@@ -1,0 +1,22 @@
+# This generates the types from your local server
+overwrite: true
+schema: 'http://localhost:3000/api/graphql'
+
+generates:
+  src/lib/generated/core.graphql.tsx:
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+      - 'typescript-resolvers'
+      - 'typescript-react-apollo'
+    config:
+      skipTypename: true
+      mappers:
+        Language: '../data/types#LanguageEntity'
+        PublishingHouse: '../data/types#PublishingHouseEntity'
+        PageType: '../data/types#PageTypeEntity'
+        BookType: '../data/types#BookTypeEntity'
+        CoverType: '../data/types#CoverTypeEntity'
+        BookSeries: '../data/types#BookSeriesEntity'
+        Book: '../data/types#BookEntity'
+        Author: '../data/types#AuthorEntity'

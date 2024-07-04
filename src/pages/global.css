@@ -1,0 +1,35 @@
+:root {
+    --background: #448AFF;
+    --light-background: rgba(68, 138, 255, 0.2);
+    --text-primary: white;
+    --text-secondary: black;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    background: var(--background);
+}
+
+.main-container {
+    padding: 10px 10px 10px 250px;
+}
+
+.active-nav-link {
+    background: var(--background);
+    color: var(--text-primary);
+}
+
+ul.MuiList-root {
+    padding: 0;
+}
+
+.clickable:hover {
+    cursor: pointer;
+    background: var(--light-background);
+}

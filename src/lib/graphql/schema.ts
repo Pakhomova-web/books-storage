@@ -1,0 +1,215 @@
+const typeDefs =  /* GraphQL */ `
+  type Language {
+    id: ID
+    name: String!
+  }
+
+  type PublishingHouse {
+    id: ID
+    name: String!
+  }
+
+  type PageType {
+    id: ID
+    name: String!
+  }
+
+  type BookType {
+    id: ID
+    name: String!
+  }
+
+  type CoverType {
+    id: ID
+    name: String!
+  }
+
+  type BookSeries {
+    id: ID
+    name: String!
+    publishingHouseId: ID!
+    publishingHouse: PublishingHouse
+  }
+
+  type Author {
+    id: ID
+    name: String!
+    description: String
+  }
+
+  type Book {
+    id: ID
+    name: String!
+    description: String
+    numberOfPages: Int
+    price: Float
+    numberInStock: Int
+    bookTypeId: ID!
+    bookType: BookType
+    bookSeriesId: ID
+    bookSeries: BookSeries
+    coverTypeId: ID!
+    coverType: CoverType
+    pageTypeId: ID!
+    pageType: PageType
+    isbn: String
+    languageId: ID!
+    language: Language
+    authorId: ID!
+    author: Author
+    format: String
+  }
+
+  type Query {
+    languages(orderBy: String, order: String): [Language!]
+    publishingHouses(orderBy: String, order: String): [PublishingHouse!]
+    pageTypes(orderBy: String, order: String): [PageType!]
+    bookTypes(orderBy: String, order: String): [BookType!]
+    coverTypes(orderBy: String, order: String): [CoverType!]
+    bookSeries(orderBy: String, order: String, filters: BookSeriesFiltersInput): [BookSeries!]
+    books(orderBy: String, order: String): [Book!]
+    authors(orderBy: String, order: String): [Author!]
+  }
+
+  type Mutation {
+    updateLanguage(input: LanguageInput!): Language
+    createLanguage(input: LanguageCreateInput!): Language
+    deleteLanguage(id: ID!): Language
+
+    updatePublishingHouse(input: PublishingHouseInput!): PublishingHouse
+    createPublishingHouse(input: PublishingHouseCreateInput!): PublishingHouse
+    deletePublishingHouse(id: ID!): PublishingHouse
+
+    updatePageType(input: PageTypeInput!): PageType
+    createPageType(input: PageTypeCreateInput!): PageType
+    deletePageType(id: ID!): PageType
+
+    updateBookType(input: BookTypeInput!): BookType
+    createBookType(input: BookTypeCreateInput!): BookType
+    deleteBookType(id: ID!): BookType
+
+    updateCoverType(input: CoverTypeInput!): CoverType
+    createCoverType(input: CoverTypeCreateInput!): CoverType
+    deleteCoverType(id: ID!): CoverType
+
+    updateBookSeries(input: BookSeriesInput!): BookSeries
+    createBookSeries(input: BookSeriesCreateInput!): BookSeries
+    deleteBookSeries(id: ID!): BookSeries
+
+    updateBook(input: BookInput!): Book
+    createBook(input: BookCreateInput!): Book
+    deleteBook(id: ID!): Book
+
+    updateAuthor(input: AuthorInput!): Author
+    createAuthor(input: AuthorCreateInput!): Author
+    deleteAuthor(id: ID!): Author
+  }
+
+  input BookCreateInput {
+    name: String!
+    description: String
+    numberOfPages: Int!
+    price: Float
+    numberInStock: Int
+    bookTypeId: ID!
+    bookSeriesId: ID!
+    coverTypeId: ID!
+    pageTypeId: ID!
+    isbn: String
+    languageId: ID!
+    authorId: ID
+    format: String
+  }
+
+  input AuthorCreateInput {
+    name: String!
+    description: String
+  }
+
+  input PublishingHouseCreateInput {
+    name: String!
+  }
+
+  input PageTypeCreateInput {
+    name: String!
+  }
+
+  input LanguageCreateInput {
+    name: String!
+  }
+
+  input BookTypeCreateInput {
+    name: String!
+  }
+
+  input CoverTypeCreateInput {
+    name: String!
+  }
+
+  input BookSeriesCreateInput {
+    name: String!
+    publishingHouseId: ID!
+  }
+
+  input BookSeriesFiltersInput {
+    name: String
+    publishingHouseId: ID
+  }
+
+
+  input PublishingHouseInput {
+    id: ID!
+    name: String!
+  }
+  
+  input AuthorInput {
+    id: ID!
+    name: String!
+    description: String
+  }
+
+  input PageTypeInput {
+    id: ID!
+    name: String!
+  }
+
+  input LanguageInput {
+    id: ID!
+    name: String!
+  }
+
+  input BookTypeInput {
+    id: ID!
+    name: String!
+  }
+
+  input CoverTypeInput {
+    id: ID!
+    name: String!
+  }
+
+  input BookSeriesInput {
+    id: ID!
+    name: String!
+    publishingHouseId: ID!
+  }
+
+  input BookInput {
+    id: ID!
+    name: String!
+    description: String
+    numberOfPages: Int!
+    price: Float
+    numberInStock: Int
+    bookTypeId: ID!
+    bookSeriesId: ID!
+    coverTypeId: ID!
+    pageTypeId: ID!
+    isbn: String
+    languageId: ID!
+    authorId: ID
+    format: String
+  }
+`;
+
+export default typeDefs;
