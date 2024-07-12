@@ -1,14 +1,14 @@
-import { BookSeriesEntity } from '@/lib/data/types';
+import { BookSeriesEntity, PublishingHouseEntity } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import {
     useCreateBookSeries,
     usePublishingHouseOptions,
-    usePublishingHouses,
     useUpdateBookSeries
 } from '@/lib/graphql/hooks';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/modals/custom-text-field';
 import CustomSelectField from '@/components/modals/custom-select-field';
+import ErrorNotification from '@/components/error-notification';
 
 interface IBookSeriesModalProps {
     open: boolean,
@@ -18,48 +18,55 @@ interface IBookSeriesModalProps {
 }
 
 export default function BookSeriesModal({ open, item, onClose }: IBookSeriesModalProps) {
-    const formContext = useForm<{ name: string, publishingHouseId: string }>({
+    const formContext = useForm<BookSeriesEntity>({
         defaultValues: {
+            id: item?.id,
             name: item?.name,
             publishingHouseId: item?.publishingHouseId
         }
     });
-    const { update, loading: loadingUpdating } = useUpdateBookSeries();
-    const { create, loading: loadingCreating } = useCreateBookSeries();
+    const { update, updating, updatingError } = useUpdateBookSeries();
+    const { create, creating, creatingError } = useCreateBookSeries();
     const { items: publishingHouseOptions } = usePublishingHouseOptions();
 
     async function onSubmit() {
-        if (item) {
-            await update({ id: item.id, ...formContext.getValues() } as BookSeriesEntity);
-        } else {
-            await create({ ...formContext.getValues() } as BookSeriesEntity);
-        }
+        try {
+            if (item) {
+                await update(formContext.getValues() as BookSeriesEntity);
+            } else {
+                await create(formContext.getValues() as BookSeriesEntity);
+            }
 
-        onClose(true);
+            onClose(true);
+        } catch (err) {}
     }
 
     return (
-        <CustomModal title={!item ? 'Додати тип книги' : 'Редагувати тип книги'}
+        <CustomModal title={!item ? 'Add Book Series' : 'Edit Book Series'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
-                     loading={loadingUpdating || loadingCreating}
+                     loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={onSubmit}>
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
                 <CustomTextField fullWidth
                                  required
                                  id="book-series-name"
-                                 label="Назва"
+                                 label="Name"
                                  name="name"/>
 
                 <CustomSelectField fullWidth
                                    required
                                    options={publishingHouseOptions}
                                    id="publishing-house-id"
-                                   label="Видавництво"
+                                   label="Publishing House"
                                    name="publishingHouseId"/>
             </FormContainer>
+
+            {(creatingError || updatingError) &&
+              <ErrorNotification apolloError={creatingError || updatingError}></ErrorNotification>
+            }
         </CustomModal>
     );
 }

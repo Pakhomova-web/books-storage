@@ -1,68 +1,71 @@
 import { Box, Button } from '@mui/material';
-import { useState } from 'react';
 import { TableKey, TableSort } from '@/components/table/table-key';
-import { BookEntity } from '@/lib/data/types';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
+import { useEffect, useState } from 'react';
+import { ApolloError } from '@apollo/client';
+
+import { BookEntity } from '@/lib/data/types';
 import Loading from '@/components/loading';
 import CustomTable from '@/components/table/custom-table';
-import AddIcon from '@mui/icons-material/Add';
 import { useBooks, useDeleteBook } from '@/lib/graphql/hooks';
 import BookModal from '@/components/modals/book-modal';
+import ErrorNotification from '@/components/error-notification';
 
 export default function Books() {
     const [tableKeys] = useState<TableKey<BookEntity>[]>([
-        { title: 'Тип', sortValue: 'bookType', renderValue: (item: BookEntity) => item.bookType?.name, type: 'text' },
+        { title: 'Type', sortValue: 'bookType', renderValue: (item: BookEntity) => item.bookType?.name, type: 'text' },
         {
-            title: 'Видавництво',
+            title: 'Publishing House',
             sortValue: 'publishingHouse',
             renderValue: (item: BookEntity) => item.bookSeries?.publishingHouse?.name,
             type: 'text'
         },
         {
-            title: 'Серія',
+            title: 'Series',
             sortValue: 'bookSeries',
             renderValue: (item: BookEntity) => item.bookSeries?.name,
             type: 'text'
         },
-        { title: 'Назва', sortValue: 'name', renderValue: (item: BookEntity) => item.name, type: 'text' },
+        { title: 'Name', sortValue: 'name', renderValue: (item: BookEntity) => item.name, type: 'text' },
         {
-            title: 'Стр.',
+            title: 'Number Of Pages.',
             sortValue: 'numberOfPages',
             renderValue: (item: BookEntity) => item.numberOfPages,
             type: 'text'
         },
         {
-            title: 'Мова',
+            title: 'Language',
             sortValue: 'language',
             renderValue: (item: BookEntity) => item.language?.name,
             type: 'text'
         },
         {
-            title: 'Тип стр.',
+            title: 'Page Type',
             sortValue: 'pageType',
             renderValue: (item: BookEntity) => item.pageType?.name,
             type: 'text'
         },
         {
-            title: 'Тип обкладинки',
+            title: 'Cover Type',
             sortValue: 'coverType',
             renderValue: (item: BookEntity) => item.coverType?.name,
             type: 'text'
         },
         {
-            title: 'Автор',
+            title: 'Author',
             sortValue: 'author',
             renderValue: (item: BookEntity) => item.author?.name,
             type: 'text'
         },
         {
-            title: 'В наявності',
+            title: 'In Stock',
             sortValue: 'numberInStock',
             renderValue: (item: BookEntity) => item.numberInStock,
             type: 'text'
         },
         {
-            title: 'Ціна',
+            title: 'Price',
             sortValue: 'price',
             renderValue: (item: BookEntity) => item.price,
             type: 'text'
@@ -79,51 +82,62 @@ export default function Books() {
     ]);
     const [selectedItem, setSelectedItem] = useState<BookEntity>();
     const [sort, setSort] = useState<TableSort>({ order: 'asc', orderBy: '' });
-    const { items, error, loading, refetch } = useBooks(sort);
-    const { deleteItem } = useDeleteBook();
-    const [deleting, setDeleting] = useState<boolean>(false);
-    const [deletingError, setDeletingError] = useState<string>();
+    const { items, gettingError, loading, refetch } = useBooks(sort);
+    const { deleteItem, deletingError, deleting } = useDeleteBook();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
+    const [error, setError] = useState<ApolloError>();
+
+    useEffect(() => {
+        if (gettingError) {
+            setError(gettingError);
+        } else if (deletingError) {
+            setError(deletingError);
+        }
+    }, [gettingError, deletingError]);
 
     async function deleteHandler(item: BookEntity) {
-        setDeleting(true);
-        deleteItem(item.id)
-            .then(() => {
-                setDeleting(false);
-                refreshData(true);
-            })
-            .catch(() => setDeletingError('Something went wrong with deleting book type'));
+        try {
+            deleteItem(item.id);
+            refreshData(true);
+        } catch (err) {
+        }
     }
 
     function refreshData(updated?: boolean) {
         if (updated) {
             refetch();
         }
+        setError(null);
         setOpenNewModal(false);
         setSelectedItem(undefined);
     }
 
     function onAdd() {
+        setError(null);
         setOpenNewModal(true);
     }
 
-    if (error) {
-        return <Box>Error</Box>;
+    function onEdit(item: BookEntity) {
+        setError(null);
+        setSelectedItem(item);
     }
 
     return (
         <Loading open={loading || deleting} fullHeight={true}>
-            {deletingError && <Box>{deletingError}</Box>}
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: BookEntity) => item.id}
                          onSort={(sort: TableSort) => setSort(sort)}
                          sort={sort}
-                         onRowClick={item => setSelectedItem(item)}></CustomTable>
+                         onRowClick={(item: BookEntity) => onEdit(item)}></CustomTable>
+
+            {error && <ErrorNotification apolloError={error}></ErrorNotification>}
 
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, background: 'white', 'z-index': 2 }}>
                 <Button variant="outlined" onClick={() => onAdd()}>
-                    <AddIcon></AddIcon>Додати книгу
+                    <AddIcon></AddIcon>Add Book
                 </Button>
+
+
             </Box>
 
             {(openNewModal || selectedItem) &&

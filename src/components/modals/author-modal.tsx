@@ -3,6 +3,7 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useCreateAuthor, useUpdateAuthor } from '@/lib/graphql/hooks';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/modals/custom-text-field';
+import ErrorNotification from '@/components/error-notification';
 
 interface IAuthorModalProps {
     open: boolean,
@@ -18,39 +19,45 @@ export default function AuthorModal({ open, item, onClose }: IAuthorModalProps) 
             description: item?.description
         }
     });
-    const { update, loading: loadingUpdating } = useUpdateAuthor();
-    const { create, loading: loadingCreating } = useCreateAuthor();
+    const { update, updating, updatingError } = useUpdateAuthor();
+    const { create, creating, creatingError } = useCreateAuthor();
 
     async function onSubmit() {
-        if (item) {
-            await update({ id: item.id, ...formContext.getValues() } as AuthorEntity);
-        } else {
-            await create({ ...formContext.getValues() } as AuthorEntity);
-        }
+        try {
+            if (item) {
+                await update({ id: item.id, ...formContext.getValues() } as AuthorEntity);
+            } else {
+                await create({ ...formContext.getValues() } as AuthorEntity);
+            }
 
-        onClose(true);
+            onClose(true);
+        } catch (err) {}
     }
 
     return (
-        <CustomModal title={!item ? 'Додати автора' : 'Редагувати автора'}
+        <CustomModal title={!item ? 'Add author' : 'Edit author'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
-                     loading={loadingUpdating || loadingCreating}
+                     loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={onSubmit}>
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
                 <CustomTextField fullWidth
                                  required
                                  id="author-name"
-                                 label="Ім'я"
+                                 label="Name"
                                  name="name"/>
 
                 <CustomTextField fullWidth
                                  id="description"
-                                 label="Опис"
+                                 label="Description"
                                  name="description"/>
             </FormContainer>
+
+            {(creatingError || updatingError) &&
+              <ErrorNotification apolloError={creatingError || updatingError}></ErrorNotification>
+            }
         </CustomModal>
     );
 }

@@ -1,7 +1,8 @@
 import { Box, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { ApolloError } from '@apollo/client';
 
 import { useDeleteLanguage, useLanguages } from '@/lib/graphql/hooks';
 import { LanguageEntity } from '@/lib/data/types';
@@ -9,10 +10,11 @@ import CustomTable from '@/components/table/custom-table';
 import { TableKey, TableSort } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import LanguageModal from '@/components/modals/language-modal';
+import ErrorNotification from '@/components/error-notification';
 
 export default function Languages() {
     const [tableKeys] = useState<TableKey<LanguageEntity>[]>([
-        { title: 'Назва', sortValue: 'name', renderValue: (item: LanguageEntity) => item.name, type: 'text' },
+        { title: 'Name', sortValue: 'name', renderValue: (item: LanguageEntity) => item.name, type: 'text' },
         {
             type: 'icons',
             icons: [
@@ -25,20 +27,25 @@ export default function Languages() {
     ]);
     const [selectedItem, setSelectedItem] = useState<LanguageEntity>();
     const [sort, setSort] = useState<TableSort>({ order: 'asc', orderBy: '' });
-    const { items, error, loading, refetch } = useLanguages(sort);
-    const { deleteItem } = useDeleteLanguage();
-    const [deleting, setDeleting] = useState<boolean>(false);
-    const [deletingError, setDeletingError] = useState<string>();
+    const { items, gettingError, loading, refetch } = useLanguages(sort);
+    const { deleteItem, deleting, deletingError } = useDeleteLanguage();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
+    const [error, setError] = useState<ApolloError>();
+
+    useEffect(() => {
+        if (gettingError) {
+            setError(gettingError);
+        } else if (deletingError) {
+            setError(deletingError);
+        }
+    }, [gettingError, deletingError]);
 
     async function deleteHandler(item: LanguageEntity) {
-        setDeleting(true);
-        deleteItem(item.id)
-            .then(() => {
-                setDeleting(false);
-                refreshData(true);
-            })
-            .catch(() => setDeletingError('Something went wrong with deleting language'));
+        try {
+            await deleteItem(item.id);
+            refreshData(true);
+        } catch (err) {
+        }
     }
 
     function refreshData(updated?: boolean) {
@@ -53,22 +60,24 @@ export default function Languages() {
         setOpenNewModal(true);
     }
 
-    if (error) {
-        return <Box>Error</Box>;
+    function onEdit(item: LanguageEntity) {
+        setError(null);
+        setSelectedItem(item);
     }
 
     return (
         <Loading open={loading || deleting} fullHeight={true}>
-            {deletingError && <Box>{deletingError}</Box>}
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: LanguageEntity) => item.id}
                          onSort={(sort: TableSort) => setSort(sort)}
                          sort={sort}
-                         onRowClick={item => setSelectedItem(item)}></CustomTable>
+                         onRowClick={item => onEdit(item)}></CustomTable>
+
+            {error && <ErrorNotification apolloError={error}></ErrorNotification>}
 
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, background: 'white', 'z-index': 2 }}>
                 <Button variant="outlined" onClick={() => onAdd()}>
-                    <AddIcon></AddIcon>Додати мову
+                    <AddIcon></AddIcon>Add language
                 </Button>
             </Box>
 

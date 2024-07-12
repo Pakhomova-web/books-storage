@@ -3,8 +3,10 @@ export const styleVariables = {
     boxShadow: 24,
     borderRadius: '4px',
     margin: '10px',
+    padding: '10px',
     doubleMargin: '20px',
-    doublePadding: '20px'
+    doublePadding: '20px',
+    warnColor: '#AB332C'
 };
 
 export const titleStyles = {

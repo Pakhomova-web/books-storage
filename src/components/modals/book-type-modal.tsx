@@ -1,8 +1,9 @@
 import { BookTypeEntity } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import { useCreateBookType, useCreateCoverType, useUpdateBookType, useUpdateCoverType } from '@/lib/graphql/hooks';
+import { useCreateBookType, useUpdateBookType } from '@/lib/graphql/hooks';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/modals/custom-text-field';
+import ErrorNotification from '@/components/error-notification';
 
 interface IBookTypeModalProps {
     open: boolean,
@@ -13,34 +14,40 @@ interface IBookTypeModalProps {
 
 export default function BookTypeModal({ open, item, onClose }: IBookTypeModalProps) {
     const formContext = useForm<{ name: string }>({ defaultValues: { name: item?.name } });
-    const { update, loading: loadingUpdating } = useUpdateBookType();
-    const { create, loading: loadingCreating } = useCreateBookType();
+    const { update, updating, updatingError } = useUpdateBookType();
+    const { create, creating, creatingError } = useCreateBookType();
 
     async function onSubmit() {
-        if (item) {
-            await update({ ...item, ...formContext.getValues() } as BookTypeEntity);
-        } else {
-            await create({ ...formContext.getValues() } as BookTypeEntity);
-        }
+        try {
+            if (item) {
+                await update({ ...item, ...formContext.getValues() } as BookTypeEntity);
+            } else {
+                await create({ ...formContext.getValues() } as BookTypeEntity);
+            }
 
-        onClose(true);
+            onClose(true);
+        } catch (err) {}
     }
 
     return (
-        <CustomModal title={!item ? 'Додати тип книги' : 'Редагувати тип книги'}
+        <CustomModal title={!item ? 'Add Book Type' : 'Edit Book Type'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
-                     loading={loadingUpdating || loadingCreating}
+                     loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={onSubmit}>
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
                 <CustomTextField fullWidth
                                  required
                                  id="book-type-name"
-                                 label="Назва"
+                                 label="Name"
                                  name="name"/>
             </FormContainer>
+
+            {(creatingError || updatingError) &&
+              <ErrorNotification apolloError={creatingError || updatingError}></ErrorNotification>
+            }
         </CustomModal>
     );
 }

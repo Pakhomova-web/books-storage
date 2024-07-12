@@ -1,18 +1,20 @@
 import { Box, Button } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { ApolloError } from '@apollo/client';
 
-import { useDeleteCoverType, useCoverTypes } from '@/lib/graphql/hooks';
+import { useCoverTypes, useDeleteCoverType } from '@/lib/graphql/hooks';
 import { CoverTypeEntity } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableKey, TableSort } from '@/components/table/table-key';
 import Loading from '@/components/loading';
-import CoverTypeModal from '@/components/modals/book-type-modal';
+import CoverTypeModal from '@/components/modals/cover-type-modal';
+import ErrorNotification from '@/components/error-notification';
 
 export default function CoverTypes() {
     const [tableKeys] = useState<TableKey<CoverTypeEntity>[]>([
-        { title: 'Назва', sortValue: 'name', renderValue: (item: CoverTypeEntity) => item.name, type: 'text' },
+        { title: 'Name', sortValue: 'name', renderValue: (item: CoverTypeEntity) => item.name, type: 'text' },
         {
             type: 'icons',
             icons: [
@@ -25,57 +27,66 @@ export default function CoverTypes() {
     ]);
     const [selectedItem, setSelectedItem] = useState<CoverTypeEntity>();
     const [sort, setSort] = useState<TableSort>({ order: 'asc', orderBy: '' });
-    const { items, error, loading, refetch } = useCoverTypes(sort);
-    const { deleteItem } = useDeleteCoverType();
-    const [deleting, setDeleting] = useState<boolean>(false);
-    const [deletingError, setDeletingError] = useState<string>();
+    const { items, gettingError, loading, refetch } = useCoverTypes(sort);
+    const { deleteItem, deleting, deletingError } = useDeleteCoverType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
+    const [error, setError] = useState<ApolloError>();
+
+    useEffect(() => {
+        if (gettingError) {
+            setError(gettingError);
+        } else if (deletingError) {
+            setError(deletingError);
+        }
+    }, [gettingError, deletingError]);
 
     async function deleteHandler(item: CoverTypeEntity) {
-        setDeleting(true);
-        deleteItem(item.id)
-            .then(() => {
-                setDeleting(false);
-                refreshData(true);
-            })
-            .catch(() => setDeletingError('Something went wrong with deleting book type'));
+        try {
+            deleteItem(item.id);
+            refreshData(true);
+        } catch (err) {
+        }
     }
 
     function refreshData(updated?: boolean) {
         if (updated) {
             refetch();
         }
+        setError(null);
         setOpenNewModal(false);
         setSelectedItem(undefined);
     }
 
     function onAdd() {
+        setError(null);
         setOpenNewModal(true);
     }
 
-    if (error) {
-        return <Box>Error</Box>;
+    function onEdit(item: CoverTypeEntity) {
+        setError(null);
+        setSelectedItem(item);
     }
 
     return (
         <Loading open={loading || deleting} fullHeight={true}>
-            {deletingError && <Box>{deletingError}</Box>}
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: CoverTypeEntity) => item.id}
                          onSort={(sort: TableSort) => setSort(sort)}
                          sort={sort}
-                         onRowClick={item => setSelectedItem(item)}></CustomTable>
+                         onRowClick={(item: CoverTypeEntity) => onEdit(item)}></CustomTable>
+
+            {error && <ErrorNotification apolloError={error}></ErrorNotification>}
 
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, background: 'white', 'z-index': 2 }}>
                 <Button variant="outlined" onClick={() => onAdd()}>
-                    <AddIcon></AddIcon>Додати тип книги
+                    <AddIcon></AddIcon>Add Cover Type
                 </Button>
             </Box>
 
             {(openNewModal || selectedItem) &&
               <CoverTypeModal open={true}
-                             item={selectedItem}
-                             onClose={(updated = false) => refreshData(updated)}></CoverTypeModal>}
+                              item={selectedItem}
+                              onClose={(updated = false) => refreshData(updated)}></CoverTypeModal>}
         </Loading>
     );
 }

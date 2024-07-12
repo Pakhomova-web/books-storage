@@ -14,8 +14,7 @@ import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/modals/custom-text-field';
 import CustomSelectField from '@/components/modals/custom-select-field';
 import { useEffect, useState } from 'react';
-import { Box } from '@mui/material';
-import CustomNotification from '@/components/custom-notification';
+import ErrorNotification from '@/components/error-notification';
 
 interface IBookModalProps {
     open: boolean,
@@ -34,7 +33,7 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
         defaultValues: {
             name: item?.name,
             bookTypeId: item?.bookTypeId,
-            publishingHouseId: item?.bookSeries?.publishingHouseId,
+            publishingHouseId: item?.bookSeries?.publishingHouse.id,
             bookSeriesId: item?.bookSeriesId,
             languageId: item?.languageId,
             pageTypeId: item?.pageTypeId,
@@ -49,8 +48,8 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
         }
     });
     const { publishingHouseId } = formContext.watch();
-    const { update, loading: loadingUpdating, error: updatingError } = useUpdateBook();
-    const { create, loading: loadingCreating, error: creatingError } = useCreateBook();
+    const { update, updating, updatingError } = useUpdateBook();
+    const { create, creating, creatingError } = useCreateBook();
     const { items: pageTypeOptions } = usePageTypeOptions();
     const { items: authorOptions } = useAuthorOptions();
     const { items: languageOptions } = useLanguageOptions();
@@ -93,11 +92,11 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
     }
 
     return (
-        <CustomModal title={!item ? 'Додати книгу' : 'Редагувати книгу'}
+        <CustomModal title={!item ? 'Add Book' : 'Edit Book'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
-                     loading={loadingUpdating || loadingCreating}
+                     loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={onSubmit}>
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
@@ -105,20 +104,20 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
                                    required
                                    options={bookTypeOptions}
                                    id="book-type-id"
-                                   label="Тип книги"
+                                   label="Book Type"
                                    name="bookTypeId"/>
 
                 <CustomTextField fullWidth
                                  required
                                  id="book-name"
-                                 label="Назва"
+                                 label="Name"
                                  name="name"/>
 
                 <CustomSelectField fullWidth
                                    required
                                    options={publishingHouseOptions}
                                    id="publishing-house-id"
-                                   label="Видавництво"
+                                   label="Publishing House"
                                    name="publishingHouseId"/>
 
                 <CustomSelectField fullWidth
@@ -126,33 +125,33 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
                                    disabled={!publishingHouseId}
                                    options={bookSeriesOptions}
                                    id="book-series-id"
-                                   label="Серія"
+                                   label="Book Series"
                                    name="bookSeriesId"/>
 
                 <CustomSelectField fullWidth
                                    required
                                    options={languageOptions}
                                    id="language-id"
-                                   label="Мова"
+                                   label="Language"
                                    name="languageId"/>
 
                 <CustomSelectField fullWidth
                                    required
                                    options={pageTypeOptions}
                                    id="page-type-id"
-                                   label="Тип сторінок"
+                                   label="Page Type"
                                    name="pageTypeId"/>
 
                 <CustomSelectField fullWidth
                                    required
                                    options={coverTypeOptions}
                                    id="cover-type-id"
-                                   label="Тип обкладинки"
+                                   label="Cover Type"
                                    name="coverTypeId"/>
 
                 <CustomTextField fullWidth
                                  id="description"
-                                 label="Опис"
+                                 label="Description"
                                  name="description"/>
 
                 <CustomTextField fullWidth
@@ -162,38 +161,38 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
 
                 <CustomTextField fullWidth
                                  id="format"
-                                 label="Формат"
+                                 label="Format"
                                  name="format"/>
 
                 <CustomTextField fullWidth
                                  required
                                  id="numberOfPages"
                                  type="number"
-                                 label="Кількість сторінок"
+                                 label="Number of Pages"
                                  name="numberOfPages"/>
 
                 <CustomSelectField fullWidth
                                    options={authorOptions}
                                    id="author"
-                                   label="Автор"
+                                   label="Author"
                                    name="authorId"/>
 
                 <CustomTextField fullWidth
                                  id="numberInStock"
                                  type="number"
-                                 label="Кількість в наявності"
+                                 label="Number in Stock"
                                  name="numberInStock"/>
 
                 <CustomTextField fullWidth
                                  required
                                  type="number"
                                  id="price"
-                                 label="Ціна"
+                                 label="Price"
                                  name="price"/>
             </FormContainer>
 
             {(creatingError || updatingError) &&
-              <CustomNotification error={creatingError || updatingError}></CustomNotification>
+              <ErrorNotification apolloError={creatingError || updatingError}></ErrorNotification>
             }
         </CustomModal>
     );

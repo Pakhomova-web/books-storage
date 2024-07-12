@@ -1,44 +1,52 @@
 import { AuthorEntity } from '@/lib/data/types';
-import { connection } from '@/lib/data/connection';
-
-const getAuthorTable = () => connection().table<AuthorEntity>('author');
+import Author from '@/lib/data/models/author';
+import { GraphQLError } from 'graphql/error';
+import { checkUsageInBook, getByName } from '@/lib/data/base';
+import Book from '@/lib/data/models/book';
 
 export async function getAuthors(orderBy: string, order: string) {
-    return await getAuthorTable().select().orderBy(orderBy, order);
+    return Author.find(null, null, { sort: { [orderBy]: order } });
 }
 
-export async function getAuthorById(id: string) {
-    return await getAuthorTable().first().where({ id });
-}
-
-export async function createAuthor({ name })  {
-    const item = await getAuthorTable().first().where({ name });
+export async function createAuthor(input: AuthorEntity)  {
+    const item = await getByName(Author, input.name);
 
     if (item) {
         return null;
+    } else {
+        const item = new Author(input);
+
+        await item.save();
+
+        return { ...input, id: item.id } as AuthorEntity;
     }
-
-    await getAuthorTable().insert({ name });
-    const data = await getAuthorTable().first().where({ name });
-
-    return data as AuthorEntity;
 }
 
-export async function updateAuthor({ id, name }: AuthorEntity) {
-    if (!id) {
-        return null;
+export async function updateAuthor(input: AuthorEntity) {
+    if (!input.id) {
+        throw new GraphQLError(`No Author found with id ${input.id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
     }
-    const item = await getAuthorTable().first().where({ id });
-    if (!item) {
-        return null;
-    }
+    const itemByName = await getByName(Author, input.name);
 
-    await getAuthorTable().update({ name }).where({ id });
-    return { ...item, name } as AuthorEntity;
+    if (itemByName && itemByName.id.toString() !== input.id) {
+        throw new GraphQLError(`Author with name '${input.name}' already exists.`, {
+            extensions: { code: 'DUPLICATE_ERROR' }
+        });
+    }
+    await Author.findOneAndUpdate({ _id: input.id }, input);
+
+    return input as AuthorEntity;
+}
+
+export async function getAuthorById(id: string) {
+    return Author.findById(id);
 }
 
 export async function deleteAuthor(id: string) {
-    await getAuthorTable().delete().where({ id });
+    await checkUsageInBook('authorId', [id], 'Author');
+    await Author.findByIdAndDelete(id);
 
     return { id } as AuthorEntity;
 }

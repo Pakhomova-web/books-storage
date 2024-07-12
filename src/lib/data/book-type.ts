@@ -1,44 +1,53 @@
 import { BookTypeEntity } from '@/lib/data/types';
-import { connection } from '@/lib/data/connection';
-
-const getBookTypeTable = () => connection().table<BookTypeEntity>('bookType');
+import { GraphQLError } from 'graphql/error';
+import BookType from '@/lib/data/models/book-type';
+import { checkUsageInBook, getByName } from '@/lib/data/base';
+import BookSeries from '@/lib/data/models/book-series';
+import Book from '@/lib/data/models/book';
 
 export async function getBookTypes(orderBy: string, order: string) {
-    return await getBookTypeTable().select().orderBy(orderBy, order);
+    return BookType.find(null, null, { sort: { [orderBy]: order } });
 }
 
-export async function getBookTypeById(id: string) {
-    return await getBookTypeTable().first().where({ id });
-}
-
-export async function createBookType({ name })  {
-    const item = await getBookTypeTable().first().where({ name });
+export async function createBookType(input: BookTypeEntity)  {
+    const item = await getByName(BookSeries, input.name);
 
     if (item) {
         return null;
+    } else {
+        const item = new BookType(input);
+
+        await item.save();
+
+        return { ...input, id: item.id } as BookTypeEntity;
     }
-
-    await getBookTypeTable().insert({ name });
-    const data = await getBookTypeTable().first().where({ name });
-
-    return data as BookTypeEntity;
 }
 
-export async function updateBookType({ id, name }: BookTypeEntity) {
-    if (!id) {
-        return null;
+export async function updateBookType(input: BookTypeEntity) {
+    if (!input.id) {
+        throw new GraphQLError(`No Book Type found with id ${input.id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
     }
-    const item = await getBookTypeTable().first().where({ id });
-    if (!item) {
-        return null;
-    }
+    const itemByName = await getByName(BookType, input.name);
 
-    await getBookTypeTable().update({ name }).where({ id });
-    return { ...item, name } as BookTypeEntity;
+    if (itemByName && itemByName.id.toString() !== input.id) {
+        throw new GraphQLError(`Book Type with name '${input.name}' already exists.`, {
+            extensions: { code: 'DUPLICATE_ERROR' }
+        });
+    }
+    await BookType.findOneAndUpdate({ _id: input.id }, input);
+
+    return input as BookTypeEntity;
+}
+
+export async function getBookTypeById(id: string) {
+    return BookType.findById(id);
 }
 
 export async function deleteBookType(id: string) {
-    await getBookTypeTable().delete().where({ id });
+    await checkUsageInBook('bookTypeId', [id], 'Book Type');
+    await BookType.findByIdAndDelete(id);
 
     return { id } as BookTypeEntity;
 }

@@ -320,15 +320,18 @@ export type PageTypeInput = {
 export type PublishingHouse = {
   id?: Maybe<Scalars['ID']['output']>;
   name: Scalars['String']['output'];
+  tags?: Maybe<Scalars['String']['output']>;
 };
 
 export type PublishingHouseCreateInput = {
   name: Scalars['String']['input'];
+  tags?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type PublishingHouseInput = {
   id: Scalars['ID']['input'];
   name: Scalars['String']['input'];
+  tags?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Query = {
@@ -625,6 +628,7 @@ export type PageTypeResolvers<ContextType = any, ParentType extends ResolversPar
 export type PublishingHouseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublishingHouse'] = ResolversParentTypes['PublishingHouse']> = {
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  tags?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

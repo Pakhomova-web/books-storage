@@ -1,44 +1,52 @@
 import { PageTypeEntity } from '@/lib/data/types';
-import { connection } from '@/lib/data/connection';
-
-const getPageTypeTable = () => connection().table<PageTypeEntity>('pageType');
+import { GraphQLError } from 'graphql/error';
+import PageType from '@/lib/data/models/page-type';
+import { checkUsageInBook, getByName } from '@/lib/data/base';
+import Book from '@/lib/data/models/book';
 
 export async function getPageTypes(orderBy: string, order: string) {
-    return await getPageTypeTable().select().orderBy(orderBy, order);
+    return PageType.find(null, null, { sort: { [orderBy]: order } });
 }
 
-export async function getPageTypeById(id: string) {
-    return await getPageTypeTable().first().where({ id });
-}
-
-export async function createPageType({ name })  {
-    const item = await getPageTypeTable().first().where({ name });
+export async function createPageType(input: PageTypeEntity) {
+    const item = await getByName(PageType, input.name);
 
     if (item) {
         return null;
+    } else {
+        const item = new PageType(input);
+
+        await item.save();
+
+        return { ...input, id: item.id } as PageTypeEntity;
     }
-
-    await getPageTypeTable().insert({ name });
-    const data = await getPageTypeTable().first().where({ name });
-
-    return data as PageTypeEntity;
 }
 
-export async function updatePageType({ id, name }: PageTypeEntity) {
-    if (!id) {
-        return null;
+export async function updatePageType(input: PageTypeEntity) {
+    if (!input.id) {
+        throw new GraphQLError(`No Page Type found with id ${input.id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
     }
-    const item = await getPageTypeTable().first().where({ id });
-    if (!item) {
-        return null;
-    }
+    const itemByName = await getByName(PageType, input.name);
 
-    await getPageTypeTable().update({ name }).where({ id });
-    return { ...item, name } as PageTypeEntity;
+    if (itemByName && itemByName.id.toString() !== input.id) {
+        throw new GraphQLError(`Page Type with name '${input.name}' already exists.`, {
+            extensions: { code: 'DUPLICATE_ERROR' }
+        });
+    }
+    await PageType.findOneAndUpdate({ _id: input.id }, input);
+
+    return input as PageTypeEntity;
+}
+
+export async function getPageTypeById(id: string) {
+    return PageType.findById(id);
 }
 
 export async function deletePageType(id: string) {
-    await getPageTypeTable().delete().where({ id });
+    await checkUsageInBook('pageTypeId', [id], 'Page Type');
+    await PageType.findByIdAndDelete(id);
 
     return { id } as PageTypeEntity;
 }

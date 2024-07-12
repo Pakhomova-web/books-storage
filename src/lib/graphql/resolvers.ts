@@ -18,6 +18,7 @@ import {
 } from '@/lib/data/cover-type';
 import {
     AuthorEntity,
+    BookEntity,
     BookSeriesEntity,
     BookTypeEntity,
     CoverTypeEntity,
@@ -41,8 +42,17 @@ function parseError(error) {
         case 'GRAPHQL_PARSE_FAILED': {
             throw new GraphQLError(error, {
                 extensions: {
-                    code: 'SOMETHING_BAD_HAPPENED',
+                    code: error.extensions?.code,
                     message: 'Something wrong with data.'
+                }
+            });
+        }
+        case 'USAGE_ERROR':
+        case 'DUPLICATE_ERROR': {
+            throw new GraphQLError(error, {
+                extensions: {
+                    code: error.extensions?.code,
+                    message: error.message
                 }
             });
         }
@@ -68,117 +78,206 @@ function parseError(error) {
 const resolvers: Resolvers = {
     Query: {
         languages: async (_root, { orderBy, order }) => {
-            return await getLanguages(orderBy || 'name', order || 'asc');
+            return getLanguages(orderBy || 'name', order || 'asc');
         },
         publishingHouses: async (_root, { orderBy, order }) => {
-            return await getPublishingHouses(orderBy || 'name', order || 'asc');
+            return getPublishingHouses(orderBy || 'name', order || 'asc');
         },
         pageTypes: async (_root, { orderBy, order }) => {
-            return await getPageTypes(orderBy || 'name', order || 'asc');
+            return getPageTypes(orderBy || 'name', order || 'asc');
         },
         bookTypes: async (_root, { orderBy, order }) => {
-            return await getBookTypes(orderBy || 'name', order || 'asc');
+            return getBookTypes(orderBy || 'name', order || 'asc');
         },
         coverTypes: async (_root, { orderBy, order }) => {
-            return await getCoverTypes(orderBy || 'name', order || 'asc');
+            return getCoverTypes(orderBy || 'name', order || 'asc');
         },
         authors: async (_root, { orderBy, order }) => {
-            return await getAuthors(orderBy || 'name', order || 'asc');
+            return getAuthors(orderBy || 'name', order || 'asc');
         },
         bookSeries: async (_root, { orderBy, order, filters }) => {
-            return await getBookSeries(orderBy || 'name', order || 'asc', filters);
+            return getBookSeries(orderBy || 'name', order || 'asc', filters);
         },
         books: async (_root, { orderBy, order }) => {
-            return await getBooks(orderBy || 'name', order || 'asc');
+            return getBooks(orderBy || 'name', order || 'asc');
         }
     },
     Mutation: {
         updateLanguage: async (_root, { input }: { input: LanguageEntity }) => {
-            return await updateLanguage(input);
+            try {
+                return updateLanguage(input);
+            } catch (error) {
+                parseError(error);
+            }
         },
         deleteLanguage: async (_root, { id }: { id: string }) => {
-            return await deleteLanguage(id);
+            try {
+                return deleteLanguage(id);
+            } catch (error) {
+                parseError(error);
+            }
         },
-        createLanguage: async (_root, { input }) => {
-            return await createLanguage(input);
+        createLanguage: async (_root, { input }: { input: LanguageEntity }) => {
+            try {
+                return createLanguage(input);
+            } catch (error) {
+                parseError(error);
+            }
         },
         // publishing house
         updatePublishingHouse: async (_root, { input }: { input: PublishingHouseEntity }) => {
-            return await updatePublishingHouse(input);
+            try {
+                return updatePublishingHouse(input);
+            } catch (error) {
+                parseError(error);
+            }
         },
-        createPublishingHouse: async (_root, { input }) => {
-            return await createPublishingHouse(input);
+        createPublishingHouse: async (_root, { input }: { input: PublishingHouseEntity}) => {
+            try {
+                return createPublishingHouse(input);
+            } catch (error) {
+                parseError(error);
+            }
         },
         deletePublishingHouse: async (_root, { id }: { id: string }) => {
-            return await deletePublishingHouse(id);
+            try {
+                return deletePublishingHouse(id);
+            } catch (error) {
+                parseError(error);
+            }
         },
         // page type
         updatePageType: async (_root, { input }: { input: PageTypeEntity }) => {
-            return await updatePageType(input);
+            try {
+                return updatePageType(input);
+            } catch (error) {
+                parseError(error);
+            }
         },
-        createPageType: async (_root, { input }) => {
-            return await createPageType(input);
+        createPageType: async (_root, { input }: { input: PageTypeEntity }) => {
+            try {
+                return createPageType(input);
+            } catch (error) {
+                parseError(error);
+            }
         },
         deletePageType: async (_root, { id }: { id: string }) => {
-            return await deletePageType(id);
+            try {
+                return deletePageType(id);
+            } catch (error) {
+                parseError(error);
+            }
         },
         // book type
         updateBookType: async (_root, { input }: { input: BookTypeEntity }) => {
-            return await updateBookType(input);
+            try {
+                return updateBookType(input);
+            } catch (error) {
+                parseError(error);
+            }
         },
-        createBookType: async (_root, { input }) => {
-            return await createBookType(input);
+        createBookType: async (_root, { input }: { input: BookTypeEntity }) => {
+            try {
+                return createBookType(input);
+            } catch (error) {
+                parseError(error);;
+            }
         },
         deleteBookType: async (_root, { id }: { id: string }) => {
-            return await deleteBookType(id);
+            try {
+                return deleteBookType(id);
+            } catch (error) {
+                parseError(error);
+            }
         },
         // cover type
-        updateCoverType: async (_root, { input }: { input: CoverTypeEntity }) => {
-            return await updateCoverType(input);
+        updateCoverType: (_root, { input }: { input: CoverTypeEntity }) => {
+            try {
+                return updateCoverType(input);
+            } catch (error) {
+                parseError(error);
+            }
         },
-        createCoverType: async (_root, { input }) => {
-            return await createCoverType(input);
+        createCoverType: async (_root, { input }: { input: CoverTypeEntity }) => {
+            try {
+                return createCoverType(input);
+            } catch (error) {
+                parseError(error);
+            }
         },
         deleteCoverType: async (_root, { id }: { id: string }) => {
-            return await deleteCoverType(id);
+            try {
+                return deleteCoverType(id);
+            } catch (error) {
+                parseError(error);
+            }
         },
         // book series
         updateBookSeries: async (_root, { input }: { input: BookSeriesEntity }) => {
-            return await updateBookSeries(input);
+            try {
+                return updateBookSeries(input);
+            } catch (error) {
+                parseError(error);
+            }
         },
-        createBookSeries: async (_root, { input }) => {
-            return await createBookSeries(input);
+        createBookSeries: async (_root, { input }: { input: BookSeriesEntity}) => {
+            try {
+                return createBookSeries(input);
+            } catch (error) {
+                parseError(error);
+            }
         },
         deleteBookSeries: async (_root, { id }: { id: string }) => {
-            return await deleteBookSeries(id);
+            try {
+                return deleteBookSeries(id);
+            } catch (error) {
+                parseError(error);
+            }
         },
         // author
         updateAuthor: async (_root, { input }: { input: AuthorEntity }) => {
-            return await updateAuthor(input);
-        },
-        createAuthor: async (_root, { input }) => {
-            return await createAuthor(input);
-        },
-        deleteAuthor: async (_root, { id }: { id: string }) => {
-            return await deleteAuthor(id);
-        },
-        // book
-        createBook: async (_root, { input }) => {
             try {
-                return await createBook(input);
+                return updateAuthor(input);
             } catch (error) {
-                parseError(error)
+                parseError(error);
             }
         },
-        updateBook: async (_root, { input }) => {
+        createAuthor: async (_root, { input }: { input: AuthorEntity }) => {
             try {
-                return await updateBook(input);
+                return createAuthor(input);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        deleteAuthor: async (_root, { id }: { id: string }) => {
+            try {
+                return deleteAuthor(id);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        // book
+        createBook: async (_root, { input }: { input: BookEntity }) => {
+            try {
+                return createBook(input);
+            } catch (error) {
+                console.log(error);
+                parseError(error);
+            }
+        },
+        updateBook: async (_root, { input }: { input: BookEntity }) => {
+            try {
+                return updateBook(input);
             } catch (error) {
                 parseError(error);
             }
         },
         deleteBook: async (_root, { id }: { id: string }) => {
-            return await deleteBook(id);
+            try {
+                return deleteBook(id);
+            } catch (error) {
+                parseError(error);
+            }
         }
     },
     BookSeries: {

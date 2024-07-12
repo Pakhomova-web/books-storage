@@ -1,61 +1,67 @@
+import { GraphQLError } from 'graphql/error';
 import { PublishingHouseEntity } from '@/lib/data/types';
-import { connection } from '@/lib/data/connection';
-import { getBookSeriesTable } from '@/lib/data/book-series';
-
-const getPublishingHouseTable = () => connection().table<PublishingHouseEntity>('publishingHouse');
+import PublishingHouse from '@/lib/data/models/publishing-house';
+import BookSeries from '@/lib/data/models/book-series';
+import { checkUsageInBook, getByName } from '@/lib/data/base';
+import Book from '@/lib/data/models/book';
 
 export async function getPublishingHouses(orderBy: string, order: string) {
-    return getPublishingHouseTable().select().orderBy(orderBy, order);
+    return PublishingHouse.find(null, null, { sort: { [orderBy]: order } });
 }
 
 export async function getPublishingHouseById(id: string) {
-    return getPublishingHouseTable().first().where({ id });
+    return PublishingHouse.findById(id);
 }
 
 export async function getPublishingHousesByIds(ids: string[]) {
-    return getPublishingHouseTable().select().whereIn('id', ids);
+    return PublishingHouse.find({ id: ids });
 }
 
-export async function createPublishingHouse({ name }) {
-    const item = await getPublishingHouseTable().first().where({ name });
+export async function createPublishingHouse(input: PublishingHouseEntity) {
+    const item = await getByName(PublishingHouse, input.name);
 
     if (item) {
         return null;
+    } else {
+        const item = new PublishingHouse(input);
+
+        console.log(item);
+        await item.save();
+        const bookSeries = new BookSeries({ name: '-', publishingHouseId: item.id });
+
+        await bookSeries.save();
+
+        return { ...input, id: item.id } as PublishingHouseEntity;
     }
-
-    await getPublishingHouseTable().insert({ name });
-    const data = await getPublishingHouseTable().first().where({ name });
-
-    await getBookSeriesTable().insert({ name: '-', publishingHouseId: data.id });
-
-    return data as PublishingHouseEntity;
 }
 
-export async function updatePublishingHouse({ id, name }: PublishingHouseEntity) {
-    if (!id) {
-        return null;
+export async function updatePublishingHouse(input: PublishingHouseEntity) {
+    if (!input.id) {
+        throw new GraphQLError(`No Publishing House found with id ${input.id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
     }
-    const item = await getPublishingHouseTable().first().where({ id });
-    if (!item) {
-        return null;
-    }
+    const itemByName = await getByName(PublishingHouse, input.name);
 
-    await getPublishingHouseTable().update({ name }).where({ id });
-    return { ...item, name } as PublishingHouseEntity;
+    if (itemByName && itemByName.id.toString() !== input.id) {
+        throw new GraphQLError(`Publishing House with name '${input.name}' already exists.`, {
+            extensions: { code: 'DUPLICATE_ERROR' }
+        });
+    }
+    await PublishingHouse.findOneAndUpdate({ _id: input.id }, input);
+
+    return input as PublishingHouseEntity;
 }
 
 export async function deletePublishingHouse(id: string) {
-    const data = await connection()
-        .select('bookSeries.publishingHouseId as publishingHouseId')
-        .from('book')
-        .join('bookSeries', 'book.bookSeriesId', '=', 'bookSeries.id')
-        .where({ publishingHouseId: id });
+    const bookSeriesIds = await BookSeries.find({ publishingHouseId: id });
 
-    if (data.length) {
-     return null;
+    if (bookSeriesIds) {
+        await checkUsageInBook('bookSeriesId', bookSeriesIds, 'Publishing House');
+        await BookSeries.deleteMany({ _id: bookSeriesIds });
     }
-    await getBookSeriesTable().delete().where({ publishingHouseId: id });
-    await getPublishingHouseTable().delete().where({ id });
+
+    await PublishingHouse.findByIdAndDelete(id);
 
     return { id } as PublishingHouseEntity;
 }

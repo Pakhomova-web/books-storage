@@ -3,6 +3,7 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useCreateLanguage, useUpdateLanguage } from '@/lib/graphql/hooks';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/modals/custom-text-field';
+import ErrorNotification from '@/components/error-notification';
 
 interface ILanguageModalProps {
     open: boolean,
@@ -13,34 +14,40 @@ interface ILanguageModalProps {
 
 export default function LanguageModal({ open, item, onClose }: ILanguageModalProps) {
     const formContext = useForm<{ name: string }>({ defaultValues: { name: item?.name } });
-    const { update, loading: loadingUpdating } = useUpdateLanguage();
-    const { create, loading: loadingCreating } = useCreateLanguage();
+    const { update, updating, updatingError } = useUpdateLanguage();
+    const { create, creating, creatingError } = useCreateLanguage();
 
     async function onSubmit() {
-        if (item) {
-            await update({ ...item, ...formContext.getValues() } as LanguageEntity);
-        } else {
-            await create({ ...formContext.getValues() } as LanguageEntity);
-        }
+        try {
+            if (item) {
+                await update({ ...item, ...formContext.getValues() } as LanguageEntity);
+            } else {
+                await create({ ...formContext.getValues() } as LanguageEntity);
+            }
 
-        onClose(true);
+            onClose(true);
+        } catch (err) {}
     }
 
     return (
-        <CustomModal title={!item ? 'Додати мову видавництва' : 'Редагувати мову видавництва'}
+        <CustomModal title={!item ? 'Add language' : 'Edit language'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
-                     loading={loadingUpdating || loadingCreating}
+                     loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={onSubmit}>
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
                 <CustomTextField fullWidth
                                  required
                                  id="language-name"
-                                 label="Назва"
+                                 label="Name"
                                  name="name"/>
             </FormContainer>
+
+            {(creatingError || updatingError) &&
+              <ErrorNotification apolloError={creatingError || updatingError}></ErrorNotification>
+            }
         </CustomModal>
     );
 }

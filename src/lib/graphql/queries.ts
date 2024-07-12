@@ -54,6 +54,7 @@ export const publishingHousesQuery = gql`
         items: publishingHouses(orderBy: $orderBy, order: $order) {
             id
             name
+            tags
         }
     }
 `;
@@ -76,19 +77,21 @@ export const deletePublishingHouseQuery = gql`
 `;
 
 export const createPublishingHouseQuery = gql`
-    mutation CreateLanguage($input: PublishingHouseCreateInput!) {
+    mutation CreatePublishingHouse($input: PublishingHouseCreateInput!) {
         item: createPublishingHouse(input: $input) {
             id
             name
+            tags
         }
     }
 `;
 
 export const updatePublishingHouseQuery = gql`
-    mutation UpdateLanguage($input: PublishingHouseInput!) {
+    mutation UpdatePublishingHouse($input: PublishingHouseInput!) {
         item: updatePublishingHouse(input: $input) {
             id
             name
+            tags
         }
     }
 `;
@@ -235,7 +238,7 @@ export const updateBookTypeQuery = gql`
 /** cover type **/
 
 export const coverTypesQuery = gql`
-    query PageTypes($orderBy: String, $order: String) {
+    query CoverTypes($orderBy: String, $order: String) {
         items: coverTypes(orderBy: $orderBy, order: $order) {
             id
             name
@@ -244,7 +247,7 @@ export const coverTypesQuery = gql`
 `;
 
 export const coverTypeOptionsQuery = gql`
-    query PageTypes($orderBy: String, $order: String) {
+    query CoverTypes($orderBy: String, $order: String) {
         items: coverTypes(orderBy: $orderBy, order: $order) {
             id
             label: name
@@ -289,6 +292,7 @@ export const bookSeriesQuery = gql`
             publishingHouse {
                 id
                 name
+                tags
             }
         }
     }
@@ -306,8 +310,6 @@ export const createBookSeriesQuery = gql`
     mutation CreateBookSeries($input: BookSeriesCreateInput!) {
         item: createBookSeries(input: $input) {
             id
-            name
-            publishingHouseId
         }
     }
 `;
@@ -316,8 +318,6 @@ export const updateBookSeriesQuery = gql`
     mutation UpdateBookSeries($input: BookSeriesInput!) {
         item: updateBookSeries(input: $input) {
             id
-            name
-            publishingHouseId
         }
     }
 `;
@@ -363,6 +363,7 @@ export const booksQuery = gql`
                 publishingHouse {
                     id
                     name
+                    tags
                 }
             }
         }

@@ -1,44 +1,52 @@
 import { CoverTypeEntity } from '@/lib/data/types';
-import { connection } from '@/lib/data/connection';
-
-const getCoverTypeTable = () => connection().table<CoverTypeEntity>('coverType');
+import { GraphQLError } from 'graphql/error';
+import CoverType from '@/lib/data/models/cover-type';
+import { checkUsageInBook, getByName } from '@/lib/data/base';
+import Book from '@/lib/data/models/book';
 
 export async function getCoverTypes(orderBy: string, order: string) {
-    return await getCoverTypeTable().select().orderBy(orderBy, order);
+    return CoverType.find(null, null, { sort: { [orderBy]: order } });
 }
 
-export async function getCoverTypeById(id: string) {
-    return await getCoverTypeTable().first().where({ id });
-}
-
-export async function createCoverType({ name })  {
-    const item = await getCoverTypeTable().first().where({ name });
+export async function createCoverType(input: CoverTypeEntity)  {
+    const item = await getByName(CoverType, input.name);
 
     if (item) {
         return null;
+    } else {
+        const item = new CoverType(input);
+
+        await item.save();
+
+        return { ...input, id: item.id } as CoverTypeEntity;
     }
-
-    await getCoverTypeTable().insert({ name });
-    const data = await getCoverTypeTable().first().where({ name });
-
-    return data as CoverTypeEntity;
 }
 
-export async function updateCoverType({ id, name }: CoverTypeEntity) {
-    if (!id) {
-        return null;
+export async function updateCoverType(input: CoverTypeEntity) {
+    if (!input.id) {
+        throw new GraphQLError(`No Cover Type found with id ${input.id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
     }
-    const item = await getCoverTypeTable().first().where({ id });
-    if (!item) {
-        return null;
-    }
+    const itemByName = await getByName(CoverType, input.name);
 
-    await getCoverTypeTable().update({ name }).where({ id });
-    return { ...item, name } as CoverTypeEntity;
+    if (itemByName && itemByName.id.toString() !== input.id) {
+        throw new GraphQLError(`Cover Type with name '${input.name}' already exists.`, {
+            extensions: { code: 'DUPLICATE_ERROR' }
+        });
+    }
+    await CoverType.findOneAndUpdate({ _id: input.id }, input);
+
+    return input as CoverTypeEntity;
+}
+
+export async function getCoverTypeById(id: string) {
+    return CoverType.findById(id);
 }
 
 export async function deleteCoverType(id: string) {
-    await getCoverTypeTable().delete().where({ id });
+    await checkUsageInBook('coverTypeId', [id], 'Cover Type');
+    await CoverType.findByIdAndDelete(id);
 
     return { id } as CoverTypeEntity;
 }

@@ -1,4 +1,4 @@
-import { DocumentNode, useMutation, useQuery } from '@apollo/client';
+import { ApolloError, DocumentNode, useMutation, useQuery } from '@apollo/client';
 import {
     authorOptionsQuery,
     authorsQuery,
@@ -51,11 +51,10 @@ import {
 } from '@/lib/data/types';
 import { apolloClient } from '@/lib/apollo';
 
-
 /** languages **/
 
 export function useLanguages(sort?: TableSort) {
-    return _useItems(languagesQuery, sort);
+    return _useItems<LanguageEntity>(languagesQuery, sort);
 }
 
 export function useLanguageOptions(sort?: TableSort) {
@@ -77,7 +76,7 @@ export function useDeleteLanguage() {
 /** publishing house **/
 
 export function usePublishingHouses(sort?: TableSort) {
-    return _useItems(publishingHousesQuery, sort);
+    return _useItems<PublishingHouseEntity>(publishingHousesQuery, sort);
 }
 
 export function usePublishingHouseOptions(sort?: TableSort) {
@@ -143,7 +142,7 @@ export function useDeleteAuthor() {
 /** book type **/
 
 export function useBookTypes(sort?: TableSort) {
-    return _useItems(bookTypesQuery, sort);
+    return _useItems<BookTypeEntity>(bookTypesQuery, sort);
 }
 
 export function useBookTypeOptions(sort?: TableSort) {
@@ -203,13 +202,13 @@ export function useDeleteBookSeries() {
 }
 
 export function useBookSeriesOptions(filters?: BookSeriesEntity) {
-    const { items, loading, error, refetch } = _useItems(bookSeriesQuery, null, filters);
+    const { items, loading, gettingError, refetch } = _useItems<BookSeriesEntity>(bookSeriesQuery, null, filters);
 
     return {
         refetch,
         items: items.map(item => ({ id: item.id, label: `${item.name} (${item.publishingHouse?.name})` })),
         loading,
-        error
+        gettingError
     };
 }
 
@@ -242,16 +241,25 @@ export function useUpdateBook() {
 
 /** common **/
 
-function _useItems(query: DocumentNode, sort?: TableSort, filters?) {
+function _useItems<T>(query: DocumentNode, sort?: TableSort, filters?): {
+    items: T[],
+    loading: boolean,
+    gettingError: ApolloError,
+    refetch: Function
+} {
     const { data, error, loading, refetch } = useQuery(query, {
         variables: { ...sort, filters }
     });
 
-    return { items: data?.items || [], error: Boolean(error), loading, refetch };
+    return { items: data?.items || [], gettingError: error, loading, refetch };
 }
 
-function _useDeleteItemById(query: DocumentNode) {
-    const [mutate, { loading }] = useMutation(query);
+function _useDeleteItemById(query: DocumentNode): {
+    deleting: boolean,
+    deletingError: ApolloError,
+    deleteItem: Function
+} {
+    const [mutate, { loading, error }] = useMutation(query);
 
     return {
         deleteItem: async (id: string) => {
@@ -259,11 +267,12 @@ function _useDeleteItemById(query: DocumentNode) {
 
             return item;
         },
-        loading
+        deleting: loading,
+        deletingError: error
     };
 }
 
-function _useUpdateItem<K>(query: DocumentNode) {
+function _useUpdateItem<K>(query: DocumentNode): { updating: boolean, updatingError: ApolloError, update: Function } {
     const [mutate, { loading, error }] = useMutation(query);
 
     return {
@@ -272,12 +281,12 @@ function _useUpdateItem<K>(query: DocumentNode) {
 
             return item;
         },
-        loading,
-        error
+        updating: loading,
+        updatingError: error
     };
 }
 
-function _useCreateItem<K>(query: DocumentNode) {
+function _useCreateItem<K>(query: DocumentNode): { creating: boolean, creatingError: ApolloError, create: Function } {
     const [mutate, { loading, error }] = useMutation(query);
 
     return {
@@ -286,7 +295,7 @@ function _useCreateItem<K>(query: DocumentNode) {
 
             return item;
         },
-        loading,
-        error
+        creating: loading,
+        creatingError: error
     };
 }

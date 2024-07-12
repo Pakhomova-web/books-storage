@@ -7,6 +7,7 @@ const typeDefs =  /* GraphQL */ `
   type PublishingHouse {
     id: ID
     name: String!
+    tags: String
   }
 
   type PageType {
@@ -128,6 +129,7 @@ const typeDefs =  /* GraphQL */ `
 
   input PublishingHouseCreateInput {
     name: String!
+    tags: String
   }
 
   input PageTypeCreateInput {
@@ -160,6 +162,7 @@ const typeDefs =  /* GraphQL */ `
   input PublishingHouseInput {
     id: ID!
     name: String!
+    tags: String
   }
   
   input AuthorInput {

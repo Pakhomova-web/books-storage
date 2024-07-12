@@ -11,7 +11,8 @@ export interface LanguageEntity {
 
 export interface PublishingHouseEntity {
     id: string,
-    name: string
+    name: string,
+    tags: string
 }
 
 export interface PageTypeEntity {

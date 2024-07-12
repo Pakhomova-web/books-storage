@@ -19,6 +19,7 @@ import React, { useEffect, useState } from 'react';
 
 import { apolloClient } from '@/lib/apollo';
 import './global.css';
+import Head from 'next/head';
 
 interface SettingListItem {
     link: string,
@@ -26,14 +27,14 @@ interface SettingListItem {
 }
 
 const settingsList: SettingListItem[] = [
-    { title: 'Книги', link: 'books' },
-    { title: 'Видавництва', link: 'publishing-houses' },
-    { title: 'Серії книг', link: 'book-series' },
-    { title: 'Типи обкладинок', link: 'cover-types' },
-    { title: 'Типи книг', link: 'book-types' },
-    { title: 'Типи сторінок', link: 'page-types' },
-    { title: 'Мови видавництва', link: 'languages' },
-    { title: 'Автори', link: 'authors' }
+    { title: 'Books', link: 'books' },
+    { title: 'Publishing Houses', link: 'publishing-houses' },
+    { title: 'Book Series', link: 'book-series' },
+    { title: 'Cover Types', link: 'cover-types' },
+    { title: 'Book Types', link: 'book-types' },
+    { title: 'Page Types', link: 'page-types' },
+    { title: 'Languages', link: 'languages' },
+    { title: 'Authors', link: 'authors' }
 ];
 const drawerWidth = 240;
 
@@ -64,11 +65,12 @@ export default function App({ Component, pageProps }: AppProps) {
 
     return (
         <ApolloProvider client={apolloClient}>
+            <Head>
+                <title>Books Storage</title>
+            </Head>
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <Toolbar className="toolbar">
-                    <Button onClick={() => goToMainPage()} color="inherit">
-                        PH_SMART_KIDS
-                    </Button>
+                    <Button onClick={() => goToMainPage()} color="inherit" sx={{ width: '190px' }}>Main page</Button>
 
                     <IconButton size="large"
                                 edge="start"

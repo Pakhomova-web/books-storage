@@ -1,44 +1,52 @@
 import { LanguageEntity } from '@/lib/data/types';
-import { connection } from '@/lib/data/connection';
-
-const getLanguageTable = () => connection().table<LanguageEntity>('language');
+import Language from './models/language';
+import { GraphQLError } from 'graphql/error';
+import { checkUsageInBook, getByName } from '@/lib/data/base';
+import Book from '@/lib/data/models/book';
 
 export async function getLanguages(orderBy: string, order: string) {
-    return await getLanguageTable().select().orderBy(orderBy, order);
+    return Language.find(null, null, { sort: { [orderBy]: order } });
+}
+
+export async function createLanguage(input: LanguageEntity) {
+    const item = await getByName(Language, input.name);
+
+    if (item) {
+        return null;
+    } else {
+        const item = new Language(input);
+
+        await item.save();
+
+        return { ...input, id: item.id } as LanguageEntity;
+    }
+}
+
+export async function updateLanguage(input: LanguageEntity) {
+    if (!input.id) {
+        throw new GraphQLError(`No Language found with id ${input.id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+    const itemByName = await getByName(Language, input.name);
+
+    if (itemByName && itemByName.id.toString() !== input.id) {
+        throw new GraphQLError(`Language with name '${input.name}' already exists.`, {
+            extensions: { code: 'DUPLICATE_ERROR' }
+        });
+    }
+    await Language.findOneAndUpdate({ _id: input.id }, input);
+
+    return input as LanguageEntity;
 }
 
 export async function getLanguageById(id: string) {
-    return await getLanguageTable().first().where({ id });
-}
-
-export async function createLanguage({ name })  {
-    const language = await getLanguageTable().first().where({ name });
-
-    if (language) {
-        return null;
-    }
-
-    await getLanguageTable().insert({ name });
-    const data = await getLanguageTable().first().where({ name });
-
-    return data as LanguageEntity;
-}
-
-export async function updateLanguage({ id, name }: LanguageEntity) {
-    if (!id) {
-        return null;
-    }
-    const language = await getLanguageTable().first().where({ id });
-    if (!language) {
-        return null;
-    }
-
-    await getLanguageTable().update({ name }).where({ id });
-    return { ...language, name } as LanguageEntity;
+    return await Language.findById(id);
 }
 
 export async function deleteLanguage(id: string) {
-    await getLanguageTable().delete().where({ id });
+    await checkUsageInBook('languageId', [id], 'Language');
+    await Language.findByIdAndDelete(id);
 
     return { id } as LanguageEntity;
 }
