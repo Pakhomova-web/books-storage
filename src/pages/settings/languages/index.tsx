@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useDeleteLanguage, useLanguages } from '@/lib/graphql/hooks';
-import { LanguageEntity } from '@/lib/data/types';
+import { IPageable, LanguageEntity } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
-import { TableKey, TableSort } from '@/components/table/table-key';
+import { TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import LanguageModal from '@/components/modals/language-modal';
 import ErrorNotification from '@/components/error-notification';
@@ -26,8 +26,8 @@ export default function Languages() {
         }
     ]);
     const [selectedItem, setSelectedItem] = useState<LanguageEntity>();
-    const [sort, setSort] = useState<TableSort>({ order: 'asc', orderBy: '' });
-    const { items, gettingError, loading, refetch } = useLanguages(sort);
+    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
+    const { items, gettingError, loading, refetch } = useLanguages(pageSettings);
     const { deleteItem, deleting, deletingError } = useDeleteLanguage();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -69,8 +69,8 @@ export default function Languages() {
         <Loading open={loading || deleting} fullHeight={true}>
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: LanguageEntity) => item.id}
-                         onSort={(sort: TableSort) => setSort(sort)}
-                         sort={sort}
+                         onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
+                         pageSettings={pageSettings}
                          onRowClick={item => onEdit(item)}></CustomTable>
 
             {error && <ErrorNotification error={error}></ErrorNotification>}

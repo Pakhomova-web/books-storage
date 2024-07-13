@@ -4,10 +4,10 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
-import { PublishingHouseEntity } from '@/lib/data/types';
+import { IPageable, PublishingHouseEntity } from '@/lib/data/types';
 import Loading from '@/components/loading';
 import CustomTable from '@/components/table/custom-table';
-import { TableKey, TableSort } from '@/components/table/table-key';
+import { TableKey } from '@/components/table/table-key';
 import { useDeletePublishingHouse, usePublishingHouses } from '@/lib/graphql/hooks';
 import PublishingHouseModal from '@/components/modals/publishing-house-modal';
 import ErrorNotification from '@/components/error-notification';
@@ -16,7 +16,7 @@ export default function PublishingHouses() {
     const { items, loading, gettingError, refetch } = usePublishingHouses();
     const { deleting, deleteItem, deletingError } = useDeletePublishingHouse();
     const [selectedItem, setSelectedItem] = useState<PublishingHouseEntity>();
-    const [sort, setSort] = useState<TableSort>({ order: 'asc', orderBy: '' });
+    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
     const [tableKeys] = useState<TableKey<PublishingHouseEntity>[]>([
         { type: 'text', title: 'Name', sortValue: 'name', renderValue: (item: PublishingHouseEntity) => item.name },
         { type: 'text', title: 'Tags', sortValue: 'tags', renderValue: (item: PublishingHouseEntity) => item.tags },
@@ -69,8 +69,8 @@ export default function PublishingHouses() {
             <CustomTable keys={tableKeys}
                          data={items}
                          renderKey={(item: PublishingHouseEntity) => item.id}
-                         onSort={(sort: TableSort) => setSort(sort)}
-                         sort={sort}
+                         onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
+                         pageSettings={pageSettings}
                          onRowClick={(item: PublishingHouseEntity) => onEdit(item)}></CustomTable>
 
             {error && <ErrorNotification error={error}></ErrorNotification>}

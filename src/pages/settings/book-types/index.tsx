@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useDeleteBookType, useBookTypes } from '@/lib/graphql/hooks';
-import { BookTypeEntity } from '@/lib/data/types';
+import { BookTypeEntity, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
-import { TableKey, TableSort } from '@/components/table/table-key';
+import { TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import BookTypeModal from '@/components/modals/book-type-modal';
 import ErrorNotification from '@/components/error-notification';
@@ -32,8 +32,8 @@ export default function BookTypes() {
         }
     ]);
     const [selectedItem, setSelectedItem] = useState<BookTypeEntity>();
-    const [sort, setSort] = useState<TableSort>({ order: 'asc', orderBy: '' });
-    const { items, gettingError, loading, refetch } = useBookTypes(sort);
+    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
+    const { items, gettingError, loading, refetch } = useBookTypes(pageSettings);
     const { deleteItem, deleting, deletingError } = useDeleteBookType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -69,8 +69,8 @@ export default function BookTypes() {
         <Loading open={loading || deleting} fullHeight={true}>
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: BookTypeEntity) => item.id}
-                         onSort={(sort: TableSort) => setSort(sort)}
-                         sort={sort}
+                         onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
+                         pageSettings={pageSettings}
                          onRowClick={(item: BookTypeEntity) => onEdit(item)}></CustomTable>
 
             {error && <ErrorNotification error={error}></ErrorNotification>}
