@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { LanguageEntity, PublishingHouseEntity, PageTypeEntity, BookTypeEntity, CoverTypeEntity, BookSeriesEntity, BookEntity, AuthorEntity, IPageable } from '../data/types';
+import { LanguageEntity, PublishingHouseEntity, PageTypeEntity, BookTypeEntity, CoverTypeEntity, BookSeriesEntity, BookEntity, AuthorEntity } from '../data/types';
 import { gql } from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -521,7 +521,7 @@ export type ResolversTypes = {
   PageType: ResolverTypeWrapper<PageTypeEntity>;
   PageTypeCreateInput: PageTypeCreateInput;
   PageTypeInput: PageTypeInput;
-  PageableInput: ResolverTypeWrapper<IPageable>;
+  PageableInput: PageableInput;
   PublishingHouse: ResolverTypeWrapper<PublishingHouseEntity>;
   PublishingHouseCreateInput: PublishingHouseCreateInput;
   PublishingHouseInput: PublishingHouseInput;
@@ -560,7 +560,7 @@ export type ResolversParentTypes = {
   PageType: PageTypeEntity;
   PageTypeCreateInput: PageTypeCreateInput;
   PageTypeInput: PageTypeInput;
-  PageableInput: IPageable;
+  PageableInput: PageableInput;
   PublishingHouse: PublishingHouseEntity;
   PublishingHouseCreateInput: PublishingHouseCreateInput;
   PublishingHouseInput: PublishingHouseInput;
