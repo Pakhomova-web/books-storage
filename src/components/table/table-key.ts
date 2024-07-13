@@ -5,5 +5,11 @@ export interface TableKey<K> {
     sortValue?: string,
     title?: string,
     renderValue?: (item: K) => string | number,
-    icons?: { element: ReactNode, onIconClick: (item: K) => void }[]
+    icons?: IIcon[]
+}
+
+export interface IIcon {
+    label?: string,
+    element: ReactNode,
+    onIconClick: Function
 }

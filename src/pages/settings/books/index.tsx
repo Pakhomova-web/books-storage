@@ -78,6 +78,7 @@ export default function Books() {
             type: 'icons',
             icons: [
                 {
+                    label: 'Copy',
                     element: <ContentCopyIcon/>,
                     onIconClick: (item: BookEntity) => {
                         const data = { ...item, name: null };
@@ -87,6 +88,7 @@ export default function Books() {
                     }
                 },
                 {
+                    label: 'Delete',
                     element: <DeleteIcon color="warning"/>,
                     onIconClick: (item: BookEntity) => deleteHandler(item)
                 }
