@@ -5,7 +5,7 @@ const removeTypenameLink = removeTypenameFromVariables();
 const link = from([
     removeTypenameLink,
     new HttpLink({
-        uri: `http${process.env.NODE_ENV === 'development' ? '://localhost:3000' : 's://ph-books-storage.vercel.app'}/api/graphql`
+        uri: `http${process.env.NODE_ENV === 'development' ? '://localhost:3000' : 's://books-storage.vercel.app'}/api/graphql`
     })
 ]);
 
