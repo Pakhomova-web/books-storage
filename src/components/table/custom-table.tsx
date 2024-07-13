@@ -14,8 +14,10 @@ import {
 } from '@mui/material';
 import React, { ReactNode, useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CopyIcon from '@mui/icons-material/ContentCopy';
 
-import { IIcon, TableKey } from '@/components/table/table-key';
+import { ITableAction, TableActionEnum, TableKey } from '@/components/table/table-key';
 import CustomTableRow from '@/components/table/custom-table-row';
 import { visuallyHidden } from '@mui/utils';
 import { IPageable } from '@/lib/data/types';
@@ -42,8 +44,8 @@ function renderTableCell<T>(key: TableKey<T>, item: T, index: number, anchorEl: 
     switch (key.type) {
         case 'icons':
             return <TableCell key={index} align="right" onClick={e => e.stopPropagation()}>
-                {key.icons && key.icons?.length === 1 ?
-                    key.icons.map((icon, index) => getIconItem<T>(item, icon, index))
+                {key.actions && key.actions?.length === 1 ?
+                    key.actions.map((icon, index) => getIconItem<T>(item, icon, index))
                     : <Box>
                         <IconButton aria-haspopup="true" onClick={onMenuClick}>
                             <MenuIcon/>
@@ -52,7 +54,7 @@ function renderTableCell<T>(key: TableKey<T>, item: T, index: number, anchorEl: 
                               open={open}
                               onClose={onCloseMenu}
                               MenuListProps={{ 'aria-labelledby': 'basic-button' }}>
-                            {key.icons.map((icon, index) => (
+                            {key.actions.map((icon, index) => (
                                 <MenuItem key={index} onClick={onCloseMenu}>
                                     {getIconItem<T>(item, icon, index, onCloseMenu)}
                                 </MenuItem>)
@@ -65,18 +67,29 @@ function renderTableCell<T>(key: TableKey<T>, item: T, index: number, anchorEl: 
     }
 }
 
-function getIconItem<T>(item: T, icon: IIcon, index: number, onClick?: Function) {
+function getIconItem<T>(item: T, action: ITableAction, index: number, onClick?: Function) {
     const handleClick = event => {
         event.stopPropagation();
         if (onClick) {
             onClick();
         }
-        icon.onIconClick(item);
+        icon.onClick(item);
     };
+    let icon = null;
+    let color = null;
 
-    return icon.label ?
-        <Button key={index} onClick={handleClick}>{icon.element}{icon.label || ''}</Button> :
-        <IconButton key={index} onClick={handleClick}>{icon.element}</IconButton>;
+    switch (action.type) {
+        case TableActionEnum.delete:
+            icon = <DeleteIcon color="warning"/>;
+            color = 'warning';
+            break;
+        case TableActionEnum.copy:
+            icon = <CopyIcon/>;
+    }
+
+    return action.label ?
+        <Button key={index} onClick={handleClick} color={color || 'primary'}>{icon}{action.label || ''}</Button> :
+        <IconButton key={index} onClick={handleClick} color={color || 'primary'}>{icon}</IconButton>;
 }
 
 export default function CustomTable<T>(props: CustomTableProps<T>) {
@@ -154,7 +167,7 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
                     {props.usePagination &&
                       <TableRow>
                         <TablePagination rowsPerPageOptions={[5, 10, 25]}
-                                         count={props.totalCount || props.data.length}
+                                         count={props.totalCount}
                                          page={page}
                                          colSpan={props.keys.length}
                                          rowsPerPage={rowsPerPage}

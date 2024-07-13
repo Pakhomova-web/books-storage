@@ -1,13 +1,12 @@
 import { Box, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
-import { IPageable, PublishingHouseEntity } from '@/lib/data/types';
+import { IPageable, LanguageEntity, PublishingHouseEntity } from '@/lib/data/types';
 import Loading from '@/components/loading';
 import CustomTable from '@/components/table/custom-table';
-import { TableKey } from '@/components/table/table-key';
+import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import { useDeletePublishingHouse, usePublishingHouses } from '@/lib/graphql/hooks';
 import PublishingHouseModal from '@/components/modals/publishing-house-modal';
 import ErrorNotification from '@/components/error-notification';
@@ -22,14 +21,10 @@ export default function PublishingHouses() {
         { type: 'text', title: 'Tags', sortValue: 'tags', renderValue: (item: PublishingHouseEntity) => item.tags },
         {
             type: 'icons',
-            icons: [
+            actions: [
                 {
-                    element: <DeleteIcon color="warning"/>, onIconClick: async (item: PublishingHouseEntity) => {
-                        try {
-                            await deleteItem(item.id);
-                            refreshData(true);
-                        } catch (err) {}
-                    }
+                    type: TableActionEnum.delete,
+                    onClick: (item: PublishingHouseEntity) => deleteHandler(item)
                 }
             ]
         }
@@ -44,6 +39,14 @@ export default function PublishingHouses() {
             setError(deletingError);
         }
     }, [gettingError, deletingError]);
+
+    async function deleteHandler(item: LanguageEntity) {
+        try {
+            await deleteItem(item.id);
+            refreshData(true);
+        } catch (err) {
+        }
+    }
 
     function refreshData(updated: boolean) {
         if (updated) {

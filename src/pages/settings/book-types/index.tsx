@@ -1,13 +1,12 @@
 import { Box, Button } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
-import { useDeleteBookType, useBookTypes } from '@/lib/graphql/hooks';
+import { useBookTypes, useDeleteBookType } from '@/lib/graphql/hooks';
 import { BookTypeEntity, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
-import { TableKey } from '@/components/table/table-key';
+import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import BookTypeModal from '@/components/modals/book-type-modal';
 import ErrorNotification from '@/components/error-notification';
@@ -17,10 +16,10 @@ export default function BookTypes() {
         { title: 'Name', sortValue: 'name', renderValue: (item: BookTypeEntity) => item.name, type: 'text' },
         {
             type: 'icons',
-            icons: [
+            actions: [
                 {
-                    element: <DeleteIcon color="warning"/>,
-                    onIconClick: async (item: BookTypeEntity) => {
+                    type: TableActionEnum.delete,
+                    onClick: async (item: BookTypeEntity) => {
                         try {
                             await deleteItem(item.id);
                             refreshData(true);

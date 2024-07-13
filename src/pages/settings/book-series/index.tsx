@@ -1,5 +1,4 @@
 import { Box, Button } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
@@ -7,7 +6,7 @@ import { ApolloError } from '@apollo/client';
 import { useBookSeries, useDeleteBookSeries } from '@/lib/graphql/hooks';
 import { BookSeriesEntity, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
-import { TableKey } from '@/components/table/table-key';
+import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import BookSeriesModal from '@/components/modals/book-series-modal';
 import ErrorNotification from '@/components/error-notification';
@@ -23,10 +22,10 @@ export default function BookSeries() {
         },
         {
             type: 'icons',
-            icons: [
+            actions: [
                 {
-                    element: <DeleteIcon color="warning"/>,
-                    onIconClick: (item: BookSeriesEntity) => deleteHandler(item)
+                    type: TableActionEnum.delete,
+                    onClick: (item: BookSeriesEntity) => deleteHandler(item)
                 }
             ]
         }

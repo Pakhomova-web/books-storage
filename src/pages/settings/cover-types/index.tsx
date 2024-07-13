@@ -1,5 +1,4 @@
 import { Box, Button } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
@@ -7,7 +6,7 @@ import { ApolloError } from '@apollo/client';
 import { useCoverTypes, useDeleteCoverType } from '@/lib/graphql/hooks';
 import { CoverTypeEntity, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
-import { TableKey } from '@/components/table/table-key';
+import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import CoverTypeModal from '@/components/modals/cover-type-modal';
 import ErrorNotification from '@/components/error-notification';
@@ -17,10 +16,10 @@ export default function CoverTypes() {
         { title: 'Name', sortValue: 'name', renderValue: (item: CoverTypeEntity) => item.name, type: 'text' },
         {
             type: 'icons',
-            icons: [
+            actions: [
                 {
-                    element: <DeleteIcon color="warning"/>,
-                    onIconClick: (item: CoverTypeEntity) => deleteHandler(item)
+                    type: TableActionEnum.delete,
+                    onClick: (item: CoverTypeEntity) => deleteHandler(item)
                 }
             ]
         }

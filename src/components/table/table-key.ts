@@ -1,15 +1,18 @@
-import { ReactNode } from 'react';
-
 export interface TableKey<K> {
     type: 'icons' | 'text',
     sortValue?: string,
     title?: string,
     renderValue?: (item: K) => string | number,
-    icons?: IIcon[]
+    actions?: ITableAction[]
 }
 
-export interface IIcon {
+export interface ITableAction {
     label?: string,
-    element: ReactNode,
-    onIconClick: Function
+    type: TableActionEnum,
+    onClick: Function
+}
+
+export enum TableActionEnum {
+    delete,
+    copy
 }

@@ -1,7 +1,5 @@
 import { Box, Button } from '@mui/material';
-import { TableKey } from '@/components/table/table-key';
-import DeleteIcon from '@mui/icons-material/Delete';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
@@ -76,11 +74,11 @@ export default function Books() {
         },
         {
             type: 'icons',
-            icons: [
+            actions: [
                 {
                     label: 'Copy',
-                    element: <ContentCopyIcon/>,
-                    onIconClick: (item: BookEntity) => {
+                    type: TableActionEnum.copy,
+                    onClick: (item: BookEntity) => {
                         const data = { ...item, name: null };
 
                         delete data.id;
@@ -89,8 +87,8 @@ export default function Books() {
                 },
                 {
                     label: 'Delete',
-                    element: <DeleteIcon color="warning"/>,
-                    onIconClick: (item: BookEntity) => deleteHandler(item)
+                    type: TableActionEnum.delete,
+                    onClick: (item: BookEntity) => deleteHandler(item)
                 }
             ]
         }

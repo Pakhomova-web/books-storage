@@ -1,5 +1,4 @@
 import { Box, Button } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
@@ -7,7 +6,7 @@ import { ApolloError } from '@apollo/client';
 import { useDeletePageType, usePageTypes } from '@/lib/graphql/hooks';
 import { IPageable, PageTypeEntity } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
-import { TableKey } from '@/components/table/table-key';
+import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import PageTypeModal from '@/components/modals/page-type-modal';
 import ErrorNotification from '@/components/error-notification';
@@ -17,10 +16,10 @@ export default function PageTypes() {
         { title: 'Name', sortValue: 'name', renderValue: (item: PageTypeEntity) => item.name, type: 'text' },
         {
             type: 'icons',
-            icons: [
+            actions: [
                 {
-                    element: <DeleteIcon color="warning"/>,
-                    onIconClick: (item: PageTypeEntity) => deleteHandler(item)
+                    type: TableActionEnum.delete,
+                    onClick: (item: PageTypeEntity) => deleteHandler(item)
                 }
             ]
         }
