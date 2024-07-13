@@ -73,7 +73,7 @@ function getIconItem<T>(item: T, action: ITableAction, index: number, onClick?: 
         if (onClick) {
             onClick();
         }
-        icon.onClick(item);
+        action.onClick(item);
     };
     let icon = null;
     let color = null;
