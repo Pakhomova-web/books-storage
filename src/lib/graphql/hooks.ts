@@ -57,8 +57,8 @@ export function useLanguages(sort?: TableSort) {
     return _useItems<LanguageEntity>(languagesQuery, sort);
 }
 
-export function useLanguageOptions(sort?: TableSort) {
-    return _useItems(languageOptionsQuery, sort);
+export function useLanguageOptions<T>(sort?: TableSort) {
+    return _useItems<T>(languageOptionsQuery, sort);
 }
 
 export function useUpdateLanguage() {
@@ -79,8 +79,8 @@ export function usePublishingHouses(sort?: TableSort) {
     return _useItems<PublishingHouseEntity>(publishingHousesQuery, sort);
 }
 
-export function usePublishingHouseOptions(sort?: TableSort) {
-    return _useItems(publishingHouseOptionsQuery, sort);
+export function usePublishingHouseOptions<T>(sort?: TableSort) {
+    return _useItems<T>(publishingHouseOptionsQuery, sort);
 }
 
 export function useDeletePublishingHouse() {
@@ -101,8 +101,8 @@ export function usePageTypes(sort?: TableSort) {
     return _useItems(pageTypesQuery, sort);
 }
 
-export function usePageTypeOptions(sort?: TableSort) {
-    return _useItems(pageTypeOptionsQuery, sort);
+export function usePageTypeOptions<T>(sort?: TableSort) {
+    return _useItems<T>(pageTypeOptionsQuery, sort);
 }
 
 export function useCreatePageType() {
@@ -123,8 +123,8 @@ export function useAuthors(sort?: TableSort) {
     return _useItems(authorsQuery, sort);
 }
 
-export function useAuthorOptions(sort?: TableSort) {
-    return _useItems(authorOptionsQuery, sort);
+export function useAuthorOptions<T>(sort?: TableSort) {
+    return _useItems<T>(authorOptionsQuery, sort);
 }
 
 export function useCreateAuthor() {
@@ -145,8 +145,8 @@ export function useBookTypes(sort?: TableSort) {
     return _useItems<BookTypeEntity>(bookTypesQuery, sort);
 }
 
-export function useBookTypeOptions(sort?: TableSort) {
-    return _useItems(bookTypeOptionsQuery, sort);
+export function useBookTypeOptions<T>(sort?: TableSort) {
+    return _useItems<T>(bookTypeOptionsQuery, sort);
 }
 
 export function useUpdateBookType() {
@@ -167,8 +167,8 @@ export function useCoverTypes(sort?: TableSort) {
     return _useItems(coverTypesQuery, sort);
 }
 
-export function useCoverTypeOptions(sort?: TableSort) {
-    return _useItems(coverTypeOptionsQuery, sort);
+export function useCoverTypeOptions<T>(sort?: TableSort) {
+    return _useItems<T>(coverTypeOptionsQuery, sort);
 }
 
 export function useUpdateCoverType() {
@@ -248,6 +248,7 @@ function _useItems<T>(query: DocumentNode, sort?: TableSort, filters?: T): {
     refetch: Function
 } {
     const { data, error, loading, refetch } = useQuery(query, {
+        fetchPolicy: 'no-cache',
         variables: { ...sort, filters }
     });
 

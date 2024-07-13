@@ -59,3 +59,8 @@ export interface BookEntity {
     authorId: string,
     author?: AuthorEntity
 }
+
+export interface IOption {
+    id: string,
+    label: string
+}

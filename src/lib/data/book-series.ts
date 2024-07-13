@@ -60,7 +60,7 @@ export async function updateBookSeries(input: BookSeriesEntity) {
     const itemByName = await getByName(BookSeries, input.name);
 
     if (itemByName && itemByName.id.toString() !== input.id) {
-        throw new GraphQLError(`Book Series with name '${name}' already exists.`, {
+        throw new GraphQLError(`Book Series with name '${input.name}' already exists.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }

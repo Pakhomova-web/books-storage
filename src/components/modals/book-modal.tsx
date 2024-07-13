@@ -1,4 +1,4 @@
-import { BookEntity, BookSeriesEntity } from '@/lib/data/types';
+import { BookEntity, BookSeriesEntity, IOption } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import {
     getBookSeriesOptions,
@@ -42,7 +42,7 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
             price: item?.price,
             format: item?.format,
             description: item?.description,
-            isbn: item?.coverTypeId,
+            isbn: item?.isbn,
             numberInStock: item?.numberInStock,
             numberOfPages: item?.numberOfPages
         }
@@ -50,13 +50,13 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
     const { publishingHouseId } = formContext.watch();
     const { update, updating, updatingError } = useUpdateBook();
     const { create, creating, creatingError } = useCreateBook();
-    const { items: pageTypeOptions } = usePageTypeOptions();
-    const { items: authorOptions } = useAuthorOptions();
-    const { items: languageOptions } = useLanguageOptions();
+    const { items: pageTypeOptions, loading: loadingPageTypes } = usePageTypeOptions<IOption>();
+    const { items: authorOptions, loading: loadingAuthors } = useAuthorOptions<IOption>();
+    const { items: languageOptions, loading: loadingLanguages } = useLanguageOptions<IOption>();
     const [bookSeriesOptions, setBookSeriesOptions] = useState<BookSeriesEntity[]>([]);
-    const { items: bookTypeOptions } = useBookTypeOptions();
-    const { items: publishingHouseOptions } = usePublishingHouseOptions();
-    const { items: coverTypeOptions } = useCoverTypeOptions();
+    const { items: bookTypeOptions, loading: loadingBookTypes } = useBookTypeOptions<IOption>();
+    const { items: publishingHouseOptions, loading: loadingPublishingHouses } = usePublishingHouseOptions<IOption>();
+    const { items: coverTypeOptions, loading: loadingCoverTypes } = useCoverTypeOptions<IOption>();
 
     useEffect(() => {
         if (publishingHouseId) {
@@ -81,7 +81,7 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
         } as BookEntity;
 
         try {
-            if (item) {
+            if (item?.id) {
                 await update(data);
             } else {
                 await create(data);
@@ -96,7 +96,7 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
-                     loading={updating || creating}
+                     loading={updating || creating || loadingLanguages || loadingAuthors || loadingPageTypes || loadingCoverTypes || loadingBookTypes || loadingPublishingHouses}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={onSubmit}>
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>

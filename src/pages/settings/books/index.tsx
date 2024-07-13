@@ -1,6 +1,7 @@
 import { Box, Button } from '@mui/material';
 import { TableKey, TableSort } from '@/components/table/table-key';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
@@ -77,6 +78,15 @@ export default function Books() {
             type: 'icons',
             icons: [
                 {
+                    element: <ContentCopyIcon/>,
+                    onIconClick: (item: BookEntity) => {
+                        const data = { ...item, name: null };
+
+                        delete data.id;
+                        onAdd(data);
+                    }
+                },
+                {
                     element: <DeleteIcon color="warning"/>,
                     onIconClick: (item: BookEntity) => deleteHandler(item)
                 }
@@ -120,9 +130,13 @@ export default function Books() {
         setSelectedItem(undefined);
     }
 
-    function onAdd() {
+    function onAdd(parentItem?: BookEntity) {
         setError(null);
-        setOpenNewModal(true);
+        if (parentItem) {
+            setSelectedItem(parentItem);
+        } else {
+            setOpenNewModal(true);
+        }
     }
 
     function onEdit(item: BookEntity) {
