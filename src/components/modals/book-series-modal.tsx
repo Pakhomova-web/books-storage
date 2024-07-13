@@ -65,7 +65,7 @@ export default function BookSeriesModal({ open, item, onClose }: IBookSeriesModa
             </FormContainer>
 
             {(creatingError || updatingError) &&
-              <ErrorNotification apolloError={creatingError || updatingError}></ErrorNotification>
+              <ErrorNotification error={creatingError || updatingError}></ErrorNotification>
             }
         </CustomModal>
     );

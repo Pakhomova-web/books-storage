@@ -1,13 +1,11 @@
 import { Box, BoxProps } from '@mui/material';
-import React from 'react';
 import { ApolloError } from '@apollo/client';
 import { styled } from '@mui/material/styles';
 import { styleVariables } from '@/constants/styles-variables';
 import Error from '@mui/icons-material/Error';
 
 interface IErrorNotificationProps {
-    apolloError?: ApolloError,
-    error?: string
+    error?: ApolloError
 }
 
 const mainContainer = {
@@ -29,17 +27,19 @@ const StyledBox = styled(Box)<BoxProps>(() => ({
     color: styleVariables.warnColor
 }));
 
-export default function ErrorNotification({ error, apolloError }: IErrorNotificationProps) {
+export default function ErrorNotification({ error }: IErrorNotificationProps) {
     return (
         <Box sx={mainContainer}>
             <StyledBox>
                 <Error sx={errorIcon}></Error>
-                <Box>
-                    {error}
-                    {apolloError?.message}
-                    {apolloError?.graphQLErrors.map(err => err.extensions?.message).join(' ')}
-                    {apolloError?.networkError?.message}
-                    {apolloError?.protocolErrors.map(err => err.message).join(' ')}
+
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                    {!!error?.graphQLErrors?.length &&
+                      <Box>{String(error?.graphQLErrors[error.graphQLErrors.length - 1].extensions.message || error?.message)}</Box>
+                    }
+
+                    {error?.networkError && <Box>{error?.networkError?.message}</Box>}
+                    {error?.protocolErrors?.map((err, index) => (<Box key={index}>{err.message}</Box>))}
                 </Box>
             </StyledBox>
         </Box>

@@ -223,8 +223,8 @@ export async function getBookSeriesOptions(filters?: BookSeriesEntity) {
 
 /** books **/
 
-export function useBooks(sort?: TableSort) {
-    return _useItems(booksQuery, sort);
+export function useBooks(sort?: TableSort, filters?: BookEntity) {
+    return _useItems<BookEntity>(booksQuery, sort, filters);
 }
 
 export function useDeleteBook() {
@@ -241,7 +241,7 @@ export function useUpdateBook() {
 
 /** common **/
 
-function _useItems<T>(query: DocumentNode, sort?: TableSort, filters?): {
+function _useItems<T>(query: DocumentNode, sort?: TableSort, filters?: T): {
     items: T[],
     loading: boolean,
     gettingError: ApolloError,

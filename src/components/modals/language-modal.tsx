@@ -46,7 +46,7 @@ export default function LanguageModal({ open, item, onClose }: ILanguageModalPro
             </FormContainer>
 
             {(creatingError || updatingError) &&
-              <ErrorNotification apolloError={creatingError || updatingError}></ErrorNotification>
+              <ErrorNotification error={creatingError || updatingError}></ErrorNotification>
             }
         </CustomModal>
     );

@@ -56,7 +56,7 @@ export default function AuthorModal({ open, item, onClose }: IAuthorModalProps) 
             </FormContainer>
 
             {(creatingError || updatingError) &&
-              <ErrorNotification apolloError={creatingError || updatingError}></ErrorNotification>
+              <ErrorNotification error={creatingError || updatingError}></ErrorNotification>
             }
         </CustomModal>
     );

@@ -1,33 +1,22 @@
-import { BookEntity, PublishingHouseEntity } from '@/lib/data/types';
+import { BookEntity } from '@/lib/data/types';
 import Book from '@/lib/data/models/book';
 import { GraphQLError } from 'graphql/error';
 
-export async function getBooks(orderBy?: string, order?: string) {
-    return Book.find(null, null, { sort: { [orderBy]: order } });
+export function getBooks(orderBy?: string, order?: string, filters?: Partial<BookEntity>) {
+    let validFilters: { [key: string]: string | RegExp } = {};
 
-    // return getBookTable().select(
-    //     'book.id as id',
-    //     'book.name as name',
-    //     'price',
-    //     'bookSeriesId',
-    //     'pageTypeId',
-    //     'bookTypeId',
-    //     'numberInStock',
-    //     'numberOfPages',
-    //     'format',
-    //     'isbn',
-    //     'book.description as description',
-    //     'languageId',
-    //     'coverTypeId',
-    //     'authorId'
-    // )
-    //     .join('bookSeries as bookSeries', 'book.bookSeriesId', '=', 'bookSeries.id')
-    //     .join('language as language', 'book.languageId', '=', 'language.id')
-    //     .join('coverType as coverType', 'book.coverTypeId', '=', 'coverType.id')
-    //     // .join('author as author', 'book.authorId', '=', 'author.id')
-    //     .join('bookType as bookType', 'book.bookTypeId', '=', 'bookType.id')
-    //     .join('pageType as pageType', 'book.pageTypeId', '=', 'pageType.id')
-    //     .orderBy(orderBy, order);
+    if (filters) {
+        Object.keys(filters).forEach(key => {
+            if (filters[key]) {
+                if (key === 'name') {
+                    validFilters.name = new RegExp(filters.name, "i");
+                } else {
+                    validFilters[key] = filters[key];
+                }
+            }
+        });
+    }
+    return Book.find(validFilters, null, { sort: { [orderBy]: order } });
 }
 
 export async function createBook(input: BookEntity) {
@@ -40,7 +29,7 @@ export async function createBook(input: BookEntity) {
 
         await item.save();
 
-        return item as BookEntity;
+        return { ...input, id: item.id } as BookEntity;
     }
 }
 

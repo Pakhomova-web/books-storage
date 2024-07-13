@@ -46,7 +46,7 @@ export default function PageTypeModal({ open, item, onClose }: IPageTypeModalPro
             </FormContainer>
 
             {(creatingError || updatingError) &&
-              <ErrorNotification apolloError={creatingError || updatingError}></ErrorNotification>
+              <ErrorNotification error={creatingError || updatingError}></ErrorNotification>
             }
         </CustomModal>
     );

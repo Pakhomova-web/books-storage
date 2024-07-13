@@ -39,23 +39,22 @@ import { GraphQLError } from 'graphql/error';
 
 function parseError(error) {
     switch (error.extensions?.code) {
-        case 'GRAPHQL_PARSE_FAILED': {
+        case 'BAD_USER_INPUT':
+        case 'GRAPHQL_PARSE_FAILED':
             throw new GraphQLError(error, {
                 extensions: {
                     code: error.extensions?.code,
                     message: 'Something wrong with data.'
                 }
             });
-        }
         case 'USAGE_ERROR':
-        case 'DUPLICATE_ERROR': {
+        case 'DUPLICATE_ERROR':
             throw new GraphQLError(error, {
                 extensions: {
                     code: error.extensions?.code,
                     message: error.message
                 }
             });
-        }
         case 'GRAPHQL_VALIDATION_FAILED': {
             throw new GraphQLError(error, {
                 extensions: {
@@ -78,28 +77,60 @@ function parseError(error) {
 const resolvers: Resolvers = {
     Query: {
         languages: async (_root, { orderBy, order }) => {
-            return getLanguages(orderBy || 'name', order || 'asc');
+            try {
+                return getLanguages(orderBy || 'name', order || 'asc');
+            } catch (error) {
+                parseError(error);
+            }
         },
         publishingHouses: async (_root, { orderBy, order }) => {
-            return getPublishingHouses(orderBy || 'name', order || 'asc');
+            try {
+                return getPublishingHouses(orderBy || 'name', order || 'asc');
+            } catch (error) {
+                parseError(error);
+            }
         },
         pageTypes: async (_root, { orderBy, order }) => {
-            return getPageTypes(orderBy || 'name', order || 'asc');
+            try {
+                return getPageTypes(orderBy || 'name', order || 'asc');
+            } catch (error) {
+                parseError(error);
+            }
         },
         bookTypes: async (_root, { orderBy, order }) => {
-            return getBookTypes(orderBy || 'name', order || 'asc');
+            try {
+                return getBookTypes(orderBy || 'name', order || 'asc');
+            } catch (error) {
+                parseError(error);
+            }
         },
         coverTypes: async (_root, { orderBy, order }) => {
-            return getCoverTypes(orderBy || 'name', order || 'asc');
+            try {
+                return getCoverTypes(orderBy || 'name', order || 'asc');
+            } catch (error) {
+                parseError(error);
+            }
         },
         authors: async (_root, { orderBy, order }) => {
-            return getAuthors(orderBy || 'name', order || 'asc');
+            try {
+                return getAuthors(orderBy || 'name', order || 'asc');
+            } catch (error) {
+                parseError(error);
+            }
         },
         bookSeries: async (_root, { orderBy, order, filters }) => {
-            return getBookSeries(orderBy || 'name', order || 'asc', filters);
+            try {
+                return getBookSeries(orderBy || 'name', order || 'asc', filters);
+            } catch (error) {
+                parseError(error);
+            }
         },
-        books: async (_root, { orderBy, order }) => {
-            return getBooks(orderBy || 'name', order || 'asc');
+        books: async (_root, { orderBy, order, filters }) => {
+            try {
+                return getBooks(orderBy || 'name', order || 'asc', filters);
+            } catch (error) {
+                parseError(error);
+            }
         }
     },
     Mutation: {
@@ -132,7 +163,7 @@ const resolvers: Resolvers = {
                 parseError(error);
             }
         },
-        createPublishingHouse: async (_root, { input }: { input: PublishingHouseEntity}) => {
+        createPublishingHouse: async (_root, { input }: { input: PublishingHouseEntity }) => {
             try {
                 return createPublishingHouse(input);
             } catch (error) {
@@ -180,7 +211,7 @@ const resolvers: Resolvers = {
             try {
                 return createBookType(input);
             } catch (error) {
-                parseError(error);;
+                parseError(error);
             }
         },
         deleteBookType: async (_root, { id }: { id: string }) => {
@@ -220,7 +251,7 @@ const resolvers: Resolvers = {
                 parseError(error);
             }
         },
-        createBookSeries: async (_root, { input }: { input: BookSeriesEntity}) => {
+        createBookSeries: async (_root, { input }: { input: BookSeriesEntity }) => {
             try {
                 return createBookSeries(input);
             } catch (error) {

@@ -11,6 +11,9 @@ import CustomTable from '@/components/table/custom-table';
 import { useBooks, useDeleteBook } from '@/lib/graphql/hooks';
 import BookModal from '@/components/modals/book-modal';
 import ErrorNotification from '@/components/error-notification';
+import { styleVariables } from '@/constants/styles-variables';
+import { downloadCsv } from '@/utils/utils';
+import { BookFilters } from '@/components/filters/book-filters';
 
 export default function Books() {
     const [tableKeys] = useState<TableKey<BookEntity>[]>([
@@ -29,7 +32,7 @@ export default function Books() {
         },
         { title: 'Name', sortValue: 'name', renderValue: (item: BookEntity) => item.name, type: 'text' },
         {
-            title: 'Number Of Pages.',
+            title: 'Number Of Pages',
             sortValue: 'numberOfPages',
             renderValue: (item: BookEntity) => item.numberOfPages,
             type: 'text'
@@ -82,7 +85,8 @@ export default function Books() {
     ]);
     const [selectedItem, setSelectedItem] = useState<BookEntity>();
     const [sort, setSort] = useState<TableSort>({ order: 'asc', orderBy: '' });
-    const { items, gettingError, loading, refetch } = useBooks(sort);
+    const [filters, setFilters] = useState<BookEntity>();
+    const { items, gettingError, loading, refetch } = useBooks(sort, filters);
     const { deleteItem, deletingError, deleting } = useDeleteBook();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -95,15 +99,19 @@ export default function Books() {
         }
     }, [gettingError, deletingError]);
 
+    useEffect(() => {
+        refreshData();
+    }, [filters]);
+
     async function deleteHandler(item: BookEntity) {
         try {
             deleteItem(item.id);
-            refreshData(true);
+            refreshData();
         } catch (err) {
         }
     }
 
-    function refreshData(updated?: boolean) {
+    function refreshData(updated = true) {
         if (updated) {
             refetch();
         }
@@ -122,22 +130,33 @@ export default function Books() {
         setSelectedItem(item);
     }
 
+    function onDownloadCSV() {
+        downloadCsv<BookEntity>(items, tableKeys.filter(key => key.type === 'text'), new Date().toISOString());
+    }
+
     return (
         <Loading open={loading || deleting} fullHeight={true}>
+            <BookFilters onApply={(filters: BookEntity) => setFilters(filters)}></BookFilters>
+
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: BookEntity) => item.id}
                          onSort={(sort: TableSort) => setSort(sort)}
                          sort={sort}
                          onRowClick={(item: BookEntity) => onEdit(item)}></CustomTable>
 
-            {error && <ErrorNotification apolloError={error}></ErrorNotification>}
+            {error && <ErrorNotification error={error}></ErrorNotification>}
 
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, background: 'white', 'z-index': 2 }}>
-                <Button variant="outlined" onClick={() => onAdd()}>
+                <Button variant="outlined" onClick={() => onAdd()}
+                        sx={items.length ? { mr: styleVariables.margin } : {}}>
                     <AddIcon></AddIcon>Add Book
                 </Button>
 
-
+                {!!items?.length &&
+                  <Button variant="outlined" onClick={() => onDownloadCSV()}>
+                    Download CSV
+                  </Button>
+                }
             </Box>
 
             {(openNewModal || selectedItem) &&

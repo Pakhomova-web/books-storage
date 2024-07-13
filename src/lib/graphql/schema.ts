@@ -56,7 +56,7 @@ const typeDefs =  /* GraphQL */ `
     isbn: String
     languageId: ID!
     language: Language
-    authorId: ID!
+    authorId: ID
     author: Author
     format: String
   }
@@ -68,7 +68,7 @@ const typeDefs =  /* GraphQL */ `
     bookTypes(orderBy: String, order: String): [BookType!]
     coverTypes(orderBy: String, order: String): [CoverType!]
     bookSeries(orderBy: String, order: String, filters: BookSeriesFiltersInput): [BookSeries!]
-    books(orderBy: String, order: String): [Book!]
+    books(orderBy: String, order: String, filters: BookSearchInput): [Book!]
     authors(orderBy: String, order: String): [Author!]
   }
 
@@ -212,6 +212,20 @@ const typeDefs =  /* GraphQL */ `
     languageId: ID!
     authorId: ID
     format: String
+  }
+
+  input BookSearchInput {
+    id: ID
+    name: String
+    description: String
+    bookTypeId: ID
+    coverTypeId: ID
+    bookSeriesId: ID
+    publishingHouseId: ID
+    pageTypeId: ID
+    isbn: String
+    languageId: ID
+    authorId: ID
   }
 `;
 

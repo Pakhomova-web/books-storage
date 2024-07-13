@@ -325,8 +325,8 @@ export const updateBookSeriesQuery = gql`
 /** books **/
 
 export const booksQuery = gql`
-    query Books($orderBy: String, $order: String) {
-        items: books(orderBy: $orderBy, order: $order) {
+    query Books($orderBy: String, $order: String, $filters: BookSearchInput) {
+        items: books(orderBy: $orderBy, order: $order, filters: $filters) {
             id
             name
             price
@@ -365,6 +365,12 @@ export const booksQuery = gql`
                     name
                     tags
                 }
+            }
+            authorId
+            author {
+                id
+                name
+                description
             }
         }
     }

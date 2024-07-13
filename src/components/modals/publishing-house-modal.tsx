@@ -1,5 +1,6 @@
-import { LanguageEntity, PublishingHouseEntity } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
+
+import { PublishingHouseEntity } from '@/lib/data/types';
 import { useCreatePublishingHouse, useUpdatePublishingHouse } from '@/lib/graphql/hooks';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/modals/custom-text-field';
@@ -7,7 +8,7 @@ import ErrorNotification from '@/components/error-notification';
 
 interface IPublishingHouseModalProps {
     open: boolean,
-    item?: LanguageEntity,
+    item?: PublishingHouseEntity,
     isSubmitDisabled?: boolean,
     onClose: (updated?: boolean) => void
 }
@@ -58,7 +59,7 @@ export default function PublishingHouseModal({ open, item, onClose }: IPublishin
             </FormContainer>
 
             {(creatingError || updatingError) &&
-              <ErrorNotification apolloError={creatingError || updatingError}></ErrorNotification>
+              <ErrorNotification error={creatingError || updatingError}></ErrorNotification>
             }
         </CustomModal>
     );

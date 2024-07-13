@@ -27,6 +27,7 @@ interface SettingListItem {
 }
 
 const settingsList: SettingListItem[] = [
+    { title: 'Orders', link: 'orders' },
     { title: 'Books', link: 'books' },
     { title: 'Publishing Houses', link: 'publishing-houses' },
     { title: 'Book Series', link: 'book-series' },

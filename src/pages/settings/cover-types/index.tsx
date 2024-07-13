@@ -75,7 +75,7 @@ export default function CoverTypes() {
                          sort={sort}
                          onRowClick={(item: CoverTypeEntity) => onEdit(item)}></CustomTable>
 
-            {error && <ErrorNotification apolloError={error}></ErrorNotification>}
+            {error && <ErrorNotification error={error}></ErrorNotification>}
 
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, background: 'white', 'z-index': 2 }}>
                 <Button variant="outlined" onClick={() => onAdd()}>
