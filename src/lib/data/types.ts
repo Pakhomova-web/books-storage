@@ -64,3 +64,10 @@ export interface IOption {
     id: string,
     label: string
 }
+
+export interface IPageable {
+    orderBy?: string,
+    order?: 'asc' | 'desc',
+    page?: number,
+    rowsPerPage?: number
+}

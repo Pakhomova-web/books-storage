@@ -10,8 +10,6 @@ const apolloServer = new ApolloServer({
     resolvers
 });
 
-const handler = startServerAndCreateNextHandler(apolloServer, {
-    context: async (req, res) => ({ req, res }),
-});
+const handler = startServerAndCreateNextHandler(apolloServer);
 
-export default allowCors(handler);
+export default process.env.NODE_ENV === 'development' ? handler : allowCors(handler);

@@ -3,7 +3,8 @@ import {
     authorOptionsQuery,
     authorsQuery,
     bookSeriesQuery,
-    booksQuery, bookTypeOptionsQuery,
+    booksQuery,
+    bookTypeOptionsQuery,
     bookTypesQuery,
     coverTypeOptionsQuery,
     coverTypesQuery,
@@ -38,13 +39,13 @@ import {
     updatePageTypeQuery,
     updatePublishingHouseQuery
 } from './queries';
-import { TableSort } from '@/components/table/table-key';
 import {
     AuthorEntity,
     BookEntity,
     BookSeriesEntity,
     BookTypeEntity,
     CoverTypeEntity,
+    IPageable,
     LanguageEntity,
     PageTypeEntity,
     PublishingHouseEntity
@@ -53,12 +54,12 @@ import { apolloClient } from '@/lib/apollo';
 
 /** languages **/
 
-export function useLanguages(sort?: TableSort) {
-    return _useItems<LanguageEntity>(languagesQuery, sort);
+export function useLanguages(pageSettings?: IPageable) {
+    return _useItems<LanguageEntity>(languagesQuery, pageSettings);
 }
 
-export function useLanguageOptions<T>(sort?: TableSort) {
-    return _useItems<T>(languageOptionsQuery, sort);
+export function useLanguageOptions<T>(pageSettings?: IPageable) {
+    return _useItems<T>(languageOptionsQuery, pageSettings);
 }
 
 export function useUpdateLanguage() {
@@ -75,12 +76,12 @@ export function useDeleteLanguage() {
 
 /** publishing house **/
 
-export function usePublishingHouses(sort?: TableSort) {
-    return _useItems<PublishingHouseEntity>(publishingHousesQuery, sort);
+export function usePublishingHouses(pageSettings?: IPageable) {
+    return _useItems<PublishingHouseEntity>(publishingHousesQuery, pageSettings);
 }
 
-export function usePublishingHouseOptions<T>(sort?: TableSort) {
-    return _useItems<T>(publishingHouseOptionsQuery, sort);
+export function usePublishingHouseOptions<T>(pageSettings?: IPageable) {
+    return _useItems<T>(publishingHouseOptionsQuery, pageSettings);
 }
 
 export function useDeletePublishingHouse() {
@@ -97,12 +98,12 @@ export function useCreatePublishingHouse() {
 
 /** page type **/
 
-export function usePageTypes(sort?: TableSort) {
-    return _useItems(pageTypesQuery, sort);
+export function usePageTypes(pageSettings?: IPageable) {
+    return _useItems(pageTypesQuery, pageSettings);
 }
 
-export function usePageTypeOptions<T>(sort?: TableSort) {
-    return _useItems<T>(pageTypeOptionsQuery, sort);
+export function usePageTypeOptions<T>(pageSettings?: IPageable) {
+    return _useItems<T>(pageTypeOptionsQuery, pageSettings);
 }
 
 export function useCreatePageType() {
@@ -119,12 +120,12 @@ export function useDeletePageType() {
 
 /** author **/
 
-export function useAuthors(sort?: TableSort) {
-    return _useItems(authorsQuery, sort);
+export function useAuthors(pageSettings?: IPageable) {
+    return _useItems(authorsQuery, pageSettings);
 }
 
-export function useAuthorOptions<T>(sort?: TableSort) {
-    return _useItems<T>(authorOptionsQuery, sort);
+export function useAuthorOptions<T>(pageSettings?: IPageable) {
+    return _useItems<T>(authorOptionsQuery, pageSettings);
 }
 
 export function useCreateAuthor() {
@@ -141,12 +142,12 @@ export function useDeleteAuthor() {
 
 /** book type **/
 
-export function useBookTypes(sort?: TableSort) {
-    return _useItems<BookTypeEntity>(bookTypesQuery, sort);
+export function useBookTypes(pageSettings?: IPageable) {
+    return _useItems<BookTypeEntity>(bookTypesQuery, pageSettings);
 }
 
-export function useBookTypeOptions<T>(sort?: TableSort) {
-    return _useItems<T>(bookTypeOptionsQuery, sort);
+export function useBookTypeOptions<T>(pageSettings?: IPageable) {
+    return _useItems<T>(bookTypeOptionsQuery, pageSettings);
 }
 
 export function useUpdateBookType() {
@@ -163,12 +164,12 @@ export function useDeleteBookType() {
 
 /** cover type **/
 
-export function useCoverTypes(sort?: TableSort) {
-    return _useItems(coverTypesQuery, sort);
+export function useCoverTypes(pageSettings?: IPageable) {
+    return _useItems(coverTypesQuery, pageSettings);
 }
 
-export function useCoverTypeOptions<T>(sort?: TableSort) {
-    return _useItems<T>(coverTypeOptionsQuery, sort);
+export function useCoverTypeOptions<T>(pageSettings?: IPageable) {
+    return _useItems<T>(coverTypeOptionsQuery, pageSettings);
 }
 
 export function useUpdateCoverType() {
@@ -185,8 +186,8 @@ export function useDeleteCoverType() {
 
 /** cover type **/
 
-export function useBookSeries(sort?: TableSort) {
-    return _useItems(bookSeriesQuery, sort);
+export function useBookSeries(pageSettings?: IPageable) {
+    return _useItems(bookSeriesQuery, pageSettings);
 }
 
 export function useUpdateBookSeries() {
@@ -223,8 +224,8 @@ export async function getBookSeriesOptions(filters?: BookSeriesEntity) {
 
 /** books **/
 
-export function useBooks(sort?: TableSort, filters?: BookEntity) {
-    return _useItems<BookEntity>(booksQuery, sort, filters);
+export function useBooks(pageSettings: IPageable, filters?: BookEntity) {
+    return _usePageableItems<BookEntity>(booksQuery, 'books', pageSettings, filters);
 }
 
 export function useDeleteBook() {
@@ -241,18 +242,40 @@ export function useUpdateBook() {
 
 /** common **/
 
-function _useItems<T>(query: DocumentNode, sort?: TableSort, filters?: T): {
+function _useItems<T>(query: DocumentNode, pageSettings?: IPageable, filters?: T): {
     items: T[],
+    totalCount?: number,
     loading: boolean,
     gettingError: ApolloError,
     refetch: Function
 } {
     const { data, error, loading, refetch } = useQuery(query, {
         fetchPolicy: 'no-cache',
-        variables: { ...sort, filters }
+        variables: { ...pageSettings, filters }
     });
 
-    return { items: data?.items || [], gettingError: error, loading, refetch };
+    return { items: data?.items || [], totalCount: data?.totalCount, gettingError: error, loading, refetch };
+}
+
+function _usePageableItems<T>(query: DocumentNode, key: string, pageSettings: IPageable, filters?: T): {
+    items: T[],
+    totalCount: number,
+    loading: boolean,
+    gettingError: ApolloError,
+    refetch: Function
+} {
+    const { data, error, loading, refetch } = useQuery(query, {
+        fetchPolicy: 'no-cache',
+        variables: { pageSettings, filters }
+    });
+
+    return {
+        items: data && data[key] ? data[key].items : [],
+        totalCount: data && data[key] ? data[key].totalCount : 0,
+        gettingError: error,
+        loading,
+        refetch
+    };
 }
 
 function _useDeleteItemById(query: DocumentNode): {

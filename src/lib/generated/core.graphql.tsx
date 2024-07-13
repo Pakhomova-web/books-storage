@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { LanguageEntity, PublishingHouseEntity, PageTypeEntity, BookTypeEntity, CoverTypeEntity, BookSeriesEntity, BookEntity, AuthorEntity } from '../data/types';
+import { LanguageEntity, PublishingHouseEntity, PageTypeEntity, BookTypeEntity, CoverTypeEntity, BookSeriesEntity, BookEntity, AuthorEntity, IPageable } from '../data/types';
 import { gql } from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -8,6 +8,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -126,6 +127,11 @@ export type BookSeriesInput = {
   id: Scalars['ID']['input'];
   name: Scalars['String']['input'];
   publishingHouseId: Scalars['ID']['input'];
+};
+
+export type BookSubList = {
+  items: Array<Book>;
+  totalCount: Scalars['Int']['output'];
 };
 
 export type BookType = {
@@ -331,6 +337,13 @@ export type PageTypeInput = {
   name: Scalars['String']['input'];
 };
 
+export type PageableInput = {
+  order?: InputMaybe<Scalars['String']['input']>;
+  orderBy?: InputMaybe<Scalars['String']['input']>;
+  page?: InputMaybe<Scalars['Int']['input']>;
+  rowsPerPage?: InputMaybe<Scalars['Int']['input']>;
+};
+
 export type PublishingHouse = {
   id?: Maybe<Scalars['ID']['output']>;
   name: Scalars['String']['output'];
@@ -352,7 +365,7 @@ export type Query = {
   authors?: Maybe<Array<Author>>;
   bookSeries?: Maybe<Array<BookSeries>>;
   bookTypes?: Maybe<Array<BookType>>;
-  books?: Maybe<Array<Book>>;
+  books?: Maybe<BookSubList>;
   coverTypes?: Maybe<Array<CoverType>>;
   languages?: Maybe<Array<Language>>;
   pageTypes?: Maybe<Array<PageType>>;
@@ -381,8 +394,7 @@ export type QueryBookTypesArgs = {
 
 export type QueryBooksArgs = {
   filters?: InputMaybe<BookSearchInput>;
-  order?: InputMaybe<Scalars['String']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
+  pageSettings?: InputMaybe<PageableInput>;
 };
 
 
@@ -491,6 +503,7 @@ export type ResolversTypes = {
   BookSeriesCreateInput: BookSeriesCreateInput;
   BookSeriesFiltersInput: BookSeriesFiltersInput;
   BookSeriesInput: BookSeriesInput;
+  BookSubList: ResolverTypeWrapper<Omit<BookSubList, 'items'> & { items: Array<ResolversTypes['Book']> }>;
   BookType: ResolverTypeWrapper<BookTypeEntity>;
   BookTypeCreateInput: BookTypeCreateInput;
   BookTypeInput: BookTypeInput;
@@ -508,6 +521,7 @@ export type ResolversTypes = {
   PageType: ResolverTypeWrapper<PageTypeEntity>;
   PageTypeCreateInput: PageTypeCreateInput;
   PageTypeInput: PageTypeInput;
+  PageableInput: ResolverTypeWrapper<IPageable>;
   PublishingHouse: ResolverTypeWrapper<PublishingHouseEntity>;
   PublishingHouseCreateInput: PublishingHouseCreateInput;
   PublishingHouseInput: PublishingHouseInput;
@@ -528,6 +542,7 @@ export type ResolversParentTypes = {
   BookSeriesCreateInput: BookSeriesCreateInput;
   BookSeriesFiltersInput: BookSeriesFiltersInput;
   BookSeriesInput: BookSeriesInput;
+  BookSubList: Omit<BookSubList, 'items'> & { items: Array<ResolversParentTypes['Book']> };
   BookType: BookTypeEntity;
   BookTypeCreateInput: BookTypeCreateInput;
   BookTypeInput: BookTypeInput;
@@ -545,6 +560,7 @@ export type ResolversParentTypes = {
   PageType: PageTypeEntity;
   PageTypeCreateInput: PageTypeCreateInput;
   PageTypeInput: PageTypeInput;
+  PageableInput: IPageable;
   PublishingHouse: PublishingHouseEntity;
   PublishingHouseCreateInput: PublishingHouseCreateInput;
   PublishingHouseInput: PublishingHouseInput;
@@ -588,6 +604,12 @@ export type BookSeriesResolvers<ContextType = any, ParentType extends ResolversP
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   publishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType>;
   publishingHouseId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type BookSubListResolvers<ContextType = any, ParentType extends ResolversParentTypes['BookSubList'] = ResolversParentTypes['BookSubList']> = {
+  items?: Resolver<Array<ResolversTypes['Book']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -653,7 +675,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   authors?: Resolver<Maybe<Array<ResolversTypes['Author']>>, ParentType, ContextType, Partial<QueryAuthorsArgs>>;
   bookSeries?: Resolver<Maybe<Array<ResolversTypes['BookSeries']>>, ParentType, ContextType, Partial<QueryBookSeriesArgs>>;
   bookTypes?: Resolver<Maybe<Array<ResolversTypes['BookType']>>, ParentType, ContextType, Partial<QueryBookTypesArgs>>;
-  books?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, Partial<QueryBooksArgs>>;
+  books?: Resolver<Maybe<ResolversTypes['BookSubList']>, ParentType, ContextType, Partial<QueryBooksArgs>>;
   coverTypes?: Resolver<Maybe<Array<ResolversTypes['CoverType']>>, ParentType, ContextType, Partial<QueryCoverTypesArgs>>;
   languages?: Resolver<Maybe<Array<ResolversTypes['Language']>>, ParentType, ContextType, Partial<QueryLanguagesArgs>>;
   pageTypes?: Resolver<Maybe<Array<ResolversTypes['PageType']>>, ParentType, ContextType, Partial<QueryPageTypesArgs>>;
@@ -664,6 +686,7 @@ export type Resolvers<ContextType = any> = {
   Author?: AuthorResolvers<ContextType>;
   Book?: BookResolvers<ContextType>;
   BookSeries?: BookSeriesResolvers<ContextType>;
+  BookSubList?: BookSubListResolvers<ContextType>;
   BookType?: BookTypeResolvers<ContextType>;
   CoverType?: CoverTypeResolvers<ContextType>;
   Language?: LanguageResolvers<ContextType>;

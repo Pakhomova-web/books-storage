@@ -1,8 +1,8 @@
-import { BookEntity } from '@/lib/data/types';
+import { BookEntity, IPageable } from '@/lib/data/types';
 import Book from '@/lib/data/models/book';
 import { GraphQLError } from 'graphql/error';
 
-export function getBooks(orderBy?: string, order?: string, filters?: Partial<BookEntity>) {
+export async function getBooks(pageSettings: IPageable, filters?: Partial<BookEntity>): Promise<{ items: BookEntity[], totalCount: number }> {
     let validFilters: { [key: string]: string | RegExp } = {};
 
     if (filters) {
@@ -16,7 +16,15 @@ export function getBooks(orderBy?: string, order?: string, filters?: Partial<Boo
             }
         });
     }
-    return Book.find(validFilters, null, { sort: { [orderBy]: order } });
+
+    const items = await Book.find(validFilters, null, {
+        sort: { [pageSettings.orderBy || 'name']: pageSettings.order },
+        skip: pageSettings.rowsPerPage * pageSettings.page,
+        limit: pageSettings.rowsPerPage
+    });
+    const totalCount = await Book.count(validFilters);
+
+    return { items, totalCount };
 }
 
 export async function createBook(input: BookEntity) {

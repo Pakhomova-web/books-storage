@@ -325,53 +325,56 @@ export const updateBookSeriesQuery = gql`
 /** books **/
 
 export const booksQuery = gql`
-    query Books($orderBy: String, $order: String, $filters: BookSearchInput) {
-        items: books(orderBy: $orderBy, order: $order, filters: $filters) {
-            id
-            name
-            price
-            description
-            numberInStock
-            numberOfPages
-            isbn
-            format
-            languageId
-            language {
+    query Books($pageSettings: PageableInput, $filters: BookSearchInput) {
+        books(pageSettings: $pageSettings, filters: $filters) {
+            items {
                 id
                 name
-            }
-            coverTypeId
-            coverType {
-                id
-                name
-            }
-            bookTypeId
-            bookType {
-                id
-                name
-            }
-            pageTypeId
-            pageType {
-                id
-                name
-            }
-            bookSeriesId
-            bookSeries {
-                id
-                name
-                publishingHouseId
-                publishingHouse {
+                price
+                description
+                numberInStock
+                numberOfPages
+                isbn
+                format
+                languageId
+                language {
                     id
                     name
-                    tags
+                }
+                coverTypeId
+                coverType {
+                    id
+                    name
+                }
+                bookTypeId
+                bookType {
+                    id
+                    name
+                }
+                pageTypeId
+                pageType {
+                    id
+                    name
+                }
+                bookSeriesId
+                bookSeries {
+                    id
+                    name
+                    publishingHouseId
+                    publishingHouse {
+                        id
+                        name
+                        tags
+                    }
+                }
+                authorId
+                author {
+                    id
+                    name
+                    description
                 }
             }
-            authorId
-            author {
-                id
-                name
-                description
-            }
+            totalCount
         }
     }
 `;

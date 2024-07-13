@@ -25,7 +25,6 @@ export async function createPublishingHouse(input: PublishingHouseEntity) {
     } else {
         const item = new PublishingHouse(input);
 
-        console.log(item);
         await item.save();
         const bookSeries = new BookSeries({ name: '-', publishingHouseId: item.id });
 

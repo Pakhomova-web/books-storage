@@ -1,12 +1,12 @@
 import { Box, Button } from '@mui/material';
-import { TableKey, TableSort } from '@/components/table/table-key';
+import { TableKey } from '@/components/table/table-key';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
-import { BookEntity } from '@/lib/data/types';
+import { BookEntity, IPageable } from '@/lib/data/types';
 import Loading from '@/components/loading';
 import CustomTable from '@/components/table/custom-table';
 import { useBooks, useDeleteBook } from '@/lib/graphql/hooks';
@@ -94,9 +94,11 @@ export default function Books() {
         }
     ]);
     const [selectedItem, setSelectedItem] = useState<BookEntity>();
-    const [sort, setSort] = useState<TableSort>({ order: 'asc', orderBy: '' });
+    const [pageSettings, setPageSettings] = useState<IPageable>({
+        order: 'asc', orderBy: '', page: 0, rowsPerPage: 5
+    });
     const [filters, setFilters] = useState<BookEntity>();
-    const { items, gettingError, loading, refetch } = useBooks(sort, filters);
+    const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
     const { deleteItem, deletingError, deleting } = useDeleteBook();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -111,7 +113,7 @@ export default function Books() {
 
     useEffect(() => {
         refreshData();
-    }, [filters]);
+    }, [filters, pageSettings]);
 
     async function deleteHandler(item: BookEntity) {
         try {
@@ -148,14 +150,21 @@ export default function Books() {
         downloadCsv<BookEntity>(items, tableKeys.filter(key => key.type === 'text'), new Date().toISOString());
     }
 
+    function onPaginationChange(settings: IPageable) {
+        setPageSettings(settings);
+    }
+
     return (
         <Loading open={loading || deleting} fullHeight={true}>
             <BookFilters onApply={(filters: BookEntity) => setFilters(filters)}></BookFilters>
 
-            <CustomTable data={items} keys={tableKeys}
+            <CustomTable data={items}
+                         keys={tableKeys}
                          renderKey={(item: BookEntity) => item.id}
-                         onSort={(sort: TableSort) => setSort(sort)}
-                         sort={sort}
+                         onChange={(settings: IPageable) => onPaginationChange(settings)}
+                         pageSettings={pageSettings}
+                         usePagination={true}
+                         totalCount={totalCount}
                          onRowClick={(item: BookEntity) => onEdit(item)}></CustomTable>
 
             {error && <ErrorNotification error={error}></ErrorNotification>}

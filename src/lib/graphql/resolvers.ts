@@ -21,7 +21,7 @@ import {
     BookEntity,
     BookSeriesEntity,
     BookTypeEntity,
-    CoverTypeEntity,
+    CoverTypeEntity, IPageable,
     LanguageEntity,
     PageTypeEntity,
     PublishingHouseEntity
@@ -125,9 +125,9 @@ const resolvers: Resolvers = {
                 parseError(error);
             }
         },
-        books: async (_root, { orderBy, order, filters }) => {
+        books: async (_root, { pageSettings, filters }) => {
             try {
-                return getBooks(orderBy || 'name', order || 'asc', filters);
+                return getBooks(<IPageable>pageSettings, filters);
             } catch (error) {
                 parseError(error);
             }
@@ -292,7 +292,6 @@ const resolvers: Resolvers = {
             try {
                 return createBook(input);
             } catch (error) {
-                console.log(error);
                 parseError(error);
             }
         },
