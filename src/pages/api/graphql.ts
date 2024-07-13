@@ -14,4 +14,4 @@ const handler = startServerAndCreateNextHandler(apolloServer, {
     context: async (req, res) => ({ req, res }),
 });
 
-export default process.env.NODE_ENV === 'development' ? handler : allowCors(handler);
+export default allowCors(handler);
