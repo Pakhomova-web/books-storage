@@ -3,7 +3,6 @@ import { ApolloProvider } from '@apollo/client';
 import {
     AppBar,
     Box,
-    Button,
     Drawer,
     IconButton,
     List,
@@ -14,12 +13,14 @@ import {
 } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router'
-import SettingsIcon from '@mui/icons-material/Settings';
 import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
+import SettingsIcon from '@mui/icons-material/Settings';
+import MenuIcon from '@mui/icons-material/Menu';
+import HomeIcon from '@mui/icons-material/Home';
 
 import { apolloClient } from '@/lib/apollo';
 import './global.css';
-import Head from 'next/head';
 
 interface SettingListItem {
     link: string,
@@ -44,6 +45,7 @@ export default function App({ Component, pageProps }: AppProps) {
     const pathname = usePathname();
     const [activeSettingsTab, setActiveSettingsTab] = useState<string>();
     const [isSettings, setIsSettings] = useState<boolean>(false);
+    const [showSettingMenu, setShowSettingMenu] = useState<boolean>(false);
 
 
     useEffect(() => {
@@ -54,6 +56,7 @@ export default function App({ Component, pageProps }: AppProps) {
     }, [pathname]);
 
     function settingsTabChange(link: string) {
+        setShowSettingMenu(false);
         setActiveSettingsTab(link);
         router.push(`/settings/${link}`);
     }
@@ -71,42 +74,45 @@ export default function App({ Component, pageProps }: AppProps) {
             </Head>
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <Toolbar className="toolbar">
-                    <Button onClick={() => goToMainPage()} color="inherit" sx={{ width: '190px' }}>Main page</Button>
+                    <Box>
+                        {isSettings && <IconButton color="inherit" onClick={() => setShowSettingMenu(!showSettingMenu)}><MenuIcon/></IconButton>}
+                    </Box>
 
-                    <IconButton size="large"
-                                edge="start"
-                                color="inherit"
-                                aria-label="settings"
-                                onClick={() => router.push('/settings/books')}
-                                sx={{ mr: 2 }}>
-                        <SettingsIcon/>
-                    </IconButton>
+                    <Box>
+                        <IconButton onClick={() => goToMainPage()} color="inherit"
+                                    sx={{ mr: 2 }}><HomeIcon/></IconButton>
+                        <IconButton size="large"
+                                    edge="start"
+                                    color="inherit"
+                                    aria-label="settings"
+                                    onClick={() => router.push('/settings/books')}>
+                            <SettingsIcon/>
+                        </IconButton>
+                    </Box>
                 </Toolbar>
             </AppBar>
 
-            <Box sx={{ pl: `${(isSettings ? drawerWidth : 0)}px` }}>
-                {isSettings ?
-                    <Drawer variant="permanent"
-                            sx={{
-                                width: drawerWidth,
-                                [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' }
-                            }}>
-                        <Toolbar/>
-                        <List>
-                            {settingsList.map(({ title, link }) => (
-                                <ListItem key={link} disablePadding
-                                          className={activeSettingsTab === link ? 'active-nav-link' : ''}
-                                          onClick={() => settingsTabChange(link)}>
-                                    <ListItemButton>
-                                        <ListItemText primary={title}/>
-                                    </ListItemButton>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </Drawer> : null}
-                <Toolbar/>
-                <Component {...pageProps} />
-            </Box>
+            {isSettings && showSettingMenu ?
+                <Drawer variant="permanent"
+                        sx={{
+                            width: drawerWidth,
+                            [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' }
+                        }}>
+                    <Toolbar/>
+                    <List>
+                        {settingsList.map(({ title, link }) => (
+                            <ListItem key={link} disablePadding
+                                      className={activeSettingsTab === link ? 'active-nav-link' : ''}
+                                      onClick={() => settingsTabChange(link)}>
+                                <ListItemButton>
+                                    <ListItemText primary={title}/>
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
+                    </List>
+                </Drawer> : null}
+            <Toolbar/>
+            <Component {...pageProps} />
         </ApolloProvider>
     );
 }
