@@ -124,6 +124,11 @@ export type BookSeriesInput = {
   publishingHouseId: Scalars['ID']['input'];
 };
 
+export type BookSeriesSearchInput = {
+  name?: InputMaybe<Scalars['String']['input']>;
+  publishingHouseId: Scalars['ID']['input'];
+};
+
 export type BookSubList = {
   items: Array<Book>;
   totalCount: Scalars['Int']['output'];
@@ -376,7 +381,7 @@ export type QueryAuthorsArgs = {
 
 
 export type QueryBookSeriesArgs = {
-  filters?: InputMaybe<SearchByNameInput>;
+  filters?: InputMaybe<BookSeriesSearchInput>;
   order?: InputMaybe<Scalars['String']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
 };
@@ -507,6 +512,7 @@ export type ResolversTypes = {
   BookSeries: ResolverTypeWrapper<BookSeriesEntity>;
   BookSeriesCreateInput: BookSeriesCreateInput;
   BookSeriesInput: BookSeriesInput;
+  BookSeriesSearchInput: BookSeriesSearchInput;
   BookSubList: ResolverTypeWrapper<Omit<BookSubList, 'items'> & { items: Array<ResolversTypes['Book']> }>;
   BookType: ResolverTypeWrapper<BookTypeEntity>;
   BookTypeCreateInput: BookTypeCreateInput;
@@ -546,6 +552,7 @@ export type ResolversParentTypes = {
   BookSeries: BookSeriesEntity;
   BookSeriesCreateInput: BookSeriesCreateInput;
   BookSeriesInput: BookSeriesInput;
+  BookSeriesSearchInput: BookSeriesSearchInput;
   BookSubList: Omit<BookSubList, 'items'> & { items: Array<ResolversParentTypes['Book']> };
   BookType: BookTypeEntity;
   BookTypeCreateInput: BookTypeCreateInput;

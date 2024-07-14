@@ -284,7 +284,7 @@ export const updateCoverTypeQuery = gql`
 /** book series **/
 
 export const bookSeriesQuery = gql`
-    query BookSeries($orderBy: String, $order: String, $filters: SearchByNameInput) {
+    query BookSeries($orderBy: String, $order: String, $filters: BookSeriesSearchInput) {
         items: bookSeries(orderBy: $orderBy, order: $order, filters: $filters) {
             id
             name

@@ -24,27 +24,14 @@ interface IBookModalProps {
 }
 
 interface IForm extends BookEntity {
-    name: string,
     publishingHouseId?: string
 }
 
 export default function BookModal({ open, item, onClose }: IBookModalProps) {
     const formContext = useForm<IForm>({
         defaultValues: {
-            name: item?.name,
-            bookTypeId: item?.bookTypeId,
-            publishingHouseId: item?.bookSeries?.publishingHouse.id,
-            bookSeriesId: item?.bookSeriesId,
-            languageId: item?.languageId,
-            pageTypeId: item?.pageTypeId,
-            authorId: item?.authorId,
-            coverTypeId: item?.coverTypeId,
-            price: item?.price,
-            format: item?.format,
-            description: item?.description,
-            isbn: item?.isbn,
-            numberInStock: item?.numberInStock,
-            numberOfPages: item?.numberOfPages
+            ...item,
+            publishingHouseId: item?.bookSeries?.publishingHouse.id
         }
     });
     const { publishingHouseId } = formContext.watch();

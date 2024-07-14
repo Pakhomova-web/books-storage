@@ -67,7 +67,7 @@ const typeDefs =  /* GraphQL */ `
         pageTypes(orderBy: String, order: String, filters: SearchByNameInput): [PageType!]
         bookTypes(orderBy: String, order: String, filters: SearchByNameInput): [BookType!]
         coverTypes(orderBy: String, order: String, filters: SearchByNameInput): [CoverType!]
-        bookSeries(orderBy: String, order: String, filters: SearchByNameInput): [BookSeries!]
+        bookSeries(orderBy: String, order: String, filters: BookSeriesSearchInput): [BookSeries!]
         books(pageSettings: PageableInput, filters: BookSearchInput): BookSubList
         authors(orderBy: String, order: String, filters: SearchByNameInput): [Author!]
     }
@@ -222,6 +222,11 @@ const typeDefs =  /* GraphQL */ `
         languageId: ID!
         authorId: ID
         format: String
+    }
+    
+    input BookSeriesSearchInput {
+        name: String,
+        publishingHouseId: ID!
     }
 
     input BookSearchInput {
