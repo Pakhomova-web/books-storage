@@ -4,12 +4,13 @@ import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useDeletePageType, usePageTypes } from '@/lib/graphql/hooks';
-import { IPageable, PageTypeEntity } from '@/lib/data/types';
+import { IPageable, LanguageEntity, PageTypeEntity } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import PageTypeModal from '@/components/modals/page-type-modal';
 import ErrorNotification from '@/components/error-notification';
+import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 
 export default function PageTypes() {
     const [tableKeys] = useState<TableKey<PageTypeEntity>[]>([
@@ -30,6 +31,7 @@ export default function PageTypes() {
     const { deleting, deleteItem, deletingError } = useDeletePageType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
+    const [filters, setFilters] = useState<LanguageEntity>();
 
     useEffect(() => {
         if (gettingError) {
@@ -39,6 +41,10 @@ export default function PageTypes() {
         }
     }, [gettingError, deletingError]);
 
+    useEffect(() => {
+        refreshData();
+    }, [filters, pageSettings]);
+
     async function deleteHandler(item: PageTypeEntity) {
         try {
             await deleteItem(item.id);
@@ -46,7 +52,7 @@ export default function PageTypes() {
         } catch (err) {}
     }
 
-    function refreshData(updated?: boolean) {
+    function refreshData(updated = true) {
         if (updated) {
             refetch();
         }
@@ -67,6 +73,8 @@ export default function PageTypes() {
 
     return (
         <Loading open={loading || deleting} fullHeight={true}>
+            <NameFiltersPanel onApply={(filters: LanguageEntity) => setFilters(filters)}></NameFiltersPanel>
+
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: PageTypeEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}

@@ -4,12 +4,13 @@ import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useCoverTypes, useDeleteCoverType } from '@/lib/graphql/hooks';
-import { CoverTypeEntity, IPageable } from '@/lib/data/types';
+import { CoverTypeEntity, IPageable, LanguageEntity } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import CoverTypeModal from '@/components/modals/cover-type-modal';
 import ErrorNotification from '@/components/error-notification';
+import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 
 export default function CoverTypes() {
     const [tableKeys] = useState<TableKey<CoverTypeEntity>[]>([
@@ -30,6 +31,7 @@ export default function CoverTypes() {
     const { deleteItem, deleting, deletingError } = useDeleteCoverType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
+    const [filters, setFilters] = useState<LanguageEntity>();
 
     useEffect(() => {
         if (gettingError) {
@@ -39,6 +41,10 @@ export default function CoverTypes() {
         }
     }, [gettingError, deletingError]);
 
+    useEffect(() => {
+        refreshData();
+    }, [filters, pageSettings]);
+
     async function deleteHandler(item: CoverTypeEntity) {
         try {
             deleteItem(item.id);
@@ -47,7 +53,7 @@ export default function CoverTypes() {
         }
     }
 
-    function refreshData(updated?: boolean) {
+    function refreshData(updated = true) {
         if (updated) {
             refetch();
         }
@@ -68,6 +74,8 @@ export default function CoverTypes() {
 
     return (
         <Loading open={loading || deleting} fullHeight={true}>
+            <NameFiltersPanel onApply={(filters: LanguageEntity) => setFilters(filters)}></NameFiltersPanel>
+
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: CoverTypeEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}

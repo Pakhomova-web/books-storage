@@ -4,12 +4,13 @@ import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useBookSeries, useDeleteBookSeries } from '@/lib/graphql/hooks';
-import { BookSeriesEntity, IPageable } from '@/lib/data/types';
+import { BookSeriesEntity, IPageable, LanguageEntity } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import BookSeriesModal from '@/components/modals/book-series-modal';
 import ErrorNotification from '@/components/error-notification';
+import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 
 export default function BookSeries() {
     const [tableKeys] = useState<TableKey<BookSeriesEntity>[]>([
@@ -36,6 +37,7 @@ export default function BookSeries() {
     const { deleteItem, deleting, deletingError } = useDeleteBookSeries();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
+    const [filters, setFilters] = useState<LanguageEntity>();
 
     useEffect(() => {
         if (gettingError) {
@@ -45,6 +47,10 @@ export default function BookSeries() {
         }
     }, [gettingError, deletingError]);
 
+    useEffect(() => {
+        refreshData();
+    }, [filters, pageSettings]);
+
     async function deleteHandler(item: BookSeriesEntity) {
         try {
             deleteItem(item.id);
@@ -53,7 +59,7 @@ export default function BookSeries() {
         }
     }
 
-    function refreshData(updated?: boolean) {
+    function refreshData(updated = true) {
         if (updated) {
             refetch();
         }
@@ -74,6 +80,8 @@ export default function BookSeries() {
 
     return (
         <Loading open={loading || deleting} fullHeight={true}>
+            <NameFiltersPanel onApply={(filters: LanguageEntity) => setFilters(filters)}></NameFiltersPanel>
+
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: BookSeriesEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}

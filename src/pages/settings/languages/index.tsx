@@ -10,6 +10,7 @@ import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import LanguageModal from '@/components/modals/language-modal';
 import ErrorNotification from '@/components/error-notification';
+import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 
 export default function Languages() {
     const [tableKeys] = useState<TableKey<LanguageEntity>[]>([
@@ -30,6 +31,7 @@ export default function Languages() {
     const { deleteItem, deleting, deletingError } = useDeleteLanguage();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
+    const [filters, setFilters] = useState<LanguageEntity>();
 
     useEffect(() => {
         if (gettingError) {
@@ -39,6 +41,10 @@ export default function Languages() {
         }
     }, [gettingError, deletingError]);
 
+    useEffect(() => {
+        refreshData();
+    }, [filters, pageSettings]);
+
     async function deleteHandler(item: LanguageEntity) {
         try {
             await deleteItem(item.id);
@@ -47,15 +53,17 @@ export default function Languages() {
         }
     }
 
-    function refreshData(updated?: boolean) {
+    function refreshData(updated = true) {
         if (updated) {
             refetch();
         }
+        setError(null);
         setOpenNewModal(false);
         setSelectedItem(undefined);
     }
 
     function onAdd() {
+        setError(null);
         setOpenNewModal(true);
     }
 
@@ -66,6 +74,8 @@ export default function Languages() {
 
     return (
         <Loading open={loading || deleting} fullHeight={true}>
+            <NameFiltersPanel onApply={(filters: LanguageEntity) => setFilters(filters)}></NameFiltersPanel>
+
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: LanguageEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}

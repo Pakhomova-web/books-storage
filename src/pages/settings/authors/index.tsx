@@ -4,12 +4,13 @@ import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useAuthors, useDeleteAuthor } from '@/lib/graphql/hooks';
-import { AuthorEntity, IPageable } from '@/lib/data/types';
+import { AuthorEntity, IPageable, LanguageEntity } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import AuthorModal from '@/components/modals/author-modal';
 import ErrorNotification from '@/components/error-notification';
+import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 
 export default function Authors() {
     const [tableKeys] = useState<TableKey<AuthorEntity>[]>([
@@ -31,6 +32,7 @@ export default function Authors() {
     const { deleting, deleteItem, deletingError } = useDeleteAuthor();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
+    const [filters, setFilters] = useState<LanguageEntity>();
 
     useEffect(() => {
         if (gettingError) {
@@ -40,6 +42,10 @@ export default function Authors() {
         }
     }, [gettingError, deletingError]);
 
+    useEffect(() => {
+        refreshData();
+    }, [filters, pageSettings]);
+
     async function deleteHandler(item: AuthorEntity) {
         try {
             deleteItem(item.id)
@@ -48,10 +54,11 @@ export default function Authors() {
         }
     }
 
-    function refreshData(updated?: boolean) {
+    function refreshData(updated = true) {
         if (updated) {
             refetch();
         }
+        setError(null);
         setOpenNewModal(false);
         setSelectedItem(undefined);
     }
@@ -68,6 +75,8 @@ export default function Authors() {
 
     return (
         <Loading open={loading || deleting} fullHeight={true}>
+            <NameFiltersPanel onApply={(filters: LanguageEntity) => setFilters(filters)}></NameFiltersPanel>
+
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: AuthorEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}

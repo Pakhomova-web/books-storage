@@ -10,6 +10,7 @@ import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import { useDeletePublishingHouse, usePublishingHouses } from '@/lib/graphql/hooks';
 import PublishingHouseModal from '@/components/modals/publishing-house-modal';
 import ErrorNotification from '@/components/error-notification';
+import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 
 export default function PublishingHouses() {
     const { items, loading, gettingError, refetch } = usePublishingHouses();
@@ -31,6 +32,7 @@ export default function PublishingHouses() {
     ]);
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
+    const [filters, setFilters] = useState<LanguageEntity>();
 
     useEffect(() => {
         if (gettingError) {
@@ -40,6 +42,10 @@ export default function PublishingHouses() {
         }
     }, [gettingError, deletingError]);
 
+    useEffect(() => {
+        refreshData();
+    }, [filters, pageSettings]);
+
     async function deleteHandler(item: LanguageEntity) {
         try {
             await deleteItem(item.id);
@@ -48,7 +54,7 @@ export default function PublishingHouses() {
         }
     }
 
-    function refreshData(updated: boolean) {
+    function refreshData(updated = true) {
         if (updated) {
             refetch();
         }
@@ -69,6 +75,8 @@ export default function PublishingHouses() {
 
     return (
         <Loading open={loading || deleting} fullHeight={true}>
+            <NameFiltersPanel onApply={(filters: LanguageEntity) => setFilters(filters)}></NameFiltersPanel>
+
             <CustomTable keys={tableKeys}
                          data={items}
                          renderKey={(item: PublishingHouseEntity) => item.id}
