@@ -1,4 +1,4 @@
-import { LanguageEntity, PageTypeEntity } from '@/lib/data/types';
+import { PageTypeEntity } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/modals/custom-text-field';
 import CustomModal from '@/components/modals/custom-modal';

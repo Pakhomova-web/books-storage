@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useBookTypes, useDeleteBookType } from '@/lib/graphql/hooks';
-import { BookTypeEntity, IPageable, LanguageEntity } from '@/lib/data/types';
+import { BookTypeEntity, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
@@ -33,7 +33,7 @@ export default function BookTypes() {
     ]);
     const [selectedItem, setSelectedItem] = useState<BookTypeEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
-    const [filters, setFilters] = useState<LanguageEntity>();
+    const [filters, setFilters] = useState<BookTypeEntity>();
     const { items, gettingError, loading, refetch } = useBookTypes(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteBookType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
@@ -72,7 +72,7 @@ export default function BookTypes() {
 
     return (
         <Loading open={loading || deleting} fullHeight={true}>
-            <NameFiltersPanel onApply={(filters: LanguageEntity) => setFilters(filters)}></NameFiltersPanel>
+            <NameFiltersPanel onApply={(filters: BookTypeEntity) => setFilters(filters)}></NameFiltersPanel>
 
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: BookTypeEntity) => item.id}

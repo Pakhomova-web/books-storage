@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useDeletePageType, usePageTypes } from '@/lib/graphql/hooks';
-import { IPageable, LanguageEntity, PageTypeEntity } from '@/lib/data/types';
+import { IPageable, PageTypeEntity } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
@@ -27,11 +27,11 @@ export default function PageTypes() {
     ]);
     const [selectedItem, setSelectedItem] = useState<PageTypeEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
+    const [filters, setFilters] = useState<PageTypeEntity>();
     const { items, gettingError, loading, refetch } = usePageTypes(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeletePageType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
-    const [filters, setFilters] = useState<LanguageEntity>();
 
     useEffect(() => {
         if (gettingError) {
@@ -73,7 +73,7 @@ export default function PageTypes() {
 
     return (
         <Loading open={loading || deleting} fullHeight={true}>
-            <NameFiltersPanel onApply={(filters: LanguageEntity) => setFilters(filters)}></NameFiltersPanel>
+            <NameFiltersPanel onApply={(filters: PageTypeEntity) => setFilters(filters)}></NameFiltersPanel>
 
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: PageTypeEntity) => item.id}

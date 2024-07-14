@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useAuthors, useDeleteAuthor } from '@/lib/graphql/hooks';
-import { AuthorEntity, IPageable, LanguageEntity } from '@/lib/data/types';
+import { AuthorEntity, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
@@ -28,7 +28,7 @@ export default function Authors() {
     ]);
     const [selectedItem, setSelectedItem] = useState<AuthorEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
-    const [filters, setFilters] = useState<LanguageEntity>();
+    const [filters, setFilters] = useState<AuthorEntity>();
     const { items, gettingError, loading, refetch } = useAuthors(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeleteAuthor();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
@@ -75,7 +75,7 @@ export default function Authors() {
 
     return (
         <Loading open={loading || deleting} fullHeight={true}>
-            <NameFiltersPanel onApply={(filters: LanguageEntity) => setFilters(filters)}></NameFiltersPanel>
+            <NameFiltersPanel onApply={(filters: AuthorEntity) => setFilters(filters)}></NameFiltersPanel>
 
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: AuthorEntity) => item.id}

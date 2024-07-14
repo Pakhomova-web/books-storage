@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useCoverTypes, useDeleteCoverType } from '@/lib/graphql/hooks';
-import { CoverTypeEntity, IPageable, LanguageEntity } from '@/lib/data/types';
+import { CoverTypeEntity, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
@@ -27,7 +27,7 @@ export default function CoverTypes() {
     ]);
     const [selectedItem, setSelectedItem] = useState<CoverTypeEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
-    const [filters, setFilters] = useState<LanguageEntity>();
+    const [filters, setFilters] = useState<CoverTypeEntity>();
     const { items, gettingError, loading, refetch } = useCoverTypes(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteCoverType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
@@ -74,7 +74,7 @@ export default function CoverTypes() {
 
     return (
         <Loading open={loading || deleting} fullHeight={true}>
-            <NameFiltersPanel onApply={(filters: LanguageEntity) => setFilters(filters)}></NameFiltersPanel>
+            <NameFiltersPanel onApply={(filters: CoverTypeEntity) => setFilters(filters)}></NameFiltersPanel>
 
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: CoverTypeEntity) => item.id}
