@@ -20,7 +20,7 @@ export default function PublishingHouses() {
         { type: 'text', title: 'Name', sortValue: 'name', renderValue: (item: PublishingHouseEntity) => item.name },
         { type: 'text', title: 'Tags', sortValue: 'tags', renderValue: (item: PublishingHouseEntity) => item.tags },
         {
-            type: 'icons',
+            type: 'actions',
             actions: [
                 {
                     type: TableActionEnum.delete,

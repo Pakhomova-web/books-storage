@@ -31,7 +31,7 @@ export function BookFilters({ onApply }) {
         <FiltersPanel onApply={() => onApply(formContext.getValues())} onClear={() => onClearClick()}>
             <FormContainer formContext={formContext}>
                 <Grid container spacing={2}>
-                    <Grid item xs={2}>
+                    <Grid item xs={12} sm={6} md={2}>
                         <CustomSelectField fullWidth
                                            options={bookTypeOptions}
                                            id="book-type-id"
@@ -39,14 +39,14 @@ export function BookFilters({ onApply }) {
                                            name="bookTypeId"/>
                     </Grid>
 
-                    <Grid item xs={2}>
+                    <Grid item xs={12} sm={6} md={2}>
                         <CustomTextField fullWidth
                                          id="book-name"
                                          label="Name"
                                          name="name"/>
                     </Grid>
 
-                    <Grid item xs={2}>
+                    <Grid item xs={12} sm={6} md={2}>
                         <CustomSelectField fullWidth
                                            options={languageOptions}
                                            id="language-id"
@@ -54,7 +54,7 @@ export function BookFilters({ onApply }) {
                                            name="languageId"/>
                     </Grid>
 
-                    <Grid item xs={2}>
+                    <Grid item xs={12} sm={6} md={2}>
                         <CustomSelectField fullWidth
                                            options={pageTypeOptions}
                                            id="page-type-id"
@@ -62,7 +62,7 @@ export function BookFilters({ onApply }) {
                                            name="pageTypeId"/>
                     </Grid>
 
-                    <Grid item xs={2}>
+                    <Grid item xs={12} sm={6} md={2}>
                         <CustomSelectField fullWidth
                                            options={coverTypeOptions}
                                            id="cover-type-id"
@@ -70,7 +70,7 @@ export function BookFilters({ onApply }) {
                                            name="coverTypeId"/>
                     </Grid>
 
-                    <Grid item xs={2}>
+                    <Grid item xs={12} sm={6} md={2}>
                         <CustomSelectField fullWidth
                                            options={authorOptions}
                                            id="author"

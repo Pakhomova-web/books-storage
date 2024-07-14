@@ -15,7 +15,7 @@ export default function CoverTypes() {
     const [tableKeys] = useState<TableKey<CoverTypeEntity>[]>([
         { title: 'Name', sortValue: 'name', renderValue: (item: CoverTypeEntity) => item.name, type: 'text' },
         {
-            type: 'icons',
+            type: 'actions',
             actions: [
                 {
                     type: TableActionEnum.delete,

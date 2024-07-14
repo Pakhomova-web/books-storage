@@ -1,5 +1,5 @@
 export interface TableKey<K> {
-    type: 'icons' | 'text',
+    type: 'actions' | 'text',
     sortValue?: string,
     title?: string,
     renderValue?: (item: K) => string | number,

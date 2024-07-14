@@ -21,7 +21,7 @@ export default function BookSeries() {
             type: 'text'
         },
         {
-            type: 'icons',
+            type: 'actions',
             actions: [
                 {
                     type: TableActionEnum.delete,

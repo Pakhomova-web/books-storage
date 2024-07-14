@@ -16,7 +16,7 @@ export default function Authors() {
         { title: 'Name', sortValue: 'name', renderValue: (item: AuthorEntity) => item.name, type: 'text' },
         { title: 'Description', renderValue: (item: AuthorEntity) => item.description, type: 'text' },
         {
-            type: 'icons',
+            type: 'actions',
             actions: [
                 {
                     type: TableActionEnum.delete,

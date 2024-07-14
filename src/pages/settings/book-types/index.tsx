@@ -15,7 +15,7 @@ export default function BookTypes() {
     const [tableKeys] = useState<TableKey<BookTypeEntity>[]>([
         { title: 'Name', sortValue: 'name', renderValue: (item: BookTypeEntity) => item.name, type: 'text' },
         {
-            type: 'icons',
+            type: 'actions',
             actions: [
                 {
                     type: TableActionEnum.delete,

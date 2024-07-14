@@ -15,7 +15,7 @@ export default function Languages() {
     const [tableKeys] = useState<TableKey<LanguageEntity>[]>([
         { title: 'Name', sortValue: 'name', renderValue: (item: LanguageEntity) => item.name, type: 'text' },
         {
-            type: 'icons',
+            type: 'actions',
             actions: [
                 {
                     type: TableActionEnum.delete,

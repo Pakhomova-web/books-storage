@@ -15,7 +15,7 @@ export default function PageTypes() {
     const [tableKeys] = useState<TableKey<PageTypeEntity>[]>([
         { title: 'Name', sortValue: 'name', renderValue: (item: PageTypeEntity) => item.name, type: 'text' },
         {
-            type: 'icons',
+            type: 'actions',
             actions: [
                 {
                     type: TableActionEnum.delete,

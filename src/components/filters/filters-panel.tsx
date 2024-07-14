@@ -4,7 +4,10 @@ import { styleVariables } from '@/constants/styles-variables';
 import { useState } from 'react';
 
 const filtersPanelContainer = {
-    marginBottom: styleVariables.margin
+    marginBottom: styleVariables.margin,
+    width: '100%',
+    position: 'absolute',
+    zIndex: 3
 };
 
 export function FiltersPanel({ onApply, onClear, children }) {

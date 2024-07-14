@@ -73,7 +73,7 @@ export default function Books() {
             type: 'text'
         },
         {
-            type: 'icons',
+            type: 'actions',
             actions: [
                 {
                     label: 'Copy',
@@ -164,6 +164,7 @@ export default function Books() {
                          onChange={(settings: IPageable) => onPaginationChange(settings)}
                          pageSettings={pageSettings}
                          usePagination={true}
+                         withFilters={true}
                          totalCount={totalCount}
                          onRowClick={(item: BookEntity) => onEdit(item)}></CustomTable>
 

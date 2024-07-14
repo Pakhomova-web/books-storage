@@ -1,5 +1,6 @@
 import {
-    Box, Button,
+    Box,
+    Button,
     IconButton,
     Menu,
     MenuItem,
@@ -7,20 +8,26 @@ import {
     TableBody,
     TableCell,
     TableContainer,
+    TableFooter,
     TableHead,
     TablePagination,
     TableRow,
-    TableSortLabel
+    TableSortLabel,
+    useTheme
 } from '@mui/material';
 import React, { ReactNode, useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CopyIcon from '@mui/icons-material/ContentCopy';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { ITableAction, TableActionEnum, TableKey } from '@/components/table/table-key';
 import CustomTableRow from '@/components/table/custom-table-row';
 import { visuallyHidden } from '@mui/utils';
 import { IPageable } from '@/lib/data/types';
+import { MobileTable } from '@/components/table/mobile-table';
+import { styleVariables } from '@/constants/styles-variables';
+import { tableContainerStyles } from '@/components/table/table-styles';
 
 interface CustomTableProps<K> {
     keys: TableKey<K>[],
@@ -30,8 +37,17 @@ interface CustomTableProps<K> {
     renderKey: (item: K) => string | number | undefined,
     onRowClick?: (item: K) => void,
     onChange?: (pageSettings: IPageable) => void,
-    pageSettings?: IPageable
+    pageSettings?: IPageable,
+    withFilters?: boolean
 }
+
+const stickyFooter = {
+    position: 'sticky',
+    bottom: 0,
+    background: 'white'
+};
+
+const paginatorStyles = { borderTop: `1px solid ${styleVariables.gray}` };
 
 function renderTableCell<T>(key: TableKey<T>, item: T, index: number, anchorEl: HTMLElement, onAnchorChange): ReactNode {
     const open = Boolean(anchorEl);
@@ -42,7 +58,7 @@ function renderTableCell<T>(key: TableKey<T>, item: T, index: number, anchorEl: 
     const onCloseMenu = () => onAnchorChange(null);
 
     switch (key.type) {
-        case 'icons':
+        case 'actions':
             return <TableCell key={index} align="right" onClick={e => e.stopPropagation()}>
                 {key.actions && key.actions?.length === 1 ?
                     key.actions.map((icon, index) => getIconItem<T>(item, icon, index))
@@ -96,6 +112,8 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
     const [page, setPage] = useState<number>(props.pageSettings?.page || 0);
     const [rowsPerPage, setRowsPerPage] = useState<number>(props.pageSettings?.rowsPerPage || 25);
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const theme = useTheme();
+    const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
 
     function handleRequestSort(orderBy?: string) {
         if (props.pageSettings && props.onChange) {
@@ -133,8 +151,8 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
         }
     }
 
-    return (
-        <TableContainer sx={{ maxHeight: 'calc(100vh - 135px)', overflowY: 'auto', overflowX: 'initial' }}>
+    return !mobileMatches ?
+        <TableContainer sx={tableContainerStyles(props.withFilters)}>
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
@@ -163,19 +181,23 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
                                 renderTableCell<T>(key, item, index, anchorEl, (val: HTMLElement) => setAnchorEl(val)))}
                         </CustomTableRow>
                     ))}
-
+                </TableBody>
+                <TableFooter sx={stickyFooter}>
                     {props.usePagination &&
                       <TableRow>
                         <TablePagination rowsPerPageOptions={[5, 10, 25]}
                                          count={props.totalCount}
                                          page={page}
+                                         sx={paginatorStyles}
                                          colSpan={props.keys.length}
                                          rowsPerPage={rowsPerPage}
                                          onPageChange={(_e, val: number) => onPageChange(val)}
                                          onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
                       </TableRow>}
-                </TableBody>
+                </TableFooter>
             </Table>
-        </TableContainer>
-    );
+        </TableContainer> :
+        <MobileTable data={props.data}
+                     keys={props.keys}
+                     withFilters={props.withFilters}></MobileTable>;
 }
