@@ -33,11 +33,11 @@ export default function BookTypes() {
     ]);
     const [selectedItem, setSelectedItem] = useState<BookTypeEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
-    const { items, gettingError, loading, refetch } = useBookTypes(pageSettings);
+    const [filters, setFilters] = useState<LanguageEntity>();
+    const { items, gettingError, loading, refetch } = useBookTypes(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteBookType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
-    const [filters, setFilters] = useState<LanguageEntity>();
 
     useEffect(() => {
         if (gettingError) {

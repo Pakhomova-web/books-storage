@@ -40,6 +40,7 @@ export default function LanguageModal({ open, item, onClose }: ILanguageModalPro
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
                 <CustomTextField fullWidth
                                  required
+                                 autoFocus
                                  id="language-name"
                                  label="Name"
                                  name="name"/>

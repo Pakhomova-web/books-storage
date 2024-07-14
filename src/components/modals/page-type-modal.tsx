@@ -40,6 +40,7 @@ export default function PageTypeModal({ open, item, onClose }: IPageTypeModalPro
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
                 <CustomTextField fullWidth
                                  required
+                                 autoFocus
                                  id="page-type-name"
                                  label="Name"
                                  name="name"/>

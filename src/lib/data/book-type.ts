@@ -1,12 +1,11 @@
 import { BookTypeEntity } from '@/lib/data/types';
 import { GraphQLError } from 'graphql/error';
 import BookType from '@/lib/data/models/book-type';
-import { checkUsageInBook, getByName } from '@/lib/data/base';
+import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
 import BookSeries from '@/lib/data/models/book-series';
-import Book from '@/lib/data/models/book';
 
-export async function getBookTypes(orderBy: string, order: string) {
-    return BookType.find(null, null, { sort: { [orderBy]: order } });
+export async function getBookTypes(orderBy: string, order: string, filters?: BookTypeEntity) {
+    return BookType.find(getValidFilters(filters), null, { sort: { [orderBy]: order } });
 }
 
 export async function createBookType(input: BookTypeEntity)  {

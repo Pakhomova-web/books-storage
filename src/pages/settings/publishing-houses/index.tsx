@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
-import { IPageable, LanguageEntity, PublishingHouseEntity } from '@/lib/data/types';
+import { IPageable, PublishingHouseEntity } from '@/lib/data/types';
 import Loading from '@/components/loading';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
@@ -13,10 +13,11 @@ import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 
 export default function PublishingHouses() {
-    const { items, loading, gettingError, refetch } = usePublishingHouses();
+    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
+    const [filters, setFilters] = useState<PublishingHouseEntity>();
+    const { items, loading, gettingError, refetch } = usePublishingHouses(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeletePublishingHouse();
     const [selectedItem, setSelectedItem] = useState<PublishingHouseEntity>();
-    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
     const [tableKeys] = useState<TableKey<PublishingHouseEntity>[]>([
         { type: 'text', title: 'Name', sortValue: 'name', renderValue: (item: PublishingHouseEntity) => item.name },
         { type: 'text', title: 'Tags', sortValue: 'tags', renderValue: (item: PublishingHouseEntity) => item.tags },
@@ -32,7 +33,6 @@ export default function PublishingHouses() {
     ]);
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
-    const [filters, setFilters] = useState<LanguageEntity>();
 
     useEffect(() => {
         if (gettingError) {
@@ -46,7 +46,7 @@ export default function PublishingHouses() {
         refreshData();
     }, [filters, pageSettings]);
 
-    async function deleteHandler(item: LanguageEntity) {
+    async function deleteHandler(item: PublishingHouseEntity) {
         try {
             await deleteItem(item.id);
             refreshData(true);
@@ -75,7 +75,7 @@ export default function PublishingHouses() {
 
     return (
         <Loading open={loading || deleting} fullHeight={true}>
-            <NameFiltersPanel onApply={(filters: LanguageEntity) => setFilters(filters)}></NameFiltersPanel>
+            <NameFiltersPanel onApply={(filters: PublishingHouseEntity) => setFilters(filters)}></NameFiltersPanel>
 
             <CustomTable keys={tableKeys}
                          data={items}

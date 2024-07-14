@@ -40,6 +40,7 @@ export default function CoverTypeModal({ open, item, onClose }: ICoverTypeModalP
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
                 <CustomTextField fullWidth
                                  required
+                                 autoFocus
                                  id="cover-type-name"
                                  label="Name"
                                  name="name"/>

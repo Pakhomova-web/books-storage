@@ -45,6 +45,7 @@ export default function AuthorModal({ open, item, onClose }: IAuthorModalProps) 
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
                 <CustomTextField fullWidth
                                  required
+                                 autoFocus
                                  id="author-name"
                                  label="Name"
                                  name="name"/>

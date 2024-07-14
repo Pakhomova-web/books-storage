@@ -1,19 +1,10 @@
 import { BookSeriesEntity } from '@/lib/data/types';
 import BookSeries from '@/lib/data/models/book-series';
 import { GraphQLError } from 'graphql/error';
-import { getByName } from '@/lib/data/base';
+import { getByName, getValidFilters } from '@/lib/data/base';
 
-export async function getBookSeries(orderBy?: string, order?: string, filters?: { name?, publishingHouseId? }) {
-    const validFilters = {};
-
-    if (filters) {
-        Object.keys(filters).forEach(key => {
-            if (filters[key]) {
-                validFilters[key] = filters[key];
-            }
-        });
-    }
-    return BookSeries.find(validFilters, null, { sort: { [orderBy]: order } });
+export async function getBookSeries(orderBy?: string, order?: string, filters?: BookSeriesEntity) {
+    return BookSeries.find(getValidFilters(filters), null, { sort: { [orderBy]: order } });
     // TODO: for sorting we need to get publishing house name
     // return connection()
     //     .select('bookSeries.id as id', 'bookSeries.name as name', 'publishingHouseId', 'publishingHouse.name as publishingHouseName')

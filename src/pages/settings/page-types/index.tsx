@@ -27,7 +27,7 @@ export default function PageTypes() {
     ]);
     const [selectedItem, setSelectedItem] = useState<PageTypeEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
-    const { items, gettingError, loading, refetch } = usePageTypes(pageSettings);
+    const { items, gettingError, loading, refetch } = usePageTypes(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeletePageType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();

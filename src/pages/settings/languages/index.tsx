@@ -27,11 +27,11 @@ export default function Languages() {
     ]);
     const [selectedItem, setSelectedItem] = useState<LanguageEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
-    const { items, gettingError, loading, refetch } = useLanguages(pageSettings);
+    const [filters, setFilters] = useState<LanguageEntity>();
+    const { items, gettingError, loading, refetch } = useLanguages(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteLanguage();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
-    const [filters, setFilters] = useState<LanguageEntity>();
 
     useEffect(() => {
         if (gettingError) {

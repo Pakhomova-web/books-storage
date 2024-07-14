@@ -33,3 +33,21 @@ export async function checkUsageInBook(propKey: keyof BookEntity, ids: string[],
         });
     }
 }
+
+export function getValidFilters<T>(filters?: T) {
+    const validFilters = {};
+
+    if (filters) {
+        Object.keys(filters).forEach(key => {
+            if (filters[key]) {
+                if (key === 'name') {
+                    validFilters[key] = { $regex: filters[key], $options: 'i' };
+                } else {
+                    validFilters[key] = filters[key];
+                }
+            }
+        });
+    }
+
+    return validFilters;
+}

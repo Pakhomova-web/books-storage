@@ -1,11 +1,11 @@
 import { CoverTypeEntity } from '@/lib/data/types';
 import { GraphQLError } from 'graphql/error';
 import CoverType from '@/lib/data/models/cover-type';
-import { checkUsageInBook, getByName } from '@/lib/data/base';
+import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
 import Book from '@/lib/data/models/book';
 
-export async function getCoverTypes(orderBy: string, order: string) {
-    return CoverType.find(null, null, { sort: { [orderBy]: order } });
+export async function getCoverTypes(orderBy: string, order: string, filters?: CoverTypeEntity) {
+    return CoverType.find(getValidFilters(filters), null, { sort: { [orderBy]: order } });
 }
 
 export async function createCoverType(input: CoverTypeEntity)  {

@@ -62,14 +62,14 @@ const typeDefs =  /* GraphQL */ `
     }
 
     type Query {
-        languages(orderBy: String, order: String): [Language!]
-        publishingHouses(orderBy: String, order: String): [PublishingHouse!]
-        pageTypes(orderBy: String, order: String): [PageType!]
-        bookTypes(orderBy: String, order: String): [BookType!]
-        coverTypes(orderBy: String, order: String): [CoverType!]
-        bookSeries(orderBy: String, order: String, filters: BookSeriesFiltersInput): [BookSeries!]
+        languages(orderBy: String, order: String, filters: SearchByNameInput): [Language!]
+        publishingHouses(orderBy: String, order: String, filters: SearchByNameInput): [PublishingHouse!]
+        pageTypes(orderBy: String, order: String, filters: SearchByNameInput): [PageType!]
+        bookTypes(orderBy: String, order: String, filters: SearchByNameInput): [BookType!]
+        coverTypes(orderBy: String, order: String, filters: SearchByNameInput): [CoverType!]
+        bookSeries(orderBy: String, order: String, filters: SearchByNameInput): [BookSeries!]
         books(pageSettings: PageableInput, filters: BookSearchInput): BookSubList
-        authors(orderBy: String, order: String): [Author!]
+        authors(orderBy: String, order: String, filters: SearchByNameInput): [Author!]
     }
 
     type Mutation {
@@ -165,11 +165,9 @@ const typeDefs =  /* GraphQL */ `
         publishingHouseId: ID!
     }
 
-    input BookSeriesFiltersInput {
+    input SearchByNameInput {
         name: String
-        publishingHouseId: ID
     }
-
 
     input PublishingHouseInput {
         id: ID!

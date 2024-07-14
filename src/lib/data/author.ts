@@ -1,11 +1,10 @@
 import { AuthorEntity } from '@/lib/data/types';
 import Author from '@/lib/data/models/author';
 import { GraphQLError } from 'graphql/error';
-import { checkUsageInBook, getByName } from '@/lib/data/base';
-import Book from '@/lib/data/models/book';
+import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
 
-export async function getAuthors(orderBy: string, order: string) {
-    return Author.find(null, null, { sort: { [orderBy]: order } });
+export async function getAuthors(orderBy: string, order: string, filters?: AuthorEntity) {
+    return Author.find(getValidFilters(filters), null, { sort: { [orderBy]: order } });
 }
 
 export async function createAuthor(input: AuthorEntity)  {

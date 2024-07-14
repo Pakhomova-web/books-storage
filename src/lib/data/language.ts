@@ -1,11 +1,10 @@
 import { LanguageEntity } from '@/lib/data/types';
 import Language from './models/language';
 import { GraphQLError } from 'graphql/error';
-import { checkUsageInBook, getByName } from '@/lib/data/base';
-import Book from '@/lib/data/models/book';
+import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
 
-export async function getLanguages(orderBy: string, order: string) {
-    return Language.find(null, null, { sort: { [orderBy]: order } });
+export async function getLanguages(orderBy: string, order: string, filters?: LanguageEntity) {
+    return Language.find(getValidFilters(filters), null, { sort: { [orderBy]: order } });
 }
 
 export async function createLanguage(input: LanguageEntity) {

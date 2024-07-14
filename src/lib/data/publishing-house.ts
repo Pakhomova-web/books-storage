@@ -2,11 +2,10 @@ import { GraphQLError } from 'graphql/error';
 import { PublishingHouseEntity } from '@/lib/data/types';
 import PublishingHouse from '@/lib/data/models/publishing-house';
 import BookSeries from '@/lib/data/models/book-series';
-import { checkUsageInBook, getByName } from '@/lib/data/base';
-import Book from '@/lib/data/models/book';
+import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
 
-export async function getPublishingHouses(orderBy: string, order: string) {
-    return PublishingHouse.find(null, null, { sort: { [orderBy]: order } });
+export async function getPublishingHouses(orderBy: string, order: string, filters?: PublishingHouseEntity) {
+    return PublishingHouse.find(getValidFilters(filters), null, { sort: { [orderBy]: order } });
 }
 
 export async function getPublishingHouseById(id: string) {

@@ -1,11 +1,10 @@
 import { PageTypeEntity } from '@/lib/data/types';
 import { GraphQLError } from 'graphql/error';
 import PageType from '@/lib/data/models/page-type';
-import { checkUsageInBook, getByName } from '@/lib/data/base';
-import Book from '@/lib/data/models/book';
+import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
 
-export async function getPageTypes(orderBy: string, order: string) {
-    return PageType.find(null, null, { sort: { [orderBy]: order } });
+export async function getPageTypes(orderBy: string, order: string, filters?: PageTypeEntity) {
+    return PageType.find(getValidFilters(filters), null, { sort: { [orderBy]: order } });
 }
 
 export async function createPageType(input: PageTypeEntity) {

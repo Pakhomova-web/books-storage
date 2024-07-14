@@ -48,6 +48,7 @@ export default function PublishingHouseModal({ open, item, onClose }: IPublishin
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
                 <CustomTextField fullWidth
                                  required
+                                 autoFocus
                                  id="publishing-house-name"
                                  label="Name"
                                  name="name"/>

@@ -40,6 +40,7 @@ export default function BookTypeModal({ open, item, onClose }: IBookTypeModalPro
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
                 <CustomTextField fullWidth
                                  required
+                                 autoFocus
                                  id="book-type-name"
                                  label="Name"
                                  name="name"/>

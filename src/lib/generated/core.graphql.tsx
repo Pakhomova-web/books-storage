@@ -118,11 +118,6 @@ export type BookSeriesCreateInput = {
   publishingHouseId: Scalars['ID']['input'];
 };
 
-export type BookSeriesFiltersInput = {
-  name?: InputMaybe<Scalars['String']['input']>;
-  publishingHouseId?: InputMaybe<Scalars['ID']['input']>;
-};
-
 export type BookSeriesInput = {
   id: Scalars['ID']['input'];
   name: Scalars['String']['input'];
@@ -374,19 +369,21 @@ export type Query = {
 
 
 export type QueryAuthorsArgs = {
+  filters?: InputMaybe<SearchByNameInput>;
   order?: InputMaybe<Scalars['String']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryBookSeriesArgs = {
-  filters?: InputMaybe<BookSeriesFiltersInput>;
+  filters?: InputMaybe<SearchByNameInput>;
   order?: InputMaybe<Scalars['String']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryBookTypesArgs = {
+  filters?: InputMaybe<SearchByNameInput>;
   order?: InputMaybe<Scalars['String']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
 };
@@ -399,26 +396,34 @@ export type QueryBooksArgs = {
 
 
 export type QueryCoverTypesArgs = {
+  filters?: InputMaybe<SearchByNameInput>;
   order?: InputMaybe<Scalars['String']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryLanguagesArgs = {
+  filters?: InputMaybe<SearchByNameInput>;
   order?: InputMaybe<Scalars['String']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryPageTypesArgs = {
+  filters?: InputMaybe<SearchByNameInput>;
   order?: InputMaybe<Scalars['String']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 export type QueryPublishingHousesArgs = {
+  filters?: InputMaybe<SearchByNameInput>;
   order?: InputMaybe<Scalars['String']['input']>;
   orderBy?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type SearchByNameInput = {
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -501,7 +506,6 @@ export type ResolversTypes = {
   BookSearchInput: BookSearchInput;
   BookSeries: ResolverTypeWrapper<BookSeriesEntity>;
   BookSeriesCreateInput: BookSeriesCreateInput;
-  BookSeriesFiltersInput: BookSeriesFiltersInput;
   BookSeriesInput: BookSeriesInput;
   BookSubList: ResolverTypeWrapper<Omit<BookSubList, 'items'> & { items: Array<ResolversTypes['Book']> }>;
   BookType: ResolverTypeWrapper<BookTypeEntity>;
@@ -526,6 +530,7 @@ export type ResolversTypes = {
   PublishingHouseCreateInput: PublishingHouseCreateInput;
   PublishingHouseInput: PublishingHouseInput;
   Query: ResolverTypeWrapper<{}>;
+  SearchByNameInput: SearchByNameInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
 };
 
@@ -540,7 +545,6 @@ export type ResolversParentTypes = {
   BookSearchInput: BookSearchInput;
   BookSeries: BookSeriesEntity;
   BookSeriesCreateInput: BookSeriesCreateInput;
-  BookSeriesFiltersInput: BookSeriesFiltersInput;
   BookSeriesInput: BookSeriesInput;
   BookSubList: Omit<BookSubList, 'items'> & { items: Array<ResolversParentTypes['Book']> };
   BookType: BookTypeEntity;
@@ -565,6 +569,7 @@ export type ResolversParentTypes = {
   PublishingHouseCreateInput: PublishingHouseCreateInput;
   PublishingHouseInput: PublishingHouseInput;
   Query: {};
+  SearchByNameInput: SearchByNameInput;
   String: Scalars['String']['output'];
 };
 

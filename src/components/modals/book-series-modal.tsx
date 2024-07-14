@@ -52,6 +52,7 @@ export default function BookSeriesModal({ open, item, onClose }: IBookSeriesModa
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
                 <CustomTextField fullWidth
                                  required
+                                 autoFocus
                                  id="book-series-name"
                                  label="Name"
                                  name="name"/>

@@ -100,18 +100,19 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={onSubmit}>
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
+                <CustomTextField fullWidth
+                                 required
+                                 autoFocus
+                                 id="book-name"
+                                 label="Name"
+                                 name="name"/>
+
                 <CustomSelectField fullWidth
                                    required
                                    options={bookTypeOptions}
                                    id="book-type-id"
                                    label="Book Type"
                                    name="bookTypeId"/>
-
-                <CustomTextField fullWidth
-                                 required
-                                 id="book-name"
-                                 label="Name"
-                                 name="name"/>
 
                 <CustomSelectField fullWidth
                                    required

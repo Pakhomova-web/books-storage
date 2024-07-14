@@ -28,11 +28,11 @@ export default function Authors() {
     ]);
     const [selectedItem, setSelectedItem] = useState<AuthorEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
-    const { items, gettingError, loading, refetch } = useAuthors(pageSettings);
+    const [filters, setFilters] = useState<LanguageEntity>();
+    const { items, gettingError, loading, refetch } = useAuthors(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeleteAuthor();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
-    const [filters, setFilters] = useState<LanguageEntity>();
 
     useEffect(() => {
         if (gettingError) {

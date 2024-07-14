@@ -55,8 +55,8 @@ import { query } from 'express';
 
 /** languages **/
 
-export function useLanguages(pageSettings?: IPageable) {
-    return _useItems<LanguageEntity>(languagesQuery, pageSettings);
+export function useLanguages(pageSettings?: IPageable, filters?: LanguageEntity) {
+    return _useItems<LanguageEntity>(languagesQuery, pageSettings, filters);
 }
 
 export function useLanguageOptions<T>(pageSettings?: IPageable) {
@@ -77,8 +77,8 @@ export function useDeleteLanguage() {
 
 /** publishing house **/
 
-export function usePublishingHouses(pageSettings?: IPageable) {
-    return _useItems<PublishingHouseEntity>(publishingHousesQuery, pageSettings);
+export function usePublishingHouses(pageSettings?: IPageable, filters?: PublishingHouseEntity) {
+    return _useItems<PublishingHouseEntity>(publishingHousesQuery, pageSettings, filters);
 }
 
 export function usePublishingHouseOptions<T>(pageSettings?: IPageable) {
@@ -99,8 +99,8 @@ export function useCreatePublishingHouse() {
 
 /** page type **/
 
-export function usePageTypes(pageSettings?: IPageable) {
-    return _useItems(pageTypesQuery, pageSettings);
+export function usePageTypes(pageSettings?: IPageable, filters?: PageTypeEntity) {
+    return _useItems(pageTypesQuery, pageSettings, filters);
 }
 
 export function usePageTypeOptions<T>(pageSettings?: IPageable) {
@@ -121,8 +121,8 @@ export function useDeletePageType() {
 
 /** author **/
 
-export function useAuthors(pageSettings?: IPageable) {
-    return _useItems(authorsQuery, pageSettings);
+export function useAuthors(pageSettings?: IPageable, filters?: AuthorEntity) {
+    return _useItems(authorsQuery, pageSettings, filters);
 }
 
 export function useAuthorOptions<T>(pageSettings?: IPageable) {
@@ -143,8 +143,8 @@ export function useDeleteAuthor() {
 
 /** book type **/
 
-export function useBookTypes(pageSettings?: IPageable) {
-    return _useItems<BookTypeEntity>(bookTypesQuery, pageSettings);
+export function useBookTypes(pageSettings?: IPageable, filters?: BookTypeEntity) {
+    return _useItems<BookTypeEntity>(bookTypesQuery, pageSettings, filters);
 }
 
 export function useBookTypeOptions<T>(pageSettings?: IPageable) {
@@ -165,8 +165,8 @@ export function useDeleteBookType() {
 
 /** cover type **/
 
-export function useCoverTypes(pageSettings?: IPageable) {
-    return _useItems(coverTypesQuery, pageSettings);
+export function useCoverTypes(pageSettings?: IPageable, filters?: CoverTypeEntity) {
+    return _useItems(coverTypesQuery, pageSettings, filters);
 }
 
 export function useCoverTypeOptions<T>(pageSettings?: IPageable) {
@@ -187,8 +187,8 @@ export function useDeleteCoverType() {
 
 /** cover type **/
 
-export function useBookSeries(pageSettings?: IPageable) {
-    return _useItems(bookSeriesQuery, pageSettings);
+export function useBookSeries(pageSettings?: IPageable, filters?: BookSeriesEntity) {
+    return _useItems(bookSeriesQuery, pageSettings, filters);
 }
 
 export function useUpdateBookSeries() {
