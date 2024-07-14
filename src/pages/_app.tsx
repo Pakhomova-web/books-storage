@@ -40,10 +40,15 @@ const settingsList: SettingListItem[] = [
 ];
 const drawerWidth = 240;
 
+const leftNavigationStyles = {
+    width: drawerWidth,
+    [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' }
+};
+
 export default function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
     const pathname = usePathname();
-    const [activeSettingsTab, setActiveSettingsTab] = useState<string>();
+    const [activeSettingsTab, setActiveSettingsTab] = useState<SettingListItem>();
     const [isSettings, setIsSettings] = useState<boolean>(false);
     const [showSettingMenu, setShowSettingMenu] = useState<boolean>(false);
 
@@ -51,19 +56,19 @@ export default function App({ Component, pageProps }: AppProps) {
     useEffect(() => {
         if (pathname.includes('settings')) {
             setIsSettings(true);
-            setActiveSettingsTab(pathname.split('/settings/')[1]);
+            setActiveSettingsTab(settingsList.find(i => i.link === pathname.split('/settings/')[1]));
         }
     }, [pathname]);
 
-    function settingsTabChange(link: string) {
+    function settingsTabChange(activeSettingsTab: SettingListItem) {
         setShowSettingMenu(false);
-        setActiveSettingsTab(link);
-        router.push(`/settings/${link}`);
+        setActiveSettingsTab(activeSettingsTab);
+        router.push(`/settings/${activeSettingsTab.link}`);
     }
 
     function goToMainPage() {
         setIsSettings(false);
-        setActiveSettingsTab('');
+        setActiveSettingsTab(null);
         router.push('/');
     }
 
@@ -77,6 +82,8 @@ export default function App({ Component, pageProps }: AppProps) {
                     <Box>
                         {isSettings && <IconButton color="inherit" onClick={() => setShowSettingMenu(!showSettingMenu)}><MenuIcon/></IconButton>}
                     </Box>
+
+                    {activeSettingsTab && <Box>{activeSettingsTab.title}</Box>}
 
                     <Box>
                         <IconButton onClick={() => goToMainPage()} color="inherit"
@@ -93,26 +100,22 @@ export default function App({ Component, pageProps }: AppProps) {
             </AppBar>
 
             {isSettings && showSettingMenu ?
-                <Drawer variant="permanent"
-                        sx={{
-                            width: drawerWidth,
-                            [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' }
-                        }}>
+                <Drawer variant="permanent" sx={leftNavigationStyles}>
                     <Toolbar/>
                     <List>
-                        {settingsList.map(({ title, link }) => (
-                            <ListItem key={link} disablePadding
-                                      className={activeSettingsTab === link ? 'active-nav-link' : ''}
-                                      onClick={() => settingsTabChange(link)}>
+                        {settingsList.map(tab => (
+                            <ListItem key={tab.link} disablePadding
+                                      className={activeSettingsTab?.link === tab.link ? 'active-nav-link' : ''}
+                                      onClick={() => settingsTabChange(tab)}>
                                 <ListItemButton>
-                                    <ListItemText primary={title}/>
+                                    <ListItemText primary={tab.title}/>
                                 </ListItemButton>
                             </ListItem>
                         ))}
                     </List>
                 </Drawer> : null}
             <Toolbar/>
-            <Component {...pageProps} />
+            <Component {...pageProps}/>
         </ApolloProvider>
     );
 }

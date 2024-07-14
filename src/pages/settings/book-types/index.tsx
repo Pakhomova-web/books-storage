@@ -78,6 +78,7 @@ export default function BookTypes() {
                          renderKey={(item: BookTypeEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                          pageSettings={pageSettings}
+                         withFilters={true}
                          onRowClick={(item: BookTypeEntity) => onEdit(item)}></CustomTable>
 
             {error && <ErrorNotification error={error}></ErrorNotification>}

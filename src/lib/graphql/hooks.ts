@@ -51,6 +51,7 @@ import {
     PublishingHouseEntity
 } from '@/lib/data/types';
 import { apolloClient } from '@/lib/apollo';
+import { query } from 'express';
 
 /** languages **/
 
@@ -228,6 +229,10 @@ export function useBooks(pageSettings: IPageable, filters?: BookEntity) {
     return _usePageableItems<BookEntity>(booksQuery, 'books', pageSettings, filters);
 }
 
+export function getAllBooks(pageSettings: IPageable, filters?: BookEntity) {
+    return _getAllItems<BookEntity>(booksQuery, 'books', pageSettings, filters);
+}
+
 export function useDeleteBook() {
     return _useDeleteItemById(deleteBookQuery);
 }
@@ -276,6 +281,16 @@ function _usePageableItems<T>(query: DocumentNode, key: string, pageSettings: IP
         loading,
         refetch
     };
+}
+
+async function _getAllItems<T>(query: DocumentNode, key: string, pageSettings: IPageable, filters?: T) {
+    const { data } = await apolloClient.query({
+        query,
+        fetchPolicy: 'no-cache',
+        variables: { pageSettings, filters }
+    });
+
+    return data[key].items;
 }
 
 function _useDeleteItemById(query: DocumentNode): {

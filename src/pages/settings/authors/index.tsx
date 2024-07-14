@@ -81,6 +81,7 @@ export default function Authors() {
                          renderKey={(item: AuthorEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                          pageSettings={pageSettings}
+                         withFilters={true}
                          onRowClick={(item: AuthorEntity) => onEdit(item)}></CustomTable>
 
             {error && <ErrorNotification error={error}></ErrorNotification>}

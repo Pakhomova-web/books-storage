@@ -79,6 +79,7 @@ export default function PageTypes() {
                          renderKey={(item: PageTypeEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                          pageSettings={pageSettings}
+                         withFilters={true}
                          onRowClick={(item: PageTypeEntity) => onEdit(item)}></CustomTable>
 
             { error && <ErrorNotification error={error}></ErrorNotification>}

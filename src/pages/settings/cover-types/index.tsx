@@ -80,6 +80,7 @@ export default function CoverTypes() {
                          renderKey={(item: CoverTypeEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                          pageSettings={pageSettings}
+                         withFilters={true}
                          onRowClick={(item: CoverTypeEntity) => onEdit(item)}></CustomTable>
 
             {error && <ErrorNotification error={error}></ErrorNotification>}

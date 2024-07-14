@@ -92,7 +92,7 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
     }
 
     return (
-        <CustomModal title={!item ? 'Add Book' : 'Edit Book'}
+        <CustomModal title={(!item || !item.id? 'Add' : 'Edit') + ' Book'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}

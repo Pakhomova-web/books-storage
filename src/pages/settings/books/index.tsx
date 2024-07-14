@@ -7,7 +7,7 @@ import { ApolloError } from '@apollo/client';
 import { BookEntity, IPageable } from '@/lib/data/types';
 import Loading from '@/components/loading';
 import CustomTable from '@/components/table/custom-table';
-import { useBooks, useDeleteBook } from '@/lib/graphql/hooks';
+import { getAllBooks, useBooks, useDeleteBook } from '@/lib/graphql/hooks';
 import BookModal from '@/components/modals/book-modal';
 import ErrorNotification from '@/components/error-notification';
 import { styleVariables } from '@/constants/styles-variables';
@@ -102,6 +102,7 @@ export default function Books() {
     const { deleteItem, deletingError, deleting } = useDeleteBook();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
+    const [downloadingCsv, setDownloadingCsv] = useState<boolean>(false);
 
     useEffect(() => {
         if (gettingError) {
@@ -146,8 +147,17 @@ export default function Books() {
         setSelectedItem(item);
     }
 
-    function onDownloadCSV() {
-        downloadCsv<BookEntity>(items, tableKeys.filter(key => key.type === 'text'), new Date().toISOString());
+    async function onDownloadCSV() {
+        setDownloadingCsv(true);
+        getAllBooks({ ...pageSettings, page: 0, rowsPerPage: totalCount }, filters)
+            .then(books => {
+                downloadCsv<BookEntity>(books, tableKeys, new Date().toISOString());
+                setDownloadingCsv(false);
+            })
+            .catch(err => {
+                setError(err);
+                setDownloadingCsv(false);
+            });
     }
 
     function onPaginationChange(settings: IPageable) {
@@ -155,7 +165,7 @@ export default function Books() {
     }
 
     return (
-        <Loading open={loading || deleting} fullHeight={true}>
+        <Loading open={loading || deleting || downloadingCsv} fullHeight={true}>
             <BookFilters onApply={(filters: BookEntity) => setFilters(filters)}></BookFilters>
 
             <CustomTable data={items}
