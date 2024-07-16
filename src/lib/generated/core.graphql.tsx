@@ -375,22 +375,19 @@ export type Query = {
 
 export type QueryAuthorsArgs = {
   filters?: InputMaybe<SearchByNameInput>;
-  order?: InputMaybe<Scalars['String']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
+  pageSettings?: InputMaybe<PageableInput>;
 };
 
 
 export type QueryBookSeriesArgs = {
   filters?: InputMaybe<BookSeriesSearchInput>;
-  order?: InputMaybe<Scalars['String']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
+  pageSettings?: InputMaybe<PageableInput>;
 };
 
 
 export type QueryBookTypesArgs = {
   filters?: InputMaybe<SearchByNameInput>;
-  order?: InputMaybe<Scalars['String']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
+  pageSettings?: InputMaybe<PageableInput>;
 };
 
 
@@ -402,29 +399,25 @@ export type QueryBooksArgs = {
 
 export type QueryCoverTypesArgs = {
   filters?: InputMaybe<SearchByNameInput>;
-  order?: InputMaybe<Scalars['String']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
+  pageSettings?: InputMaybe<PageableInput>;
 };
 
 
 export type QueryLanguagesArgs = {
   filters?: InputMaybe<SearchByNameInput>;
-  order?: InputMaybe<Scalars['String']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
+  pageSettings?: InputMaybe<PageableInput>;
 };
 
 
 export type QueryPageTypesArgs = {
   filters?: InputMaybe<SearchByNameInput>;
-  order?: InputMaybe<Scalars['String']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
+  pageSettings?: InputMaybe<PageableInput>;
 };
 
 
 export type QueryPublishingHousesArgs = {
   filters?: InputMaybe<SearchByNameInput>;
-  order?: InputMaybe<Scalars['String']['input']>;
-  orderBy?: InputMaybe<Scalars['String']['input']>;
+  pageSettings?: InputMaybe<PageableInput>;
 };
 
 export type SearchByNameInput = {

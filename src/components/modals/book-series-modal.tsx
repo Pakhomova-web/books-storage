@@ -1,10 +1,6 @@
-import { BookSeriesEntity, PublishingHouseEntity } from '@/lib/data/types';
+import { BookSeriesEntity } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import {
-    useCreateBookSeries,
-    usePublishingHouseOptions,
-    useUpdateBookSeries
-} from '@/lib/graphql/hooks';
+import { useCreateBookSeries, usePublishingHouseOptions, useUpdateBookSeries } from '@/lib/graphql/hooks';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/modals/custom-text-field';
 import CustomSelectField from '@/components/modals/custom-select-field';
@@ -38,7 +34,8 @@ export default function BookSeriesModal({ open, item, onClose }: IBookSeriesModa
             }
 
             onClose(true);
-        } catch (err) {}
+        } catch (err) {
+        }
     }
 
     return (

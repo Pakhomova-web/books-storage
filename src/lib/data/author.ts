@@ -1,10 +1,10 @@
-import { AuthorEntity } from '@/lib/data/types';
+import { AuthorEntity, IPageable } from '@/lib/data/types';
 import Author from '@/lib/data/models/author';
 import { GraphQLError } from 'graphql/error';
 import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
 
-export async function getAuthors(orderBy: string, order: string, filters?: AuthorEntity) {
-    return Author.find(getValidFilters(filters), null, { sort: { [orderBy]: order } });
+export async function getAuthors(pageSettings: IPageable, filters?: AuthorEntity) {
+    return Author.find(getValidFilters(filters), null).sort({ [pageSettings.orderBy || 'name']: pageSettings.order || 'asc' });
 }
 
 export async function createAuthor(input: AuthorEntity)  {

@@ -1,11 +1,11 @@
-import { BookTypeEntity } from '@/lib/data/types';
+import { BookTypeEntity, IPageable } from '@/lib/data/types';
 import { GraphQLError } from 'graphql/error';
 import BookType from '@/lib/data/models/book-type';
 import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
 import BookSeries from '@/lib/data/models/book-series';
 
-export async function getBookTypes(orderBy: string, order: string, filters?: BookTypeEntity) {
-    return BookType.find(getValidFilters(filters), null, { sort: { [orderBy]: order } });
+export async function getBookTypes(pageSettings: IPageable, filters?: BookTypeEntity) {
+    return BookType.find(getValidFilters(filters), null).sort({ [pageSettings.orderBy || 'name']: pageSettings.order || 'asc' });
 }
 
 export async function createBookType(input: BookTypeEntity)  {

@@ -4,8 +4,8 @@ import { gql } from '@apollo/client';
 /** language **/
 
 export const languagesQuery = gql`
-    query Languages($orderBy: String, $order: String, $filters: SearchByNameInput) {
-        items: languages(orderBy: $orderBy, order: $order, filters: $filters) {
+    query Languages($pageSettings: PageableInput, $filters: SearchByNameInput) {
+        items: languages(pageSettings: $pageSettings, filters: $filters) {
             id
             name
         }
@@ -13,8 +13,8 @@ export const languagesQuery = gql`
 `;
 
 export const languageOptionsQuery = gql`
-    query Languages($orderBy: String, $order: String, $filters: SearchByNameInput) {
-        items: languages(orderBy: $orderBy, order: $order, filters: $filters) {
+    query Languages($pageSettings: PageableInput, $filters: SearchByNameInput) {
+        items: languages(pageSettings: $pageSettings, filters: $filters) {
             id
             label: name
         }
@@ -50,8 +50,8 @@ export const deleteLanguageQuery = gql`
 /** publishing house **/
 
 export const publishingHousesQuery = gql`
-    query PublishingHouses($orderBy: String, $order: String, $filters: SearchByNameInput) {
-        items: publishingHouses(orderBy: $orderBy, order: $order, filters: $filters) {
+    query PublishingHouses($pageSettings: PageableInput, $filters: SearchByNameInput) {
+        items: publishingHouses(pageSettings: $pageSettings, filters: $filters) {
             id
             name
             tags
@@ -60,8 +60,8 @@ export const publishingHousesQuery = gql`
 `;
 
 export const publishingHouseOptionsQuery = gql`
-    query PublishingHouses($orderBy: String, $order: String, $filters: SearchByNameInput) {
-        items: publishingHouses(orderBy: $orderBy, order: $order, filters: $filters) {
+    query PublishingHouses($pageSettings: PageableInput, $filters: SearchByNameInput) {
+        items: publishingHouses(pageSettings: $pageSettings, filters: $filters) {
             id
             label: name
         }
@@ -99,8 +99,8 @@ export const updatePublishingHouseQuery = gql`
 /** page type **/
 
 export const pageTypesQuery = gql`
-    query PageTypes($orderBy: String, $order: String, $filters: SearchByNameInput) {
-        items: pageTypes(orderBy: $orderBy, order: $order, filters: $filters) {
+    query PageTypes($pageSettings: PageableInput, $filters: SearchByNameInput) {
+        items: pageTypes(pageSettings: $pageSettings, filters: $filters) {
             id
             name
         }
@@ -108,8 +108,8 @@ export const pageTypesQuery = gql`
 `;
 
 export const pageTypeOptionsQuery = gql`
-    query PageTypes($orderBy: String, $order: String, $filters: SearchByNameInput) {
-        items: pageTypes(orderBy: $orderBy, order: $order, filters: $filters) {
+    query PageTypes($pageSettings: PageableInput, $filters: SearchByNameInput) {
+        items: pageTypes(pageSettings: $pageSettings, filters: $filters) {
             id
             label: name
         }
@@ -147,8 +147,8 @@ export const updatePageTypeQuery = gql`
 /** author **/
 
 export const authorsQuery = gql`
-    query Authors($orderBy: String, $order: String, $filters: SearchByNameInput) {
-        items: authors(orderBy: $orderBy, order: $order, filters: $filters) {
+    query Authors($pageSettings: PageableInput, $filters: SearchByNameInput) {
+        items: authors(pageSettings: $pageSettings, filters: $filters) {
             id
             name
             description
@@ -157,8 +157,8 @@ export const authorsQuery = gql`
 `;
 
 export const authorOptionsQuery = gql`
-    query Authors($orderBy: String, $order: String, $filters: SearchByNameInput) {
-        items: authors(orderBy: $orderBy, order: $order, filters: $filters) {
+    query Authors($pageSettings: PageableInput, $filters: SearchByNameInput) {
+        items: authors(pageSettings: $pageSettings, filters: $filters) {
             id
             label: name
         }
@@ -192,8 +192,8 @@ export const updateAuthorQuery = gql`
 /** book type **/
 
 export const bookTypesQuery = gql`
-    query BookTypes($orderBy: String, $order: String, $filters: SearchByNameInput) {
-        items: bookTypes(orderBy: $orderBy, order: $order, filters: $filters) {
+    query BookTypes($pageSettings: PageableInput, $filters: SearchByNameInput) {
+        items: bookTypes(pageSettings: $pageSettings, filters: $filters) {
             id
             name
         }
@@ -201,8 +201,8 @@ export const bookTypesQuery = gql`
 `;
 
 export const bookTypeOptionsQuery = gql`
-    query BookTypes($orderBy: String, $order: String, $filters: SearchByNameInput) {
-        items: bookTypes(orderBy: $orderBy, order: $order, filters: $filters) {
+    query BookTypes($pageSettings: PageableInput, $filters: SearchByNameInput) {
+        items: bookTypes(pageSettings: $pageSettings, filters: $filters) {
             id
             label: name
         }
@@ -238,8 +238,8 @@ export const updateBookTypeQuery = gql`
 /** cover type **/
 
 export const coverTypesQuery = gql`
-    query CoverTypes($orderBy: String, $order: String, $filters: SearchByNameInput) {
-        items: coverTypes(orderBy: $orderBy, order: $order, filters: $filters) {
+    query CoverTypes($pageSettings: PageableInput, $filters: SearchByNameInput) {
+        items: coverTypes(pageSettings: $pageSettings, filters: $filters) {
             id
             name
         }
@@ -247,8 +247,8 @@ export const coverTypesQuery = gql`
 `;
 
 export const coverTypeOptionsQuery = gql`
-    query CoverTypes($orderBy: String, $order: String, $filters: SearchByNameInput) {
-        items: coverTypes(orderBy: $orderBy, order: $order, filters: $filters) {
+    query CoverTypes($pageSettings: PageableInput, $filters: SearchByNameInput) {
+        items: coverTypes(pageSettings: $pageSettings, filters: $filters) {
             id
             label: name
         }
@@ -284,8 +284,8 @@ export const updateCoverTypeQuery = gql`
 /** book series **/
 
 export const bookSeriesQuery = gql`
-    query BookSeries($orderBy: String, $order: String, $filters: BookSeriesSearchInput) {
-        items: bookSeries(orderBy: $orderBy, order: $order, filters: $filters) {
+    query BookSeries($pageSettings: PageableInput, $filters: BookSeriesSearchInput) {
+        items: bookSeries(pageSettings: $pageSettings, filters: $filters) {
             id
             name
             publishingHouseId

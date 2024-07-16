@@ -62,14 +62,14 @@ const typeDefs =  /* GraphQL */ `
     }
 
     type Query {
-        languages(orderBy: String, order: String, filters: SearchByNameInput): [Language!]
-        publishingHouses(orderBy: String, order: String, filters: SearchByNameInput): [PublishingHouse!]
-        pageTypes(orderBy: String, order: String, filters: SearchByNameInput): [PageType!]
-        bookTypes(orderBy: String, order: String, filters: SearchByNameInput): [BookType!]
-        coverTypes(orderBy: String, order: String, filters: SearchByNameInput): [CoverType!]
-        bookSeries(orderBy: String, order: String, filters: BookSeriesSearchInput): [BookSeries!]
+        languages(pageSettings: PageableInput, filters: SearchByNameInput): [Language!]
+        publishingHouses(pageSettings: PageableInput, filters: SearchByNameInput): [PublishingHouse!]
+        pageTypes(pageSettings: PageableInput, filters: SearchByNameInput): [PageType!]
+        bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): [BookType!]
+        coverTypes(pageSettings: PageableInput, filters: SearchByNameInput): [CoverType!]
+        bookSeries(pageSettings: PageableInput, filters: BookSeriesSearchInput): [BookSeries!]
         books(pageSettings: PageableInput, filters: BookSearchInput): BookSubList
-        authors(orderBy: String, order: String, filters: SearchByNameInput): [Author!]
+        authors(pageSettings: PageableInput, filters: SearchByNameInput): [Author!]
     }
 
     type Mutation {
@@ -117,7 +117,7 @@ const typeDefs =  /* GraphQL */ `
         page: Int,
         rowsPerPage: Int
     }
-    
+
     input BookCreateInput {
         name: String!
         description: String
@@ -223,7 +223,7 @@ const typeDefs =  /* GraphQL */ `
         authorId: ID
         format: String
     }
-    
+
     input BookSeriesSearchInput {
         name: String,
         publishingHouseId: ID!

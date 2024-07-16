@@ -76,51 +76,51 @@ function parseError(error) {
 
 const resolvers: Resolvers = {
     Query: {
-        languages: async (_root, { orderBy, order, filters }) => {
+        languages: async (_root, { pageSettings, filters }) => {
             try {
-                return getLanguages(orderBy || 'name', order || 'asc', <LanguageEntity>filters);
+                return getLanguages(<IPageable>pageSettings, <LanguageEntity>filters);
             } catch (error) {
                 parseError(error);
             }
         },
-        publishingHouses: async (_root, { orderBy, order, filters }) => {
+        publishingHouses: async (_root, { pageSettings, filters }) => {
             try {
-                return getPublishingHouses(orderBy || 'name', order || 'asc', <PublishingHouseEntity>filters);
+                return getPublishingHouses(<IPageable>pageSettings, <PublishingHouseEntity>filters);
             } catch (error) {
                 parseError(error);
             }
         },
-        pageTypes: async (_root, { orderBy, order, filters }) => {
+        pageTypes: async (_root, { pageSettings, filters }) => {
             try {
-                return getPageTypes(orderBy || 'name', order || 'asc', <PageTypeEntity>filters);
+                return getPageTypes(<IPageable>pageSettings, <PageTypeEntity>filters);
             } catch (error) {
                 parseError(error);
             }
         },
-        bookTypes: async (_root, { orderBy, order, filters }) => {
+        bookTypes: async (_root, { pageSettings, filters }) => {
             try {
-                return getBookTypes(orderBy || 'name', order || 'asc', <BookTypeEntity>filters);
+                return getBookTypes(<IPageable>pageSettings, <BookTypeEntity>filters);
             } catch (error) {
                 parseError(error);
             }
         },
-        coverTypes: async (_root, { orderBy, order, filters }) => {
+        coverTypes: async (_root, { pageSettings, filters }) => {
             try {
-                return getCoverTypes(orderBy || 'name', order || 'asc', <CoverTypeEntity>filters);
+                return getCoverTypes(<IPageable>pageSettings, <CoverTypeEntity>filters);
             } catch (error) {
                 parseError(error);
             }
         },
-        authors: async (_root, { orderBy, order, filters }) => {
+        authors: async (_root, { pageSettings, filters }) => {
             try {
-                return getAuthors(orderBy || 'name', order || 'asc', <AuthorEntity>filters);
+                return getAuthors(<IPageable>pageSettings, <AuthorEntity>filters);
             } catch (error) {
                 parseError(error);
             }
         },
-        bookSeries: async (_root, { orderBy, order, filters }) => {
+        bookSeries: async (_root, { pageSettings, filters }) => {
             try {
-                return getBookSeries(orderBy || 'name', order || 'asc', <BookSeriesEntity>filters);
+                return getBookSeries(<IPageable>pageSettings, <BookSeriesEntity>filters);
             } catch (error) {
                 parseError(error);
             }

@@ -17,7 +17,7 @@ export default function BookSeries() {
         { title: 'Name', sortValue: 'name', renderValue: (item: BookSeriesEntity) => item.name, type: 'text' },
         {
             title: 'Publishing House',
-            sortValue: 'publishingHouseName',
+            sortValue: 'publishingHouse.name',
             renderValue: (item: BookSeriesEntity) => item.publishingHouse?.name,
             type: 'text'
         },

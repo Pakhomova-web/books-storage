@@ -1,17 +1,12 @@
-import { BookSeriesEntity } from '@/lib/data/types';
+import { BookSeriesEntity, IPageable } from '@/lib/data/types';
 import BookSeries from '@/lib/data/models/book-series';
 import { GraphQLError } from 'graphql/error';
 import { getByName, getValidFilters } from '@/lib/data/base';
 
-export async function getBookSeries(orderBy?: string, order?: string, filters?: BookSeriesEntity) {
-    return BookSeries.find(getValidFilters(filters), null, { sort: { [orderBy]: order } });
-    // TODO: for sorting we need to get publishing house name
-    // return connection()
-    //     .select('bookSeries.id as id', 'bookSeries.name as name', 'publishingHouseId', 'publishingHouse.name as publishingHouseName')
-    //     .from('bookSeries')
-    //     .join('publishingHouse as publishingHouse', 'bookSeries.publishingHouseId', '=', 'publishingHouse.id')
-    //     .where(validFilters)
-    //     .orderBy(orderBy, order);
+export async function getBookSeries(pageSettings: IPageable, filters?: BookSeriesEntity) {
+    return BookSeries
+        .find(getValidFilters(filters), null)
+        .sort({ [pageSettings.orderBy || 'name']: pageSettings.order || 'asc' });
 }
 
 export async function getBookSeriesById(id: string) {

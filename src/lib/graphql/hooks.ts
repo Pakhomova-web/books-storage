@@ -256,7 +256,7 @@ function _useItems<T>(query: DocumentNode, pageSettings?: IPageable, filters?: T
 } {
     const { data, error, loading, refetch } = useQuery(query, {
         fetchPolicy: 'no-cache',
-        variables: { ...pageSettings, filters }
+        variables: { pageSettings, filters }
     });
 
     return { items: data?.items || [], totalCount: data?.totalCount, gettingError: error, loading, refetch };
