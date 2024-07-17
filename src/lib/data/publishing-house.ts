@@ -22,14 +22,15 @@ export async function createPublishingHouse(input: PublishingHouseEntity) {
     if (item) {
         return null;
     } else {
-        const item = new PublishingHouse(input);
+        const bookSeries = new BookSeries({
+            name: '-',
+            publishingHouse: new PublishingHouse(input)
+        });
 
-        await item.save();
-        const bookSeries = new BookSeries({ name: '-', publishingHouseId: item.id });
-
+        await bookSeries.publishingHouse.save();
         await bookSeries.save();
 
-        return { ...input, id: item.id } as PublishingHouseEntity;
+        return { ...input, id: bookSeries.publishingHouse.id } as PublishingHouseEntity;
     }
 }
 
@@ -52,7 +53,7 @@ export async function updatePublishingHouse(input: PublishingHouseEntity) {
 }
 
 export async function deletePublishingHouse(id: string) {
-    const bookSeriesIds = await BookSeries.find({ publishingHouseId: id });
+    const bookSeriesIds = await BookSeries.find({ publishingHouse: id });
 
     if (bookSeriesIds) {
         await checkUsageInBook('bookSeriesId', bookSeriesIds, 'Publishing House');
