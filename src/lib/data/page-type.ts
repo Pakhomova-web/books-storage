@@ -3,8 +3,8 @@ import { GraphQLError } from 'graphql/error';
 import PageType from '@/lib/data/models/page-type';
 import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
 
-export async function getPageTypes(pageSettings: IPageable, filters?: PageTypeEntity) {
-    return PageType.find(getValidFilters(filters), null).sort({ [pageSettings.orderBy || 'name']: pageSettings.order || 'asc' });
+export async function getPageTypes(pageSettings?: IPageable, filters?: PageTypeEntity) {
+    return PageType.find(getValidFilters(filters), null).sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
 }
 
 export async function createPageType(input: PageTypeEntity) {
@@ -34,7 +34,7 @@ export async function updatePageType(input: PageTypeEntity) {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
-    await PageType.findOneAndUpdate({ _id: input.id }, input);
+    await PageType.findByIdAndUpdate(input.id, input);
 
     return input as PageTypeEntity;
 }

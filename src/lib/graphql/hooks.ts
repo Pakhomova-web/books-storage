@@ -1,7 +1,7 @@
 import { ApolloError, DocumentNode, useMutation, useQuery } from '@apollo/client';
 import {
     authorOptionsQuery,
-    authorsQuery,
+    authorsQuery, bookSeriesOptionsQuery,
     bookSeriesQuery,
     booksQuery,
     bookTypeOptionsQuery,
@@ -44,14 +44,14 @@ import {
     BookEntity,
     BookSeriesEntity,
     BookTypeEntity,
-    CoverTypeEntity,
+    CoverTypeEntity, IBookFilter,
+    IBookSeriesFilter,
     IPageable,
     LanguageEntity,
     PageTypeEntity,
     PublishingHouseEntity
 } from '@/lib/data/types';
 import { apolloClient } from '@/lib/apollo';
-import { query } from 'express';
 
 /** languages **/
 
@@ -185,10 +185,10 @@ export function useDeleteCoverType() {
     return _useDeleteItemById(deleteCoverTypeQuery);
 }
 
-/** cover type **/
+/** book series **/
 
-export function useBookSeries(pageSettings?: IPageable, filters?: BookSeriesEntity) {
-    return _useItems(bookSeriesQuery, pageSettings, filters);
+export function useBookSeries(pageSettings?: IPageable, filters?: IBookSeriesFilter) {
+    return _usePageableItems<BookSeriesEntity>(bookSeriesQuery, 'bookSeries', pageSettings, filters);
 }
 
 export function useUpdateBookSeries() {
@@ -214,22 +214,22 @@ export function useBookSeriesOptions(filters?: BookSeriesEntity) {
     };
 }
 
-export async function getBookSeriesOptions(filters?: BookSeriesEntity) {
-    const { data } = await apolloClient.query({
-        query: bookSeriesQuery,
+export async function getBookSeriesOptions(filters?: IBookSeriesFilter) {
+    const { data: { items } } = await apolloClient.query({
+        query: bookSeriesOptionsQuery,
         variables: { filters }
     });
 
-    return data.items.map(item => ({ id: item.id, label: `${item.name}` }));
+    return items;
 }
 
 /** books **/
 
-export function useBooks(pageSettings: IPageable, filters?: BookEntity) {
+export function useBooks(pageSettings?: IPageable, filters?: IBookFilter) {
     return _usePageableItems<BookEntity>(booksQuery, 'books', pageSettings, filters);
 }
 
-export function getAllBooks(pageSettings: IPageable, filters?: BookEntity) {
+export function getAllBooks(pageSettings?: IPageable, filters?: IBookFilter) {
     return _getAllItems<BookEntity>(booksQuery, 'books', pageSettings, filters);
 }
 
@@ -247,7 +247,7 @@ export function useUpdateBook() {
 
 /** common **/
 
-function _useItems<T>(query: DocumentNode, pageSettings?: IPageable, filters?: T): {
+function _useItems<T>(query: DocumentNode, pageSettings?: IPageable, filters?): {
     items: T[],
     totalCount?: number,
     loading: boolean,
@@ -262,7 +262,7 @@ function _useItems<T>(query: DocumentNode, pageSettings?: IPageable, filters?: T
     return { items: data?.items || [], totalCount: data?.totalCount, gettingError: error, loading, refetch };
 }
 
-function _usePageableItems<T>(query: DocumentNode, key: string, pageSettings: IPageable, filters?: T): {
+function _usePageableItems<T>(query: DocumentNode, key: string, pageSettings: IPageable, filters?): {
     items: T[],
     totalCount: number,
     loading: boolean,
@@ -283,7 +283,7 @@ function _usePageableItems<T>(query: DocumentNode, key: string, pageSettings: IP
     };
 }
 
-async function _getAllItems<T>(query: DocumentNode, key: string, pageSettings: IPageable, filters?: T) {
+async function _getAllItems<T>(query: DocumentNode, key: string, pageSettings: IPageable, filters?) {
     const { data } = await apolloClient.query({
         query,
         fetchPolicy: 'no-cache',

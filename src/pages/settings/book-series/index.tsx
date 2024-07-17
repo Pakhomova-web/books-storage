@@ -4,13 +4,13 @@ import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useBookSeries, useDeleteBookSeries } from '@/lib/graphql/hooks';
-import { BookSeriesEntity, IPageable } from '@/lib/data/types';
+import { BookSeriesEntity, IBookSeriesFilter, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import BookSeriesModal from '@/components/modals/book-series-modal';
 import ErrorNotification from '@/components/error-notification';
-import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
+import { BookSeriesFilters } from '@/components/filters/book-series-filters';
 
 export default function BookSeries() {
     const [tableKeys] = useState<TableKey<BookSeriesEntity>[]>([
@@ -33,8 +33,8 @@ export default function BookSeries() {
     ]);
     const [selectedItem, setSelectedItem] = useState<BookSeriesEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
-    const [filters, setFilters] = useState<BookSeriesEntity>();
-    const { items, gettingError, loading, refetch } = useBookSeries(pageSettings, filters);
+    const [filters, setFilters] = useState<IBookSeriesFilter>();
+    const { items, totalCount, gettingError, loading, refetch } = useBookSeries(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteBookSeries();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -80,13 +80,15 @@ export default function BookSeries() {
 
     return (
         <Loading open={loading || deleting} fullHeight={true}>
-            <NameFiltersPanel onApply={(filters: BookSeriesEntity) => setFilters(filters)}></NameFiltersPanel>
+            <BookSeriesFilters onApply={(filters: IBookSeriesFilter) => setFilters(filters)}></BookSeriesFilters>
 
             <CustomTable data={items} keys={tableKeys}
                          renderKey={(item: BookSeriesEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                          pageSettings={pageSettings}
                          withFilters={true}
+                         usePagination={true}
+                         totalCount={totalCount}
                          onRowClick={(item: BookSeriesEntity) => onEdit(item)}></CustomTable>
 
             {error && <ErrorNotification error={error}></ErrorNotification>}

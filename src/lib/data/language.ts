@@ -3,8 +3,8 @@ import Language from './models/language';
 import { GraphQLError } from 'graphql/error';
 import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
 
-export async function getLanguages(pageSettings: IPageable, filters?: LanguageEntity) {
-    return Language.find(getValidFilters(filters), null).sort({ [pageSettings.orderBy || 'name']: pageSettings.order || 'asc' });
+export async function getLanguages(pageSettings?: IPageable, filters?: LanguageEntity) {
+    return Language.find(getValidFilters(filters), null).sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
 }
 
 export async function createLanguage(input: LanguageEntity) {
@@ -34,7 +34,7 @@ export async function updateLanguage(input: LanguageEntity) {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
-    await Language.findOneAndUpdate({ _id: input.id }, input);
+    await Language.findByIdAndUpdate(input.id, input);
 
     return input as LanguageEntity;
 }

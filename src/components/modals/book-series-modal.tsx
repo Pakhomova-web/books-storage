@@ -18,7 +18,7 @@ export default function BookSeriesModal({ open, item, onClose }: IBookSeriesModa
         defaultValues: {
             id: item?.id,
             name: item?.name,
-            publishingHouseId: item?.publishingHouseId
+            publishingHouseId: item?.publishingHouse.id
         }
     });
     const { update, updating, updatingError } = useUpdateBookSeries();

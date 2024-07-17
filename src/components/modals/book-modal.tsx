@@ -1,4 +1,4 @@
-import { BookEntity, BookSeriesEntity, IOption } from '@/lib/data/types';
+import { BookEntity, BookSeriesEntity, IBookSeriesFilter, IOption } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import {
     getBookSeriesOptions,
@@ -31,7 +31,13 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
     const formContext = useForm<IForm>({
         defaultValues: {
             ...item,
-            publishingHouseId: item?.bookSeries?.publishingHouse.id
+            authorId: item?.author?.id,
+            languageId: item?.language?.id,
+            coverTypeId: item?.coverType.id,
+            pageTypeId: item?.pageType.id,
+            bookTypeId: item?.bookType.id,
+            bookSeriesId: item?.bookSeries.id,
+            publishingHouseId: item?.bookSeries.publishingHouse.id
         }
     });
     const { publishingHouseId } = formContext.watch();
@@ -48,10 +54,12 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
     useEffect(() => {
         if (publishingHouseId) {
             setBookSeriesOptions([]);
-            getBookSeriesOptions({ publishingHouseId } as BookSeriesEntity)
+            getBookSeriesOptions({ publishingHouse: publishingHouseId } as IBookSeriesFilter)
                 .then(options => {
+                    const bookSeriesId = formContext.getValues().bookSeriesId;
+
                     setBookSeriesOptions(options);
-                    formContext.setValue('bookSeriesId', options.find(opt => opt.id === formContext.getValues().bookSeriesId)?.id);
+                    formContext.setValue('bookSeriesId', bookSeriesId ? options.find(({ id }) => id === bookSeriesId)?.id : null);
                 });
         }
     }, [publishingHouseId]);

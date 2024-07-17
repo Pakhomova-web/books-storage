@@ -28,8 +28,7 @@ const typeDefs =  /* GraphQL */ `
     type BookSeries {
         id: ID
         name: String!
-        publishingHouseId: ID!
-        publishingHouse: PublishingHouse
+        publishingHouse: PublishingHouse!
     }
 
     type Author {
@@ -42,21 +41,15 @@ const typeDefs =  /* GraphQL */ `
         id: ID
         name: String!
         description: String
-        numberOfPages: Int
-        price: Float
+        numberOfPages: Int!
+        price: Float!
         numberInStock: Int
-        bookTypeId: ID!
-        bookType: BookType
-        bookSeriesId: ID
-        bookSeries: BookSeries
-        coverTypeId: ID!
-        coverType: CoverType
-        pageTypeId: ID!
-        pageType: PageType
+        bookType: BookType!
+        bookSeries: BookSeries!
+        coverType: CoverType!
+        pageType: PageType!
         isbn: String
-        languageId: ID!
-        language: Language
-        authorId: ID
+        language: Language!
         author: Author
         format: String
     }
@@ -65,11 +58,13 @@ const typeDefs =  /* GraphQL */ `
         languages(pageSettings: PageableInput, filters: SearchByNameInput): [Language!]
         publishingHouses(pageSettings: PageableInput, filters: SearchByNameInput): [PublishingHouse!]
         pageTypes(pageSettings: PageableInput, filters: SearchByNameInput): [PageType!]
-        bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): [BookType!]
         coverTypes(pageSettings: PageableInput, filters: SearchByNameInput): [CoverType!]
-        bookSeries(pageSettings: PageableInput, filters: BookSeriesSearchInput): [BookSeries!]
-        books(pageSettings: PageableInput, filters: BookSearchInput): BookSubList
+        bookSeries(pageSettings: PageableInput, filters: BookSeriesSearchInput): BookSeriesSubList
         authors(pageSettings: PageableInput, filters: SearchByNameInput): [Author!]
+        books(pageSettings: PageableInput, filters: BookSearchInput): BookSubList
+        
+        bookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
+        bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): [BookType!]
     }
 
     type Mutation {
@@ -93,11 +88,11 @@ const typeDefs =  /* GraphQL */ `
         createCoverType(input: CoverTypeCreateInput!): CoverType
         deleteCoverType(id: ID!): CoverType
 
-        updateBookSeries(input: BookSeriesInput!): BookSeries
+        updateBookSeries(input: BookSeriesUpdateInput!): BookSeries
         createBookSeries(input: BookSeriesCreateInput!): BookSeries
         deleteBookSeries(id: ID!): BookSeries
 
-        updateBook(input: BookInput!): Book
+        updateBook(input: BookUpdateInput!): Book
         createBook(input: BookCreateInput!): Book
         deleteBook(id: ID!): Book
 
@@ -106,32 +101,11 @@ const typeDefs =  /* GraphQL */ `
         deleteAuthor(id: ID!): Author
     }
 
-    type BookSubList {
-        items: [Book!]!
-        totalCount: Int!
-    }
-
     input PageableInput {
         order: String,
         orderBy: String,
         page: Int,
         rowsPerPage: Int
-    }
-
-    input BookCreateInput {
-        name: String!
-        description: String
-        numberOfPages: Int!
-        price: Float
-        numberInStock: Int
-        bookTypeId: ID!
-        bookSeriesId: ID!
-        coverTypeId: ID!
-        pageTypeId: ID!
-        isbn: String
-        languageId: ID!
-        authorId: ID
-        format: String
     }
 
     input AuthorCreateInput {
@@ -158,11 +132,6 @@ const typeDefs =  /* GraphQL */ `
 
     input CoverTypeCreateInput {
         name: String!
-    }
-
-    input BookSeriesCreateInput {
-        name: String!
-        publishingHouseId: ID!
     }
 
     input SearchByNameInput {
@@ -201,13 +170,25 @@ const typeDefs =  /* GraphQL */ `
         name: String!
     }
 
-    input BookSeriesInput {
-        id: ID!
+    #    book
+
+    input BookCreateInput {
         name: String!
-        publishingHouseId: ID!
+        description: String
+        numberOfPages: Int!
+        price: Float
+        numberInStock: Int
+        bookTypeId: ID!
+        bookSeriesId: ID!
+        coverTypeId: ID!
+        pageTypeId: ID!
+        isbn: String
+        languageId: ID!
+        authorId: ID
+        format: String
     }
 
-    input BookInput {
+    input BookUpdateInput {
         id: ID!
         name: String!
         description: String
@@ -224,23 +205,45 @@ const typeDefs =  /* GraphQL */ `
         format: String
     }
 
-    input BookSeriesSearchInput {
-        name: String,
-        publishingHouseId: ID!
-    }
-
     input BookSearchInput {
         id: ID
         name: String
         description: String
-        bookTypeId: ID
-        coverTypeId: ID
-        bookSeriesId: ID
-        publishingHouseId: ID
-        pageTypeId: ID
+        bookType: ID
+        coverType: ID
+        bookSeries: ID
+        pageType: ID
         isbn: String
-        languageId: ID
-        authorId: ID
+        language: ID
+        author: ID
+    }
+
+    type BookSubList {
+        items: [Book!]!
+        totalCount: Int!
+    }
+
+    #    book series
+
+    input BookSeriesCreateInput {
+        name: String!
+        publishingHouseId: ID!
+    }
+
+    input BookSeriesUpdateInput {
+        id: ID!
+        name: String!
+        publishingHouseId: ID!
+    }
+
+    input BookSeriesSearchInput {
+        name: String,
+        publishingHouse: ID!
+    }
+
+    type BookSeriesSubList {
+        items: [BookSeries!]!
+        totalCount: Int!
     }
 `;
 

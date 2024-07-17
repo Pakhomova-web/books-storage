@@ -3,8 +3,8 @@ import Author from '@/lib/data/models/author';
 import { GraphQLError } from 'graphql/error';
 import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
 
-export async function getAuthors(pageSettings: IPageable, filters?: AuthorEntity) {
-    return Author.find(getValidFilters(filters), null).sort({ [pageSettings.orderBy || 'name']: pageSettings.order || 'asc' });
+export async function getAuthors(pageSettings?: IPageable, filters?: AuthorEntity) {
+    return Author.find(getValidFilters(filters), null).sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
 }
 
 export async function createAuthor(input: AuthorEntity)  {
@@ -34,7 +34,7 @@ export async function updateAuthor(input: AuthorEntity) {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
-    await Author.findOneAndUpdate({ _id: input.id }, input);
+    await Author.findByIdAndUpdate(input.id, input);
 
     return input as AuthorEntity;
 }

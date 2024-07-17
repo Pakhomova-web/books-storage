@@ -46,7 +46,7 @@ export async function updatePublishingHouse(input: PublishingHouseEntity) {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
-    await PublishingHouse.findOneAndUpdate({ _id: input.id }, input);
+    await PublishingHouse.findByIdAndUpdate(input.id, input);
 
     return input as PublishingHouseEntity;
 }

@@ -1,12 +1,5 @@
 import { Model, model, models, Schema } from 'mongoose';
-import {
-    AuthorEntity,
-    BookEntity,
-    BookSeriesEntity,
-    BookTypeEntity,
-    CoverTypeEntity, LanguageEntity,
-    PageTypeEntity
-} from '@/lib/data/types';
+import { BookEntity } from '@/lib/data/types';
 
 const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
     name: {
@@ -20,32 +13,32 @@ const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
     numberOfPages: Number,
     numberInStock: Number,
     price: Number,
-    bookSeriesId: {
+    bookSeries: {
         ref: 'bookSeries',
         type: Schema.Types.ObjectId,
         required: true
     },
-    coverTypeId: {
+    coverType: {
         ref: 'coverType',
         type: Schema.Types.ObjectId,
         required: true
     },
-    bookTypeId: {
+    bookType: {
         ref: 'bookType',
         type: Schema.Types.ObjectId,
         required: true
     },
-    pageTypeId: {
+    pageType: {
         ref: 'pageType',
         type: Schema.Types.ObjectId,
         required: true
     },
-    languageId: {
+    language: {
         ref: 'language',
         type: Schema.Types.ObjectId,
         required: true
     },
-    authorId: {
+    author: {
         ref: 'author',
         type: Schema.Types.ObjectId
     }

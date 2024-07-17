@@ -6,13 +6,13 @@ const bookSeriesSchema = new Schema<BookSeriesEntity, Model<BookSeriesEntity>>({
         type: String,
         required: true
     },
-    publishingHouseId: {
+    publishingHouse: {
         ref: 'publishingHouse',
         type: Schema.Types.ObjectId,
         required: true
     }
 });
 
-bookSeriesSchema.index({ name: 1, publishingHouseId: 1 }, { unique: true });
+bookSeriesSchema.index({ name: 1, publishingHouse: 1 }, { unique: true });
 
 export default models.bookSeries || model('bookSeries', bookSeriesSchema);

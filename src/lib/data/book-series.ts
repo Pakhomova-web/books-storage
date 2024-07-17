@@ -1,13 +1,29 @@
-import { BookSeriesEntity, IPageable } from '@/lib/data/types';
+import { BookSeriesEntity, IBookSeriesFilter, IPageable } from '@/lib/data/types';
 import BookSeries from '@/lib/data/models/book-series';
 import { GraphQLError } from 'graphql/error';
 import { getByName, getValidFilters } from '@/lib/data/base';
 
-export async function getBookSeries(pageSettings: IPageable, filters?: BookSeriesEntity) {
-    return BookSeries
-        .find(getValidFilters(filters), null)
-        .sort({ [pageSettings.orderBy || 'name']: pageSettings.order || 'asc' });
+export async function getBookSeries(pageSettings?: IPageable, filters?: IBookSeriesFilter): Promise<{
+    items: BookSeriesEntity[],
+    totalCount: number
+}> {
+    const validFilters = getValidFilters(filters);
+    const items = await BookSeries
+        .find(validFilters, null, pageSettings ? {
+            skip: pageSettings.rowsPerPage * pageSettings.page,
+            limit: pageSettings.rowsPerPage
+        } : null)
+        .populate('publishingHouse')
+        .sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
+    const totalCount = await BookSeries.count(validFilters, null);
+
+    return { items, totalCount };
 }
+
+export async function getBookSeriesOptions(filters?: IBookSeriesFilter): Promise<BookSeriesEntity[]> {
+    return BookSeries.find(getValidFilters(filters)).sort({ name: 'asc' });
+}
+
 
 export async function getBookSeriesById(id: string) {
     return BookSeries.findById(id);
@@ -20,7 +36,7 @@ export async function createBookSeries(input: BookSeriesEntity) {
         return null;
     } else {
         const itemsByPublishingHouseId = await BookSeries.find({
-            publishingHouseId: input.publishingHouseId,
+            publishingHouse: input.publishingHouseId,
             name: new RegExp(`^${input.name}$`, "i")
         });
 
@@ -29,7 +45,7 @@ export async function createBookSeries(input: BookSeriesEntity) {
                 extensions: { code: 'DUPLICATE_ERROR' }
             });
         }
-        const item = new BookSeries(input);
+        const item = new BookSeries({ ...input, publishingHouse: input.publishingHouseId });
 
         await item.save();
 
@@ -50,7 +66,7 @@ export async function updateBookSeries(input: BookSeriesEntity) {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
-    await BookSeries.findOneAndUpdate({ _id: input.id }, input);
+    await BookSeries.findByIdAndUpdate(input.id, { ...input, publishingHouse: input.publishingHouseId });
 
     return input as BookSeriesEntity;
 }

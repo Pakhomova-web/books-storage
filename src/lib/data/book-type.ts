@@ -4,11 +4,12 @@ import BookType from '@/lib/data/models/book-type';
 import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
 import BookSeries from '@/lib/data/models/book-series';
 
-export async function getBookTypes(pageSettings: IPageable, filters?: BookTypeEntity) {
-    return BookType.find(getValidFilters(filters), null).sort({ [pageSettings.orderBy || 'name']: pageSettings.order || 'asc' });
+export async function getBookTypes(pageSettings?: IPageable, filters?: BookTypeEntity) {
+    return BookType.find(getValidFilters(filters), null)
+        .sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
 }
 
-export async function createBookType(input: BookTypeEntity)  {
+export async function createBookType(input: BookTypeEntity) {
     const item = await getByName(BookSeries, input.name);
 
     if (item) {
@@ -35,7 +36,7 @@ export async function updateBookType(input: BookTypeEntity) {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
-    await BookType.findOneAndUpdate({ _id: input.id }, input);
+    await BookType.findByIdAndUpdate(input.id, input);
 
     return input as BookTypeEntity;
 }

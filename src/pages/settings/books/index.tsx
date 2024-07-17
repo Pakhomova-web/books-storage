@@ -4,7 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
-import { BookEntity, IPageable } from '@/lib/data/types';
+import { BookEntity, IBookFilter, IPageable } from '@/lib/data/types';
 import Loading from '@/components/loading';
 import CustomTable from '@/components/table/custom-table';
 import { getAllBooks, useBooks, useDeleteBook } from '@/lib/graphql/hooks';
@@ -97,7 +97,7 @@ export default function Books() {
     const [pageSettings, setPageSettings] = useState<IPageable>({
         order: 'asc', orderBy: '', page: 0, rowsPerPage: 5
     });
-    const [filters, setFilters] = useState<BookEntity>();
+    const [filters, setFilters] = useState<IBookFilter>();
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
     const { deleteItem, deletingError, deleting } = useDeleteBook();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
@@ -166,7 +166,7 @@ export default function Books() {
 
     return (
         <Loading open={loading || deleting || downloadingCsv} fullHeight={true}>
-            <BookFilters onApply={(filters: BookEntity) => setFilters(filters)}></BookFilters>
+            <BookFilters onApply={(filters: IBookFilter) => setFilters(filters)}></BookFilters>
 
             <CustomTable data={items}
                          keys={tableKeys}

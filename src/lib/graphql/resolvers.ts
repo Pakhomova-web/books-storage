@@ -30,7 +30,7 @@ import {
     createBookSeries,
     deleteBookSeries,
     getBookSeries,
-    getBookSeriesById,
+    getBookSeriesById, getBookSeriesOptions,
     updateBookSeries
 } from '@/lib/data/book-series';
 import { createBook, deleteBook, getBooks, updateBook } from '@/lib/data/books';
@@ -120,7 +120,14 @@ const resolvers: Resolvers = {
         },
         bookSeries: async (_root, { pageSettings, filters }) => {
             try {
-                return getBookSeries(<IPageable>pageSettings, <BookSeriesEntity>filters);
+                return getBookSeries(<IPageable>pageSettings, filters);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        bookSeriesOptions: async (_root, { filters }) => {
+            try {
+                return getBookSeriesOptions(filters);
             } catch (error) {
                 parseError(error);
             }
@@ -309,17 +316,6 @@ const resolvers: Resolvers = {
                 parseError(error);
             }
         }
-    },
-    BookSeries: {
-        publishingHouse: item => !item.publishingHouse ? getPublishingHouseById(item.publishingHouseId) : item.publishingHouse
-    },
-    Book: {
-        bookSeries: item => !item.bookSeries ? getBookSeriesById(item.bookSeriesId) : item.bookSeries,
-        language: item => !item.language ? getLanguageById(item.languageId) : item.language,
-        coverType: item => !item.coverType ? getCoverTypeById(item.coverTypeId) : item.coverType,
-        pageType: item => !item.pageType ? getPageTypeById(item.pageTypeId) : item.pageType,
-        bookType: item => !item.bookType ? getBookTypeById(item.bookTypeId) : item.bookType,
-        author: item => !item.author ? (item.authorId ? getAuthorById(item.authorId) : null) : item.author,
     }
 };
 

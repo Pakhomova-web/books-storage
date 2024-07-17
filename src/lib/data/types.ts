@@ -34,7 +34,7 @@ export interface BookSeriesEntity {
     id: string,
     name: string,
     publishingHouseId: string,
-    publishingHouse?: PublishingHouseEntity
+    publishingHouse: PublishingHouseEntity
 }
 
 export interface BookEntity {
@@ -70,4 +70,22 @@ export interface IPageable {
     order?: 'asc' | 'desc',
     page?: number,
     rowsPerPage?: number
+}
+
+export interface IBookSeriesFilter {
+    name?: string,
+    publishingHouse?: string
+}
+
+export interface IBookFilter {
+    id?: string,
+    name?: string,
+    bookSeries?: string,
+    description?: string,
+    bookType?: string
+    coverType?: string
+    pageType?: string
+    isbn?: string
+    language?: string
+    author?: string
 }

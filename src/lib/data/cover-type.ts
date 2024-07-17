@@ -4,8 +4,8 @@ import CoverType from '@/lib/data/models/cover-type';
 import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
 import Book from '@/lib/data/models/book';
 
-export async function getCoverTypes(pageSettings: IPageable, filters?: CoverTypeEntity) {
-    return CoverType.find(getValidFilters(filters), null).sort({ [pageSettings.orderBy || 'name']: pageSettings.order || 'asc' });
+export async function getCoverTypes(pageSettings?: IPageable, filters?: CoverTypeEntity) {
+    return CoverType.find(getValidFilters(filters), null).sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
 }
 
 export async function createCoverType(input: CoverTypeEntity)  {
@@ -35,7 +35,7 @@ export async function updateCoverType(input: CoverTypeEntity) {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
-    await CoverType.findOneAndUpdate({ _id: input.id }, input);
+    await CoverType.findByIdAndUpdate(input.id, input);
 
     return input as CoverTypeEntity;
 }

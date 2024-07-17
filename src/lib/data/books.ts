@@ -1,27 +1,31 @@
-import { BookEntity, IPageable } from '@/lib/data/types';
+import { BookEntity, IBookFilter, IPageable } from '@/lib/data/types';
 import Book from '@/lib/data/models/book';
 import { GraphQLError } from 'graphql/error';
+import { getValidFilters } from '@/lib/data/base';
 
-export async function getBooks(pageSettings: IPageable, filters?: Partial<BookEntity>): Promise<{ items: BookEntity[], totalCount: number }> {
-    let validFilters: { [key: string]: string | RegExp } = {};
+export async function getBooks(pageSettings?: IPageable, filters?: IBookFilter): Promise<{
+    items: BookEntity[],
+    totalCount: number
+}> {
+    const validFilters = getValidFilters(filters);
 
-    if (filters) {
-        Object.keys(filters).forEach(key => {
-            if (filters[key]) {
-                if (key === 'name') {
-                    validFilters.name = new RegExp(filters.name, "i");
-                } else {
-                    validFilters[key] = filters[key];
-                }
+    const items = await Book
+        .find(validFilters, null, pageSettings ? {
+            skip: pageSettings.rowsPerPage * pageSettings.page,
+            limit: pageSettings.rowsPerPage
+        } : null)
+        .populate({
+            path: 'bookSeries',
+            populate: {
+                path: 'publishingHouse'
             }
-        });
-    }
-
-    const items = await Book.find(validFilters, null, {
-        sort: { [pageSettings.orderBy || 'name']: pageSettings.order },
-        skip: pageSettings.rowsPerPage * pageSettings.page,
-        limit: pageSettings.rowsPerPage
-    });
+        })
+        .populate('bookType')
+        .populate('pageType')
+        .populate('coverType')
+        .populate('language')
+        .populate('author')
+        .sort({ [pageSettings.orderBy || 'name']: pageSettings.order });
     const totalCount = await Book.count(validFilters);
 
     return { items, totalCount };
@@ -33,7 +37,7 @@ export async function createBook(input: BookEntity) {
     if (item) {
         return null;
     } else {
-        const item = new Book(input);
+        const item = new Book(_getBookData(input));
 
         await item.save();
 
@@ -54,7 +58,7 @@ export async function updateBook(input: BookEntity) {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
-    await Book.findOneAndUpdate({ _id: input.id }, input);
+    await Book.findByIdAndUpdate(input.id, _getBookData(input));
 
     return input as BookEntity;
 }
@@ -65,10 +69,22 @@ export async function deleteBook(id: string) {
     return { id } as BookEntity;
 }
 
-function _getBookByUnique(name: string, bookSeriesId: string, bookTypeId: string) {
+function _getBookByUnique(name: string, bookSeries: string, bookType: string) {
     return Book.findOne({
         name: new RegExp(`^${name}$`, "i"),
-        bookSeriesId,
-        bookTypeId
+        bookSeries,
+        bookType
     });
+}
+
+function _getBookData(input: BookEntity) {
+    return {
+        ...input,
+        author: input.authorId,
+        language: input.languageId,
+        bookSeries: input.bookSeriesId,
+        coverType: input.coverTypeId,
+        pageType: input.pageTypeId,
+        bookType: input.bookTypeId
+    };
 }

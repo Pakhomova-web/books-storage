@@ -285,15 +285,26 @@ export const updateCoverTypeQuery = gql`
 
 export const bookSeriesQuery = gql`
     query BookSeries($pageSettings: PageableInput, $filters: BookSeriesSearchInput) {
-        items: bookSeries(pageSettings: $pageSettings, filters: $filters) {
-            id
-            name
-            publishingHouseId
-            publishingHouse {
+        bookSeries(pageSettings: $pageSettings, filters: $filters) {
+            items {
                 id
                 name
-                tags
+                publishingHouse {
+                    id
+                    name
+                    tags
+                }
             }
+            totalCount
+        }
+    }
+`;
+
+export const bookSeriesOptionsQuery = gql`
+    query BookSeries($filters: BookSeriesSearchInput) {
+        items: bookSeriesOptions(filters: $filters) {
+            id
+            label: name
         }
     }
 `;
@@ -315,7 +326,7 @@ export const createBookSeriesQuery = gql`
 `;
 
 export const updateBookSeriesQuery = gql`
-    mutation UpdateBookSeries($input: BookSeriesInput!) {
+    mutation UpdateBookSeries($input: BookSeriesUpdateInput!) {
         item: updateBookSeries(input: $input) {
             id
         }
@@ -336,38 +347,31 @@ export const booksQuery = gql`
                 numberOfPages
                 isbn
                 format
-                languageId
                 language {
                     id
                     name
                 }
-                coverTypeId
                 coverType {
                     id
                     name
                 }
-                bookTypeId
                 bookType {
                     id
                     name
                 }
-                pageTypeId
                 pageType {
                     id
                     name
                 }
-                bookSeriesId
                 bookSeries {
                     id
                     name
-                    publishingHouseId
                     publishingHouse {
                         id
                         name
                         tags
                     }
                 }
-                authorId
                 author {
                     id
                     name
@@ -396,7 +400,7 @@ export const createBookQuery = gql`
 `;
 
 export const updateBookQuery = gql`
-    mutation UpdateBook($input: BookInput!) {
+    mutation UpdateBook($input: BookUpdateInput!) {
         item: updateBook(input: $input) {
             id
         }
