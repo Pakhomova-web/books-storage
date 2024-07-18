@@ -30,7 +30,7 @@ import {
     pageTypesQuery,
     publishingHouseOptionsQuery,
     publishingHousesQuery,
-    updateAuthorQuery,
+    updateAuthorQuery, updateBookNumberInStockQuery,
     updateBookQuery,
     updateBookSeriesQuery,
     updateBookTypeQuery,
@@ -243,6 +243,10 @@ export function useCreateBook() {
 
 export function useUpdateBook() {
     return _useUpdateItem<BookEntity>(updateBookQuery);
+}
+
+export function useUpdateBookNumberInStock() {
+    return _useUpdateItem<BookEntity>(updateBookNumberInStockQuery);
 }
 
 /** common **/

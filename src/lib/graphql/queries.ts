@@ -406,3 +406,11 @@ export const updateBookQuery = gql`
         }
     }
 `;
+
+export const updateBookNumberInStockQuery = gql`
+    mutation UpdateBookNumberInStock($input: BookUpdateNumberInStockInput!) {
+        item: updateBookNumberInStock(input: $input) {
+            id
+        }
+    }
+`;

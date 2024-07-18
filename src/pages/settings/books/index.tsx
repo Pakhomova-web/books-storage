@@ -13,6 +13,7 @@ import ErrorNotification from '@/components/error-notification';
 import { styleVariables } from '@/constants/styles-variables';
 import { downloadCsv } from '@/utils/utils';
 import { BookFilters } from '@/components/filters/book-filters';
+import { BookNumberInStockModal } from '@/components/modals/book-number-in-stock-modal';
 
 export default function Books() {
     const [tableKeys] = useState<TableKey<BookEntity>[]>([
@@ -76,6 +77,15 @@ export default function Books() {
             type: 'actions',
             actions: [
                 {
+                    label: 'Add quantity in stock',
+                    type: TableActionEnum.add,
+                    onClick: (item: BookEntity) => {
+                        setError(null);
+                        setSelectedItem(item);
+                        setOpenNumberInStockModal(true);
+                    }
+                },
+                {
                     label: 'Copy',
                     type: TableActionEnum.copy,
                     onClick: (item: BookEntity) => {
@@ -101,6 +111,7 @@ export default function Books() {
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
     const { deleteItem, deletingError, deleting } = useDeleteBook();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
+    const [openNumberInStockModal, setOpenNumberInStockModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
     const [downloadingCsv, setDownloadingCsv] = useState<boolean>(false);
 
@@ -129,6 +140,7 @@ export default function Books() {
             refetch();
         }
         setError(null);
+        setOpenNumberInStockModal(false);
         setOpenNewModal(false);
         setSelectedItem(undefined);
     }
@@ -145,6 +157,7 @@ export default function Books() {
     function onEdit(item: BookEntity) {
         setError(null);
         setSelectedItem(item);
+        setOpenNewModal(true);
     }
 
     async function onDownloadCSV() {
@@ -193,10 +206,15 @@ export default function Books() {
                 }
             </Box>
 
-            {(openNewModal || selectedItem) &&
-              <BookModal open={true}
+            {openNewModal &&
+              <BookModal open={openNewModal}
                          item={selectedItem}
                          onClose={(updated = false) => refreshData(updated)}></BookModal>}
+
+            {openNumberInStockModal && selectedItem &&
+              <BookNumberInStockModal open={openNumberInStockModal}
+                                      item={selectedItem}
+                                      onClose={(updated = false) => refreshData(updated)}></BookNumberInStockModal>}
         </Loading>
     );
 }

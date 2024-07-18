@@ -145,6 +145,11 @@ export type BookUpdateInput = {
   price?: InputMaybe<Scalars['Float']['input']>;
 };
 
+export type BookUpdateNumberInStockInput = {
+  id: Scalars['ID']['input'];
+  numberInStock: Scalars['Int']['input'];
+};
+
 export type CoverType = {
   id?: Maybe<Scalars['ID']['output']>;
   name: Scalars['String']['output'];
@@ -192,6 +197,7 @@ export type Mutation = {
   deletePublishingHouse?: Maybe<PublishingHouse>;
   updateAuthor?: Maybe<Author>;
   updateBook?: Maybe<Book>;
+  updateBookNumberInStock: Book;
   updateBookSeries?: Maybe<BookSeries>;
   updateBookType?: Maybe<BookType>;
   updateCoverType?: Maybe<CoverType>;
@@ -288,6 +294,11 @@ export type MutationUpdateAuthorArgs = {
 
 export type MutationUpdateBookArgs = {
   input: BookUpdateInput;
+};
+
+
+export type MutationUpdateBookNumberInStockArgs = {
+  input: BookUpdateNumberInStockInput;
 };
 
 
@@ -514,6 +525,7 @@ export type ResolversTypes = {
   BookTypeCreateInput: BookTypeCreateInput;
   BookTypeInput: BookTypeInput;
   BookUpdateInput: BookUpdateInput;
+  BookUpdateNumberInStockInput: BookUpdateNumberInStockInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CoverType: ResolverTypeWrapper<CoverTypeEntity>;
   CoverTypeCreateInput: CoverTypeCreateInput;
@@ -555,6 +567,7 @@ export type ResolversParentTypes = {
   BookTypeCreateInput: BookTypeCreateInput;
   BookTypeInput: BookTypeInput;
   BookUpdateInput: BookUpdateInput;
+  BookUpdateNumberInStockInput: BookUpdateNumberInStockInput;
   Boolean: Scalars['Boolean']['output'];
   CoverType: CoverTypeEntity;
   CoverTypeCreateInput: CoverTypeCreateInput;
@@ -659,6 +672,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deletePublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationDeletePublishingHouseArgs, 'id'>>;
   updateAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationUpdateAuthorArgs, 'input'>>;
   updateBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationUpdateBookArgs, 'input'>>;
+  updateBookNumberInStock?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationUpdateBookNumberInStockArgs, 'input'>>;
   updateBookSeries?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType, RequireFields<MutationUpdateBookSeriesArgs, 'input'>>;
   updateBookType?: Resolver<Maybe<ResolversTypes['BookType']>, ParentType, ContextType, RequireFields<MutationUpdateBookTypeArgs, 'input'>>;
   updateCoverType?: Resolver<Maybe<ResolversTypes['CoverType']>, ParentType, ContextType, RequireFields<MutationUpdateCoverTypeArgs, 'input'>>;

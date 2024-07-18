@@ -4,6 +4,7 @@ import { Box, Button, IconButton, Menu, MenuItem, TableCell } from '@mui/materia
 import MenuIcon from '@mui/icons-material/Menu';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CopyIcon from '@mui/icons-material/ContentCopy';
+import AddIcon from '@mui/icons-material/Add';
 
 export function renderTableCell<T>(key: TableKey<T>, item: T, index: number, anchorMenuEl: HTMLElement, onAnchorMenuElChange): ReactNode {
     const open = Boolean(anchorMenuEl);
@@ -57,6 +58,9 @@ function getIconItem<T>(item: T, action: ITableAction, index: number, onClick?: 
             break;
         case TableActionEnum.copy:
             icon = <CopyIcon/>;
+            break;
+        case TableActionEnum.add:
+            icon = <AddIcon/>;
     }
 
     return action.label ?

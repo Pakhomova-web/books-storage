@@ -1,27 +1,21 @@
 import { Resolvers } from '@/lib/generated/core.graphql';
-import { createLanguage, deleteLanguage, getLanguageById, getLanguages, updateLanguage } from '@/lib/data/language';
+import { createLanguage, deleteLanguage, getLanguages, updateLanguage } from '@/lib/data/language';
 import {
     createPublishingHouse,
     deletePublishingHouse,
-    getPublishingHouseById,
     getPublishingHouses,
     updatePublishingHouse
 } from '@/lib/data/publishing-house';
-import { createPageType, deletePageType, getPageTypeById, getPageTypes, updatePageType } from '@/lib/data/page-type';
-import { createBookType, deleteBookType, getBookTypeById, getBookTypes, updateBookType } from '@/lib/data/book-type';
-import {
-    createCoverType,
-    deleteCoverType,
-    getCoverTypeById,
-    getCoverTypes,
-    updateCoverType
-} from '@/lib/data/cover-type';
+import { createPageType, deletePageType, getPageTypes, updatePageType } from '@/lib/data/page-type';
+import { createBookType, deleteBookType, getBookTypes, updateBookType } from '@/lib/data/book-type';
+import { createCoverType, deleteCoverType, getCoverTypes, updateCoverType } from '@/lib/data/cover-type';
 import {
     AuthorEntity,
     BookEntity,
     BookSeriesEntity,
     BookTypeEntity,
-    CoverTypeEntity, IPageable,
+    CoverTypeEntity,
+    IPageable,
     LanguageEntity,
     PageTypeEntity,
     PublishingHouseEntity
@@ -30,11 +24,11 @@ import {
     createBookSeries,
     deleteBookSeries,
     getBookSeries,
-    getBookSeriesById, getBookSeriesOptions,
+    getBookSeriesOptions,
     updateBookSeries
 } from '@/lib/data/book-series';
-import { createBook, deleteBook, getBooks, updateBook } from '@/lib/data/books';
-import { createAuthor, deleteAuthor, getAuthorById, getAuthors, updateAuthor } from '@/lib/data/author';
+import { createBook, deleteBook, getBooks, updateBook, updateBookNumberInStock } from '@/lib/data/books';
+import { createAuthor, deleteAuthor, getAuthors, updateAuthor } from '@/lib/data/author';
 import { GraphQLError } from 'graphql/error';
 
 function parseError(error) {
@@ -305,6 +299,13 @@ const resolvers: Resolvers = {
         updateBook: async (_root, { input }: { input: BookEntity }) => {
             try {
                 return updateBook(input);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        updateBookNumberInStock: async (_root, { input }: { input: { id: string, numberInStock: number } }) => {
+            try {
+                return updateBookNumberInStock(input);
             } catch (error) {
                 parseError(error);
             }

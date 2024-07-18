@@ -93,6 +93,7 @@ const typeDefs =  /* GraphQL */ `
         deleteBookSeries(id: ID!): BookSeries
 
         updateBook(input: BookUpdateInput!): Book
+        updateBookNumberInStock(input: BookUpdateNumberInStockInput!): Book!
         createBook(input: BookCreateInput!): Book
         deleteBook(id: ID!): Book
 
@@ -171,6 +172,11 @@ const typeDefs =  /* GraphQL */ `
     }
 
     #    book
+
+    input BookUpdateNumberInStockInput {
+        id: ID!
+        numberInStock: Int!
+    }
 
     input BookCreateInput {
         name: String!
