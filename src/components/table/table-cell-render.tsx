@@ -18,7 +18,7 @@ export function renderTableCell<T>(key: TableKey<T>, item: T, index: number, anc
         case 'actions':
             return <TableCell key={index} align="right" onClick={e => e.stopPropagation()}>
                 {key.actions && key.actions?.length === 1 ?
-                    key.actions.map((icon, index) => getIconItem<T>(item, icon, index))
+                    key.actions.map((icon, index) => getActionItem<T>(item, icon, index))
                     : <Box>
                         <IconButton aria-haspopup="true" onClick={onMenuClick}>
                             <MenuIcon/>
@@ -29,7 +29,7 @@ export function renderTableCell<T>(key: TableKey<T>, item: T, index: number, anc
                               MenuListProps={{ 'aria-labelledby': 'basic-button' }}>
                             {key.actions.map((icon, index) => (
                                 <MenuItem key={index} onClick={onCloseMenu}>
-                                    {getIconItem<T>(item, icon, index, onCloseMenu)}
+                                    {getActionItem<T>(item, icon, index, onCloseMenu)}
                                 </MenuItem>)
                             )}
                         </Menu>
@@ -40,7 +40,7 @@ export function renderTableCell<T>(key: TableKey<T>, item: T, index: number, anc
     }
 }
 
-function getIconItem<T>(item: T, action: ITableAction, index: number, onClick?: Function) {
+export function getActionItem<T>(item: T, action: ITableAction, index: number, onClick?: Function) {
     const handleClick = event => {
         event.stopPropagation();
         if (onClick) {

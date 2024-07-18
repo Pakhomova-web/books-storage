@@ -11,14 +11,14 @@ import {
     TableSortLabel,
     useTheme
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { TableKey } from '@/components/table/table-key';
 import CustomTableRow from '@/components/table/custom-table-row';
 import { visuallyHidden } from '@mui/utils';
 import { IPageable } from '@/lib/data/types';
-import { MobileTable } from '@/components/table/mobile-table';
+import { MobileTable } from '@/components/table/mobile-view/mobile-table';
 import { styleVariables } from '@/constants/styles-variables';
 import { tableContainerStyles } from '@/components/table/table-styles';
 import { renderTableCell } from '@/components/table/table-cell-render';
@@ -32,7 +32,8 @@ interface CustomTableProps<K> {
     onRowClick?: (item: K) => void,
     onChange?: (pageSettings: IPageable) => void,
     pageSettings?: IPageable,
-    withFilters?: boolean
+    withFilters?: boolean,
+    renderMobileView?: (item: K) => ReactNode
 }
 
 const stickyFooter = {
@@ -132,5 +133,25 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
                 </TableFooter>
             </Table>
         </TableContainer> :
-        <MobileTable data={props.data} keys={props.keys} withFilters={props.withFilters}></MobileTable>;
+        <MobileTable data={props.data}
+                     keys={props.keys}
+                     withFilters={props.withFilters}
+                     onRowClick={props.onRowClick}
+                     renderMobileView={props.renderMobileView}>
+            {props.usePagination &&
+              <Table>
+                <TableFooter>
+                  <TableRow>
+                    <TablePagination rowsPerPageOptions={[5, 10, 25]}
+                                     count={props.totalCount}
+                                     page={page}
+                                     sx={paginatorStyles}
+                                     rowsPerPage={rowsPerPage}
+                                     onPageChange={(_e, val: number) => onPageChange(val)}
+                                     onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
+                  </TableRow>
+                </TableFooter>
+              </Table>
+            }
+        </MobileTable>;
 }
