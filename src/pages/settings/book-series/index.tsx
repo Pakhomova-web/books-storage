@@ -11,25 +11,35 @@ import Loading from '@/components/loading';
 import BookSeriesModal from '@/components/modals/book-series-modal';
 import ErrorNotification from '@/components/error-notification';
 import { BookSeriesFilters } from '@/components/filters/book-series-filters';
+import { styleVariables } from '@/constants/styles-variables';
 
 export default function BookSeries() {
-    const [tableKeys] = useState<TableKey<BookSeriesEntity>[]>([
-        { title: 'Name', sortValue: 'name', renderValue: (item: BookSeriesEntity) => item.name, type: 'text' },
+    const [tableActions] = useState<TableKey<BookSeriesEntity>>({
+        renderMobileLabel: (item: BookSeriesEntity) => <Box><b>{item.name}</b></Box>,
+        type: 'actions',
+        actions: [
+            {
+                type: TableActionEnum.delete,
+                onClick: (item: BookSeriesEntity) => deleteHandler(item)
+            }
+        ]
+    });
+    const [mobileKeys] = useState<TableKey<BookSeriesEntity>[]>([
         {
             title: 'Publishing House',
             sortValue: 'publishingHouse.name',
             renderValue: (item: BookSeriesEntity) => item.publishingHouse?.name,
             type: 'text'
-        },
-        {
-            type: 'actions',
-            actions: [
-                {
-                    type: TableActionEnum.delete,
-                    onClick: (item: BookSeriesEntity) => deleteHandler(item)
-                }
-            ]
         }
+    ]);
+    const [tableKeys] = useState<TableKey<BookSeriesEntity>[]>([
+        {
+            title: 'Name',
+            sortValue: 'name',
+            renderValue: (item: BookSeriesEntity) => item.name,
+            type: 'text'
+        },
+        ...mobileKeys
     ]);
     const [selectedItem, setSelectedItem] = useState<BookSeriesEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
@@ -82,7 +92,10 @@ export default function BookSeries() {
         <Loading open={loading || deleting} fullHeight={true}>
             <BookSeriesFilters onApply={(filters: IBookSeriesFilter) => setFilters(filters)}></BookSeriesFilters>
 
-            <CustomTable data={items} keys={tableKeys}
+            <CustomTable data={items}
+                         keys={tableKeys}
+                         mobileKeys={mobileKeys}
+                         actions={tableActions}
                          renderKey={(item: BookSeriesEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                          pageSettings={pageSettings}

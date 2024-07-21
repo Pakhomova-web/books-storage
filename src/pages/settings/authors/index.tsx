@@ -13,18 +13,22 @@ import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 
 export default function Authors() {
+    const [tableActions] = useState<TableKey<AuthorEntity>>({
+        renderMobileLabel: (item: AuthorEntity) => <Box><b>{item.name}</b></Box>,
+        type: 'actions',
+        actions: [
+            {
+                type: TableActionEnum.delete,
+                onClick: (item: AuthorEntity) => deleteHandler(item)
+            }
+        ]
+    });
+    const [mobileKeys] = useState<TableKey<AuthorEntity>[]>([
+        { title: 'Description', renderValue: (item: AuthorEntity) => item.description, type: 'text' }
+    ]);
     const [tableKeys] = useState<TableKey<AuthorEntity>[]>([
         { title: 'Name', sortValue: 'name', renderValue: (item: AuthorEntity) => item.name, type: 'text' },
-        { title: 'Description', renderValue: (item: AuthorEntity) => item.description, type: 'text' },
-        {
-            type: 'actions',
-            actions: [
-                {
-                    type: TableActionEnum.delete,
-                    onClick: (item: AuthorEntity) => deleteHandler(item)
-                }
-            ]
-        }
+        ...mobileKeys
     ]);
     const [selectedItem, setSelectedItem] = useState<AuthorEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
@@ -77,7 +81,10 @@ export default function Authors() {
         <Loading open={loading || deleting} fullHeight={true}>
             <NameFiltersPanel onApply={(filters: AuthorEntity) => setFilters(filters)}></NameFiltersPanel>
 
-            <CustomTable data={items} keys={tableKeys}
+            <CustomTable data={items}
+                         keys={tableKeys}
+                         mobileKeys={mobileKeys}
+                         actions={tableActions}
                          renderKey={(item: AuthorEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                          pageSettings={pageSettings}

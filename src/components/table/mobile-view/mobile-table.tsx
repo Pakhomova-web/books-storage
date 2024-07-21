@@ -1,9 +1,9 @@
-import { Box, Grid, Table, TableFooter, TablePagination, TableRow } from '@mui/material';
-import React, { ReactNode } from 'react';
+import { Box, Grid } from '@mui/material';
+import React, { ReactNode, useState } from 'react';
 import { styleVariables } from '@/constants/styles-variables';
 import { TableKey } from '@/components/table/table-key';
 import { tableContainerStyles } from '@/components/table/table-styles';
-import { getActionItem } from '@/components/table/table-cell-render';
+import { renderActions } from '@/components/table/table-cell-render';
 
 const mobileBox = {
     borderRadius: styleVariables.borderRadius,
@@ -15,6 +15,7 @@ const mobileBox = {
 interface IMobileTableProps<T> {
     data: T[],
     keys: TableKey<T>[],
+    actions?: TableKey<T>,
     withFilters?: boolean,
     onRowClick?: (item: T) => void,
     renderMobileView?: (item: T) => ReactNode,
@@ -22,31 +23,45 @@ interface IMobileTableProps<T> {
 }
 
 export function MobileTable<T>(props: IMobileTableProps<T>) {
+    const [anchorMenuEl, setAnchorMenuEl] = useState<null | HTMLElement>(null);
+
+    function renderItem(item: T) {
+        return <>
+            {props.actions &&
+              <Grid container sx={styleVariables.alignItemsCenter}>
+                <Grid item xs={9}>{props.actions.renderMobileLabel && props.actions.renderMobileLabel(item)}</Grid>
+                <Grid item xs={3} sx={styleVariables.flexEnd}>
+                    {renderActions(props.actions.actions, item, anchorMenuEl, (val: HTMLElement) => setAnchorMenuEl(val))}
+                </Grid>
+              </Grid>}
+            {props.keys.map((key, i) => (
+                <Grid container key={i}
+                      sx={{ ...(i !== props.keys.length - 1 ? styleVariables.mobileRow : {}), ...styleVariables.mobileSmallFontSize }}>
+                    <Grid item xs={6} sx={key.mobileStyleClasses || {}}>{key.title}</Grid>
+                    <Grid item xs={6} sx={{
+                        ...styleVariables.flexEnd,
+                        ...(key.mobileStyleClasses || {})
+                    }}>{key.renderValue(item)}</Grid>
+                </Grid>
+            ))}
+        </>;
+    }
+
+    function onRowClick(item: T) {
+        if (!!anchorMenuEl) {
+            setAnchorMenuEl(null);
+        } else {
+            props.onRowClick(item);
+        }
+    }
+
     return (
         <Box sx={tableContainerStyles(props.withFilters)}>
             <Grid container>
                 {props.data.map((item, index) =>
-                    <Grid item key={index} sm={6} xs={12}
-                          onClick={() => props.onRowClick ? props.onRowClick(item) : {}}>
-                        <Box sx={mobileBox}>
-                            {props.renderMobileView ?
-                                props.renderMobileView(item) :
-                                props.keys.map((key, i) => {
-                                    switch (key.type) {
-                                        case 'actions':
-                                            return <Box>{key.actions
-                                                .map((action, index) => getActionItem(item, action, index))}</Box>
-                                        case 'text':
-                                            return (
-                                                <Grid container key={i}>
-                                                    <Grid item xs={6}>{key.title}</Grid>
-                                                    <Grid item
-                                                          xs={6}>{key.renderValue ? key.renderValue(item) : ''}</Grid>
-                                                </Grid>
-                                            );
-                                    }
-                                })
-                            }
+                    <Grid item key={index} sm={6} xs={12}>
+                        <Box sx={mobileBox} onClick={() => props.onRowClick ? onRowClick(item) : {}}>
+                            {props.renderMobileView ? props.renderMobileView(item) : renderItem(item)}
                         </Box>
                     </Grid>
                 )}

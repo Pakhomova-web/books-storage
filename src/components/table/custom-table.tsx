@@ -21,10 +21,12 @@ import { IPageable } from '@/lib/data/types';
 import { MobileTable } from '@/components/table/mobile-view/mobile-table';
 import { styleVariables } from '@/constants/styles-variables';
 import { tableContainerStyles } from '@/components/table/table-styles';
-import { renderTableCell } from '@/components/table/table-cell-render';
+import { renderTableActions, renderTableCell } from '@/components/table/table-cell-render';
 
 interface CustomTableProps<K> {
     keys: TableKey<K>[],
+    mobileKeys?: TableKey<K>[],
+    actions?: TableKey<K>,
     data: K[],
     usePagination?: boolean,
     totalCount?: number,
@@ -87,6 +89,31 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
         }
     }
 
+    function renderPaginator(sticky = false, colSpan = 1) {
+        return (
+            <TableFooter sx={sticky ? stickyFooter : {}}>
+                <TableRow>
+                    <TablePagination rowsPerPageOptions={[5, 10, 25]}
+                                     count={props.totalCount}
+                                     page={page}
+                                     colSpan={colSpan}
+                                     sx={paginatorStyles}
+                                     rowsPerPage={rowsPerPage}
+                                     onPageChange={(_e, val: number) => onPageChange(val)}
+                                     onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
+                </TableRow>
+            </TableFooter>
+        );
+    }
+
+    function onRowClick(item: T) {
+        if (!!anchorMenuEl) {
+            setAnchorMenuEl(null);
+        } else {
+            props.onRowClick(item);
+        }
+    }
+
     return !mobileMatches ?
         <TableContainer sx={tableContainerStyles(props.withFilters)}>
             <Table stickyHeader>
@@ -100,58 +127,35 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
                                     {key.title}
                                     {props.pageSettings?.orderBy === key.sortValue ? (
                                         <Box component="span" sx={visuallyHidden}>
-                                            {props.pageSettings?.order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                                            {`sorted ${props.pageSettings?.order === 'desc' ? 'descending' : 'ascending'}`}
                                         </Box>
                                     ) : null}
                                 </TableSortLabel>
                             </TableCell>
                             : <TableCell key={index}>{key.title}</TableCell>
                         )}
+                        {props.actions && <TableCell></TableCell>}
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     {props.data.map((item: T) => (
                         <CustomTableRow key={props.renderKey(item)} isClickable={!!props.onRowClick}
-                                        onClick={() => props.onRowClick ? props.onRowClick(item) : null}>
+                                        onClick={() => props.onRowClick ? onRowClick(item) : null}>
                             {props.keys.map((key: TableKey<T>, index) =>
-                                renderTableCell<T>(key, item, index, anchorMenuEl, (val: HTMLElement) => setAnchorMenuEl(val)))}
+                                renderTableCell<T>(key, item, index))}
+                            {props.actions && renderTableActions(props.actions, item, anchorMenuEl, (val: HTMLElement) => setAnchorMenuEl(val))}
                         </CustomTableRow>
                     ))}
                 </TableBody>
-                <TableFooter sx={stickyFooter}>
-                    {props.usePagination &&
-                      <TableRow>
-                        <TablePagination rowsPerPageOptions={[5, 10, 25]}
-                                         count={props.totalCount}
-                                         page={page}
-                                         sx={paginatorStyles}
-                                         colSpan={props.keys.length}
-                                         rowsPerPage={rowsPerPage}
-                                         onPageChange={(_e, val: number) => onPageChange(val)}
-                                         onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
-                      </TableRow>}
-                </TableFooter>
+                {props.usePagination && renderPaginator(true, props.keys.length + (props.actions ? 1 : 0))}
             </Table>
         </TableContainer> :
         <MobileTable data={props.data}
-                     keys={props.keys}
+                     keys={props.mobileKeys || props.keys}
+                     actions={props.actions}
                      withFilters={props.withFilters}
                      onRowClick={props.onRowClick}
                      renderMobileView={props.renderMobileView}>
-            {props.usePagination &&
-              <Table>
-                <TableFooter>
-                  <TableRow>
-                    <TablePagination rowsPerPageOptions={[5, 10, 25]}
-                                     count={props.totalCount}
-                                     page={page}
-                                     sx={paginatorStyles}
-                                     rowsPerPage={rowsPerPage}
-                                     onPageChange={(_e, val: number) => onPageChange(val)}
-                                     onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
-                  </TableRow>
-                </TableFooter>
-              </Table>
-            }
+            {props.usePagination && <Table>{renderPaginator()}</Table>}
         </MobileTable>;
 }

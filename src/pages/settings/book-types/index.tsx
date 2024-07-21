@@ -11,24 +11,32 @@ import Loading from '@/components/loading';
 import BookTypeModal from '@/components/modals/book-type-modal';
 import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
+import { styleVariables } from '@/constants/styles-variables';
 
 export default function BookTypes() {
-    const [tableKeys] = useState<TableKey<BookTypeEntity>[]>([
-        { title: 'Name', sortValue: 'name', renderValue: (item: BookTypeEntity) => item.name, type: 'text' },
-        {
-            type: 'actions',
-            actions: [
-                {
-                    type: TableActionEnum.delete,
-                    onClick: async (item: BookTypeEntity) => {
-                        try {
-                            await deleteItem(item.id);
-                            refreshData(true);
-                        } catch (err) {
-                        }
+    const [tableActions] = useState<TableKey<BookTypeEntity>>({
+        renderMobileLabel: (item: BookTypeEntity) => <Box><b>{item.name}</b></Box>,
+        type: 'actions',
+        actions: [
+            {
+                type: TableActionEnum.delete,
+                onClick: async (item: BookTypeEntity) => {
+                    try {
+                        await deleteItem(item.id);
+                        refreshData(true);
+                    } catch (err) {
                     }
                 }
-            ]
+            }
+        ]
+    });
+    const [tableKeys] = useState<TableKey<BookTypeEntity>[]>([
+        {
+            title: 'Name',
+            sortValue: 'name',
+            renderValue: (item: BookTypeEntity) => item.name,
+            type: 'text',
+            mobileStyleClasses: styleVariables.boldFont
         }
     ]);
     const [selectedItem, setSelectedItem] = useState<BookTypeEntity>();
@@ -74,7 +82,10 @@ export default function BookTypes() {
         <Loading open={loading || deleting} fullHeight={true}>
             <NameFiltersPanel onApply={(filters: BookTypeEntity) => setFilters(filters)}></NameFiltersPanel>
 
-            <CustomTable data={items} keys={tableKeys}
+            <CustomTable data={items}
+                         keys={tableKeys}
+                         mobileKeys={[]}
+                         actions={tableActions}
                          renderKey={(item: BookTypeEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                          pageSettings={pageSettings}

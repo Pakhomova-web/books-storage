@@ -6,7 +6,19 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CopyIcon from '@mui/icons-material/ContentCopy';
 import AddIcon from '@mui/icons-material/Add';
 
-export function renderTableCell<T>(key: TableKey<T>, item: T, index: number, anchorMenuEl: HTMLElement, onAnchorMenuElChange): ReactNode {
+export function renderTableCell<T>(key: TableKey<T>, item: T, index: number): ReactNode {
+    return <TableCell key={index}>{key.renderValue ? key.renderValue(item) : ''}</TableCell>;
+}
+
+export function renderTableActions<T>(key: TableKey<T>, item: T, anchorMenuEl: HTMLElement, onAnchorMenuElChange) {
+    return (
+        <TableCell align="right" onClick={e => e.stopPropagation()}>
+            {renderActions(key.actions, item, anchorMenuEl, onAnchorMenuElChange)}
+        </TableCell>
+    );
+}
+
+export function renderActions<T>(actions: ITableAction[], item: T, anchorMenuEl: HTMLElement, onAnchorMenuElChange) {
     const open = Boolean(anchorMenuEl);
     const onMenuClick = (event: React.MouseEvent<HTMLElement>) => {
         event.stopPropagation();
@@ -14,30 +26,23 @@ export function renderTableCell<T>(key: TableKey<T>, item: T, index: number, anc
     }
     const onCloseMenu = () => onAnchorMenuElChange(null);
 
-    switch (key.type) {
-        case 'actions':
-            return <TableCell key={index} align="right" onClick={e => e.stopPropagation()}>
-                {key.actions && key.actions?.length === 1 ?
-                    key.actions.map((icon, index) => getActionItem<T>(item, icon, index))
-                    : <Box>
-                        <IconButton aria-haspopup="true" onClick={onMenuClick}>
-                            <MenuIcon/>
-                        </IconButton>
-                        <Menu anchorEl={anchorMenuEl}
-                              open={open}
-                              onClose={onCloseMenu}
-                              MenuListProps={{ 'aria-labelledby': 'basic-button' }}>
-                            {key.actions.map((icon, index) => (
-                                <MenuItem key={index} onClick={onCloseMenu}>
-                                    {getActionItem<T>(item, icon, index, onCloseMenu)}
-                                </MenuItem>)
-                            )}
-                        </Menu>
-                    </Box>}
-            </TableCell>;
-        default:
-            return <TableCell key={index}>{key.renderValue ? key.renderValue(item) : ''}</TableCell>;
-    }
+    return actions && actions?.length === 1 ?
+        actions.map((icon, index) => getActionItem<T>(item, icon, index)) :
+        <Box>
+            <IconButton aria-haspopup="true" onClick={onMenuClick}>
+                <MenuIcon/>
+            </IconButton>
+            <Menu anchorEl={anchorMenuEl}
+                  open={open}
+                  onClose={onCloseMenu}
+                  MenuListProps={{ 'aria-labelledby': 'basic-button' }}>
+                {actions.map((icon, index) => (
+                    <MenuItem key={index} onClick={onCloseMenu}>
+                        {getActionItem<T>(item, icon, index, onCloseMenu)}
+                    </MenuItem>)
+                )}
+            </Menu>
+        </Box>;
 }
 
 export function getActionItem<T>(item: T, action: ITableAction, index: number, onClick?: Function) {

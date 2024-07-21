@@ -11,18 +11,26 @@ import Loading from '@/components/loading';
 import LanguageModal from '@/components/modals/language-modal';
 import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
+import { styleVariables } from '@/constants/styles-variables';
 
 export default function Languages() {
+    const [tableActions] = useState<TableKey<LanguageEntity>>({
+        renderMobileLabel: (item: LanguageEntity) => <Box><b>{item.name}</b></Box>,
+        type: 'actions',
+        actions: [
+            {
+                type: TableActionEnum.delete,
+                onClick: (item: LanguageEntity) => deleteHandler(item)
+            }
+        ]
+    });
     const [tableKeys] = useState<TableKey<LanguageEntity>[]>([
-        { title: 'Name', sortValue: 'name', renderValue: (item: LanguageEntity) => item.name, type: 'text' },
         {
-            type: 'actions',
-            actions: [
-                {
-                    type: TableActionEnum.delete,
-                    onClick: (item: LanguageEntity) => deleteHandler(item)
-                }
-            ]
+            title: 'Name',
+            sortValue: 'name',
+            renderValue: (item: LanguageEntity) => item.name,
+            type: 'text',
+            mobileStyleClasses: styleVariables.boldFont
         }
     ]);
     const [selectedItem, setSelectedItem] = useState<LanguageEntity>();
@@ -76,7 +84,10 @@ export default function Languages() {
         <Loading open={loading || deleting} fullHeight={true}>
             <NameFiltersPanel onApply={(filters: LanguageEntity) => setFilters(filters)}></NameFiltersPanel>
 
-            <CustomTable data={items} keys={tableKeys}
+            <CustomTable data={items}
+                         keys={tableKeys}
+                         mobileKeys={[]}
+                         actions={tableActions}
                          renderKey={(item: LanguageEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                          pageSettings={pageSettings}

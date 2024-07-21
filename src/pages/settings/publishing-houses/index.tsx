@@ -18,18 +18,22 @@ export default function PublishingHouses() {
     const { items, loading, gettingError, refetch } = usePublishingHouses(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeletePublishingHouse();
     const [selectedItem, setSelectedItem] = useState<PublishingHouseEntity>();
+    const [tableActions] = useState<TableKey<PublishingHouseEntity>>({
+        renderMobileLabel: (item: PublishingHouseEntity) => <Box><b>{item.name}</b></Box>,
+        type: 'actions',
+        actions: [
+            {
+                type: TableActionEnum.delete,
+                onClick: (item: PublishingHouseEntity) => deleteHandler(item)
+            }
+        ]
+    });
+    const [mobileKeys] = useState<TableKey<PublishingHouseEntity>[]>([
+        { type: 'text', title: 'Tags', sortValue: 'tags', renderValue: (item: PublishingHouseEntity) => item.tags }
+    ])
     const [tableKeys] = useState<TableKey<PublishingHouseEntity>[]>([
         { type: 'text', title: 'Name', sortValue: 'name', renderValue: (item: PublishingHouseEntity) => item.name },
-        { type: 'text', title: 'Tags', sortValue: 'tags', renderValue: (item: PublishingHouseEntity) => item.tags },
-        {
-            type: 'actions',
-            actions: [
-                {
-                    type: TableActionEnum.delete,
-                    onClick: (item: PublishingHouseEntity) => deleteHandler(item)
-                }
-            ]
-        }
+        ...mobileKeys
     ]);
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -77,8 +81,10 @@ export default function PublishingHouses() {
         <Loading open={loading || deleting} fullHeight={true}>
             <NameFiltersPanel onApply={(filters: PublishingHouseEntity) => setFilters(filters)}></NameFiltersPanel>
 
-            <CustomTable keys={tableKeys}
-                         data={items}
+            <CustomTable data={items}
+                         keys={tableKeys}
+                         mobileKeys={mobileKeys}
+                         actions={tableActions}
                          renderKey={(item: PublishingHouseEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                          pageSettings={pageSettings}

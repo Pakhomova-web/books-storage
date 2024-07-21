@@ -4,25 +4,33 @@ import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useCoverTypes, useDeleteCoverType } from '@/lib/graphql/hooks';
-import { CoverTypeEntity, IPageable } from '@/lib/data/types';
+import { CoverTypeEntity, IPageable, LanguageEntity } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import CoverTypeModal from '@/components/modals/cover-type-modal';
 import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
+import { styleVariables } from '@/constants/styles-variables';
 
 export default function CoverTypes() {
+    const [tableActions] = useState<TableKey<CoverTypeEntity>>({
+        renderMobileLabel: (item: CoverTypeEntity) => <Box><b>{item.name}</b></Box>,
+        type: 'actions',
+        actions: [
+            {
+                type: TableActionEnum.delete,
+                onClick: (item: CoverTypeEntity) => deleteHandler(item)
+            }
+        ]
+    });
     const [tableKeys] = useState<TableKey<CoverTypeEntity>[]>([
-        { title: 'Name', sortValue: 'name', renderValue: (item: CoverTypeEntity) => item.name, type: 'text' },
         {
-            type: 'actions',
-            actions: [
-                {
-                    type: TableActionEnum.delete,
-                    onClick: (item: CoverTypeEntity) => deleteHandler(item)
-                }
-            ]
+            title: 'Name',
+            sortValue: 'name',
+            renderValue: (item: CoverTypeEntity) => item.name,
+            type: 'text',
+            mobileStyleClasses: styleVariables.boldFont
         }
     ]);
     const [selectedItem, setSelectedItem] = useState<CoverTypeEntity>();
@@ -76,7 +84,10 @@ export default function CoverTypes() {
         <Loading open={loading || deleting} fullHeight={true}>
             <NameFiltersPanel onApply={(filters: CoverTypeEntity) => setFilters(filters)}></NameFiltersPanel>
 
-            <CustomTable data={items} keys={tableKeys}
+            <CustomTable data={items}
+                         keys={tableKeys}
+                         mobileKeys={[]}
+                         actions={tableActions}
                          renderKey={(item: CoverTypeEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                          pageSettings={pageSettings}

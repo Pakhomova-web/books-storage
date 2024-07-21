@@ -1,9 +1,13 @@
+import { ReactNode } from 'react';
+
 export interface TableKey<K> {
     type: 'actions' | 'text',
     sortValue?: string,
     title?: string,
     renderValue?: (item: K) => string | number,
-    actions?: ITableAction[]
+    actions?: ITableAction[],
+    renderMobileLabel?: (item: K) => ReactNode,
+    mobileStyleClasses?: any
 }
 
 export interface ITableAction {

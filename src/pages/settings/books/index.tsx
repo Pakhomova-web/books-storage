@@ -1,7 +1,7 @@
-import { Box, Button, Grid } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import AddIcon from '@mui/icons-material/Add';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { BookEntity, IBookFilter, IPageable } from '@/lib/data/types';
@@ -14,21 +14,11 @@ import { styleVariables } from '@/constants/styles-variables';
 import { downloadCsv } from '@/utils/utils';
 import { BookFilters } from '@/components/filters/book-filters';
 import { BookNumberInStockModal } from '@/components/modals/book-number-in-stock-modal';
-import { getActionItem } from '@/components/table/table-cell-render';
 
 const subTitleStyles = {
     fontSize: styleVariables.hintFontSize,
     display: 'flex',
     alignItems: 'center'
-};
-
-const titleBox = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginBottom: styleVariables.margin,
-    title: {
-        fontSize: '18px'
-    }
 };
 
 const numberInStockBox = (inStock: boolean) => ({
@@ -39,18 +29,14 @@ const numberInStockBox = (inStock: boolean) => ({
     border: `1px solid ${inStock ? 'green' : styleVariables.warnColor}`
 });
 
-const mobileSmallFontSize = {
-    fontSize: styleVariables.hintFontSize
-};
-
-const mobileRow = {
-    paddingBottom: styleVariables.rowMargin,
-    marginBottom: styleVariables.rowMargin,
-    borderBottom: `1px solid ${styleVariables.gray}`
-};
-
 export default function Books() {
     const [tableActions] = useState<TableKey<BookEntity>>({
+        renderMobileLabel: (item: BookEntity) => (
+            <Box sx={subTitleStyles}>
+                {item.bookType.name}/{item.bookSeries.publishingHouse.name}/{item.bookSeries.name}
+                <Box sx={numberInStockBox(!!item.numberInStock)}>{item.numberInStock}</Box>
+            </Box>
+        ),
         type: 'actions',
         actions: [
             {
@@ -79,6 +65,45 @@ export default function Books() {
             }
         ]
     });
+    const [mobileKeys] = useState<TableKey<BookEntity>[]>([
+        {
+            title: 'Name',
+            sortValue: 'name',
+            renderValue: (item: BookEntity) => item.name,
+            type: 'text',
+            mobileStyleClasses: { ...styleVariables.boldFont, ...styleVariables.mobileBigFontSize }
+        },
+        {
+            title: 'Number Of Pages',
+            sortValue: 'numberOfPages',
+            renderValue: (item: BookEntity) => item.numberOfPages,
+            type: 'text'
+        },
+        {
+            title: 'Language',
+            sortValue: 'language',
+            renderValue: (item: BookEntity) => item.language?.name,
+            type: 'text'
+        },
+        {
+            title: 'Page Type',
+            sortValue: 'pageType',
+            renderValue: (item: BookEntity) => item.pageType?.name,
+            type: 'text'
+        },
+        {
+            title: 'Cover Type',
+            sortValue: 'coverType',
+            renderValue: (item: BookEntity) => item.coverType?.name,
+            type: 'text'
+        },
+        {
+            title: 'Author',
+            sortValue: 'author',
+            renderValue: (item: BookEntity) => item.author?.name,
+            type: 'text'
+        }
+    ]);
     const [tableKeys] = useState<TableKey<BookEntity>[]>([
         { title: 'Type', sortValue: 'bookType', renderValue: (item: BookEntity) => item.bookType?.name, type: 'text' },
         {
@@ -93,37 +118,7 @@ export default function Books() {
             renderValue: (item: BookEntity) => item.bookSeries?.name,
             type: 'text'
         },
-        { title: 'Name', sortValue: 'name', renderValue: (item: BookEntity) => item.name, type: 'text' },
-        {
-            title: 'Number Of Pages',
-            sortValue: 'numberOfPages',
-            renderValue: (item: BookEntity) => item.numberOfPages,
-            type: 'text'
-        },
-        {
-            title: 'Language',
-            sortValue: 'language',
-            renderValue: (item: BookEntity) => item.language?.name,
-            type: 'text'
-        },
-        {
-            title: 'Page Type',
-            sortValue: 'pageType',
-            renderValue: (item: BookEntity) => item.pageType?.name,
-            type: 'text'
-        },
-        {
-            title: 'Cover Type',
-            sortValue: 'coverType',
-            renderValue: (item: BookEntity) => item.coverType?.name,
-            type: 'text'
-        },
-        {
-            title: 'Author',
-            sortValue: 'author',
-            renderValue: (item: BookEntity) => item.author?.name,
-            type: 'text'
-        },
+        ...mobileKeys,
         {
             title: 'In Stock',
             sortValue: 'numberInStock',
@@ -135,41 +130,7 @@ export default function Books() {
             sortValue: 'price',
             renderValue: (item: BookEntity) => item.price,
             type: 'text'
-        },
-        tableActions
-    ]);
-    const [mobileKeys] = useState<TableKey<BookEntity>[]>([
-        {
-            title: 'Number Of Pages',
-            sortValue: 'numberOfPages',
-            renderValue: (item: BookEntity) => item.numberOfPages,
-            type: 'text'
-        },
-        {
-            title: 'Language',
-            sortValue: 'language',
-            renderValue: (item: BookEntity) => item.language?.name,
-            type: 'text'
-        },
-        {
-            title: 'Page Type',
-            sortValue: 'pageType',
-            renderValue: (item: BookEntity) => item.pageType?.name,
-            type: 'text'
-        },
-        {
-            title: 'Cover Type',
-            sortValue: 'coverType',
-            renderValue: (item: BookEntity) => item.coverType?.name,
-            type: 'text'
-        },
-        {
-            title: 'Author',
-            sortValue: 'author',
-            renderValue: (item: BookEntity) => item.author?.name,
-            type: 'text'
-        },
-        tableActions
+        }
     ]);
     const [selectedItem, setSelectedItem] = useState<BookEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({
@@ -245,49 +206,20 @@ export default function Books() {
         setPageSettings(settings);
     }
 
-    function renderMobileView(item: BookEntity): ReactNode {
-        return (
-            <Box>
-                <Box sx={titleBox}>
-                    <Box sx={subTitleStyles}>
-                        {item.bookType.name}/{item.bookSeries.publishingHouse.name}/{item.bookSeries.name}
-                        <Box sx={numberInStockBox(!!item.numberInStock)}>{item.numberInStock}</Box>
-                    </Box>
-                </Box>
-                <Grid container sx={mobileRow}>
-                    <Grid item xs={6}><b>{item.name}</b></Grid>
-                    <Grid item xs={6} sx={styleVariables.flexEnd}><b>{item.price} грн</b></Grid>
-                </Grid>
-                {mobileKeys.map((key, i) => {
-                    switch (key.type) {
-                        case 'actions':
-                            return <Box>{key.actions
-                                .map((action, index) => getActionItem<BookEntity>(item, action, index))}</Box>
-                        case 'text':
-                            return (<Grid container key={i}
-                                          sx={{ ...(i !== mobileKeys.length - 1 ? mobileRow : {}), ...mobileSmallFontSize }}>
-                                <Grid item xs={6}>{key.title}</Grid>
-                                <Grid item xs={6} sx={styleVariables.flexEnd}>{key.renderValue(item)}</Grid>
-                            </Grid>);
-                    }
-                })}
-            </Box>
-        );
-    }
-
     return (
         <Loading open={loading || deleting || downloadingCsv} fullHeight={true}>
             <BookFilters onApply={(filters: IBookFilter) => setFilters(filters)}></BookFilters>
 
             <CustomTable data={items}
                          keys={tableKeys}
+                         mobileKeys={mobileKeys}
+                         actions={tableActions}
                          renderKey={(item: BookEntity) => item.id}
                          onChange={(settings: IPageable) => onPaginationChange(settings)}
                          pageSettings={pageSettings}
                          usePagination={true}
                          withFilters={true}
                          totalCount={totalCount}
-                         renderMobileView={renderMobileView}
                          onRowClick={(item: BookEntity) => onEdit(item)}>
             </CustomTable>
 

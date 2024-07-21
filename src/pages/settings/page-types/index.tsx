@@ -11,18 +11,26 @@ import Loading from '@/components/loading';
 import PageTypeModal from '@/components/modals/page-type-modal';
 import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
+import { styleVariables } from '@/constants/styles-variables';
 
 export default function PageTypes() {
+    const [tableActions] = useState<TableKey<PageTypeEntity>>({
+        renderMobileLabel: (item: PageTypeEntity) => <Box><b>{item.name}</b></Box>,
+        type: 'actions',
+        actions: [
+            {
+                type: TableActionEnum.delete,
+                onClick: (item: PageTypeEntity) => deleteHandler(item)
+            }
+        ]
+    });
     const [tableKeys] = useState<TableKey<PageTypeEntity>[]>([
-        { title: 'Name', sortValue: 'name', renderValue: (item: PageTypeEntity) => item.name, type: 'text' },
         {
-            type: 'actions',
-            actions: [
-                {
-                    type: TableActionEnum.delete,
-                    onClick: (item: PageTypeEntity) => deleteHandler(item)
-                }
-            ]
+            title: 'Name',
+            sortValue: 'name',
+            renderValue: (item: PageTypeEntity) => item.name,
+            type: 'text',
+            mobileStyleClasses: styleVariables.boldFont
         }
     ]);
     const [selectedItem, setSelectedItem] = useState<PageTypeEntity>();
@@ -49,7 +57,8 @@ export default function PageTypes() {
         try {
             await deleteItem(item.id);
             refreshData(true);
-        } catch (err) {}
+        } catch (err) {
+        }
     }
 
     function refreshData(updated = true) {
@@ -75,14 +84,17 @@ export default function PageTypes() {
         <Loading open={loading || deleting} fullHeight={true}>
             <NameFiltersPanel onApply={(filters: PageTypeEntity) => setFilters(filters)}></NameFiltersPanel>
 
-            <CustomTable data={items} keys={tableKeys}
+            <CustomTable data={items}
+                         keys={tableKeys}
+                         mobileKeys={[]}
+                         actions={tableActions}
                          renderKey={(item: PageTypeEntity) => item.id}
                          onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                          pageSettings={pageSettings}
                          withFilters={true}
                          onRowClick={(item: PageTypeEntity) => onEdit(item)}></CustomTable>
 
-            { error && <ErrorNotification error={error}></ErrorNotification>}
+            {error && <ErrorNotification error={error}></ErrorNotification>}
 
             <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, background: 'white', 'z-index': 2 }}>
                 <Button variant="outlined" onClick={() => onAdd()}>
