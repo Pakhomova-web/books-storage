@@ -81,7 +81,7 @@ export default function PageTypes() {
     }
 
     return (
-        <Loading open={loading || deleting} fullHeight={true}>
+        <Loading show={loading || deleting} fullHeight={true}>
             <NameFiltersPanel onApply={(filters: PageTypeEntity) => setFilters(filters)}></NameFiltersPanel>
 
             <CustomTable data={items}

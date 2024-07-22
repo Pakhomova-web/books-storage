@@ -81,7 +81,7 @@ export default function CoverTypes() {
     }
 
     return (
-        <Loading open={loading || deleting} fullHeight={true}>
+        <Loading show={loading || deleting} fullHeight={true}>
             <NameFiltersPanel onApply={(filters: CoverTypeEntity) => setFilters(filters)}></NameFiltersPanel>
 
             <CustomTable data={items}

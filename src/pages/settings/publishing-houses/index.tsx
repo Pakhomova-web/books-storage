@@ -78,7 +78,7 @@ export default function PublishingHouses() {
     }
 
     return (
-        <Loading open={loading || deleting} fullHeight={true}>
+        <Loading show={loading || deleting} fullHeight={true}>
             <NameFiltersPanel onApply={(filters: PublishingHouseEntity) => setFilters(filters)}></NameFiltersPanel>
 
             <CustomTable data={items}

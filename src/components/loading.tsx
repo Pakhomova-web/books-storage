@@ -4,7 +4,7 @@ import { positionRelative, styleVariables } from '@/constants/styles-variables';
 
 interface ILoadingProps {
     children: any,
-    open: boolean,
+    show: boolean,
     fullHeight?: boolean
 }
 
@@ -19,10 +19,10 @@ const fullHeightBoxStyles = {
     height: `calc(100vh - ${styleVariables.toolbarHeight}px)`
 };
 
-export default function Loading({ children, open, fullHeight }: ILoadingProps) {
+export default function Loading({ children, show, fullHeight }: ILoadingProps) {
     return (
         <Box sx={positionRelative}>
-            <Backdrop sx={backdropStyles} open={open}>
+            <Backdrop sx={backdropStyles} open={show}>
                 <CircularProgress color="inherit"/>
             </Backdrop>
             <Box sx={fullHeight ? fullHeightBoxStyles : null}>{children}</Box>

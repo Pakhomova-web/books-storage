@@ -54,7 +54,7 @@ export default function CustomModal(props: ICustomModalProps) {
     return (
         <Modal open={props.open} onClose={closeModalHandler} disableEscapeKeyDown sx={modalStyle}>
             <Box sx={mainContainerStyle}>
-                <Loading open={props.loading} fullHeight={false}>
+                <Loading show={props.loading} fullHeight={false}>
                     <Box sx={innerContainer}>
                         <Box sx={titleStyles}>{props.title}</Box>
                         <Box sx={childrenContainer}>

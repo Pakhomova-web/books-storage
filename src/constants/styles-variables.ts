@@ -34,7 +34,9 @@ export const styleVariables = {
     },
     boldFont: {
         fontWeight: 'bold'
-    }
+    },
+    textCenter: { textAlign: 'center' },
+    cursorPointer: { cursor: 'pointer' }
 };
 
 

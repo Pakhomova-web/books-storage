@@ -89,7 +89,7 @@ export default function BookSeries() {
     }
 
     return (
-        <Loading open={loading || deleting} fullHeight={true}>
+        <Loading show={loading || deleting} fullHeight={true}>
             <BookSeriesFilters onApply={(filters: IBookSeriesFilter) => setFilters(filters)}></BookSeriesFilters>
 
             <CustomTable data={items}

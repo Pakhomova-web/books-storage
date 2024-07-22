@@ -213,7 +213,7 @@ export default function Books() {
     }
 
     return (
-        <Loading open={loading || deleting || downloadingCsv} fullHeight={true}>
+        <Loading show={loading || deleting || downloadingCsv} fullHeight={true}>
             <BookFilters onApply={(filters: IBookFilter) => setFilters(filters)}></BookFilters>
 
             <CustomTable data={items}

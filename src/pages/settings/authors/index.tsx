@@ -78,7 +78,7 @@ export default function Authors() {
     }
 
     return (
-        <Loading open={loading || deleting} fullHeight={true}>
+        <Loading show={loading || deleting} fullHeight={true}>
             <NameFiltersPanel onApply={(filters: AuthorEntity) => setFilters(filters)}></NameFiltersPanel>
 
             <CustomTable data={items}
