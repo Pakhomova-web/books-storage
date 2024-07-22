@@ -9,11 +9,11 @@ import {
     ListItem,
     ListItemButton,
     ListItemText,
-    Toolbar
+    Toolbar, useTheme
 } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import SettingsIcon from '@mui/icons-material/Settings';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -21,6 +21,9 @@ import HomeIcon from '@mui/icons-material/Home';
 
 import { apolloClient } from '@/lib/apollo';
 import './global.css';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon';
+import { styleVariables } from '@/constants/styles-variables';
 
 interface SettingListItem {
     link: string,
@@ -45,13 +48,25 @@ const leftNavigationStyles = {
     [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' }
 };
 
+const settingMenuBackdrop = {
+    width: '100vw',
+    height: '100vh',
+    background: styleVariables.gray,
+    opacity: 0.5,
+    position: 'absolute',
+    top: 0,
+    zIndex: 3
+};
+
 export default function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
     const pathname = usePathname();
     const [activeSettingsTab, setActiveSettingsTab] = useState<SettingListItem>();
     const [isSettings, setIsSettings] = useState<boolean>(false);
-    const [showSettingMenu, setShowSettingMenu] = useState<boolean>(false);
-
+    const [showSettingsMenu, setShowSettingsMenu] = useState<boolean>(false);
+    const [attachedSettingsMenu, setAttachedSettingsMenu] = useState<boolean>(false);
+    const theme = useTheme();
+    const mobileMatches = useMediaQuery(theme.breakpoints.up('md'));
 
     useEffect(() => {
         if (pathname.includes('settings')) {
@@ -60,27 +75,62 @@ export default function App({ Component, pageProps }: AppProps) {
         }
     }, [pathname]);
 
+    useEffect(() => {
+        if (isSettings) {
+            setAttachedSettingsMenu(mobileMatches);
+            if (!attachedSettingsMenu) {
+                setShowSettingsMenu(false);
+            }
+        }
+    }, [mobileMatches]);
+
     function settingsTabChange(activeSettingsTab: SettingListItem) {
-        setShowSettingMenu(false);
+        if (!attachedSettingsMenu) {
+            setShowSettingsMenu(false);
+        }
         setActiveSettingsTab(activeSettingsTab);
         router.push(`/settings/${activeSettingsTab.link}`);
     }
 
     function goToMainPage() {
         setIsSettings(false);
+        if (!attachedSettingsMenu) {
+            setShowSettingsMenu(false);
+        }
         setActiveSettingsTab(null);
         router.push('/');
     }
 
+    function handleMenu(close = true) {
+        if (close) {
+            setShowSettingsMenu(false);
+            setAttachedSettingsMenu(false);
+        } else {
+            setAttachedSettingsMenu(mobileMatches);
+            setShowSettingsMenu(true);
+        }
+    }
+
+    function handleClickOutsideSettingsMenu(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        setShowSettingsMenu(false);
+    };
+
     return (
         <ApolloProvider client={apolloClient}>
-            <Head>
-                <title>Books Storage</title>
-            </Head>
+            <Head><title>Books Storage</title></Head>
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <Toolbar className="toolbar">
                     <Box>
-                        {isSettings && <IconButton color="inherit" onClick={() => setShowSettingMenu(!showSettingMenu)}><MenuIcon/></IconButton>}
+                        {isSettings &&
+                            (!showSettingsMenu && !attachedSettingsMenu ?
+                                    <IconButton color="inherit"
+                                                onClick={() => handleMenu(false)}><MenuIcon/></IconButton> :
+                                    <IconButton color="inherit"
+                                                onClick={() => handleMenu()}><CloseIcon/></IconButton>
+                            )
+                        }
                     </Box>
 
                     {activeSettingsTab && <Box>{activeSettingsTab.title}</Box>}
@@ -99,7 +149,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 </Toolbar>
             </AppBar>
 
-            {isSettings && showSettingMenu ?
+            {isSettings && (attachedSettingsMenu || showSettingsMenu) ?
                 <Drawer variant="permanent" sx={leftNavigationStyles}>
                     <Toolbar/>
                     <List>
@@ -115,7 +165,11 @@ export default function App({ Component, pageProps }: AppProps) {
                     </List>
                 </Drawer> : null}
             <Toolbar/>
-            <Component {...pageProps}/>
+            <Box sx={attachedSettingsMenu ? { paddingLeft: `${drawerWidth}px` } : {}}>
+                <Component {...pageProps} />
+                {isSettings && showSettingsMenu && !attachedSettingsMenu &&
+                  <Box sx={settingMenuBackdrop} onClick={handleClickOutsideSettingsMenu}></Box>}
+            </Box>
         </ApolloProvider>
     );
 }
