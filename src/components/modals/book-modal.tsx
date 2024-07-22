@@ -43,10 +43,10 @@ interface IForm {
 export default function BookModal({ open, item, onClose }: IBookModalProps) {
     const formContext = useForm<IForm>({
         defaultValues: {
-            name: item.name,
-            numberOfPages: item.numberOfPages,
-            numberInStock: item.numberInStock,
-            price: item.price,
+            name: item?.name,
+            numberOfPages: item?.numberOfPages,
+            numberInStock: item?.numberInStock,
+            price: item?.price,
             authorId: item?.author?.id,
             languageId: item?.language?.id,
             coverTypeId: item?.coverType.id,

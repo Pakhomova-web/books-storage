@@ -6,13 +6,19 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CopyIcon from '@mui/icons-material/ContentCopy';
 import AddIcon from '@mui/icons-material/Add';
 
-export function renderTableCell<T>(key: TableKey<T>, item: T, index: number): ReactNode {
-    return <TableCell key={index}>{key.renderValue ? key.renderValue(item) : ''}</TableCell>;
+export function renderTableCell<T>(key: TableKey<T>, item: T, index: number, rowStyleClass?: Function): ReactNode {
+    return (
+        <TableCell key={index} sx={rowStyleClass ? rowStyleClass(item) : {}}>
+            {key.renderValue ? key.renderValue(item) : ''}
+        </TableCell>
+    );
 }
 
-export function renderTableActions<T>(key: TableKey<T>, item: T, anchorMenuEl: HTMLElement, onAnchorMenuElChange) {
+export function renderTableActions<T>(key: TableKey<T>, item: T, anchorMenuEl: HTMLElement, onAnchorMenuElChange, rowStyleClass?: Function) {
     return (
-        <TableCell align="right" onClick={e => e.stopPropagation()}>
+        <TableCell align="right"
+                   onClick={e => e.stopPropagation()}
+                   sx={rowStyleClass ? rowStyleClass(item) : {}}>
             {renderActions(key.actions, item, anchorMenuEl, onAnchorMenuElChange)}
         </TableCell>
     );

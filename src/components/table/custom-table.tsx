@@ -32,6 +32,7 @@ interface CustomTableProps<K> {
     totalCount?: number,
     renderKey: (item: K) => string | number | undefined,
     onRowClick?: (item: K) => void,
+    rowStyleClass?: (item: K) => any,
     onChange?: (pageSettings: IPageable) => void,
     pageSettings?: IPageable,
     withFilters?: boolean,
@@ -142,8 +143,8 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
                         <CustomTableRow key={props.renderKey(item)} isClickable={!!props.onRowClick}
                                         onClick={() => props.onRowClick ? onRowClick(item) : null}>
                             {props.keys.map((key: TableKey<T>, index) =>
-                                renderTableCell<T>(key, item, index))}
-                            {props.actions && renderTableActions(props.actions, item, anchorMenuEl, (val: HTMLElement) => setAnchorMenuEl(val))}
+                                renderTableCell<T>(key, item, index, props.rowStyleClass))}
+                            {props.actions && renderTableActions(props.actions, item, anchorMenuEl, (val: HTMLElement) => setAnchorMenuEl(val), props.rowStyleClass)}
                         </CustomTableRow>
                     ))}
                 </TableBody>

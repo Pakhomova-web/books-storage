@@ -40,7 +40,7 @@ export default function Books() {
         type: 'actions',
         actions: [
             {
-                label: 'Add quantity in stock',
+                label: 'Add number in stock',
                 type: TableActionEnum.add,
                 onClick: (item: BookEntity) => {
                     setError(null);
@@ -74,7 +74,7 @@ export default function Books() {
             mobileStyleClasses: { ...styleVariables.boldFont, ...styleVariables.mobileBigFontSize }
         },
         {
-            title: 'Number Of Pages',
+            title: 'Pages',
             sortValue: 'numberOfPages',
             renderValue: (item: BookEntity) => item.numberOfPages,
             type: 'text'
@@ -156,6 +156,12 @@ export default function Books() {
         refreshData();
     }, [filters, pageSettings]);
 
+    function highlightInRed(numberInStock: number) {
+        return !numberInStock ? {
+             background: styleVariables.redLightColor
+        } : {};
+    }
+
     async function deleteHandler(item: BookEntity) {
         try {
             deleteItem(item.id);
@@ -219,6 +225,7 @@ export default function Books() {
                          pageSettings={pageSettings}
                          usePagination={true}
                          withFilters={true}
+                         rowStyleClass={(item: BookEntity) => highlightInRed(item.numberInStock)}
                          totalCount={totalCount}
                          onRowClick={(item: BookEntity) => onEdit(item)}>
             </CustomTable>
