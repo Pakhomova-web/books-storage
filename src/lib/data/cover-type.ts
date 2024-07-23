@@ -9,7 +9,7 @@ export async function getCoverTypes(pageSettings?: IPageable, filters?: CoverTyp
 }
 
 export async function createCoverType(input: CoverTypeEntity)  {
-    const item = await getByName(CoverType, input.name);
+    const item = await getByName<CoverTypeEntity>(CoverType, input.name);
 
     if (item) {
         return null;
@@ -28,7 +28,7 @@ export async function updateCoverType(input: CoverTypeEntity) {
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const itemByName = await getByName(CoverType, input.name);
+    const itemByName = await getByName<CoverTypeEntity>(CoverType, input.name);
 
     if (itemByName && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Cover Type with name '${input.name}' already exists.`, {

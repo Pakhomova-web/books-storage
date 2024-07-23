@@ -1,4 +1,4 @@
-import * as mongoose from 'mongoose';
+import { connect } from 'mongoose';
 import { keys } from '@/config/keys';
 
 const DATABASE_URL = keys.mongoURI;
@@ -14,6 +14,7 @@ if (!cached) {
 }
 
 async function connectDB() {
+    console.log('connectDB');
     if (cached.conn) {
         console.log('MongoDB is connected!');
         return cached.conn;
@@ -26,7 +27,7 @@ async function connectDB() {
             useUnifiedTopology: true
         };
 
-        cached.promise = mongoose.connect(DATABASE_URL, opts).then(mongoose => {
+        cached.promise = connect(DATABASE_URL, opts).then(mongoose => {
             return mongoose;
         });
     }

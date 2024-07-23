@@ -63,7 +63,7 @@ export default function BookSeries() {
 
     async function deleteHandler(item: BookSeriesEntity) {
         try {
-            deleteItem(item.id);
+            await deleteItem(item.id);
             refreshData(true);
         } catch (err) {
         }

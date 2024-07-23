@@ -17,7 +17,7 @@ export async function getPublishingHousesByIds(ids: string[]) {
 }
 
 export async function createPublishingHouse(input: PublishingHouseEntity) {
-    const item = await getByName(PublishingHouse, input.name);
+    const item = await getByName<PublishingHouseEntity>(PublishingHouse, input.name);
 
     if (item) {
         return null;
@@ -40,7 +40,7 @@ export async function updatePublishingHouse(input: PublishingHouseEntity) {
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const itemByName = await getByName(PublishingHouse, input.name);
+    const itemByName = await getByName<PublishingHouseEntity>(PublishingHouse, input.name);
 
     if (itemByName && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Publishing House with name '${input.name}' already exists.`, {

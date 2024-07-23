@@ -8,7 +8,7 @@ export async function getLanguages(pageSettings?: IPageable, filters?: LanguageE
 }
 
 export async function createLanguage(input: LanguageEntity) {
-    const item = await getByName(Language, input.name);
+    const item = await getByName<LanguageEntity>(Language, input.name);
 
     if (item) {
         return null;
@@ -27,7 +27,7 @@ export async function updateLanguage(input: LanguageEntity) {
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const itemByName = await getByName(Language, input.name);
+    const itemByName = await getByName<LanguageEntity>(Language, input.name);
 
     if (itemByName && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Language with name '${input.name}' already exists.`, {

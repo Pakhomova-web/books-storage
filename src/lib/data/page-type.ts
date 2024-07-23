@@ -8,7 +8,7 @@ export async function getPageTypes(pageSettings?: IPageable, filters?: PageTypeE
 }
 
 export async function createPageType(input: PageTypeEntity) {
-    const item = await getByName(PageType, input.name);
+    const item = await getByName<PageTypeEntity>(PageType, input.name);
 
     if (item) {
         return null;
@@ -27,7 +27,7 @@ export async function updatePageType(input: PageTypeEntity) {
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const itemByName = await getByName(PageType, input.name);
+    const itemByName = await getByName<PageTypeEntity>(PageType, input.name);
 
     if (itemByName && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Page Type with name '${input.name}' already exists.`, {

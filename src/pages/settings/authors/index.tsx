@@ -52,7 +52,7 @@ export default function Authors() {
 
     async function deleteHandler(item: AuthorEntity) {
         try {
-            deleteItem(item.id)
+            await deleteItem(item.id)
             refreshData(true);
         } catch (err) {
         }

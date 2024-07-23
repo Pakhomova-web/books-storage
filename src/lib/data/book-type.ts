@@ -1,4 +1,4 @@
-import { BookTypeEntity, IPageable } from '@/lib/data/types';
+import { BookSeriesEntity, BookTypeEntity, IPageable } from '@/lib/data/types';
 import { GraphQLError } from 'graphql/error';
 import BookType from '@/lib/data/models/book-type';
 import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
@@ -10,7 +10,7 @@ export async function getBookTypes(pageSettings?: IPageable, filters?: BookTypeE
 }
 
 export async function createBookType(input: BookTypeEntity) {
-    const item = await getByName(BookSeries, input.name);
+    const item = await getByName<BookSeriesEntity>(BookSeries, input.name);
 
     if (item) {
         return null;
@@ -29,7 +29,7 @@ export async function updateBookType(input: BookTypeEntity) {
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const itemByName = await getByName(BookType, input.name);
+    const itemByName = await getByName<BookTypeEntity>(BookType, input.name);
 
     if (itemByName && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Book Type with name '${input.name}' already exists.`, {

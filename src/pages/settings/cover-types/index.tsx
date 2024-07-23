@@ -55,7 +55,7 @@ export default function CoverTypes() {
 
     async function deleteHandler(item: CoverTypeEntity) {
         try {
-            deleteItem(item.id);
+            await deleteItem(item.id);
             refreshData(true);
         } catch (err) {
         }

@@ -26,7 +26,7 @@ export async function getBooks(pageSettings?: IPageable, filters?: IBookFilter):
         .populate('language')
         .populate('author')
         .sort({ [pageSettings.orderBy || 'name']: pageSettings.order });
-    const totalCount = await Book.count(validFilters);
+    const totalCount = await Book.countDocuments(validFilters);
 
     return { items, totalCount };
 }

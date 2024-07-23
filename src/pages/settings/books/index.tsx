@@ -14,6 +14,7 @@ import { styleVariables } from '@/constants/styles-variables';
 import { downloadCsv } from '@/utils/utils';
 import { BookFilters } from '@/components/filters/book-filters';
 import { BookNumberInStockModal } from '@/components/modals/book-number-in-stock-modal';
+import { router } from 'next/client';
 
 const subTitleStyles = {
     fontSize: styleVariables.hintFontSize,
@@ -164,10 +165,9 @@ export default function Books() {
 
     async function deleteHandler(item: BookEntity) {
         try {
-            deleteItem(item.id);
+            await deleteItem(item.id);
             refreshData();
-        } catch (err) {
-        }
+        } catch (err) {}
     }
 
     function refreshData(updated = true) {

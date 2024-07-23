@@ -20,3 +20,4 @@ generates:
         BookSeries: '../data/types#BookSeriesEntity'
         Book: '../data/types#BookEntity'
         Author: '../data/types#AuthorEntity'
+        User: '../data/types#UserEntity'

@@ -89,3 +89,12 @@ export interface IBookFilter {
     language?: string
     author?: string
 }
+
+export class UserEntity {
+    id?: string;
+    email: string;
+    password?: string;
+    firstName?: string;
+    lastName?: string;
+    role?: string;
+}

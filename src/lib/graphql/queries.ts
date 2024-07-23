@@ -414,3 +414,59 @@ export const updateBookNumberInStockQuery = gql`
         }
     }
 `;
+
+/** auth **/
+
+export const signInQuery = gql`
+    mutation CreateUser($input: UserCreateInput!) {
+        item: createUser(input: $input) {
+            id
+        }
+    }
+`;
+
+export const loginQuery = gql`
+    mutation Login($email: String!, $password: String!) {
+        login(email: $email, password: $password) {
+            token
+            refreshToken
+            user {
+                id
+                email
+                firstName
+                lastName
+                role
+            }
+        }
+    }    
+`;
+
+export const userQuery = gql`
+    mutation User {
+        user {
+            id
+            email
+            firstName
+            lastName
+            role
+        }
+    }
+`;
+
+export const refreshTokenQuery = gql`
+    query RefreshToken($refreshToken: String!) {
+        login: refreshToken(refreshToken: $refreshToken) {
+            token
+            refreshToken
+            user {
+                id
+                email
+                firstName
+                lastName
+                role
+            }
+        }
+    }
+`;
+
+

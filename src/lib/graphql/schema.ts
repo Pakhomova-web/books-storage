@@ -53,6 +53,15 @@ const typeDefs =  /* GraphQL */ `
         author: Author
         format: String
     }
+    
+    type User {
+        id: ID!,
+        email: String!,
+        password: String,
+        firstName: String,
+        lastName: String,
+        role: String
+    }
 
     type Query {
         languages(pageSettings: PageableInput, filters: SearchByNameInput): [Language!]
@@ -65,6 +74,8 @@ const typeDefs =  /* GraphQL */ `
         
         bookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
         bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): [BookType!]
+        
+        refreshToken(refreshToken: String!): UserToken!
     }
 
     type Mutation {
@@ -100,6 +111,16 @@ const typeDefs =  /* GraphQL */ `
         updateAuthor(input: AuthorInput!): Author
         createAuthor(input: AuthorCreateInput!): Author
         deleteAuthor(id: ID!): Author
+
+        createUser(input: UserCreateInput!): User
+        login(email: String!, password: String!): UserToken!
+        user: User
+    }
+    
+    type UserToken {
+        token: String!,
+        refreshToken: String!,
+        user: User!
     }
 
     input PageableInput {
@@ -250,6 +271,13 @@ const typeDefs =  /* GraphQL */ `
     type BookSeriesSubList {
         items: [BookSeries!]!
         totalCount: Int!
+    }
+    
+    input UserCreateInput {
+        email: String!,
+        password: String!,
+        firstName: String,
+        lastName: String
     }
 `;
 

@@ -8,7 +8,7 @@ export async function getAuthors(pageSettings?: IPageable, filters?: AuthorEntit
 }
 
 export async function createAuthor(input: AuthorEntity)  {
-    const item = await getByName(Author, input.name);
+    const item = await getByName<AuthorEntity>(Author, input.name);
 
     if (item) {
         return null;
@@ -27,7 +27,7 @@ export async function updateAuthor(input: AuthorEntity) {
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const itemByName = await getByName(Author, input.name);
+    const itemByName = await getByName<AuthorEntity>(Author, input.name);
 
     if (itemByName && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Author with name '${input.name}' already exists.`, {

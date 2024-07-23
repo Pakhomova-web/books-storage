@@ -1,7 +1,8 @@
 import { ApolloError, DocumentNode, useMutation, useQuery } from '@apollo/client';
 import {
     authorOptionsQuery,
-    authorsQuery, bookSeriesOptionsQuery,
+    authorsQuery,
+    bookSeriesOptionsQuery,
     bookSeriesQuery,
     booksQuery,
     bookTypeOptionsQuery,
@@ -26,30 +27,36 @@ import {
     deletePublishingHouseQuery,
     languageOptionsQuery,
     languagesQuery,
+    loginQuery,
     pageTypeOptionsQuery,
     pageTypesQuery,
     publishingHouseOptionsQuery,
-    publishingHousesQuery,
-    updateAuthorQuery, updateBookNumberInStockQuery,
+    publishingHousesQuery, refreshTokenQuery,
+    signInQuery,
+    updateAuthorQuery,
+    updateBookNumberInStockQuery,
     updateBookQuery,
     updateBookSeriesQuery,
     updateBookTypeQuery,
     updateCoverTypeQuery,
     updateLanguageQuery,
     updatePageTypeQuery,
-    updatePublishingHouseQuery
+    updatePublishingHouseQuery,
+    userQuery
 } from './queries';
 import {
     AuthorEntity,
     BookEntity,
     BookSeriesEntity,
     BookTypeEntity,
-    CoverTypeEntity, IBookFilter,
+    CoverTypeEntity,
+    IBookFilter,
     IBookSeriesFilter,
     IPageable,
     LanguageEntity,
     PageTypeEntity,
-    PublishingHouseEntity
+    PublishingHouseEntity,
+    UserEntity
 } from '@/lib/data/types';
 import { apolloClient } from '@/lib/apollo';
 
@@ -249,6 +256,50 @@ export function useUpdateBookNumberInStock() {
     return _useUpdateItem<BookEntity>(updateBookNumberInStockQuery);
 }
 
+/** sign in **/
+
+export function useSignIn() {
+    const [mutate, { loading, error }] = useMutation(signInQuery);
+
+    return {
+        signIn: async (input: UserEntity) => {
+            const { data: { item } } = await mutate({ variables: { input } });
+
+            return item;
+        },
+        loading,
+        error
+    };
+}
+
+export function useLogin() {
+    const [mutate, { loading, error }] = useMutation(loginQuery);
+
+    return {
+        loginUser: async (email: string, password: string): Promise<{ token: string, user: UserEntity, refreshToken: string }> => {
+            const { data: { login } } = await mutate({ variables: { email, password } });
+
+            return login;
+        },
+        loading,
+        error
+    };
+}
+
+export function useUser() {
+    const [mutate, { loading, error }] = useMutation(userQuery);
+
+    return {
+        fetchUser: async (): Promise<{ token: string, user: UserEntity, refreshToken: string }> => {
+            const { data: { user } } = await mutate();
+
+            return user;
+        },
+        loading,
+        error
+    };
+}
+
 /** common **/
 
 function _useItems<T>(query: DocumentNode, pageSettings?: IPageable, filters?): {
@@ -306,7 +357,10 @@ function _useDeleteItemById(query: DocumentNode): {
 
     return {
         deleteItem: async (id: string) => {
-            const { data: { item } } = await mutate({ variables: { id } });
+            const { data: { item } } = await mutate({
+                fetchPolicy: 'no-cache',
+                variables: { id }
+            });
 
             return item;
         },
@@ -320,7 +374,10 @@ function _useUpdateItem<K>(query: DocumentNode): { updating: boolean, updatingEr
 
     return {
         update: async (input: K) => {
-            const { data: { item } } = await mutate({ variables: { input } });
+            const { data: { item } } = await mutate({
+                fetchPolicy: 'no-cache',
+                variables: { input }
+            });
 
             return item;
         },
@@ -334,7 +391,10 @@ function _useCreateItem<K>(query: DocumentNode): { creating: boolean, creatingEr
 
     return {
         create: async (input: K) => {
-            const { data: { item } } = await mutate({ variables: { input } });
+            const { data: { item } } = await mutate({
+                fetchPolicy: 'no-cache',
+                variables: { input }
+            });
 
             return item;
         },

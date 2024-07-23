@@ -4,7 +4,7 @@ import {
     BookSeriesEntity,
     BookTypeEntity, CoverTypeEntity,
     LanguageEntity, PageTypeEntity,
-    PublishingHouseEntity
+    PublishingHouseEntity, UserEntity
 } from '@/lib/data/types';
 import Book from '@/lib/data/models/book';
 import { GraphQLError } from 'graphql/error';
@@ -17,11 +17,16 @@ type CustomModelType = Model<
     BookTypeEntity |
     PageTypeEntity |
     CoverTypeEntity |
-    BookEntity
+    BookEntity |
+    UserEntity
 >;
 
-export function getByName(model: CustomModelType, name: string) {
-    return model.findOne({ name: new RegExp(`^${name}$`, "i") });
+export async function getByName<T>(model: CustomModelType, name: string): Promise<T> {
+    return model.findOne({ name: new RegExp(`^${name}$`, "i") }) as T;
+}
+
+export async function getByEmail<T>(model: CustomModelType, value: string): Promise<T> {
+    return model.findOne({ email: new RegExp(`^${value}$`, "i") }) as T;
 }
 
 export async function checkUsageInBook(propKey: keyof BookEntity, ids: string[], modelName: string) {

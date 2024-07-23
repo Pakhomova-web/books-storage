@@ -15,7 +15,7 @@ export async function getBookSeries(pageSettings?: IPageable, filters?: IBookSer
         } : null)
         .populate('publishingHouse')
         .sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
-    const totalCount = await BookSeries.count(validFilters, null);
+    const totalCount = await BookSeries.countDocuments(validFilters, null);
 
     return { items, totalCount };
 }
@@ -30,7 +30,7 @@ export async function getBookSeriesById(id: string) {
 }
 
 export async function createBookSeries(input: BookSeriesEntity) {
-    const item = await getByName(BookSeries, input.name);
+    const item = await getByName<BookSeriesEntity>(BookSeries, input.name);
 
     if (item) {
         return null;
@@ -59,7 +59,7 @@ export async function updateBookSeries(input: BookSeriesEntity) {
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const itemByName = await getByName(BookSeries, input.name);
+    const itemByName = await getByName<BookSeriesEntity>(BookSeries, input.name);
 
     if (itemByName && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Book Series with name '${input.name}' already exists.`, {

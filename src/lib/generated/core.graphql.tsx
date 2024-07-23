@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { LanguageEntity, PublishingHouseEntity, PageTypeEntity, BookTypeEntity, CoverTypeEntity, BookSeriesEntity, BookEntity, AuthorEntity } from '../data/types';
+import { LanguageEntity, PublishingHouseEntity, PageTypeEntity, BookTypeEntity, CoverTypeEntity, BookSeriesEntity, BookEntity, AuthorEntity, UserEntity } from '../data/types';
 import { gql } from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -187,6 +187,7 @@ export type Mutation = {
   createLanguage?: Maybe<Language>;
   createPageType?: Maybe<PageType>;
   createPublishingHouse?: Maybe<PublishingHouse>;
+  createUser?: Maybe<User>;
   deleteAuthor?: Maybe<Author>;
   deleteBook?: Maybe<Book>;
   deleteBookSeries?: Maybe<BookSeries>;
@@ -195,6 +196,7 @@ export type Mutation = {
   deleteLanguage?: Maybe<Language>;
   deletePageType?: Maybe<PageType>;
   deletePublishingHouse?: Maybe<PublishingHouse>;
+  login: UserToken;
   updateAuthor?: Maybe<Author>;
   updateBook?: Maybe<Book>;
   updateBookNumberInStock: Book;
@@ -204,6 +206,7 @@ export type Mutation = {
   updateLanguage?: Maybe<Language>;
   updatePageType?: Maybe<PageType>;
   updatePublishingHouse?: Maybe<PublishingHouse>;
+  user?: Maybe<User>;
 };
 
 
@@ -247,6 +250,11 @@ export type MutationCreatePublishingHouseArgs = {
 };
 
 
+export type MutationCreateUserArgs = {
+  input: UserCreateInput;
+};
+
+
 export type MutationDeleteAuthorArgs = {
   id: Scalars['ID']['input'];
 };
@@ -284,6 +292,12 @@ export type MutationDeletePageTypeArgs = {
 
 export type MutationDeletePublishingHouseArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationLoginArgs = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 
@@ -379,6 +393,7 @@ export type Query = {
   languages?: Maybe<Array<Language>>;
   pageTypes?: Maybe<Array<PageType>>;
   publishingHouses?: Maybe<Array<PublishingHouse>>;
+  refreshToken: UserToken;
 };
 
 
@@ -434,8 +449,35 @@ export type QueryPublishingHousesArgs = {
   pageSettings?: InputMaybe<PageableInput>;
 };
 
+
+export type QueryRefreshTokenArgs = {
+  refreshToken: Scalars['String']['input'];
+};
+
 export type SearchByNameInput = {
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type User = {
+  email: Scalars['String']['output'];
+  firstName?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  lastName?: Maybe<Scalars['String']['output']>;
+  password?: Maybe<Scalars['String']['output']>;
+  role?: Maybe<Scalars['String']['output']>;
+};
+
+export type UserCreateInput = {
+  email: Scalars['String']['input'];
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  password: Scalars['String']['input'];
+};
+
+export type UserToken = {
+  refreshToken: Scalars['String']['output'];
+  token: Scalars['String']['output'];
+  user: User;
 };
 
 
@@ -547,6 +589,9 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   SearchByNameInput: SearchByNameInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  User: ResolverTypeWrapper<UserEntity>;
+  UserCreateInput: UserCreateInput;
+  UserToken: ResolverTypeWrapper<Omit<UserToken, 'user'> & { user: ResolversTypes['User'] }>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -589,6 +634,9 @@ export type ResolversParentTypes = {
   Query: {};
   SearchByNameInput: SearchByNameInput;
   String: Scalars['String']['output'];
+  User: UserEntity;
+  UserCreateInput: UserCreateInput;
+  UserToken: Omit<UserToken, 'user'> & { user: ResolversParentTypes['User'] };
 };
 
 export type AuthorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Author'] = ResolversParentTypes['Author']> = {
@@ -662,6 +710,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createLanguage?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<MutationCreateLanguageArgs, 'input'>>;
   createPageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationCreatePageTypeArgs, 'input'>>;
   createPublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationCreatePublishingHouseArgs, 'input'>>;
+  createUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
   deleteAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationDeleteAuthorArgs, 'id'>>;
   deleteBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationDeleteBookArgs, 'id'>>;
   deleteBookSeries?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType, RequireFields<MutationDeleteBookSeriesArgs, 'id'>>;
@@ -670,6 +719,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteLanguage?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<MutationDeleteLanguageArgs, 'id'>>;
   deletePageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationDeletePageTypeArgs, 'id'>>;
   deletePublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationDeletePublishingHouseArgs, 'id'>>;
+  login?: Resolver<ResolversTypes['UserToken'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   updateAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationUpdateAuthorArgs, 'input'>>;
   updateBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationUpdateBookArgs, 'input'>>;
   updateBookNumberInStock?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationUpdateBookNumberInStockArgs, 'input'>>;
@@ -679,6 +729,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateLanguage?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<MutationUpdateLanguageArgs, 'input'>>;
   updatePageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationUpdatePageTypeArgs, 'input'>>;
   updatePublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationUpdatePublishingHouseArgs, 'input'>>;
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };
 
 export type PageTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['PageType'] = ResolversParentTypes['PageType']> = {
@@ -704,6 +755,24 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   languages?: Resolver<Maybe<Array<ResolversTypes['Language']>>, ParentType, ContextType, Partial<QueryLanguagesArgs>>;
   pageTypes?: Resolver<Maybe<Array<ResolversTypes['PageType']>>, ParentType, ContextType, Partial<QueryPageTypesArgs>>;
   publishingHouses?: Resolver<Maybe<Array<ResolversTypes['PublishingHouse']>>, ParentType, ContextType, Partial<QueryPublishingHousesArgs>>;
+  refreshToken?: Resolver<ResolversTypes['UserToken'], ParentType, ContextType, RequireFields<QueryRefreshTokenArgs, 'refreshToken'>>;
+};
+
+export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type UserTokenResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserToken'] = ResolversParentTypes['UserToken']> = {
+  refreshToken?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  token?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
@@ -719,5 +788,7 @@ export type Resolvers<ContextType = any> = {
   PageType?: PageTypeResolvers<ContextType>;
   PublishingHouse?: PublishingHouseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  User?: UserResolvers<ContextType>;
+  UserToken?: UserTokenResolvers<ContextType>;
 };
 
