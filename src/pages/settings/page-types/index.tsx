@@ -12,17 +12,20 @@ import PageTypeModal from '@/components/modals/page-type-modal';
 import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 import { styleVariables } from '@/constants/styles-variables';
+import { isAdmin } from '@/utils/utils';
+import { useAuth } from '@/components/auth-context';
 
 export default function PageTypes() {
+    const { user, checkAuth } = useAuth();
     const [tableActions] = useState<TableKey<PageTypeEntity>>({
         renderMobileLabel: (item: PageTypeEntity) => <Box><b>{item.name}</b></Box>,
         type: 'actions',
-        actions: [
+        actions: isAdmin(user) ? [
             {
                 type: TableActionEnum.delete,
                 onClick: (item: PageTypeEntity) => deleteHandler(item)
             }
-        ]
+        ] : []
     });
     const [tableKeys] = useState<TableKey<PageTypeEntity>[]>([
         {
@@ -56,8 +59,9 @@ export default function PageTypes() {
     async function deleteHandler(item: PageTypeEntity) {
         try {
             await deleteItem(item.id);
-            refreshData(true);
+            refreshData();
         } catch (err) {
+            checkAuth(err);
         }
     }
 
@@ -96,11 +100,12 @@ export default function PageTypes() {
 
             {error && <ErrorNotification error={error}></ErrorNotification>}
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, background: 'white', 'z-index': 2 }}>
+            {isAdmin(user) &&
+              <Box sx={styleVariables.buttonsContainer}>
                 <Button variant="outlined" onClick={() => onAdd()}>
-                    <AddIcon></AddIcon>Add Page Type
+                  <AddIcon></AddIcon>Add Page Type
                 </Button>
-            </Box>
+              </Box>}
 
             {(openNewModal || selectedItem) &&
               <PageTypeModal open={true}

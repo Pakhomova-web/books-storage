@@ -70,7 +70,13 @@ export async function login(email: string, password: string): Promise<{ user: Us
 }
 
 export async function getNewToken(refreshToken: string) {
-    verify(refreshToken, SECRET_JWT_KEY);
+    try {
+        verify(refreshToken, SECRET_JWT_KEY);
+    } catch (_) {
+        throw new GraphQLError(`Token is invalid.`, {
+            extensions: { code: 'UNAUTHORIZED' }
+        });
+    }
     const userId = getUserIdFromToken(refreshToken);
     const user = await getUserById(userId);
 

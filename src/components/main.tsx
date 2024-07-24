@@ -8,6 +8,7 @@ import CustomToolbar from '@/components/custom-toolbar';
 import { useUser } from '@/lib/graphql/hooks';
 import Loading from '@/components/loading';
 import { useAuth } from '@/components/auth-context';
+import { UserEntity } from '@/lib/data/types';
 
 interface SettingListItem {
     link: string,
@@ -58,11 +59,11 @@ export default function Main({ children }) {
     useEffect(() => {
         setLoading(true);
         fetchUser()
-            .then(({ user }) => {
+            .then((user: UserEntity) => {
                 setUser(user);
                 setLoading(false);
             })
-            .catch(err => {
+            .catch(() => {
                 setLoading(false);
                 setIsSettings(false);
                 setShowSettingsMenu(false);
@@ -77,6 +78,9 @@ export default function Main({ children }) {
         if (pathname.includes('settings')) {
             setIsSettings(true);
             setActiveSettingsTab(settingsList.find(i => i.link === pathname.split('/settings/')[1]));
+        } else {
+            setIsSettings(false);
+            setActiveSettingsTab(null);
         }
     }, [pathname]);
 

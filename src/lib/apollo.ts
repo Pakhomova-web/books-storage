@@ -21,20 +21,25 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
             for (const err of graphQLErrors) {
                 switch (err?.extensions?.code) {
                     case 'UNAUTHORIZED': {
-                        return new Observable<FetchResult<Record<string, any>>>(
+                        return new Observable<FetchResult>(
                             (observer) => {
                                 (async () => {
                                     try {
+                                        if (operation.operationName === 'RefreshToken') {
+                                            throw err;
+                                        }
                                         const currentRefreshToken = getRefreshToken();
+
                                         if (!currentRefreshToken) {
                                             throw err;
                                         }
+
                                         const { data: { login } } = await apolloClient.query({
                                             query: refreshTokenQuery,
                                             variables: { refreshToken: currentRefreshToken }
                                         });
 
-                                        if (!login.refreshToken) {
+                                        if (!login || !login.refreshToken) {
                                             throw err;
                                         }
                                         saveTokenToLocalStorage(login.token, login.refreshToken);
@@ -54,8 +59,8 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
                                             }
                                         });
                                         forward(operation).subscribe(subscriber);
-                                    } catch (err) {
-                                        observer.error(err);
+                                    } catch (e) {
+                                        observer.error(e);
                                     }
                                 })();
                             }

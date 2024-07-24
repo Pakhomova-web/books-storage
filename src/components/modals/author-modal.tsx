@@ -4,15 +4,17 @@ import { useCreateAuthor, useUpdateAuthor } from '@/lib/graphql/hooks';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/modals/custom-text-field';
 import ErrorNotification from '@/components/error-notification';
+import { useAuth } from '@/components/auth-context';
 
 interface IAuthorModalProps {
     open: boolean,
     item?: AuthorEntity,
     isSubmitDisabled?: boolean,
+    isAdmin?: boolean,
     onClose: (updated?: boolean) => void
 }
 
-export default function AuthorModal({ open, item, onClose }: IAuthorModalProps) {
+export default function AuthorModal({ open, item, onClose, isAdmin }: IAuthorModalProps) {
     const formContext = useForm<AuthorEntity>({
         defaultValues: {
             name: item?.name,
@@ -21,6 +23,7 @@ export default function AuthorModal({ open, item, onClose }: IAuthorModalProps) 
     });
     const { update, updating, updatingError } = useUpdateAuthor();
     const { create, creating, creatingError } = useCreateAuthor();
+    const { checkAuth } = useAuth();
 
     async function onSubmit() {
         try {
@@ -31,17 +34,19 @@ export default function AuthorModal({ open, item, onClose }: IAuthorModalProps) 
             }
 
             onClose(true);
-        } catch (err) {}
+        } catch (err) {
+            checkAuth(err);
+        }
     }
 
     return (
-        <CustomModal title={!item ? 'Add author' : 'Edit author'}
+        <CustomModal title={(!item ? 'Add' : (!isAdmin ? 'View' : 'Edit')) + ' Author'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
-                     onSubmit={onSubmit}>
+                     onSubmit={isAdmin ? onSubmit : null}>
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
                 <CustomTextField fullWidth
                                  required

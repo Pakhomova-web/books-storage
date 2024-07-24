@@ -11,17 +11,21 @@ import Loading from '@/components/loading';
 import AuthorModal from '@/components/modals/author-modal';
 import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
+import { useAuth } from '@/components/auth-context';
+import { isAdmin } from '@/utils/utils';
+import { styleVariables } from '@/constants/styles-variables';
 
 export default function Authors() {
+    const { user, checkAuth } = useAuth();
     const [tableActions] = useState<TableKey<AuthorEntity>>({
         renderMobileLabel: (item: AuthorEntity) => <Box><b>{item.name}</b></Box>,
         type: 'actions',
-        actions: [
+        actions: isAdmin(user) ? [
             {
                 type: TableActionEnum.delete,
                 onClick: (item: AuthorEntity) => deleteHandler(item)
             }
-        ]
+        ] : []
     });
     const [mobileKeys] = useState<TableKey<AuthorEntity>[]>([
         { title: 'Description', renderValue: (item: AuthorEntity) => item.description, type: 'text' }
@@ -52,9 +56,10 @@ export default function Authors() {
 
     async function deleteHandler(item: AuthorEntity) {
         try {
-            await deleteItem(item.id)
-            refreshData(true);
+            await deleteItem(item.id);
+            refreshData();
         } catch (err) {
+            checkAuth(err);
         }
     }
 
@@ -93,11 +98,12 @@ export default function Authors() {
 
             {error && <ErrorNotification error={error}></ErrorNotification>}
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, background: 'white', 'z-index': 2 }}>
+            {isAdmin(user) &&
+              <Box sx={styleVariables.buttonsContainer}>
                 <Button variant="outlined" onClick={() => onAdd()}>
-                    <AddIcon></AddIcon>Add author
+                  <AddIcon></AddIcon>Add author
                 </Button>
-            </Box>
+              </Box>}
 
             {(openNewModal || selectedItem) &&
               <AuthorModal open={true}

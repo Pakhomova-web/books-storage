@@ -1,4 +1,6 @@
 import { TableKey } from '@/components/table/table-key';
+import { UserEntity } from '@/lib/data/types';
+import { ROLES } from '@/constants/roles';
 
 export function downloadCsv<K>(items: K[], tableKeys: TableKey<K>[], filename = 'data') {
     const blob = new Blob(
@@ -64,4 +66,8 @@ function decrypt(val: string): string {
         return null;
     }
     return atob(val);
+}
+
+export function isAdmin(user?: UserEntity): boolean {
+    return user && user.role === ROLES.admin;
 }

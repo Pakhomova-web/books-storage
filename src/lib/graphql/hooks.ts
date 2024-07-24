@@ -31,7 +31,7 @@ import {
     pageTypeOptionsQuery,
     pageTypesQuery,
     publishingHouseOptionsQuery,
-    publishingHousesQuery, refreshTokenQuery,
+    publishingHousesQuery,
     signInQuery,
     updateAuthorQuery,
     updateBookNumberInStockQuery,
@@ -290,7 +290,7 @@ export function useUser() {
     const [mutate, { loading, error }] = useMutation(userQuery);
 
     return {
-        fetchUser: async (): Promise<{ token: string, user: UserEntity, refreshToken: string }> => {
+        fetchUser: async (): Promise<UserEntity> => {
             const { data: { user } } = await mutate();
 
             return user;

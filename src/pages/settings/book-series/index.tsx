@@ -12,17 +12,20 @@ import BookSeriesModal from '@/components/modals/book-series-modal';
 import ErrorNotification from '@/components/error-notification';
 import { BookSeriesFilters } from '@/components/filters/book-series-filters';
 import { styleVariables } from '@/constants/styles-variables';
+import { isAdmin } from '@/utils/utils';
+import { useAuth } from '@/components/auth-context';
 
 export default function BookSeries() {
+    const { user, checkAuth } = useAuth();
     const [tableActions] = useState<TableKey<BookSeriesEntity>>({
         renderMobileLabel: (item: BookSeriesEntity) => <Box><b>{item.name}</b></Box>,
         type: 'actions',
-        actions: [
+        actions: isAdmin(user) ? [
             {
                 type: TableActionEnum.delete,
                 onClick: (item: BookSeriesEntity) => deleteHandler(item)
             }
-        ]
+        ] : []
     });
     const [mobileKeys] = useState<TableKey<BookSeriesEntity>[]>([
         {
@@ -64,8 +67,9 @@ export default function BookSeries() {
     async function deleteHandler(item: BookSeriesEntity) {
         try {
             await deleteItem(item.id);
-            refreshData(true);
+            refreshData();
         } catch (err) {
+            checkAuth(err);
         }
     }
 
@@ -106,11 +110,12 @@ export default function BookSeries() {
 
             {error && <ErrorNotification error={error}></ErrorNotification>}
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, background: 'white', 'z-index': 2 }}>
+            {isAdmin(user) &&
+              <Box sx={styleVariables.buttonsContainer}>
                 <Button variant="outlined" onClick={() => onAdd()}>
-                    <AddIcon></AddIcon>Add series
+                  <AddIcon></AddIcon>Add series
                 </Button>
-            </Box>
+              </Box>}
 
             {(openNewModal || selectedItem) &&
               <BookSeriesModal open={true}

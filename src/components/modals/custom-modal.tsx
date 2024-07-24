@@ -42,6 +42,7 @@ interface ICustomModalProps {
     disableBackdropClick?: boolean,
     isSubmitDisabled?: boolean,
     onClose: () => void,
+    hideSubmit?: boolean,
     onSubmit?: () => void
 }
 

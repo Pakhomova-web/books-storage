@@ -4,6 +4,7 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useUpdateBookNumberInStock } from '@/lib/graphql/hooks';
 import { BookEntity } from '@/lib/data/types';
 import ErrorNotification from '@/components/error-notification';
+import { useAuth } from '@/components/auth-context';
 
 interface IForm {
     name: string,
@@ -23,12 +24,15 @@ export function BookNumberInStockModal({ item, open, onClose }: IProps) {
         }
     });
     const { updating, update, updatingError } = useUpdateBookNumberInStock();
+    const { checkAuth } = useAuth();
 
     async function onSubmit() {
         try {
             await update({ id: item.id, numberInStock: item.numberInStock + formContext.getValues().receivedNumber });
             onClose(true);
-        } catch (err) {}
+        }  catch (err) {
+            checkAuth(err);
+        }
     }
 
     return (

@@ -4,18 +4,21 @@ import { useCreateLanguage, useUpdateLanguage } from '@/lib/graphql/hooks';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/modals/custom-text-field';
 import ErrorNotification from '@/components/error-notification';
+import { useAuth } from '@/components/auth-context';
 
 interface ILanguageModalProps {
     open: boolean,
     item?: LanguageEntity,
     isSubmitDisabled?: boolean,
+    isAdmin?: boolean,
     onClose: (updated?: boolean) => void
 }
 
-export default function LanguageModal({ open, item, onClose }: ILanguageModalProps) {
+export default function LanguageModal({ open, item, onClose, isAdmin }: ILanguageModalProps) {
     const formContext = useForm<{ name: string }>({ defaultValues: { name: item?.name } });
     const { update, updating, updatingError } = useUpdateLanguage();
     const { create, creating, creatingError } = useCreateLanguage();
+    const { checkAuth } = useAuth();
 
     async function onSubmit() {
         try {
@@ -26,17 +29,19 @@ export default function LanguageModal({ open, item, onClose }: ILanguageModalPro
             }
 
             onClose(true);
-        } catch (err) {}
+        } catch (err) {
+            checkAuth(err);
+        }
     }
 
     return (
-        <CustomModal title={!item ? 'Add language' : 'Edit language'}
+        <CustomModal title={(!item ? 'Add' : (!isAdmin ? 'View' : 'Edit')) + ' Language'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
-                     onSubmit={onSubmit}>
+                     onSubmit={isAdmin ? onSubmit : null}>
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
                 <CustomTextField fullWidth
                                  required

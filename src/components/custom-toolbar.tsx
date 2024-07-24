@@ -44,28 +44,37 @@ export default function CustomToolbar({
                     isSettings && (
                         !showSettingsMenu && !attachedSettingsMenu ?
                             <IconButton color="inherit"
+                                        size="large"
                                         onClick={() => handleSettingsMenu(false)}><MenuIcon/></IconButton> :
                             <IconButton color="inherit"
+                                        size="large"
                                         onClick={() => handleSettingsMenu()}><CloseIcon/></IconButton>)
                 }</Box>
 
                 {activeSettingsTab && <Box>{activeSettingsTab.title}</Box>}
 
                 <Box>
-                    <IconButton onClick={() => goToMainPage()} color="inherit"
+                    <IconButton onClick={() => goToMainPage()}
+                                size="large"
+                                color="inherit"
                                 sx={{ mr: 2 }}><HomeIcon/></IconButton>
 
-                    {user?.role === ROLES.admin && <IconButton size="large"
-                                                               edge="start"
-                                                               color="inherit"
-                                                               aria-label="settings"
-                                                               onClick={() => router.push('/settings/books')}>
-                      <SettingsIcon/>
-                    </IconButton>}
+                    {user?.role === ROLES.admin &&
+                      <IconButton size="large"
+                                  color="inherit"
+                                  sx={{ mr: 2 }}
+                                  aria-label="settings"
+                                  onClick={() => router.push('/settings/books')}>
+                        <SettingsIcon/>
+                      </IconButton>}
 
                     {!!user ?
-                        <IconButton color="inherit" onClick={() => onLogoutClick()}><LogoutIcon/></IconButton> :
-                        <IconButton color="inherit" onClick={() => onLoginClick()}><LoginIcon/></IconButton>}
+                        <IconButton size="large" color="inherit" onClick={() => onLogoutClick()}>
+                            <LogoutIcon/>
+                        </IconButton> :
+                        <IconButton size="large" color="inherit" onClick={() => onLoginClick()}>
+                            <LoginIcon/>
+                        </IconButton>}
                 </Box>
             </Toolbar>
         </AppBar>

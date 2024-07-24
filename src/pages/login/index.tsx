@@ -22,7 +22,7 @@ export default function Login() {
     const router = useRouter();
     const formContext = useForm<{ email: string, password: string }>();
     const { loading, error, loginUser } = useLogin();
-    const { user, login, logout } = useAuth();
+    const { login } = useAuth();
     const { email } = formContext.watch();
 
     useEffect(() => {
@@ -48,7 +48,7 @@ export default function Login() {
 
                 login(user, token, refreshToken);
                 router.push('/');
-            } catch (err) {}
+            } catch (_) {}
         }
     }
 

@@ -1,9 +1,9 @@
-import { useAuth } from '@/components/auth-context';
+import Books from '@/pages/settings/books';
 
 export default function Home() {
-    const { user } = useAuth();
-
     return (
-        <div>Something will be here: {user?.email}</div>
+        <>
+            <Books></Books>
+        </>
     );
 }

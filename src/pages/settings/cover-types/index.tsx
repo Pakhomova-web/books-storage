@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useCoverTypes, useDeleteCoverType } from '@/lib/graphql/hooks';
-import { CoverTypeEntity, IPageable, LanguageEntity } from '@/lib/data/types';
+import { CoverTypeEntity, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
@@ -12,17 +12,20 @@ import CoverTypeModal from '@/components/modals/cover-type-modal';
 import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 import { styleVariables } from '@/constants/styles-variables';
+import { isAdmin } from '@/utils/utils';
+import { useAuth } from '@/components/auth-context';
 
 export default function CoverTypes() {
+    const { user, checkAuth } = useAuth();
     const [tableActions] = useState<TableKey<CoverTypeEntity>>({
         renderMobileLabel: (item: CoverTypeEntity) => <Box><b>{item.name}</b></Box>,
         type: 'actions',
-        actions: [
+        actions: isAdmin(user) ? [
             {
                 type: TableActionEnum.delete,
                 onClick: (item: CoverTypeEntity) => deleteHandler(item)
             }
-        ]
+        ] : []
     });
     const [tableKeys] = useState<TableKey<CoverTypeEntity>[]>([
         {
@@ -56,8 +59,9 @@ export default function CoverTypes() {
     async function deleteHandler(item: CoverTypeEntity) {
         try {
             await deleteItem(item.id);
-            refreshData(true);
+            refreshData();
         } catch (err) {
+            checkAuth(err);
         }
     }
 
@@ -96,11 +100,12 @@ export default function CoverTypes() {
 
             {error && <ErrorNotification error={error}></ErrorNotification>}
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, background: 'white', 'z-index': 2 }}>
+            {isAdmin(user) &&
+              <Box sx={styleVariables.buttonsContainer}>
                 <Button variant="outlined" onClick={() => onAdd()}>
-                    <AddIcon></AddIcon>Add Cover Type
+                  <AddIcon></AddIcon>Add Cover Type
                 </Button>
-            </Box>
+              </Box>}
 
             {(openNewModal || selectedItem) &&
               <CoverTypeModal open={true}

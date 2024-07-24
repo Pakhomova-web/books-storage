@@ -32,7 +32,7 @@ export function renderActions<T>(actions: ITableAction[], item: T, anchorMenuEl:
     }
     const onCloseMenu = () => onAnchorMenuElChange(null);
 
-    return actions && actions?.length === 1 ?
+    return actions && (!actions.length || actions.length === 1) ?
         actions.map((icon, index) => getActionItem<T>(item, icon, index)) :
         <Box>
             <IconButton aria-haspopup="true" onClick={onMenuClick}>

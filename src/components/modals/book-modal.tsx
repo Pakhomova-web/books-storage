@@ -15,11 +15,13 @@ import CustomTextField from '@/components/modals/custom-text-field';
 import CustomSelectField from '@/components/modals/custom-select-field';
 import { useEffect, useState } from 'react';
 import ErrorNotification from '@/components/error-notification';
+import { useAuth } from '@/components/auth-context';
 
 interface IBookModalProps {
     open: boolean,
     item?: BookEntity,
     isSubmitDisabled?: boolean,
+    isAdmin?: boolean,
     onClose: (updated?: boolean) => void
 }
 
@@ -40,7 +42,7 @@ interface IForm {
     publishingHouseId?: string
 }
 
-export default function BookModal({ open, item, onClose }: IBookModalProps) {
+export default function BookModal({ open, item, onClose, isAdmin }: IBookModalProps) {
     const formContext = useForm<IForm>({
         defaultValues: {
             name: item?.name,
@@ -66,6 +68,7 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
     const { items: bookTypeOptions, loading: loadingBookTypes } = useBookTypeOptions<IOption>();
     const { items: publishingHouseOptions, loading: loadingPublishingHouses } = usePublishingHouseOptions<IOption>();
     const { items: coverTypeOptions, loading: loadingCoverTypes } = useCoverTypeOptions<IOption>();
+    const { checkAuth } = useAuth();
 
     useEffect(() => {
         if (publishingHouseId) {
@@ -98,21 +101,23 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
                 await create(data);
             }
             onClose(true);
-        } catch {
+        } catch (err) {
+            checkAuth(err);
         }
     }
 
     return (
-        <CustomModal title={(!item || !item.id? 'Add' : 'Edit') + ' Book'}
+        <CustomModal title={(!item || !item.id? 'Add' : (!isAdmin ? 'View' : 'Edit')) + ' Book'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
                      loading={updating || creating || loadingLanguages || loadingAuthors || loadingPageTypes || loadingCoverTypes || loadingBookTypes || loadingPublishingHouses}
                      isSubmitDisabled={!formContext.formState.isValid}
-                     onSubmit={onSubmit}>
+                     onSubmit={isAdmin ? onSubmit : null}>
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
                 <CustomTextField fullWidth
                                  required
+                                 disabled={!isAdmin}
                                  autoFocus
                                  id="book-name"
                                  label="Name"
@@ -120,6 +125,7 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
 
                 <CustomSelectField fullWidth
                                    required
+                                   disabled={!isAdmin}
                                    options={bookTypeOptions}
                                    id="book-type-id"
                                    label="Book Type"
@@ -127,6 +133,7 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
 
                 <CustomSelectField fullWidth
                                    required
+                                   disabled={!isAdmin}
                                    options={publishingHouseOptions}
                                    id="publishing-house-id"
                                    label="Publishing House"
@@ -134,7 +141,7 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
 
                 <CustomSelectField fullWidth
                                    required
-                                   disabled={!publishingHouseId}
+                                   disabled={!isAdmin || !publishingHouseId}
                                    options={bookSeriesOptions}
                                    id="book-series-id"
                                    label="Book Series"
@@ -142,6 +149,7 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
 
                 <CustomSelectField fullWidth
                                    required
+                                   disabled={!isAdmin}
                                    options={languageOptions}
                                    id="language-id"
                                    label="Language"
@@ -149,6 +157,7 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
 
                 <CustomSelectField fullWidth
                                    required
+                                   disabled={!isAdmin}
                                    options={pageTypeOptions}
                                    id="page-type-id"
                                    label="Page Type"
@@ -156,28 +165,33 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
 
                 <CustomSelectField fullWidth
                                    required
+                                   disabled={!isAdmin}
                                    options={coverTypeOptions}
                                    id="cover-type-id"
                                    label="Cover Type"
                                    name="coverTypeId"/>
 
                 <CustomTextField fullWidth
+                                 disabled={!isAdmin}
                                  id="description"
                                  label="Description"
                                  name="description"/>
 
                 <CustomTextField fullWidth
+                                 disabled={!isAdmin}
                                  id="isbn"
                                  label="ISBN"
                                  name="isbn"/>
 
                 <CustomTextField fullWidth
+                                 disabled={!isAdmin}
                                  id="format"
                                  label="Format"
                                  name="format"/>
 
                 <CustomTextField fullWidth
                                  required
+                                 disabled={!isAdmin}
                                  id="numberOfPages"
                                  type="number"
                                  label="Number of Pages"
@@ -185,18 +199,21 @@ export default function BookModal({ open, item, onClose }: IBookModalProps) {
 
                 <CustomSelectField fullWidth
                                    options={authorOptions}
+                                   disabled={!isAdmin}
                                    id="author"
                                    label="Author"
                                    name="authorId"/>
 
                 <CustomTextField fullWidth
                                  id="numberInStock"
+                                 disabled={!isAdmin}
                                  type="number"
                                  label="Number in Stock"
                                  name="numberInStock"/>
 
                 <CustomTextField fullWidth
                                  required
+                                 disabled={!isAdmin}
                                  type="number"
                                  id="price"
                                  label="Price"

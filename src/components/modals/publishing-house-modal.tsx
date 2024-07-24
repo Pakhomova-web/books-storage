@@ -5,15 +5,17 @@ import { useCreatePublishingHouse, useUpdatePublishingHouse } from '@/lib/graphq
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/modals/custom-text-field';
 import ErrorNotification from '@/components/error-notification';
+import { useAuth } from '@/components/auth-context';
 
 interface IPublishingHouseModalProps {
     open: boolean,
     item?: PublishingHouseEntity,
     isSubmitDisabled?: boolean,
+    isAdmin?: boolean,
     onClose: (updated?: boolean) => void
 }
 
-export default function PublishingHouseModal({ open, item, onClose }: IPublishingHouseModalProps) {
+export default function PublishingHouseModal({ open, item, onClose, isAdmin }: IPublishingHouseModalProps) {
     const formContext = useForm<PublishingHouseEntity>({
         defaultValues: {
             id: item?.id,
@@ -23,6 +25,7 @@ export default function PublishingHouseModal({ open, item, onClose }: IPublishin
     });
     const { update, updating, updatingError } = useUpdatePublishingHouse();
     const { create, creating, creatingError } = useCreatePublishingHouse();
+    const { checkAuth } = useAuth();
 
     async function onSubmit() {
         try {
@@ -34,17 +37,18 @@ export default function PublishingHouseModal({ open, item, onClose }: IPublishin
 
             onClose(true);
         } catch (err) {
+            checkAuth(err);
         }
     }
 
     return (
-        <CustomModal title={!item ? 'Add Publishing House' : 'Edit Publishing House'}
+        <CustomModal title={(!item ? 'Add' : (!isAdmin ? 'View' : 'Edit')) + ' Publishing House'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
-                     onSubmit={onSubmit}>
+                     onSubmit={isAdmin ? onSubmit : null}>
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
                 <CustomTextField fullWidth
                                  required

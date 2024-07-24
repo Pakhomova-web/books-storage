@@ -11,8 +11,11 @@ import { useDeletePublishingHouse, usePublishingHouses } from '@/lib/graphql/hoo
 import PublishingHouseModal from '@/components/modals/publishing-house-modal';
 import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
+import { isAdmin } from '@/utils/utils';
+import { useAuth } from '@/components/auth-context';
 
 export default function PublishingHouses() {
+    const { user, checkAuth } = useAuth();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
     const [filters, setFilters] = useState<PublishingHouseEntity>();
     const { items, loading, gettingError, refetch } = usePublishingHouses(pageSettings, filters);
@@ -21,12 +24,12 @@ export default function PublishingHouses() {
     const [tableActions] = useState<TableKey<PublishingHouseEntity>>({
         renderMobileLabel: (item: PublishingHouseEntity) => <Box><b>{item.name}</b></Box>,
         type: 'actions',
-        actions: [
+        actions: isAdmin(user) ? [
             {
                 type: TableActionEnum.delete,
                 onClick: (item: PublishingHouseEntity) => deleteHandler(item)
             }
-        ]
+        ] : []
     });
     const [mobileKeys] = useState<TableKey<PublishingHouseEntity>[]>([
         { type: 'text', title: 'Tags', sortValue: 'tags', renderValue: (item: PublishingHouseEntity) => item.tags }
@@ -53,8 +56,9 @@ export default function PublishingHouses() {
     async function deleteHandler(item: PublishingHouseEntity) {
         try {
             await deleteItem(item.id);
-            refreshData(true);
+            refreshData();
         } catch (err) {
+            checkAuth(err);
         }
     }
 
@@ -93,11 +97,12 @@ export default function PublishingHouses() {
 
             {error && <ErrorNotification error={error}></ErrorNotification>}
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
+            {isAdmin(user) &&
+              <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
                 <Button variant="outlined" onClick={() => onAdd()}>
-                    <AddIcon></AddIcon>Add Publishing House
+                  <AddIcon></AddIcon>Add Publishing House
                 </Button>
-            </Box>
+              </Box>}
 
             {(selectedItem || openNewModal) &&
               <PublishingHouseModal open={true}

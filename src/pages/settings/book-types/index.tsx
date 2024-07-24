@@ -12,23 +12,27 @@ import BookTypeModal from '@/components/modals/book-type-modal';
 import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 import { styleVariables } from '@/constants/styles-variables';
+import { isAdmin } from '@/utils/utils';
+import { useAuth } from '@/components/auth-context';
 
 export default function BookTypes() {
+    const { user, checkAuth } = useAuth();
     const [tableActions] = useState<TableKey<BookTypeEntity>>({
         renderMobileLabel: (item: BookTypeEntity) => <Box><b>{item.name}</b></Box>,
         type: 'actions',
-        actions: [
+        actions: isAdmin(user) ? [
             {
                 type: TableActionEnum.delete,
                 onClick: async (item: BookTypeEntity) => {
                     try {
                         await deleteItem(item.id);
-                        refreshData(true);
+                        refreshData();
                     } catch (err) {
+                        checkAuth(err);
                     }
                 }
             }
-        ]
+        ] : []
     });
     const [tableKeys] = useState<TableKey<BookTypeEntity>[]>([
         {
@@ -94,11 +98,12 @@ export default function BookTypes() {
 
             {error && <ErrorNotification error={error}></ErrorNotification>}
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, background: 'white', 'z-index': 2 }}>
+            {isAdmin(user) &&
+              <Box sx={styleVariables.buttonsContainer}>
                 <Button variant="outlined" onClick={() => onAdd()}>
-                    <AddIcon></AddIcon>Add Book Type
+                  <AddIcon></AddIcon>Add Book Type
                 </Button>
-            </Box>
+              </Box>}
 
             {(openNewModal || selectedItem) &&
               <BookTypeModal open={true}

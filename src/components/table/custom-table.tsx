@@ -135,7 +135,7 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
                             </TableCell>
                             : <TableCell key={index}>{key.title}</TableCell>
                         )}
-                        {props.actions && <TableCell></TableCell>}
+                        {!!props.actions?.actions.length && <TableCell></TableCell>}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -144,7 +144,8 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
                                         onClick={() => props.onRowClick ? onRowClick(item) : null}>
                             {props.keys.map((key: TableKey<T>, index) =>
                                 renderTableCell<T>(key, item, index, props.rowStyleClass))}
-                            {props.actions && renderTableActions(props.actions, item, anchorMenuEl, (val: HTMLElement) => setAnchorMenuEl(val), props.rowStyleClass)}
+                            {!!props.actions?.actions.length &&
+                                renderTableActions(props.actions, item, anchorMenuEl, (val: HTMLElement) => setAnchorMenuEl(val), props.rowStyleClass)}
                         </CustomTableRow>
                     ))}
                 </TableBody>

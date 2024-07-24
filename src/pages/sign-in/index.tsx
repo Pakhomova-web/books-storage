@@ -66,8 +66,7 @@ export default function SignIn() {
                     lastName: values.lastName
                 });
                 goToLoginPage();
-            } catch (err) {
-            }
+            } catch (_) {}
         }
     }
 

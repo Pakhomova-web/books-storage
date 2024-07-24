@@ -36,7 +36,14 @@ export const styleVariables = {
         fontWeight: 'bold'
     },
     textCenter: { textAlign: 'center' },
-    cursorPointer: { cursor: 'pointer' }
+    cursorPointer: { cursor: 'pointer' },
+    buttonsContainer: {
+        display: 'flex',
+        justifyContent:'center',
+        py: 2,
+        background: 'white',
+        'z-index': 2
+    }
 };
 
 

@@ -145,9 +145,7 @@ const resolvers: Resolvers = {
     },
     Mutation: {
         updateLanguage: async (_root, { input }: { input: LanguageEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return updateLanguage(input);
             } catch (error) {
@@ -155,9 +153,7 @@ const resolvers: Resolvers = {
             }
         },
         deleteLanguage: async (_root, { id }: { id: string }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return deleteLanguage(id);
             } catch (error) {
@@ -165,9 +161,7 @@ const resolvers: Resolvers = {
             }
         },
         createLanguage: async (_root, { input }: { input: LanguageEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return createLanguage(input);
             } catch (error) {
@@ -176,9 +170,7 @@ const resolvers: Resolvers = {
         },
         // publishing house
         updatePublishingHouse: async (_root, { input }: { input: PublishingHouseEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return updatePublishingHouse(input);
             } catch (error) {
@@ -186,9 +178,7 @@ const resolvers: Resolvers = {
             }
         },
         createPublishingHouse: async (_root, { input }: { input: PublishingHouseEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return createPublishingHouse(input);
             } catch (error) {
@@ -196,9 +186,7 @@ const resolvers: Resolvers = {
             }
         },
         deletePublishingHouse: async (_root, { id }: { id: string }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return deletePublishingHouse(id);
             } catch (error) {
@@ -207,9 +195,7 @@ const resolvers: Resolvers = {
         },
         // page type
         updatePageType: async (_root, { input }: { input: PageTypeEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return updatePageType(input);
             } catch (error) {
@@ -217,9 +203,7 @@ const resolvers: Resolvers = {
             }
         },
         createPageType: async (_root, { input }: { input: PageTypeEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return createPageType(input);
             } catch (error) {
@@ -227,9 +211,7 @@ const resolvers: Resolvers = {
             }
         },
         deletePageType: async (_root, { id }: { id: string }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return deletePageType(id);
             } catch (error) {
@@ -238,9 +220,7 @@ const resolvers: Resolvers = {
         },
         // book type
         updateBookType: async (_root, { input }: { input: BookTypeEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return updateBookType(input);
             } catch (error) {
@@ -248,9 +228,7 @@ const resolvers: Resolvers = {
             }
         },
         createBookType: async (_root, { input }: { input: BookTypeEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return createBookType(input);
             } catch (error) {
@@ -258,9 +236,7 @@ const resolvers: Resolvers = {
             }
         },
         deleteBookType: async (_root, { id }: { id: string }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return deleteBookType(id);
             } catch (error) {
@@ -269,9 +245,7 @@ const resolvers: Resolvers = {
         },
         // cover type
         updateCoverType: (_root, { input }: { input: CoverTypeEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return updateCoverType(input);
             } catch (error) {
@@ -279,9 +253,7 @@ const resolvers: Resolvers = {
             }
         },
         createCoverType: async (_root, { input }: { input: CoverTypeEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return createCoverType(input);
             } catch (error) {
@@ -289,9 +261,7 @@ const resolvers: Resolvers = {
             }
         },
         deleteCoverType: async (_root, { id }: { id: string }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return deleteCoverType(id);
             } catch (error) {
@@ -300,9 +270,7 @@ const resolvers: Resolvers = {
         },
         // book series
         updateBookSeries: async (_root, { input }: { input: BookSeriesEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return updateBookSeries(input);
             } catch (error) {
@@ -310,9 +278,7 @@ const resolvers: Resolvers = {
             }
         },
         createBookSeries: async (_root, { input }: { input: BookSeriesEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return createBookSeries(input);
             } catch (error) {
@@ -320,9 +286,7 @@ const resolvers: Resolvers = {
             }
         },
         deleteBookSeries: async (_root, { id }: { id: string }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return deleteBookSeries(id);
             } catch (error) {
@@ -331,9 +295,7 @@ const resolvers: Resolvers = {
         },
         // author
         updateAuthor: async (_root, { input }: { input: AuthorEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return updateAuthor(input);
             } catch (error) {
@@ -341,9 +303,7 @@ const resolvers: Resolvers = {
             }
         },
         createAuthor: async (_root, { input }: { input: AuthorEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return createAuthor(input);
             } catch (error) {
@@ -351,9 +311,7 @@ const resolvers: Resolvers = {
             }
         },
         deleteAuthor: async (_root, { id }: { id: string }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return deleteAuthor(id);
             } catch (error) {
@@ -362,9 +320,7 @@ const resolvers: Resolvers = {
         },
         // book
         createBook: async (_root, { input }: { input: BookEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return createBook(input);
             } catch (error) {
@@ -372,19 +328,17 @@ const resolvers: Resolvers = {
             }
         },
         updateBook: async (_root, { input }: { input: BookEntity }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return updateBook(input);
             } catch (error) {
                 parseError(error);
             }
         },
-        updateBookNumberInStock: async (_root, { input }: { input: { id: string, numberInStock: number } }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+        updateBookNumberInStock: async (_root, { input }: {
+            input: { id: string, numberInStock: number }
+        }, { user }) => {
+            _checkUser(user);
             try {
                 return updateBookNumberInStock(input);
             } catch (error) {
@@ -392,9 +346,7 @@ const resolvers: Resolvers = {
             }
         },
         deleteBook: async (_root, { id }: { id: string }, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return deleteBook(id);
             } catch (error) {
@@ -417,9 +369,7 @@ const resolvers: Resolvers = {
             }
         },
         user: async (_root, {}, { user }) => {
-            if (!user) {
-                throw unauthorizedError('Missing authentication!');
-            }
+            _checkUser(user);
             try {
                 return user;
             } catch (error) {
@@ -428,6 +378,12 @@ const resolvers: Resolvers = {
         }
     }
 };
+
+function _checkUser(user: UserEntity) {
+    if (!user) {
+        throw unauthorizedError('Missing authentication!');
+    }
+}
 
 function unauthorizedError(message: string) {
     return new GraphQLError(message, {

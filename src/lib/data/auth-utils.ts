@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { decode, Secret, sign } from 'jsonwebtoken';
+import { decode, Secret, sign, verify } from 'jsonwebtoken';
 
 export const SECRET_JWT_KEY: Secret = 'books-storage-token-key';
 const saltRounds = 10;
@@ -15,11 +15,11 @@ export function comparePassword(password: string, hashPassword: string): Promise
 }
 
 export function createToken(userId: string) {
-    return _createToken(userId, '30 seconds');
+    return _createToken(userId, '2 hour');
 }
 
 export function createRefreshToken(userId: string) {
-    return _createToken(userId, '2 minutes');
+    return _createToken(userId, '2 days');
 }
 
 function _createToken(userId: string, expiresIn: string) {
@@ -27,5 +27,9 @@ function _createToken(userId: string, expiresIn: string) {
 }
 
 export function getUserIdFromToken(token: string): string {
-    return decode(token).id;
+    try {
+        verify(token, SECRET_JWT_KEY);
+
+        return decode(token).id;
+    } catch (_) {}
 }

@@ -12,17 +12,20 @@ import LanguageModal from '@/components/modals/language-modal';
 import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 import { styleVariables } from '@/constants/styles-variables';
+import { isAdmin } from '@/utils/utils';
+import { useAuth } from '@/components/auth-context';
 
 export default function Languages() {
+    const { user, checkAuth } = useAuth();
     const [tableActions] = useState<TableKey<LanguageEntity>>({
         renderMobileLabel: (item: LanguageEntity) => <Box><b>{item.name}</b></Box>,
         type: 'actions',
-        actions: [
+        actions: isAdmin(user) ? [
             {
                 type: TableActionEnum.delete,
                 onClick: (item: LanguageEntity) => deleteHandler(item)
             }
-        ]
+        ] : []
     });
     const [tableKeys] = useState<TableKey<LanguageEntity>[]>([
         {
@@ -56,8 +59,9 @@ export default function Languages() {
     async function deleteHandler(item: LanguageEntity) {
         try {
             await deleteItem(item.id);
-            refreshData(true);
+            refreshData();
         } catch (err) {
+            checkAuth(err);
         }
     }
 
@@ -96,11 +100,12 @@ export default function Languages() {
 
             {error && <ErrorNotification error={error}></ErrorNotification>}
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, background: 'white', 'z-index': 2 }}>
+            {isAdmin(user) &&
+              <Box sx={styleVariables.buttonsContainer}>
                 <Button variant="outlined" onClick={() => onAdd()}>
-                    <AddIcon></AddIcon>Add language
+                  <AddIcon></AddIcon>Add language
                 </Button>
-            </Box>
+              </Box>}
 
             {(openNewModal || selectedItem) &&
               <LanguageModal open={true}

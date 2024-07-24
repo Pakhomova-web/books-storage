@@ -6,10 +6,9 @@ import typeDefs from '../../lib/graphql/schema';
 import resolvers from '../../lib/graphql/resolvers';
 import { SchemaLink } from '@apollo/client/link/schema';
 import { NextApiRequest, NextApiResponse } from 'next';
-import ResolverContext = SchemaLink.ResolverContext;
 import { getUserById } from '@/lib/data/user';
-import { getUserIdFromToken, SECRET_JWT_KEY } from '@/lib/data/auth-utils';
-import { verify } from 'jsonwebtoken';
+import { getUserIdFromToken } from '@/lib/data/auth-utils';
+import ResolverContext = SchemaLink.ResolverContext;
 
 const apolloServer = new ApolloServer({
     typeDefs,
@@ -21,14 +20,11 @@ async function getContext(req: NextApiRequest, res: NextApiResponse) {
 
     if (req.headers.authorization) {
         const token = req.headers.authorization.split('Bearer ')[1];
-        try {
-            verify(token, SECRET_JWT_KEY);
-            const userId = getUserIdFromToken(token);
+        const userId = getUserIdFromToken(token);
 
-            if (userId) {
-                context.user = await getUserById(userId);
-            }
-        } catch (err) {}
+        if (userId) {
+            context.user = await getUserById(userId);
+        }
     }
     return context;
 }

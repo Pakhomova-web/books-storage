@@ -11,15 +11,16 @@ import { getAllBooks, useBooks, useDeleteBook } from '@/lib/graphql/hooks';
 import BookModal from '@/components/modals/book-modal';
 import ErrorNotification from '@/components/error-notification';
 import { styleVariables } from '@/constants/styles-variables';
-import { downloadCsv } from '@/utils/utils';
+import { downloadCsv, isAdmin } from '@/utils/utils';
 import { BookFilters } from '@/components/filters/book-filters';
 import { BookNumberInStockModal } from '@/components/modals/book-number-in-stock-modal';
-import { router } from 'next/client';
+import { useAuth } from '@/components/auth-context';
 
 const subTitleStyles = {
     fontSize: styleVariables.hintFontSize,
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    margin: `${styleVariables.margin} 0`
 };
 
 const numberInStockBox = (inStock: boolean) => ({
@@ -31,15 +32,16 @@ const numberInStockBox = (inStock: boolean) => ({
 });
 
 export default function Books() {
-    const [tableActions] = useState<TableKey<BookEntity>>({
+    const { user, checkAuth } = useAuth();
+    const tableActions: TableKey<BookEntity> = {
         renderMobileLabel: (item: BookEntity) => (
             <Box sx={subTitleStyles}>
                 {item.bookType.name}/{item.bookSeries.publishingHouse.name}/{item.bookSeries.name}
-                <Box sx={numberInStockBox(!!item.numberInStock)}>{item.numberInStock}</Box>
+                {isAdmin(user) && <Box sx={numberInStockBox(!!item.numberInStock)}>{item.numberInStock}</Box>}
             </Box>
         ),
         type: 'actions',
-        actions: [
+        actions: isAdmin(user) ? [
             {
                 label: 'Add number in stock',
                 type: TableActionEnum.add,
@@ -64,8 +66,8 @@ export default function Books() {
                 type: TableActionEnum.delete,
                 onClick: (item: BookEntity) => deleteHandler(item)
             }
-        ]
-    });
+        ] : []
+    };
     const [mobileKeys] = useState<TableKey<BookEntity>[]>([
         {
             title: 'Name',
@@ -103,6 +105,12 @@ export default function Books() {
             sortValue: 'author',
             renderValue: (item: BookEntity) => item.author?.name,
             type: 'text'
+        },
+        {
+            title: 'Price',
+            sortValue: 'price',
+            renderValue: (item: BookEntity) => item.price,
+            type: 'text'
         }
     ]);
     const [tableKeys] = useState<TableKey<BookEntity>[]>([
@@ -124,12 +132,6 @@ export default function Books() {
             title: 'In Stock',
             sortValue: 'numberInStock',
             renderValue: (item: BookEntity) => item.numberInStock,
-            type: 'text'
-        },
-        {
-            title: 'Price',
-            sortValue: 'price',
-            renderValue: (item: BookEntity) => item.price,
             type: 'text'
         }
     ]);
@@ -159,7 +161,7 @@ export default function Books() {
 
     function highlightInRed(numberInStock: number) {
         return !numberInStock ? {
-             background: styleVariables.redLightColor
+            background: styleVariables.redLightColor
         } : {};
     }
 
@@ -167,7 +169,9 @@ export default function Books() {
         try {
             await deleteItem(item.id);
             refreshData();
-        } catch (err) {}
+        } catch (err) {
+            checkAuth(err);
+        }
     }
 
     function refreshData(updated = true) {
@@ -232,22 +236,25 @@ export default function Books() {
 
             {error && <ErrorNotification error={error}></ErrorNotification>}
 
-            <Box sx={{ display: 'flex', justifyContent: 'center', py: 2, background: 'white', 'z-index': 2 }}>
+            {isAdmin(user) &&
+              <Box sx={styleVariables.buttonsContainer}>
                 <Button variant="outlined" onClick={() => onAdd()}
                         sx={items.length ? { mr: styleVariables.margin } : {}}>
-                    <AddIcon></AddIcon>Add Book
+                  <AddIcon></AddIcon>Add Book
                 </Button>
 
-                {!!items?.length &&
-                  <Button variant="outlined" onClick={() => onDownloadCSV()}>
-                    Download CSV
-                  </Button>
-                }
-            </Box>
+                  {!!items?.length &&
+                    <Button variant="outlined" onClick={() => onDownloadCSV()}>
+                      Download CSV
+                    </Button>
+                  }
+              </Box>
+            }
 
             {openNewModal &&
               <BookModal open={openNewModal}
                          item={selectedItem}
+                         isAdmin={isAdmin(user)}
                          onClose={(updated = false) => refreshData(updated)}></BookModal>}
 
             {openNumberInStockModal && selectedItem &&
