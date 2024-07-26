@@ -1,4 +1,4 @@
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button } from '@mui/material';
+import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Toolbar } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { styleVariables } from '@/constants/styles-variables';
 import { useState } from 'react';
@@ -6,7 +6,8 @@ import { useState } from 'react';
 const filtersPanelContainer = {
     marginBottom: styleVariables.margin,
     width: '100%',
-    position: 'absolute',
+    position: 'sticky',
+    top: 0,
     zIndex: 3
 };
 

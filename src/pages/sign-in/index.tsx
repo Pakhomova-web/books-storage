@@ -4,11 +4,11 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 
 import { authStyles } from '@/styles/auth';
 import CustomTextField from '@/components/modals/custom-text-field';
-import { styleVariables } from '@/constants/styles-variables';
+import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 import ErrorNotification from '@/components/error-notification';
 import Loading from '@/components/loading';
 import { useSignIn } from '@/lib/graphql/hooks';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import CustomPasswordElement from '@/components/modals/custom-password-element';
 import { emailValidatorExp } from '@/constants/validators-exp';
 
@@ -66,7 +66,8 @@ export default function SignIn() {
                     lastName: values.lastName
                 });
                 goToLoginPage();
-            } catch (_) {}
+            } catch (_) {
+            }
         }
     }
 
@@ -75,41 +76,45 @@ export default function SignIn() {
     }
 
     return (
-        <Loading show={loading}>
-            <Box sx={authStyles.container}>
-                <Box sx={authStyles.title}>Sign In</Box>
-                <FormContainer formContext={formContext} onSuccess={() => onSubmit()}>
-                    <CustomTextField fullWidth name="email" required type="email" label="Email" id="email"/>
+        <Box sx={positionRelative}>
+            <Loading show={loading} fullHeight={true}></Loading>
 
-                    <CustomPasswordElement fullWidth
-                                           variant="standard"
-                                           id="password"
-                                           label="Password"
-                                           name="password"
-                                           required/>
+            <Box sx={pageStyles}>
+                <Box sx={authStyles.container}>
+                    <Box sx={authStyles.title}>Sign In</Box>
+                    <FormContainer formContext={formContext} onSuccess={() => onSubmit()}>
+                        <CustomTextField fullWidth name="email" required type="email" label="Email" id="email"/>
 
-                    <CustomPasswordElement fullWidth
-                                           variant="standard"
-                                           id="confirmPassword"
-                                           label="Confirm Password"
-                                           name="confirmPassword"
-                                           required/>
+                        <CustomPasswordElement fullWidth
+                                               variant="standard"
+                                               id="password"
+                                               label="Password"
+                                               name="password"
+                                               required/>
 
-                    <CustomTextField fullWidth name="firstName" label="First Name"/>
+                        <CustomPasswordElement fullWidth
+                                               variant="standard"
+                                               id="confirmPassword"
+                                               label="Confirm Password"
+                                               name="confirmPassword"
+                                               required/>
 
-                    <CustomTextField fullWidth name="lastName" label="Last Name"/>
-                </FormContainer>
-                <Button variant="contained"
-                        sx={authStyles.buttonMargin}
-                        disabled={!formContext.formState.isValid}
-                        onClick={() => onSubmit()}>
-                    Create account
-                </Button>
-                <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>or</Box>
-                <Button variant="outlined" onClick={() => goToLoginPage()}>Login</Button>
+                        <CustomTextField fullWidth name="firstName" label="First Name"/>
 
-                {error && <ErrorNotification error={error}></ErrorNotification>}
+                        <CustomTextField fullWidth name="lastName" label="Last Name"/>
+                    </FormContainer>
+                    <Button variant="contained"
+                            sx={authStyles.buttonMargin}
+                            disabled={!formContext.formState.isValid}
+                            onClick={() => onSubmit()}>
+                        Create account
+                    </Button>
+                    <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>or</Box>
+                    <Button variant="outlined" onClick={() => goToLoginPage()}>Login</Button>
+
+                    {error && <ErrorNotification error={error}></ErrorNotification>}
+                </Box>
             </Box>
-        </Loading>
+        </Box>
     );
 }

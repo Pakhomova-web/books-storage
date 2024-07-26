@@ -1,11 +1,11 @@
 import { Box, Button } from "@mui/material";
-import { styleVariables } from '@/constants/styles-variables';
+import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/modals/custom-text-field';
 import { useRouter } from 'next/router';
 import { authStyles } from '@/styles/auth';
 import ErrorNotification from '@/components/error-notification';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import CustomPasswordElement from '@/components/modals/custom-password-element';
 import { emailValidatorExp } from '@/constants/validators-exp';
 import Loading from '@/components/loading';
@@ -48,7 +48,8 @@ export default function Login() {
 
                 login(user, token, refreshToken);
                 router.push('/');
-            } catch (_) {}
+            } catch (_) {
+            }
         }
     }
 
@@ -61,33 +62,37 @@ export default function Login() {
     }
 
     return (
-        <Loading show={loading}>
-            <Box sx={authStyles.container}>
-                <Box sx={authStyles.title}>Login</Box>
-                <FormContainer formContext={formContext} onSuccess={() => onSubmit()}>
-                    <CustomTextField fullWidth name="email" required label="Email" type="email"/>
+        <Box sx={positionRelative}>
+            <Loading show={loading} fullHeight={true}></Loading>
 
-                    <CustomPasswordElement fullWidth
-                                           variant="standard"
-                                           id="password"
-                                           label="Password"
-                                           name="password"
-                                           required/>
-                </FormContainer>
-                <Box sx={forgotPasswordLink}>
-                    <Box sx={styleVariables.cursorPointer} onClick={onForgotPasswordClick}>Forgot password?</Box>
+            <Box sx={pageStyles}>
+                <Box sx={authStyles.container}>
+                    <Box sx={authStyles.title}>Login</Box>
+                    <FormContainer formContext={formContext} onSuccess={() => onSubmit()}>
+                        <CustomTextField fullWidth name="email" required label="Email" type="email"/>
+
+                        <CustomPasswordElement fullWidth
+                                               variant="standard"
+                                               id="password"
+                                               label="Password"
+                                               name="password"
+                                               required/>
+                    </FormContainer>
+                    <Box sx={forgotPasswordLink}>
+                        <Box sx={styleVariables.cursorPointer} onClick={onForgotPasswordClick}>Forgot password?</Box>
+                    </Box>
+                    <Button variant="contained"
+                            sx={authStyles.buttonMargin}
+                            disabled={!formContext.formState.isValid}
+                            onClick={() => onSubmit()}>
+                        Login
+                    </Button>
+                    <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>or</Box>
+                    <Button variant="outlined" onClick={() => goToSignInPage()}>Create new account</Button>
+
+                    {error && <ErrorNotification error={error}></ErrorNotification>}
                 </Box>
-                <Button variant="contained"
-                        sx={authStyles.buttonMargin}
-                        disabled={!formContext.formState.isValid}
-                        onClick={() => onSubmit()}>
-                    Login
-                </Button>
-                <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>or</Box>
-                <Button variant="outlined" onClick={() => goToSignInPage()}>Create new account</Button>
-
-                {error && <ErrorNotification error={error}></ErrorNotification>}
             </Box>
-        </Loading>
+        </Box>
     );
 }

@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useDeleteLanguage, useLanguages } from '@/lib/graphql/hooks';
@@ -11,7 +11,7 @@ import Loading from '@/components/loading';
 import LanguageModal from '@/components/modals/language-modal';
 import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
-import { styleVariables } from '@/constants/styles-variables';
+import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 import { isAdmin } from '@/utils/utils';
 import { useAuth } from '@/components/auth-context';
 
@@ -85,32 +85,36 @@ export default function Languages() {
     }
 
     return (
-        <Loading show={loading || deleting} fullHeight={true}>
-            <NameFiltersPanel onApply={(filters: LanguageEntity) => setFilters(filters)}></NameFiltersPanel>
+        <Box sx={positionRelative}>
+            <Loading show={loading || deleting} fullHeight={true}></Loading>
 
-            <CustomTable data={items}
-                         keys={tableKeys}
-                         mobileKeys={[]}
-                         actions={tableActions}
-                         renderKey={(item: LanguageEntity) => item.id}
-                         onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
-                         pageSettings={pageSettings}
-                         withFilters={true}
-                         onRowClick={item => onEdit(item)}></CustomTable>
+            <Box sx={pageStyles}>
+                <NameFiltersPanel onApply={(filters: LanguageEntity) => setFilters(filters)}></NameFiltersPanel>
 
-            {error && <ErrorNotification error={error}></ErrorNotification>}
+                <CustomTable data={items}
+                             keys={tableKeys}
+                             mobileKeys={[]}
+                             actions={tableActions}
+                             renderKey={(item: LanguageEntity) => item.id}
+                             onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
+                             pageSettings={pageSettings}
+                             withFilters={true}
+                             onRowClick={item => onEdit(item)}>
+                    {error && <ErrorNotification error={error}></ErrorNotification>}
 
-            {isAdmin(user) &&
-              <Box sx={styleVariables.buttonsContainer}>
-                <Button variant="outlined" onClick={() => onAdd()}>
-                  <AddIcon></AddIcon>Add language
-                </Button>
-              </Box>}
+                    {isAdmin(user) &&
+                      <Box sx={styleVariables.buttonsContainer}>
+                        <Button variant="outlined" onClick={() => onAdd()}>
+                          <AddIcon></AddIcon>Add language
+                        </Button>
+                      </Box>}
+                </CustomTable>
 
-            {(openNewModal || selectedItem) &&
-              <LanguageModal open={true}
-                             item={selectedItem}
-                             onClose={(updated = false) => refreshData(updated)}></LanguageModal>}
-        </Loading>
+                {(openNewModal || selectedItem) &&
+                  <LanguageModal open={true}
+                                 item={selectedItem}
+                                 onClose={(updated = false) => refreshData(updated)}></LanguageModal>}
+            </Box>
+        </Box>
     );
 }

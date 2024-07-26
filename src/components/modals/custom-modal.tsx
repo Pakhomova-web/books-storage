@@ -56,22 +56,22 @@ export default function CustomModal(props: ICustomModalProps) {
     return (
         <Modal open={props.open} onClose={closeModalHandler} disableEscapeKeyDown sx={modalStyle}>
             <Box sx={mainContainerStyle}>
-                <Loading show={props.loading} fullHeight={false}>
-                    <Box sx={innerContainer}>
-                        <Box sx={titleStyles}>{props.title}</Box>
-                        <Box sx={childrenContainer}>
-                            {props.children}
-                        </Box>
+                <Loading show={props.loading} fullHeight={false}></Loading>
 
-                        <Box sx={buttonsContainerStyles}>
-                            <Button variant="outlined" onClick={props.onClose}>Close</Button>
-                            {props.onSubmit ?
-                                <Button onClick={props.onSubmit} variant="contained" disabled={props.isSubmitDisabled}
-                                        sx={{ marginLeft: styleVariables.margin }}>Submit</Button>
-                                : null}
-                        </Box>
+                <Box sx={innerContainer}>
+                    <Box sx={titleStyles}>{props.title}</Box>
+                    <Box sx={childrenContainer}>
+                        {props.children}
                     </Box>
-                </Loading>
+
+                    <Box sx={buttonsContainerStyles}>
+                        <Button variant="outlined" onClick={props.onClose}>Close</Button>
+                        {props.onSubmit ?
+                            <Button onClick={props.onSubmit} variant="contained" disabled={props.isSubmitDisabled}
+                                    sx={{ marginLeft: styleVariables.margin }}>Submit</Button>
+                            : null}
+                    </Box>
+                </Box>
             </Box>
         </Modal>
     );

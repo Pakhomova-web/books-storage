@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { IPageable, PublishingHouseEntity } from '@/lib/data/types';
@@ -13,6 +13,7 @@ import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 import { isAdmin } from '@/utils/utils';
 import { useAuth } from '@/components/auth-context';
+import { pageStyles, positionRelative } from '@/constants/styles-variables';
 
 export default function PublishingHouses() {
     const { user, checkAuth } = useAuth();
@@ -82,32 +83,36 @@ export default function PublishingHouses() {
     }
 
     return (
-        <Loading show={loading || deleting} fullHeight={true}>
-            <NameFiltersPanel onApply={(filters: PublishingHouseEntity) => setFilters(filters)}></NameFiltersPanel>
+        <Box sx={positionRelative}>
+            <Loading show={loading || deleting} fullHeight={true}></Loading>
 
-            <CustomTable data={items}
-                         keys={tableKeys}
-                         mobileKeys={mobileKeys}
-                         actions={tableActions}
-                         renderKey={(item: PublishingHouseEntity) => item.id}
-                         onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
-                         pageSettings={pageSettings}
-                         withFilters={true}
-                         onRowClick={(item: PublishingHouseEntity) => onEdit(item)}></CustomTable>
+            <Box sx={pageStyles}>
+                <NameFiltersPanel onApply={(filters: PublishingHouseEntity) => setFilters(filters)}></NameFiltersPanel>
 
-            {error && <ErrorNotification error={error}></ErrorNotification>}
+                <CustomTable data={items}
+                             keys={tableKeys}
+                             mobileKeys={mobileKeys}
+                             actions={tableActions}
+                             renderKey={(item: PublishingHouseEntity) => item.id}
+                             onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
+                             pageSettings={pageSettings}
+                             withFilters={true}
+                             onRowClick={(item: PublishingHouseEntity) => onEdit(item)}>
+                    {error && <ErrorNotification error={error}></ErrorNotification>}
 
-            {isAdmin(user) &&
-              <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
-                <Button variant="outlined" onClick={() => onAdd()}>
-                  <AddIcon></AddIcon>Add Publishing House
-                </Button>
-              </Box>}
+                    {isAdmin(user) &&
+                      <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
+                        <Button variant="outlined" onClick={() => onAdd()}>
+                          <AddIcon></AddIcon>Add Publishing House
+                        </Button>
+                      </Box>}
+                </CustomTable>
 
-            {(selectedItem || openNewModal) &&
-              <PublishingHouseModal open={true}
-                                    item={selectedItem}
-                                    onClose={(updated = false) => refreshData(updated)}></PublishingHouseModal>}
-        </Loading>
+                {(selectedItem || openNewModal) &&
+                  <PublishingHouseModal open={true}
+                                        item={selectedItem}
+                                        onClose={(updated = false) => refreshData(updated)}></PublishingHouseModal>}
+            </Box>
+        </Box>
     );
 }

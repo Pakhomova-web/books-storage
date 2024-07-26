@@ -10,7 +10,7 @@ import CustomTable from '@/components/table/custom-table';
 import { getAllBooks, useBooks, useDeleteBook } from '@/lib/graphql/hooks';
 import BookModal from '@/components/modals/book-modal';
 import ErrorNotification from '@/components/error-notification';
-import { styleVariables } from '@/constants/styles-variables';
+import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 import { downloadCsv, isAdmin } from '@/utils/utils';
 import { BookFilters } from '@/components/filters/book-filters';
 import { BookNumberInStockModal } from '@/components/modals/book-number-in-stock-modal';
@@ -217,50 +217,53 @@ export default function Books() {
     }
 
     return (
-        <Loading show={loading || deleting || downloadingCsv} fullHeight={true}>
-            <BookFilters onApply={(filters: IBookFilter) => setFilters(filters)}></BookFilters>
+        <Box sx={positionRelative}>
+            <Loading show={loading || deleting || downloadingCsv} fullHeight={true}></Loading>
 
-            <CustomTable data={items}
-                         keys={tableKeys}
-                         mobileKeys={mobileKeys}
-                         actions={tableActions}
-                         renderKey={(item: BookEntity) => item.id}
-                         onChange={(settings: IPageable) => onPaginationChange(settings)}
-                         pageSettings={pageSettings}
-                         usePagination={true}
-                         withFilters={true}
-                         rowStyleClass={(item: BookEntity) => highlightInRed(item.numberInStock)}
-                         totalCount={totalCount}
-                         onRowClick={(item: BookEntity) => onEdit(item)}>
-            </CustomTable>
+            <Box sx={pageStyles}>
+                <BookFilters onApply={(filters: IBookFilter) => setFilters(filters)}></BookFilters>
 
-            {error && <ErrorNotification error={error}></ErrorNotification>}
+                <CustomTable data={items}
+                             keys={tableKeys}
+                             mobileKeys={mobileKeys}
+                             actions={tableActions}
+                             renderKey={(item: BookEntity) => item.id}
+                             onChange={(settings: IPageable) => onPaginationChange(settings)}
+                             pageSettings={pageSettings}
+                             usePagination={true}
+                             withFilters={true}
+                             rowStyleClass={(item: BookEntity) => highlightInRed(item.numberInStock)}
+                             totalCount={totalCount}
+                             onRowClick={(item: BookEntity) => onEdit(item)}>
+                    {error && <ErrorNotification error={error}></ErrorNotification>}
 
-            {isAdmin(user) &&
-              <Box sx={styleVariables.buttonsContainer}>
-                <Button variant="outlined" onClick={() => onAdd()}
-                        sx={items.length ? { mr: styleVariables.margin } : {}}>
-                  <AddIcon></AddIcon>Add Book
-                </Button>
+                    {isAdmin(user) &&
+                      <Box sx={styleVariables.buttonsContainer}>
+                        <Button variant="outlined" onClick={() => onAdd()}
+                                sx={items.length ? { mr: styleVariables.margin } : {}}>
+                          <AddIcon></AddIcon>Add Book
+                        </Button>
 
-                  {!!items?.length &&
-                    <Button variant="outlined" onClick={() => onDownloadCSV()}>
-                      Download CSV
-                    </Button>
-                  }
-              </Box>
-            }
+                          {!!items?.length &&
+                            <Button variant="outlined" onClick={() => onDownloadCSV()}>
+                              Download CSV
+                            </Button>
+                          }
+                      </Box>
+                    }
+                </CustomTable>
 
-            {openNewModal &&
-              <BookModal open={openNewModal}
-                         item={selectedItem}
-                         isAdmin={isAdmin(user)}
-                         onClose={(updated = false) => refreshData(updated)}></BookModal>}
+                {openNewModal &&
+                  <BookModal open={openNewModal}
+                             item={selectedItem}
+                             isAdmin={isAdmin(user)}
+                             onClose={(updated = false) => refreshData(updated)}></BookModal>}
 
-            {openNumberInStockModal && selectedItem &&
-              <BookNumberInStockModal open={openNumberInStockModal}
-                                      item={selectedItem}
-                                      onClose={(updated = false) => refreshData(updated)}></BookNumberInStockModal>}
-        </Loading>
+                {openNumberInStockModal && selectedItem &&
+                  <BookNumberInStockModal open={openNumberInStockModal}
+                                          item={selectedItem}
+                                          onClose={(updated = false) => refreshData(updated)}></BookNumberInStockModal>}
+            </Box>
+        </Box>
     );
 }

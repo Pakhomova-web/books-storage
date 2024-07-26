@@ -56,7 +56,7 @@ export function MobileTable<T>(props: IMobileTableProps<T>) {
     }
 
     return (
-        <Box sx={tableContainerStyles(props.withFilters)}>
+        <Box sx={tableContainerStyles()}>
             <Grid container>
                 {props.data.map((item, index) =>
                     <Grid item key={index} sm={6} xs={12}>

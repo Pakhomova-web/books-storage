@@ -36,7 +36,8 @@ interface CustomTableProps<K> {
     onChange?: (pageSettings: IPageable) => void,
     pageSettings?: IPageable,
     withFilters?: boolean,
-    renderMobileView?: (item: K) => ReactNode
+    renderMobileView?: (item: K) => ReactNode,
+    children?: ReactNode
 }
 
 const stickyFooter = {
@@ -45,7 +46,10 @@ const stickyFooter = {
     background: 'white'
 };
 
-const paginatorStyles = { borderTop: `1px solid ${styleVariables.gray}` };
+const paginatorStyles = {
+    borderTop: `1px solid ${styleVariables.gray}`,
+    background: 'white'
+};
 
 export default function CustomTable<T>(props: CustomTableProps<T>) {
     const [page, setPage] = useState<number>(props.pageSettings?.page || 0);
@@ -116,7 +120,7 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
     }
 
     return !mobileMatches ?
-        <TableContainer sx={tableContainerStyles(props.withFilters)}>
+        <TableContainer sx={tableContainerStyles()}>
             <Table stickyHeader>
                 <TableHead>
                     <TableRow>
@@ -149,7 +153,10 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
                         </CustomTableRow>
                     ))}
                 </TableBody>
-                {props.usePagination && renderPaginator(true, props.keys.length + (props.actions ? 1 : 0))}
+                <Box sx={{ position: 'sticky', bottom: 0 }}>
+                    {props.usePagination && renderPaginator(true, props.keys.length + (props.actions ? 1 : 0))}
+                    {props.children}
+                </Box>
             </Table>
         </TableContainer> :
         <MobileTable data={props.data}
@@ -158,6 +165,9 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
                      withFilters={props.withFilters}
                      onRowClick={props.onRowClick}
                      renderMobileView={props.renderMobileView}>
-            {props.usePagination && <Table>{renderPaginator()}</Table>}
+            <Box sx={{ position: 'sticky', bottom: 0 }}>
+                {props.usePagination && <Table>{renderPaginator()}</Table>}
+                {props.children}
+            </Box>
         </MobileTable>;
 }

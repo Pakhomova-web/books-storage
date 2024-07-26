@@ -44,10 +44,8 @@ export default function CustomToolbar({
                     isSettings && (
                         !showSettingsMenu && !attachedSettingsMenu ?
                             <IconButton color="inherit"
-                                        size="large"
                                         onClick={() => handleSettingsMenu(false)}><MenuIcon/></IconButton> :
                             <IconButton color="inherit"
-                                        size="large"
                                         onClick={() => handleSettingsMenu()}><CloseIcon/></IconButton>)
                 }</Box>
 
@@ -55,13 +53,11 @@ export default function CustomToolbar({
 
                 <Box>
                     <IconButton onClick={() => goToMainPage()}
-                                size="large"
                                 color="inherit"
                                 sx={{ mr: 2 }}><HomeIcon/></IconButton>
 
                     {user?.role === ROLES.admin &&
-                      <IconButton size="large"
-                                  color="inherit"
+                      <IconButton color="inherit"
                                   sx={{ mr: 2 }}
                                   aria-label="settings"
                                   onClick={() => router.push('/settings/books')}>
@@ -69,10 +65,10 @@ export default function CustomToolbar({
                       </IconButton>}
 
                     {!!user ?
-                        <IconButton size="large" color="inherit" onClick={() => onLogoutClick()}>
+                        <IconButton color="inherit" onClick={() => onLogoutClick()}>
                             <LogoutIcon/>
                         </IconButton> :
-                        <IconButton size="large" color="inherit" onClick={() => onLoginClick()}>
+                        <IconButton color="inherit" onClick={() => onLoginClick()}>
                             <LoginIcon/>
                         </IconButton>}
                 </Box>

@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useBookSeries, useDeleteBookSeries } from '@/lib/graphql/hooks';
@@ -11,7 +11,7 @@ import Loading from '@/components/loading';
 import BookSeriesModal from '@/components/modals/book-series-modal';
 import ErrorNotification from '@/components/error-notification';
 import { BookSeriesFilters } from '@/components/filters/book-series-filters';
-import { styleVariables } from '@/constants/styles-variables';
+import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 import { isAdmin } from '@/utils/utils';
 import { useAuth } from '@/components/auth-context';
 
@@ -93,34 +93,38 @@ export default function BookSeries() {
     }
 
     return (
-        <Loading show={loading || deleting} fullHeight={true}>
-            <BookSeriesFilters onApply={(filters: IBookSeriesFilter) => setFilters(filters)}></BookSeriesFilters>
+        <Box sx={positionRelative}>
+            <Loading show={loading || deleting} fullHeight={true}></Loading>
 
-            <CustomTable data={items}
-                         keys={tableKeys}
-                         mobileKeys={mobileKeys}
-                         actions={tableActions}
-                         renderKey={(item: BookSeriesEntity) => item.id}
-                         onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
-                         pageSettings={pageSettings}
-                         withFilters={true}
-                         usePagination={true}
-                         totalCount={totalCount}
-                         onRowClick={(item: BookSeriesEntity) => onEdit(item)}></CustomTable>
+            <Box sx={pageStyles}>
+                <BookSeriesFilters onApply={(filters: IBookSeriesFilter) => setFilters(filters)}></BookSeriesFilters>
 
-            {error && <ErrorNotification error={error}></ErrorNotification>}
+                <CustomTable data={items}
+                             keys={tableKeys}
+                             mobileKeys={mobileKeys}
+                             actions={tableActions}
+                             renderKey={(item: BookSeriesEntity) => item.id}
+                             onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
+                             pageSettings={pageSettings}
+                             withFilters={true}
+                             usePagination={true}
+                             totalCount={totalCount}
+                             onRowClick={(item: BookSeriesEntity) => onEdit(item)}>
+                    {error && <ErrorNotification error={error}></ErrorNotification>}
 
-            {isAdmin(user) &&
-              <Box sx={styleVariables.buttonsContainer}>
-                <Button variant="outlined" onClick={() => onAdd()}>
-                  <AddIcon></AddIcon>Add series
-                </Button>
-              </Box>}
+                    {isAdmin(user) &&
+                      <Box sx={styleVariables.buttonsContainer}>
+                        <Button variant="outlined" onClick={() => onAdd()}>
+                          <AddIcon></AddIcon>Add series
+                        </Button>
+                      </Box>}
+                </CustomTable>
 
-            {(openNewModal || selectedItem) &&
-              <BookSeriesModal open={true}
-                               item={selectedItem}
-                               onClose={(updated = false) => refreshData(updated)}></BookSeriesModal>}
-        </Loading>
+                {(openNewModal || selectedItem) &&
+                  <BookSeriesModal open={true}
+                                   item={selectedItem}
+                                   onClose={(updated = false) => refreshData(updated)}></BookSeriesModal>}
+            </Box>
+        </Box>
     );
 }

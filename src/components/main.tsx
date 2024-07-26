@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { styleVariables } from '@/constants/styles-variables';
+import { positionRelative, styleVariables } from '@/constants/styles-variables';
 import CustomToolbar from '@/components/custom-toolbar';
 import { useUser } from '@/lib/graphql/hooks';
 import Loading from '@/components/loading';
@@ -128,36 +128,39 @@ export default function Main({ children }) {
     }
 
     return (
-        <Loading show={loading} fullHeight={true}>
+        <Box sx={positionRelative}>
+            <Loading show={loading} fullHeight={true}></Loading>
+
             <CustomToolbar isSettings={isSettings}
                            showSettingsMenu={showSettingsMenu}
                            activeSettingsTab={activeSettingsTab}
                            attachedSettingsMenu={attachedSettingsMenu}
                            handleSettingsMenu={handleSettingsMenu}
                            hideSettingsMenu={hideSettingsMenu}/>
+            {!loading && <>
+                {isSettings && (attachedSettingsMenu || showSettingsMenu) ?
+                    <Drawer variant="permanent" sx={leftNavigationStyles}>
+                        <Toolbar/>
+                        <List>
+                            {settingsList.map(tab => (
+                                <ListItem key={tab.link} disablePadding
+                                          className={activeSettingsTab?.link === tab.link ? 'active-nav-link' : ''}
+                                          onClick={() => settingsTabChange(tab)}>
+                                    <ListItemButton>
+                                        <ListItemText primary={tab.title}/>
+                                    </ListItemButton>
+                                </ListItem>
+                            ))}
+                        </List>
+                    </Drawer> : null}
 
-            {isSettings && (attachedSettingsMenu || showSettingsMenu) ?
-                <Drawer variant="permanent" sx={leftNavigationStyles}>
-                    <Toolbar/>
-                    <List>
-                        {settingsList.map(tab => (
-                            <ListItem key={tab.link} disablePadding
-                                      className={activeSettingsTab?.link === tab.link ? 'active-nav-link' : ''}
-                                      onClick={() => settingsTabChange(tab)}>
-                                <ListItemButton>
-                                    <ListItemText primary={tab.title}/>
-                                </ListItemButton>
-                            </ListItem>
-                        ))}
-                    </List>
-                </Drawer> : null}
-
-            <Toolbar/>
-            <Box sx={isSettings && attachedSettingsMenu ? { paddingLeft: `${drawerWidth}px` } : {}}>
-                {children}
-                {isSettings && showSettingsMenu && !attachedSettingsMenu &&
-                  <Box sx={settingMenuBackdrop} onClick={handleClickOutsideSettingsMenu}></Box>}
-            </Box>
-        </Loading>
+              <Toolbar/>
+              <Box sx={isSettings && attachedSettingsMenu ? { paddingLeft: `${drawerWidth}px` } : {}}>
+                <Box sx={{ overflow: 'hidden' }}>{children}</Box>
+                  {isSettings && showSettingsMenu && !attachedSettingsMenu &&
+                    <Box sx={settingMenuBackdrop} onClick={handleClickOutsideSettingsMenu}></Box>}
+              </Box>
+            </>}
+        </Box>
     );
 }

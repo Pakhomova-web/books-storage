@@ -39,7 +39,7 @@ export const styleVariables = {
     cursorPointer: { cursor: 'pointer' },
     buttonsContainer: {
         display: 'flex',
-        justifyContent:'center',
+        justifyContent: 'center',
         py: 2,
         background: 'white',
         'z-index': 2
@@ -47,10 +47,11 @@ export const styleVariables = {
 };
 
 
-export const positionRelative = { position: 'relative' }
+export const positionRelative = { position: 'relative' };
+export const pageStyles = { overflowY: 'auto', height: 'calc(100vh - 64px)' };
 
 export const titleStyles = {
     fontSize: styleVariables.titleFontSize,
     fontWeight: 'bold',
     marginBottom: styleVariables.doubleMargin
-}
+};

@@ -1,6 +1,6 @@
 import { Box, Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useBookTypes, useDeleteBookType } from '@/lib/graphql/hooks';
@@ -11,7 +11,7 @@ import Loading from '@/components/loading';
 import BookTypeModal from '@/components/modals/book-type-modal';
 import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
-import { styleVariables } from '@/constants/styles-variables';
+import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 import { isAdmin } from '@/utils/utils';
 import { useAuth } from '@/components/auth-context';
 
@@ -83,32 +83,36 @@ export default function BookTypes() {
     }
 
     return (
-        <Loading show={loading || deleting} fullHeight={true}>
-            <NameFiltersPanel onApply={(filters: BookTypeEntity) => setFilters(filters)}></NameFiltersPanel>
+        <Box sx={positionRelative}>
+            <Loading show={loading || deleting} fullHeight={true}></Loading>
 
-            <CustomTable data={items}
-                         keys={tableKeys}
-                         mobileKeys={[]}
-                         actions={tableActions}
-                         renderKey={(item: BookTypeEntity) => item.id}
-                         onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
-                         pageSettings={pageSettings}
-                         withFilters={true}
-                         onRowClick={(item: BookTypeEntity) => onEdit(item)}></CustomTable>
+            <Box sx={pageStyles}>
+                <NameFiltersPanel onApply={(filters: BookTypeEntity) => setFilters(filters)}></NameFiltersPanel>
 
-            {error && <ErrorNotification error={error}></ErrorNotification>}
+                <CustomTable data={items}
+                             keys={tableKeys}
+                             mobileKeys={[]}
+                             actions={tableActions}
+                             renderKey={(item: BookTypeEntity) => item.id}
+                             onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
+                             pageSettings={pageSettings}
+                             withFilters={true}
+                             onRowClick={(item: BookTypeEntity) => onEdit(item)}>
+                    {error && <ErrorNotification error={error}></ErrorNotification>}
 
-            {isAdmin(user) &&
-              <Box sx={styleVariables.buttonsContainer}>
-                <Button variant="outlined" onClick={() => onAdd()}>
-                  <AddIcon></AddIcon>Add Book Type
-                </Button>
-              </Box>}
+                    {isAdmin(user) &&
+                      <Box sx={styleVariables.buttonsContainer}>
+                        <Button variant="outlined" onClick={() => onAdd()}>
+                          <AddIcon></AddIcon>Add Book Type
+                        </Button>
+                      </Box>}
+                </CustomTable>
 
-            {(openNewModal || selectedItem) &&
-              <BookTypeModal open={true}
-                             item={selectedItem}
-                             onClose={(updated = false) => refreshData(updated)}></BookTypeModal>}
-        </Loading>
+                {(openNewModal || selectedItem) &&
+                  <BookTypeModal open={true}
+                                 item={selectedItem}
+                                 onClose={(updated = false) => refreshData(updated)}></BookTypeModal>}
+            </Box>
+        </Box>
     );
 }
