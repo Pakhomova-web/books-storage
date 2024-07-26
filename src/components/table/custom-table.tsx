@@ -119,55 +119,53 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
         }
     }
 
-    return !mobileMatches ?
-        <TableContainer sx={tableContainerStyles()}>
-            <Table stickyHeader>
-                <TableHead>
-                    <TableRow>
-                        {props.keys.map((key, index) => key.sortValue ?
-                            <TableCell key={index} onClick={() => handleRequestSort(key.sortValue)}>
-                                <TableSortLabel active={props.pageSettings?.orderBy === key.sortValue}
-                                                direction={props.pageSettings?.orderBy === key.sortValue ? (props.pageSettings?.order || 'asc') : 'asc'}
-                                                onClick={() => handleRequestSort(key.sortValue)}>
-                                    {key.title}
-                                    {props.pageSettings?.orderBy === key.sortValue ? (
-                                        <Box component="span" sx={visuallyHidden}>
-                                            {`sorted ${props.pageSettings?.order === 'desc' ? 'descending' : 'ascending'}`}
-                                        </Box>
-                                    ) : null}
-                                </TableSortLabel>
-                            </TableCell>
-                            : <TableCell key={index}>{key.title}</TableCell>
-                        )}
-                        {!!props.actions?.actions.length && <TableCell></TableCell>}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {props.data.map((item: T) => (
-                        <CustomTableRow key={props.renderKey(item)} isClickable={!!props.onRowClick}
-                                        onClick={() => props.onRowClick ? onRowClick(item) : null}>
-                            {props.keys.map((key: TableKey<T>, index) =>
-                                renderTableCell<T>(key, item, index, props.rowStyleClass))}
-                            {!!props.actions?.actions.length &&
-                                renderTableActions(props.actions, item, anchorMenuEl, (val: HTMLElement) => setAnchorMenuEl(val), props.rowStyleClass)}
-                        </CustomTableRow>
-                    ))}
-                </TableBody>
-                <Box sx={{ position: 'sticky', bottom: 0 }}>
-                    {props.usePagination && renderPaginator(true, props.keys.length + (props.actions ? 1 : 0))}
-                    {props.children}
-                </Box>
-            </Table>
-        </TableContainer> :
-        <MobileTable data={props.data}
-                     keys={props.mobileKeys || props.keys}
-                     actions={props.actions}
-                     withFilters={props.withFilters}
-                     onRowClick={props.onRowClick}
-                     renderMobileView={props.renderMobileView}>
+    return (<>
+        {!mobileMatches ?
+            <TableContainer sx={tableContainerStyles()}>
+                <Table stickyHeader>
+                    <TableHead>
+                        <TableRow>
+                            {props.keys.map((key, index) => key.sortValue ?
+                                <TableCell key={index} onClick={() => handleRequestSort(key.sortValue)}>
+                                    <TableSortLabel active={props.pageSettings?.orderBy === key.sortValue}
+                                                    direction={props.pageSettings?.orderBy === key.sortValue ? (props.pageSettings?.order || 'asc') : 'asc'}
+                                                    onClick={() => handleRequestSort(key.sortValue)}>
+                                        {key.title}
+                                        {props.pageSettings?.orderBy === key.sortValue ? (
+                                            <Box component="span" sx={visuallyHidden}>
+                                                {`sorted ${props.pageSettings?.order === 'desc' ? 'descending' : 'ascending'}`}
+                                            </Box>
+                                        ) : null}
+                                    </TableSortLabel>
+                                </TableCell>
+                                : <TableCell key={index}>{key.title}</TableCell>
+                            )}
+                            {!!props.actions?.actions.length && <TableCell></TableCell>}
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {props.data.map((item: T) => (
+                            <CustomTableRow key={props.renderKey(item)} isClickable={!!props.onRowClick}
+                                            onClick={() => props.onRowClick ? onRowClick(item) : null}>
+                                {props.keys.map((key: TableKey<T>, index) =>
+                                    renderTableCell<T>(key, item, index, props.rowStyleClass))}
+                                {!!props.actions?.actions.length &&
+                                    renderTableActions(props.actions, item, anchorMenuEl, (val: HTMLElement) => setAnchorMenuEl(val), props.rowStyleClass)}
+                            </CustomTableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer> :
+            <MobileTable data={props.data}
+                         keys={props.mobileKeys || props.keys}
+                         actions={props.actions}
+                         withFilters={props.withFilters}
+                         onRowClick={props.onRowClick}
+                         renderMobileView={props.renderMobileView}>
+            </MobileTable>}
             <Box sx={{ position: 'sticky', bottom: 0 }}>
                 {props.usePagination && <Table>{renderPaginator()}</Table>}
                 {props.children}
             </Box>
-        </MobileTable>;
+    </>);
 }
