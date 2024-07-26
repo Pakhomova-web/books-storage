@@ -11,7 +11,8 @@ const modalStyle = {
 };
 
 const mainContainerStyle = {
-    width: 400,
+    width: '400px',
+    maxWidth: '90vw',
     bgcolor: 'background.paper',
     borderRadius: styleVariables.borderRadius,
     boxShadow: styleVariables.boxShadow,
@@ -22,7 +23,7 @@ const innerContainer = { position: 'relative', paddingBottom: '50px' };
 const childrenContainer = {
     overflow: 'auto',
     position: 'relative',
-    maxHeight: 'calc(100vh - 175px)'
+    maxHeight: 'calc(100vh - 200px)'
 };
 
 const buttonsContainerStyles = {

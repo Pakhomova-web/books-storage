@@ -70,7 +70,9 @@ export default function Main({ children }) {
                 setAttachedSettingsMenu(false);
                 setActiveSettingsTab(null);
                 logout();
-                router.push('/');
+                if (!(pathname.includes('login') || pathname.includes('sign-in'))) {
+                    router.push('/');
+                }
             });
     }, []);
 

@@ -4,12 +4,12 @@ export const authStyles = {
     container: {
         display: 'flex',
         flexDirection: 'column',
-        width: '350px',
-        maxWidth: '90vw',
+        width: '400px',
+        maxWidth: '95vw',
         padding: styleVariables.doublePadding,
         margin: `${styleVariables.margin} auto`,
         borderRadius: styleVariables.borderRadius,
-        border: `1px solid ${styleVariables.gray}`,
+        border: `1px solid ${styleVariables.gray}`
     },
     boxStyles: {
         ...styleVariables.textCenter,

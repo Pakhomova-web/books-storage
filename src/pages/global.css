@@ -5,6 +5,10 @@
     --text-secondary: black;
 }
 
+div {
+    box-sizing: border-box;
+}
+
 html, body {
     padding: 0;
     margin: 0;
@@ -14,10 +18,6 @@ html, body {
     display: flex;
     justify-content: space-between;
     background: var(--background);
-}
-
-.main-container {
-    padding: 10px 10px 10px 250px;
 }
 
 .active-nav-link {

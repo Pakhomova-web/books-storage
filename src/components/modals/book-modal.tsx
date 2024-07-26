@@ -58,7 +58,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             publishingHouseId: item?.bookSeries.publishingHouse.id
         }
     });
-    const { publishingHouseId } = formContext.watch();
+    const { publishingHouseId, bookSeriesId } = formContext.watch();
     const { update, updating, updatingError } = useUpdateBook();
     const { create, creating, creatingError } = useCreateBook();
     const { items: pageTypeOptions, loading: loadingPageTypes } = usePageTypeOptions<IOption>();
@@ -71,17 +71,19 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     const { checkAuth } = useAuth();
 
     useEffect(() => {
+        fetchBookSeriesOptions();
+    }, [publishingHouseId]);
+
+    async function fetchBookSeriesOptions() {
         if (publishingHouseId) {
             setBookSeriesOptions([]);
             getBookSeriesOptions({ publishingHouse: publishingHouseId } as IBookSeriesFilter)
                 .then(options => {
-                    const bookSeriesId = formContext.getValues().bookSeriesId;
-
                     setBookSeriesOptions(options);
                     formContext.setValue('bookSeriesId', bookSeriesId ? options.find(({ id }) => id === bookSeriesId)?.id : null);
                 });
         }
-    }, [publishingHouseId]);
+    }
 
     async function onSubmit() {
         const values = formContext.getValues();
@@ -107,7 +109,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     }
 
     return (
-        <CustomModal title={(!item || !item.id? 'Add' : (!isAdmin ? 'View' : 'Edit')) + ' Book'}
+        <CustomModal title={(!item || !item.id ? 'Add' : (!isAdmin ? 'View' : 'Edit')) + ' Book'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
