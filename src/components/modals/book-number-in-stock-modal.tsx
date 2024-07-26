@@ -1,4 +1,4 @@
-import CustomTextField from '@/components/modals/custom-text-field';
+import CustomTextField from '@/components/form-fields/custom-text-field';
 import CustomModal from '@/components/modals/custom-modal';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useUpdateBookNumberInStock } from '@/lib/graphql/hooks';

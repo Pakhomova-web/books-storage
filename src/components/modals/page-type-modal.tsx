@@ -1,6 +1,6 @@
 import { PageTypeEntity } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import CustomTextField from '@/components/modals/custom-text-field';
+import CustomTextField from '@/components/form-fields/custom-text-field';
 import CustomModal from '@/components/modals/custom-modal';
 import { useCreatePageType, useUpdatePageType } from '@/lib/graphql/hooks';
 import ErrorNotification from '@/components/error-notification';

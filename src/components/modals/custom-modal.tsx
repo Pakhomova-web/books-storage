@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 import { styleVariables, titleStyles } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 
-const modalStyle = {
+const modalContainerStyle = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center'
@@ -54,7 +54,7 @@ export default function CustomModal(props: ICustomModalProps) {
     }
 
     return (
-        <Modal open={props.open} onClose={closeModalHandler} disableEscapeKeyDown sx={modalStyle}>
+        <Modal open={props.open} onClose={closeModalHandler} disableEscapeKeyDown sx={modalContainerStyle}>
             <Box sx={mainContainerStyle}>
                 <Loading show={props.loading} fullHeight={false}></Loading>
 

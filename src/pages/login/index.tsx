@@ -1,12 +1,12 @@
 import { Box, Button } from "@mui/material";
 import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import CustomTextField from '@/components/modals/custom-text-field';
+import CustomTextField from '@/components/form-fields/custom-text-field';
 import { useRouter } from 'next/router';
 import { authStyles } from '@/styles/auth';
 import ErrorNotification from '@/components/error-notification';
 import React, { useEffect } from 'react';
-import CustomPasswordElement from '@/components/modals/custom-password-element';
+import CustomPasswordElement from '@/components/form-fields/custom-password-element';
 import { emailValidatorExp } from '@/constants/validators-exp';
 import Loading from '@/components/loading';
 import { useLogin } from '@/lib/graphql/hooks';

@@ -2,9 +2,8 @@ import React from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 
 import { FiltersPanel } from '@/components/filters/filters-panel';
-import { BookEntity } from '@/lib/data/types';
 import { Grid } from '@mui/material';
-import CustomTextField from '@/components/modals/custom-text-field';
+import CustomTextField from '@/components/form-fields/custom-text-field';
 
 export function NameFiltersPanel({ onApply }) {
     const formContext = useForm<{ name: string }>({});

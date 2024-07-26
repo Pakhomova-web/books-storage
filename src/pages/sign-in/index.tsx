@@ -3,13 +3,13 @@ import { useRouter } from 'next/router';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 
 import { authStyles } from '@/styles/auth';
-import CustomTextField from '@/components/modals/custom-text-field';
+import CustomTextField from '@/components/form-fields/custom-text-field';
 import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 import ErrorNotification from '@/components/error-notification';
 import Loading from '@/components/loading';
 import { useSignIn } from '@/lib/graphql/hooks';
 import React, { useEffect } from 'react';
-import CustomPasswordElement from '@/components/modals/custom-password-element';
+import CustomPasswordElement from '@/components/form-fields/custom-password-element';
 import { emailValidatorExp } from '@/constants/validators-exp';
 
 export default function SignIn() {

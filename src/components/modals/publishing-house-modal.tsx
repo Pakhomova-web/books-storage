@@ -3,7 +3,7 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import { PublishingHouseEntity } from '@/lib/data/types';
 import { useCreatePublishingHouse, useUpdatePublishingHouse } from '@/lib/graphql/hooks';
 import CustomModal from '@/components/modals/custom-modal';
-import CustomTextField from '@/components/modals/custom-text-field';
+import CustomTextField from '@/components/form-fields/custom-text-field';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
 

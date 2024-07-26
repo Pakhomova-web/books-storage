@@ -2,7 +2,6 @@ import React from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 
 import { FiltersPanel } from '@/components/filters/filters-panel';
-import CustomSelectField from '@/components/modals/custom-select-field';
 import { BookEntity } from '@/lib/data/types';
 import {
     useAuthorOptions,
@@ -12,7 +11,8 @@ import {
     usePageTypeOptions
 } from '@/lib/graphql/hooks';
 import { Grid } from '@mui/material';
-import CustomTextField from '@/components/modals/custom-text-field';
+import CustomSelectField from '@/components/form-fields/custom-select-field';
+import CustomTextField from '@/components/form-fields/custom-text-field';
 
 export function BookFilters({ onApply }) {
     const formContext = useForm<BookEntity>({});
