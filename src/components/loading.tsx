@@ -3,7 +3,7 @@ import React from 'react';
 
 interface ILoadingProps {
     show: boolean,
-    fullHeight?: boolean
+    isSmall?: boolean
 }
 
 const backdropStyles = {
@@ -13,10 +13,10 @@ const backdropStyles = {
     position: 'absolute'
 };
 
-export default function Loading({ show, fullHeight }: ILoadingProps) {
+export default function Loading({ show, isSmall }: ILoadingProps) {
     return (
         <Backdrop sx={backdropStyles} open={show}>
-            <CircularProgress color="inherit"/>
+            <CircularProgress color="inherit" size={!isSmall ? 40 : 20}/>
         </Backdrop>
     );
 }

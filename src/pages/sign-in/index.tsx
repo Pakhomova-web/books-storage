@@ -77,7 +77,7 @@ export default function SignIn() {
 
     return (
         <Box sx={positionRelative}>
-            <Loading show={loading} fullHeight={true}></Loading>
+            <Loading show={loading}></Loading>
 
             <Box sx={pageStyles}>
                 <Box sx={authStyles.container}>

@@ -48,6 +48,9 @@ export const styleVariables = {
     flexNoWrap: {
         display: 'flex',
         flexWrap: 'nowrap'
+    },
+    positionRelative: {
+        position: 'relative'
     }
 };
 

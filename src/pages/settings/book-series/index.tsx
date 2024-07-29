@@ -94,7 +94,7 @@ export default function BookSeries() {
 
     return (
         <Box sx={positionRelative}>
-            <Loading show={loading || deleting} fullHeight={true}></Loading>
+            <Loading show={loading || deleting}></Loading>
 
             <Box sx={pageStyles}>
                 <BookSeriesFilters onApply={(filters: IBookSeriesFilter) => setFilters(filters)}></BookSeriesFilters>

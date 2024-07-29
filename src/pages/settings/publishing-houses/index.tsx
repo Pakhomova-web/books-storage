@@ -84,7 +84,7 @@ export default function PublishingHouses() {
 
     return (
         <Box sx={positionRelative}>
-            <Loading show={loading || deleting} fullHeight={true}></Loading>
+            <Loading show={loading || deleting}></Loading>
 
             <Box sx={pageStyles}>
                 <NameFiltersPanel onApply={(filters: PublishingHouseEntity) => setFilters(filters)}></NameFiltersPanel>

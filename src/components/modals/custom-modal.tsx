@@ -11,6 +11,7 @@ const modalContainerStyle = {
 };
 
 const mainContainerStyle = {
+    position: 'relative',
     width: '400px',
     maxWidth: '90vw',
     bgcolor: 'background.paper',
@@ -56,7 +57,7 @@ export default function CustomModal(props: ICustomModalProps) {
     return (
         <Modal open={props.open} onClose={closeModalHandler} disableEscapeKeyDown sx={modalContainerStyle}>
             <Box sx={mainContainerStyle}>
-                <Loading show={props.loading} fullHeight={false}></Loading>
+                <Loading show={props.loading}></Loading>
 
                 <Box sx={innerContainer}>
                     <Box sx={titleStyles}>{props.title}</Box>

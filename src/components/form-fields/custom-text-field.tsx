@@ -1,12 +1,22 @@
-import { TextFieldProps } from '@mui/material';
+import { Box, TextFieldProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { styleVariables } from '@/constants/styles-variables';
 import { TextFieldElement, TextFieldElementProps } from 'react-hook-form-mui';
+import Loading from '@/components/loading';
 
 const StyledTextField = styled(TextFieldElement)<TextFieldProps>(() => ({
     marginBottom: styleVariables.margin
 }));
 
-export default function CustomTextField(props: TextFieldElementProps) {
-    return <StyledTextField {...props} variant="standard" />
+interface ITextFieldElementProps extends TextFieldElementProps {
+    loading?: boolean;
+}
+
+export default function CustomTextField(props: ITextFieldElementProps) {
+    return (
+        <Box sx={styleVariables.positionRelative}>
+            <Loading show={!!props.loading} isSmall={true}/>
+            <StyledTextField {...props} variant="standard"/>
+        </Box>
+    );
 }

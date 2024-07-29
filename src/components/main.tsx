@@ -32,7 +32,7 @@ export default function Main({ children }) {
     const [showSettingsMenu, setShowSettingsMenu] = useState<boolean>(false);
     const [attachedSettingsMenu, setAttachedSettingsMenu] = useState<boolean>(false);
     const theme = useTheme();
-    const mobileMatches = useMediaQuery(theme.breakpoints.up('md'));
+    const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
 
     useEffect(() => {
         setLoading(true);
@@ -63,20 +63,20 @@ export default function Main({ children }) {
 
     useEffect(() => {
         if (activeSettingsTab) {
-            setAttachedSettingsMenu(mobileMatches);
+            setAttachedSettingsMenu(!mobileMatches);
             if (!attachedSettingsMenu) {
                 setShowSettingsMenu(false);
             }
         }
     }, [mobileMatches]);
 
-    function handleSettingsMenu() {
-        if (showSettingsMenu) {
+    function handleSettingsMenu(close = false) {
+        if (close || showSettingsMenu) {
             setAttachedSettingsMenu(false);
             setShowSettingsMenu(false);
         } else {
             if (activeSettingsTab) {
-                setAttachedSettingsMenu(mobileMatches);
+                setAttachedSettingsMenu(!mobileMatches);
             }
             setShowSettingsMenu(true);
         }
@@ -102,9 +102,10 @@ export default function Main({ children }) {
 
     return (
         <Box sx={positionRelative}>
-            <Loading show={loading} fullHeight={true}></Loading>
+            <Loading show={loading}></Loading>
 
             <CustomToolbar activeSettingsTab={activeSettingsTab}
+                           closeSettingsMenu={() => handleSettingsMenu(true)}
                            onSettingsClick={handleSettingsMenu}/>
             {!loading &&
               <>

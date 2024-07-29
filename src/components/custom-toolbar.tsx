@@ -11,13 +11,13 @@ import { ROLES } from '@/constants/roles';
 import { styleVariables } from '@/constants/styles-variables';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-const toolbatTitle = {
+const toolbarTitle = {
     textWrap: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis'
 };
 
-export default function CustomToolbar({ activeSettingsTab, onSettingsClick }) {
+export default function CustomToolbar({ activeSettingsTab, closeSettingsMenu, onSettingsClick }) {
     const { user, logout } = useAuth();
     const router = useRouter();
     const theme = useTheme();
@@ -35,19 +35,20 @@ export default function CustomToolbar({ activeSettingsTab, onSettingsClick }) {
     }, [mobileMatches]);
 
     function goToMainPage() {
-        handleClickOnSettings();
+        closeMenu();
+        closeSettingsMenu();
         router.push('/');
     }
 
     function onLogoutClick() {
-        handleClickOnSettings();
+        closeSettingsMenu();
         closeMenu();
         logout();
         router.push('/');
     }
 
     function onLoginClick() {
-        handleClickOnSettings();
+        closeSettingsMenu();
         closeMenu();
         router.push('../login');
     }
@@ -71,7 +72,7 @@ export default function CustomToolbar({ activeSettingsTab, onSettingsClick }) {
                       </IconButton>}
                 </Box>
 
-                {activeSettingsTab && <Box sx={toolbatTitle}>{activeSettingsTab.title}</Box>}
+                {activeSettingsTab && <Box sx={toolbarTitle}>{activeSettingsTab.title}</Box>}
 
                 <Box sx={styleVariables.flexNoWrap}>
                     <IconButton onClick={() => goToMainPage()}

@@ -63,7 +63,7 @@ export default function Login() {
 
     return (
         <Box sx={positionRelative}>
-            <Loading show={loading} fullHeight={true}></Loading>
+            <Loading show={loading}></Loading>
 
             <Box sx={pageStyles}>
                 <Box sx={authStyles.container}>

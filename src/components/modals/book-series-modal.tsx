@@ -25,7 +25,7 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
     });
     const { update, updating, updatingError } = useUpdateBookSeries();
     const { create, creating, creatingError } = useCreateBookSeries();
-    const { items: publishingHouseOptions } = usePublishingHouseOptions();
+    const { items: publishingHouseOptions, loading: loadingPublishingHouses } = usePublishingHouseOptions();
     const { checkAuth } = useAuth();
 
     async function onSubmit() {
@@ -61,6 +61,7 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
                 <CustomSelectField fullWidth
                                    required
                                    options={publishingHouseOptions}
+                                   loading={loadingPublishingHouses}
                                    id="publishing-house-id"
                                    label="Publishing House"
                                    name="publishingHouseId"/>

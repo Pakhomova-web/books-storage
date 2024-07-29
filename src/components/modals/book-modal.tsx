@@ -68,6 +68,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     const { items: bookTypeOptions, loading: loadingBookTypes } = useBookTypeOptions<IOption>();
     const { items: publishingHouseOptions, loading: loadingPublishingHouses } = usePublishingHouseOptions<IOption>();
     const { items: coverTypeOptions, loading: loadingCoverTypes } = useCoverTypeOptions<IOption>();
+    const [loadingBookSeries, setLoadingBookSeries] = useState<boolean>();
     const { checkAuth } = useAuth();
 
     useEffect(() => {
@@ -76,9 +77,11 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
 
     async function fetchBookSeriesOptions() {
         if (publishingHouseId) {
+            setLoadingBookSeries(true);
             setBookSeriesOptions([]);
             getBookSeriesOptions({ publishingHouse: publishingHouseId } as IBookSeriesFilter)
                 .then(options => {
+                    setLoadingBookSeries(false);
                     setBookSeriesOptions(options);
                     formContext.setValue('bookSeriesId', bookSeriesId ? options.find(({ id }) => id === bookSeriesId)?.id : null);
                 });
@@ -113,7 +116,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
-                     loading={updating || creating || loadingLanguages || loadingAuthors || loadingPageTypes || loadingCoverTypes || loadingBookTypes || loadingPublishingHouses}
+                     loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={isAdmin ? onSubmit : null}>
             <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
@@ -129,6 +132,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                    required
                                    disabled={!isAdmin}
                                    options={bookTypeOptions}
+                                   loading={loadingBookTypes}
                                    id="book-type-id"
                                    label="Book Type"
                                    name="bookTypeId"/>
@@ -136,6 +140,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 <CustomSelectField fullWidth
                                    required
                                    disabled={!isAdmin}
+                                   loading={loadingPublishingHouses}
                                    options={publishingHouseOptions}
                                    id="publishing-house-id"
                                    label="Publishing House"
@@ -144,6 +149,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 <CustomSelectField fullWidth
                                    required
                                    disabled={!isAdmin || !publishingHouseId}
+                                   loading={loadingBookSeries}
                                    options={bookSeriesOptions}
                                    id="book-series-id"
                                    label="Book Series"
@@ -152,6 +158,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 <CustomSelectField fullWidth
                                    required
                                    disabled={!isAdmin}
+                                   loading={loadingLanguages}
                                    options={languageOptions}
                                    id="language-id"
                                    label="Language"
@@ -160,6 +167,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 <CustomSelectField fullWidth
                                    required
                                    disabled={!isAdmin}
+                                   loading={loadingPageTypes}
                                    options={pageTypeOptions}
                                    id="page-type-id"
                                    label="Page Type"
@@ -168,6 +176,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 <CustomSelectField fullWidth
                                    required
                                    disabled={!isAdmin}
+                                   loading={loadingCoverTypes}
                                    options={coverTypeOptions}
                                    id="cover-type-id"
                                    label="Cover Type"
@@ -202,6 +211,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 <CustomSelectField fullWidth
                                    options={authorOptions}
                                    disabled={!isAdmin}
+                                   loading={loadingAuthors}
                                    id="author"
                                    label="Author"
                                    name="authorId"/>

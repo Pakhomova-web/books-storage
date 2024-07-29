@@ -218,7 +218,7 @@ export default function Books() {
 
     return (
         <Box sx={positionRelative}>
-            <Loading show={loading || deleting || downloadingCsv} fullHeight={true}></Loading>
+            <Loading show={loading || deleting || downloadingCsv}></Loading>
 
             <Box sx={pageStyles}>
                 <BookFilters onApply={(filters: IBookFilter) => setFilters(filters)}></BookFilters>

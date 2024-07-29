@@ -86,7 +86,7 @@ export default function PageTypes() {
 
     return (
         <Box sx={positionRelative}>
-            <Loading show={loading || deleting} fullHeight={true}></Loading>
+            <Loading show={loading || deleting}></Loading>
 
             <Box sx={pageStyles}>
                 <NameFiltersPanel onApply={(filters: PageTypeEntity) => setFilters(filters)}></NameFiltersPanel>
