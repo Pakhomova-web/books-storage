@@ -1,10 +1,10 @@
 import { ITableAction, TableActionEnum, TableKey } from '@/components/table/table-key';
 import React, { ReactNode } from 'react';
 import { Box, Button, IconButton, Menu, MenuItem, TableCell } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CopyIcon from '@mui/icons-material/ContentCopy';
 import AddIcon from '@mui/icons-material/Add';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 export function renderTableCell<T>(key: TableKey<T>, item: T, index: number, rowStyleClass?: Function): ReactNode {
     return (
@@ -36,7 +36,7 @@ export function renderActions<T>(actions: ITableAction[], item: T, anchorMenuEl:
         actions.map((icon, index) => getActionItem<T>(item, icon, index)) :
         <Box>
             <IconButton aria-haspopup="true" onClick={onMenuClick}>
-                <MenuIcon/>
+                <MoreVertIcon/>
             </IconButton>
             <Menu anchorEl={anchorMenuEl}
                   open={open}
