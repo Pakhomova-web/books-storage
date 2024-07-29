@@ -1,6 +1,4 @@
 import { AppBar, Box, IconButton, Menu, MenuItem, Toolbar, useTheme } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon';
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -19,14 +17,7 @@ const toolbatTitle = {
     textOverflow: 'ellipsis'
 };
 
-export default function CustomToolbar({
-                                          isSettings,
-                                          showSettingsMenu,
-                                          attachedSettingsMenu,
-                                          activeSettingsTab,
-                                          handleSettingsMenu,
-                                          hideSettingsMenu
-                                      }) {
+export default function CustomToolbar({ activeSettingsTab, onSettingsClick }) {
     const { user, logout } = useAuth();
     const router = useRouter();
     const theme = useTheme();
@@ -44,19 +35,19 @@ export default function CustomToolbar({
     }, [mobileMatches]);
 
     function goToMainPage() {
-        hideSettingsMenu();
+        handleClickOnSettings();
         router.push('/');
     }
 
     function onLogoutClick() {
-        hideSettingsMenu();
+        handleClickOnSettings();
         closeMenu();
         logout();
         router.push('/');
     }
 
     function onLoginClick() {
-        hideSettingsMenu();
+        handleClickOnSettings();
         closeMenu();
         router.push('../login');
     }
@@ -65,22 +56,20 @@ export default function CustomToolbar({
         setAnchorMenuEl(null);
     }
 
-    function onSettingsClick() {
+    function handleClickOnSettings() {
         closeMenu();
-        router.push('/settings/books');
+        onSettingsClick();
     }
 
     return (
         <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
             <Toolbar className="toolbar">
-                <Box>{
-                    isSettings && (
-                        !showSettingsMenu && !attachedSettingsMenu ?
-                            <IconButton color="inherit"
-                                        onClick={() => handleSettingsMenu(false)}><MenuIcon/></IconButton> :
-                            <IconButton color="inherit"
-                                        onClick={() => handleSettingsMenu()}><CloseIcon/></IconButton>)
-                }</Box>
+                <Box>
+                    {user?.role === ROLES.admin &&
+                      <IconButton color="inherit" sx={{ mr: 2 }} aria-label="settings" onClick={handleClickOnSettings}>
+                        <SettingsIcon/>
+                      </IconButton>}
+                </Box>
 
                 {activeSettingsTab && <Box sx={toolbatTitle}>{activeSettingsTab.title}</Box>}
 
@@ -96,7 +85,6 @@ export default function CustomToolbar({
                                   open={!!anchorMenuEl}
                                   onClose={closeMenu}
                                   MenuListProps={{ 'aria-labelledby': 'basic-button' }}>
-                                <MenuItem onClick={onSettingsClick}>Settings</MenuItem>
                                 {!!user ?
                                     <MenuItem onClick={() => onLogoutClick()}>Logout</MenuItem> :
                                     <MenuItem onClick={() => onLoginClick()}>Login</MenuItem>
@@ -104,14 +92,6 @@ export default function CustomToolbar({
                             </Menu>
                         </> :
                         <>
-                            {user?.role === ROLES.admin &&
-                              <IconButton color="inherit"
-                                          sx={{ mr: 2 }}
-                                          aria-label="settings"
-                                          onClick={onSettingsClick}>
-                                <SettingsIcon/>
-                              </IconButton>}
-
                             {!!user ?
                                 <IconButton color="inherit" onClick={() => onLogoutClick()}>
                                     <LogoutIcon/>

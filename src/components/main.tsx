@@ -29,7 +29,6 @@ export default function Main({ children }) {
     const router = useRouter();
     const pathname = usePathname();
     const [activeSettingsTab, setActiveSettingsTab] = useState<SettingListItem>();
-    const [isSettings, setIsSettings] = useState<boolean>(false);
     const [showSettingsMenu, setShowSettingsMenu] = useState<boolean>(false);
     const [attachedSettingsMenu, setAttachedSettingsMenu] = useState<boolean>(false);
     const theme = useTheme();
@@ -44,7 +43,6 @@ export default function Main({ children }) {
             })
             .catch(() => {
                 setLoading(false);
-                setIsSettings(false);
                 setShowSettingsMenu(false);
                 setAttachedSettingsMenu(false);
                 setActiveSettingsTab(null);
@@ -57,16 +55,14 @@ export default function Main({ children }) {
 
     useEffect(() => {
         if (pathname.includes('settings')) {
-            setIsSettings(true);
-            setActiveSettingsTab(settingsList.find(i => i.link === pathname.split('/settings/')[1]));
+            onSettingItemClick(settingsList.find(i => i.link === pathname.split('/settings/')[1]));
         } else {
-            setIsSettings(false);
             setActiveSettingsTab(null);
         }
     }, [pathname]);
 
     useEffect(() => {
-        if (isSettings) {
+        if (activeSettingsTab) {
             setAttachedSettingsMenu(mobileMatches);
             if (!attachedSettingsMenu) {
                 setShowSettingsMenu(false);
@@ -74,12 +70,14 @@ export default function Main({ children }) {
         }
     }, [mobileMatches]);
 
-    function handleSettingsMenu(close = true) {
-        if (close) {
-            setShowSettingsMenu(false);
+    function handleSettingsMenu() {
+        if (showSettingsMenu) {
             setAttachedSettingsMenu(false);
+            setShowSettingsMenu(false);
         } else {
-            setAttachedSettingsMenu(mobileMatches);
+            if (activeSettingsTab) {
+                setAttachedSettingsMenu(mobileMatches);
+            }
             setShowSettingsMenu(true);
         }
     }
@@ -90,41 +88,34 @@ export default function Main({ children }) {
         setShowSettingsMenu(false);
     }
 
-    function hideSettingsMenu() {
-        setIsSettings(false);
-        if (!attachedSettingsMenu) {
-            setShowSettingsMenu(false);
-        }
-        setActiveSettingsTab(null);
-    }
-
     function onSettingItemClick(item: SettingListItem) {
         if (!attachedSettingsMenu) {
-            setShowSettingsMenu(false)
+            if (!mobileMatches) {
+                setAttachedSettingsMenu(true);
+                setShowSettingsMenu(true);
+            } else {
+                setShowSettingsMenu(false);
+            }
         }
-        setActiveSettingsTab(activeSettingsTab);
+        setActiveSettingsTab(item);
     }
 
     return (
         <Box sx={positionRelative}>
             <Loading show={loading} fullHeight={true}></Loading>
 
-            <CustomToolbar isSettings={isSettings}
-                           showSettingsMenu={showSettingsMenu}
-                           activeSettingsTab={activeSettingsTab}
-                           attachedSettingsMenu={attachedSettingsMenu}
-                           handleSettingsMenu={handleSettingsMenu}
-                           hideSettingsMenu={hideSettingsMenu}/>
+            <CustomToolbar activeSettingsTab={activeSettingsTab}
+                           onSettingsClick={handleSettingsMenu}/>
             {!loading &&
               <>
-                  {isSettings && (attachedSettingsMenu || showSettingsMenu) ?
-                      <SettingsMenu activeSettingsTab={activeSettingsTab}
-                                    onMenuItemClick={(item: SettingListItem) => onSettingItemClick(item)}/> : null}
+                  {(showSettingsMenu || attachedSettingsMenu) &&
+                    <SettingsMenu activeSettingsTab={activeSettingsTab}
+                                  onMenuItemClick={(item: SettingListItem) => onSettingItemClick(item)}/>}
 
                 <Toolbar/>
-                <Box sx={isSettings && attachedSettingsMenu ? { paddingLeft: `${drawerWidth}px` } : {}}>
+                <Box sx={!!activeSettingsTab && attachedSettingsMenu ? { paddingLeft: `${drawerWidth}px` } : {}}>
                   <Box sx={styleVariables.overflowHidden}>{children}</Box>
-                    {isSettings && showSettingsMenu && !attachedSettingsMenu &&
+                    {showSettingsMenu && !attachedSettingsMenu &&
                       <Box sx={settingMenuBackdrop} onClick={handleClickOutsideSettingsMenu}></Box>}
                 </Box>
               </>}
