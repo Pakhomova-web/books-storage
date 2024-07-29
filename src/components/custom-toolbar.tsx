@@ -9,6 +9,13 @@ import React from 'react';
 import { useAuth } from '@/components/auth-context';
 import { useRouter } from 'next/router';
 import { ROLES } from '@/constants/roles';
+import { styleVariables } from '@/constants/styles-variables';
+
+const toolbatTitle = {
+    textWrap: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis'
+};
 
 export default function CustomToolbar({
                                           isSettings,
@@ -49,9 +56,9 @@ export default function CustomToolbar({
                                         onClick={() => handleSettingsMenu()}><CloseIcon/></IconButton>)
                 }</Box>
 
-                {activeSettingsTab && <Box>{activeSettingsTab.title}</Box>}
+                {activeSettingsTab && <Box sx={toolbatTitle}>{activeSettingsTab.title}</Box>}
 
-                <Box>
+                <Box sx={styleVariables.flexNoWrap}>
                     <IconButton onClick={() => goToMainPage()}
                                 color="inherit"
                                 sx={{ mr: 2 }}><HomeIcon/></IconButton>

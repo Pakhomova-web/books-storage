@@ -43,6 +43,11 @@ export const styleVariables = {
         py: 2,
         background: 'white',
         'z-index': 2
+    },
+    overflowHidden: { overflow: 'hidden' },
+    flexNoWrap: {
+        display: 'flex',
+        flexWrap: 'nowrap'
     }
 };
 
@@ -55,3 +60,5 @@ export const titleStyles = {
     fontWeight: 'bold',
     marginBottom: styleVariables.doubleMargin
 };
+
+export const drawerWidth = 240;

@@ -1,37 +1,16 @@
-import { Box, Drawer, List, ListItem, ListItemButton, ListItemText, Toolbar, useTheme } from '@mui/material';
+import { Box, Toolbar, useTheme } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { positionRelative, styleVariables } from '@/constants/styles-variables';
+import { drawerWidth, positionRelative, styleVariables } from '@/constants/styles-variables';
 import CustomToolbar from '@/components/custom-toolbar';
 import { useUser } from '@/lib/graphql/hooks';
 import Loading from '@/components/loading';
 import { useAuth } from '@/components/auth-context';
 import { UserEntity } from '@/lib/data/types';
-
-interface SettingListItem {
-    link: string,
-    title: string
-}
-
-const settingsList: SettingListItem[] = [
-    { title: 'Orders', link: 'orders' },
-    { title: 'Books', link: 'books' },
-    { title: 'Publishing Houses', link: 'publishing-houses' },
-    { title: 'Book Series', link: 'book-series' },
-    { title: 'Cover Types', link: 'cover-types' },
-    { title: 'Book Types', link: 'book-types' },
-    { title: 'Page Types', link: 'page-types' },
-    { title: 'Languages', link: 'languages' },
-    { title: 'Authors', link: 'authors' }
-];
-const drawerWidth = 240;
-
-const leftNavigationStyles = {
-    width: drawerWidth,
-    [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' }
-};
+import SettingsMenu, { settingsList } from '@/components/settings-menu';
+import { SettingListItem } from '@/components/types';
 
 const settingMenuBackdrop = {
     width: '100vw',
@@ -95,14 +74,6 @@ export default function Main({ children }) {
         }
     }, [mobileMatches]);
 
-    function settingsTabChange(activeSettingsTab: SettingListItem) {
-        if (!attachedSettingsMenu) {
-            setShowSettingsMenu(false);
-        }
-        setActiveSettingsTab(activeSettingsTab);
-        router.push(`/settings/${activeSettingsTab.link}`);
-    }
-
     function handleSettingsMenu(close = true) {
         if (close) {
             setShowSettingsMenu(false);
@@ -127,6 +98,13 @@ export default function Main({ children }) {
         setActiveSettingsTab(null);
     }
 
+    function onSettingItemClick(item: SettingListItem) {
+        if (!attachedSettingsMenu) {
+            setShowSettingsMenu(false)
+        }
+        setActiveSettingsTab(activeSettingsTab);
+    }
+
     return (
         <Box sx={positionRelative}>
             <Loading show={loading} fullHeight={true}></Loading>
@@ -137,30 +115,19 @@ export default function Main({ children }) {
                            attachedSettingsMenu={attachedSettingsMenu}
                            handleSettingsMenu={handleSettingsMenu}
                            hideSettingsMenu={hideSettingsMenu}/>
-            {!loading && <>
-                {isSettings && (attachedSettingsMenu || showSettingsMenu) ?
-                    <Drawer variant="permanent" sx={leftNavigationStyles}>
-                        <Toolbar/>
-                        <List>
-                            {settingsList.map(tab => (
-                                <ListItem key={tab.link} disablePadding
-                                          className={activeSettingsTab?.link === tab.link ? 'active-nav-link' : ''}
-                                          onClick={() => settingsTabChange(tab)}>
-                                    <ListItemButton>
-                                        <ListItemText primary={tab.title}/>
-                                    </ListItemButton>
-                                </ListItem>
-                            ))}
-                        </List>
-                    </Drawer> : null}
+            {!loading &&
+              <>
+                  {isSettings && (attachedSettingsMenu || showSettingsMenu) ?
+                      <SettingsMenu activeSettingsTab={activeSettingsTab}
+                                    onMenuItemClick={(item: SettingListItem) => onSettingItemClick(item)}/> : null}
 
-              <Toolbar/>
-              <Box sx={isSettings && attachedSettingsMenu ? { paddingLeft: `${drawerWidth}px` } : {}}>
-                <Box sx={{ overflow: 'hidden' }}>{children}</Box>
-                  {isSettings && showSettingsMenu && !attachedSettingsMenu &&
-                    <Box sx={settingMenuBackdrop} onClick={handleClickOutsideSettingsMenu}></Box>}
-              </Box>
-            </>}
+                <Toolbar/>
+                <Box sx={isSettings && attachedSettingsMenu ? { paddingLeft: `${drawerWidth}px` } : {}}>
+                  <Box sx={styleVariables.overflowHidden}>{children}</Box>
+                    {isSettings && showSettingsMenu && !attachedSettingsMenu &&
+                      <Box sx={settingMenuBackdrop} onClick={handleClickOutsideSettingsMenu}></Box>}
+                </Box>
+              </>}
         </Box>
     );
 }
