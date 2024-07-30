@@ -55,16 +55,17 @@ export default function Main({ children }) {
 
     useEffect(() => {
         if (pathname.includes('settings')) {
-            onSettingItemClick(settingsList.find(i => i.link === pathname.split('/settings/')[1]));
+            setActiveSettingsTab(settingsList.find(i => i.link === pathname.split('/settings/')[1]));
         } else {
             setActiveSettingsTab(null);
         }
     }, [pathname]);
 
     useEffect(() => {
+        console.log('activeSettingsTab', activeSettingsTab);
         if (activeSettingsTab) {
             setAttachedSettingsMenu(!mobileMatches);
-            if (!attachedSettingsMenu) {
+            if (mobileMatches) {
                 setShowSettingsMenu(false);
             }
         }
@@ -94,6 +95,7 @@ export default function Main({ children }) {
                 setAttachedSettingsMenu(true);
                 setShowSettingsMenu(true);
             } else {
+                setAttachedSettingsMenu(false);
                 setShowSettingsMenu(false);
             }
         }

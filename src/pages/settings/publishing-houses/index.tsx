@@ -13,7 +13,7 @@ import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 import { isAdmin } from '@/utils/utils';
 import { useAuth } from '@/components/auth-context';
-import { pageStyles, positionRelative } from '@/constants/styles-variables';
+import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 
 export default function PublishingHouses() {
     const { user, checkAuth } = useAuth();
@@ -101,7 +101,7 @@ export default function PublishingHouses() {
                     {error && <ErrorNotification error={error}></ErrorNotification>}
 
                     {isAdmin(user) &&
-                      <Box sx={{ display: 'flex', justifyContent: 'center', py: 2 }}>
+                      <Box sx={styleVariables.buttonsContainer}>
                         <Button variant="outlined" onClick={() => onAdd()}>
                           <AddIcon></AddIcon>Add Publishing House
                         </Button>
