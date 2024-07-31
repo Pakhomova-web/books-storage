@@ -206,6 +206,7 @@ export type Mutation = {
   updateLanguage?: Maybe<Language>;
   updatePageType?: Maybe<PageType>;
   updatePublishingHouse?: Maybe<PublishingHouse>;
+  updateUser: User;
   user?: Maybe<User>;
 };
 
@@ -345,6 +346,11 @@ export type MutationUpdatePublishingHouseArgs = {
   input: PublishingHouseInput;
 };
 
+
+export type MutationUpdateUserArgs = {
+  input: UserUpdateInput;
+};
+
 export type PageType = {
   id?: Maybe<Scalars['ID']['output']>;
   name: Scalars['String']['output'];
@@ -480,6 +486,13 @@ export type UserToken = {
   user: User;
 };
 
+export type UserUpdateInput = {
+  email: Scalars['String']['input'];
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  lastName?: InputMaybe<Scalars['String']['input']>;
+};
+
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -592,6 +605,7 @@ export type ResolversTypes = {
   User: ResolverTypeWrapper<UserEntity>;
   UserCreateInput: UserCreateInput;
   UserToken: ResolverTypeWrapper<Omit<UserToken, 'user'> & { user: ResolversTypes['User'] }>;
+  UserUpdateInput: UserUpdateInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -637,6 +651,7 @@ export type ResolversParentTypes = {
   User: UserEntity;
   UserCreateInput: UserCreateInput;
   UserToken: Omit<UserToken, 'user'> & { user: ResolversParentTypes['User'] };
+  UserUpdateInput: UserUpdateInput;
 };
 
 export type AuthorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Author'] = ResolversParentTypes['Author']> = {
@@ -729,6 +744,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateLanguage?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<MutationUpdateLanguageArgs, 'input'>>;
   updatePageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationUpdatePageTypeArgs, 'input'>>;
   updatePublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationUpdatePublishingHouseArgs, 'input'>>;
+  updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };
 

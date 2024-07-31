@@ -78,7 +78,10 @@ const link = from([
     removeTypenameLink,
     new HttpLink({
         uri: `${process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : 'https://books-storage.vercel.app'}/api/graphql`
-    })
+    }),
+    // new HttpLink({
+    //     uri: 'http://192.168.1.88:3000/api/graphql'
+    // })
 ]);
 
 export const apolloClient = new ApolloClient({

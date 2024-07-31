@@ -31,7 +31,7 @@ import {
 import { createBook, deleteBook, getBooks, updateBook, updateBookNumberInStock } from '@/lib/data/books';
 import { createAuthor, deleteAuthor, getAuthors, updateAuthor } from '@/lib/data/author';
 import { GraphQLError } from 'graphql/error';
-import { createUser, getNewToken, login } from '@/lib/data/user';
+import { createUser, getNewToken, login, updateUser } from '@/lib/data/user';
 
 function parseError(error) {
     switch (error.extensions?.code) {
@@ -372,6 +372,14 @@ const resolvers: Resolvers = {
             _checkUser(user);
             try {
                 return user;
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        updateUser: async (_root, { input }: { input: UserEntity }, { user }) => {
+            _checkUser(user);
+            try {
+                return updateUser(input);
             } catch (error) {
                 parseError(error);
             }

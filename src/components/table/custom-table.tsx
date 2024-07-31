@@ -20,7 +20,6 @@ import { visuallyHidden } from '@mui/utils';
 import { IPageable } from '@/lib/data/types';
 import { MobileTable } from '@/components/table/mobile-view/mobile-table';
 import { styleVariables } from '@/constants/styles-variables';
-import { tableContainerStyles } from '@/components/table/table-styles';
 import { renderTableActions, renderTableCell } from '@/components/table/table-cell-render';
 
 interface CustomTableProps<K> {
@@ -121,7 +120,7 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
 
     return (<>
         {!mobileMatches ?
-            <TableContainer sx={tableContainerStyles()}>
+            <TableContainer>
                 <Table stickyHeader>
                     <TableHead>
                         <TableRow>

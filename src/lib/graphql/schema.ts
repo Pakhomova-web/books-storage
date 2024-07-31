@@ -115,6 +115,7 @@ const typeDefs =  /* GraphQL */ `
         createUser(input: UserCreateInput!): User
         login(email: String!, password: String!): UserToken!
         user: User
+        updateUser(input: UserUpdateInput!): User!
     }
     
     type UserToken {
@@ -276,6 +277,13 @@ const typeDefs =  /* GraphQL */ `
     input UserCreateInput {
         email: String!,
         password: String!,
+        firstName: String,
+        lastName: String
+    }
+    
+    input UserUpdateInput {
+        id: ID!,
+        email: String!,
         firstName: String,
         lastName: String
     }

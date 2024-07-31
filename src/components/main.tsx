@@ -1,16 +1,13 @@
-import { Box, Toolbar, useTheme } from '@mui/material';
+import { Box, Toolbar } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { drawerWidth, positionRelative, styleVariables } from '@/constants/styles-variables';
+import { drawerWidth, fullHeight, positionRelative, styleVariables } from '@/constants/styles-variables';
 import CustomToolbar from '@/components/custom-toolbar';
 import { useUser } from '@/lib/graphql/hooks';
 import Loading from '@/components/loading';
 import { useAuth } from '@/components/auth-context';
 import { UserEntity } from '@/lib/data/types';
-import SettingsMenu, { settingsList } from '@/components/settings-menu';
-import { SettingListItem } from '@/components/types';
 
 const settingMenuBackdrop = {
     width: '100vw',
@@ -28,11 +25,8 @@ export default function Main({ children }) {
     const { logout, setUser } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
-    const [activeSettingsTab, setActiveSettingsTab] = useState<SettingListItem>();
     const [showSettingsMenu, setShowSettingsMenu] = useState<boolean>(false);
     const [attachedSettingsMenu, setAttachedSettingsMenu] = useState<boolean>(false);
-    const theme = useTheme();
-    const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
 
     useEffect(() => {
         setLoading(true);
@@ -45,7 +39,6 @@ export default function Main({ children }) {
                 setLoading(false);
                 setShowSettingsMenu(false);
                 setAttachedSettingsMenu(false);
-                setActiveSettingsTab(null);
                 logout();
                 if (!(pathname.includes('login') || pathname.includes('sign-in'))) {
                     router.push('/');
@@ -53,74 +46,34 @@ export default function Main({ children }) {
             });
     }, []);
 
-    useEffect(() => {
-        if (pathname.includes('settings')) {
-            setActiveSettingsTab(settingsList.find(i => i.link === pathname.split('/settings/')[1]));
-        } else {
-            setActiveSettingsTab(null);
-        }
-    }, [pathname]);
-
-    useEffect(() => {
-        console.log('activeSettingsTab', activeSettingsTab);
-        if (activeSettingsTab) {
-            setAttachedSettingsMenu(!mobileMatches);
-            if (mobileMatches) {
-                setShowSettingsMenu(false);
-            }
-        }
-    }, [mobileMatches]);
-
-    function handleSettingsMenu(close = false) {
-        if (close || showSettingsMenu) {
-            setAttachedSettingsMenu(false);
-            setShowSettingsMenu(false);
-        } else {
-            if (activeSettingsTab) {
-                setAttachedSettingsMenu(!mobileMatches);
-            }
-            setShowSettingsMenu(true);
-        }
-    }
-
     function handleClickOutsideSettingsMenu(event) {
         event.stopPropagation();
         event.preventDefault();
         setShowSettingsMenu(false);
     }
 
-    function onSettingItemClick(item: SettingListItem) {
-        if (!attachedSettingsMenu) {
-            if (!mobileMatches) {
-                setAttachedSettingsMenu(true);
-                setShowSettingsMenu(true);
-            } else {
-                setAttachedSettingsMenu(false);
-                setShowSettingsMenu(false);
-            }
-        }
-        setActiveSettingsTab(item);
+    function changeDisplayingSettingsMenu({ show, attached }) {
+        console.log('show', show, 'attached', attached);
+        setAttachedSettingsMenu(attached);
+        setShowSettingsMenu(show);
     }
 
     return (
-        <Box sx={positionRelative}>
+        <Box sx={{ ...positionRelative, ...fullHeight }}>
             <Loading show={loading}></Loading>
 
-            <CustomToolbar activeSettingsTab={activeSettingsTab}
-                           closeSettingsMenu={() => handleSettingsMenu(true)}
-                           onSettingsClick={handleSettingsMenu}/>
+            <CustomToolbar showSettingsMenu={showSettingsMenu}
+                           attachedSettingsMenu={attachedSettingsMenu}
+                           changeDisplayingSettings={changeDisplayingSettingsMenu}/>
             {!loading &&
               <>
-                  {(showSettingsMenu || attachedSettingsMenu) &&
-                    <SettingsMenu activeSettingsTab={activeSettingsTab}
-                                  onMenuItemClick={(item: SettingListItem) => onSettingItemClick(item)}/>}
-
                 <Toolbar/>
-                <Box sx={!!activeSettingsTab && attachedSettingsMenu ? { paddingLeft: `${drawerWidth}px` } : {}}>
+                <Box sx={showSettingsMenu && attachedSettingsMenu ? { paddingLeft: `${drawerWidth}px` } : {}}>
                   <Box sx={styleVariables.overflowHidden}>{children}</Box>
-                    {showSettingsMenu && !attachedSettingsMenu &&
-                      <Box sx={settingMenuBackdrop} onClick={handleClickOutsideSettingsMenu}></Box>}
                 </Box>
+
+                  {showSettingsMenu && !attachedSettingsMenu &&
+                    <Box sx={settingMenuBackdrop} onClick={handleClickOutsideSettingsMenu}></Box>}
               </>}
         </Box>
     );

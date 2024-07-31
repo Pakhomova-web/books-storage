@@ -2,7 +2,6 @@ import { Box, Grid } from '@mui/material';
 import React, { ReactNode, useState } from 'react';
 import { styleVariables } from '@/constants/styles-variables';
 import { TableKey } from '@/components/table/table-key';
-import { tableContainerStyles } from '@/components/table/table-styles';
 import { renderActions } from '@/components/table/table-cell-render';
 
 const mobileBox = {
@@ -56,7 +55,7 @@ export function MobileTable<T>(props: IMobileTableProps<T>) {
     }
 
     return (
-        <Box sx={tableContainerStyles()}>
+        <Box>
             <Grid container>
                 {props.data.map((item, index) =>
                     <Grid item key={index} sm={6} xs={12}>

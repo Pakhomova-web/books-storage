@@ -42,7 +42,7 @@ import {
     updateLanguageQuery,
     updatePageTypeQuery,
     updatePublishingHouseQuery,
-    userQuery
+    userQuery, userUpdateQuery
 } from './queries';
 import {
     AuthorEntity,
@@ -298,6 +298,10 @@ export function useUser() {
         loading,
         error
     };
+}
+
+export function useCurrentUser() {
+    return _useUpdateItem<UserEntity>(userUpdateQuery);
 }
 
 /** common **/

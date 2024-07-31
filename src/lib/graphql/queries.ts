@@ -453,6 +453,18 @@ export const userQuery = gql`
     }
 `;
 
+export const userUpdateQuery = gql`
+    mutation UpdateUser($input: UserUpdateInput!) {
+        item: updateUser(input: $input) {
+            id
+            email
+            firstName
+            lastName
+            role
+        }
+    }
+`;
+
 export const refreshTokenQuery = gql`
     query RefreshToken($refreshToken: String!) {
         login: refreshToken(refreshToken: $refreshToken) {

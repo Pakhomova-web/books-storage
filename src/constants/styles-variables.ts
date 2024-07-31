@@ -17,8 +17,6 @@ export const styleVariables = {
     greenLightColor: 'rgba(0, 128, 0, 0.2)',
     primaryColor: 'rgba(68, 138, 255, 0.2)',
     gray,
-    filtersPanelHeight: 48,
-    toolbarHeight: 64,
     flexEnd: { display: 'flex', justifyContent: 'end' },
     alignItemsCenter: { alignItems: 'center' },
     mobileSmallFontSize: {
@@ -42,8 +40,10 @@ export const styleVariables = {
         justifyContent: 'center',
         py: 2,
         background: 'white',
-        'z-index': 2
+        zIndex: 2,
+        width: '100%'
     },
+    border: { border: '1px solid' },
     overflowHidden: { overflow: 'hidden' },
     flexNoWrap: {
         display: 'flex',
@@ -56,6 +56,7 @@ export const styleVariables = {
 
 
 export const positionRelative = { position: 'relative' };
+export const fullHeight = { height: '100vh' };
 export const pageStyles = { overflowY: 'auto', height: 'calc(100vh - 64px)' };
 
 export const titleStyles = {

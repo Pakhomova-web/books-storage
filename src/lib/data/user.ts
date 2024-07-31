@@ -13,6 +13,7 @@ import {
     SECRET_JWT_KEY
 } from '@/lib/data/auth-utils';
 import { verify } from 'jsonwebtoken';
+import PageType from '@/lib/data/models/page-type';
 
 export async function createUser(input: UserEntity) {
     if (!input.email || !input.password) {
@@ -82,6 +83,24 @@ export async function getNewToken(refreshToken: string) {
 
     delete user.password;
     return { user, token: createToken(userId), refreshToken: createRefreshToken(userId) };
+}
+
+export async function updateUser(input: UserEntity): Promise<UserEntity> {
+    if (!input.id) {
+        throw new GraphQLError(`No User found with id ${input.id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+    const itemByEmail = await getByEmail<UserEntity>(User, input.email);
+
+    if (itemByEmail && itemByEmail.id.toString() !== input.id) {
+        throw new GraphQLError(`Email '${input.email}' is used.`, {
+            extensions: { code: 'DUPLICATE_ERROR' }
+        });
+    }
+    await User.findByIdAndUpdate(input.id, input);
+
+    return input as UserEntity;
 }
 
 export async function getUserById(id: string): Promise<UserEntity> {
