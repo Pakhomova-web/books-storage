@@ -7,7 +7,7 @@ import { authStyles } from '@/styles/auth';
 import ErrorNotification from '@/components/error-notification';
 import React, { useEffect } from 'react';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
-import { emailValidatorExp } from '@/constants/validators-exp';
+import { emailValidatorExp, passwordValidatorExp } from '@/constants/validators-exp';
 import Loading from '@/components/loading';
 import { useLogin } from '@/lib/graphql/hooks';
 import { useAuth } from '@/components/auth-context';
@@ -23,7 +23,17 @@ export default function Login() {
     const formContext = useForm<{ email: string, password: string }>();
     const { loading, error, loginUser } = useLogin();
     const { login } = useAuth();
-    const { email } = formContext.watch();
+    const { email, password } = formContext.watch();
+
+    useEffect(() => {
+        if (password && !passwordValidatorExp.test(password)) {
+            formContext.setError('password', { message: 'Min 8 chars: A-Z, a-z, 0-9' });
+        } else if (!password && formContext.formState.touchedFields.password) {
+            formContext.setError('password', { message: 'Password is required' });
+        } else {
+            formContext.clearErrors('password');
+        }
+    }, [password]);
 
     useEffect(() => {
         if (formContext.formState.touchedFields.email) {

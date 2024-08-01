@@ -10,7 +10,7 @@ import Loading from '@/components/loading';
 import { useSignIn } from '@/lib/graphql/hooks';
 import React, { useEffect } from 'react';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
-import { emailValidatorExp } from '@/constants/validators-exp';
+import { emailValidatorExp, passwordValidatorExp } from '@/constants/validators-exp';
 
 export default function SignIn() {
     const router = useRouter();
@@ -26,7 +26,9 @@ export default function SignIn() {
 
     useEffect(() => {
         if (formContext.formState.touchedFields.password || formContext.formState.touchedFields.confirmPassword) {
-            if (!password && formContext.formState.touchedFields.password) {
+            if (password && !passwordValidatorExp.test(password)) {
+                formContext.setError('password', { message: 'Min 8 chars: A-Z, a-z, 0-9' });
+            } else if (!password && formContext.formState.touchedFields.password) {
                 formContext.setError('password', { message: 'Password is required' });
             } else if (!confirmPassword && formContext.formState.touchedFields.confirmPassword) {
                 formContext.setError('confirmPassword', { message: 'Confirm Password is required' });
