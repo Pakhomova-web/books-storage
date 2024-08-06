@@ -4,7 +4,7 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 
 import { authStyles } from '@/styles/auth';
 import CustomTextField from '@/components/form-fields/custom-text-field';
-import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
+import { pageStyles, styleVariables } from '@/constants/styles-variables';
 import ErrorNotification from '@/components/error-notification';
 import Loading from '@/components/loading';
 import { useSignIn } from '@/lib/graphql/hooks';
@@ -78,44 +78,42 @@ export default function SignIn() {
     }
 
     return (
-        <Box sx={positionRelative}>
-            <Loading show={loading}></Loading>
+        <Box sx={pageStyles}>
+            <Box sx={authStyles.container}>
+                <Loading show={loading}></Loading>
 
-            <Box sx={pageStyles}>
-                <Box sx={authStyles.container}>
-                    <Box sx={authStyles.title}>Sign In</Box>
-                    <FormContainer formContext={formContext} onSuccess={() => onSubmit()}>
-                        <CustomTextField fullWidth name="email" required type="email" label="Email" id="email"/>
+                <Box sx={authStyles.title}>Sign In</Box>
+                <FormContainer formContext={formContext} onSuccess={() => onSubmit()}>
+                    <CustomTextField fullWidth name="email" required type="email" label="Email" id="email"/>
 
-                        <CustomPasswordElement fullWidth
-                                               variant="standard"
-                                               id="password"
-                                               label="Password"
-                                               name="password"
-                                               required/>
+                    <CustomPasswordElement fullWidth
+                                           variant="standard"
+                                           id="password"
+                                           label="Password"
+                                           name="password"
+                                           required/>
 
-                        <CustomPasswordElement fullWidth
-                                               variant="standard"
-                                               id="confirmPassword"
-                                               label="Confirm Password"
-                                               name="confirmPassword"
-                                               required/>
+                    <CustomPasswordElement fullWidth
+                                           variant="standard"
+                                           id="confirmPassword"
+                                           label="Confirm Password"
+                                           name="confirmPassword"
+                                           required/>
 
-                        <CustomTextField fullWidth name="firstName" label="First Name"/>
+                    <CustomTextField fullWidth name="firstName" label="First Name"/>
 
-                        <CustomTextField fullWidth name="lastName" label="Last Name"/>
-                    </FormContainer>
-                    <Button variant="contained"
-                            sx={authStyles.buttonMargin}
-                            disabled={!formContext.formState.isValid}
-                            onClick={() => onSubmit()}>
-                        Create account
-                    </Button>
-                    <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>or</Box>
-                    <Button variant="outlined" onClick={() => goToLoginPage()}>Login</Button>
+                    <CustomTextField fullWidth name="lastName" label="Last Name"/>
+                </FormContainer>
+                <Button variant="contained"
+                        sx={authStyles.buttonMargin}
+                        disabled={!formContext.formState.isValid}
+                        onClick={() => onSubmit()}>
+                    Create account
+                </Button>
+                <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>or</Box>
+                <Button variant="outlined" onClick={() => goToLoginPage()}>Login</Button>
 
-                    {error && <ErrorNotification error={error}></ErrorNotification>}
-                </Box>
+                {error && <ErrorNotification error={error}></ErrorNotification>}
             </Box>
         </Box>
     );

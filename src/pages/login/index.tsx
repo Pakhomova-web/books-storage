@@ -1,5 +1,5 @@
 import { Box, Button } from "@mui/material";
-import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
+import { pageStyles, styleVariables } from '@/constants/styles-variables';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import { useRouter } from 'next/router';
@@ -72,36 +72,34 @@ export default function Login() {
     }
 
     return (
-        <Box sx={positionRelative}>
-            <Loading show={loading}></Loading>
+        <Box sx={pageStyles}>
+            <Box sx={authStyles.container}>
+                <Loading show={loading}></Loading>
 
-            <Box sx={pageStyles}>
-                <Box sx={authStyles.container}>
-                    <Box sx={authStyles.title}>Login</Box>
-                    <FormContainer formContext={formContext} onSuccess={() => onSubmit()}>
-                        <CustomTextField fullWidth name="email" required label="Email" type="email"/>
+                <Box sx={authStyles.title}>Login</Box>
+                <FormContainer formContext={formContext} onSuccess={() => onSubmit()}>
+                    <CustomTextField fullWidth name="email" required label="Email" type="email"/>
 
-                        <CustomPasswordElement fullWidth
-                                               variant="standard"
-                                               id="password"
-                                               label="Password"
-                                               name="password"
-                                               required/>
-                    </FormContainer>
-                    <Box sx={forgotPasswordLink}>
-                        <Box sx={styleVariables.cursorPointer} onClick={onForgotPasswordClick}>Forgot password?</Box>
-                    </Box>
-                    <Button variant="contained"
-                            sx={authStyles.buttonMargin}
-                            disabled={!formContext.formState.isValid}
-                            onClick={() => onSubmit()}>
-                        Login
-                    </Button>
-                    <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>or</Box>
-                    <Button variant="outlined" onClick={() => goToSignInPage()}>Create new account</Button>
-
-                    {error && <ErrorNotification error={error}></ErrorNotification>}
+                    <CustomPasswordElement fullWidth
+                                           variant="standard"
+                                           id="password"
+                                           label="Password"
+                                           name="password"
+                                           required/>
+                </FormContainer>
+                <Box sx={forgotPasswordLink}>
+                    <Box sx={styleVariables.cursorPointer} onClick={onForgotPasswordClick}>Forgot password?</Box>
                 </Box>
+                <Button variant="contained"
+                        sx={authStyles.buttonMargin}
+                        disabled={!formContext.formState.isValid}
+                        onClick={() => onSubmit()}>
+                    Login
+                </Button>
+                <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>or</Box>
+                <Button variant="outlined" onClick={() => goToSignInPage()}>Create new account</Button>
+
+                {error && <ErrorNotification error={error}></ErrorNotification>}
             </Box>
         </Box>
     );

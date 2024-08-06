@@ -9,7 +9,8 @@ export const authStyles = {
         padding: styleVariables.doublePadding,
         margin: `${styleVariables.margin} auto`,
         borderRadius: styleVariables.borderRadius,
-        border: `1px solid ${styleVariables.gray}`
+        border: `1px solid ${styleVariables.gray}`,
+        position: 'relative'
     },
     boxStyles: {
         ...styleVariables.textCenter,
