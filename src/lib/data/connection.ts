@@ -1,10 +1,7 @@
 import { connect } from 'mongoose';
-import { keys } from '@/config/keys';
 
-const DATABASE_URL = keys.mongoURI;
-
-if (!DATABASE_URL) {
-    throw new Error("Please define the DATABASE_URL environment variable inside .env.local");
+if (!process.env.BOOK_STORAGE_DATABASE_URL) {
+    throw new Error("Please define the BOOK_STORAGE_DATABASE_URL environment variable inside .env");
 }
 
 let cached = global.mongoose;
@@ -14,7 +11,6 @@ if (!cached) {
 }
 
 async function connectDB() {
-    console.log('connectDB');
     if (cached.conn) {
         console.log('MongoDB is connected!');
         return cached.conn;
@@ -27,7 +23,7 @@ async function connectDB() {
             useUnifiedTopology: true
         };
 
-        cached.promise = connect(DATABASE_URL, opts).then(mongoose => {
+        cached.promise = connect(process.env.BOOK_STORAGE_DATABASE_URL, opts).then(mongoose => {
             return mongoose;
         });
     }
