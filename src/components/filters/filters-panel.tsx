@@ -1,4 +1,4 @@
-import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Button, Toolbar } from '@mui/material';
+import { Accordion, AccordionActions, AccordionDetails, AccordionSummary, Box, Button, Toolbar } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { styleVariables } from '@/constants/styles-variables';
 import { useState } from 'react';
@@ -32,8 +32,9 @@ export function FiltersPanel({ onApply, onClear, children }) {
             <AccordionDetails sx={{ py: 0 }}>{children}</AccordionDetails>
 
             <AccordionActions>
-                <Button onClick={() => onClearClick()}>Clear</Button>
-                <Button variant="outlined" onClick={() => onApplyClick()}>Apply</Button>
+                <Button onClick={() => setExpanded(false)}>Close</Button>
+                <Button variant="outlined" onClick={() => onClearClick()}>Clear</Button>
+                <Button variant="contained" onClick={() => onApplyClick()}>Apply</Button>
             </AccordionActions>
         </Accordion>
     );

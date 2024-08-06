@@ -51,6 +51,10 @@ export const styleVariables = {
     },
     positionRelative: {
         position: 'relative'
+    },
+    flexBetween: {
+        display: 'flex',
+        justifyContent: 'space-between'
     }
 };
 

@@ -1,9 +1,7 @@
-import Books from '@/pages/settings/books';
+import BooksTable from '@/components/table/books-table';
 
 export default function Home() {
     return (
-        <>
-            <Books></Books>
-        </>
+        <BooksTable></BooksTable>
     );
 }
