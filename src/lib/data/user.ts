@@ -3,7 +3,7 @@ import { GraphQLError } from 'graphql/error';
 import { UserEntity } from '@/lib/data/types';
 import { getByEmail } from '@/lib/data/base';
 import User from '@/lib/data/models/user';
-import { ADMIN_EMAILS, ROLES } from '@/constants/roles';
+import { ROLES } from '@/constants/roles';
 import {
     comparePassword,
     createRefreshToken,
@@ -13,7 +13,10 @@ import {
     SECRET_JWT_KEY
 } from '@/lib/data/auth-utils';
 import { verify } from 'jsonwebtoken';
-import PageType from '@/lib/data/models/page-type';
+
+const ADMIN_EMAILS: string[] = [
+    'pakhomov.business@gmail.com'
+];
 
 export async function createUser(input: UserEntity) {
     if (!input.email || !input.password) {
