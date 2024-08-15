@@ -216,12 +216,12 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                    label="Author"
                                    name="authorId"/>
 
-                <CustomTextField fullWidth
-                                 id="numberInStock"
-                                 disabled={!isAdmin}
-                                 type="number"
-                                 label="Number in Stock"
-                                 name="numberInStock"/>
+                {isAdmin && <CustomTextField fullWidth
+                                             id="numberInStock"
+                                             disabled={!isAdmin}
+                                             type="number"
+                                             label="Number in Stock"
+                                             name="numberInStock"/>}
 
                 <CustomTextField fullWidth
                                  required
