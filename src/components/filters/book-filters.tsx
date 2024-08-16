@@ -36,7 +36,7 @@ export function BookFilters({ onApply }) {
                                            options={bookTypeOptions}
                                            id="book-type-id"
                                            label="Book Type"
-                                           name="bookTypeId"/>
+                                           name="bookType"/>
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={2}>
@@ -51,7 +51,7 @@ export function BookFilters({ onApply }) {
                                            options={languageOptions}
                                            id="language-id"
                                            label="Language"
-                                           name="languageId"/>
+                                           name="language"/>
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={2}>
@@ -59,7 +59,7 @@ export function BookFilters({ onApply }) {
                                            options={pageTypeOptions}
                                            id="page-type-id"
                                            label="Page Type"
-                                           name="pageTypeId"/>
+                                           name="pageType"/>
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={2}>
@@ -67,7 +67,7 @@ export function BookFilters({ onApply }) {
                                            options={coverTypeOptions}
                                            id="cover-type-id"
                                            label="Cover Type"
-                                           name="coverTypeId"/>
+                                           name="coverType"/>
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={2}>
@@ -75,7 +75,7 @@ export function BookFilters({ onApply }) {
                                            options={authorOptions}
                                            id="author"
                                            label="Author"
-                                           name="authorId"/>
+                                           name="author"/>
                     </Grid>
                 </Grid>
             </FormContainer>

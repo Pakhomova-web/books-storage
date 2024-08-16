@@ -111,6 +111,7 @@ export default function Authors() {
                 {(openNewModal || selectedItem) &&
                   <AuthorModal open={true}
                                item={selectedItem}
+                               isAdmin={isAdmin(user)}
                                onClose={(updated = false) => refreshData(updated)}></AuthorModal>}
             </Box>
         </Box>

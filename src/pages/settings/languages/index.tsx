@@ -113,6 +113,7 @@ export default function Languages() {
                 {(openNewModal || selectedItem) &&
                   <LanguageModal open={true}
                                  item={selectedItem}
+                                 isAdmin={isAdmin(user)}
                                  onClose={(updated = false) => refreshData(updated)}></LanguageModal>}
             </Box>
         </Box>

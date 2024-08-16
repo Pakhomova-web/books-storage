@@ -123,6 +123,7 @@ export default function BookSeries() {
                 {(openNewModal || selectedItem) &&
                   <BookSeriesModal open={true}
                                    item={selectedItem}
+                                   isAdmin={isAdmin(user)}
                                    onClose={(updated = false) => refreshData(updated)}></BookSeriesModal>}
             </Box>
         </Box>

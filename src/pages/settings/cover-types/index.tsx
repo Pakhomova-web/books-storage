@@ -113,6 +113,7 @@ export default function CoverTypes() {
                 {(openNewModal || selectedItem) &&
                   <CoverTypeModal open={true}
                                   item={selectedItem}
+                                  isAdmin={isAdmin(user)}
                                   onClose={(updated = false) => refreshData(updated)}></CoverTypeModal>}
             </Box>
         </Box>

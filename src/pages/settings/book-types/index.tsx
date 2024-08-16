@@ -111,6 +111,7 @@ export default function BookTypes() {
                 {(openNewModal || selectedItem) &&
                   <BookTypeModal open={true}
                                  item={selectedItem}
+                                 isAdmin={isAdmin(user)}
                                  onClose={(updated = false) => refreshData(updated)}></BookTypeModal>}
             </Box>
         </Box>

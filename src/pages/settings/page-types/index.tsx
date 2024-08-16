@@ -113,6 +113,7 @@ export default function PageTypes() {
                 {(openNewModal || selectedItem) &&
                   <PageTypeModal open={true}
                                  item={selectedItem}
+                                 isAdmin={isAdmin(user)}
                                  onClose={(updated = false) => refreshData(updated)}></PageTypeModal>}
             </Box>
         </Box>

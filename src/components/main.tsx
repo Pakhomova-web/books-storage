@@ -53,7 +53,6 @@ export default function Main({ children }) {
     }
 
     function changeDisplayingSettingsMenu({ show, attached }) {
-        console.log('show', show, 'attached', attached);
         setAttachedSettingsMenu(attached);
         setShowSettingsMenu(show);
     }

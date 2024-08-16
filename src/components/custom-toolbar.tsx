@@ -51,7 +51,6 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
         if (pathname.includes('settings')) {
             setActiveSettingsTab(settingsList.find(i => i.link === pathname.split('/settings/')[1]));
             setSelectedMenuItem(MainMenuItem.settings);
-            changeDisplayingSettings({ show: !mobileMatches, attached: !mobileMatches });
         } else {
             if (pathname.includes('profile')) {
                 setSelectedMenuItem(MainMenuItem.profile);
@@ -69,13 +68,19 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
         setAnchorMenuEl(event.currentTarget);
     }
 
+    function changeDisplayingSettingsMenu() {
+        if (activeSettingsTab) {
+            changeDisplayingSettings({ show: !mobileMatches, attached: !mobileMatches });
+        }
+    }
+
+    useEffect(() => changeDisplayingSettingsMenu(), [activeSettingsTab]);
+
     useEffect(() => {
         if (!mobileMatches) {
             setAnchorMenuEl(null);
         }
-        if (activeSettingsTab) {
-            changeDisplayingSettings({ show: !mobileMatches, attached: !mobileMatches });
-        }
+        changeDisplayingSettingsMenu();
     }, [mobileMatches]);
 
     function onLogoutClick() {
