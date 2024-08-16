@@ -12,10 +12,10 @@ interface ITextFieldElementProps extends TextFieldElementProps {
     loading?: boolean;
 }
 
-export default function CustomTextField(props: ITextFieldElementProps) {
+export default function CustomTextField({ loading, ...props }: ITextFieldElementProps) {
     return (
         <Box sx={styleVariables.positionRelative}>
-            <Loading show={!!props.loading} isSmall={true}/>
+            <Loading show={!!loading} isSmall={true}/>
             <StyledTextField {...props} variant="standard"/>
         </Box>
     );

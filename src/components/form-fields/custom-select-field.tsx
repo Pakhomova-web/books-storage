@@ -12,10 +12,10 @@ interface ICustomSelectField extends SelectElementProps {
     loading?: boolean;
 }
 
-export default function CustomSelectField(props: ICustomSelectField) {
+export default function CustomSelectField({ loading, ...props}: ICustomSelectField) {
     return (
         <Box sx={styleVariables.positionRelative}>
-            <Loading show={!!props.loading} isSmall={true}/>
+            <Loading show={!!loading} isSmall={true}/>
             <StyledSelectField {...props} variant="standard" />
         </Box>
     );
