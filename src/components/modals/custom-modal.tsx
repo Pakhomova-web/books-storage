@@ -24,7 +24,7 @@ const innerContainer = { position: 'relative', paddingBottom: '50px' };
 const childrenContainer = {
     overflow: 'auto',
     position: 'relative',
-    maxHeight: 'calc(100vh - 200px)'
+    maxHeight: 'calc(100svh - 200px)'
 };
 
 const buttonsContainerStyles = {

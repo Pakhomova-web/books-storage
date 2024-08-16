@@ -60,8 +60,8 @@ export const styleVariables = {
 
 
 export const positionRelative = { position: 'relative' };
-export const fullHeight = { height: '100vh' };
-export const pageStyles = { overflowY: 'auto', height: 'calc(100vh - 64px)' };
+export const fullHeight = { height: '100svh' };
+export const pageStyles = { overflowY: 'auto', height: 'calc(100svh - 64px)' };
 
 export const titleStyles = {
     fontSize: styleVariables.titleFontSize,

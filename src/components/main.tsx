@@ -11,7 +11,7 @@ import { UserEntity } from '@/lib/data/types';
 
 const settingMenuBackdrop = {
     width: '100vw',
-    height: '100vh',
+    height: '100svh',
     background: styleVariables.gray,
     opacity: 0.5,
     position: 'absolute',
