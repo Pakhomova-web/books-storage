@@ -243,7 +243,8 @@ const typeDefs =  /* GraphQL */ `
         pageType: ID
         isbn: String
         language: ID
-        author: ID
+        author: ID,
+        isInStock: Boolean
     }
 
     type BookSubList {

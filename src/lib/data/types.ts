@@ -87,7 +87,8 @@ export interface IBookFilter {
     pageType?: string
     isbn?: string
     language?: string
-    author?: string
+    author?: string,
+    isInStock?: boolean
 }
 
 export class UserEntity {

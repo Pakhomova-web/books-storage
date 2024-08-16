@@ -76,6 +76,7 @@ export type BookSearchInput = {
   coverType?: InputMaybe<Scalars['ID']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
+  isInStock?: InputMaybe<Scalars['Boolean']['input']>;
   isbn?: InputMaybe<Scalars['String']['input']>;
   language?: InputMaybe<Scalars['ID']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;

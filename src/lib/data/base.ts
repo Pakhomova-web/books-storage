@@ -47,6 +47,8 @@ export function getValidFilters<T>(filters?: T) {
             if (filters[key]) {
                 if (key === 'name') {
                     validFilters[key] = { $regex: filters[key], $options: 'i' };
+                } if (key === 'isInStock' && filters[key]) {
+                    validFilters['numberInStock'] = { $gt: 0 };
                 } else {
                     validFilters[key] = filters[key];
                 }
