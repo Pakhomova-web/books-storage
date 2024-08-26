@@ -10,13 +10,24 @@ const StyledTextField = styled(TextFieldElement)<TextFieldProps>(() => ({
 
 interface ITextFieldElementProps extends TextFieldElementProps {
     loading?: boolean;
+    showClear?: boolean;
+    onClear?;
 }
 
-export default function CustomTextField({ loading, ...props }: ITextFieldElementProps) {
+const clearBtnStyles = {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    cursor: 'pointer',
+    fontSize: styleVariables.hintFontSize
+};
+
+export default function CustomTextField({ loading, showClear, onClear, ...props }: ITextFieldElementProps) {
     return (
         <Box sx={styleVariables.positionRelative}>
             <Loading show={!!loading} isSmall={true}/>
             <StyledTextField {...props} variant="standard"/>
+            {showClear && onClear && <Box sx={clearBtnStyles} onClick={onClear}>Clear</Box>}
         </Box>
     );
 }

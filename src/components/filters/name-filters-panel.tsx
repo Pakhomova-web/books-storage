@@ -5,12 +5,20 @@ import { FiltersPanel } from '@/components/filters/filters-panel';
 import { Grid } from '@mui/material';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 
+interface INameForm {
+    name: string
+}
+
 export function NameFiltersPanel({ onApply }) {
-    const formContext = useForm<{ name: string }>({});
+    const formContext = useForm<INameForm>({});
 
     function onClearClick() {
         formContext.reset();
         onApply();
+    }
+
+    function clearValue(controlName: keyof INameForm) {
+        formContext.setValue(controlName, null);
     }
 
     return (
@@ -21,7 +29,9 @@ export function NameFiltersPanel({ onApply }) {
                         <CustomTextField fullWidth
                                          id="name"
                                          label="Name"
-                                         name="name"/>
+                                         name="name"
+                                         showClear={!!formContext.getValues('name')}
+                                         onClear={() => clearValue('name')}/>
                     </Grid>
                 </Grid>
             </FormContainer>

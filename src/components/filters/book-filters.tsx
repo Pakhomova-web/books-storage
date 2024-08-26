@@ -22,10 +22,15 @@ export function BookFilters({ onApply }) {
     const { items: authorOptions } = useAuthorOptions();
     const { items: languageOptions } = useLanguageOptions();
     const { items: coverTypeOptions } = useCoverTypeOptions();
+    const { quickSearch, bookType, author, coverType, pageType, name, language } = formContext.watch();
 
     function onClearClick() {
         formContext.reset();
         onApply();
+    }
+
+    function clearValue(controlName: keyof IBookFilter) {
+        formContext.setValue(controlName, null);
     }
 
     return (
@@ -36,7 +41,9 @@ export function BookFilters({ onApply }) {
                         <CustomTextField fullWidth
                                          id="quickSearch"
                                          label="Quick Search"
-                                         name="quickSearch"/>
+                                         name="quickSearch"
+                                         showClear={!!quickSearch}
+                                         onClear={() => clearValue('quickSearch')}/>
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={2}>
@@ -44,14 +51,18 @@ export function BookFilters({ onApply }) {
                                            options={bookTypeOptions}
                                            id="book-type-id"
                                            label="Book Type"
-                                           name="bookType"/>
+                                           name="bookType"
+                                           showClear={!!bookType}
+                                           onClear={() => clearValue('bookType')}/>
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={2}>
                         <CustomTextField fullWidth
                                          id="book-name"
                                          label="Name"
-                                         name="name"/>
+                                         name="name"
+                                         showClear={!!name}
+                                         onClear={() => clearValue('name')}/>
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={2}>
@@ -59,7 +70,9 @@ export function BookFilters({ onApply }) {
                                            options={languageOptions}
                                            id="language-id"
                                            label="Language"
-                                           name="language"/>
+                                           name="language"
+                                           showClear={!!language}
+                                           onClear={() => clearValue('language')}/>
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={2}>
@@ -67,7 +80,9 @@ export function BookFilters({ onApply }) {
                                            options={pageTypeOptions}
                                            id="page-type-id"
                                            label="Page Type"
-                                           name="pageType"/>
+                                           name="pageType"
+                                           showClear={!!pageType}
+                                           onClear={() => clearValue('pageType')}/>
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={2}>
@@ -75,7 +90,9 @@ export function BookFilters({ onApply }) {
                                            options={coverTypeOptions}
                                            id="cover-type-id"
                                            label="Cover Type"
-                                           name="coverType"/>
+                                           name="coverType"
+                                           showClear={!!coverType}
+                                           onClear={() => clearValue('coverType')}/>
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={2}>
@@ -83,7 +100,9 @@ export function BookFilters({ onApply }) {
                                            options={authorOptions}
                                            id="author"
                                            label="Author"
-                                           name="author"/>
+                                           name="author"
+                                           showClear={!!author}
+                                           onClear={() => clearValue('author')}/>
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={2}>
