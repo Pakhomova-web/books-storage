@@ -47,7 +47,7 @@ export default function AuthorModal({ open, item, onClose, isAdmin }: IAuthorMod
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={isAdmin ? onSubmit : null}>
-            <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
+            <FormContainer formContext={formContext}>
                 <CustomTextField fullWidth
                                  required
                                  autoFocus

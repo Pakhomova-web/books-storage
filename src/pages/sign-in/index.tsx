@@ -83,7 +83,7 @@ export default function SignIn() {
                 <Loading show={loading}></Loading>
 
                 <Box sx={authStyles.title}>Sign In</Box>
-                <FormContainer formContext={formContext} onSuccess={() => onSubmit()}>
+                <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
                     <CustomTextField fullWidth name="email" required type="email" label="Email" id="email"/>
 
                     <CustomPasswordElement fullWidth

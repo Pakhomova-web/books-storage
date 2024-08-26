@@ -77,7 +77,7 @@ export default function Login() {
                 <Loading show={loading}></Loading>
 
                 <Box sx={authStyles.title}>Login</Box>
-                <FormContainer formContext={formContext} onSuccess={() => onSubmit()}>
+                <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
                     <CustomTextField fullWidth name="email" required label="Email" type="email"/>
 
                     <CustomPasswordElement fullWidth
@@ -86,16 +86,19 @@ export default function Login() {
                                            label="Password"
                                            name="password"
                                            required/>
+
+                    <Box sx={forgotPasswordLink}>
+                        <Box sx={styleVariables.cursorPointer} onClick={onForgotPasswordClick}>Forgot password?</Box>
+                    </Box>
+                    <Button variant="contained"
+                            fullWidth
+                            type="submit"
+                            sx={authStyles.buttonMargin}
+                            disabled={!formContext.formState.isValid}>
+                        Login
+                    </Button>
                 </FormContainer>
-                <Box sx={forgotPasswordLink}>
-                    <Box sx={styleVariables.cursorPointer} onClick={onForgotPasswordClick}>Forgot password?</Box>
-                </Box>
-                <Button variant="contained"
-                        sx={authStyles.buttonMargin}
-                        disabled={!formContext.formState.isValid}
-                        onClick={() => onSubmit()}>
-                    Login
-                </Button>
+
                 <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>or</Box>
                 <Button variant="outlined" onClick={() => goToSignInPage()}>Create new account</Button>
 

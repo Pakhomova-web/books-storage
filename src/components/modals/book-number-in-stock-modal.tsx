@@ -43,7 +43,7 @@ export function BookNumberInStockModal({ item, open, onClose }: IProps) {
                      loading={updating}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={onSubmit}>
-            <FormContainer onSuccess={() => onSubmit()} formContext={formContext}>
+            <FormContainer formContext={formContext}>
                 <CustomTextField fullWidth
                                  disabled
                                  id="book-name"

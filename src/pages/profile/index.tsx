@@ -5,7 +5,7 @@ import { Box, Button, Grid } from '@mui/material';
 import { positionRelative, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import React from 'react';
-import { useCurrentUser, useUser } from '@/lib/graphql/hooks';
+import { useCurrentUser } from '@/lib/graphql/hooks';
 import ErrorNotification from '@/components/error-notification';
 
 export default function Profile() {
@@ -32,7 +32,7 @@ export default function Profile() {
       <Box sx={positionRelative}>
         <Loading show={updating}></Loading>
 
-        <FormContainer formContext={formContext} onSuccess={() => onSubmit()}>
+        <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
           <Grid container sx={{ p: styleVariables.doublePadding }} spacing={2}>
             <Grid item xs={12} sm={6} md={3}>
               <CustomTextField name="email" required label="Email" fullWidth/>
@@ -54,7 +54,7 @@ export default function Profile() {
             {updatingError && <ErrorNotification error={updatingError}></ErrorNotification>}
 
           <Box sx={styleVariables.buttonsContainer}>
-            <Button variant="outlined" disabled={!formContext.formState.isValid} onClick={() => onSubmit()}>
+            <Button variant="contained" type="submit" disabled={!formContext.formState.isValid}>
               Save
             </Button>
           </Box>
