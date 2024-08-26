@@ -1,11 +1,15 @@
 import { CoverTypeEntity, IPageable } from '@/lib/data/types';
 import { GraphQLError } from 'graphql/error';
 import CoverType from '@/lib/data/models/cover-type';
-import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
-import Book from '@/lib/data/models/book';
+import { checkUsageInBook, getByName, getValidFilters, setFiltersAndPageSettingsToQuery } from '@/lib/data/base';
 
 export async function getCoverTypes(pageSettings?: IPageable, filters?: CoverTypeEntity) {
-    return CoverType.find(getValidFilters(filters), null).sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
+    const { andFilters } = getValidFilters(filters);
+    return setFiltersAndPageSettingsToQuery(
+        CoverType.find(),
+        andFilters,
+        pageSettings
+    );
 }
 
 export async function createCoverType(input: CoverTypeEntity)  {

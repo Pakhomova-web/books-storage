@@ -1,10 +1,16 @@
 import { IPageable, LanguageEntity } from '@/lib/data/types';
 import Language from './models/language';
 import { GraphQLError } from 'graphql/error';
-import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
+import { checkUsageInBook, getByName, getValidFilters, setFiltersAndPageSettingsToQuery } from '@/lib/data/base';
 
 export async function getLanguages(pageSettings?: IPageable, filters?: LanguageEntity) {
-    return Language.find(getValidFilters(filters), null).sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
+    const { andFilters } = getValidFilters(filters);
+
+    return setFiltersAndPageSettingsToQuery(
+        Language.find(),
+        andFilters,
+        pageSettings
+    );
 }
 
 export async function createLanguage(input: LanguageEntity) {

@@ -33,6 +33,13 @@ export function BookFilters({ onApply }) {
             <FormContainer formContext={formContext}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6} md={2}>
+                        <CustomTextField fullWidth
+                                         id="quickSearch"
+                                         label="Quick Search"
+                                         name="quickSearch"/>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} md={2}>
                         <CustomSelectField fullWidth
                                            options={bookTypeOptions}
                                            id="book-type-id"

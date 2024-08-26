@@ -78,6 +78,7 @@ export interface IBookSeriesFilter {
 }
 
 export interface IBookFilter {
+    quickSearch?: string,
     id?: string,
     name?: string,
     bookSeries?: string,

@@ -155,7 +155,6 @@ export default function BooksTable() {
     }, [gettingError, deletingError]);
 
     useEffect(() => {
-        console.log(filters);
         refreshData();
     }, [filters, pageSettings]);
 

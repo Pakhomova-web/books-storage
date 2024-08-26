@@ -22,11 +22,11 @@ type CustomModelType = Model<
 >;
 
 export async function getByName<T>(model: CustomModelType, name: string): Promise<T> {
-    return model.findOne({ name: new RegExp(`^${name}$`, "i") }) as T;
+    return model.findOne({ name: getCaseInsensitiveSubstringOption(name) }) as T;
 }
 
 export async function getByEmail<T>(model: CustomModelType, value: string): Promise<T> {
-    return model.findOne({ email: new RegExp(`^${value}$`, "i") }) as T;
+    return model.findOne({ email: getCaseInsensitiveSubstringOption(value) }) as T;
 }
 
 export async function checkUsageInBook(propKey: keyof BookEntity, ids: string[], modelName: string) {
@@ -39,22 +39,50 @@ export async function checkUsageInBook(propKey: keyof BookEntity, ids: string[],
     }
 }
 
-export function getValidFilters<T>(filters?: T) {
-    const validFilters = {};
+export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilters: any[] } {
+    const andFilters = [];
 
     if (filters) {
         Object.keys(filters).forEach(key => {
+            if (key === 'quickSearch') {
+                return;
+            }
             if (filters[key]) {
                 if (key === 'name') {
-                    validFilters[key] = { $regex: filters[key], $options: 'i' };
-                } if (key === 'isInStock' && filters[key]) {
-                    validFilters['numberInStock'] = { $gt: 0 };
+                    andFilters.push({ [key]: getCaseInsensitiveSubstringOption(filters[key]) });
+                }
+                if (key === 'isInStock' && filters[key]) {
+                    andFilters.push({ numberInStock: { $gt: 0 } });
                 } else {
-                    validFilters[key] = filters[key];
+                    andFilters.push({ [key]: filters[key] });
                 }
             }
         });
     }
 
-    return validFilters;
+    return {
+        quickSearch: filters && filters['quickSearch'] ? getCaseInsensitiveSubstringOption(filters['quickSearch']) : null,
+        andFilters
+    };
+}
+
+export function getCaseInsensitiveSubstringOption(value: string): RegExp {
+    return new RegExp(`${value}`, 'i');
+}
+
+export function setFiltersAndPageSettingsToQuery(query, andFilters, pageSettings) {
+    if (andFilters?.length) {
+        query.and(andFilters);
+    }
+    if (pageSettings) {
+        if (pageSettings.rowsPerPage && pageSettings.page !== undefined) {
+            query
+                .skip(pageSettings.rowsPerPage * pageSettings.page)
+                .limit(pageSettings.rowsPerPage);
+        }
+
+        query.sort({ [pageSettings.orderBy || 'name']: pageSettings.order || 'asc' })
+    }
+
+    return query;
 }

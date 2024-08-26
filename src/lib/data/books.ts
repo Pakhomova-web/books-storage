@@ -7,13 +7,9 @@ export async function getBooks(pageSettings?: IPageable, filters?: IBookFilter):
     items: BookEntity[],
     totalCount: number
 }> {
-    const validFilters = getValidFilters(filters);
+    const { quickSearch, andFilters } = getValidFilters(filters);
 
-    const items = await Book
-        .find(validFilters, null, pageSettings ? {
-            skip: pageSettings.rowsPerPage * pageSettings.page,
-            limit: pageSettings.rowsPerPage
-        } : null)
+    const query = Book.find()
         .populate({
             path: 'bookSeries',
             populate: {
@@ -26,9 +22,34 @@ export async function getBooks(pageSettings?: IPageable, filters?: IBookFilter):
         .populate('language')
         .populate('author')
         .sort({ [pageSettings.orderBy || 'name']: pageSettings.order });
-    const totalCount = await Book.countDocuments(validFilters);
 
-    return { items, totalCount };
+    if (andFilters?.length) {
+        query.and(andFilters);
+    }
+    let res = { items: [], totalCount: 0 };
+
+    await query.exec().then((items: BookEntity[]) => {
+        if (quickSearch) {
+            items = items.filter(({ author, name, bookSeries, bookType }) =>
+                quickSearch.test(name) ||
+                (author && quickSearch.test(author.name)) ||
+                quickSearch.test(bookType.name) ||
+                quickSearch.test(bookSeries.name) ||
+                quickSearch.test(bookSeries.publishingHouse.name)
+            );
+        }
+        const totalCount = items.length;
+
+        if (pageSettings) {
+            const startIndex = pageSettings.rowsPerPage * pageSettings.page;
+
+            items = items.slice(startIndex, startIndex + pageSettings.rowsPerPage);
+        }
+
+        res = { items, totalCount };
+    });
+
+    return res;
 }
 
 export async function createBook(input: BookEntity) {

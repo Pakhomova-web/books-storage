@@ -1,21 +1,23 @@
 import { BookSeriesEntity, IBookSeriesFilter, IPageable } from '@/lib/data/types';
 import BookSeries from '@/lib/data/models/book-series';
 import { GraphQLError } from 'graphql/error';
-import { getByName, getValidFilters } from '@/lib/data/base';
+import { getByName, getValidFilters, setFiltersAndPageSettingsToQuery } from '@/lib/data/base';
 
 export async function getBookSeries(pageSettings?: IPageable, filters?: IBookSeriesFilter): Promise<{
     items: BookSeriesEntity[],
     totalCount: number
 }> {
-    const validFilters = getValidFilters(filters);
-    const items = await BookSeries
-        .find(validFilters, null, pageSettings ? {
-            skip: pageSettings.rowsPerPage * pageSettings.page,
-            limit: pageSettings.rowsPerPage
-        } : null)
-        .populate('publishingHouse')
-        .sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
-    const totalCount = await BookSeries.countDocuments(validFilters, null);
+    const { andFilters } = getValidFilters(filters);
+    const query = setFiltersAndPageSettingsToQuery(
+        BookSeries
+            .find()
+            .populate('publishingHouse'),
+        andFilters,
+        pageSettings
+    );
+
+    const items = await query;
+    const totalCount = await query.countDocuments();
 
     return { items, totalCount };
 }

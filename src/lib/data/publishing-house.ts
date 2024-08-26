@@ -2,10 +2,16 @@ import { GraphQLError } from 'graphql/error';
 import { IPageable, PublishingHouseEntity } from '@/lib/data/types';
 import PublishingHouse from '@/lib/data/models/publishing-house';
 import BookSeries from '@/lib/data/models/book-series';
-import { checkUsageInBook, getByName, getValidFilters } from '@/lib/data/base';
+import { checkUsageInBook, getByName, getValidFilters, setFiltersAndPageSettingsToQuery } from '@/lib/data/base';
 
 export async function getPublishingHouses(pageSettings?: IPageable, filters?: PublishingHouseEntity) {
-    return PublishingHouse.find(getValidFilters(filters), null).sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
+    const { andFilters } = getValidFilters(filters);
+
+    return setFiltersAndPageSettingsToQuery(
+        PublishingHouse.find(),
+        andFilters,
+        pageSettings
+    );
 }
 
 export async function getPublishingHouseById(id: string) {

@@ -81,6 +81,7 @@ export type BookSearchInput = {
   language?: InputMaybe<Scalars['ID']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   pageType?: InputMaybe<Scalars['ID']['input']>;
+  quickSearch?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type BookSeries = {

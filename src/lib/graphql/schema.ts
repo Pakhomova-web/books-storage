@@ -244,7 +244,8 @@ const typeDefs =  /* GraphQL */ `
         isbn: String
         language: ID
         author: ID,
-        isInStock: Boolean
+        isInStock: Boolean,
+        quickSearch: String
     }
 
     type BookSubList {
