@@ -4,7 +4,7 @@ import { styleVariables } from '@/constants/styles-variables';
 import { TableKey } from '@/components/table/table-key';
 import { renderActions } from '@/components/table/table-cell-render';
 
-const mobileBox = {
+const mobileBoxStyles = {
     borderRadius: styleVariables.borderRadius,
     border: `1px solid ${styleVariables.primaryColor}`,
     padding: styleVariables.padding,
@@ -59,7 +59,7 @@ export function MobileTable<T>(props: IMobileTableProps<T>) {
             <Grid container>
                 {props.data.map((item, index) =>
                     <Grid item key={index} sm={6} xs={12}>
-                        <Box sx={mobileBox} onClick={() => props.onRowClick ? onRowClick(item) : {}}>
+                        <Box sx={mobileBoxStyles} onClick={() => props.onRowClick ? onRowClick(item) : {}}>
                             {props.renderMobileView ? props.renderMobileView(item) : renderItem(item)}
                         </Box>
                     </Grid>

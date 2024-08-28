@@ -38,8 +38,8 @@ const buttonsContainerStyles = {
 
 interface ICustomModalProps {
     children?: ReactNode,
-    title: string,
-    loading: boolean,
+    title?: string,
+    loading?: boolean,
     open: boolean,
     disableBackdropClick?: boolean,
     isSubmitDisabled?: boolean,
@@ -57,10 +57,10 @@ export default function CustomModal(props: ICustomModalProps) {
     return (
         <Modal open={props.open} onClose={closeModalHandler} disableEscapeKeyDown sx={modalContainerStyle}>
             <Box sx={mainContainerStyle}>
-                <Loading show={props.loading}></Loading>
+                {props.loading && <Loading show={props.loading}></Loading>}
 
                 <Box sx={innerContainer}>
-                    <Box sx={titleStyles}>{props.title}</Box>
+                    {!!props.title && <Box sx={titleStyles}>{props.title}</Box>}
                     <Box sx={childrenContainer}>
                         {props.children}
                     </Box>

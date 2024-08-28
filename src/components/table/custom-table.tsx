@@ -18,7 +18,7 @@ import { TableKey } from '@/components/table/table-key';
 import CustomTableRow from '@/components/table/custom-table-row';
 import { visuallyHidden } from '@mui/utils';
 import { IPageable } from '@/lib/data/types';
-import { MobileTable } from '@/components/table/mobile-view/mobile-table';
+import { MobileTable } from '@/components/table/mobile-table';
 import { styleVariables } from '@/constants/styles-variables';
 import { renderTableActions, renderTableCell } from '@/components/table/table-cell-render';
 

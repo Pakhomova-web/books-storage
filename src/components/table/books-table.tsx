@@ -215,12 +215,22 @@ export default function BooksTable() {
         setPageSettings(settings);
     }
 
+    function onSort(key) {
+        setPageSettings({
+            ...pageSettings,
+            page: 0,
+            order: key.direction,
+            orderBy: key.direction ? key.sortValue : ''
+        });
+    }
+
     return (
         <Box sx={positionRelative}>
             <Loading show={loading || deleting || downloadingCsv}></Loading>
 
             <Box sx={pageStyles}>
-                <BookFilters onApply={(filters: IBookFilter) => setFilters(filters)}></BookFilters>
+                <BookFilters tableKeys={tableKeys} onApply={(filters: IBookFilter) => setFilters(filters)}
+                             onSort={key => onSort(key)}></BookFilters>
 
                 <CustomTable data={items}
                              keys={tableKeys}
