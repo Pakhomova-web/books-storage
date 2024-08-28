@@ -1,14 +1,15 @@
 import React from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 
-import { FiltersPanel } from '@/components/filters/filters-panel';
+import { FiltersButton } from '@/components/filters/filters-button';
 import CustomSelectField from '@/components/form-fields/custom-select-field';
 import { IBookSeriesFilter } from '@/lib/data/types';
 import { usePublishingHouseOptions } from '@/lib/graphql/hooks';
 import { Grid } from '@mui/material';
 import CustomTextField from '@/components/form-fields/custom-text-field';
+import SortFiltersContainer from '@/components/filters/sort-filters-container';
 
-export function BookSeriesFilters({ onApply }) {
+export function BookSeriesFilters({ tableKeys, pageSettings, onApply, onSort }) {
     const formContext = useForm<IBookSeriesFilter>({});
     const { items: publishingHouseOptions } = usePublishingHouseOptions();
     const { name, publishingHouse } = formContext.watch();
@@ -23,29 +24,31 @@ export function BookSeriesFilters({ onApply }) {
     }
 
     return (
-        <FiltersPanel onApply={() => onApply(formContext.getValues())} onClear={() => onClearClick()}>
-            <FormContainer formContext={formContext}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6} md={2}>
-                        <CustomTextField fullWidth
-                                         id="book-name"
-                                         label="Name"
-                                         name="name"
-                                         showClear={!!name}
-                                         onClear={() => clearValue('name')}/>
-                    </Grid>
+        <SortFiltersContainer tableKeys={tableKeys} pageSettings={pageSettings} onSort={onSort}>
+            <FiltersButton onApply={() => onApply(formContext.getValues())} onClear={() => onClearClick()}>
+                <FormContainer formContext={formContext}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <CustomTextField fullWidth
+                                             id="book-name"
+                                             label="Name"
+                                             name="name"
+                                             showClear={!!name}
+                                             onClear={() => clearValue('name')}/>
+                        </Grid>
 
-                    <Grid item xs={12} sm={6} md={2}>
-                        <CustomSelectField fullWidth
-                                           options={publishingHouseOptions}
-                                           id="publishing-house-id"
-                                           label="Publishing House"
-                                           name="publishingHouse"
-                                           showClear={!!publishingHouse}
-                                           onClear={() => clearValue('publishingHouse')}/>
+                        <Grid item xs={12}>
+                            <CustomSelectField fullWidth
+                                               options={publishingHouseOptions}
+                                               id="publishing-house-id"
+                                               label="Publishing House"
+                                               name="publishingHouse"
+                                               showClear={!!publishingHouse}
+                                               onClear={() => clearValue('publishingHouse')}/>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </FormContainer>
-        </FiltersPanel>
+                </FormContainer>
+            </FiltersButton>
+        </SortFiltersContainer>
     );
 }

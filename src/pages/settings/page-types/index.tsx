@@ -89,7 +89,10 @@ export default function PageTypes() {
             <Loading show={loading || deleting}></Loading>
 
             <Box sx={pageStyles}>
-                <NameFiltersPanel onApply={(filters: PageTypeEntity) => setFilters(filters)}></NameFiltersPanel>
+                <NameFiltersPanel tableKeys={tableKeys}
+                                  onApply={(filters: PageTypeEntity) => setFilters(filters)}
+                                  pageSettings={pageSettings}
+                                  onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
 
                 <CustomTable data={items}
                              keys={tableKeys}

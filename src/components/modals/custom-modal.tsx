@@ -46,6 +46,7 @@ interface ICustomModalProps {
     onClose: () => void,
     hideSubmit?: boolean,
     onSubmit?: () => void
+    actions?: { title: string, onClick: () => void }[];
 }
 
 export default function CustomModal(props: ICustomModalProps) {
@@ -71,6 +72,13 @@ export default function CustomModal(props: ICustomModalProps) {
                             <Button onClick={props.onSubmit} variant="contained" disabled={props.isSubmitDisabled}
                                     sx={{ marginLeft: styleVariables.margin }}>Submit</Button>
                             : null}
+                        {props.actions?.length && props.actions.map((action, index) => (
+                            <Button key={index}
+                                    onClick={action.onClick}
+                                    variant="contained"
+                                    disabled={props.isSubmitDisabled}
+                                    sx={{ marginLeft: styleVariables.margin }}>{action.title}</Button>
+                        ))}
                     </Box>
                 </Box>
             </Box>

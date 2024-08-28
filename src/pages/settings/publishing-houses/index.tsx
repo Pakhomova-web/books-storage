@@ -87,7 +87,10 @@ export default function PublishingHouses() {
             <Loading show={loading || deleting}></Loading>
 
             <Box sx={pageStyles}>
-                <NameFiltersPanel onApply={(filters: PublishingHouseEntity) => setFilters(filters)}></NameFiltersPanel>
+                <NameFiltersPanel tableKeys={tableKeys}
+                                  onApply={(filters: PublishingHouseEntity) => setFilters(filters)}
+                                  pageSettings={pageSettings}
+                                  onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
 
                 <CustomTable data={items}
                              keys={tableKeys}

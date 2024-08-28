@@ -97,7 +97,10 @@ export default function BookSeries() {
             <Loading show={loading || deleting}></Loading>
 
             <Box sx={pageStyles}>
-                <BookSeriesFilters onApply={(filters: IBookSeriesFilter) => setFilters(filters)}></BookSeriesFilters>
+                <BookSeriesFilters tableKeys={tableKeys}
+                                   onApply={(filters: IBookSeriesFilter) => setFilters(filters)}
+                                   pageSettings={pageSettings}
+                                   onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></BookSeriesFilters>
 
                 <CustomTable data={items}
                              keys={tableKeys}

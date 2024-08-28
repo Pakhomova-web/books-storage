@@ -1,15 +1,14 @@
 import React from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-
-import { FiltersPanel } from '@/components/filters/filters-panel';
 import { Grid } from '@mui/material';
 import CustomTextField from '@/components/form-fields/custom-text-field';
+import SortFiltersContainer from '@/components/filters/sort-filters-container';
 
 interface INameForm {
     name: string
 }
 
-export function NameFiltersPanel({ onApply }) {
+export function NameFiltersPanel({ tableKeys, pageSettings, onSort, onApply }) {
     const formContext = useForm<INameForm>({});
 
     function onClearClick() {
@@ -22,10 +21,14 @@ export function NameFiltersPanel({ onApply }) {
     }
 
     return (
-        <FiltersPanel onApply={() => onApply(formContext.getValues())} onClear={() => onClearClick()}>
+        <SortFiltersContainer tableKeys={tableKeys}
+                              pageSettings={pageSettings}
+                              onApply={() => onApply(formContext.getValues())}
+                              onClear={() => onClearClick()}
+                              onSort={onSort}>
             <FormContainer formContext={formContext}>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6} md={2}>
+                    <Grid item xs={12}>
                         <CustomTextField fullWidth
                                          id="name"
                                          label="Name"
@@ -35,6 +38,6 @@ export function NameFiltersPanel({ onApply }) {
                     </Grid>
                 </Grid>
             </FormContainer>
-        </FiltersPanel>
+        </SortFiltersContainer>
     );
 }

@@ -87,7 +87,10 @@ export default function Authors() {
             <Loading show={loading || deleting}></Loading>
 
             <Box sx={pageStyles}>
-                <NameFiltersPanel onApply={(filters: AuthorEntity) => setFilters(filters)}></NameFiltersPanel>
+                <NameFiltersPanel tableKeys={tableKeys}
+                                  onApply={(filters: AuthorEntity) => setFilters(filters)}
+                                  pageSettings={pageSettings}
+                                  onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
 
                 <CustomTable data={items}
                              keys={tableKeys}

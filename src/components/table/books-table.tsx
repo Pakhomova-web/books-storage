@@ -211,33 +211,22 @@ export default function BooksTable() {
             });
     }
 
-    function onPaginationChange(settings: IPageable) {
-        setPageSettings(settings);
-    }
-
-    function onSort(key) {
-        setPageSettings({
-            ...pageSettings,
-            page: 0,
-            order: key.direction,
-            orderBy: key.direction ? key.sortValue : ''
-        });
-    }
-
     return (
         <Box sx={positionRelative}>
             <Loading show={loading || deleting || downloadingCsv}></Loading>
 
             <Box sx={pageStyles}>
-                <BookFilters tableKeys={tableKeys} onApply={(filters: IBookFilter) => setFilters(filters)}
-                             onSort={key => onSort(key)}></BookFilters>
+                <BookFilters tableKeys={tableKeys}
+                             onApply={(filters: IBookFilter) => setFilters(filters)}
+                             pageSettings={pageSettings}
+                             onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></BookFilters>
 
                 <CustomTable data={items}
                              keys={tableKeys}
                              mobileKeys={mobileKeys}
                              actions={tableActions}
                              renderKey={(item: BookEntity) => item.id}
-                             onChange={(settings: IPageable) => onPaginationChange(settings)}
+                             onChange={(settings: IPageable) => setPageSettings(settings)}
                              pageSettings={pageSettings}
                              usePagination={true}
                              withFilters={true}
