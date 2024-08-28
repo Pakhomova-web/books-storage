@@ -22,7 +22,7 @@ export default function SortButton(props: ISortButtonProps) {
 
     function onSortByField(key: ISortKey) {
         setOpenSortModal(false);
-        const order = (props.pageSettings?.order === key.orderBy ? props.pageSettings : key).order === 'desc' ? 'asc' : 'desc';
+        const order = (props.pageSettings?.orderBy === key.orderBy ? props.pageSettings : key).order === 'desc' ? 'asc' : 'desc';
 
         props.onSort({
             ...props.pageSettings,
