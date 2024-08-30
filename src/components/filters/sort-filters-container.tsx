@@ -28,7 +28,7 @@ interface ISortFiltersContainerProps<T> {
 
 export default function SortFiltersContainer<T>(props: ISortFiltersContainerProps<T>) {
     const theme = useTheme();
-    const mobileMatches = useMediaQuery(theme.breakpoints.down('sm'));
+    const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
     const [sortKeys] = useState<ISortKey[]>(props.tableKeys ? props.tableKeys.filter(({ sortValue }) => !!sortValue)
         .map(({ title, sortValue }) => ({ title, orderBy: sortValue })) : []);
 
