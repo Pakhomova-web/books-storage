@@ -21,3 +21,4 @@ generates:
         Book: '../data/types#BookEntity'
         Author: '../data/types#AuthorEntity'
         User: '../data/types#UserEntity'
+        Delivery: '../data/types#DeliveryEntity'

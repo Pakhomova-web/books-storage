@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { LanguageEntity, PublishingHouseEntity, PageTypeEntity, BookTypeEntity, CoverTypeEntity, BookSeriesEntity, BookEntity, AuthorEntity, UserEntity } from '../data/types';
+import { LanguageEntity, PublishingHouseEntity, PageTypeEntity, BookTypeEntity, CoverTypeEntity, BookSeriesEntity, BookEntity, AuthorEntity, UserEntity, DeliveryEntity } from '../data/types';
 import { gql } from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -166,6 +166,20 @@ export type CoverTypeInput = {
   name: Scalars['String']['input'];
 };
 
+export type Delivery = {
+  id?: Maybe<Scalars['ID']['output']>;
+  name: Scalars['String']['output'];
+};
+
+export type DeliveryCreateInput = {
+  name: Scalars['String']['input'];
+};
+
+export type DeliveryInput = {
+  id: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+};
+
 export type Language = {
   id?: Maybe<Scalars['ID']['output']>;
   name: Scalars['String']['output'];
@@ -186,6 +200,7 @@ export type Mutation = {
   createBookSeries?: Maybe<BookSeries>;
   createBookType?: Maybe<BookType>;
   createCoverType?: Maybe<CoverType>;
+  createDelivery?: Maybe<Delivery>;
   createLanguage?: Maybe<Language>;
   createPageType?: Maybe<PageType>;
   createPublishingHouse?: Maybe<PublishingHouse>;
@@ -195,6 +210,7 @@ export type Mutation = {
   deleteBookSeries?: Maybe<BookSeries>;
   deleteBookType?: Maybe<BookType>;
   deleteCoverType?: Maybe<CoverType>;
+  deleteDelivery?: Maybe<Delivery>;
   deleteLanguage?: Maybe<Language>;
   deletePageType?: Maybe<PageType>;
   deletePublishingHouse?: Maybe<PublishingHouse>;
@@ -205,6 +221,7 @@ export type Mutation = {
   updateBookSeries?: Maybe<BookSeries>;
   updateBookType?: Maybe<BookType>;
   updateCoverType?: Maybe<CoverType>;
+  updateDelivery?: Maybe<Delivery>;
   updateLanguage?: Maybe<Language>;
   updatePageType?: Maybe<PageType>;
   updatePublishingHouse?: Maybe<PublishingHouse>;
@@ -235,6 +252,11 @@ export type MutationCreateBookTypeArgs = {
 
 export type MutationCreateCoverTypeArgs = {
   input: CoverTypeCreateInput;
+};
+
+
+export type MutationCreateDeliveryArgs = {
+  input: DeliveryCreateInput;
 };
 
 
@@ -279,6 +301,11 @@ export type MutationDeleteBookTypeArgs = {
 
 
 export type MutationDeleteCoverTypeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteDeliveryArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -331,6 +358,11 @@ export type MutationUpdateBookTypeArgs = {
 
 export type MutationUpdateCoverTypeArgs = {
   input: CoverTypeInput;
+};
+
+
+export type MutationUpdateDeliveryArgs = {
+  input: DeliveryInput;
 };
 
 
@@ -398,6 +430,7 @@ export type Query = {
   bookTypes?: Maybe<Array<BookType>>;
   books?: Maybe<BookSubList>;
   coverTypes?: Maybe<Array<CoverType>>;
+  deliveries?: Maybe<Array<Delivery>>;
   languages?: Maybe<Array<Language>>;
   pageTypes?: Maybe<Array<PageType>>;
   publishingHouses?: Maybe<Array<PublishingHouse>>;
@@ -435,6 +468,12 @@ export type QueryBooksArgs = {
 
 
 export type QueryCoverTypesArgs = {
+  filters?: InputMaybe<SearchByNameInput>;
+  pageSettings?: InputMaybe<PageableInput>;
+};
+
+
+export type QueryDeliveriesArgs = {
   filters?: InputMaybe<SearchByNameInput>;
   pageSettings?: InputMaybe<PageableInput>;
 };
@@ -587,6 +626,9 @@ export type ResolversTypes = {
   CoverType: ResolverTypeWrapper<CoverTypeEntity>;
   CoverTypeCreateInput: CoverTypeCreateInput;
   CoverTypeInput: CoverTypeInput;
+  Delivery: ResolverTypeWrapper<DeliveryEntity>;
+  DeliveryCreateInput: DeliveryCreateInput;
+  DeliveryInput: DeliveryInput;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
@@ -633,6 +675,9 @@ export type ResolversParentTypes = {
   CoverType: CoverTypeEntity;
   CoverTypeCreateInput: CoverTypeCreateInput;
   CoverTypeInput: CoverTypeInput;
+  Delivery: DeliveryEntity;
+  DeliveryCreateInput: DeliveryCreateInput;
+  DeliveryInput: DeliveryInput;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
@@ -712,6 +757,12 @@ export type CoverTypeResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type DeliveryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Delivery'] = ResolversParentTypes['Delivery']> = {
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type LanguageResolvers<ContextType = any, ParentType extends ResolversParentTypes['Language'] = ResolversParentTypes['Language']> = {
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -724,6 +775,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createBookSeries?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType, RequireFields<MutationCreateBookSeriesArgs, 'input'>>;
   createBookType?: Resolver<Maybe<ResolversTypes['BookType']>, ParentType, ContextType, RequireFields<MutationCreateBookTypeArgs, 'input'>>;
   createCoverType?: Resolver<Maybe<ResolversTypes['CoverType']>, ParentType, ContextType, RequireFields<MutationCreateCoverTypeArgs, 'input'>>;
+  createDelivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType, RequireFields<MutationCreateDeliveryArgs, 'input'>>;
   createLanguage?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<MutationCreateLanguageArgs, 'input'>>;
   createPageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationCreatePageTypeArgs, 'input'>>;
   createPublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationCreatePublishingHouseArgs, 'input'>>;
@@ -733,6 +785,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteBookSeries?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType, RequireFields<MutationDeleteBookSeriesArgs, 'id'>>;
   deleteBookType?: Resolver<Maybe<ResolversTypes['BookType']>, ParentType, ContextType, RequireFields<MutationDeleteBookTypeArgs, 'id'>>;
   deleteCoverType?: Resolver<Maybe<ResolversTypes['CoverType']>, ParentType, ContextType, RequireFields<MutationDeleteCoverTypeArgs, 'id'>>;
+  deleteDelivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType, RequireFields<MutationDeleteDeliveryArgs, 'id'>>;
   deleteLanguage?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<MutationDeleteLanguageArgs, 'id'>>;
   deletePageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationDeletePageTypeArgs, 'id'>>;
   deletePublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationDeletePublishingHouseArgs, 'id'>>;
@@ -743,6 +796,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateBookSeries?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType, RequireFields<MutationUpdateBookSeriesArgs, 'input'>>;
   updateBookType?: Resolver<Maybe<ResolversTypes['BookType']>, ParentType, ContextType, RequireFields<MutationUpdateBookTypeArgs, 'input'>>;
   updateCoverType?: Resolver<Maybe<ResolversTypes['CoverType']>, ParentType, ContextType, RequireFields<MutationUpdateCoverTypeArgs, 'input'>>;
+  updateDelivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType, RequireFields<MutationUpdateDeliveryArgs, 'input'>>;
   updateLanguage?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<MutationUpdateLanguageArgs, 'input'>>;
   updatePageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationUpdatePageTypeArgs, 'input'>>;
   updatePublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationUpdatePublishingHouseArgs, 'input'>>;
@@ -770,6 +824,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   bookTypes?: Resolver<Maybe<Array<ResolversTypes['BookType']>>, ParentType, ContextType, Partial<QueryBookTypesArgs>>;
   books?: Resolver<Maybe<ResolversTypes['BookSubList']>, ParentType, ContextType, Partial<QueryBooksArgs>>;
   coverTypes?: Resolver<Maybe<Array<ResolversTypes['CoverType']>>, ParentType, ContextType, Partial<QueryCoverTypesArgs>>;
+  deliveries?: Resolver<Maybe<Array<ResolversTypes['Delivery']>>, ParentType, ContextType, Partial<QueryDeliveriesArgs>>;
   languages?: Resolver<Maybe<Array<ResolversTypes['Language']>>, ParentType, ContextType, Partial<QueryLanguagesArgs>>;
   pageTypes?: Resolver<Maybe<Array<ResolversTypes['PageType']>>, ParentType, ContextType, Partial<QueryPageTypesArgs>>;
   publishingHouses?: Resolver<Maybe<Array<ResolversTypes['PublishingHouse']>>, ParentType, ContextType, Partial<QueryPublishingHousesArgs>>;
@@ -801,6 +856,7 @@ export type Resolvers<ContextType = any> = {
   BookSubList?: BookSubListResolvers<ContextType>;
   BookType?: BookTypeResolvers<ContextType>;
   CoverType?: CoverTypeResolvers<ContextType>;
+  Delivery?: DeliveryResolvers<ContextType>;
   Language?: LanguageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   PageType?: PageTypeResolvers<ContextType>;

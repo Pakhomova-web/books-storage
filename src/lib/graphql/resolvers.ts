@@ -14,7 +14,7 @@ import {
     BookEntity,
     BookSeriesEntity,
     BookTypeEntity,
-    CoverTypeEntity,
+    CoverTypeEntity, DeliveryEntity,
     IPageable,
     LanguageEntity,
     PageTypeEntity,
@@ -32,6 +32,7 @@ import { createBook, deleteBook, getBooks, updateBook, updateBookNumberInStock }
 import { createAuthor, deleteAuthor, getAuthors, updateAuthor } from '@/lib/data/author';
 import { GraphQLError } from 'graphql/error';
 import { createUser, getNewToken, login, updateUser } from '@/lib/data/user';
+import { createDelivery, deleteDelivery, getDeliveries, updateDelivery } from '@/lib/data/delivery';
 
 function parseError(error) {
     switch (error.extensions?.code) {
@@ -141,7 +142,14 @@ const resolvers: Resolvers = {
             } catch (error) {
                 parseError(error);
             }
-        }
+        },
+        deliveries: async (_root, { pageSettings, filters }) => {
+            try {
+                return getDeliveries(<IPageable>pageSettings, <DeliveryEntity>filters);
+            } catch (error) {
+                parseError(error);
+            }
+        },
     },
     Mutation: {
         updateLanguage: async (_root, { input }: { input: LanguageEntity }, { user }) => {
@@ -380,6 +388,31 @@ const resolvers: Resolvers = {
             _checkUser(user);
             try {
                 return updateUser(input);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        // delivery
+        updateDelivery: async (_root, { input }: { input: DeliveryEntity }, { user }) => {
+            _checkUser(user);
+            try {
+                return updateDelivery(input);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        deleteDelivery: async (_root, { id }: { id: string }, { user }) => {
+            _checkUser(user);
+            try {
+                return deleteDelivery(id);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        createDelivery: async (_root, { input }: { input: DeliveryEntity }, { user }) => {
+            _checkUser(user);
+            try {
+                return createDelivery(input);
             } catch (error) {
                 parseError(error);
             }

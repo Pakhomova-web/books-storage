@@ -100,3 +100,8 @@ export class UserEntity {
     lastName?: string;
     role?: string;
 }
+
+export class DeliveryEntity {
+    id?: string;
+    name: string;
+}

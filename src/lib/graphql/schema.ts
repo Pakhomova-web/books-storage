@@ -3,6 +3,11 @@ const typeDefs =  /* GraphQL */ `
         id: ID
         name: String!
     }
+    
+    type Delivery {
+        id: ID
+        name: String!
+    }
 
     type PublishingHouse {
         id: ID
@@ -71,6 +76,7 @@ const typeDefs =  /* GraphQL */ `
         bookSeries(pageSettings: PageableInput, filters: BookSeriesSearchInput): BookSeriesSubList
         authors(pageSettings: PageableInput, filters: SearchByNameInput): [Author!]
         books(pageSettings: PageableInput, filters: BookSearchInput): BookSubList
+        deliveries(pageSettings: PageableInput, filters: SearchByNameInput): [Delivery!]
         
         bookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
         bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): [BookType!]
@@ -116,6 +122,10 @@ const typeDefs =  /* GraphQL */ `
         login(email: String!, password: String!): UserToken!
         user: User
         updateUser(input: UserUpdateInput!): User!
+        
+        updateDelivery(input: DeliveryInput!): Delivery
+        createDelivery(input: DeliveryCreateInput!): Delivery
+        deleteDelivery(id: ID!): Delivery
     }
     
     type UserToken {
@@ -288,6 +298,15 @@ const typeDefs =  /* GraphQL */ `
         email: String!,
         firstName: String,
         lastName: String
+    }
+
+    input DeliveryInput {
+        id: ID!
+        name: String!
+    }
+    
+    input DeliveryCreateInput {
+        name: String!
     }
 `;
 

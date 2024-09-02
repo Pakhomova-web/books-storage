@@ -13,7 +13,7 @@ import {
     createBookQuery,
     createBookSeriesQuery,
     createBookTypeQuery,
-    createCoverTypeQuery,
+    createCoverTypeQuery, createDeliveryQuery,
     createLanguageQuery,
     createPageTypeQuery,
     createPublishingHouseQuery,
@@ -21,10 +21,10 @@ import {
     deleteBookQuery,
     deleteBookSeriesQuery,
     deleteBookTypeQuery,
-    deleteCoverTypeQuery,
+    deleteCoverTypeQuery, deleteDeliveryQuery,
     deleteLanguageQuery,
     deletePageTypeQuery,
-    deletePublishingHouseQuery,
+    deletePublishingHouseQuery, deliveriesQuery, deliveryOptionsQuery,
     languageOptionsQuery,
     languagesQuery,
     loginQuery,
@@ -38,7 +38,7 @@ import {
     updateBookQuery,
     updateBookSeriesQuery,
     updateBookTypeQuery,
-    updateCoverTypeQuery,
+    updateCoverTypeQuery, updateDeliveryQuery,
     updateLanguageQuery,
     updatePageTypeQuery,
     updatePublishingHouseQuery,
@@ -49,7 +49,7 @@ import {
     BookEntity,
     BookSeriesEntity,
     BookTypeEntity,
-    CoverTypeEntity,
+    CoverTypeEntity, DeliveryEntity,
     IBookFilter,
     IBookSeriesFilter,
     IPageable,
@@ -302,6 +302,28 @@ export function useUser() {
 
 export function useCurrentUser() {
     return _useUpdateItem<UserEntity>(userUpdateQuery);
+}
+
+/** delivery **/
+
+export function useDeliveries(pageSettings?: IPageable, filters?: DeliveryEntity) {
+    return _useItems<DeliveryEntity>(deliveriesQuery, pageSettings, filters);
+}
+
+export function useDeliveryOptions<T>(pageSettings?: IPageable) {
+    return _useItems<T>(deliveryOptionsQuery, pageSettings);
+}
+
+export function useUpdateDelivery() {
+    return _useUpdateItem<DeliveryEntity>(updateDeliveryQuery);
+}
+
+export function useCreateDelivery() {
+    return _useCreateItem<DeliveryEntity>(createDeliveryQuery);
+}
+
+export function useDeleteDelivery() {
+    return _useDeleteItemById(deleteDeliveryQuery);
 }
 
 /** common **/

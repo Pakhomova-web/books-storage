@@ -17,7 +17,8 @@ export const settingsList: SettingListItem[] = [
     { title: 'Book Types', link: 'book-types' },
     { title: 'Page Types', link: 'page-types' },
     { title: 'Languages', link: 'languages' },
-    { title: 'Authors', link: 'authors' }
+    { title: 'Authors', link: 'authors' },
+    { title: 'Deliveries', link: 'deliveries' }
 ];
 
 export default function SettingsMenu({ onMenuItemClick, activeSettingsTab }) {
