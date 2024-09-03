@@ -1,6 +1,7 @@
 import { BookSeriesEntity } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import { useCreateBookSeries, usePublishingHouseOptions, useUpdateBookSeries } from '@/lib/graphql/hooks';
+import { useCreateBookSeries, useUpdateBookSeries } from '@/lib/graphql/queries/book-series/hook';
+import { usePublishingHouseOptions } from '@/lib/graphql/queries/publishing-house/hook';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import CustomSelectField from '@/components/form-fields/custom-select-field';

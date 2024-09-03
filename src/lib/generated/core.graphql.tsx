@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { LanguageEntity, PublishingHouseEntity, PageTypeEntity, BookTypeEntity, CoverTypeEntity, BookSeriesEntity, BookEntity, AuthorEntity, UserEntity, DeliveryEntity } from '../data/types';
+import { LanguageEntity, PublishingHouseEntity, PageTypeEntity, BookTypeEntity, CoverTypeEntity, BookSeriesEntity, BookEntity, AuthorEntity, UserEntity, DeliveryEntity, OrderEntity } from '../data/types';
 import { gql } from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -19,6 +19,20 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Address = {
+  city: Scalars['String']['output'];
+  district?: Maybe<Scalars['String']['output']>;
+  postcode?: Maybe<Scalars['String']['output']>;
+  region: Scalars['String']['output'];
+};
+
+export type AddressInput = {
+  city: Scalars['String']['input'];
+  district?: InputMaybe<Scalars['String']['input']>;
+  postcode: Scalars['String']['input'];
+  region: Scalars['String']['input'];
+};
+
 export type Author = {
   description?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
@@ -30,7 +44,7 @@ export type AuthorCreateInput = {
   name: Scalars['String']['input'];
 };
 
-export type AuthorInput = {
+export type AuthorUpdateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   name: Scalars['String']['input'];
@@ -125,7 +139,7 @@ export type BookTypeCreateInput = {
   name: Scalars['String']['input'];
 };
 
-export type BookTypeInput = {
+export type BookTypeUpdateInput = {
   id: Scalars['ID']['input'];
   name: Scalars['String']['input'];
 };
@@ -147,7 +161,7 @@ export type BookUpdateInput = {
   price?: InputMaybe<Scalars['Float']['input']>;
 };
 
-export type BookUpdateNumberInStockInput = {
+export type BookUpdateNumberInStockUpdateInput = {
   id: Scalars['ID']['input'];
   numberInStock: Scalars['Int']['input'];
 };
@@ -161,7 +175,7 @@ export type CoverTypeCreateInput = {
   name: Scalars['String']['input'];
 };
 
-export type CoverTypeInput = {
+export type CoverTypeUpdateInput = {
   id: Scalars['ID']['input'];
   name: Scalars['String']['input'];
 };
@@ -175,7 +189,7 @@ export type DeliveryCreateInput = {
   name: Scalars['String']['input'];
 };
 
-export type DeliveryInput = {
+export type DeliveryUpdateInput = {
   id: Scalars['ID']['input'];
   name: Scalars['String']['input'];
 };
@@ -189,7 +203,7 @@ export type LanguageCreateInput = {
   name: Scalars['String']['input'];
 };
 
-export type LanguageInput = {
+export type LanguageUpdateInput = {
   id: Scalars['ID']['input'];
   name: Scalars['String']['input'];
 };
@@ -202,6 +216,7 @@ export type Mutation = {
   createCoverType?: Maybe<CoverType>;
   createDelivery?: Maybe<Delivery>;
   createLanguage?: Maybe<Language>;
+  createOrder?: Maybe<Order>;
   createPageType?: Maybe<PageType>;
   createPublishingHouse?: Maybe<PublishingHouse>;
   createUser?: Maybe<User>;
@@ -212,6 +227,7 @@ export type Mutation = {
   deleteCoverType?: Maybe<CoverType>;
   deleteDelivery?: Maybe<Delivery>;
   deleteLanguage?: Maybe<Language>;
+  deleteOrder?: Maybe<Order>;
   deletePageType?: Maybe<PageType>;
   deletePublishingHouse?: Maybe<PublishingHouse>;
   login: UserToken;
@@ -223,6 +239,7 @@ export type Mutation = {
   updateCoverType?: Maybe<CoverType>;
   updateDelivery?: Maybe<Delivery>;
   updateLanguage?: Maybe<Language>;
+  updateOrder?: Maybe<Order>;
   updatePageType?: Maybe<PageType>;
   updatePublishingHouse?: Maybe<PublishingHouse>;
   updateUser: User;
@@ -262,6 +279,11 @@ export type MutationCreateDeliveryArgs = {
 
 export type MutationCreateLanguageArgs = {
   input: LanguageCreateInput;
+};
+
+
+export type MutationCreateOrderArgs = {
+  input: OrderCreateInput;
 };
 
 
@@ -315,6 +337,11 @@ export type MutationDeleteLanguageArgs = {
 };
 
 
+export type MutationDeleteOrderArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
 export type MutationDeletePageTypeArgs = {
   id: Scalars['ID']['input'];
 };
@@ -332,7 +359,7 @@ export type MutationLoginArgs = {
 
 
 export type MutationUpdateAuthorArgs = {
-  input: AuthorInput;
+  input: AuthorUpdateInput;
 };
 
 
@@ -342,7 +369,7 @@ export type MutationUpdateBookArgs = {
 
 
 export type MutationUpdateBookNumberInStockArgs = {
-  input: BookUpdateNumberInStockInput;
+  input: BookUpdateNumberInStockUpdateInput;
 };
 
 
@@ -352,37 +379,108 @@ export type MutationUpdateBookSeriesArgs = {
 
 
 export type MutationUpdateBookTypeArgs = {
-  input: BookTypeInput;
+  input: BookTypeUpdateInput;
 };
 
 
 export type MutationUpdateCoverTypeArgs = {
-  input: CoverTypeInput;
+  input: CoverTypeUpdateInput;
 };
 
 
 export type MutationUpdateDeliveryArgs = {
-  input: DeliveryInput;
+  input: DeliveryUpdateInput;
 };
 
 
 export type MutationUpdateLanguageArgs = {
-  input: LanguageInput;
+  input: LanguageUpdateInput;
+};
+
+
+export type MutationUpdateOrderArgs = {
+  input: OrderUpdateInput;
 };
 
 
 export type MutationUpdatePageTypeArgs = {
-  input: PageTypeInput;
+  input: PageTypeUpdateInput;
 };
 
 
 export type MutationUpdatePublishingHouseArgs = {
-  input: PublishingHouseInput;
+  input: PublishingHouseUpdateInput;
 };
 
 
 export type MutationUpdateUserArgs = {
   input: UserUpdateInput;
+};
+
+export type Order = {
+  address: Address;
+  books: Array<OrderBook>;
+  customerFirstName: Scalars['String']['output'];
+  customerLastName: Scalars['String']['output'];
+  customerPhoneNumber: Scalars['String']['output'];
+  delivery?: Maybe<Delivery>;
+  description?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['ID']['output']>;
+  isDelivered?: Maybe<Scalars['Boolean']['output']>;
+  isDone?: Maybe<Scalars['Boolean']['output']>;
+  isPaid?: Maybe<Scalars['Boolean']['output']>;
+  isPartlyPaid?: Maybe<Scalars['Boolean']['output']>;
+  trackingNumber: Scalars['String']['output'];
+};
+
+export type OrderBook = {
+  book: Book;
+  count: Scalars['Int']['output'];
+  discount?: Maybe<Scalars['Float']['output']>;
+  price: Scalars['Float']['output'];
+};
+
+export type OrderBookInput = {
+  bookId: Scalars['ID']['input'];
+  count: Scalars['Int']['input'];
+  discount?: InputMaybe<Scalars['Float']['input']>;
+  price: Scalars['Float']['input'];
+};
+
+export type OrderCreateInput = {
+  address: AddressInput;
+  books: Array<OrderBookInput>;
+  customerFirstName: Scalars['String']['input'];
+  customerLastName: Scalars['String']['input'];
+  customerPhoneNumber: Scalars['String']['input'];
+  deliveryId?: InputMaybe<Scalars['ID']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  isDelivered?: InputMaybe<Scalars['Boolean']['input']>;
+  isDone?: InputMaybe<Scalars['Boolean']['input']>;
+  isPaid?: InputMaybe<Scalars['Boolean']['input']>;
+  isPartlyPaid?: InputMaybe<Scalars['Boolean']['input']>;
+  trackingNumber: Scalars['String']['input'];
+};
+
+export type OrderSubList = {
+  items: Array<Order>;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type OrderUpdateInput = {
+  address: AddressInput;
+  books: Array<OrderBookInput>;
+  customerFirstName: Scalars['String']['input'];
+  customerLastName: Scalars['String']['input'];
+  customerPhoneNumber: Scalars['String']['input'];
+  deliveryId?: InputMaybe<Scalars['ID']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  isDelivered?: InputMaybe<Scalars['Boolean']['input']>;
+  isDone?: InputMaybe<Scalars['Boolean']['input']>;
+  isPaid?: InputMaybe<Scalars['Boolean']['input']>;
+  isPartlyPaid?: InputMaybe<Scalars['Boolean']['input']>;
+  trackingNumber: Scalars['String']['input'];
 };
 
 export type PageType = {
@@ -394,7 +492,7 @@ export type PageTypeCreateInput = {
   name: Scalars['String']['input'];
 };
 
-export type PageTypeInput = {
+export type PageTypeUpdateInput = {
   id: Scalars['ID']['input'];
   name: Scalars['String']['input'];
 };
@@ -417,7 +515,7 @@ export type PublishingHouseCreateInput = {
   tags?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type PublishingHouseInput = {
+export type PublishingHouseUpdateInput = {
   id: Scalars['ID']['input'];
   name: Scalars['String']['input'];
   tags?: InputMaybe<Scalars['String']['input']>;
@@ -432,6 +530,7 @@ export type Query = {
   coverTypes?: Maybe<Array<CoverType>>;
   deliveries?: Maybe<Array<Delivery>>;
   languages?: Maybe<Array<Language>>;
+  orders?: Maybe<OrderSubList>;
   pageTypes?: Maybe<Array<PageType>>;
   publishingHouses?: Maybe<Array<PublishingHouse>>;
   refreshToken: UserToken;
@@ -480,6 +579,12 @@ export type QueryDeliveriesArgs = {
 
 
 export type QueryLanguagesArgs = {
+  filters?: InputMaybe<SearchByNameInput>;
+  pageSettings?: InputMaybe<PageableInput>;
+};
+
+
+export type QueryOrdersArgs = {
   filters?: InputMaybe<SearchByNameInput>;
   pageSettings?: InputMaybe<PageableInput>;
 };
@@ -605,9 +710,11 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  Address: ResolverTypeWrapper<Address>;
+  AddressInput: AddressInput;
   Author: ResolverTypeWrapper<AuthorEntity>;
   AuthorCreateInput: AuthorCreateInput;
-  AuthorInput: AuthorInput;
+  AuthorUpdateInput: AuthorUpdateInput;
   Book: ResolverTypeWrapper<BookEntity>;
   BookCreateInput: BookCreateInput;
   BookSearchInput: BookSearchInput;
@@ -619,30 +726,36 @@ export type ResolversTypes = {
   BookSubList: ResolverTypeWrapper<Omit<BookSubList, 'items'> & { items: Array<ResolversTypes['Book']> }>;
   BookType: ResolverTypeWrapper<BookTypeEntity>;
   BookTypeCreateInput: BookTypeCreateInput;
-  BookTypeInput: BookTypeInput;
+  BookTypeUpdateInput: BookTypeUpdateInput;
   BookUpdateInput: BookUpdateInput;
-  BookUpdateNumberInStockInput: BookUpdateNumberInStockInput;
+  BookUpdateNumberInStockUpdateInput: BookUpdateNumberInStockUpdateInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CoverType: ResolverTypeWrapper<CoverTypeEntity>;
   CoverTypeCreateInput: CoverTypeCreateInput;
-  CoverTypeInput: CoverTypeInput;
+  CoverTypeUpdateInput: CoverTypeUpdateInput;
   Delivery: ResolverTypeWrapper<DeliveryEntity>;
   DeliveryCreateInput: DeliveryCreateInput;
-  DeliveryInput: DeliveryInput;
+  DeliveryUpdateInput: DeliveryUpdateInput;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Language: ResolverTypeWrapper<LanguageEntity>;
   LanguageCreateInput: LanguageCreateInput;
-  LanguageInput: LanguageInput;
+  LanguageUpdateInput: LanguageUpdateInput;
   Mutation: ResolverTypeWrapper<{}>;
+  Order: ResolverTypeWrapper<OrderEntity>;
+  OrderBook: ResolverTypeWrapper<Omit<OrderBook, 'book'> & { book: ResolversTypes['Book'] }>;
+  OrderBookInput: OrderBookInput;
+  OrderCreateInput: OrderCreateInput;
+  OrderSubList: ResolverTypeWrapper<Omit<OrderSubList, 'items'> & { items: Array<ResolversTypes['Order']> }>;
+  OrderUpdateInput: OrderUpdateInput;
   PageType: ResolverTypeWrapper<PageTypeEntity>;
   PageTypeCreateInput: PageTypeCreateInput;
-  PageTypeInput: PageTypeInput;
+  PageTypeUpdateInput: PageTypeUpdateInput;
   PageableInput: PageableInput;
   PublishingHouse: ResolverTypeWrapper<PublishingHouseEntity>;
   PublishingHouseCreateInput: PublishingHouseCreateInput;
-  PublishingHouseInput: PublishingHouseInput;
+  PublishingHouseUpdateInput: PublishingHouseUpdateInput;
   Query: ResolverTypeWrapper<{}>;
   SearchByNameInput: SearchByNameInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
@@ -654,9 +767,11 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  Address: Address;
+  AddressInput: AddressInput;
   Author: AuthorEntity;
   AuthorCreateInput: AuthorCreateInput;
-  AuthorInput: AuthorInput;
+  AuthorUpdateInput: AuthorUpdateInput;
   Book: BookEntity;
   BookCreateInput: BookCreateInput;
   BookSearchInput: BookSearchInput;
@@ -668,30 +783,36 @@ export type ResolversParentTypes = {
   BookSubList: Omit<BookSubList, 'items'> & { items: Array<ResolversParentTypes['Book']> };
   BookType: BookTypeEntity;
   BookTypeCreateInput: BookTypeCreateInput;
-  BookTypeInput: BookTypeInput;
+  BookTypeUpdateInput: BookTypeUpdateInput;
   BookUpdateInput: BookUpdateInput;
-  BookUpdateNumberInStockInput: BookUpdateNumberInStockInput;
+  BookUpdateNumberInStockUpdateInput: BookUpdateNumberInStockUpdateInput;
   Boolean: Scalars['Boolean']['output'];
   CoverType: CoverTypeEntity;
   CoverTypeCreateInput: CoverTypeCreateInput;
-  CoverTypeInput: CoverTypeInput;
+  CoverTypeUpdateInput: CoverTypeUpdateInput;
   Delivery: DeliveryEntity;
   DeliveryCreateInput: DeliveryCreateInput;
-  DeliveryInput: DeliveryInput;
+  DeliveryUpdateInput: DeliveryUpdateInput;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   Language: LanguageEntity;
   LanguageCreateInput: LanguageCreateInput;
-  LanguageInput: LanguageInput;
+  LanguageUpdateInput: LanguageUpdateInput;
   Mutation: {};
+  Order: OrderEntity;
+  OrderBook: Omit<OrderBook, 'book'> & { book: ResolversParentTypes['Book'] };
+  OrderBookInput: OrderBookInput;
+  OrderCreateInput: OrderCreateInput;
+  OrderSubList: Omit<OrderSubList, 'items'> & { items: Array<ResolversParentTypes['Order']> };
+  OrderUpdateInput: OrderUpdateInput;
   PageType: PageTypeEntity;
   PageTypeCreateInput: PageTypeCreateInput;
-  PageTypeInput: PageTypeInput;
+  PageTypeUpdateInput: PageTypeUpdateInput;
   PageableInput: PageableInput;
   PublishingHouse: PublishingHouseEntity;
   PublishingHouseCreateInput: PublishingHouseCreateInput;
-  PublishingHouseInput: PublishingHouseInput;
+  PublishingHouseUpdateInput: PublishingHouseUpdateInput;
   Query: {};
   SearchByNameInput: SearchByNameInput;
   String: Scalars['String']['output'];
@@ -699,6 +820,14 @@ export type ResolversParentTypes = {
   UserCreateInput: UserCreateInput;
   UserToken: Omit<UserToken, 'user'> & { user: ResolversParentTypes['User'] };
   UserUpdateInput: UserUpdateInput;
+};
+
+export type AddressResolvers<ContextType = any, ParentType extends ResolversParentTypes['Address'] = ResolversParentTypes['Address']> = {
+  city?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  district?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  postcode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  region?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type AuthorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Author'] = ResolversParentTypes['Author']> = {
@@ -777,6 +906,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createCoverType?: Resolver<Maybe<ResolversTypes['CoverType']>, ParentType, ContextType, RequireFields<MutationCreateCoverTypeArgs, 'input'>>;
   createDelivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType, RequireFields<MutationCreateDeliveryArgs, 'input'>>;
   createLanguage?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<MutationCreateLanguageArgs, 'input'>>;
+  createOrder?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationCreateOrderArgs, 'input'>>;
   createPageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationCreatePageTypeArgs, 'input'>>;
   createPublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationCreatePublishingHouseArgs, 'input'>>;
   createUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
@@ -787,6 +917,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteCoverType?: Resolver<Maybe<ResolversTypes['CoverType']>, ParentType, ContextType, RequireFields<MutationDeleteCoverTypeArgs, 'id'>>;
   deleteDelivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType, RequireFields<MutationDeleteDeliveryArgs, 'id'>>;
   deleteLanguage?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<MutationDeleteLanguageArgs, 'id'>>;
+  deleteOrder?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationDeleteOrderArgs, 'id'>>;
   deletePageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationDeletePageTypeArgs, 'id'>>;
   deletePublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationDeletePublishingHouseArgs, 'id'>>;
   login?: Resolver<ResolversTypes['UserToken'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
@@ -798,10 +929,42 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateCoverType?: Resolver<Maybe<ResolversTypes['CoverType']>, ParentType, ContextType, RequireFields<MutationUpdateCoverTypeArgs, 'input'>>;
   updateDelivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType, RequireFields<MutationUpdateDeliveryArgs, 'input'>>;
   updateLanguage?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<MutationUpdateLanguageArgs, 'input'>>;
+  updateOrder?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationUpdateOrderArgs, 'input'>>;
   updatePageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationUpdatePageTypeArgs, 'input'>>;
   updatePublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationUpdatePublishingHouseArgs, 'input'>>;
   updateUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationUpdateUserArgs, 'input'>>;
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
+};
+
+export type OrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order']> = {
+  address?: Resolver<ResolversTypes['Address'], ParentType, ContextType>;
+  books?: Resolver<Array<ResolversTypes['OrderBook']>, ParentType, ContextType>;
+  customerFirstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  customerLastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  customerPhoneNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  delivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  isDelivered?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  isDone?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  isPaid?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  isPartlyPaid?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  trackingNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type OrderBookResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrderBook'] = ResolversParentTypes['OrderBook']> = {
+  book?: Resolver<ResolversTypes['Book'], ParentType, ContextType>;
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  discount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type OrderSubListResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrderSubList'] = ResolversParentTypes['OrderSubList']> = {
+  items?: Resolver<Array<ResolversTypes['Order']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type PageTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['PageType'] = ResolversParentTypes['PageType']> = {
@@ -826,6 +989,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   coverTypes?: Resolver<Maybe<Array<ResolversTypes['CoverType']>>, ParentType, ContextType, Partial<QueryCoverTypesArgs>>;
   deliveries?: Resolver<Maybe<Array<ResolversTypes['Delivery']>>, ParentType, ContextType, Partial<QueryDeliveriesArgs>>;
   languages?: Resolver<Maybe<Array<ResolversTypes['Language']>>, ParentType, ContextType, Partial<QueryLanguagesArgs>>;
+  orders?: Resolver<Maybe<ResolversTypes['OrderSubList']>, ParentType, ContextType, Partial<QueryOrdersArgs>>;
   pageTypes?: Resolver<Maybe<Array<ResolversTypes['PageType']>>, ParentType, ContextType, Partial<QueryPageTypesArgs>>;
   publishingHouses?: Resolver<Maybe<Array<ResolversTypes['PublishingHouse']>>, ParentType, ContextType, Partial<QueryPublishingHousesArgs>>;
   refreshToken?: Resolver<ResolversTypes['UserToken'], ParentType, ContextType, RequireFields<QueryRefreshTokenArgs, 'refreshToken'>>;
@@ -849,6 +1013,7 @@ export type UserTokenResolvers<ContextType = any, ParentType extends ResolversPa
 };
 
 export type Resolvers<ContextType = any> = {
+  Address?: AddressResolvers<ContextType>;
   Author?: AuthorResolvers<ContextType>;
   Book?: BookResolvers<ContextType>;
   BookSeries?: BookSeriesResolvers<ContextType>;
@@ -859,6 +1024,9 @@ export type Resolvers<ContextType = any> = {
   Delivery?: DeliveryResolvers<ContextType>;
   Language?: LanguageResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
+  Order?: OrderResolvers<ContextType>;
+  OrderBook?: OrderBookResolvers<ContextType>;
+  OrderSubList?: OrderSubListResolvers<ContextType>;
   PageType?: PageTypeResolvers<ContextType>;
   PublishingHouse?: PublishingHouseResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

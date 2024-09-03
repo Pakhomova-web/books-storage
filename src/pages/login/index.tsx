@@ -9,7 +9,7 @@ import React, { useEffect } from 'react';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
 import { emailValidatorExp, passwordValidatorExp } from '@/constants/validators-exp';
 import Loading from '@/components/loading';
-import { useLogin } from '@/lib/graphql/hooks';
+import { useLogin } from '@/lib/graphql/queries/auth/hook';
 import { useAuth } from '@/components/auth-context';
 
 const forgotPasswordLink = {

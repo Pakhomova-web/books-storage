@@ -5,7 +5,7 @@ import { BookEntity, IBookFilter, IPageable } from '@/lib/data/types';
 import { Box, Button } from '@mui/material';
 import { downloadCsv, isAdmin } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
-import { getAllBooks, useBooks, useDeleteBook } from '@/lib/graphql/hooks';
+import { getAllBooks, useBooks, useDeleteBook } from '@/lib/graphql/queries/book/hook';
 import { ApolloError } from '@apollo/client';
 import Loading from '@/components/loading';
 import { BookFilters } from '@/components/filters/book-filters';

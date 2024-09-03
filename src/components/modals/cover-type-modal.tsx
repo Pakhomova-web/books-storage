@@ -1,6 +1,6 @@
 import { CoverTypeEntity } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import { useCreateCoverType, useUpdateCoverType } from '@/lib/graphql/hooks';
+import { useCreateCoverType, useUpdateCoverType } from '@/lib/graphql/queries/cover-type/hook';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import ErrorNotification from '@/components/error-notification';

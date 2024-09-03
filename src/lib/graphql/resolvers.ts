@@ -14,9 +14,9 @@ import {
     BookEntity,
     BookSeriesEntity,
     BookTypeEntity,
-    CoverTypeEntity, DeliveryEntity,
+    CoverTypeEntity, DeliveryEntity, IOrderFilter,
     IPageable,
-    LanguageEntity,
+    LanguageEntity, OrderEntity,
     PageTypeEntity,
     PublishingHouseEntity,
     UserEntity
@@ -33,6 +33,7 @@ import { createAuthor, deleteAuthor, getAuthors, updateAuthor } from '@/lib/data
 import { GraphQLError } from 'graphql/error';
 import { createUser, getNewToken, login, updateUser } from '@/lib/data/user';
 import { createDelivery, deleteDelivery, getDeliveries, updateDelivery } from '@/lib/data/delivery';
+import { createOrder, deleteOrder, getOrders, updateOrder } from '@/lib/data/order';
 
 function parseError(error) {
     switch (error.extensions?.code) {
@@ -150,6 +151,13 @@ const resolvers: Resolvers = {
                 parseError(error);
             }
         },
+        orders: async (_root, { pageSettings, filters }) => {
+            try {
+                return getOrders(<IPageable>pageSettings, <IOrderFilter>filters);
+            } catch (error) {
+                parseError(error);
+            }
+        }
     },
     Mutation: {
         updateLanguage: async (_root, { input }: { input: LanguageEntity }, { user }) => {
@@ -413,6 +421,31 @@ const resolvers: Resolvers = {
             _checkUser(user);
             try {
                 return createDelivery(input);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        // order
+        updateOrder: async (_root, { input }: { input: OrderEntity }, { user }) => {
+            _checkUser(user);
+            try {
+                return updateOrder(input);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        deleteOrder: async (_root, { id }: { id: string }, { user }) => {
+            _checkUser(user);
+            try {
+                return deleteOrder(id);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        createOrder: async (_root, { input }: { input: OrderEntity }, { user }) => {
+            _checkUser(user);
+            try {
+                return createOrder(input);
             } catch (error) {
                 parseError(error);
             }

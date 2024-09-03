@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
-import { useBookTypes, useDeleteBookType } from '@/lib/graphql/hooks';
+import { useBookTypes, useDeleteBookType } from '@/lib/graphql/queries/book-type/hook';
 import { BookTypeEntity, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';

@@ -2,7 +2,7 @@ import React from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomSelectField from '@/components/form-fields/custom-select-field';
 import { IBookSeriesFilter } from '@/lib/data/types';
-import { usePublishingHouseOptions } from '@/lib/graphql/hooks';
+import { usePublishingHouseOptions } from '@/lib/graphql/queries/';
 import { Grid } from '@mui/material';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import SortFiltersContainer from '@/components/filters/sort-filters-container';

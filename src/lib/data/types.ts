@@ -105,3 +105,39 @@ export class DeliveryEntity {
     id?: string;
     name: string;
 }
+
+export class Address {
+    region: string;
+    district?: string;
+    city: string;
+    postcode: string;
+}
+
+export class OrderBook {
+    bookId: string;
+    book: BookEntity;
+    count: number;
+    discount?: number;
+    price: number;
+}
+
+export class OrderEntity {
+    id: string;
+    customerFirstName: string;
+    customerLastName: string;
+    customerPhoneNumber: string;
+    trackingNumber: string;
+    deliveryId?: string;
+    delivery?: DeliveryEntity;
+    address: Address;
+    isPaid: boolean;
+    isPartlyPaid: boolean;
+    isDelivered: boolean;
+    isDone: boolean;
+    books: OrderBook[];
+    description?: string;
+}
+
+export interface IOrderFilter {
+    quickSearch?: string
+}

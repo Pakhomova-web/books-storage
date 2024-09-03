@@ -5,7 +5,7 @@ import { Box, Button, Grid } from '@mui/material';
 import { positionRelative, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import React from 'react';
-import { useCurrentUser } from '@/lib/graphql/hooks';
+import { useCurrentUser } from '@/lib/graphql/queries/auth/hook';
 import ErrorNotification from '@/components/error-notification';
 
 export default function Profile() {

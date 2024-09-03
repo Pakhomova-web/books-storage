@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react';
 import { drawerWidth, fullHeight, positionRelative, styleVariables } from '@/constants/styles-variables';
 import CustomToolbar from '@/components/custom-toolbar';
-import { useUser } from '@/lib/graphql/hooks';
+import { useUser } from '@/lib/graphql/queries/auth/hook';
 import Loading from '@/components/loading';
 import { useAuth } from '@/components/auth-context';
 import { UserEntity } from '@/lib/data/types';

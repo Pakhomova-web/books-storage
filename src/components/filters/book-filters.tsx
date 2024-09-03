@@ -1,18 +1,16 @@
 import React from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { IBookFilter } from '@/lib/data/types';
-import {
-    useAuthorOptions,
-    useBookTypeOptions,
-    useCoverTypeOptions,
-    useLanguageOptions,
-    usePageTypeOptions
-} from '@/lib/graphql/hooks';
+import { useLanguageOptions } from '@/lib/graphql/queries/language/hooks';
 import { Grid } from '@mui/material';
 import CustomSelectField from '@/components/form-fields/custom-select-field';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import CustomCheckbox from '@/components/form-fields/custom-checkbox';
 import SortFiltersContainer from '@/components/filters/sort-filters-container';
+import { useBookTypeOptions } from '@/lib/graphql/queries/book-type/hook';
+import { usePageTypeOptions } from '@/lib/graphql/queries/page-type/hook';
+import { useAuthorOptions } from '@/lib/graphql/queries/author/hook';
+import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
 
 export function BookFilters({ tableKeys, onApply, pageSettings, onSort }) {
     const formContext = useForm<IBookFilter>();

@@ -22,3 +22,4 @@ generates:
         Author: '../data/types#AuthorEntity'
         User: '../data/types#UserEntity'
         Delivery: '../data/types#DeliveryEntity'
+        Order: '../data/types#OrderEntity'

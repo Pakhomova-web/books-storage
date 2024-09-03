@@ -1,6 +1,6 @@
 import { DeliveryEntity } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import { useCreateDelivery, useUpdateDelivery } from '@/lib/graphql/hooks';
+import { useCreateDelivery, useUpdateDelivery } from '@/lib/graphql/queries/delivery/hook';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import ErrorNotification from '@/components/error-notification';

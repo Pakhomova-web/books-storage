@@ -67,6 +67,36 @@ const typeDefs =  /* GraphQL */ `
         lastName: String,
         role: String
     }
+    
+    type Address {
+        region: String!
+        district: String
+        city: String!
+        postcode: String
+    }
+    
+    type OrderBook { 
+        book: Book!
+        count: Int!
+        discount: Float
+        price: Float!
+    }
+
+    type Order {
+        id: ID
+        customerFirstName: String!
+        customerLastName: String!
+        customerPhoneNumber: String!
+        trackingNumber: String!
+        isPaid: Boolean
+        isPartlyPaid: Boolean
+        isDelivered: Boolean
+        isDone: Boolean
+        delivery: Delivery
+        books: [OrderBook!]!
+        address: Address!
+        description: String
+    }
 
     type Query {
         languages(pageSettings: PageableInput, filters: SearchByNameInput): [Language!]
@@ -77,6 +107,7 @@ const typeDefs =  /* GraphQL */ `
         authors(pageSettings: PageableInput, filters: SearchByNameInput): [Author!]
         books(pageSettings: PageableInput, filters: BookSearchInput): BookSubList
         deliveries(pageSettings: PageableInput, filters: SearchByNameInput): [Delivery!]
+        orders(pageSettings: PageableInput, filters: SearchByNameInput): OrderSubList
         
         bookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
         bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): [BookType!]
@@ -85,23 +116,23 @@ const typeDefs =  /* GraphQL */ `
     }
 
     type Mutation {
-        updateLanguage(input: LanguageInput!): Language
+        updateLanguage(input: LanguageUpdateInput!): Language
         createLanguage(input: LanguageCreateInput!): Language
         deleteLanguage(id: ID!): Language
 
-        updatePublishingHouse(input: PublishingHouseInput!): PublishingHouse
+        updatePublishingHouse(input: PublishingHouseUpdateInput!): PublishingHouse
         createPublishingHouse(input: PublishingHouseCreateInput!): PublishingHouse
         deletePublishingHouse(id: ID!): PublishingHouse
 
-        updatePageType(input: PageTypeInput!): PageType
+        updatePageType(input: PageTypeUpdateInput!): PageType
         createPageType(input: PageTypeCreateInput!): PageType
         deletePageType(id: ID!): PageType
 
-        updateBookType(input: BookTypeInput!): BookType
+        updateBookType(input: BookTypeUpdateInput!): BookType
         createBookType(input: BookTypeCreateInput!): BookType
         deleteBookType(id: ID!): BookType
 
-        updateCoverType(input: CoverTypeInput!): CoverType
+        updateCoverType(input: CoverTypeUpdateInput!): CoverType
         createCoverType(input: CoverTypeCreateInput!): CoverType
         deleteCoverType(id: ID!): CoverType
 
@@ -110,11 +141,11 @@ const typeDefs =  /* GraphQL */ `
         deleteBookSeries(id: ID!): BookSeries
 
         updateBook(input: BookUpdateInput!): Book
-        updateBookNumberInStock(input: BookUpdateNumberInStockInput!): Book!
+        updateBookNumberInStock(input: BookUpdateNumberInStockUpdateInput!): Book!
         createBook(input: BookCreateInput!): Book
         deleteBook(id: ID!): Book
 
-        updateAuthor(input: AuthorInput!): Author
+        updateAuthor(input: AuthorUpdateInput!): Author
         createAuthor(input: AuthorCreateInput!): Author
         deleteAuthor(id: ID!): Author
 
@@ -123,9 +154,13 @@ const typeDefs =  /* GraphQL */ `
         user: User
         updateUser(input: UserUpdateInput!): User!
         
-        updateDelivery(input: DeliveryInput!): Delivery
+        updateDelivery(input: DeliveryUpdateInput!): Delivery
         createDelivery(input: DeliveryCreateInput!): Delivery
         deleteDelivery(id: ID!): Delivery
+        
+        updateOrder(input: OrderUpdateInput!): Order
+        createOrder(input: OrderCreateInput!): Order
+        deleteOrder(id: ID!): Order
     }
     
     type UserToken {
@@ -171,41 +206,41 @@ const typeDefs =  /* GraphQL */ `
         name: String
     }
 
-    input PublishingHouseInput {
+    input PublishingHouseUpdateInput {
         id: ID!
         name: String!
         tags: String
     }
 
-    input AuthorInput {
+    input AuthorUpdateInput {
         id: ID!
         name: String!
         description: String
     }
 
-    input PageTypeInput {
+    input PageTypeUpdateInput {
         id: ID!
         name: String!
     }
 
-    input LanguageInput {
+    input LanguageUpdateInput {
         id: ID!
         name: String!
     }
 
-    input BookTypeInput {
+    input BookTypeUpdateInput {
         id: ID!
         name: String!
     }
 
-    input CoverTypeInput {
+    input CoverTypeUpdateInput {
         id: ID!
         name: String!
     }
 
     #    book
 
-    input BookUpdateNumberInStockInput {
+    input BookUpdateNumberInStockUpdateInput {
         id: ID!
         numberInStock: Int!
     }
@@ -263,6 +298,11 @@ const typeDefs =  /* GraphQL */ `
         totalCount: Int!
     }
 
+    type OrderSubList {
+        items: [Order!]!
+        totalCount: Int!
+    }
+
     #    book series
 
     input BookSeriesCreateInput {
@@ -300,13 +340,58 @@ const typeDefs =  /* GraphQL */ `
         lastName: String
     }
 
-    input DeliveryInput {
+    input DeliveryUpdateInput {
         id: ID!
         name: String!
     }
     
     input DeliveryCreateInput {
         name: String!
+    }
+    
+    input OrderBookInput {
+        bookId: ID!
+        count: Int!
+        discount: Float
+        price: Float!
+    }
+    
+    input AddressInput {
+        region: String!
+        district: String
+        city: String!
+        postcode: String!
+    }
+    
+    input OrderCreateInput {
+        customerFirstName: String!
+        customerLastName: String!
+        customerPhoneNumber: String!
+        trackingNumber: String!
+        isPaid: Boolean
+        isPartlyPaid: Boolean
+        isDelivered: Boolean
+        isDone: Boolean
+        deliveryId: ID
+        books: [OrderBookInput!]!
+        address: AddressInput!
+        description: String
+    }
+
+    input OrderUpdateInput {
+        id: ID!
+        customerFirstName: String!
+        customerLastName: String!
+        customerPhoneNumber: String!
+        trackingNumber: String!
+        isPaid: Boolean
+        isPartlyPaid: Boolean
+        isDelivered: Boolean
+        isDone: Boolean
+        deliveryId: ID
+        books: [OrderBookInput!]!
+        address: AddressInput!
+        description: String
     }
 `;
 

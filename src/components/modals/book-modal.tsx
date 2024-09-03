@@ -1,21 +1,19 @@
 import { BookEntity, BookSeriesEntity, IBookSeriesFilter, IOption } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import {
-    getBookSeriesOptions,
-    useAuthorOptions, useBookTypeOptions,
-    useCoverTypeOptions,
-    useCreateBook,
-    useLanguageOptions,
-    usePageTypeOptions,
-    usePublishingHouseOptions,
-    useUpdateBook
-} from '@/lib/graphql/hooks';
+import { useCreateBook, useUpdateBook } from '@/lib/graphql/queries/book/hook';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import CustomSelectField from '@/components/form-fields/custom-select-field';
 import { useEffect, useState } from 'react';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
+import { usePageTypeOptions } from '@/lib/graphql/queries/page-type/hook';
+import { useAuthorOptions } from '@/lib/graphql/queries/author/hook';
+import { useLanguageOptions } from '@/lib/graphql/queries/language/hooks';
+import { useBookTypeOptions } from '@/lib/graphql/queries/book-type/hook';
+import { usePublishingHouseOptions } from '@/lib/graphql/queries/publishing-house/hook';
+import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
+import { getBookSeriesOptions } from '@/lib/data/book-series';
 
 interface IBookModalProps {
     open: boolean,

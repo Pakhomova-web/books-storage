@@ -2,7 +2,7 @@ import { ApolloClient, ApolloLink, FetchResult, from, HttpLink, InMemoryCache, O
 import { removeTypenameFromVariables } from '@apollo/client/link/remove-typename';
 import { getAccessToken, getRefreshToken, saveTokenToLocalStorage } from '@/utils/utils';
 import { onError } from '@apollo/client/link/error';
-import { refreshTokenQuery } from '@/lib/graphql/queries';
+import { refreshTokenQuery } from '@/lib/graphql/queries/auth/queries';
 
 const removeTypenameLink = removeTypenameFromVariables();
 const authLink = new ApolloLink((operation, forward) => {

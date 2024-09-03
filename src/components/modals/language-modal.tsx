@@ -1,6 +1,6 @@
 import { LanguageEntity } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import { useCreateLanguage, useUpdateLanguage } from '@/lib/graphql/hooks';
+import { useCreateLanguage, useUpdateLanguage } from '@/lib/graphql/queries/language/hooks';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import ErrorNotification from '@/components/error-notification';

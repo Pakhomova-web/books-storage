@@ -1,6 +1,6 @@
 import { AuthorEntity } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import { useCreateAuthor, useUpdateAuthor } from '@/lib/graphql/hooks';
+import { useCreateAuthor, useUpdateAuthor } from '@/lib/graphql/queries/author/hook';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import ErrorNotification from '@/components/error-notification';

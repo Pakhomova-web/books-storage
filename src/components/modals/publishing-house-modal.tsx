@@ -1,7 +1,7 @@
 import { FormContainer, useForm } from 'react-hook-form-mui';
 
 import { PublishingHouseEntity } from '@/lib/data/types';
-import { useCreatePublishingHouse, useUpdatePublishingHouse } from '@/lib/graphql/hooks';
+import { useCreatePublishingHouse, useUpdatePublishingHouse } from '@/lib/graphql/queries/publishing-house/hook';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import ErrorNotification from '@/components/error-notification';

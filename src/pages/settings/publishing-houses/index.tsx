@@ -7,7 +7,7 @@ import { IPageable, PublishingHouseEntity } from '@/lib/data/types';
 import Loading from '@/components/loading';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
-import { useDeletePublishingHouse, usePublishingHouses } from '@/lib/graphql/hooks';
+import { useDeletePublishingHouse, usePublishingHouses } from '@/lib/graphql/queries/publishing-house/hook';
 import PublishingHouseModal from '@/components/modals/publishing-house-modal';
 import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
