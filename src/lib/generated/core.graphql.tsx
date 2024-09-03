@@ -426,10 +426,10 @@ export type Order = {
   delivery?: Maybe<Delivery>;
   description?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
-  isDelivered?: Maybe<Scalars['Boolean']['output']>;
   isDone?: Maybe<Scalars['Boolean']['output']>;
   isPaid?: Maybe<Scalars['Boolean']['output']>;
   isPartlyPaid?: Maybe<Scalars['Boolean']['output']>;
+  isSent?: Maybe<Scalars['Boolean']['output']>;
   trackingNumber: Scalars['String']['output'];
 };
 
@@ -455,10 +455,10 @@ export type OrderCreateInput = {
   customerPhoneNumber: Scalars['String']['input'];
   deliveryId?: InputMaybe<Scalars['ID']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
-  isDelivered?: InputMaybe<Scalars['Boolean']['input']>;
   isDone?: InputMaybe<Scalars['Boolean']['input']>;
   isPaid?: InputMaybe<Scalars['Boolean']['input']>;
   isPartlyPaid?: InputMaybe<Scalars['Boolean']['input']>;
+  isSent?: InputMaybe<Scalars['Boolean']['input']>;
   trackingNumber: Scalars['String']['input'];
 };
 
@@ -476,10 +476,10 @@ export type OrderUpdateInput = {
   deliveryId?: InputMaybe<Scalars['ID']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
-  isDelivered?: InputMaybe<Scalars['Boolean']['input']>;
   isDone?: InputMaybe<Scalars['Boolean']['input']>;
   isPaid?: InputMaybe<Scalars['Boolean']['input']>;
   isPartlyPaid?: InputMaybe<Scalars['Boolean']['input']>;
+  isSent?: InputMaybe<Scalars['Boolean']['input']>;
   trackingNumber: Scalars['String']['input'];
 };
 
@@ -945,10 +945,10 @@ export type OrderResolvers<ContextType = any, ParentType extends ResolversParent
   delivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  isDelivered?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   isDone?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   isPaid?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   isPartlyPaid?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  isSent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   trackingNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

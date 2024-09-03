@@ -46,7 +46,7 @@ export async function getOrders(pageSettings?: IPageable, filters?: IOrderFilter
 }
 
 export async function createOrder(input: OrderEntity) {
-    const item = new Order(input);
+    const item = new Order(_getOrderData(input));
 
     await item.save();
 
@@ -60,7 +60,7 @@ export async function updateOrder(input: OrderEntity) {
         });
     }
 
-    await Order.findByIdAndUpdate(input.id, input);
+    await Order.findByIdAndUpdate(input.id, _getOrderData(input));
 
     return input as OrderEntity;
 }
@@ -74,4 +74,11 @@ export async function deleteOrder(id: string) {
     await Order.findByIdAndDelete(id);
 
     return { id } as OrderEntity;
+}
+
+function _getOrderData(input: OrderEntity) {
+    return {
+        ...input,
+        delivery: input.deliveryId
+    };
 }

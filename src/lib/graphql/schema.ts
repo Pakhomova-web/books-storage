@@ -90,7 +90,7 @@ const typeDefs =  /* GraphQL */ `
         trackingNumber: String!
         isPaid: Boolean
         isPartlyPaid: Boolean
-        isDelivered: Boolean
+        isSent: Boolean
         isDone: Boolean
         delivery: Delivery
         books: [OrderBook!]!
@@ -108,7 +108,6 @@ const typeDefs =  /* GraphQL */ `
         books(pageSettings: PageableInput, filters: BookSearchInput): BookSubList
         deliveries(pageSettings: PageableInput, filters: SearchByNameInput): [Delivery!]
         orders(pageSettings: PageableInput, filters: SearchByNameInput): OrderSubList
-        
         bookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
         bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): [BookType!]
         
@@ -370,7 +369,7 @@ const typeDefs =  /* GraphQL */ `
         trackingNumber: String!
         isPaid: Boolean
         isPartlyPaid: Boolean
-        isDelivered: Boolean
+        isSent: Boolean
         isDone: Boolean
         deliveryId: ID
         books: [OrderBookInput!]!
@@ -386,7 +385,7 @@ const typeDefs =  /* GraphQL */ `
         trackingNumber: String!
         isPaid: Boolean
         isPartlyPaid: Boolean
-        isDelivered: Boolean
+        isSent: Boolean
         isDone: Boolean
         deliveryId: ID
         books: [OrderBookInput!]!

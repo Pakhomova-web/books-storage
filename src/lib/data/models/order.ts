@@ -20,7 +20,7 @@ const orderSchema = new Schema<OrderEntity, Model<OrderEntity>>({
     },
     isPaid: Boolean,
     isPartlyPaid: Boolean,
-    isDelivered: Boolean,
+    isSent: Boolean,
     isDone: Boolean,
     trackingNumber: String,
     description: String,

@@ -7,7 +7,7 @@ const orderFragment = gql`
         customerLastName
         customerPhoneNumber
         trackingNumber
-        isDelivered
+        isSent
         isDone
         isPaid
         isPartlyPaid

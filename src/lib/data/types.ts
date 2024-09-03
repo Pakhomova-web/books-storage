@@ -132,7 +132,7 @@ export class OrderEntity {
     address: Address;
     isPaid: boolean;
     isPartlyPaid: boolean;
-    isDelivered: boolean;
+    isSent: boolean;
     isDone: boolean;
     books: OrderBook[];
     description?: string;

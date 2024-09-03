@@ -14,7 +14,7 @@ export default function CustomCheckbox({ loading, label, name }: ICustomCheckbox
     return (
         <Box sx={styleVariables.positionRelative}>
             <Loading show={!!loading} isSmall={true}/>
-            <CheckboxElement label={label} name={name}/>
+            <CheckboxElement label={label} name={name} sx={{ marginLeft: styleVariables.margin }}/>
         </Box>
     );
 }
