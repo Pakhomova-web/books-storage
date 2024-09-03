@@ -46,4 +46,4 @@ const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
 
 bookSchema.index({ name: 1, bookSeries: 1, bookType: 1 }, { unique: true });
 
-export default models.book || model('book', bookSchema);
+export default models?.book || model('book', bookSchema);
