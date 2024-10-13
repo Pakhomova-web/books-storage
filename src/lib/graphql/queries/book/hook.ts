@@ -6,7 +6,13 @@ import {
     _usePageableItems,
     _useUpdateItem
 } from '@/lib/graphql/base-hooks';
-import { booksQuery, createBookQuery, deleteBookQuery, updateBookNumberInStockQuery } from '@/lib/graphql/queries/book/queries';
+import {
+    booksQuery,
+    createBookQuery,
+    deleteBookQuery,
+    updateBookNumberInStockQuery,
+    updateBookQuery
+} from '@/lib/graphql/queries/book/queries';
 
 export function useBooks(pageSettings?: IPageable, filters?: IBookFilter) {
     return _usePageableItems<BookEntity>(booksQuery, 'books', pageSettings, filters);
@@ -25,7 +31,6 @@ export function useCreateBook() {
 }
 
 export function useUpdateBook() {
-    // @ts-ignore
     return _useUpdateItem<BookEntity>(updateBookQuery);
 }
 
