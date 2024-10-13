@@ -19,6 +19,8 @@ const settingMenuBackdrop = {
     zIndex: 3
 };
 
+const authUrls = ['login', 'sign-in'];
+
 export default function Main({ children }) {
     const [loading, setLoading] = useState<boolean>(false);
     const { fetchUser } = useUser();
@@ -34,13 +36,16 @@ export default function Main({ children }) {
             .then((user: UserEntity) => {
                 setUser(user);
                 setLoading(false);
+                if (authUrls.some(url => pathname.includes(url))) {
+                    router.push('/');
+                }
             })
             .catch(() => {
                 setLoading(false);
                 setShowSettingsMenu(false);
                 setAttachedSettingsMenu(false);
                 logout();
-                if (!(pathname.includes('login') || pathname.includes('sign-in'))) {
+                if (!authUrls.some(url => pathname.includes(url))) {
                     router.push('/');
                 }
             });
