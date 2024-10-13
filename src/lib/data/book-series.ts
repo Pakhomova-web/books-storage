@@ -23,7 +23,9 @@ export async function getBookSeries(pageSettings?: IPageable, filters?: IBookSer
 }
 
 export async function getBookSeriesOptions(filters?: IBookSeriesFilter): Promise<BookSeriesEntity[]> {
-    return BookSeries.find(getValidFilters(filters)).sort({ name: 'asc' });
+    const { andFilters } = getValidFilters(filters);
+
+    return BookSeries.find().and(andFilters).sort({ name: 'asc' });
 }
 
 

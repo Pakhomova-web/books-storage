@@ -13,7 +13,7 @@ import { useLanguageOptions } from '@/lib/graphql/queries/language/hooks';
 import { useBookTypeOptions } from '@/lib/graphql/queries/book-type/hook';
 import { usePublishingHouseOptions } from '@/lib/graphql/queries/publishing-house/hook';
 import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
-import { getBookSeriesOptions } from '@/lib/data/book-series';
+import { getBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 
 interface IBookModalProps {
     open: boolean,
@@ -70,10 +70,6 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     const { checkAuth } = useAuth();
 
     useEffect(() => {
-        fetchBookSeriesOptions();
-    }, [publishingHouseId]);
-
-    async function fetchBookSeriesOptions() {
         if (publishingHouseId) {
             setLoadingBookSeries(true);
             setBookSeriesOptions([]);
@@ -82,9 +78,12 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                     setLoadingBookSeries(false);
                     setBookSeriesOptions(options);
                     formContext.setValue('bookSeriesId', bookSeriesId ? options.find(({ id }) => id === bookSeriesId)?.id : null);
+                })
+                .catch(() => {
+                    setLoadingBookSeries(false);
                 });
         }
-    }
+    }, [publishingHouseId]);
 
     async function onSubmit() {
         const values = formContext.getValues();
