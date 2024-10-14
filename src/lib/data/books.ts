@@ -81,7 +81,7 @@ export async function updateBook(input: BookEntity) {
     }
     await Book.findByIdAndUpdate(input.id, _getBookData(input));
 
-    return input as BookEntity;
+    return { id: input.id } as BookEntity;
 }
 
 export async function updateBookNumberInStock(input: { id: string, numberInStock: number }) {
