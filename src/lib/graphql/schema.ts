@@ -57,6 +57,7 @@ const typeDefs =  /* GraphQL */ `
         language: Language!
         author: Author
         format: String
+        imageId: String
     }
     
     type User {
@@ -258,6 +259,7 @@ const typeDefs =  /* GraphQL */ `
         languageId: ID!
         authorId: ID
         format: String
+        imageId: String
     }
 
     input BookUpdateInput {
@@ -275,6 +277,7 @@ const typeDefs =  /* GraphQL */ `
         languageId: ID!
         authorId: ID
         format: String
+        imageId: String
     }
 
     input BookSearchInput {

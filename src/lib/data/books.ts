@@ -21,7 +21,7 @@ export async function getBooks(pageSettings?: IPageable, filters?: IBookFilter):
         .populate('coverType')
         .populate('language')
         .populate('author')
-        .sort({ [pageSettings.orderBy || 'name']: pageSettings.order });
+        .sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
 
     if (andFilters?.length) {
         query.and(andFilters);

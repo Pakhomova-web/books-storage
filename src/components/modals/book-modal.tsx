@@ -31,13 +31,15 @@ interface IForm {
     numberOfPages: number,
     numberInStock: number,
     price: number,
-    coverTypeId: string
-    languageId: string
-    pageTypeId: string
-    bookTypeId: string
-    bookSeriesId: string
-    authorId?: string
-    publishingHouseId?: string
+    coverTypeId: string,
+    languageId: string,
+    pageTypeId: string,
+    bookTypeId: string,
+    bookSeriesId: string,
+    authorId?: string,
+    publishingHouseId?: string,
+    imageId?: string,
+    imageLink?: string
 }
 
 export default function BookModal({ open, item, onClose, isAdmin }: IBookModalProps) {
@@ -53,7 +55,8 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             pageTypeId: item?.pageType.id,
             bookTypeId: item?.bookType.id,
             bookSeriesId: item?.bookSeries.id,
-            publishingHouseId: item?.bookSeries.publishingHouse.id
+            publishingHouseId: item?.bookSeries.publishingHouse.id,
+            imageId: item?.imageId
         }
     });
     const { publishingHouseId, bookSeriesId } = formContext.watch();
@@ -86,7 +89,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     }, [publishingHouseId]);
 
     async function onSubmit() {
-        const values = formContext.getValues();
+        const { imageLink, ...values } = formContext.getValues();
         delete values.publishingHouseId;
         const data = {
             id: item?.id,
@@ -96,6 +99,14 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             numberInStock: values.numberInStock ? Number(values.numberInStock) : 0
         } as BookEntity;
 
+        if (!data.imageId && imageLink) {
+            // link example: https://drive.google.com/file/d/EXAMPLE_ID/view?usp=drive_link
+            try {
+                data.imageId = imageLink.split('https://drive.google.com/file/d/')[1].split('/')[0];
+            } catch (err) {
+                console.log(err);
+            }
+        }
         try {
             if (item?.id) {
                 await update(data);
@@ -227,6 +238,18 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                  id="price"
                                  label="Price"
                                  name="price"/>
+
+                <CustomTextField fullWidth
+                                 disabled={!isAdmin}
+                                 id="imageLink"
+                                 label="Image Link"
+                                 name="imageLink"/>
+
+                <CustomTextField fullWidth
+                                 disabled={!isAdmin}
+                                 id="imageId"
+                                 label="Image ID"
+                                 name="imageId"/>
             </FormContainer>
 
             {(creatingError || updatingError) &&

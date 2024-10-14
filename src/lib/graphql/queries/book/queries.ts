@@ -10,6 +10,7 @@ const bookFragment = gql`
         numberOfPages
         isbn
         format
+        imageId
         language {
             id
             name

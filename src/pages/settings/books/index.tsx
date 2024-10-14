@@ -1,8 +1,8 @@
 import React from 'react';
-import BooksTable from '@/components/table/books-table';
+import BooksSettingsTable from '@/components/table/books-settings-table';
 
 export default function Books() {
     return (
-        <BooksTable></BooksTable>
+        <BooksSettingsTable></BooksSettingsTable>
     );
 }

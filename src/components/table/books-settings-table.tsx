@@ -14,6 +14,7 @@ import ErrorNotification from '@/components/error-notification';
 import AddIcon from '@mui/icons-material/Add';
 import BookModal from '@/components/modals/book-modal';
 import { BookNumberInStockModal } from '@/components/modals/book-number-in-stock-modal';
+import Image from 'next/image';
 
 const subTitleStyles = {
     fontSize: styleVariables.hintFontSize,
@@ -30,7 +31,7 @@ const numberInStockBox = (inStock: boolean) => ({
     border: `1px solid ${inStock ? 'green' : styleVariables.warnColor}`
 });
 
-export default function BooksTable() {
+export default function BooksSettingsTable() {
     const { user, checkAuth } = useAuth();
     const tableActions: TableKey<BookEntity> = {
         renderMobileLabel: (item: BookEntity) => (
