@@ -6,6 +6,11 @@ import CopyIcon from '@mui/icons-material/ContentCopy';
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
+const tableCellActionsStyles = {
+    display: 'flex',
+    justifyContent: 'end'
+};
+
 export function renderTableCell<T>(key: TableKey<T>, item: T, index: number, rowStyleClass?: Function): ReactNode {
     return (
         <TableCell key={index} sx={rowStyleClass ? rowStyleClass(item) : {}}>
@@ -14,53 +19,51 @@ export function renderTableCell<T>(key: TableKey<T>, item: T, index: number, row
     );
 }
 
-export function renderTableActions<T>(key: TableKey<T>, item: T, anchorMenuEl: HTMLElement, onAnchorMenuElChange, rowStyleClass?: Function) {
+export function renderTableActions<T>(index: number, key: TableKey<T>, item: T, anchorMenuEl: HTMLElement, onAnchorMenuElChange, rowStyleClass?: Function) {
     return (
         <TableCell align="right"
                    onClick={e => e.stopPropagation()}
                    sx={rowStyleClass ? rowStyleClass(item) : {}}>
-            {renderActions(key.actions, item, anchorMenuEl, onAnchorMenuElChange)}
+            <Box sx={tableCellActionsStyles}>
+                {renderActions(index, key.actions, item, anchorMenuEl, onAnchorMenuElChange)}
+            </Box>
         </TableCell>
     );
 }
 
-export function renderActions<T>(actions: ITableAction[], item: T, anchorMenuEl: HTMLElement, onAnchorMenuElChange) {
+export function renderActions<T>(index: number, actions: ITableAction[], item: T, anchorMenuEl: HTMLElement, onAnchorMenuElChange) {
     const open = Boolean(anchorMenuEl);
     const onMenuClick = (event: React.MouseEvent<HTMLElement>) => {
         event.stopPropagation();
-        console.log(item);
-        onAnchorMenuElChange(event.currentTarget);
+        onAnchorMenuElChange(event.currentTarget.id);
     }
-    const onCloseMenu = () => onAnchorMenuElChange(null);
 
-    return actions && (!actions.length || actions.length === 1) ?
-        actions.map((icon, index) => getActionItem<T>(item, icon, index)) :
+    function handleClick(action: ITableAction) {
+        onAnchorMenuElChange(null);
+        action.onClick(item);
+    }
+
+    return (!actions.length || actions.length === 1) ?
+        <Button onClick={() => handleClick(actions[0])}>getActionItem(actions[0], index)</Button> :
         <Box>
             <IconButton aria-haspopup="true" onClick={onMenuClick}>
-                <MoreVertIcon/>
+                <MoreVertIcon/>{index}
             </IconButton>
             <Menu anchorEl={anchorMenuEl}
                   open={open}
-                  onClose={onCloseMenu}
+                  onClose={() => onAnchorMenuElChange(null)}
                   MenuListProps={{ 'aria-labelledby': 'basic-button' }}>
-                {actions.map((icon, index) => (
-                    <MenuItem key={index} onClick={onCloseMenu}>
-                        {getActionItem<T>(item, icon, index, onCloseMenu)}
+                {actions.map((action, index) => (
+                    <MenuItem key={index} onClick={() => handleClick(action)}>
+                        {getActionItem(action, index)}
                     </MenuItem>)
                 )}
             </Menu>
         </Box>;
 }
 
-export function getActionItem<T>(item: T, action: ITableAction, index: number, onClick?: Function) {
-    const handleClick = () => {
-        if (onClick) {
-            onClick();
-        }
-        action.onClick(item);
-    };
+export function getActionItem(action: ITableAction, index: number) {
     let icon = null;
-    let color = null;
     const styles = {
         display: 'flex',
         alignItems: 'center'
@@ -77,5 +80,5 @@ export function getActionItem<T>(item: T, action: ITableAction, index: number, o
             icon = <AddIcon color="primary"/>;
     }
 
-    return <Box gap={1} key={index} sx={styles} onClick={handleClick}>{icon}{action.label || ''}</Box>;
+    return <Box gap={1} key={index} sx={styles}>{icon}{action.label || ''}</Box>;
 }

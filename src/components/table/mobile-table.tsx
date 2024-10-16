@@ -24,13 +24,13 @@ interface IMobileTableProps<T> {
 export function MobileTable<T>(props: IMobileTableProps<T>) {
     const [anchorMenuEl, setAnchorMenuEl] = useState<null | HTMLElement>(null);
 
-    function renderItem(item: T) {
+    function renderItem(item: T, index: number) {
         return <>
             {props.actions &&
               <Grid container sx={styleVariables.alignItemsCenter}>
                 <Grid item xs={9}>{props.actions.renderMobileLabel && props.actions.renderMobileLabel(item)}</Grid>
                 <Grid item xs={3} sx={styleVariables.flexEnd}>
-                    {renderActions(props.actions.actions, item, anchorMenuEl, (val: HTMLElement) => setAnchorMenuEl(val))}
+                    {renderActions(index, props.actions.actions, item, anchorMenuEl, (val: HTMLElement) => setAnchorMenuEl(val))}
                 </Grid>
               </Grid>}
             {props.keys.map((key, i) => (
@@ -60,7 +60,7 @@ export function MobileTable<T>(props: IMobileTableProps<T>) {
                 {props.data.map((item, index) =>
                     <Grid item key={index} sm={6} xs={12}>
                         <Box sx={mobileBoxStyles} onClick={() => props.onRowClick ? onRowClick(item) : {}}>
-                            {props.renderMobileView ? props.renderMobileView(item) : renderItem(item)}
+                            {props.renderMobileView ? props.renderMobileView(item) : renderItem(item, index)}
                         </Box>
                     </Grid>
                 )}

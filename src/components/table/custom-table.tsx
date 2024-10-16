@@ -143,13 +143,13 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {props.data.map((item: T) => (
+                        {props.data.map((item: T, index) => (
                             <CustomTableRow key={props.renderKey(item)} isClickable={!!props.onRowClick}
                                             onClick={() => props.onRowClick ? onRowClick(item) : null}>
                                 {props.keys.map((key: TableKey<T>, index) =>
                                     renderTableCell<T>(key, item, index, props.rowStyleClass))}
                                 {!!props.actions?.actions.length &&
-                                    renderTableActions(props.actions, item, anchorMenuEl, (val: HTMLElement) => setAnchorMenuEl(val), props.rowStyleClass)}
+                                    renderTableActions(index, props.actions, item, anchorMenuEl, (val: HTMLElement) => setAnchorMenuEl(val), props.rowStyleClass)}
                             </CustomTableRow>
                         ))}
                     </TableBody>
