@@ -36,17 +36,15 @@ export const deleteCoverTypeQuery = gql`
 export const createCoverTypeQuery = gql`
     mutation CreateCoverType($input: CoverTypeCreateInput!) {
         item: createCoverType(input: $input) {
-            ...CoverType
+            id
         }
     }
-    ${coverTypeFragment}
 `;
 
 export const updateCoverTypeQuery = gql`
     mutation UpdateCoverType($input: CoverTypeUpdateInput!) {
         item: updateCoverType(input: $input) {
-            ...CoverType
+            id
         }
     }
-    ${coverTypeFragment}
 `;

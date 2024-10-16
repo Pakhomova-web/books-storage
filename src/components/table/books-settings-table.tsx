@@ -14,7 +14,6 @@ import ErrorNotification from '@/components/error-notification';
 import AddIcon from '@mui/icons-material/Add';
 import BookModal from '@/components/modals/book-modal';
 import { BookNumberInStockModal } from '@/components/modals/book-number-in-stock-modal';
-import Image from 'next/image';
 
 const subTitleStyles = {
     fontSize: styleVariables.hintFontSize,
@@ -186,11 +185,8 @@ export default function BooksSettingsTable() {
 
     function onAdd(parentItem?: BookEntity) {
         setError(null);
-        if (parentItem) {
-            setSelectedItem(parentItem);
-        } else {
-            setOpenNewModal(true);
-        }
+        setSelectedItem(parentItem);
+        setOpenNewModal(true);
     }
 
     function onEdit(item: BookEntity) {

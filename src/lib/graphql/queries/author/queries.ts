@@ -37,17 +37,15 @@ export const deleteAuthorQuery = gql`
 export const createAuthorQuery = gql`
     mutation CreateAuthor($input: AuthorCreateInput!) {
         item: createAuthor(input: $input) {
-            ...Author
+            id
         }
     }
-    ${authorFragment}
 `;
 
 export const updateAuthorQuery = gql`
     mutation UpdateAuthor($input: AuthorUpdateInput!) {
         item: updateAuthor(input: $input) {
-            ...Author
+            id
         }
     }
-    ${authorFragment}
 `;

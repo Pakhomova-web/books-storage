@@ -36,17 +36,15 @@ export const deleteBookTypeQuery = gql`
 export const createBookTypeQuery = gql`
     mutation CreateBookType($input: BookTypeCreateInput!) {
         item: createBookType(input: $input) {
-            ...BookType
+            id
         }
     }
-    ${bookTypeFragment}
 `;
 
 export const updateBookTypeQuery = gql`
     mutation UpdateBookType($input: BookTypeUpdateInput!) {
         item: updateBookType(input: $input) {
-            ...BookType
+            id
         }
     }
-    ${bookTypeFragment}
 `;

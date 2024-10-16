@@ -45,6 +45,7 @@ export function useBookSeriesOptions(filters?: BookSeriesEntity) {
 export async function getBookSeriesOptions(filters?: IBookSeriesFilter) {
     const { data: { items } } = await apolloClient.query({
         query: bookSeriesOptionsQuery,
+        fetchPolicy: 'no-cache',
         variables: { filters }
     });
 

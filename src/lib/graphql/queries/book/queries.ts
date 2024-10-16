@@ -67,10 +67,9 @@ export const deleteBookQuery = gql`
 export const createBookQuery = gql`
     mutation CreateBook($input: BookCreateInput!) {
         item: createBook(input: $input) {
-            ...Book
+            id
         }
     }
-    ${bookFragment}
 `;
 
 export const updateBookQuery = gql`

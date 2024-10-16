@@ -44,17 +44,15 @@ export const deleteBookSeriesQuery = gql`
 export const createBookSeriesQuery = gql`
     mutation CreateBookSeries($input: BookSeriesCreateInput!) {
         item: createBookSeries(input: $input) {
-            ...BookSeries
+            id
         }
     }
-    ${bookSeriesFragment}
 `;
 
 export const updateBookSeriesQuery = gql`
     mutation UpdateBookSeries($input: BookSeriesUpdateInput!) {
         item: updateBookSeries(input: $input) {
-            ...BookSeries
+            id
         }
     }
-    ${bookSeriesFragment}
 `;

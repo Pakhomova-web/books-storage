@@ -28,6 +28,7 @@ export function renderActions<T>(actions: ITableAction[], item: T, anchorMenuEl:
     const open = Boolean(anchorMenuEl);
     const onMenuClick = (event: React.MouseEvent<HTMLElement>) => {
         event.stopPropagation();
+        console.log(item);
         onAnchorMenuElChange(event.currentTarget);
     }
     const onCloseMenu = () => onAnchorMenuElChange(null);
@@ -52,8 +53,7 @@ export function renderActions<T>(actions: ITableAction[], item: T, anchorMenuEl:
 }
 
 export function getActionItem<T>(item: T, action: ITableAction, index: number, onClick?: Function) {
-    const handleClick = event => {
-        event.stopPropagation();
+    const handleClick = () => {
         if (onClick) {
             onClick();
         }
@@ -61,20 +61,21 @@ export function getActionItem<T>(item: T, action: ITableAction, index: number, o
     };
     let icon = null;
     let color = null;
+    const styles = {
+        display: 'flex',
+        alignItems: 'center'
+    };
 
     switch (action.type) {
         case TableActionEnum.delete:
             icon = <DeleteIcon color="warning"/>;
-            color = 'warning';
             break;
         case TableActionEnum.copy:
-            icon = <CopyIcon/>;
+            icon = <CopyIcon color="primary"/>;
             break;
         case TableActionEnum.add:
-            icon = <AddIcon/>;
+            icon = <AddIcon color="primary"/>;
     }
 
-    return action.label ?
-        <Button key={index} onClick={handleClick} color={color || 'primary'}>{icon}{action.label || ''}</Button> :
-        <IconButton key={index} onClick={handleClick} color={color || 'primary'}>{icon}</IconButton>;
+    return <Box gap={1} key={index} sx={styles} onClick={handleClick}>{icon}{action.label || ''}</Box>;
 }

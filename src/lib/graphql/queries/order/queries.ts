@@ -56,19 +56,17 @@ export const ordersQuery = gql`
 export const createOrderQuery = gql`
     mutation CreateOrder($input: OrderCreateInput!) {
         item: createOrder(input: $input) {
-            ...Order
+            id
         }
     }
-    ${orderFragment}
 `;
 
 export const updateOrderQuery = gql`
     mutation UpdateOrder($input: OrderUpdateInput!) {
         item: updateOrder(input: $input) {
-            ...Order
+            id
         }
     }
-    ${orderFragment}
 `;
 
 export const deleteOrderQuery = gql`
