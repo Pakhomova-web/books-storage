@@ -10,6 +10,8 @@ const paginatorStyles = {
     background: 'white'
 };
 
+const bookBoxStyles = { height: '300px', maxHeight: '50vw' };
+
 export default function Home() {
     const [pageSettings, setPageSettings] = useState<IPageable>({
         order: 'asc', orderBy: '', page: 0, rowsPerPage: 25
@@ -36,14 +38,14 @@ export default function Home() {
         <Box sx={positionRelative}>
             <Loading show={loading}></Loading>
 
-            <Grid container gap={2} m={2}>
+            <Grid container justifyContent="center">
                 {items.map(((book, i) =>
-                        <Grid item key={i}>
-                            <Box style={{ width: '200px', height: '200px' }}>
+                        <Grid item key={i} xl={1} lg={2} md={3} sm={4} xs={6} p={2} textAlign="center">
+                            <Box sx={bookBoxStyles}>
                                 <img alt="Image 1" width="100%" height="100%" style={{ objectFit: 'contain' }}
                                      src={book.imageId ? `https://drive.google.com/thumbnail?id=${book.imageId}&sz=w1000` : '/book-empty.jpg'}/>
                             </Box>
-                            {book.name}
+                            <Box>{book.name}</Box>
                         </Grid>
                 ))}
             </Grid>
