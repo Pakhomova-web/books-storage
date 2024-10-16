@@ -71,3 +71,16 @@ function decrypt(val: string): string {
 export function isAdmin(user?: UserEntity): boolean {
     return user && user.role === ROLES.admin;
 }
+
+export function renderPrice(price: number): string {
+    let res = `${price}`;
+
+    if (res.split('.').length === 1) {
+        res = `${res}.00`;
+    }
+    while (res.split('.')[1].length !== 2) {
+        res = `${res}0`;
+    }
+
+    return res;
+}

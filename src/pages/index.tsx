@@ -6,6 +6,7 @@ import { positionRelative, styleVariables } from '@/constants/styles-variables';
 import { BookEntity, IBookFilter, IPageable } from '@/lib/data/types';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
+import { renderPrice } from '@/utils/utils';
 
 const paginatorStyles = {
     borderTop: `1px solid ${styleVariables.gray}`,
@@ -14,15 +15,15 @@ const paginatorStyles = {
 
 const bookBoxStyles = { height: '250px', maxHeight: '50vw' };
 const bookTitleStyles = {
-    fontSize: styleVariables.titleFontSize
+    ...styleVariables.titleFontSize
 };
 const bookPriceStyles = {
-    fontSize: styleVariables.titleFontSize,
+    ...styleVariables.titleFontSize,
     ...styleVariables.boldFont
 };
 
 const bookInfoStyles = {
-    fontSize: styleVariables.hintFontSize
+    ...styleVariables.hintFontSize
 };
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
@@ -68,14 +69,14 @@ export default function Home() {
                         <StyledGrid item key={i} xl={1} lg={2} md={3} sm={4} xs={6} p={2} textAlign="center"
                                     onClick={() => handleClickOnBook(book)}>
                             <Box sx={bookBoxStyles} mb={1}>
-                                <img alt="Image 1" width="100%" height="100%" style={{ objectFit: 'contain' }}
+                                <img alt="Image" width="100%" height="100%" style={{ objectFit: 'contain' }}
                                      src={book.imageId ? `https://drive.google.com/thumbnail?id=${book.imageId}&sz=w1000` : '/book-empty.jpg'}/>
                             </Box>
                             <Box sx={bookInfoStyles}>
                                 {book.bookSeries.publishingHouse.name}{book.bookSeries.name === '-' ? '' : `, ${book.bookSeries.name}`}
                             </Box>
                             <Box sx={bookTitleStyles}>{book.name}</Box>
-                            <Box sx={bookPriceStyles} mt={1}>{book.price} грн</Box>
+                            <Box sx={bookPriceStyles} mt={1}>{renderPrice(book.price)} грн</Box>
                         </StyledGrid>
                 ))}
             </Grid>

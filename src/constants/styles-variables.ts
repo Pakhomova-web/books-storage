@@ -3,8 +3,12 @@ const rowMargin = '5px';
 const gray = 'rgba(224, 224, 224, 1)';
 
 export const styleVariables = {
-    titleFontSize: '20px',
-    hintFontSize,
+    titleFontSize: {
+        fontSize: '20px'
+    },
+    hintFontSize: {
+        fontSize: hintFontSize
+    },
     boxShadow: 24,
     borderRadius: '4px',
     margin: '10px',
@@ -64,7 +68,7 @@ export const fullHeight = { height: '100svh' };
 export const pageStyles = { overflowY: 'auto', height: 'calc(100svh - 64px)' };
 
 export const titleStyles = {
-    fontSize: styleVariables.titleFontSize,
+    ...styleVariables.titleFontSize,
     fontWeight: 'bold',
     marginBottom: styleVariables.doubleMargin
 };

@@ -19,7 +19,7 @@ const clearBtnStyles = {
     top: 0,
     right: 0,
     cursor: 'pointer',
-    fontSize: styleVariables.hintFontSize
+    ...styleVariables.hintFontSize
 };
 
 export default function CustomTextField({ loading, showClear, onClear, ...props }: ITextFieldElementProps) {

@@ -54,7 +54,7 @@ export function _useItemById<T>(query: DocumentNode, key: string, id: string) {
         variables: { id }
     });
 
-    return { loading, error, item: data ? data[key] : null };
+    return { loading, error, item: data ? data[key] as T : null };
 }
 
 export function _useDeleteItemById(query: DocumentNode): {

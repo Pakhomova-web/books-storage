@@ -19,7 +19,7 @@ export const authStyles = {
     title: {
         ...styleVariables.textCenter,
         marginBottom: styleVariables.margin,
-        fontSize: styleVariables.titleFontSize,
+        ...styleVariables.titleFontSize,
         fontWeight: 'bold',
     },
     buttonMargin: {

@@ -39,8 +39,6 @@ export default function Main({ children }) {
                 setLoading(false);
                 if (authUrls.some(url => pathname.includes(url))) {
                     router.push('/');
-                } else if (pathname.includes('book') && !router.query.id) {
-                    router.push('/');
                 }
             })
             .catch(() => {
@@ -49,8 +47,6 @@ export default function Main({ children }) {
                 setAttachedSettingsMenu(false);
                 logout();
                 if (![...authUrls, ...commonUrls].some(url => pathname.includes(url))) {
-                    router.push('/');
-                } else if (pathname.includes('book') && !router.query.id) {
                     router.push('/');
                 }
             });

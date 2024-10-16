@@ -14,7 +14,7 @@ import { useAuth } from '@/components/auth-context';
 
 const forgotPasswordLink = {
     display: 'flex',
-    fontSize: styleVariables.hintFontSize,
+    ...styleVariables.hintFontSize,
     margin: `${styleVariables.margin} 0`
 };
 
