@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 import { useBooks } from '@/lib/graphql/queries/book/hook';
 import Loading from '@/components/loading';
 import { positionRelative, styleVariables } from '@/constants/styles-variables';
-import { IBookFilter, IPageable } from '@/lib/data/types';
+import { BookEntity, IBookFilter, IPageable } from '@/lib/data/types';
+import { styled } from '@mui/material/styles';
+import { useRouter } from 'next/router';
 
 const paginatorStyles = {
     borderTop: `1px solid ${styleVariables.gray}`,
@@ -23,9 +25,12 @@ const bookInfoStyles = {
     fontSize: styleVariables.hintFontSize
 };
 
-const bookContainerStyles = {
-    cursor: 'pointer'
-};
+const StyledGrid = styled(Grid)(({ theme }) => ({
+    cursor: 'pointer',
+    '&:hover': {
+        transform: 'scale(1.1)'
+    }
+}));
 
 export default function Home() {
     const [pageSettings, setPageSettings] = useState<IPageable>({
@@ -33,6 +38,7 @@ export default function Home() {
     });
     const [filters, setFilters] = useState<IBookFilter>();
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
+    const router = useRouter();
 
     function onPageChange(val: number) {
         setPageSettings({
@@ -49,13 +55,18 @@ export default function Home() {
         });
     }
 
+    function handleClickOnBook(book: BookEntity) {
+        router.push(`/book?id=${book.id}`);
+    }
+
     return (
         <Box sx={positionRelative}>
             <Loading show={loading}></Loading>
 
             <Grid container justifyContent="center">
                 {items.map(((book, i) =>
-                        <Grid item key={i} xl={1} lg={2} md={3} sm={4} xs={6} p={2} textAlign="center" sx={bookContainerStyles}>
+                        <StyledGrid item key={i} xl={1} lg={2} md={3} sm={4} xs={6} p={2} textAlign="center"
+                                    onClick={() => handleClickOnBook(book)}>
                             <Box sx={bookBoxStyles} mb={1}>
                                 <img alt="Image 1" width="100%" height="100%" style={{ objectFit: 'contain' }}
                                      src={book.imageId ? `https://drive.google.com/thumbnail?id=${book.imageId}&sz=w1000` : '/book-empty.jpg'}/>
@@ -65,7 +76,7 @@ export default function Home() {
                             </Box>
                             <Box sx={bookTitleStyles}>{book.name}</Box>
                             <Box sx={bookPriceStyles} mt={1}>{book.price} грн</Box>
-                        </Grid>
+                        </StyledGrid>
                 ))}
             </Grid>
 

@@ -52,6 +52,29 @@ export async function getBooks(pageSettings?: IPageable, filters?: IBookFilter):
     return res;
 }
 
+export function getBookById(id: string) {
+    const item = Book.findById(id)
+        .populate('language')
+        .populate('bookType')
+        .populate('author')
+        .populate({
+            path: 'bookSeries',
+            populate: {
+                path: 'publishingHouse'
+            }
+        })
+        .populate('pageType')
+        .populate('coverType');
+
+    if (!item) {
+        throw new GraphQLError(`No Book found with id ${id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+
+    return item;
+}
+
 export async function createBook(input: BookEntity) {
     const item = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeId);
 

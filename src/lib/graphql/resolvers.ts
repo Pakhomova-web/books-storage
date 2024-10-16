@@ -31,7 +31,7 @@ import {
     getBookSeriesOptions,
     updateBookSeries
 } from '@/lib/data/book-series';
-import { createBook, deleteBook, getBooks, updateBook, updateBookNumberInStock } from '@/lib/data/books';
+import { createBook, deleteBook, getBookById, getBooks, updateBook, updateBookNumberInStock } from '@/lib/data/books';
 import { createAuthor, deleteAuthor, getAuthors, updateAuthor } from '@/lib/data/author';
 import { GraphQLError } from 'graphql/error';
 import { createUser, getNewToken, login, updateUser } from '@/lib/data/user';
@@ -136,6 +136,13 @@ const resolvers: Resolvers = {
         books: async (_root, { pageSettings, filters }) => {
             try {
                 return getBooks(<IPageable>pageSettings, filters);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        bookById: async (_root, { id }) => {
+            try {
+                return getBookById(id);
             } catch (error) {
                 parseError(error);
             }

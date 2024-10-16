@@ -526,6 +526,7 @@ export type PublishingHouseUpdateInput = {
 
 export type Query = {
   authors?: Maybe<Array<Author>>;
+  bookById?: Maybe<Book>;
   bookSeries?: Maybe<BookSeriesSubList>;
   bookSeriesOptions?: Maybe<Array<BookSeries>>;
   bookTypes?: Maybe<Array<BookType>>;
@@ -543,6 +544,11 @@ export type Query = {
 export type QueryAuthorsArgs = {
   filters?: InputMaybe<SearchByNameInput>;
   pageSettings?: InputMaybe<PageableInput>;
+};
+
+
+export type QueryBookByIdArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -986,6 +992,7 @@ export type PublishingHouseResolvers<ContextType = any, ParentType extends Resol
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   authors?: Resolver<Maybe<Array<ResolversTypes['Author']>>, ParentType, ContextType, Partial<QueryAuthorsArgs>>;
+  bookById?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QueryBookByIdArgs, 'id'>>;
   bookSeries?: Resolver<Maybe<ResolversTypes['BookSeriesSubList']>, ParentType, ContextType, Partial<QueryBookSeriesArgs>>;
   bookSeriesOptions?: Resolver<Maybe<Array<ResolversTypes['BookSeries']>>, ParentType, ContextType, Partial<QueryBookSeriesOptionsArgs>>;
   bookTypes?: Resolver<Maybe<Array<ResolversTypes['BookType']>>, ParentType, ContextType, Partial<QueryBookTypesArgs>>;

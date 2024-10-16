@@ -56,6 +56,15 @@ export const booksQuery = gql`
     ${bookFragment}
 `;
 
+export const bookByIdQuery = gql`
+    query Books($id: ID!) {
+        bookById(id: $id) {
+            ...Book
+        }
+    }
+    ${bookFragment}
+`;
+
 export const deleteBookQuery = gql`
     mutation DeleteBook($id: ID!) {
         item: deleteBook(id: $id) {

@@ -20,6 +20,7 @@ const settingMenuBackdrop = {
 };
 
 const authUrls = ['login', 'sign-in'];
+const commonUrls = ['', 'book'];
 
 export default function Main({ children }) {
     const [loading, setLoading] = useState<boolean>(false);
@@ -38,6 +39,8 @@ export default function Main({ children }) {
                 setLoading(false);
                 if (authUrls.some(url => pathname.includes(url))) {
                     router.push('/');
+                } else if (pathname.includes('book') && !router.query.id) {
+                    router.push('/');
                 }
             })
             .catch(() => {
@@ -45,7 +48,9 @@ export default function Main({ children }) {
                 setShowSettingsMenu(false);
                 setAttachedSettingsMenu(false);
                 logout();
-                if (!authUrls.some(url => pathname.includes(url))) {
+                if (![...authUrls, ...commonUrls].some(url => pathname.includes(url))) {
+                    router.push('/');
+                } else if (pathname.includes('book') && !router.query.id) {
                     router.push('/');
                 }
             });
