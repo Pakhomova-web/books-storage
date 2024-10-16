@@ -18,7 +18,7 @@ import { TableKey } from '@/components/table/table-key';
 import CustomTableRow from '@/components/table/custom-table-row';
 import { visuallyHidden } from '@mui/utils';
 import { IPageable } from '@/lib/data/types';
-import { MobileTable } from '@/components/table/mobile-table';
+import { IMenuAnchorEl, MobileTable } from '@/components/table/mobile-table';
 import { styleVariables } from '@/constants/styles-variables';
 import { renderTableActions, renderTableCell } from '@/components/table/table-cell-render';
 
@@ -53,7 +53,7 @@ const paginatorStyles = {
 export default function CustomTable<T>(props: CustomTableProps<T>) {
     const [page, setPage] = useState<number>(props.pageSettings?.page || 0);
     const [rowsPerPage, setRowsPerPage] = useState<number>(props.pageSettings?.rowsPerPage || 25);
-    const [anchorMenuEl, setAnchorMenuEl] = useState<null | HTMLElement>(null);
+    const [anchorMenuEl, setAnchorMenuEl] = useState<IMenuAnchorEl>(null);
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -149,7 +149,7 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
                                 {props.keys.map((key: TableKey<T>, index) =>
                                     renderTableCell<T>(key, item, index, props.rowStyleClass))}
                                 {!!props.actions?.actions.length &&
-                                    renderTableActions(index, props.actions, item, anchorMenuEl, (val: HTMLElement) => setAnchorMenuEl(val), props.rowStyleClass)}
+                                    renderTableActions(index, props.actions, item, anchorMenuEl, (val: IMenuAnchorEl) => setAnchorMenuEl(val), props.rowStyleClass)}
                             </CustomTableRow>
                         ))}
                     </TableBody>

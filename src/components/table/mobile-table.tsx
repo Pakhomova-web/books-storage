@@ -21,8 +21,13 @@ interface IMobileTableProps<T> {
     children?: ReactNode
 }
 
+export interface IMenuAnchorEl {
+    el: HTMLElement,
+    rowIndex: number
+}
+
 export function MobileTable<T>(props: IMobileTableProps<T>) {
-    const [anchorMenuEl, setAnchorMenuEl] = useState<null | HTMLElement>(null);
+    const [anchorMenuEl, setAnchorMenuEl] = useState<IMenuAnchorEl>(null);
 
     function renderItem(item: T, index: number) {
         return <>
@@ -30,7 +35,7 @@ export function MobileTable<T>(props: IMobileTableProps<T>) {
               <Grid container sx={styleVariables.alignItemsCenter}>
                 <Grid item xs={9}>{props.actions.renderMobileLabel && props.actions.renderMobileLabel(item)}</Grid>
                 <Grid item xs={3} sx={styleVariables.flexEnd}>
-                    {renderActions(index, props.actions.actions, item, anchorMenuEl, (val: HTMLElement) => setAnchorMenuEl(val))}
+                    {renderActions(index, props.actions.actions, item, anchorMenuEl, (val: IMenuAnchorEl) => setAnchorMenuEl(val))}
                 </Grid>
               </Grid>}
             {props.keys.map((key, i) => (
