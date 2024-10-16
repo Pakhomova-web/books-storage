@@ -10,7 +10,22 @@ const paginatorStyles = {
     background: 'white'
 };
 
-const bookBoxStyles = { height: '300px', maxHeight: '50vw' };
+const bookBoxStyles = { height: '250px', maxHeight: '50vw' };
+const bookTitleStyles = {
+    fontSize: styleVariables.titleFontSize
+};
+const bookPriceStyles = {
+    fontSize: styleVariables.titleFontSize,
+    ...styleVariables.boldFont
+};
+
+const bookInfoStyles = {
+    fontSize: styleVariables.hintFontSize
+};
+
+const bookContainerStyles = {
+    cursor: 'pointer'
+};
 
 export default function Home() {
     const [pageSettings, setPageSettings] = useState<IPageable>({
@@ -40,12 +55,16 @@ export default function Home() {
 
             <Grid container justifyContent="center">
                 {items.map(((book, i) =>
-                        <Grid item key={i} xl={1} lg={2} md={3} sm={4} xs={6} p={2} textAlign="center">
-                            <Box sx={bookBoxStyles}>
+                        <Grid item key={i} xl={1} lg={2} md={3} sm={4} xs={6} p={2} textAlign="center" sx={bookContainerStyles}>
+                            <Box sx={bookBoxStyles} mb={1}>
                                 <img alt="Image 1" width="100%" height="100%" style={{ objectFit: 'contain' }}
                                      src={book.imageId ? `https://drive.google.com/thumbnail?id=${book.imageId}&sz=w1000` : '/book-empty.jpg'}/>
                             </Box>
-                            <Box>{book.name}</Box>
+                            <Box sx={bookInfoStyles}>
+                                {book.bookSeries.publishingHouse.name}{book.bookSeries.name === '-' ? '' : `, ${book.bookSeries.name}`}
+                            </Box>
+                            <Box sx={bookTitleStyles}>{book.name}</Box>
+                            <Box sx={bookPriceStyles} mt={1}>{book.price} грн</Box>
                         </Grid>
                 ))}
             </Grid>
