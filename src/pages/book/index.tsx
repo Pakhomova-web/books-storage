@@ -5,7 +5,7 @@ import HdrStrongIcon from '@mui/icons-material/HdrStrong';
 import HdrWeakIcon from '@mui/icons-material/HdrWeak';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-import { styleVariables } from '@/constants/styles-variables';
+import { pageStyles, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import { useBook } from '@/lib/graphql/queries/book/hook';
 import ErrorNotification from '@/components/error-notification';
@@ -13,11 +13,14 @@ import { TableKey } from '@/components/table/table-key';
 import { BookEntity } from '@/lib/data/types';
 import { renderPrice } from '@/utils/utils';
 import { styled } from '@mui/material/styles';
+import CustomImage from '@/components/custom-image';
 
-const bookBoxStyles = { height: '350px', maxHeight: '80vw' };
+const bookBoxStyles = { height: '300px', maxHeight: '60vw' };
 
 const titleStyles = (bold: boolean) => ({
     ...styleVariables.titleFontSize,
+    display: 'flex',
+    alignItems: 'center',
     ...(bold ? styleVariables.boldFont : {})
 });
 
@@ -56,60 +59,62 @@ export default function Book() {
         <Box sx={styleVariables.positionRelative}>
             <Loading show={loading}></Loading>
 
-            <Grid container>
-                <Grid item xs={6} p={1}>
-                    <Button variant="outlined" onClick={() => router.push('/')}>
-                        <ArrowBackIcon/>Back
-                    </Button>
+            <Box sx={pageStyles}>
+                <Grid container>
+                    <Grid item sm={6} p={1}>
+                        <Button variant="outlined" onClick={() => router.push('/')}>
+                            <ArrowBackIcon/>Back
+                        </Button>
+                    </Grid>
+
+                    {item &&
+                      <Grid item sm={6} p={1} sx={titleStyles(true)}>{item.name}</Grid>
+                    }
                 </Grid>
 
                 {item &&
-                  <Grid item xs={6} p={1} sx={titleStyles(true)} mb={1}>{item.name}</Grid>
-                }
-            </Grid>
-
-            {item &&
-              <Grid container>
-                <Grid item p={1} xs={6}>
-                  <Box sx={bookBoxStyles} mb={1}>
-                    <img alt="Image" width="100%" height="100%" style={{ objectFit: 'contain' }}
-                         src={item.imageId ? `https://drive.google.com/thumbnail?id=${item.imageId}&sz=w1000` : '/book-empty.jpg'}/>
-                  </Box>
-                </Grid>
-
-                <Grid item p={1} xs={6}>
-                  <Grid container mb={3}>
-                    <Grid item sm={6} xs={12} sx={titleStyles(false)}>
-                      <Box display="flex" alignItems="center" gap={1}>
-                          {item.numberInStock ?
-                              <><HdrStrongIcon style={{ color: "green" }}/>In stock</> :
-                              <><HdrWeakIcon style={{ color: styleVariables.warnColor }}/>Out of stock</>
-                          }
+                  <Grid container>
+                    <Grid item p={1} sm={6} xs={12}>
+                      <Box sx={bookBoxStyles} mb={1}>
+                        <CustomImage imageId={item.imageId}></CustomImage>
                       </Box>
                     </Grid>
 
-                    <Grid item sm={6} xs={12}
-                          sx={titleStyles(!!item.numberInStock)}>{renderPrice(item.price)} грн</Grid>
+                    <Grid item p={1} sm={6} xs={12}>
+                      <Grid container mb={3}>
+                        <Grid item xs={6} px={1}>
+                          <Box display="flex" alignItems="center" gap={1}>
+                              {item.numberInStock ?
+                                  <><HdrStrongIcon style={{ color: "green" }}/>In stock</> :
+                                  <><HdrWeakIcon style={{ color: styleVariables.warnColor }}/>Out of stock</>
+                              }
+                          </Box>
+                        </Grid>
+
+                        <Grid item xs={6} px={1} sx={titleStyles(!!item.numberInStock)}>
+                            {renderPrice(item.price)} грн
+                        </Grid>
+                      </Grid>
+
+                        {keys.map((key, index) =>
+                            <StyledGrid key={index} container>
+                                <Grid item pr={1} xs={6} my={1} px={1}>{key.title}</Grid>
+                                <Grid item xs={6} my={1} px={1}>{key.renderValue(item)}</Grid>
+                            </StyledGrid>
+                        )}
+
+                        {!!item.description &&
+                          <Box m={1}>
+                            <Box mb={1}><b>Description</b></Box>
+                            <Box>{item.description}</Box>
+                          </Box>
+                        }
+                    </Grid>
                   </Grid>
+                }
 
-                    {keys.map((key, index) =>
-                        <StyledGrid key={index} container>
-                            <Grid item pr={1} xs={6} my={1} px={1}>{key.title}</Grid>
-                            <Grid item xs={6} my={1} px={1}>{key.renderValue(item)}</Grid>
-                        </StyledGrid>
-                    )}
-
-                    {!!item.description &&
-                      <Box m={1}>
-                        <Box mb={1}><b>Description</b></Box>
-                        <Box>{item.description}</Box>
-                      </Box>
-                    }
-                </Grid>
-              </Grid>
-            }
-
-            {error && <ErrorNotification error={error}></ErrorNotification>}
+                {error && <ErrorNotification error={error}></ErrorNotification>}
+            </Box>
         </Box>
     );
 }

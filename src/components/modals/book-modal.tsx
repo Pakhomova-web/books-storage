@@ -14,6 +14,8 @@ import { useBookTypeOptions } from '@/lib/graphql/queries/book-type/hook';
 import { usePublishingHouseOptions } from '@/lib/graphql/queries/publishing-house/hook';
 import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
 import { getBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
+import CustomImage from '@/components/custom-image';
+import { Box } from '@mui/material';
 
 interface IBookModalProps {
     open: boolean,
@@ -22,6 +24,8 @@ interface IBookModalProps {
     isAdmin?: boolean,
     onClose: (updated?: boolean) => void
 }
+
+const bookBoxStyles = { height: '150px', maxHeight: '50vw' };
 
 interface IForm {
     name: string,
@@ -250,6 +254,10 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                  id="imageId"
                                  label="Image ID"
                                  name="imageId"/>
+
+                <Box sx={bookBoxStyles} mb={1}>
+                    <CustomImage imageId={formContext.getValues('imageId')}></CustomImage>
+                </Box>
             </FormContainer>
 
             {(creatingError || updatingError) &&

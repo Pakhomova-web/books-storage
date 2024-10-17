@@ -7,6 +7,7 @@ import { BookEntity, IBookFilter, IPageable } from '@/lib/data/types';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { renderPrice } from '@/utils/utils';
+import CustomImage from '@/components/custom-image';
 
 const paginatorStyles = {
     borderTop: `1px solid ${styleVariables.gray}`,
@@ -70,8 +71,7 @@ export default function Home() {
                             <StyledGrid item key={i} xl={1} lg={2} md={3} sm={4} xs={6} p={2} textAlign="center"
                                         onClick={() => handleClickOnBook(book)}>
                                 <Box sx={bookBoxStyles} mb={1}>
-                                    <img alt="Image" width="100%" height="100%" style={{ objectFit: 'contain' }}
-                                         src={book.imageId ? `https://drive.google.com/thumbnail?id=${book.imageId}&sz=w1000` : '/book-empty.jpg'}/>
+                                    <CustomImage imageId={book.imageId}></CustomImage>
                                 </Box>
                                 <Box sx={bookInfoStyles}>
                                     {book.bookSeries.publishingHouse.name}{book.bookSeries.name === '-' ? '' : `, ${book.bookSeries.name}`}
