@@ -27,7 +27,7 @@ const bookInfoStyles = {
     ...styleVariables.hintFontSize
 };
 
-const StyledGrid = styled(Grid)(({ theme }) => ({
+const StyledGrid = styled(Grid)(() => ({
     cursor: 'pointer',
     '&:hover': {
         transform: 'scale(1.1)'
@@ -58,7 +58,7 @@ export default function Books() {
     }
 
     function handleClickOnBook(book: BookEntity) {
-        router.push(`books/details?id=${book.id}`);
+        router.push(`/books/details?id=${book.id}`);
     }
 
     return (
@@ -68,16 +68,22 @@ export default function Books() {
             <Box sx={pageStyles}>
                 <Grid container justifyContent="center">
                     {items.map(((book, i) =>
-                            <StyledGrid item key={i} xl={1} lg={2} md={3} sm={4} xs={6} p={2} textAlign="center"
+                            <StyledGrid item key={i} xl={1} lg={2} md={3} sm={4} xs={6} p={2}
                                         onClick={() => handleClickOnBook(book)}>
-                                <Box sx={bookBoxStyles} mb={1}>
-                                    <CustomImage isBookDetails={true} imageId={book.imageId}></CustomImage>
+                                <Box display="flex"
+                                     flexDirection="column"
+                                     alignItems="center"
+                                     justifyContent="space-between"
+                                     height="100%">
+                                    <Box sx={bookBoxStyles} mb={1}>
+                                        <CustomImage isBookDetails={true} imageId={book.imageId}></CustomImage>
+                                    </Box>
+                                    <Box sx={bookInfoStyles} textAlign="center">
+                                        {book.bookSeries.publishingHouse.name}{book.bookSeries.name === '-' ? '' : `, ${book.bookSeries.name}`}
+                                    </Box>
+                                    <Box sx={bookTitleStyles} textAlign="center">{book.name}</Box>
+                                    <Box sx={bookPriceStyles} mt={1}>{renderPrice(book.price)} грн</Box>
                                 </Box>
-                                <Box sx={bookInfoStyles}>
-                                    {book.bookSeries.publishingHouse.name}{book.bookSeries.name === '-' ? '' : `, ${book.bookSeries.name}`}
-                                </Box>
-                                <Box sx={bookTitleStyles}>{book.name}</Box>
-                                <Box sx={bookPriceStyles} mt={1}>{renderPrice(book.price)} грн</Box>
                             </StyledGrid>
                     ))}
                 </Grid>
