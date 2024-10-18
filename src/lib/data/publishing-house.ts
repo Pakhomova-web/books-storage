@@ -62,7 +62,7 @@ export async function deletePublishingHouse(id: string) {
     const bookSeriesIds = await BookSeries.find({ publishingHouse: id });
 
     if (bookSeriesIds) {
-        await checkUsageInBook('bookSeriesId', bookSeriesIds, 'Publishing House');
+        await checkUsageInBook('bookSeries', bookSeriesIds, 'Publishing House');
         await BookSeries.deleteMany({ _id: bookSeriesIds });
     }
 

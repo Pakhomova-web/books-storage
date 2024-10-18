@@ -50,7 +50,7 @@ export async function getDeliveryById(id: string) {
 }
 
 export async function deleteDelivery(id: string) {
-    // TODO check usage in orders await checkUsageInBook('deliveryId', [id], 'Delivery');
+    // TODO check usage in orders await checkUsageInBook('delivery', [id], 'Delivery');
     await Delivery.findByIdAndDelete(id);
 
     return { id } as DeliveryEntity;

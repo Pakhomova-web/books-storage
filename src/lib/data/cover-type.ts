@@ -49,7 +49,7 @@ export async function getCoverTypeById(id: string) {
 }
 
 export async function deleteCoverType(id: string) {
-    await checkUsageInBook('coverTypeId', [id], 'Cover Type');
+    await checkUsageInBook('coverType', [id], 'Cover Type');
     await CoverType.findByIdAndDelete(id);
 
     return { id } as CoverTypeEntity;

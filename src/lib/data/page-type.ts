@@ -51,7 +51,7 @@ export async function getPageTypeById(id: string) {
 }
 
 export async function deletePageType(id: string) {
-    await checkUsageInBook('pageTypeId', [id], 'Page Type');
+    await checkUsageInBook('pageType', [id], 'Page Type');
     await PageType.findByIdAndDelete(id);
 
     return { id } as PageTypeEntity;
