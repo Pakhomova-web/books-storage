@@ -9,10 +9,14 @@ import CustomImage from '@/components/custom-image';
 
 const StyledBookTypeBox = styled(Box)<BoxProps>(({ theme }) => ({
     borderRadius: styleVariables.borderRadius,
-    backgroundColor: theme.palette.action.hover,
+    backgroundColor: styleVariables.gray,
     padding: styleVariables.doublePadding,
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    cursor: 'pointer',
+    ':hover': {
+        transform: 'scale(1.02)'
+    }
 }));
 
 const imageBoxStyles = {
@@ -23,7 +27,7 @@ const imageBoxStyles = {
 };
 
 export default function Home() {
-    const { loading, items } = useBookTypes();
+    const { loading, items } = useBookTypes({ orderBy: 'name', order: 'asc' });
     const router = useRouter();
 
     return (
@@ -31,11 +35,12 @@ export default function Home() {
             <Loading show={loading}></Loading>
 
             <Box sx={pageStyles} p={1}>
-                {items?.length &&
+                {!!items?.length &&
                   <Grid container>
                       {items?.map((type, index) => (
                           <Grid xs={12} sm={6} md={3} key={index} item p={1}>
-                              <StyledBookTypeBox gap={2}>
+                              <StyledBookTypeBox gap={2}
+                                                 onClick={() => router.push(`/books?bookTypeId=${type.id}`)}>
                                   <Box sx={imageBoxStyles}>
                                       <CustomImage isBookType={true}></CustomImage>
                                   </Box>

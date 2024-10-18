@@ -30,14 +30,6 @@ interface IBookModalProps {
     onClose: (updated?: boolean) => void
 }
 
-const StyledTagGrid = styled(Grid)<GridProps>(({ theme }) => ({
-    padding: '3px 6px',
-    borderRadius: styleVariables.borderRadius,
-    backgroundColor: theme.palette.action.hover,
-    display: 'flex',
-    alignItems: 'center'
-}));
-
 const bookBoxStyles = { height: '150px', maxHeight: '50vw' };
 
 interface IForm {

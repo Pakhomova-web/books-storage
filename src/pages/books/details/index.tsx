@@ -33,7 +33,7 @@ const titleStyles = (bold: boolean) => ({
 
 const StyledStripedGrid = styled(Grid)(({ theme }) => ({
     '&:nth-of-type(even)': {
-        backgroundColor: theme.palette.action.hover,
+        backgroundColor: styleVariables.gray,
         borderRadius: styleVariables.borderRadius,
     }
 }));

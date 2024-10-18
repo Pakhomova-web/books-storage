@@ -1,6 +1,6 @@
 const hintFontSize = '14px';
 const rowMargin = '5px';
-const gray = 'rgba(224, 224, 224, 1)';
+const gray = 'rgb(244, 244, 244)';
 
 export const styleVariables = {
     titleFontSize: {
