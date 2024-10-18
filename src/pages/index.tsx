@@ -1,4 +1,4 @@
-import { Box, BoxProps, Grid, useTheme } from '@mui/material';
+import { Box, BoxProps, Grid, IconButton, useTheme } from '@mui/material';
 import React from 'react';
 import Loading from '@/components/loading';
 import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { useBookTypes } from '@/lib/graphql/queries/book-type/hook';
 import CustomImage from '@/components/custom-image';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import InstagramIcon from '@mui/icons-material/Instagram';
 
 const bookTypeBoxStyles = {
     borderRadius: styleVariables.borderRadius,
@@ -18,6 +19,13 @@ const bookTypeBoxStyles = {
         transform: 'scale(1.02)'
     }
 };
+
+const StyledSocialsBox = styled(Box)(() => ({
+    position: 'sticky',
+    backgroundColor: 'white',
+    bottom: 0,
+    borderTop: `1px solid ${styleVariables.gray}`
+}));
 
 const StyledMobileBookTypeBox = styled(Box)<BoxProps>(() => ({
     padding: styleVariables.padding,
@@ -51,7 +59,6 @@ const bookTypeNameStyles = {
 const mobileImageBoxStyles = {
     height: '50px',
     width: '50px',
-    // borderRadius: '50%',
     overflow: 'hidden'
 };
 
@@ -61,11 +68,15 @@ export default function Home() {
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
 
+    function onInstagramClick() {
+        window.open('https://instagram.com/ph_smart_kids', "_blank")
+    }
+
     return (
         <Box sx={positionRelative}>
             <Loading show={loading}></Loading>
 
-            <Box sx={pageStyles} p={1}>
+            <Box sx={pageStyles}>
                 {!!items?.length &&
                   <Grid container>
                       {items?.map((type, index) => (
@@ -91,6 +102,13 @@ export default function Home() {
                       ))}
                   </Grid>
                 }
+
+                <StyledSocialsBox display="flex" alignItems="center" gap={2} width="100%" p={1} mt={1}
+                                  justifyContent="end">
+                    <Box sx={styleVariables.titleFontSize}>Social media:</Box>
+                    <IconButton><InstagramIcon color="primary" fontSize="large"
+                                               onClick={onInstagramClick}/></IconButton>
+                </StyledSocialsBox>
             </Box>
         </Box>
     );
