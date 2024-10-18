@@ -42,7 +42,7 @@ const bookTypeNameStyles = {
     ...styleVariables.titleFontSize,
     position: 'absolute',
     bottom: 0,
-    background: 'rgba(255, 255, 255, 0.5)',
+    background: 'rgba(255, 255, 255, 0.8)',
     width: '100%',
     padding: styleVariables.doublePadding,
     textAlign: 'center'
@@ -51,7 +51,7 @@ const bookTypeNameStyles = {
 const mobileImageBoxStyles = {
     height: '50px',
     width: '50px',
-    borderRadius: '50%',
+    // borderRadius: '50%',
     overflow: 'hidden'
 };
 
