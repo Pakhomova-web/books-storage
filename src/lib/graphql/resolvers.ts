@@ -244,7 +244,7 @@ const resolvers: Resolvers = {
                 parseError(error);
             }
         },
-        // book type
+        // details type
         updateBookType: async (_root, { input }: { input: BookTypeEntity }, { user }) => {
             _checkUser(user);
             try {
@@ -294,7 +294,7 @@ const resolvers: Resolvers = {
                 parseError(error);
             }
         },
-        // book series
+        // details series
         updateBookSeries: async (_root, { input }: { input: BookSeriesEntity }, { user }) => {
             _checkUser(user);
             try {
@@ -344,7 +344,7 @@ const resolvers: Resolvers = {
                 parseError(error);
             }
         },
-        // book
+        // details
         createBook: async (_root, { input }: { input: BookEntity }, { user }) => {
             _checkUser(user);
             try {

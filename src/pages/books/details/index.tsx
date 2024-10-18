@@ -14,12 +14,13 @@ import { BookEntity } from '@/lib/data/types';
 import { renderPrice } from '@/utils/utils';
 import { styled } from '@mui/material/styles';
 import CustomImage from '@/components/custom-image';
+import Tag from '@/components/tag';
 
 const StyledImageBox = styled(Box)(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
         maxHeight: '30vh'
     },
-    height: '350px',
+    height: '400px',
     maxHeight: '50vh'
 }));
 
@@ -30,14 +31,14 @@ const titleStyles = (bold: boolean) => ({
     ...(bold ? styleVariables.boldFont : {})
 });
 
-const StyledGrid = styled(Grid)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
+const StyledStripedGrid = styled(Grid)(({ theme }) => ({
+    '&:nth-of-type(even)': {
         backgroundColor: theme.palette.action.hover,
         borderRadius: styleVariables.borderRadius,
     }
 }));
 
-export default function Book() {
+export default function BookDetails() {
     const router = useRouter();
     const { loading, error, item } = useBook(router.query.id as string);
     const [keys, setKeys] = useState<TableKey<BookEntity>[]>([]);
@@ -58,7 +59,7 @@ export default function Book() {
                 { title: 'Author', type: 'text', renderValue: (book: BookEntity) => book.author?.name },
                 { title: 'Language', type: 'text', renderValue: (book: BookEntity) => book.language?.name },
                 { title: 'ISBN', type: 'text', renderValue: (book: BookEntity) => book.isbn },
-                { title: 'Format', type: 'text', renderValue: (book: BookEntity) => book.format }
+                { title: 'Format, mm', type: 'text', renderValue: (book: BookEntity) => book.format }
             ] as TableKey<BookEntity>[]).filter(key => !!key.renderValue(item)));
         }
     }, [item]);
@@ -69,7 +70,7 @@ export default function Book() {
             <Box sx={pageStyles}>
                 <Grid container>
                     <Grid item sm={6} p={1}>
-                        <Button variant="outlined" onClick={() => router.push('/')}>
+                        <Button variant="outlined" onClick={() => router.push('/books')}>
                             <ArrowBackIcon/>Back
                         </Button>
                     </Grid>
@@ -83,7 +84,7 @@ export default function Book() {
                   <Grid container>
                     <Grid item p={1} sm={6} xs={12}>
                       <StyledImageBox mb={1}>
-                        <CustomImage imageId={item.imageId}></CustomImage>
+                        <CustomImage isBookDetails={true} imageId={item.imageId}></CustomImage>
                       </StyledImageBox>
                     </Grid>
 
@@ -103,11 +104,19 @@ export default function Book() {
                         </Grid>
                       </Grid>
 
+                        {!!item.tags?.length &&
+                          <Grid container mb={2} pl={1} alignItems="center" gap={1}>
+                            Tags:
+                              {item.tags.map((tag, index) => <Tag key={index} tag={tag}/>)
+                              }
+                          </Grid>
+                        }
+
                         {keys.map((key, index) =>
-                            <StyledGrid key={index} container>
+                            <StyledStripedGrid key={index} container>
                                 <Grid item pr={1} xs={6} my={1} px={1}>{key.title}</Grid>
                                 <Grid item xs={6} my={1} px={1}>{key.renderValue(item)}</Grid>
-                            </StyledGrid>
+                            </StyledStripedGrid>
                         )}
 
                         {!!item.description &&

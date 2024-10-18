@@ -45,7 +45,7 @@ export function renderActions<T>(rowIndex: number, actions: ITableAction[], item
     }
 
     return (!actions.length || actions.length === 1) ?
-        <Button onClick={() => handleClick(actions[0])}>getActionItem(actions[0], index)</Button> :
+        <Button onClick={() => handleClick(actions[0])}>{getActionItem(actions[0])}</Button> :
         <Box>
             <IconButton aria-haspopup="true" onClick={onMenuClick}>
                 <MoreVertIcon/>

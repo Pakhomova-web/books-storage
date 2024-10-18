@@ -22,7 +22,8 @@ export interface PageTypeEntity {
 
 export interface BookTypeEntity {
     id: string,
-    name: string
+    name: string,
+    imageId?: string
 }
 
 export interface CoverTypeEntity {

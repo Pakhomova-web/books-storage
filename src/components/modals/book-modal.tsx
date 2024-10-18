@@ -4,7 +4,6 @@ import { useCreateBook, useUpdateBook } from '@/lib/graphql/queries/book/hook';
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Grid, GridProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
@@ -20,6 +19,8 @@ import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
 import { getBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 import CustomImage from '@/components/custom-image';
 import { styleVariables } from '@/constants/styles-variables';
+import Tag from '@/components/tag';
+import { parseImageFromLink } from '@/utils/utils';
 
 interface IBookModalProps {
     open: boolean,
@@ -134,14 +135,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     }
 
     function parseImage() {
-        if (imageLink) {
-            // link example: https://drive.google.com/file/d/EXAMPLE_ID/view?usp=drive_link
-            try {
-                formContext.setValue('imageId', imageLink.split('https://drive.google.com/file/d/')[1].split('/')[0]);
-            } catch (err) {
-                console.log(err);
-            }
-        }
+        formContext.setValue('imageId', parseImageFromLink(imageLink));
     }
 
     function addTag(e?) {
@@ -251,7 +245,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 <CustomTextField fullWidth
                                  disabled={!isAdmin}
                                  id="format"
-                                 label="Format"
+                                 label="Format, mm"
                                  name="format"/>
 
                 <CustomTextField fullWidth
@@ -294,14 +288,11 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                  name="tag"></CustomTextField>
 
                 {!!tags?.length && <Grid container gap={1}>
-                    {tags.map(((tag, index) => (
-                        <StyledTagGrid item key={index} gap={1}>
-                            #{tag}
-                            <RemoveCircleOutlineIcon fontSize="small"
-                                                     sx={{ cursor: 'pointer', color: styleVariables.warnColor }}
-                                                     onClick={() => removeTag(tag)}/>
-                        </StyledTagGrid>
-                    )))}
+                    {tags.map(((tag, index) =>
+                        <Tag key={index}
+                             tag={tag}
+                             gap={1}
+                             onRemove={isAdmin ? (tag: string) => removeTag(tag) : null}/>))}
                 </Grid>}
 
                 <CustomTextField fullWidth
@@ -319,7 +310,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                  name="imageId"/>
 
                 <Box sx={bookBoxStyles} mb={1}>
-                    <CustomImage imageId={formContext.getValues('imageId')}></CustomImage>
+                    <CustomImage isBookDetails={true} imageId={formContext.getValues('imageId')}></CustomImage>
                 </Box>
             </FormContainer>
 

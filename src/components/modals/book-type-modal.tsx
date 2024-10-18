@@ -5,6 +5,10 @@ import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
+import { parseImageFromLink } from '@/utils/utils';
+import { Box, Button } from '@mui/material';
+import CustomImage from '@/components/custom-image';
+import React from 'react';
 
 interface IBookTypeModalProps {
     open: boolean,
@@ -14,18 +18,39 @@ interface IBookTypeModalProps {
     onClose: (updated?: boolean) => void
 }
 
+interface IForm {
+    name: string,
+    imageLink: string,
+    imageId: string
+}
+
+const bookBoxStyles = { height: '150px', maxHeight: '50vw' };
+
 export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTypeModalProps) {
-    const formContext = useForm<{ name: string }>({ defaultValues: { name: item?.name } });
+    const formContext = useForm<IForm>({
+        defaultValues: {
+            name: item?.name,
+            imageId: item?.imageId
+        }
+    });
     const { update, updating, updatingError } = useUpdateBookType();
     const { create, creating, creatingError } = useCreateBookType();
+    const { imageLink } = formContext.watch();
     const { checkAuth } = useAuth();
+
+    function parseImage() {
+        formContext.setValue('imageId', parseImageFromLink(imageLink));
+    }
 
     async function onSubmit() {
         try {
+            const data = formContext.getValues();
+
+            delete data.imageLink;
             if (item) {
-                await update({ ...item, ...formContext.getValues() } as BookTypeEntity);
+                await update({ ...item, ...data });
             } else {
-                await create({ ...formContext.getValues() } as BookTypeEntity);
+                await create(data);
             }
 
             onClose(true);
@@ -49,6 +74,24 @@ export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTyp
                                  id="book-type-name"
                                  label="Name"
                                  name="name"/>
+
+                <CustomTextField fullWidth
+                                 disabled={!isAdmin}
+                                 id="imageLink"
+                                 label="Image Link"
+                                 name="imageLink"/>
+                {!!imageLink &&
+                  <Button fullWidth variant="outlined" onClick={parseImage}>Parse image</Button>}
+
+                <CustomTextField fullWidth
+                                 disabled={!isAdmin}
+                                 id="imageId"
+                                 label="Image ID"
+                                 name="imageId"/>
+
+                <Box sx={bookBoxStyles} mb={1}>
+                    <CustomImage isBookType={true} imageId={formContext.getValues('imageId')}></CustomImage>
+                </Box>
             </FormContainer>
 
             {(creatingError || updatingError) &&

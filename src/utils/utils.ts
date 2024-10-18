@@ -84,3 +84,15 @@ export function renderPrice(price: number): string {
 
     return res;
 }
+
+export function parseImageFromLink(imageLink: string) {
+    if (imageLink) {
+        // link example: https://drive.google.com/file/d/EXAMPLE_ID/view?usp=drive_link
+        try {
+            return imageLink.split('https://drive.google.com/file/d/')[1].split('/')[0];
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+    }
+}

@@ -30,12 +30,13 @@ export async function getBooks(pageSettings?: IPageable, filters?: IBookFilter):
 
     await query.exec().then((items: BookEntity[]) => {
         if (quickSearch) {
-            items = items.filter(({ author, name, bookSeries, bookType }) =>
+            items = items.filter(({ author, name, bookSeries, bookType, tags }) =>
                 quickSearch.test(name) ||
                 (author && quickSearch.test(author.name)) ||
                 quickSearch.test(bookType.name) ||
                 quickSearch.test(bookSeries.name) ||
-                quickSearch.test(bookSeries.publishingHouse.name)
+                quickSearch.test(bookSeries.publishingHouse.name) ||
+                tags?.some(tag => quickSearch.test(tag))
             );
         }
         const totalCount = items.length;

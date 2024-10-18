@@ -1,102 +1,50 @@
-import { Box, Grid, Table, TableFooter, TablePagination, TableRow } from '@mui/material';
-import React, { useState } from 'react';
-import { useBooks } from '@/lib/graphql/queries/book/hook';
+import { Box, BoxProps, Grid } from '@mui/material';
+import React from 'react';
 import Loading from '@/components/loading';
 import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
-import { BookEntity, IBookFilter, IPageable } from '@/lib/data/types';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
-import { renderPrice } from '@/utils/utils';
+import { useBookTypes } from '@/lib/graphql/queries/book-type/hook';
 import CustomImage from '@/components/custom-image';
 
-const paginatorStyles = {
-    borderTop: `1px solid ${styleVariables.gray}`,
-    background: 'white'
-};
-
-const bookBoxStyles = { height: '250px', maxHeight: '50vw' };
-const bookTitleStyles = {
-    ...styleVariables.titleFontSize
-};
-const bookPriceStyles = {
-    ...styleVariables.titleFontSize,
-    ...styleVariables.boldFont
-};
-
-const bookInfoStyles = {
-    ...styleVariables.hintFontSize
-};
-
-const StyledGrid = styled(Grid)(({ theme }) => ({
-    cursor: 'pointer',
-    '&:hover': {
-        transform: 'scale(1.1)'
-    }
+const StyledBookTypeBox = styled(Box)<BoxProps>(({ theme }) => ({
+    borderRadius: styleVariables.borderRadius,
+    backgroundColor: theme.palette.action.hover,
+    padding: styleVariables.doublePadding,
+    display: 'flex',
+    alignItems: 'center'
 }));
 
+const imageBoxStyles = {
+    height: '50px',
+    width: '50px',
+    borderRadius: '50%',
+    overflow: 'hidden',
+};
+
 export default function Home() {
-    const [pageSettings, setPageSettings] = useState<IPageable>({
-        order: 'asc', orderBy: '', page: 0, rowsPerPage: 25
-    });
-    const [filters, setFilters] = useState<IBookFilter>();
-    const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
+    const { loading, items } = useBookTypes();
     const router = useRouter();
-
-    function onPageChange(val: number) {
-        setPageSettings({
-            ...pageSettings,
-            page: val
-        });
-    }
-
-    function onRowsPerPageChange(val: number) {
-        setPageSettings({
-            ...pageSettings,
-            page: 0,
-            rowsPerPage: val
-        });
-    }
-
-    function handleClickOnBook(book: BookEntity) {
-        router.push(`/book?id=${book.id}`);
-    }
 
     return (
         <Box sx={positionRelative}>
             <Loading show={loading}></Loading>
 
-            <Box sx={pageStyles}>
-                <Grid container justifyContent="center">
-                    {items.map(((book, i) =>
-                            <StyledGrid item key={i} xl={1} lg={2} md={3} sm={4} xs={6} p={2} textAlign="center"
-                                        onClick={() => handleClickOnBook(book)}>
-                                <Box sx={bookBoxStyles} mb={1}>
-                                    <CustomImage imageId={book.imageId}></CustomImage>
-                                </Box>
-                                <Box sx={bookInfoStyles}>
-                                    {book.bookSeries.publishingHouse.name}{book.bookSeries.name === '-' ? '' : `, ${book.bookSeries.name}`}
-                                </Box>
-                                <Box sx={bookTitleStyles}>{book.name}</Box>
-                                <Box sx={bookPriceStyles} mt={1}>{renderPrice(book.price)} грн</Box>
-                            </StyledGrid>
-                    ))}
-                </Grid>
-
-                <Box sx={{ position: 'sticky', bottom: 0 }}>
-                    <Table>
-                        <TableFooter>
-                            <TableRow>
-                                <TablePagination rowsPerPageOptions={[5, 10, 25]}
-                                                 count={totalCount}
-                                                 page={pageSettings.page}
-                                                 sx={paginatorStyles}
-                                                 rowsPerPage={pageSettings.rowsPerPage}
-                                                 onPageChange={(_e, val: number) => onPageChange(val)}
-                                                 onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
-                            </TableRow>
-                        </TableFooter>
-                    </Table>
-                </Box>
+            <Box sx={pageStyles} p={1}>
+                {items?.length &&
+                  <Grid container>
+                      {items?.map((type, index) => (
+                          <Grid xs={12} sm={6} md={3} key={index} item p={1}>
+                              <StyledBookTypeBox gap={2}>
+                                  <Box sx={imageBoxStyles}>
+                                      <CustomImage isBookType={true}></CustomImage>
+                                  </Box>
+                                  {type.name}
+                              </StyledBookTypeBox>
+                          </Grid>
+                      ))}
+                  </Grid>
+                }
             </Box>
         </Box>
     );

@@ -23,6 +23,7 @@ const typeDefs =  /* GraphQL */ `
     type BookType {
         id: ID
         name: String!
+        imageId: String
     }
 
     type CoverType {
@@ -198,6 +199,7 @@ const typeDefs =  /* GraphQL */ `
 
     input BookTypeCreateInput {
         name: String!
+        imageId: String
     }
 
     input CoverTypeCreateInput {
@@ -233,6 +235,7 @@ const typeDefs =  /* GraphQL */ `
     input BookTypeUpdateInput {
         id: ID!
         name: String!
+        imageId: String
     }
 
     input CoverTypeUpdateInput {

@@ -4,6 +4,7 @@ const bookTypeFragment = gql`
     fragment BookType on BookType {
         id
         name
+        imageId
     }
 `;
 

@@ -136,15 +136,18 @@ export type BookSubList = {
 
 export type BookType = {
   id?: Maybe<Scalars['ID']['output']>;
+  imageId?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
 };
 
 export type BookTypeCreateInput = {
+  imageId?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
 };
 
 export type BookTypeUpdateInput = {
   id: Scalars['ID']['input'];
+  imageId?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
 };
 
@@ -890,6 +893,7 @@ export type BookSubListResolvers<ContextType = any, ParentType extends Resolvers
 
 export type BookTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['BookType'] = ResolversParentTypes['BookType']> = {
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  imageId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
