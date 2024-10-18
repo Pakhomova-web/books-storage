@@ -15,9 +15,6 @@ const paginatorStyles = {
 };
 
 const bookBoxStyles = { height: '250px', maxHeight: '50vw' };
-const bookTitleStyles = {
-    ...styleVariables.titleFontSize
-};
 const bookPriceStyles = {
     ...styleVariables.titleFontSize,
     ...styleVariables.boldFont
@@ -81,7 +78,7 @@ export default function Books() {
                                     <Box sx={bookInfoStyles} textAlign="center">
                                         {book.bookSeries.publishingHouse.name}{book.bookSeries.name === '-' ? '' : `, ${book.bookSeries.name}`}
                                     </Box>
-                                    <Box sx={bookTitleStyles} textAlign="center">{book.name}</Box>
+                                    <Box sx={styleVariables.titleFontSize} textAlign="center">{book.name}</Box>
                                     <Box sx={bookPriceStyles} mt={1}>{renderPrice(book.price)} грн</Box>
                                 </Box>
                             </StyledGrid>

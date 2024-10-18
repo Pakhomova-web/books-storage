@@ -24,12 +24,11 @@ const StyledImageBox = styled(Box)(({ theme }) => ({
     maxHeight: '50vh'
 }));
 
-const titleStyles = (bold: boolean) => ({
-    ...styleVariables.titleFontSize,
+const StyledTitleGrid = styled(Grid)(({ theme }) => ({
+    ...styleVariables.bigTitleFontSize(theme),
     display: 'flex',
-    alignItems: 'center',
-    ...(bold ? styleVariables.boldFont : {})
-});
+    alignItems: 'center'
+}));
 
 const StyledStripedGrid = styled(Grid)(({ theme }) => ({
     '&:nth-of-type(even)': {
@@ -75,9 +74,7 @@ export default function BookDetails() {
                         </Button>
                     </Grid>
 
-                    {item &&
-                      <Grid item sm={6} p={1} sx={titleStyles(true)}>{item.name}</Grid>
-                    }
+                    {item && <StyledTitleGrid item sm={6} p={1}>{item.name}</StyledTitleGrid>}
                 </Grid>
 
                 {item &&
@@ -90,7 +87,7 @@ export default function BookDetails() {
 
                     <Grid item p={1} sm={6} xs={12}>
                       <Grid container mb={3}>
-                        <Grid item xs={6} px={1}>
+                        <Grid item xs={6} px={1} display="flex" alignItems="center">
                           <Box display="flex" alignItems="center" gap={1}>
                               {item.numberInStock ?
                                   <><HdrStrongIcon style={{ color: "green" }}/>In stock</> :
@@ -99,9 +96,9 @@ export default function BookDetails() {
                           </Box>
                         </Grid>
 
-                        <Grid item xs={6} px={1} sx={titleStyles(!!item.numberInStock)}>
+                        <StyledTitleGrid item xs={6} px={1} sx={!!item.numberInStock ? styleVariables.boldFont : {}}>
                             {renderPrice(item.price)} грн
-                        </Grid>
+                        </StyledTitleGrid>
                       </Grid>
 
                         {!!item.tags?.length &&

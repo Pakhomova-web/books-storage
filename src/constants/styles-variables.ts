@@ -1,4 +1,3 @@
-const hintFontSize = '14px';
 const rowMargin = '5px';
 const gray = 'rgb(244, 244, 244)';
 
@@ -6,8 +5,14 @@ export const styleVariables = {
     titleFontSize: {
         fontSize: '20px'
     },
+    bigTitleFontSize: (theme) => ({
+        fontSize: '28px',
+        [theme.breakpoints.down('md')]: {
+            fontSize: '20px'
+        }
+    }),
     hintFontSize: {
-        fontSize: hintFontSize
+        fontSize: '14px'
     },
     boxShadow: 24,
     borderRadius: '4px',
@@ -23,9 +28,6 @@ export const styleVariables = {
     gray,
     flexEnd: { display: 'flex', justifyContent: 'end' },
     alignItemsCenter: { alignItems: 'center' },
-    mobileSmallFontSize: {
-        fontSize: hintFontSize
-    },
     mobileBigFontSize: {
         fontSize: '16px'
     },
