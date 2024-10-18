@@ -6,7 +6,8 @@ const bookTypeSchema = new Schema<BookTypeEntity, Model<BookTypeEntity>>({
         type: String,
         required: true,
         unique: true
-    }
+    },
+    imageId: String
 });
 
 export default models.bookType || model('bookType', bookTypeSchema);

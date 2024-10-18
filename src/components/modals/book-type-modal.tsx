@@ -44,6 +44,7 @@ export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTyp
 
     async function onSubmit() {
         try {
+            parseImage();
             const data = formContext.getValues();
 
             delete data.imageLink;
