@@ -41,6 +41,7 @@ const bookFragment = gql`
             name
             description
         }
+        tags
     }
 `;
 

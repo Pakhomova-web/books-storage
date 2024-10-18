@@ -15,7 +15,13 @@ import { renderPrice } from '@/utils/utils';
 import { styled } from '@mui/material/styles';
 import CustomImage from '@/components/custom-image';
 
-const bookBoxStyles = { height: '300px', maxHeight: '60vw' };
+const StyledImageBox = styled(Box)(({ theme }) => ({
+    [theme.breakpoints.down('md')]: {
+        maxHeight: '30vh'
+    },
+    height: '350px',
+    maxHeight: '50vh'
+}));
 
 const titleStyles = (bold: boolean) => ({
     ...styleVariables.titleFontSize,
@@ -26,7 +32,8 @@ const titleStyles = (bold: boolean) => ({
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
     '&:nth-of-type(odd)': {
-        backgroundColor: theme.palette.action.hover
+        backgroundColor: theme.palette.action.hover,
+        borderRadius: styleVariables.borderRadius,
     }
 }));
 
@@ -75,9 +82,9 @@ export default function Book() {
                 {item &&
                   <Grid container>
                     <Grid item p={1} sm={6} xs={12}>
-                      <Box sx={bookBoxStyles} mb={1}>
+                      <StyledImageBox mb={1}>
                         <CustomImage imageId={item.imageId}></CustomImage>
-                      </Box>
+                      </StyledImageBox>
                     </Grid>
 
                     <Grid item p={1} sm={6} xs={12}>

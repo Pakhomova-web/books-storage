@@ -58,7 +58,8 @@ export interface BookEntity {
     language?: LanguageEntity,
     authorId: string,
     author?: AuthorEntity,
-    imageId?: string
+    imageId?: string,
+    tags?: string[]
 }
 
 export interface IOption {

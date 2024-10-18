@@ -3,7 +3,7 @@ const typeDefs =  /* GraphQL */ `
         id: ID
         name: String!
     }
-    
+
     type Delivery {
         id: ID
         name: String!
@@ -58,8 +58,9 @@ const typeDefs =  /* GraphQL */ `
         author: Author
         format: String
         imageId: String
+        tags: [String]
     }
-    
+
     type User {
         id: ID!,
         email: String!,
@@ -68,15 +69,15 @@ const typeDefs =  /* GraphQL */ `
         lastName: String,
         role: String
     }
-    
+
     type Address {
         region: String!
         district: String
         city: String!
         postcode: String
     }
-    
-    type OrderBook { 
+
+    type OrderBook {
         book: Book!
         count: Int!
         discount: Float
@@ -112,7 +113,7 @@ const typeDefs =  /* GraphQL */ `
         bookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
         bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): [BookType!]
         bookById(id: ID!): Book
-        
+
         refreshToken(refreshToken: String!): UserToken!
     }
 
@@ -154,16 +155,16 @@ const typeDefs =  /* GraphQL */ `
         login(email: String!, password: String!): UserToken!
         user: User
         updateUser(input: UserUpdateInput!): User!
-        
+
         updateDelivery(input: DeliveryUpdateInput!): Delivery
         createDelivery(input: DeliveryCreateInput!): Delivery
         deleteDelivery(id: ID!): Delivery
-        
+
         updateOrder(input: OrderUpdateInput!): Order
         createOrder(input: OrderCreateInput!): Order
         deleteOrder(id: ID!): Order
     }
-    
+
     type UserToken {
         token: String!,
         refreshToken: String!,
@@ -260,7 +261,8 @@ const typeDefs =  /* GraphQL */ `
         languageId: ID!
         authorId: ID
         format: String
-        imageId: String
+        imageId: String,
+        tags: [String]
     }
 
     input BookUpdateInput {
@@ -278,7 +280,8 @@ const typeDefs =  /* GraphQL */ `
         languageId: ID!
         authorId: ID
         format: String
-        imageId: String
+        imageId: String,
+        tags: [String]
     }
 
     input BookSearchInput {
@@ -298,11 +301,6 @@ const typeDefs =  /* GraphQL */ `
 
     type BookSubList {
         items: [Book!]!
-        totalCount: Int!
-    }
-
-    type OrderSubList {
-        items: [Order!]!
         totalCount: Int!
     }
 
@@ -329,13 +327,15 @@ const typeDefs =  /* GraphQL */ `
         totalCount: Int!
     }
     
+    #    user
+
     input UserCreateInput {
         email: String!,
         password: String!,
         firstName: String,
         lastName: String
     }
-    
+
     input UserUpdateInput {
         id: ID!,
         email: String!,
@@ -343,29 +343,31 @@ const typeDefs =  /* GraphQL */ `
         lastName: String
     }
 
+    #    order
+
     input DeliveryUpdateInput {
         id: ID!
         name: String!
     }
-    
+
     input DeliveryCreateInput {
         name: String!
     }
-    
+
     input OrderBookInput {
         bookId: ID!
         count: Int!
         discount: Float
         price: Float!
     }
-    
+
     input AddressInput {
         region: String!
         district: String
         city: String!
         postcode: String!
     }
-    
+
     input OrderCreateInput {
         customerFirstName: String!
         customerLastName: String!
@@ -395,6 +397,11 @@ const typeDefs =  /* GraphQL */ `
         books: [OrderBookInput!]!
         address: AddressInput!
         description: String
+    }
+
+    type OrderSubList {
+        items: [Order!]!
+        totalCount: Int!
     }
 `;
 

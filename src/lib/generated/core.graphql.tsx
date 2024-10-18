@@ -66,6 +66,7 @@ export type Book = {
   numberOfPages: Scalars['Int']['output'];
   pageType: PageType;
   price: Scalars['Float']['output'];
+  tags?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
 };
 
 export type BookCreateInput = {
@@ -83,6 +84,7 @@ export type BookCreateInput = {
   numberOfPages: Scalars['Int']['input'];
   pageTypeId: Scalars['ID']['input'];
   price?: InputMaybe<Scalars['Float']['input']>;
+  tags?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type BookSearchInput = {
@@ -162,6 +164,7 @@ export type BookUpdateInput = {
   numberOfPages: Scalars['Int']['input'];
   pageTypeId: Scalars['ID']['input'];
   price?: InputMaybe<Scalars['Float']['input']>;
+  tags?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type BookUpdateNumberInStockUpdateInput = {
@@ -862,6 +865,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
   numberOfPages?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   pageType?: Resolver<ResolversTypes['PageType'], ParentType, ContextType>;
   price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  tags?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

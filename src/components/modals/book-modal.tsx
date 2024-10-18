@@ -1,10 +1,14 @@
 import { BookEntity, BookSeriesEntity, IBookSeriesFilter, IOption } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useCreateBook, useUpdateBook } from '@/lib/graphql/queries/book/hook';
+import React, { useEffect, useState } from 'react';
+import { Box, Button, Grid, GridProps } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import CustomSelectField from '@/components/form-fields/custom-select-field';
-import { useEffect, useState } from 'react';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
 import { usePageTypeOptions } from '@/lib/graphql/queries/page-type/hook';
@@ -15,7 +19,7 @@ import { usePublishingHouseOptions } from '@/lib/graphql/queries/publishing-hous
 import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
 import { getBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 import CustomImage from '@/components/custom-image';
-import { Box } from '@mui/material';
+import { styleVariables } from '@/constants/styles-variables';
 
 interface IBookModalProps {
     open: boolean,
@@ -24,6 +28,14 @@ interface IBookModalProps {
     isAdmin?: boolean,
     onClose: (updated?: boolean) => void
 }
+
+const StyledTagGrid = styled(Grid)<GridProps>(({ theme }) => ({
+    padding: '3px 6px',
+    borderRadius: styleVariables.borderRadius,
+    backgroundColor: theme.palette.action.hover,
+    display: 'flex',
+    alignItems: 'center'
+}));
 
 const bookBoxStyles = { height: '150px', maxHeight: '50vw' };
 
@@ -43,7 +55,9 @@ interface IForm {
     authorId?: string,
     publishingHouseId?: string,
     imageId?: string,
-    imageLink?: string
+    imageLink?: string,
+    tags?: string[],
+    tag?: string
 }
 
 export default function BookModal({ open, item, onClose, isAdmin }: IBookModalProps) {
@@ -60,10 +74,11 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             bookTypeId: item?.bookType.id,
             bookSeriesId: item?.bookSeries.id,
             publishingHouseId: item?.bookSeries.publishingHouse.id,
-            imageId: item?.imageId
+            imageId: item?.imageId,
+            tags: item?.tags
         }
     });
-    const { publishingHouseId, bookSeriesId } = formContext.watch();
+    const { publishingHouseId, bookSeriesId, imageLink, tags, tag } = formContext.watch();
     const { update, updating, updatingError } = useUpdateBook();
     const { create, creating, creatingError } = useCreateBook();
     const { items: pageTypeOptions, loading: loadingPageTypes } = usePageTypeOptions<IOption>();
@@ -93,8 +108,11 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     }, [publishingHouseId]);
 
     async function onSubmit() {
+        parseImage();
         const { imageLink, ...values } = formContext.getValues();
+
         delete values.publishingHouseId;
+        delete values.tag;
         const data = {
             id: item?.id,
             ...values,
@@ -103,14 +121,6 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             numberInStock: values.numberInStock ? Number(values.numberInStock) : 0
         } as BookEntity;
 
-        if (!data.imageId && imageLink) {
-            // link example: https://drive.google.com/file/d/EXAMPLE_ID/view?usp=drive_link
-            try {
-                data.imageId = imageLink.split('https://drive.google.com/file/d/')[1].split('/')[0];
-            } catch (err) {
-                console.log(err);
-            }
-        }
         try {
             if (item?.id) {
                 await update(data);
@@ -121,6 +131,38 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         } catch (err) {
             checkAuth(err);
         }
+    }
+
+    function parseImage() {
+        if (imageLink) {
+            // link example: https://drive.google.com/file/d/EXAMPLE_ID/view?usp=drive_link
+            try {
+                formContext.setValue('imageId', imageLink.split('https://drive.google.com/file/d/')[1].split('/')[0]);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    }
+
+    function addTag(e?) {
+        if (!e || e.key === 'Enter') {
+            const value = tag?.trim();
+
+            if (value?.length >= 3) {
+                if (tags) {
+                    if (!tags.includes(value)) {
+                        tags.push(value);
+                    }
+                } else {
+                    formContext.setValue('tags', [value]);
+                }
+                formContext.setValue('tag', null);
+            }
+        }
+    }
+
+    function removeTag(tag: string) {
+        formContext.setValue('tags', tags.filter(t => t !== tag));
     }
 
     return (
@@ -245,9 +287,30 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
 
                 <CustomTextField fullWidth
                                  disabled={!isAdmin}
+                                 id="tag"
+                                 label="Tag"
+                                 helperText="Click enter to add a tag, 3 chars at least"
+                                 onKeyDown={addTag}
+                                 name="tag"></CustomTextField>
+
+                {!!tags?.length && <Grid container gap={1}>
+                    {tags.map(((tag, index) => (
+                        <StyledTagGrid item key={index} gap={1}>
+                            #{tag}
+                            <RemoveCircleOutlineIcon fontSize="small"
+                                                     sx={{ cursor: 'pointer', color: styleVariables.warnColor }}
+                                                     onClick={() => removeTag(tag)}/>
+                        </StyledTagGrid>
+                    )))}
+                </Grid>}
+
+                <CustomTextField fullWidth
+                                 disabled={!isAdmin}
                                  id="imageLink"
                                  label="Image Link"
                                  name="imageLink"/>
+                {!!imageLink &&
+                  <Button fullWidth variant="outlined" onClick={parseImage}>Parse image</Button>}
 
                 <CustomTextField fullWidth
                                  disabled={!isAdmin}
