@@ -9,9 +9,9 @@ interface ICustomImageProps {
 export default function CustomImage({ imageId, isBookDetails, isBookType }: ICustomImageProps) {
     function getEmptySrcImage() {
         if (isBookDetails) {
-            return '/book-details-empty.jpg';
+            return '/book_details_empty.png';
         } else if (isBookType) {
-            return '/book-type-empty.png';
+            return '/book_type_empty.png';
         }
     }
 

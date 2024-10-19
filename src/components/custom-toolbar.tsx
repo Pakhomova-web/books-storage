@@ -33,6 +33,11 @@ interface IProps {
     changeDisplayingSettings: ({ show, attached }) => void
 }
 
+const selectedMenuItemStyles = {
+    backgroundColor: styleVariables.gray,
+    color: 'var(--background)'
+};
+
 export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, changeDisplayingSettings }: IProps) {
     const { user, logout } = useAuth();
     const router = useRouter();
@@ -56,8 +61,10 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                 setSelectedMenuItem(MainMenuItem.profile);
             } else if (pathname.includes('login') || pathname.includes('sign-in')) {
                 setSelectedMenuItem(null);
-            } else {
+            } else if (pathname === '/') {
                 setSelectedMenuItem(MainMenuItem.home);
+            } else {
+                setSelectedMenuItem(null);
             }
             setActiveSettingsTab(null);
         }
@@ -135,7 +142,7 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                     <Box>
                         {isAdmin(user) &&
                           <IconButton color="inherit"
-                                      sx={selectedMenuItem === MainMenuItem.settings ? styleVariables.border : {}}
+                                      sx={selectedMenuItem === MainMenuItem.settings ? selectedMenuItemStyles : {}}
                                       aria-label="settings"
                                       onClick={handleClickOnSettings}>
                             <SettingsIcon/>
@@ -148,7 +155,9 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                     <Box sx={styleVariables.flexNoWrap}>
                         <IconButton onClick={() => goToPage('/')}
                                     color="inherit"
-                                    sx={{ mr: 1, ...(selectedMenuItem === MainMenuItem.home ? styleVariables.border : {}) }}>
+                                    sx={{
+                                        mr: 1, ...(selectedMenuItem === MainMenuItem.home ? selectedMenuItemStyles : {})
+                                    }}>
                             <HomeIcon/>
                         </IconButton>
                         {mobileMatches && !!user ?
@@ -167,7 +176,7 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                                 <>
                                     <IconButton color="inherit"
                                                 onClick={() => goToProfilePage()}
-                                                sx={{ mr: 1, ...(selectedMenuItem === MainMenuItem.profile ? styleVariables.border : {}) }}>
+                                                sx={{ mr: 1, ...(selectedMenuItem === MainMenuItem.profile ? selectedMenuItemStyles : {}) }}>
                                         <ProfileIcon/>
                                     </IconButton>
                                     <IconButton color="inherit" onClick={() => onLogoutClick()}>

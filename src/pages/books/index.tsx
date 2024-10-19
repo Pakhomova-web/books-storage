@@ -31,7 +31,9 @@ const bookInfoStyles = {
 const StyledGrid = styled(Grid)(() => ({
     cursor: 'pointer',
     '&:hover': {
-        transform: 'scale(1.1)'
+
+        backgroundColor: styleVariables.gray,
+        borderRadius: styleVariables.borderRadius
     }
 }));
 

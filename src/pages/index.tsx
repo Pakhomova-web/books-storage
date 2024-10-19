@@ -14,10 +14,7 @@ const bookTypeBoxStyles = {
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
-    backgroundColor: styleVariables.gray,
-    ':hover': {
-        transform: 'scale(1.02)'
-    }
+    backgroundColor: styleVariables.gray
 };
 
 const StyledSocialsBox = styled(Box)(() => ({
@@ -38,7 +35,13 @@ const StyledBookTypeBox = styled(Box)<BoxProps>(() => ({
     position: 'relative',
     flexDirection: 'column',
     overflow: 'hidden',
-    ...bookTypeBoxStyles
+    ...bookTypeBoxStyles,
+    ':hover .bookTypeBox': {
+        height: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }
 }));
 
 const imageBoxStyles = {
@@ -96,7 +99,7 @@ export default function Home() {
                                       <Box sx={imageBoxStyles}>
                                           <CustomImage imageId={type.imageId} isBookType={true}></CustomImage>
                                       </Box>
-                                      <Box sx={bookTypeNameStyles}>{type.name}</Box>
+                                      <Box sx={bookTypeNameStyles} className="bookTypeBox">{type.name}</Box>
                                   </StyledBookTypeBox>
                               </Grid>
                       ))}
