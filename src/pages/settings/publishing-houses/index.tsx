@@ -115,6 +115,7 @@ export default function PublishingHouses() {
                   {(selectedItem || openNewModal) &&
                     <PublishingHouseModal open={true}
                                           item={selectedItem}
+                                          isAdmin={isAdmin(user)}
                                           onClose={(updated = false) => refreshData(updated)}></PublishingHouseModal>}
               </Box>
             }
