@@ -86,7 +86,8 @@ export default function PublishingHouses() {
         <Box sx={positionRelative}>
             <Loading show={loading || deleting}></Loading>
 
-            <Box sx={pageStyles}>
+            {isAdmin(user) &&
+              <Box sx={pageStyles}>
                 <NameFiltersPanel tableKeys={tableKeys}
                                   onApply={(filters: PublishingHouseEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
@@ -111,11 +112,12 @@ export default function PublishingHouses() {
                       </Box>}
                 </CustomTable>
 
-                {(selectedItem || openNewModal) &&
-                  <PublishingHouseModal open={true}
-                                        item={selectedItem}
-                                        onClose={(updated = false) => refreshData(updated)}></PublishingHouseModal>}
-            </Box>
+                  {(selectedItem || openNewModal) &&
+                    <PublishingHouseModal open={true}
+                                          item={selectedItem}
+                                          onClose={(updated = false) => refreshData(updated)}></PublishingHouseModal>}
+              </Box>
+            }
         </Box>
     );
 }

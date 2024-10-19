@@ -20,7 +20,7 @@ const settingMenuBackdrop = {
 };
 
 const authUrls = ['login', 'sign-in'];
-const commonUrls = ['', 'book'];
+const commonUrls = ['books', 'books/details'];
 
 export default function Main({ children }) {
     const [loading, setLoading] = useState<boolean>(false);

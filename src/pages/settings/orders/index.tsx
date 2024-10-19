@@ -115,7 +115,8 @@ export default function Orders() {
         <Box sx={positionRelative}>
             <Loading show={loading || deleting || downloadingCsv}></Loading>
 
-            <Box sx={pageStyles}>
+            {isAdmin(user) &&
+              <Box sx={pageStyles}>
                 <NameFiltersPanel tableKeys={tableKeys}
                                   onApply={(filters: IOrderFilter) => setFilters(filters)}
                                   pageSettings={pageSettings}
@@ -145,12 +146,13 @@ export default function Orders() {
                     }
                 </CustomTable>
 
-                {openNewModal &&
-                  <OrderModal open={openNewModal}
-                              item={selectedItem}
-                              isAdmin={isAdmin(user)}
-                              onClose={(updated = false) => refreshData(updated)}></OrderModal>}
-            </Box>
+                  {openNewModal &&
+                    <OrderModal open={openNewModal}
+                                item={selectedItem}
+                                isAdmin={isAdmin(user)}
+                                onClose={(updated = false) => refreshData(updated)}></OrderModal>}
+              </Box>
+            }
         </Box>
     );
 }

@@ -69,7 +69,7 @@ function decrypt(val: string): string {
 }
 
 export function isAdmin(user?: UserEntity): boolean {
-    return user && user.role === ROLES.admin;
+    return user?.role === ROLES.admin;
 }
 
 export function renderPrice(price: number): string {

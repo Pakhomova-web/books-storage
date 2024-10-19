@@ -88,7 +88,8 @@ export default function Languages() {
         <Box sx={positionRelative}>
             <Loading show={loading || deleting}></Loading>
 
-            <Box sx={pageStyles}>
+            {isAdmin(user) &&
+              <Box sx={pageStyles}>
                 <NameFiltersPanel tableKeys={tableKeys}
                                   onApply={(filters: LanguageEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
@@ -113,12 +114,13 @@ export default function Languages() {
                       </Box>}
                 </CustomTable>
 
-                {(openNewModal || selectedItem) &&
-                  <LanguageModal open={true}
-                                 item={selectedItem}
-                                 isAdmin={isAdmin(user)}
-                                 onClose={(updated = false) => refreshData(updated)}></LanguageModal>}
-            </Box>
+                  {(openNewModal || selectedItem) &&
+                    <LanguageModal open={true}
+                                   item={selectedItem}
+                                   isAdmin={isAdmin(user)}
+                                   onClose={(updated = false) => refreshData(updated)}></LanguageModal>}
+              </Box>
+            }
         </Box>
     );
 }

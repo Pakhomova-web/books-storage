@@ -96,7 +96,8 @@ export default function BookSeries() {
         <Box sx={positionRelative}>
             <Loading show={loading || deleting}></Loading>
 
-            <Box sx={pageStyles}>
+            {isAdmin(user) &&
+              <Box sx={pageStyles}>
                 <BookSeriesFilters tableKeys={tableKeys}
                                    onApply={(filters: IBookSeriesFilter) => setFilters(filters)}
                                    pageSettings={pageSettings}
@@ -123,12 +124,13 @@ export default function BookSeries() {
                       </Box>}
                 </CustomTable>
 
-                {(openNewModal || selectedItem) &&
-                  <BookSeriesModal open={true}
-                                   item={selectedItem}
-                                   isAdmin={isAdmin(user)}
-                                   onClose={(updated = false) => refreshData(updated)}></BookSeriesModal>}
-            </Box>
+                  {(openNewModal || selectedItem) &&
+                    <BookSeriesModal open={true}
+                                     item={selectedItem}
+                                     isAdmin={isAdmin(user)}
+                                     onClose={(updated = false) => refreshData(updated)}></BookSeriesModal>}
+              </Box>
+            }
         </Box>
     );
 }

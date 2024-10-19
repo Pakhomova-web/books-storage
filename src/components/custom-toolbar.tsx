@@ -8,12 +8,12 @@ import LoginIcon from '@mui/icons-material/Login';
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/components/auth-context';
 import { useRouter } from 'next/router';
-import { ROLES } from '@/constants/roles';
 import { styleVariables } from '@/constants/styles-variables';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import SettingsMenu, { settingsList } from '@/components/settings-menu';
 import { usePathname } from 'next/navigation';
 import { SettingListItem } from '@/components/types';
+import { isAdmin } from '@/utils/utils';
 
 const toolbarTitle = {
     textWrap: 'nowrap',
@@ -133,7 +133,7 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <Toolbar className="toolbar">
                     <Box>
-                        {user?.role === ROLES.admin &&
+                        {isAdmin(user) &&
                           <IconButton color="inherit"
                                       sx={selectedMenuItem === MainMenuItem.settings ? styleVariables.border : {}}
                                       aria-label="settings"
@@ -182,7 +182,7 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                 </Toolbar>
             </AppBar>
 
-            {(showSettingsMenu || attachedSettingsMenu) &&
+            {isAdmin(user) && (showSettingsMenu || attachedSettingsMenu) &&
               <SettingsMenu activeSettingsTab={activeSettingsTab}
                             onMenuItemClick={(item: SettingListItem) => onSettingItemClick(item)}/>}
         </>

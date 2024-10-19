@@ -212,7 +212,8 @@ export default function BooksSettingsTable() {
         <Box sx={positionRelative}>
             <Loading show={loading || deleting || downloadingCsv}></Loading>
 
-            <Box sx={pageStyles}>
+            {isAdmin(user) &&
+              <Box sx={pageStyles}>
                 <BookFilters tableKeys={tableKeys}
                              onApply={(filters: IBookFilter) => setFilters(filters)}
                              pageSettings={pageSettings}
@@ -248,17 +249,18 @@ export default function BooksSettingsTable() {
                     }
                 </CustomTable>
 
-                {openNewModal &&
-                  <BookModal open={openNewModal}
-                             item={selectedItem}
-                             isAdmin={isAdmin(user)}
-                             onClose={(updated = false) => refreshData(updated)}></BookModal>}
+                  {openNewModal &&
+                    <BookModal open={openNewModal}
+                               item={selectedItem}
+                               isAdmin={isAdmin(user)}
+                               onClose={(updated = false) => refreshData(updated)}></BookModal>}
 
-                {openNumberInStockModal && selectedItem &&
-                  <BookNumberInStockModal open={openNumberInStockModal}
-                                          item={selectedItem}
-                                          onClose={(updated = false) => refreshData(updated)}></BookNumberInStockModal>}
-            </Box>
+                  {openNumberInStockModal && selectedItem &&
+                    <BookNumberInStockModal open={openNumberInStockModal}
+                                            item={selectedItem}
+                                            onClose={(updated = false) => refreshData(updated)}></BookNumberInStockModal>}
+              </Box>
+            }
         </Box>
     );
 }

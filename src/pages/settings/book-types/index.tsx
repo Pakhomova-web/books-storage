@@ -86,7 +86,8 @@ export default function BookTypes() {
         <Box sx={positionRelative}>
             <Loading show={loading || deleting}></Loading>
 
-            <Box sx={pageStyles}>
+            {isAdmin(user) &&
+              <Box sx={pageStyles}>
                 <NameFiltersPanel tableKeys={tableKeys}
                                   onApply={(filters: BookTypeEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
@@ -111,12 +112,13 @@ export default function BookTypes() {
                       </Box>}
                 </CustomTable>
 
-                {(openNewModal || selectedItem) &&
-                  <BookTypeModal open={true}
-                                 item={selectedItem}
-                                 isAdmin={isAdmin(user)}
-                                 onClose={(updated = false) => refreshData(updated)}></BookTypeModal>}
-            </Box>
+                  {(openNewModal || selectedItem) &&
+                    <BookTypeModal open={true}
+                                   item={selectedItem}
+                                   isAdmin={isAdmin(user)}
+                                   onClose={(updated = false) => refreshData(updated)}></BookTypeModal>}
+              </Box>
+            }
         </Box>
     );
 }

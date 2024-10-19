@@ -86,7 +86,8 @@ export default function Authors() {
         <Box sx={positionRelative}>
             <Loading show={loading || deleting}></Loading>
 
-            <Box sx={pageStyles}>
+            {isAdmin(user) &&
+              <Box sx={pageStyles}>
                 <NameFiltersPanel tableKeys={tableKeys}
                                   onApply={(filters: AuthorEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
@@ -111,12 +112,13 @@ export default function Authors() {
                       </Box>}
                 </CustomTable>
 
-                {(openNewModal || selectedItem) &&
-                  <AuthorModal open={true}
-                               item={selectedItem}
-                               isAdmin={isAdmin(user)}
-                               onClose={(updated = false) => refreshData(updated)}></AuthorModal>}
-            </Box>
+                  {(openNewModal || selectedItem) &&
+                    <AuthorModal open={true}
+                                 item={selectedItem}
+                                 isAdmin={isAdmin(user)}
+                                 onClose={(updated = false) => refreshData(updated)}></AuthorModal>}
+              </Box>
+            }
         </Box>
     );
 }

@@ -105,9 +105,9 @@ export default function Home() {
 
                 <StyledSocialsBox display="flex" alignItems="center" gap={2} width="100%" p={1} mt={1}
                                   justifyContent="end">
-                    <Box sx={styleVariables.titleFontSize}>Social media:</Box>
-                    <IconButton><InstagramIcon color="primary" fontSize="large"
-                                               onClick={onInstagramClick}/></IconButton>
+                    <Box>Social media:</Box>
+                    <IconButton onClick={onInstagramClick}><InstagramIcon color="primary"
+                                                                          fontSize="medium"/></IconButton>
                 </StyledSocialsBox>
             </Box>
         </Box>

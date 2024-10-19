@@ -88,7 +88,8 @@ export default function PageTypes() {
         <Box sx={positionRelative}>
             <Loading show={loading || deleting}></Loading>
 
-            <Box sx={pageStyles}>
+            {isAdmin(user) &&
+              <Box sx={pageStyles}>
                 <NameFiltersPanel tableKeys={tableKeys}
                                   onApply={(filters: PageTypeEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
@@ -113,12 +114,13 @@ export default function PageTypes() {
                       </Box>}
                 </CustomTable>
 
-                {(openNewModal || selectedItem) &&
-                  <PageTypeModal open={true}
-                                 item={selectedItem}
-                                 isAdmin={isAdmin(user)}
-                                 onClose={(updated = false) => refreshData(updated)}></PageTypeModal>}
-            </Box>
+                  {(openNewModal || selectedItem) &&
+                    <PageTypeModal open={true}
+                                   item={selectedItem}
+                                   isAdmin={isAdmin(user)}
+                                   onClose={(updated = false) => refreshData(updated)}></PageTypeModal>}
+              </Box>
+            }
         </Box>
     );
 }

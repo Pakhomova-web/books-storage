@@ -88,7 +88,8 @@ export default function CoverTypes() {
         <Box sx={positionRelative}>
             <Loading show={loading || deleting}></Loading>
 
-            <Box sx={pageStyles}>
+            {isAdmin(user) &&
+              <Box sx={pageStyles}>
                 <NameFiltersPanel tableKeys={tableKeys}
                                   onApply={(filters: CoverTypeEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
@@ -113,12 +114,13 @@ export default function CoverTypes() {
                       </Box>}
                 </CustomTable>
 
-                {(openNewModal || selectedItem) &&
-                  <CoverTypeModal open={true}
-                                  item={selectedItem}
-                                  isAdmin={isAdmin(user)}
-                                  onClose={(updated = false) => refreshData(updated)}></CoverTypeModal>}
-            </Box>
+                  {(openNewModal || selectedItem) &&
+                    <CoverTypeModal open={true}
+                                    item={selectedItem}
+                                    isAdmin={isAdmin(user)}
+                                    onClose={(updated = false) => refreshData(updated)}></CoverTypeModal>}
+              </Box>
+            }
         </Box>
     );
 }

@@ -88,7 +88,8 @@ export default function Deliveries() {
         <Box sx={positionRelative}>
             <Loading show={loading || deleting}></Loading>
 
-            <Box sx={pageStyles}>
+            {isAdmin(user) &&
+              <Box sx={pageStyles}>
                 <NameFiltersPanel tableKeys={tableKeys}
                                   onApply={(filters: DeliveryEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
@@ -113,12 +114,13 @@ export default function Deliveries() {
                       </Box>}
                 </CustomTable>
 
-                {(openNewModal || selectedItem) &&
-                  <DeliveryModal open={true}
-                                 item={selectedItem}
-                                 isAdmin={isAdmin(user)}
-                                 onClose={(updated = false) => refreshData(updated)}></DeliveryModal>}
-            </Box>
+                  {(openNewModal || selectedItem) &&
+                    <DeliveryModal open={true}
+                                   item={selectedItem}
+                                   isAdmin={isAdmin(user)}
+                                   onClose={(updated = false) => refreshData(updated)}></DeliveryModal>}
+              </Box>
+            }
         </Box>
     );
 }

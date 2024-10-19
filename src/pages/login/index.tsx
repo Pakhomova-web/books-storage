@@ -97,6 +97,7 @@ export default function Login() {
                             disabled={!formContext.formState.isValid}>
                         Login
                     </Button>
+                    Is valid: {!!formContext.formState.errors ? 'false' : 'true'}
                 </FormContainer>
 
                 <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>or</Box>
