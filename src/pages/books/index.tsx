@@ -6,7 +6,7 @@ import { pageStyles, positionRelative, styleVariables } from '@/constants/styles
 import { BookEntity, BookTypeEntity, IBookFilter, IPageable } from '@/lib/data/types';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
-import { renderPrice } from '@/utils/utils';
+import { getParamsQueryString, renderPrice } from '@/utils/utils';
 import CustomImage from '@/components/custom-image';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { getBookTypeById } from '@/lib/graphql/queries/book-type/hook';
@@ -80,7 +80,7 @@ export default function Books() {
             .filter(query => !!query);
         const query = !!filterQueries.length ? filterQueries.join('&') : '';
 
-        router.push(`/books/details?${new URLSearchParams({ id: book.id, filters: query }).toString()}`);
+        router.push(`/books/details?${getParamsQueryString({ id: book.id, filters: query })}`);
     }
 
     return (

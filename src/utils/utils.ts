@@ -96,3 +96,7 @@ export function parseImageFromLink(imageLink: string) {
         }
     }
 }
+
+export function getParamsQueryString(params: any): string {
+    return new URLSearchParams(params).toString();
+}
