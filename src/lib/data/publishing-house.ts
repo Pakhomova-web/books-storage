@@ -65,11 +65,11 @@ export async function updatePublishingHouse(input: PublishingHouseEntity) {
 }
 
 export async function deletePublishingHouse(id: string) {
-    const bookSeriesIds = await BookSeries.find({ publishingHouse: id });
+    const bookSeriesIds = await BookSeries.find({ publishingHouse: id }, 'id');
 
     if (bookSeriesIds) {
         await checkUsageInBook('bookSeries', bookSeriesIds, 'Publishing House');
-        await BookSeries.deleteMany({ _id: bookSeriesIds });
+        await BookSeries.deleteMany({ _id: bookSeriesIds.map(i => i.id) });
     }
 
     await PublishingHouse.findByIdAndDelete(id);

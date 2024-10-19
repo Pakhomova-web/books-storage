@@ -79,7 +79,6 @@ export default function Books() {
             getPublishingHouseById(router.query?.publishingHouse as string)
                 .then((item: PublishingHouseEntity) => {
                     setPublishingHouse(item);
-                    console.log(item);
                     setLoadingOption(false);
                 })
                 .catch(() => {

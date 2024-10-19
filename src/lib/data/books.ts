@@ -2,14 +2,31 @@ import { BookEntity, IBookFilter, IPageable } from '@/lib/data/types';
 import Book from '@/lib/data/models/book';
 import { GraphQLError } from 'graphql/error';
 import { getValidFilters } from '@/lib/data/base';
+import BookSeries from '@/lib/data/models/book-series';
 
 export async function getBooks(pageSettings?: IPageable, filters?: IBookFilter): Promise<{
     items: BookEntity[],
     totalCount: number
 }> {
     const { quickSearch, andFilters } = getValidFilters(filters);
+    const indexFilterByPublishingHouse = andFilters.findIndex(filter => filter.publishingHouse);
 
-    const query = Book.find()
+    if (indexFilterByPublishingHouse !== -1) {
+        const bookSeries = await BookSeries.find(andFilters[indexFilterByPublishingHouse], 'id');
+
+        if (bookSeries.length) {
+            andFilters.push({ bookSeries: bookSeries.map(bookSeries => bookSeries.id) });
+        }
+        andFilters.splice(indexFilterByPublishingHouse, 1);
+    }
+
+    const query = Book.find();
+
+    if (andFilters?.length) {
+        query.and(andFilters);
+    }
+
+    query
         .populate({
             path: 'bookSeries',
             populate: {
@@ -23,9 +40,6 @@ export async function getBooks(pageSettings?: IPageable, filters?: IBookFilter):
         .populate('author')
         .sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
 
-    if (andFilters?.length) {
-        query.and(andFilters);
-    }
     let res = { items: [], totalCount: 0 };
 
     await query.exec().then((items: BookEntity[]) => {
