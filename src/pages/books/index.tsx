@@ -143,7 +143,7 @@ export default function Books() {
                     <>
                         <Grid container justifyContent="center">
                             {items.map(((book, i) =>
-                                    <StyledGrid item key={i} xl={1} lg={2} md={3} sm={4} xs={6} p={2}
+                                    <StyledGrid item key={i} xl={2} md={3} sm={4} xs={6} p={2}
                                                 onClick={() => handleClickOnBook(book)}>
                                         <Box display="flex"
                                              flexDirection="column"
