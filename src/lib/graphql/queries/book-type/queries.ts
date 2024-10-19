@@ -17,6 +17,15 @@ export const bookTypesQuery = gql`
     ${bookTypeFragment}
 `;
 
+export const bookTypeByIdQuery = gql`
+    query BookTypeById($id: ID!) {
+        item: bookTypeById(id: $id) {
+            ...BookType
+        }
+    }
+    ${bookTypeFragment}
+`;
+
 export const bookTypeOptionsQuery = gql`
     query BookTypes($pageSettings: PageableInput, $filters: SearchByNameInput) {
         items: bookTypes(pageSettings: $pageSettings, filters: $filters) {

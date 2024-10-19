@@ -57,6 +57,16 @@ export function _useItemById<T>(query: DocumentNode, key: string, id: string) {
     return { loading, error, item: data ? data[key] as T : null };
 }
 
+export async function getItemById<T>(query: DocumentNode, id: string): Promise<T> {
+    const { data } = await apolloClient.query({
+        query,
+        fetchPolicy: 'no-cache',
+        variables: { id }
+    });
+
+    return data.item;
+}
+
 export function _useDeleteItemById(query: DocumentNode): {
     deleting: boolean,
     deletingError: ApolloError,
@@ -78,7 +88,11 @@ export function _useDeleteItemById(query: DocumentNode): {
     };
 }
 
-export function _useUpdateItem<K>(query: DocumentNode): { updating: boolean, updatingError: ApolloError, update: Function } {
+export function _useUpdateItem<K>(query: DocumentNode): {
+    updating: boolean,
+    updatingError: ApolloError,
+    update: Function
+} {
     const [mutate, { loading, error }] = useMutation(query);
 
     return {
@@ -95,7 +109,11 @@ export function _useUpdateItem<K>(query: DocumentNode): { updating: boolean, upd
     };
 }
 
-export function _useCreateItem<K>(query: DocumentNode): { creating: boolean, creatingError: ApolloError, create: Function } {
+export function _useCreateItem<K>(query: DocumentNode): {
+    creating: boolean,
+    creatingError: ApolloError,
+    create: Function
+} {
     const [mutate, { loading, error }] = useMutation(query);
 
     return {

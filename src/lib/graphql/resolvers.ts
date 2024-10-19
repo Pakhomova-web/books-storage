@@ -7,7 +7,7 @@ import {
     updatePublishingHouse
 } from '@/lib/data/publishing-house';
 import { createPageType, deletePageType, getPageTypes, updatePageType } from '@/lib/data/page-type';
-import { createBookType, deleteBookType, getBookTypes, updateBookType } from '@/lib/data/book-type';
+import { createBookType, deleteBookType, getBookTypeById, getBookTypes, updateBookType } from '@/lib/data/book-type';
 import { createCoverType, deleteCoverType, getCoverTypes, updateCoverType } from '@/lib/data/cover-type';
 import {
     AuthorEntity,
@@ -143,6 +143,13 @@ const resolvers: Resolvers = {
         bookById: async (_root, { id }) => {
             try {
                 return getBookById(id);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        bookTypeById: async (_root, { id }) => {
+            try {
+                return getBookTypeById(id);
             } catch (error) {
                 parseError(error);
             }

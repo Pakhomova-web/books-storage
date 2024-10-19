@@ -46,6 +46,12 @@ export async function updateBookType(input: BookTypeEntity) {
 }
 
 export async function getBookTypeById(id: string) {
+    if (!id) {
+        throw new GraphQLError(`No Book Type found with id ${id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+
     return BookType.findById(id);
 }
 

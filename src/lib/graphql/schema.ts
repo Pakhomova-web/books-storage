@@ -114,6 +114,7 @@ const typeDefs =  /* GraphQL */ `
         bookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
         bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): [BookType!]
         bookById(id: ID!): Book
+        bookTypeById(id: ID!): BookType
 
         refreshToken(refreshToken: String!): UserToken!
     }

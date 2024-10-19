@@ -30,7 +30,7 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
     alignItems: 'center'
 }));
 
-const StyledStripedGrid = styled(Grid)(({ theme }) => ({
+const StyledStripedGrid = styled(Grid)(() => ({
     '&:nth-of-type(even)': {
         backgroundColor: styleVariables.gray,
         borderRadius: styleVariables.borderRadius,
@@ -39,11 +39,11 @@ const StyledStripedGrid = styled(Grid)(({ theme }) => ({
 
 export default function BookDetails() {
     const router = useRouter();
-    const { loading, error, item } = useBook(router.query.id as string);
+    const { loading, error, item: book } = useBook(router.query.id as string);
     const [keys, setKeys] = useState<TableKey<BookEntity>[]>([]);
 
     useEffect(() => {
-        if (item) {
+        if (book) {
             setKeys(([
                 {
                     title: 'Publishing house',
@@ -59,9 +59,14 @@ export default function BookDetails() {
                 { title: 'Language', type: 'text', renderValue: (book: BookEntity) => book.language?.name },
                 { title: 'ISBN', type: 'text', renderValue: (book: BookEntity) => book.isbn },
                 { title: 'Format, mm', type: 'text', renderValue: (book: BookEntity) => book.format }
-            ] as TableKey<BookEntity>[]).filter(key => !!key.renderValue(item)));
+            ] as TableKey<BookEntity>[]).filter(key => !!key.renderValue(book)));
         }
-    }, [item]);
+    }, [book]);
+
+    function onBackClick() {
+        router.push(`/books${router.query.filters ? `?${router.query.filters}` : ''}`);
+    }
+
     return (
         <Box sx={styleVariables.positionRelative}>
             <Loading show={loading}></Loading>
@@ -69,19 +74,19 @@ export default function BookDetails() {
             <Box sx={pageStyles}>
                 <Grid container>
                     <Grid item sm={6} p={1}>
-                        <Button variant="outlined" onClick={() => router.push('/books')}>
+                        <Button variant="outlined" onClick={onBackClick}>
                             <ArrowBackIcon/>Back
                         </Button>
                     </Grid>
 
-                    {item && <StyledTitleGrid item sm={6} p={1}>{item.name}</StyledTitleGrid>}
+                    {book && <StyledTitleGrid item sm={6} p={1}>{book.name}</StyledTitleGrid>}
                 </Grid>
 
-                {item &&
+                {book &&
                   <Grid container>
                     <Grid item p={1} sm={6} xs={12}>
                       <StyledImageBox mb={1}>
-                        <CustomImage isBookDetails={true} imageId={item.imageId}></CustomImage>
+                        <CustomImage isBookDetails={true} imageId={book.imageId}></CustomImage>
                       </StyledImageBox>
                     </Grid>
 
@@ -89,22 +94,22 @@ export default function BookDetails() {
                       <Grid container mb={3}>
                         <Grid item xs={6} px={1} display="flex" alignItems="center">
                           <Box display="flex" alignItems="center" gap={1}>
-                              {item.numberInStock ?
+                              {book.numberInStock ?
                                   <><HdrStrongIcon style={{ color: "green" }}/>In stock</> :
                                   <><HdrWeakIcon style={{ color: styleVariables.warnColor }}/>Out of stock</>
                               }
                           </Box>
                         </Grid>
 
-                        <StyledTitleGrid item xs={6} px={1} sx={!!item.numberInStock ? styleVariables.boldFont : {}}>
-                            {renderPrice(item.price)} грн
+                        <StyledTitleGrid item xs={6} px={1} sx={!!book.numberInStock ? styleVariables.boldFont : {}}>
+                            {renderPrice(book.price)} грн
                         </StyledTitleGrid>
                       </Grid>
 
-                        {!!item.tags?.length &&
+                        {!!book.tags?.length &&
                           <Grid container mb={2} pl={1} alignItems="center" gap={1}>
                             Tags:
-                              {item.tags.map((tag, index) => <Tag key={index} tag={tag}/>)
+                              {book.tags.map((tag, index) => <Tag key={index} tag={tag}/>)
                               }
                           </Grid>
                         }
@@ -112,14 +117,14 @@ export default function BookDetails() {
                         {keys.map((key, index) =>
                             <StyledStripedGrid key={index} container>
                                 <Grid item pr={1} xs={6} my={1} px={1}>{key.title}</Grid>
-                                <Grid item xs={6} my={1} px={1}>{key.renderValue(item)}</Grid>
+                                <Grid item xs={6} my={1} px={1}>{key.renderValue(book)}</Grid>
                             </StyledStripedGrid>
                         )}
 
-                        {!!item.description &&
+                        {!!book.description &&
                           <Box m={1}>
                             <Box mb={1}><b>Description</b></Box>
-                            <Box>{item.description}</Box>
+                            <Box>{book.description}</Box>
                           </Box>
                         }
                     </Grid>
