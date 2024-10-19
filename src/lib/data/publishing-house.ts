@@ -39,8 +39,8 @@ export async function createPublishingHouse(input: PublishingHouseEntity) {
             publishingHouse: new PublishingHouse(input)
         });
 
-        await bookSeries.publishingHouse.save();
         await bookSeries.save();
+        await bookSeries.publishingHouse.save();
 
         return { ...input, id: bookSeries.publishingHouse.id } as PublishingHouseEntity;
     }

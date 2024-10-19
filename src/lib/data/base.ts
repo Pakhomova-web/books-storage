@@ -50,8 +50,7 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
             if (filters[key]) {
                 if (key === 'name') {
                     andFilters.push({ [key]: getCaseInsensitiveSubstringOption(filters[key]) });
-                }
-                if (key === 'isInStock' && filters[key]) {
+                } else if (key === 'isInStock' && filters[key]) {
                     andFilters.push({ numberInStock: { $gt: 0 } });
                 } else {
                     andFilters.push({ [key]: filters[key] });

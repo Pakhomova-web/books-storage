@@ -36,7 +36,7 @@ export async function getBookSeriesById(id: string) {
 export async function createBookSeries(input: BookSeriesEntity) {
     const item = await getByName<BookSeriesEntity>(BookSeries, input.name);
 
-    if (item) {
+    if (item && item.publishingHouse.id === input.publishingHouseId) {
         return null;
     } else {
         const itemsByPublishingHouseId = await BookSeries.find({
