@@ -50,7 +50,7 @@ export default function Login() {
     }, [email]);
 
     async function onSubmit() {
-        if (formContext.formState.isValid) {
+        if (!isFormInvalid()) {
             const values = formContext.getValues();
 
             try {
@@ -69,6 +69,10 @@ export default function Login() {
 
     function goToSignInPage() {
         router.push('sign-in');
+    }
+
+    function isFormInvalid(): boolean {
+        return !password || !email || !!Object.keys(formContext.formState.errors).length;
     }
 
     return (
@@ -94,10 +98,9 @@ export default function Login() {
                             fullWidth
                             type="submit"
                             sx={authStyles.buttonMargin}
-                            disabled={!formContext.formState.isValid}>
+                            disabled={isFormInvalid()}>
                         Login
                     </Button>
-                    Is valid: {!!formContext.formState.errors ? 'false' : 'true'}
                 </FormContainer>
 
                 <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>or</Box>
