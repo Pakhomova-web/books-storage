@@ -61,6 +61,10 @@ export const styleVariables = {
     flexBetween: {
         display: 'flex',
         justifyContent: 'space-between'
+    },
+    paginatorStyles: {
+        borderTop: `1px solid ${gray}`,
+        background: 'white'
     }
 };
 

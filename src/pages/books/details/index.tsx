@@ -15,6 +15,7 @@ import { renderPrice } from '@/utils/utils';
 import { styled } from '@mui/material/styles';
 import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
+import CustomLink from '@/components/custom-link';
 
 const StyledImageBox = styled(Box)(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
@@ -33,7 +34,7 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
 const StyledStripedGrid = styled(Grid)(() => ({
     '&:nth-of-type(even)': {
         backgroundColor: styleVariables.gray,
-        borderRadius: styleVariables.borderRadius,
+        borderRadius: styleVariables.borderRadius
     }
 }));
 
@@ -48,14 +49,31 @@ export default function BookDetails() {
                 {
                     title: 'Publishing house',
                     type: 'text',
-                    renderValue: (book: BookEntity) => book.bookSeries.publishingHouse.name
+                    renderValue: (book: BookEntity) => book.bookSeries.publishingHouse.name,
+                    onValueClick: () => {
+                        router.push(`/books?publishingHouse=${book.bookSeries.publishingHouse.id}`);
+                    }
                 },
                 { title: 'Series', type: 'text', renderValue: (book: BookEntity) => book.bookSeries.name },
-                { title: 'Type', type: 'text', renderValue: (book: BookEntity) => book.bookType.name },
+                {
+                    title: 'Type',
+                    type: 'text',
+                    renderValue: (book: BookEntity) => book.bookType.name,
+                    onValueClick: () => {
+                        router.push(`/books?bookType=${book.bookType.id}`);
+                    }
+                },
                 { title: 'Page type', type: 'text', renderValue: (book: BookEntity) => book.pageType?.name },
                 { title: 'Cover type', type: 'text', renderValue: (book: BookEntity) => book.coverType?.name },
                 { title: '# of pages', type: 'text', renderValue: (book: BookEntity) => book.numberOfPages },
-                { title: 'Author', type: 'text', renderValue: (book: BookEntity) => book.author?.name },
+                {
+                    title: 'Author',
+                    type: 'text',
+                    renderValue: (book: BookEntity) => book.author?.name,
+                    onValueClick: () => {
+                        router.push(`/books?author=${book.author.id}`);
+                    }
+                },
                 { title: 'Language', type: 'text', renderValue: (book: BookEntity) => book.language?.name },
                 { title: 'ISBN', type: 'text', renderValue: (book: BookEntity) => book.isbn },
                 { title: 'Format, mm', type: 'text', renderValue: (book: BookEntity) => book.format }
@@ -117,7 +135,11 @@ export default function BookDetails() {
                         {keys.map((key, index) =>
                             <StyledStripedGrid key={index} container>
                                 <Grid item pr={1} xs={6} my={1} px={1}>{key.title}</Grid>
-                                <Grid item xs={6} my={1} px={1}>{key.renderValue(book)}</Grid>
+                                <Grid item xs={6} my={1} px={1}>
+                                    {key.onValueClick ?
+                                        <CustomLink onClick={key.onValueClick}>{key.renderValue(book)}</CustomLink> :
+                                        key.renderValue(book)}
+                                </Grid>
                             </StyledStripedGrid>
                         )}
 

@@ -115,6 +115,8 @@ const typeDefs =  /* GraphQL */ `
         bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): [BookType!]
         bookById(id: ID!): Book
         bookTypeById(id: ID!): BookType
+        authorById(id: ID!): Author
+        publishingHouseById(id: ID!): PublishingHouse
 
         refreshToken(refreshToken: String!): UserToken!
     }
@@ -298,8 +300,9 @@ const typeDefs =  /* GraphQL */ `
         pageType: ID
         isbn: String
         language: ID
-        author: ID,
-        isInStock: Boolean,
+        author: ID
+        publishingHouse: ID
+        isInStock: Boolean
         quickSearch: String
     }
 

@@ -46,6 +46,12 @@ export async function updateAuthor(input: AuthorEntity) {
 }
 
 export async function getAuthorById(id: string) {
+    if (!id) {
+        throw new GraphQLError(`No Author found with id ${id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+
     return Author.findById(id);
 }
 

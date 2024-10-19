@@ -45,11 +45,6 @@ const stickyFooter = {
     background: 'white'
 };
 
-const paginatorStyles = {
-    borderTop: `1px solid ${styleVariables.gray}`,
-    background: 'white'
-};
-
 export default function CustomTable<T>(props: CustomTableProps<T>) {
     const [page, setPage] = useState<number>(props.pageSettings?.page || 0);
     const [rowsPerPage, setRowsPerPage] = useState<number>(props.pageSettings?.rowsPerPage || 25);
@@ -101,7 +96,7 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
                                      count={props.totalCount}
                                      page={page}
                                      colSpan={colSpan}
-                                     sx={paginatorStyles}
+                                     sx={styleVariables.paginatorStyles}
                                      rowsPerPage={rowsPerPage}
                                      onPageChange={(_e, val: number) => onPageChange(val)}
                                      onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>

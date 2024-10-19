@@ -99,6 +99,7 @@ export type BookSearchInput = {
   language?: InputMaybe<Scalars['ID']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   pageType?: InputMaybe<Scalars['ID']['input']>;
+  publishingHouse?: InputMaybe<Scalars['ID']['input']>;
   quickSearch?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -531,6 +532,7 @@ export type PublishingHouseUpdateInput = {
 };
 
 export type Query = {
+  authorById?: Maybe<Author>;
   authors?: Maybe<Array<Author>>;
   bookById?: Maybe<Book>;
   bookSeries?: Maybe<BookSeriesSubList>;
@@ -543,8 +545,14 @@ export type Query = {
   languages?: Maybe<Array<Language>>;
   orders?: Maybe<OrderSubList>;
   pageTypes?: Maybe<Array<PageType>>;
+  publishingHouseById?: Maybe<PublishingHouse>;
   publishingHouses?: Maybe<Array<PublishingHouse>>;
   refreshToken: UserToken;
+};
+
+
+export type QueryAuthorByIdArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -614,6 +622,11 @@ export type QueryOrdersArgs = {
 export type QueryPageTypesArgs = {
   filters?: InputMaybe<SearchByNameInput>;
   pageSettings?: InputMaybe<PageableInput>;
+};
+
+
+export type QueryPublishingHouseByIdArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -1005,6 +1018,7 @@ export type PublishingHouseResolvers<ContextType = any, ParentType extends Resol
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  authorById?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<QueryAuthorByIdArgs, 'id'>>;
   authors?: Resolver<Maybe<Array<ResolversTypes['Author']>>, ParentType, ContextType, Partial<QueryAuthorsArgs>>;
   bookById?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QueryBookByIdArgs, 'id'>>;
   bookSeries?: Resolver<Maybe<ResolversTypes['BookSeriesSubList']>, ParentType, ContextType, Partial<QueryBookSeriesArgs>>;
@@ -1017,6 +1031,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   languages?: Resolver<Maybe<Array<ResolversTypes['Language']>>, ParentType, ContextType, Partial<QueryLanguagesArgs>>;
   orders?: Resolver<Maybe<ResolversTypes['OrderSubList']>, ParentType, ContextType, Partial<QueryOrdersArgs>>;
   pageTypes?: Resolver<Maybe<Array<ResolversTypes['PageType']>>, ParentType, ContextType, Partial<QueryPageTypesArgs>>;
+  publishingHouseById?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<QueryPublishingHouseByIdArgs, 'id'>>;
   publishingHouses?: Resolver<Maybe<Array<ResolversTypes['PublishingHouse']>>, ParentType, ContextType, Partial<QueryPublishingHousesArgs>>;
   refreshToken?: Resolver<ResolversTypes['UserToken'], ParentType, ContextType, RequireFields<QueryRefreshTokenArgs, 'refreshToken'>>;
 };

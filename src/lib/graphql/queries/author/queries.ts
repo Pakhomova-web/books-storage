@@ -17,6 +17,15 @@ export const authorsQuery = gql`
     ${authorFragment}
 `;
 
+export const authorByIdQuery = gql`
+    query Author($id: ID!) {
+        item: authorById(id: $id) {
+            ...Author
+        }
+    }
+    ${authorFragment}
+`;
+
 export const authorOptionsQuery = gql`
     query Authors($pageSettings: PageableInput, $filters: SearchByNameInput) {
         items: authors(pageSettings: $pageSettings, filters: $filters) {

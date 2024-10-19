@@ -15,6 +15,12 @@ export async function getPublishingHouses(pageSettings?: IPageable, filters?: Pu
 }
 
 export async function getPublishingHouseById(id: string) {
+    if (!id) {
+        throw new GraphQLError(`No Publishing House found with id ${id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+
     return PublishingHouse.findById(id);
 }
 

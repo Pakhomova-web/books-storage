@@ -2,7 +2,7 @@ import { Resolvers } from '@/lib/generated/core.graphql';
 import { createLanguage, deleteLanguage, getLanguages, updateLanguage } from '@/lib/data/language';
 import {
     createPublishingHouse,
-    deletePublishingHouse,
+    deletePublishingHouse, getPublishingHouseById,
     getPublishingHouses,
     updatePublishingHouse
 } from '@/lib/data/publishing-house';
@@ -32,7 +32,7 @@ import {
     updateBookSeries
 } from '@/lib/data/book-series';
 import { createBook, deleteBook, getBookById, getBooks, updateBook, updateBookNumberInStock } from '@/lib/data/books';
-import { createAuthor, deleteAuthor, getAuthors, updateAuthor } from '@/lib/data/author';
+import { createAuthor, deleteAuthor, getAuthorById, getAuthors, updateAuthor } from '@/lib/data/author';
 import { GraphQLError } from 'graphql/error';
 import { createUser, getNewToken, login, updateUser } from '@/lib/data/user';
 import { createDelivery, deleteDelivery, getDeliveries, updateDelivery } from '@/lib/data/delivery';
@@ -150,6 +150,20 @@ const resolvers: Resolvers = {
         bookTypeById: async (_root, { id }) => {
             try {
                 return getBookTypeById(id);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        authorById: async (_root, { id }) => {
+            try {
+                return getAuthorById(id);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        publishingHouseById: async (_root, { id }) => {
+            try {
+                return getPublishingHouseById(id);
             } catch (error) {
                 parseError(error);
             }

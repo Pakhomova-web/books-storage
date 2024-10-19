@@ -7,7 +7,8 @@ export interface TableKey<K> {
     renderValue?: (item: K) => string | number,
     actions?: ITableAction[],
     renderMobileLabel?: (item: K) => ReactNode,
-    mobileStyleClasses?: any
+    mobileStyleClasses?: any,
+    onValueClick?: () => void
 }
 
 export interface ITableAction {

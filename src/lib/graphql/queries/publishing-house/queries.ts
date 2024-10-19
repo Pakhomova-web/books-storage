@@ -17,6 +17,15 @@ export const publishingHousesQuery = gql`
     ${publishingHouseFragment}
 `;
 
+export const publishingHouseByIdQuery = gql`
+    query PublishingHouseById($id: ID!) {
+        item: publishingHouseById(id: $id) {
+            ...PublishingHouse
+        }
+    }
+    ${publishingHouseFragment}
+`;
+
 export const publishingHouseOptionsQuery = gql`
     query PublishingHouses($pageSettings: PageableInput, $filters: SearchByNameInput) {
         items: publishingHouses(pageSettings: $pageSettings, filters: $filters) {

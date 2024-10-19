@@ -3,7 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { useBooks } from '@/lib/graphql/queries/book/hook';
 import Loading from '@/components/loading';
 import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
-import { BookEntity, BookTypeEntity, IBookFilter, IPageable } from '@/lib/data/types';
+import {
+    AuthorEntity,
+    BookEntity,
+    BookTypeEntity,
+    IBookFilter,
+    IPageable,
+    PublishingHouseEntity
+} from '@/lib/data/types';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { getParamsQueryString, renderPrice } from '@/utils/utils';
@@ -12,11 +19,8 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { getBookTypeById } from '@/lib/graphql/queries/book-type/hook';
 import CustomLink from '@/components/custom-link';
 import ErrorNotification from '@/components/error-notification';
-
-const paginatorStyles = {
-    borderTop: `1px solid ${styleVariables.gray}`,
-    background: 'white'
-};
+import { getAuthorById } from '@/lib/graphql/queries/author/hook';
+import { getPublishingHouseById } from '@/lib/graphql/queries/publishing-house/hook';
 
 const bookBoxStyles = { height: '250px', maxHeight: '50vw' };
 const bookPriceStyles = {
@@ -44,19 +48,42 @@ export default function Books() {
     });
     const [filters, setFilters] = useState<IBookFilter>(router.query);
     const [bookType, setBookType] = useState<BookTypeEntity>();
-    const [loadingBookType, setLoadingBookType] = useState<boolean>();
+    const [author, setAuthor] = useState<AuthorEntity>();
+    const [publishingHouse, setPublishingHouse] = useState<PublishingHouseEntity>();
+    const [loadingOption, setLoadingOption] = useState<boolean>();
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
 
     useEffect(() => {
         if (router.query?.bookType) {
-            setLoadingBookType(true);
+            setLoadingOption(true);
             getBookTypeById(router.query?.bookType as string)
                 .then((item: BookTypeEntity) => {
                     setBookType(item);
-                    setLoadingBookType(false);
+                    setLoadingOption(false);
                 })
                 .catch(() => {
-                    setLoadingBookType(false);
+                    setLoadingOption(false);
+                });
+        } else if (router.query?.author) {
+            setLoadingOption(true);
+            getAuthorById(router.query?.author as string)
+                .then((item: AuthorEntity) => {
+                    setAuthor(item);
+                    setLoadingOption(false);
+                })
+                .catch(() => {
+                    setLoadingOption(false);
+                });
+        } else if (router.query?.publishingHouse) {
+            setLoadingOption(true);
+            getPublishingHouseById(router.query?.publishingHouse as string)
+                .then((item: PublishingHouseEntity) => {
+                    setPublishingHouse(item);
+                    console.log(item);
+                    setLoadingOption(false);
+                })
+                .catch(() => {
+                    setLoadingOption(false);
                 });
         }
     }, [router.query]);
@@ -85,17 +112,31 @@ export default function Books() {
         router.push(`/books/details?${getParamsQueryString({ id: book.id, filters: query })}`);
     }
 
+    function renderBackBox(items: string[]) {
+        return (
+            <Box ml={1} display="flex" alignItems="center" flexWrap="wrap" gap={1}>
+                <CustomLink onClick={() => router.push('/')}>Головна</CustomLink>
+                {items.map((item, index) =>
+                    <Box key={index} display="flex" alignItems="center" gap={1}>
+                        <ArrowForwardIcon fontSize="small"/>{item}
+                    </Box>)
+                }
+            </Box>
+        );
+    }
+
     return (
         <Box sx={positionRelative}>
             <Loading show={loading}></Loading>
 
             <Box sx={pageStyles}>
                 <Box p={1} display="flex" flexWrap="wrap" alignItems="center">
-                    {!loadingBookType && !!bookType &&
-                      <Box ml={1} display="flex" alignItems="center" gap={1}>
-                        <CustomLink onClick={() => router.push('/')}>Головна</CustomLink>
-                        <ArrowForwardIcon fontSize="small"/>{bookType.name}
-                      </Box>
+                    {!loadingOption &&
+                        (
+                            !!bookType && renderBackBox([bookType.name]) ||
+                            !!author && renderBackBox(['Автор', author.name]) ||
+                            !!publishingHouse && renderBackBox(['Видавництво', publishingHouse.name])
+                        )
                     }
                 </Box>
 
@@ -130,7 +171,7 @@ export default function Books() {
                                         <TablePagination rowsPerPageOptions={[5, 10, 25]}
                                                          count={totalCount}
                                                          page={pageSettings.page}
-                                                         sx={paginatorStyles}
+                                                         sx={styleVariables.paginatorStyles}
                                                          rowsPerPage={pageSettings.rowsPerPage}
                                                          onPageChange={(_e, val: number) => onPageChange(val)}
                                                          onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>

@@ -10,4 +10,4 @@ const authorSchema = new Schema<AuthorEntity, Model<AuthorEntity>>({
     description: String
 });
 
-export default models.author || model('author', authorSchema);
+export default models?.author || model('author', authorSchema);
