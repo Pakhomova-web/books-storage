@@ -97,7 +97,7 @@ export default function BookDetails() {
                 <Grid container>
                     <Grid item sm={6} p={1}>
                         <Button variant="outlined" onClick={onBackClick}>
-                            <ArrowBackIcon/>Back
+                            <ArrowBackIcon/>Назад
                         </Button>
                     </Grid>
 
@@ -117,8 +117,8 @@ export default function BookDetails() {
                         <Grid item xs={6} px={1} display="flex" alignItems="center">
                           <Box display="flex" alignItems="center" gap={1}>
                               {book.numberInStock ?
-                                  <><HdrStrongIcon style={{ color: "green" }}/>In stock</> :
-                                  <><HdrWeakIcon style={{ color: styleVariables.warnColor }}/>Out of stock</>
+                                  <><HdrStrongIcon style={{ color: "green" }}/>В наявності</> :
+                                  <><HdrWeakIcon style={{ color: styleVariables.warnColor }}/>Відсутня</>
                               }
                           </Box>
                         </Grid>

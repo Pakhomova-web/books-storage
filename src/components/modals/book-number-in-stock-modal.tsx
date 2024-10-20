@@ -36,7 +36,7 @@ export function BookNumberInStockModal({ item, open, onClose }: IProps) {
     }
 
     return (
-        <CustomModal title="Change book number in stock"
+        <CustomModal title="Змінити кількість в наявності"
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}

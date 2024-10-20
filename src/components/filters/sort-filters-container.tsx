@@ -24,6 +24,7 @@ interface ISortFiltersContainerProps<T> {
     tableKeys?: TableKey<T>[];
     children?: ReactNode;
     onSort?: (_: IPageable) => void;
+    showAlwaysSorting?: boolean;
 }
 
 export default function SortFiltersContainer<T>(props: ISortFiltersContainerProps<T>) {
@@ -38,7 +39,7 @@ export default function SortFiltersContainer<T>(props: ISortFiltersContainerProp
 
     return <>
         <Grid container spacing={1} sx={filtersPanelContainer}>
-            {mobileMatches && sortKeys?.length ?
+            {(mobileMatches || props.showAlwaysSorting) && sortKeys?.length ?
                 <>
                     <Grid item xs={6}>{renderFiltersButton(props.children)}</Grid>
                     <Grid item xs={6}>

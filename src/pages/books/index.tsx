@@ -13,7 +13,7 @@ import {
 } from '@/lib/data/types';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
-import { getParamsQueryString, renderPrice } from '@/utils/utils';
+import { getParamsQueryString, isAdmin, renderPrice } from '@/utils/utils';
 import CustomImage from '@/components/custom-image';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { getBookTypeById } from '@/lib/graphql/queries/book-type/hook';
@@ -23,6 +23,10 @@ import { getAuthorById } from '@/lib/graphql/queries/author/hook';
 import { getPublishingHouseById } from '@/lib/graphql/queries/publishing-house/hook';
 import { BookFilters } from '@/components/filters/book-filters';
 import { ApolloError } from '@apollo/client';
+import HdrStrongIcon from '@mui/icons-material/HdrStrong';
+import HdrWeakIcon from '@mui/icons-material/HdrWeak';
+import { useAuth } from '@/components/auth-context';
+import { TableKey } from '@/components/table/table-key';
 
 const bookBoxStyles = { height: '250px', maxHeight: '50vw' };
 const bookPriceStyles = {
@@ -45,9 +49,16 @@ const StyledGrid = styled(Grid)(() => ({
 
 export default function Books() {
     const router = useRouter();
+    const { user } = useAuth();
     const [pageSettings, setPageSettings] = useState<IPageable>({
         order: 'asc', orderBy: '', page: 0, rowsPerPage: 25
     });
+    const [tableKeys] = useState<TableKey<BookEntity>[]>([
+        { title: 'Назва', sortValue: 'name', type: 'text' },
+        { title: 'Тип обкладинки', sortValue: 'coverType', type: 'text' },
+        { title: 'Автор', sortValue: 'author', type: 'text' },
+        { title: 'Ціна', sortValue: 'price', type: 'text' }
+    ]);
     const [filters, setFilters] = useState<BookFilter>(new BookFilter(router.query));
     const [bookType, setBookType] = useState<BookTypeEntity>();
     const [author, setAuthor] = useState<AuthorEntity>();
@@ -154,9 +165,10 @@ export default function Books() {
             <Loading show={loading}></Loading>
 
             <Box sx={pageStyles}>
-                <BookFilters tableKeys={[]}
+                <BookFilters tableKeys={tableKeys}
                              onApply={(filters: BookFilter) => setFilters(filters)}
                              pageSettings={pageSettings}
+                             showAlwaysSorting={true}
                              onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></BookFilters>
 
                 <Box p={1} display="flex" flexWrap="wrap" alignItems="center">
@@ -188,6 +200,15 @@ export default function Books() {
                                                 {book.bookSeries.publishingHouse.name}{book.bookSeries.name === '-' ? '' : `, ${book.bookSeries.name}`}
                                             </Box>
                                             <Box sx={styleVariables.titleFontSize} textAlign="center">{book.name}</Box>
+                                            {isAdmin(user) &&
+                                              <Box display="flex" alignItems="center" textAlign="center" gap={1}>
+                                                  {book.numberInStock ?
+                                                      <><HdrStrongIcon style={{ color: "green" }}/>В наявності
+                                                          ({book.numberInStock})</> :
+                                                      <><HdrWeakIcon
+                                                          style={{ color: styleVariables.warnColor }}/>Відсутня</>
+                                                  }
+                                              </Box>}
                                             <Box sx={bookPriceStyles} mt={1}>{renderPrice(book.price)} грн</Box>
                                         </Box>
                                     </StyledGrid>
