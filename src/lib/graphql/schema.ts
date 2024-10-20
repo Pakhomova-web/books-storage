@@ -117,6 +117,7 @@ const typeDefs =  /* GraphQL */ `
         bookTypeById(id: ID!): BookType
         authorById(id: ID!): Author
         publishingHouseById(id: ID!): PublishingHouse
+        languageById(id: ID!): Language
 
         refreshToken(refreshToken: String!): UserToken!
     }

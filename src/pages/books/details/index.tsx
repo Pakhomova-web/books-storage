@@ -74,7 +74,14 @@ export default function BookDetails() {
                         router.push(`/books?author=${book.author.id}`);
                     }
                 },
-                { title: 'Мова', type: 'text', renderValue: (book: BookEntity) => book.language?.name },
+                {
+                    title: 'Мова',
+                    type: 'text',
+                    renderValue: (book: BookEntity) => book.language?.name,
+                    onValueClick: () => {
+                        router.push(`/books?language=${book.language.id}`);
+                    }
+                },
                 { title: 'ISBN', type: 'text', renderValue: (book: BookEntity) => book.isbn },
                 { title: 'Формат, мм', type: 'text', renderValue: (book: BookEntity) => book.format }
             ] as TableKey<BookEntity>[]).filter(key => !!key.renderValue(book)));

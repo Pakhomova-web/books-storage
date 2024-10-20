@@ -50,3 +50,12 @@ export const deleteLanguageQuery = gql`
         }
     }
 `;
+
+export const languageByIdQuery = gql`
+    query LanguageById($id: ID!) {
+        item: languageById(id: $id) {
+            ...Language
+        }
+    }
+    ${languageFragment}
+`;

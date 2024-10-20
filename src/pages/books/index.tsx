@@ -8,7 +8,7 @@ import {
     BookEntity,
     BookFilter,
     BookTypeEntity,
-    IPageable,
+    IPageable, LanguageEntity,
     PublishingHouseEntity
 } from '@/lib/data/types';
 import { styled } from '@mui/material/styles';
@@ -27,6 +27,7 @@ import HdrStrongIcon from '@mui/icons-material/HdrStrong';
 import HdrWeakIcon from '@mui/icons-material/HdrWeak';
 import { useAuth } from '@/components/auth-context';
 import { TableKey } from '@/components/table/table-key';
+import { getLanguageById } from '@/lib/graphql/queries/language/hooks';
 
 const bookBoxStyles = { height: '250px', maxHeight: '50vw' };
 const bookPriceStyles = {
@@ -61,6 +62,7 @@ export default function Books() {
     const [filters, setFilters] = useState<BookFilter>(new BookFilter(router.query));
     const [bookType, setBookType] = useState<BookTypeEntity>();
     const [author, setAuthor] = useState<AuthorEntity>();
+    const [language, setLanguage] = useState<LanguageEntity>();
     const [publishingHouse, setPublishingHouse] = useState<PublishingHouseEntity>();
     const [tag, setTag] = useState<string>();
     const [loadingOption, setLoadingOption] = useState<boolean>();
@@ -78,7 +80,17 @@ export default function Books() {
     }, [gettingError]);
 
     useEffect(() => {
-        if (router.query?.bookType) {
+        if (router.query?.language) {
+            setLoadingOption(true);
+            getLanguageById(router.query?.language as string)
+                .then((item: LanguageEntity) => {
+                    setLanguage(item);
+                    setLoadingOption(false);
+                })
+                .catch(() => {
+                    setLoadingOption(false);
+                });
+        } else if (router.query?.bookType) {
             setLoadingOption(true);
             getBookTypeById(router.query?.bookType as string)
                 .then((item: BookTypeEntity) => {
@@ -176,6 +188,7 @@ export default function Books() {
                             !!bookType && renderBackBox([bookType.name]) ||
                             !!author && renderBackBox(['Автор', author.name]) ||
                             !!publishingHouse && renderBackBox(['Видавництво', publishingHouse.name]) ||
+                            !!language && renderBackBox(['Мова', language.name]) ||
                             !!tag && renderBackBox(['Тег', tag])
                         )
                     }

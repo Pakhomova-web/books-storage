@@ -1,5 +1,5 @@
 import { Resolvers } from '@/lib/generated/core.graphql';
-import { createLanguage, deleteLanguage, getLanguages, updateLanguage } from '@/lib/data/language';
+import { createLanguage, deleteLanguage, getLanguageById, getLanguages, updateLanguage } from '@/lib/data/language';
 import {
     createPublishingHouse,
     deletePublishingHouse, getPublishingHouseById,
@@ -164,6 +164,13 @@ const resolvers: Resolvers = {
         publishingHouseById: async (_root, { id }) => {
             try {
                 return getPublishingHouseById(id);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        languageById: async (_root, { id }) => {
+            try {
+                return getLanguageById(id);
             } catch (error) {
                 parseError(error);
             }

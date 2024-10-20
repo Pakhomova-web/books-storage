@@ -543,6 +543,7 @@ export type Query = {
   books?: Maybe<BookSubList>;
   coverTypes?: Maybe<Array<CoverType>>;
   deliveries?: Maybe<Array<Delivery>>;
+  languageById?: Maybe<Language>;
   languages?: Maybe<Array<Language>>;
   orders?: Maybe<OrderSubList>;
   pageTypes?: Maybe<Array<PageType>>;
@@ -605,6 +606,11 @@ export type QueryCoverTypesArgs = {
 export type QueryDeliveriesArgs = {
   filters?: InputMaybe<SearchByNameInput>;
   pageSettings?: InputMaybe<PageableInput>;
+};
+
+
+export type QueryLanguageByIdArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -1029,6 +1035,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   books?: Resolver<Maybe<ResolversTypes['BookSubList']>, ParentType, ContextType, Partial<QueryBooksArgs>>;
   coverTypes?: Resolver<Maybe<Array<ResolversTypes['CoverType']>>, ParentType, ContextType, Partial<QueryCoverTypesArgs>>;
   deliveries?: Resolver<Maybe<Array<ResolversTypes['Delivery']>>, ParentType, ContextType, Partial<QueryDeliveriesArgs>>;
+  languageById?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<QueryLanguageByIdArgs, 'id'>>;
   languages?: Resolver<Maybe<Array<ResolversTypes['Language']>>, ParentType, ContextType, Partial<QueryLanguagesArgs>>;
   orders?: Resolver<Maybe<ResolversTypes['OrderSubList']>, ParentType, ContextType, Partial<QueryOrdersArgs>>;
   pageTypes?: Resolver<Maybe<Array<ResolversTypes['PageType']>>, ParentType, ContextType, Partial<QueryPageTypesArgs>>;

@@ -46,6 +46,12 @@ export async function updateLanguage(input: LanguageEntity) {
 }
 
 export async function getLanguageById(id: string) {
+    if (!id) {
+        throw new GraphQLError(`No Language found with id ${id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+
     return await Language.findById(id);
 }
 
