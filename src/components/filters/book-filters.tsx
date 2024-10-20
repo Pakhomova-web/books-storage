@@ -41,7 +41,7 @@ export function BookFilters({ tableKeys, onApply, pageSettings, onSort }) {
                     <Grid item xs={12}>
                         <CustomTextField fullWidth
                                          id="quickSearch"
-                                         label="Quick Search"
+                                         label="Пошук"
                                          name="quickSearch"
                                          showClear={!!quickSearch}
                                          onClear={() => clearValue('quickSearch')}/>
@@ -51,7 +51,7 @@ export function BookFilters({ tableKeys, onApply, pageSettings, onSort }) {
                         <CustomSelectField fullWidth
                                            options={bookTypeOptions}
                                            id="book-type-id"
-                                           label="Book Type"
+                                           label="Тип книги"
                                            name="bookType"
                                            showClear={!!bookType}
                                            onClear={() => clearValue('bookType')}/>
@@ -60,7 +60,7 @@ export function BookFilters({ tableKeys, onApply, pageSettings, onSort }) {
                     <Grid item xs={12}>
                         <CustomTextField fullWidth
                                          id="book-name"
-                                         label="Name"
+                                         label="Назва"
                                          name="name"
                                          showClear={!!name}
                                          onClear={() => clearValue('name')}/>
@@ -70,7 +70,7 @@ export function BookFilters({ tableKeys, onApply, pageSettings, onSort }) {
                         <CustomSelectField fullWidth
                                            options={languageOptions}
                                            id="language-id"
-                                           label="Language"
+                                           label="Мова"
                                            name="language"
                                            showClear={!!language}
                                            onClear={() => clearValue('language')}/>
@@ -80,7 +80,7 @@ export function BookFilters({ tableKeys, onApply, pageSettings, onSort }) {
                         <CustomSelectField fullWidth
                                            options={pageTypeOptions}
                                            id="page-type-id"
-                                           label="Page Type"
+                                           label="Тип сторінок"
                                            name="pageType"
                                            showClear={!!pageType}
                                            onClear={() => clearValue('pageType')}/>
@@ -90,7 +90,7 @@ export function BookFilters({ tableKeys, onApply, pageSettings, onSort }) {
                         <CustomSelectField fullWidth
                                            options={coverTypeOptions}
                                            id="cover-type-id"
-                                           label="Cover Type"
+                                           label="Тип обкладинки"
                                            name="coverType"
                                            showClear={!!coverType}
                                            onClear={() => clearValue('coverType')}/>
@@ -100,14 +100,14 @@ export function BookFilters({ tableKeys, onApply, pageSettings, onSort }) {
                         <CustomSelectField fullWidth
                                            options={authorOptions}
                                            id="author"
-                                           label="Author"
+                                           label="Автор"
                                            name="author"
                                            showClear={!!author}
                                            onClear={() => clearValue('author')}/>
                     </Grid>
 
                     <Grid item xs={12}>
-                        <CustomCheckbox label="In Stock" name="isInStock"/>
+                        <CustomCheckbox label="В наявності" name="isInStock"/>
                     </Grid>
                 </Grid>
             </FormContainer>

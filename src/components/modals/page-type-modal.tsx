@@ -35,7 +35,7 @@ export default function PageTypeModal({ open, item, onClose, isAdmin }: IPageTyp
     }
 
     return (
-        <CustomModal title={(!item ? 'Add' : (!isAdmin ? 'View' : 'Edit')) + ' Page Type'}
+        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' Тип сторінок'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}

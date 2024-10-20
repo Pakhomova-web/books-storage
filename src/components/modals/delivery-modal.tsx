@@ -35,7 +35,7 @@ export default function DeliveryModal({ open, item, onClose, isAdmin }: IDeliver
     }
 
     return (
-        <CustomModal title={(!item ? 'Add' : (!isAdmin ? 'View' : 'Edit')) + ' Delivery'}
+        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' Спосіб доставки'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}

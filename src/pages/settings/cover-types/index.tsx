@@ -29,7 +29,7 @@ export default function CoverTypes() {
     });
     const [tableKeys] = useState<TableKey<CoverTypeEntity>[]>([
         {
-            title: 'Name',
+            title: 'Назва',
             sortValue: 'name',
             renderValue: (item: CoverTypeEntity) => item.name,
             type: 'text',
@@ -109,7 +109,7 @@ export default function CoverTypes() {
                     {isAdmin(user) &&
                       <Box sx={styleVariables.buttonsContainer}>
                         <Button variant="outlined" onClick={() => onAdd()}>
-                          <AddIcon></AddIcon>Add Cover Type
+                          <AddIcon></AddIcon>Додати тип обкладинки
                         </Button>
                       </Box>}
                 </CustomTable>

@@ -44,7 +44,7 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
     }
 
     return (
-        <CustomModal title={(!item ? 'Add' : (!isAdmin ? 'View' : 'Edit')) + ' Book Series'}
+        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' Серію'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
@@ -64,7 +64,7 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
                                    options={publishingHouseOptions}
                                    loading={loadingPublishingHouses}
                                    id="publishing-house-id"
-                                   label="Publishing House"
+                                   label="Видавництво"
                                    name="publishingHouseId"/>
             </FormContainer>
 

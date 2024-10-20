@@ -82,12 +82,12 @@ export default function Login() {
 
                 <Box sx={authStyles.title}>Login</Box>
                 <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
-                    <CustomTextField fullWidth name="email" required label="Email" type="email"/>
+                    <CustomTextField fullWidth name="email" required label="Ел. пошта" type="email"/>
 
                     <CustomPasswordElement fullWidth
                                            variant="standard"
                                            id="password"
-                                           label="Password"
+                                           label="Пароль"
                                            name="password"
                                            required/>
 

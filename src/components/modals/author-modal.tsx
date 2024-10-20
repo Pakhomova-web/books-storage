@@ -40,7 +40,7 @@ export default function AuthorModal({ open, item, onClose, isAdmin }: IAuthorMod
     }
 
     return (
-        <CustomModal title={(!item ? 'Add' : (!isAdmin ? 'View' : 'Edit')) + ' Author'}
+        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' Автора'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
@@ -52,12 +52,12 @@ export default function AuthorModal({ open, item, onClose, isAdmin }: IAuthorMod
                                  required
                                  autoFocus
                                  id="author-name"
-                                 label="Name"
+                                 label="ПІБ"
                                  name="name"/>
 
                 <CustomTextField fullWidth
                                  id="description"
-                                 label="Description"
+                                 label="Опис"
                                  name="description"/>
             </FormContainer>
 

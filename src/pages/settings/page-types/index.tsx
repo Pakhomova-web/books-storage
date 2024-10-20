@@ -29,7 +29,7 @@ export default function PageTypes() {
     });
     const [tableKeys] = useState<TableKey<PageTypeEntity>[]>([
         {
-            title: 'Name',
+            title: 'Назва',
             sortValue: 'name',
             renderValue: (item: PageTypeEntity) => item.name,
             type: 'text',
@@ -109,7 +109,7 @@ export default function PageTypes() {
                     {isAdmin(user) &&
                       <Box sx={styleVariables.buttonsContainer}>
                         <Button variant="outlined" onClick={() => onAdd()}>
-                          <AddIcon></AddIcon>Add Page Type
+                          <AddIcon></AddIcon>Додати тип сторінок
                         </Button>
                       </Box>}
                 </CustomTable>

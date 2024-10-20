@@ -47,7 +47,7 @@ export function BookNumberInStockModal({ item, open, onClose }: IProps) {
                 <CustomTextField fullWidth
                                  disabled
                                  id="book-name"
-                                 label="Name"
+                                 label="Назва книги"
                                  name="name"/>
 
                 <CustomTextField fullWidth
@@ -55,7 +55,7 @@ export function BookNumberInStockModal({ item, open, onClose }: IProps) {
                                  autoFocus
                                  type="number"
                                  id="number-in-stock"
-                                 label="Received books number"
+                                 label="Отримана кількість книг"
                                  name="receivedNumber"/>
             </FormContainer>
 

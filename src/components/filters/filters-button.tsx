@@ -7,8 +7,8 @@ import CustomModal from '@/components/modals/custom-modal';
 export function FiltersButton({ onApply, onClear, children }) {
     const [openFiltersModal, setOpenFiltersModal] = useState<boolean>(false);
     const [actions] = useState([
-        { title: 'Clear', onClick: () => onClearClick() },
-        { title: 'Apply', onClick: () => onApplyClick() }
+        { title: 'Очистити', onClick: () => onClearClick() },
+        { title: 'Примінити', onClick: () => onApplyClick() }
     ]);
 
     function onClearClick() {

@@ -61,7 +61,7 @@ export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTyp
     }
 
     return (
-        <CustomModal title={(!item ? 'Add' : (!isAdmin ? 'View' : 'Edit')) + ' Book Type'}
+        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' Тип книги'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
@@ -73,21 +73,21 @@ export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTyp
                                  required
                                  autoFocus
                                  id="book-type-name"
-                                 label="Name"
+                                 label="Назва"
                                  name="name"/>
 
                 <CustomTextField fullWidth
                                  disabled={!isAdmin}
                                  id="imageLink"
-                                 label="Image Link"
+                                 label="Посилання на ілюстрацію"
                                  name="imageLink"/>
                 {!!imageLink &&
-                  <Button fullWidth variant="outlined" onClick={parseImage}>Parse image</Button>}
+                  <Button fullWidth variant="outlined" onClick={parseImage}>Відокремити ID</Button>}
 
                 <CustomTextField fullWidth
                                  disabled={!isAdmin}
                                  id="imageId"
-                                 label="Image ID"
+                                 label="ID ілюстрації"
                                  name="imageId"/>
 
                 <Box sx={bookBoxStyles} mb={1}>

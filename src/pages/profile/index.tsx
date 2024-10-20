@@ -35,19 +35,19 @@ export default function Profile() {
         <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
           <Grid container sx={{ p: styleVariables.doublePadding }} spacing={2}>
             <Grid item xs={12} sm={6} md={3}>
-              <CustomTextField name="email" required label="Email" fullWidth/>
+              <CustomTextField name="email" required label="Ел. адреса" fullWidth/>
             </Grid>
 
             <Grid item xs={12} sm={6} md={3}>
-              <CustomTextField name="firstName" label="First Name" fullWidth/>
+              <CustomTextField name="firstName" label="Ім'я" fullWidth/>
             </Grid>
 
             <Grid item xs={12} sm={6} md={3}>
-              <CustomTextField name="lastName" label="Last Name" fullWidth/>
+              <CustomTextField name="lastName" label="Прізвище" fullWidth/>
             </Grid>
 
             <Grid item xs={12} sm={6} md={3}>
-              <CustomTextField name="role" required label="Role" disabled fullWidth/>
+              <CustomTextField name="role" required label="Роль" disabled fullWidth/>
             </Grid>
           </Grid>
 

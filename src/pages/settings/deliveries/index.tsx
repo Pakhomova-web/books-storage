@@ -29,7 +29,7 @@ export default function Deliveries() {
     });
     const [tableKeys] = useState<TableKey<DeliveryEntity>[]>([
         {
-            title: 'Name',
+            title: 'Назва',
             sortValue: 'name',
             renderValue: (item: DeliveryEntity) => item.name,
             type: 'text',
@@ -109,7 +109,7 @@ export default function Deliveries() {
                     {isAdmin(user) &&
                       <Box sx={styleVariables.buttonsContainer}>
                         <Button variant="outlined" onClick={() => onAdd()}>
-                          <AddIcon></AddIcon>Add delivery
+                          <AddIcon></AddIcon>Додати спосіб діставки
                         </Button>
                       </Box>}
                 </CustomTable>

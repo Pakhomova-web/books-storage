@@ -9,16 +9,16 @@ const leftNavigationStyles = {
     [`& .MuiDrawer-paper`]: { width: drawerWidth, boxSizing: 'border-box' }
 };
 export const settingsList: SettingListItem[] = [
-    { title: 'Orders', link: 'orders' },
-    { title: 'Books', link: 'books' },
-    { title: 'Publishing Houses', link: 'publishing-houses' },
-    { title: 'Book Series', link: 'book-series' },
-    { title: 'Cover Types', link: 'cover-types' },
-    { title: 'Book Types', link: 'book-types' },
-    { title: 'Page Types', link: 'page-types' },
-    { title: 'Languages', link: 'languages' },
-    { title: 'Authors', link: 'authors' },
-    { title: 'Deliveries', link: 'deliveries' }
+    { title: 'Замовлення', link: 'orders' },
+    { title: 'Книги', link: 'books' },
+    { title: 'Видавництва', link: 'publishing-houses' },
+    { title: 'Серії', link: 'book-series' },
+    { title: 'Види обкладинок', link: 'cover-types' },
+    { title: 'Види книг', link: 'book-types' },
+    { title: 'Види сторінок', link: 'page-types' },
+    { title: 'Мови', link: 'languages' },
+    { title: 'Автори', link: 'authors' },
+    { title: 'Способи доставки', link: 'deliveries' }
 ];
 
 export default function SettingsMenu({ onMenuItemClick, activeSettingsTab }) {

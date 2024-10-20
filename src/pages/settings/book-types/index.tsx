@@ -36,7 +36,7 @@ export default function BookTypes() {
     });
     const [tableKeys] = useState<TableKey<BookTypeEntity>[]>([
         {
-            title: 'Name',
+            title: 'Назва',
             sortValue: 'name',
             renderValue: (item: BookTypeEntity) => item.name,
             type: 'text',
@@ -107,7 +107,7 @@ export default function BookTypes() {
                     {isAdmin(user) &&
                       <Box sx={styleVariables.buttonsContainer}>
                         <Button variant="outlined" onClick={() => onAdd()}>
-                          <AddIcon></AddIcon>Add Book Type
+                          <AddIcon></AddIcon>Додати тип книги
                         </Button>
                       </Box>}
                 </CustomTable>

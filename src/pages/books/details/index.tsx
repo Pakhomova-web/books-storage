@@ -47,36 +47,36 @@ export default function BookDetails() {
         if (book) {
             setKeys(([
                 {
-                    title: 'Publishing house',
+                    title: 'Видавництво',
                     type: 'text',
                     renderValue: (book: BookEntity) => book.bookSeries.publishingHouse.name,
                     onValueClick: () => {
                         router.push(`/books?publishingHouse=${book.bookSeries.publishingHouse.id}`);
                     }
                 },
-                { title: 'Series', type: 'text', renderValue: (book: BookEntity) => book.bookSeries.name },
+                { title: 'Серія', type: 'text', renderValue: (book: BookEntity) => book.bookSeries.name },
                 {
-                    title: 'Type',
+                    title: 'Тип',
                     type: 'text',
                     renderValue: (book: BookEntity) => book.bookType.name,
                     onValueClick: () => {
                         router.push(`/books?bookType=${book.bookType.id}`);
                     }
                 },
-                { title: 'Page type', type: 'text', renderValue: (book: BookEntity) => book.pageType?.name },
-                { title: 'Cover type', type: 'text', renderValue: (book: BookEntity) => book.coverType?.name },
-                { title: '# of pages', type: 'text', renderValue: (book: BookEntity) => book.numberOfPages },
+                { title: 'Тип сторінок', type: 'text', renderValue: (book: BookEntity) => book.pageType?.name },
+                { title: 'Тип обкладинки', type: 'text', renderValue: (book: BookEntity) => book.coverType?.name },
+                { title: 'Кількість сторінок', type: 'text', renderValue: (book: BookEntity) => book.numberOfPages },
                 {
-                    title: 'Author',
+                    title: 'Автор',
                     type: 'text',
                     renderValue: (book: BookEntity) => book.author?.name,
                     onValueClick: () => {
                         router.push(`/books?author=${book.author.id}`);
                     }
                 },
-                { title: 'Language', type: 'text', renderValue: (book: BookEntity) => book.language?.name },
+                { title: 'Мова', type: 'text', renderValue: (book: BookEntity) => book.language?.name },
                 { title: 'ISBN', type: 'text', renderValue: (book: BookEntity) => book.isbn },
-                { title: 'Format, mm', type: 'text', renderValue: (book: BookEntity) => book.format }
+                { title: 'Формат, мм', type: 'text', renderValue: (book: BookEntity) => book.format }
             ] as TableKey<BookEntity>[]).filter(key => !!key.renderValue(book)));
         }
     }, [book]);

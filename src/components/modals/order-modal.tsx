@@ -95,7 +95,7 @@ export default function OrderModal({ open, item, onClose, isAdmin }: IOrderModal
     }
 
     return (
-        <CustomModal title={(!item ? 'Add' : (!isAdmin ? 'View' : 'Edit')) + ' Order'}
+        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' Замовлення'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
@@ -107,38 +107,40 @@ export default function OrderModal({ open, item, onClose, isAdmin }: IOrderModal
                                  required
                                  autoFocus
                                  id="customer-first-name"
-                                 label="Customer First Name"
+                                 label="Ім'я замовника"
                                  name="customerFirstName"/>
 
                 <CustomTextField fullWidth
                                  required
                                  id="customer-last-name"
-                                 label="Customer Last Name"
+                                 label="Прізвище замовника"
                                  name="customerLastName"/>
 
                 <CustomTextField fullWidth
                                  required
                                  id="customer-phone-number"
-                                 label="Customer Phone Number"
+                                 label="Телефон замовника"
                                  name="customerPhoneNumber"/>
 
                 <CustomTextField fullWidth
                                  id="description"
-                                 label="Description"
+                                 label="Опис"
                                  name="description"/>
 
                 <b>books</b> button add
 
-                <div>book selection</div>
-                <div>count</div>
-                <div>discount</div>
-                <div>price</div>
+                <div>
+                    <div>book selection</div>
+                    <div>count</div>
+                    <div>discount</div>
+                    <div>price</div>
+                </div>
 
-                <b>Full sum:</b>
+                <b>Сума замовлення:</b>
 
-                <CustomCheckbox label="Fully Paid" name="isPaid"></CustomCheckbox>
+                <CustomCheckbox label="Повністю оплачене" name="isPaid"></CustomCheckbox>
 
-                <CustomCheckbox label="Partly Paid" name="isPartlyPaid"></CustomCheckbox>
+                <CustomCheckbox label="Передплата" name="isPartlyPaid"></CustomCheckbox>
 
                 <CustomSelectField fullWidth
                                    options={deliveryOptions}
@@ -146,40 +148,40 @@ export default function OrderModal({ open, item, onClose, isAdmin }: IOrderModal
                                    showClear={!!deliveryId}
                                    onClear={() => formContext.setValue('deliveryId', null)}
                                    id="delivery-id"
-                                   label="Delivery Company"
+                                   label="Спосіб доставки"
                                    name="deliveryId"/>
 
                 <CustomTextField fullWidth
                                  required={!!deliveryId}
                                  id="region"
-                                 label="Region"
+                                 label="Область"
                                  name="region"/>
 
                 <CustomTextField fullWidth
                                  id="district"
-                                 label="District"
+                                 label="Район"
                                  name="district"/>
 
                 <CustomTextField fullWidth
                                  required={!!deliveryId}
                                  id="city"
-                                 label="City"
+                                 label="Місто"
                                  name="city"/>
 
                 <CustomTextField fullWidth
                                  required={!!deliveryId}
                                  id="postcode"
-                                 label="Postcode/Number of Office"
+                                 label="Індекс/№ відділення/поштомата"
                                  name="postcode"/>
 
                 <CustomTextField fullWidth
                                  id="trackingNumber"
-                                 label="Tracking Number"
+                                 label="ТТН"
                                  name="trackingNumber"/>
 
-                <CustomCheckbox label="Sent" name="isSent"></CustomCheckbox>
+                <CustomCheckbox label="Відправлене" name="isSent"></CustomCheckbox>
 
-                <CustomCheckbox label="Done" name="isDone"></CustomCheckbox>
+                <CustomCheckbox label="Виконане" name="isDone"></CustomCheckbox>
 
             </FormContainer>
 

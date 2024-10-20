@@ -28,10 +28,10 @@ export default function Authors() {
         ] : []
     });
     const [mobileKeys] = useState<TableKey<AuthorEntity>[]>([
-        { title: 'Description', renderValue: (item: AuthorEntity) => item.description, type: 'text' }
+        { title: 'Опис', renderValue: (item: AuthorEntity) => item.description, type: 'text' }
     ]);
     const [tableKeys] = useState<TableKey<AuthorEntity>[]>([
-        { title: 'Name', sortValue: 'name', renderValue: (item: AuthorEntity) => item.name, type: 'text' },
+        { title: 'Назва', sortValue: 'name', renderValue: (item: AuthorEntity) => item.name, type: 'text' },
         ...mobileKeys
     ]);
     const [selectedItem, setSelectedItem] = useState<AuthorEntity>();
@@ -107,7 +107,7 @@ export default function Authors() {
                     {isAdmin(user) &&
                       <Box sx={styleVariables.buttonsContainer}>
                         <Button variant="outlined" onClick={() => onAdd()}>
-                          <AddIcon></AddIcon>Add author
+                          <AddIcon></AddIcon>Додати автора
                         </Button>
                       </Box>}
                 </CustomTable>

@@ -29,7 +29,7 @@ export default function BookSeries() {
     });
     const [mobileKeys] = useState<TableKey<BookSeriesEntity>[]>([
         {
-            title: 'Publishing House',
+            title: 'Видавництво',
             sortValue: 'publishingHouse.name',
             renderValue: (item: BookSeriesEntity) => item.publishingHouse?.name,
             type: 'text'
@@ -37,7 +37,7 @@ export default function BookSeries() {
     ]);
     const [tableKeys] = useState<TableKey<BookSeriesEntity>[]>([
         {
-            title: 'Name',
+            title: 'Назва',
             sortValue: 'name',
             renderValue: (item: BookSeriesEntity) => item.name,
             type: 'text'
@@ -119,7 +119,7 @@ export default function BookSeries() {
                     {isAdmin(user) &&
                       <Box sx={styleVariables.buttonsContainer}>
                         <Button variant="outlined" onClick={() => onAdd()}>
-                          <AddIcon></AddIcon>Add series
+                          <AddIcon></AddIcon>Додати серію
                         </Button>
                       </Box>}
                 </CustomTable>

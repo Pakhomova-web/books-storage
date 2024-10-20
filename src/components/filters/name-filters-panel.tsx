@@ -31,7 +31,7 @@ export function NameFiltersPanel({ tableKeys, pageSettings, onSort, onApply }) {
                     <Grid item xs={12}>
                         <CustomTextField fullWidth
                                          id="name"
-                                         label="Name"
+                                         label="Назва"
                                          name="name"
                                          showClear={!!formContext.getValues('name')}
                                          onClear={() => clearValue('name')}/>

@@ -42,7 +42,7 @@ export default function PublishingHouseModal({ open, item, onClose, isAdmin }: I
     }
 
     return (
-        <CustomModal title={(!item ? 'Add' : (!isAdmin ? 'View' : 'Edit')) + ' Publishing House'}
+        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' Видавництво'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
@@ -59,7 +59,7 @@ export default function PublishingHouseModal({ open, item, onClose, isAdmin }: I
 
                 <CustomTextField fullWidth
                                  id="publishing-house-tags"
-                                 label="Tags"
+                                 label="Теги"
                                  name="tags"/>
             </FormContainer>
 

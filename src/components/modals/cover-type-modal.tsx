@@ -35,7 +35,7 @@ export default function CoverTypeModal({ open, item, onClose, isAdmin }: ICoverT
     }
 
     return (
-        <CustomModal title={(!item ? 'Add' : (!isAdmin ? 'View' : 'Edit')) + ' Cover Type'}
+        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' Тип обкладинки'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}

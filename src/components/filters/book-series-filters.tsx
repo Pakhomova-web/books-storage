@@ -32,7 +32,7 @@ export function BookSeriesFilters({ tableKeys, pageSettings, onApply, onSort }) 
                     <Grid item xs={12}>
                         <CustomTextField fullWidth
                                          id="book-name"
-                                         label="Name"
+                                         label="Назва"
                                          name="name"
                                          showClear={!!name}
                                          onClear={() => clearValue('name')}/>
@@ -42,7 +42,7 @@ export function BookSeriesFilters({ tableKeys, pageSettings, onApply, onSort }) 
                         <CustomSelectField fullWidth
                                            options={publishingHouseOptions}
                                            id="publishing-house-id"
-                                           label="Publishing House"
+                                           label="Видавництво"
                                            name="publishingHouse"
                                            showClear={!!publishingHouse}
                                            onClear={() => clearValue('publishingHouse')}/>

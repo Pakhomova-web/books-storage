@@ -29,7 +29,7 @@ export default function Languages() {
     });
     const [tableKeys] = useState<TableKey<LanguageEntity>[]>([
         {
-            title: 'Name',
+            title: 'Назва',
             sortValue: 'name',
             renderValue: (item: LanguageEntity) => item.name,
             type: 'text',
@@ -109,7 +109,7 @@ export default function Languages() {
                     {isAdmin(user) &&
                       <Box sx={styleVariables.buttonsContainer}>
                         <Button variant="outlined" onClick={() => onAdd()}>
-                          <AddIcon></AddIcon>Add language
+                          <AddIcon></AddIcon>Додати мову
                         </Button>
                       </Box>}
                 </CustomTable>

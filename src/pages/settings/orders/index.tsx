@@ -20,7 +20,7 @@ export default function Orders() {
         type: 'actions',
         actions: isAdmin(user) ? [
             {
-                label: 'Delete',
+                label: 'Видалити',
                 type: TableActionEnum.delete,
                 onClick: (item: OrderEntity) => deleteHandler(item)
             }
@@ -28,19 +28,19 @@ export default function Orders() {
     };
     const [mobileKeys] = useState<TableKey<OrderEntity>[]>([
         {
-            title: 'Customer First Name',
+            title: 'Ім\'я замовника',
             sortValue: 'customerFirstName',
             renderValue: (item: OrderEntity) => item.customerFirstName,
             type: 'text'
         },
         {
-            title: 'Customer Last Name',
+            title: 'Прізвище замовника',
             sortValue: 'customerLastName',
             renderValue: (item: OrderEntity) => item.customerLastName,
             type: 'text'
         },
         {
-            title: 'Description',
+            title: 'Опис',
             sortValue: 'description',
             renderValue: (item: OrderEntity) => item.description,
             type: 'text'
@@ -140,7 +140,7 @@ export default function Orders() {
                       <Box sx={styleVariables.buttonsContainer}>
                         <Button variant="outlined" onClick={() => onAdd()}
                                 sx={items.length ? { mr: styleVariables.margin } : {}}>
-                          <AddIcon></AddIcon>Add Order
+                          <AddIcon></AddIcon>Додати замовлення
                         </Button>
                       </Box>
                     }

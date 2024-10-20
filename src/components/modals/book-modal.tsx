@@ -152,7 +152,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     }
 
     return (
-        <CustomModal title={(!item || !item.id ? 'Add' : (!isAdmin ? 'View' : 'Edit')) + ' Book'}
+        <CustomModal title={(!item || !item.id ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' Книгу'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
@@ -165,7 +165,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                  disabled={!isAdmin}
                                  autoFocus
                                  id="book-name"
-                                 label="Name"
+                                 label="Назва"
                                  name="name"/>
 
                 <CustomSelectField fullWidth
@@ -174,7 +174,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                    options={bookTypeOptions}
                                    loading={loadingBookTypes}
                                    id="book-type-id"
-                                   label="Book Type"
+                                   label="Тип"
                                    name="bookTypeId"/>
 
                 <CustomSelectField fullWidth
@@ -183,7 +183,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                    loading={loadingPublishingHouses}
                                    options={publishingHouseOptions}
                                    id="publishing-house-id"
-                                   label="Publishing House"
+                                   label="Видавництво"
                                    name="publishingHouseId"/>
 
                 <CustomSelectField fullWidth
@@ -192,7 +192,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                    loading={loadingBookSeries}
                                    options={bookSeriesOptions}
                                    id="book-series-id"
-                                   label="Book Series"
+                                   label="Серія"
                                    name="bookSeriesId"/>
 
                 <CustomSelectField fullWidth
@@ -201,7 +201,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                    loading={loadingLanguages}
                                    options={languageOptions}
                                    id="language-id"
-                                   label="Language"
+                                   label="Мова"
                                    name="languageId"/>
 
                 <CustomSelectField fullWidth
@@ -210,7 +210,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                    loading={loadingPageTypes}
                                    options={pageTypeOptions}
                                    id="page-type-id"
-                                   label="Page Type"
+                                   label="Тип сторінок"
                                    name="pageTypeId"/>
 
                 <CustomSelectField fullWidth
@@ -219,13 +219,13 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                    loading={loadingCoverTypes}
                                    options={coverTypeOptions}
                                    id="cover-type-id"
-                                   label="Cover Type"
+                                   label="Тип обкладинки"
                                    name="coverTypeId"/>
 
                 <CustomTextField fullWidth
                                  disabled={!isAdmin}
                                  id="description"
-                                 label="Description"
+                                 label="Опис"
                                  name="description"/>
 
                 <CustomTextField fullWidth
@@ -237,7 +237,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 <CustomTextField fullWidth
                                  disabled={!isAdmin}
                                  id="format"
-                                 label="Format, mm"
+                                 label="Формат, мм"
                                  name="format"/>
 
                 <CustomTextField fullWidth
@@ -245,7 +245,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                  disabled={!isAdmin}
                                  id="numberOfPages"
                                  type="number"
-                                 label="Number of Pages"
+                                 label="Кількість сторінок"
                                  name="numberOfPages"/>
 
                 <CustomSelectField fullWidth
@@ -253,14 +253,14 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                    disabled={!isAdmin}
                                    loading={loadingAuthors}
                                    id="author"
-                                   label="Author"
+                                   label="Автор"
                                    name="authorId"/>
 
                 {isAdmin && <CustomTextField fullWidth
                                              id="numberInStock"
                                              disabled={!isAdmin}
                                              type="number"
-                                             label="Number in Stock"
+                                             label="Кількість в наявності"
                                              name="numberInStock"/>}
 
                 <CustomTextField fullWidth
@@ -274,7 +274,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 <CustomTextField fullWidth
                                  disabled={!isAdmin}
                                  id="tag"
-                                 label="Tag"
+                                 label="Тег"
                                  helperText="Click enter to add a tag, 3 chars at least"
                                  onKeyDown={addTag}
                                  name="tag"></CustomTextField>
@@ -290,15 +290,15 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 <CustomTextField fullWidth
                                  disabled={!isAdmin}
                                  id="imageLink"
-                                 label="Image Link"
+                                 label="Посилання на ілюстрацію"
                                  name="imageLink"/>
                 {!!imageLink &&
-                  <Button fullWidth variant="outlined" onClick={parseImage}>Parse image</Button>}
+                  <Button fullWidth variant="outlined" onClick={parseImage}>Відокремити ID</Button>}
 
                 <CustomTextField fullWidth
                                  disabled={!isAdmin}
                                  id="imageId"
-                                 label="Image ID"
+                                 label="ID ілюстрації"
                                  name="imageId"/>
 
                 <Box sx={bookBoxStyles} mb={1}>

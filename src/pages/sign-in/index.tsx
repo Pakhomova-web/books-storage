@@ -88,34 +88,34 @@ export default function SignIn() {
 
                 <Box sx={authStyles.title}>Sign In</Box>
                 <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
-                    <CustomTextField fullWidth name="email" required type="email" label="Email" id="email"/>
+                    <CustomTextField fullWidth name="email" required type="email" label="Ел. адреса" id="email"/>
 
                     <CustomPasswordElement fullWidth
                                            variant="standard"
                                            id="password"
-                                           label="Password"
+                                           label="Пароль"
                                            name="password"
                                            required/>
 
                     <CustomPasswordElement fullWidth
                                            variant="standard"
                                            id="confirmPassword"
-                                           label="Confirm Password"
+                                           label="Підтвердіть пароль"
                                            name="confirmPassword"
                                            required/>
 
-                    <CustomTextField fullWidth name="firstName" label="First Name"/>
+                    <CustomTextField fullWidth name="firstName" label="Ім'я"/>
 
-                    <CustomTextField fullWidth name="lastName" label="Last Name"/>
+                    <CustomTextField fullWidth name="lastName" label="Прізвище"/>
                 </FormContainer>
                 <Button variant="contained"
                         sx={authStyles.buttonMargin}
                         disabled={isFormInvalid()}
                         onClick={onSubmit}>
-                    Create account
+                    Створити аккаунт
                 </Button>
-                <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>or</Box>
-                <Button variant="outlined" onClick={() => goToLoginPage()}>Login</Button>
+                <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>або</Box>
+                <Button variant="outlined" onClick={() => goToLoginPage()}>Вже є аккаунт</Button>
 
                 {error && <ErrorNotification error={error}></ErrorNotification>}
             </Box>

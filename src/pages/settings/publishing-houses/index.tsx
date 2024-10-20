@@ -33,10 +33,10 @@ export default function PublishingHouses() {
         ] : []
     });
     const [mobileKeys] = useState<TableKey<PublishingHouseEntity>[]>([
-        { type: 'text', title: 'Tags', sortValue: 'tags', renderValue: (item: PublishingHouseEntity) => item.tags }
+        { type: 'text', title: 'Теги', sortValue: 'tags', renderValue: (item: PublishingHouseEntity) => item.tags }
     ])
     const [tableKeys] = useState<TableKey<PublishingHouseEntity>[]>([
-        { type: 'text', title: 'Name', sortValue: 'name', renderValue: (item: PublishingHouseEntity) => item.name },
+        { type: 'text', title: 'Назва', sortValue: 'name', renderValue: (item: PublishingHouseEntity) => item.name },
         ...mobileKeys
     ]);
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
@@ -107,7 +107,7 @@ export default function PublishingHouses() {
                     {isAdmin(user) &&
                       <Box sx={styleVariables.buttonsContainer}>
                         <Button variant="outlined" onClick={() => onAdd()}>
-                          <AddIcon></AddIcon>Add Publishing House
+                          <AddIcon></AddIcon>Додати Видавництво
                         </Button>
                       </Box>}
                 </CustomTable>

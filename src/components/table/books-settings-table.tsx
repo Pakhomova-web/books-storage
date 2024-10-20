@@ -42,7 +42,7 @@ export default function BooksSettingsTable() {
         type: 'actions',
         actions: isAdmin(user) ? [
             {
-                label: 'Add number in stock',
+                label: 'Додати кількість в наявності',
                 type: TableActionEnum.add,
                 onClick: (item: BookEntity) => {
                     setError(null);
@@ -51,7 +51,7 @@ export default function BooksSettingsTable() {
                 }
             },
             {
-                label: 'Copy',
+                label: 'Скопіювати',
                 type: TableActionEnum.copy,
                 onClick: (item: BookEntity) => {
                     const data = { ...item, name: null };
@@ -61,7 +61,7 @@ export default function BooksSettingsTable() {
                 }
             },
             {
-                label: 'Delete',
+                label: 'Видалити',
                 type: TableActionEnum.delete,
                 onClick: (item: BookEntity) => deleteHandler(item)
             }
@@ -69,66 +69,66 @@ export default function BooksSettingsTable() {
     };
     const [mobileKeys] = useState<TableKey<BookEntity>[]>([
         {
-            title: 'Name',
+            title: 'Назва',
             sortValue: 'name',
             renderValue: (item: BookEntity) => item.name,
             type: 'text',
             mobileStyleClasses: { ...styleVariables.boldFont, ...styleVariables.mobileBigFontSize }
         },
         {
-            title: 'Pages',
+            title: 'Кількість сторінок',
             sortValue: 'numberOfPages',
             renderValue: (item: BookEntity) => item.numberOfPages,
             type: 'text'
         },
         {
-            title: 'Language',
+            title: 'Мова',
             sortValue: 'language',
             renderValue: (item: BookEntity) => item.language?.name,
             type: 'text'
         },
         {
-            title: 'Page Type',
+            title: 'Тип сторінок',
             sortValue: 'pageType',
             renderValue: (item: BookEntity) => item.pageType?.name,
             type: 'text'
         },
         {
-            title: 'Cover Type',
+            title: 'Тип обкладинки',
             sortValue: 'coverType',
             renderValue: (item: BookEntity) => item.coverType?.name,
             type: 'text'
         },
         {
-            title: 'Author',
+            title: 'Автор',
             sortValue: 'author',
             renderValue: (item: BookEntity) => item.author?.name,
             type: 'text'
         },
         {
-            title: 'Price',
+            title: 'Ціна',
             sortValue: 'price',
             renderValue: (item: BookEntity) => renderPrice(item.price),
             type: 'text'
         }
     ]);
     const [tableKeys] = useState<TableKey<BookEntity>[]>([
-        { title: 'Type', sortValue: 'bookType', renderValue: (item: BookEntity) => item.bookType?.name, type: 'text' },
+        { title: 'Тип', sortValue: 'bookType', renderValue: (item: BookEntity) => item.bookType?.name, type: 'text' },
         {
-            title: 'Publishing House',
+            title: 'Видавництво',
             sortValue: 'publishingHouse',
             renderValue: (item: BookEntity) => item.bookSeries?.publishingHouse?.name,
             type: 'text'
         },
         {
-            title: 'Series',
+            title: 'Серія',
             sortValue: 'bookSeries',
             renderValue: (item: BookEntity) => item.bookSeries?.name,
             type: 'text'
         },
         ...mobileKeys,
         {
-            title: 'In Stock',
+            title: 'В наявності',
             sortValue: 'numberInStock',
             renderValue: (item: BookEntity) => item.numberInStock,
             type: 'text'
@@ -237,12 +237,12 @@ export default function BooksSettingsTable() {
                       <Box sx={styleVariables.buttonsContainer}>
                         <Button variant="outlined" onClick={() => onAdd()}
                                 sx={items.length ? { mr: styleVariables.margin } : {}}>
-                          <AddIcon></AddIcon>Add Book
+                          <AddIcon></AddIcon>Додати книгу
                         </Button>
 
                           {!!items?.length &&
                             <Button variant="outlined" onClick={() => onDownloadCSV()}>
-                              Download CSV
+                              Скачати CSV
                             </Button>
                           }
                       </Box>
