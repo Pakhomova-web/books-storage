@@ -85,6 +85,10 @@ export default function BookDetails() {
         router.push(`/books${router.query.filters ? `?${router.query.filters}` : ''}`);
     }
 
+    function onTagClick(tag: string) {
+        router.push(`/books?tags=${tag}`);
+    }
+
     return (
         <Box sx={styleVariables.positionRelative}>
             <Loading show={loading}></Loading>
@@ -127,8 +131,8 @@ export default function BookDetails() {
                         {!!book.tags?.length &&
                           <Grid container mb={2} pl={1} alignItems="center" gap={1}>
                             Tags:
-                              {book.tags.map((tag, index) => <Tag key={index} tag={tag}/>)
-                              }
+                              {book.tags.map((tag, index) =>
+                                  <Tag key={index} tag={tag} onClick={() => onTagClick(tag)}/>)}
                           </Grid>
                         }
 

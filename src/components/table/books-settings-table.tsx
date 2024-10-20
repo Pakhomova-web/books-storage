@@ -1,7 +1,7 @@
 import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 import { useAuth } from '@/components/auth-context';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
-import { BookEntity, IBookFilter, IPageable } from '@/lib/data/types';
+import { BookEntity, BookFilter, IPageable } from '@/lib/data/types';
 import { Box, Button } from '@mui/material';
 import { downloadCsv, isAdmin, renderPrice } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
@@ -138,7 +138,7 @@ export default function BooksSettingsTable() {
     const [pageSettings, setPageSettings] = useState<IPageable>({
         order: 'asc', orderBy: '', page: 0, rowsPerPage: 5
     });
-    const [filters, setFilters] = useState<IBookFilter>();
+    const [filters, setFilters] = useState<BookFilter>();
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
     const { deleteItem, deletingError, deleting } = useDeleteBook();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
@@ -215,7 +215,7 @@ export default function BooksSettingsTable() {
             {isAdmin(user) &&
               <Box sx={pageStyles}>
                 <BookFilters tableKeys={tableKeys}
-                             onApply={(filters: IBookFilter) => setFilters(filters)}
+                             onApply={(filters: BookFilter) => setFilters(filters)}
                              pageSettings={pageSettings}
                              onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></BookFilters>
 

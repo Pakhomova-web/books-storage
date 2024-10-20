@@ -2,8 +2,7 @@ import { BookEntity, BookSeriesEntity, IBookSeriesFilter, IOption } from '@/lib/
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useCreateBook, useUpdateBook } from '@/lib/graphql/queries/book/hook';
 import React, { useEffect, useState } from 'react';
-import { Box, Button, Grid, GridProps } from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { Box, Button, Grid } from '@mui/material';
 
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
@@ -18,7 +17,6 @@ import { usePublishingHouseOptions } from '@/lib/graphql/queries/publishing-hous
 import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
 import { getBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 import CustomImage from '@/components/custom-image';
-import { styleVariables } from '@/constants/styles-variables';
 import Tag from '@/components/tag';
 import { parseImageFromLink } from '@/utils/utils';
 

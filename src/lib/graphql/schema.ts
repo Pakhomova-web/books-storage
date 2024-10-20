@@ -304,6 +304,7 @@ const typeDefs =  /* GraphQL */ `
         publishingHouse: ID
         isInStock: Boolean
         quickSearch: String
+        tags: String
     }
 
     type BookSubList {

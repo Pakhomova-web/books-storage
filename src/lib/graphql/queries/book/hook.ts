@@ -1,4 +1,4 @@
-import { BookEntity, IBookFilter, IPageable } from '@/lib/data/types';
+import { BookEntity, BookFilter, IPageable } from '@/lib/data/types';
 import {
     _useAllItems, _useItemById,
     _useCreateItem,
@@ -16,7 +16,7 @@ import {
 } from '@/lib/graphql/queries/book/queries';
 import { GraphQLError } from 'graphql/error';
 
-export function useBooks(pageSettings?: IPageable, filters?: IBookFilter) {
+export function useBooks(pageSettings?: IPageable, filters?: BookFilter) {
     return _usePageableItems<BookEntity>(booksQuery, 'books', pageSettings, filters);
 }
 
@@ -24,7 +24,7 @@ export function useBook(id: string) {
     return _useItemById<BookEntity>(bookByIdQuery, 'bookById', id);
 }
 
-export function getAllBooks(pageSettings?: IPageable, filters?: IBookFilter) {
+export function getAllBooks(pageSettings?: IPageable, filters?: BookFilter) {
     return _useAllItems<BookEntity>(booksQuery, 'books', pageSettings, filters);
 }
 

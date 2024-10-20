@@ -8,7 +8,7 @@ export function FiltersButton({ onApply, onClear, children }) {
     const [openFiltersModal, setOpenFiltersModal] = useState<boolean>(false);
     const [actions] = useState([
         { title: 'Очистити', onClick: () => onClearClick() },
-        { title: 'Примінити', onClick: () => onApplyClick() }
+        { title: 'Знайти', onClick: () => onApplyClick() }
     ]);
 
     function onClearClick() {

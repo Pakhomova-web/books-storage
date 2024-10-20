@@ -80,19 +80,38 @@ export interface IBookSeriesFilter {
     publishingHouse?: string
 }
 
-export interface IBookFilter {
-    quickSearch?: string,
-    id?: string,
-    name?: string,
-    bookSeries?: string,
-    description?: string,
-    bookType?: string
-    coverType?: string
-    pageType?: string
-    isbn?: string
-    language?: string
-    author?: string,
-    isInStock?: boolean
+export class BookFilter {
+    quickSearch?: string;
+    id?: string;
+    name?: string;
+    bookSeries?: string;
+    description?: string;
+    bookType?: string;
+    coverType?: string;
+    pageType?: string;
+    isbn?: string;
+    language?: string;
+    author?: string;
+    isInStock?: boolean;
+    tags?: string;
+
+    constructor(data?) {
+        if (data) {
+            this.quickSearch = data.quickSearch;
+            this.id = data.id;
+            this.name = data.name;
+            this.bookSeries = data.bookSeries;
+            this.description = data.description;
+            this.bookType = data.bookType;
+            this.coverType = data.coverType;
+            this.pageType = data.pageType;
+            this.isbn = data.isbn;
+            this.language = data.language;
+            this.author = data.author;
+            this.isInStock = data.isInStock;
+            this.tags = data.tags;
+        }
+    }
 }
 
 export class UserEntity {

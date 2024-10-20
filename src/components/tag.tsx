@@ -14,17 +14,21 @@ const StyledTagGrid = styled(Grid)<GridOwnProps>(({ theme }) => ({
 
 interface ITagProps extends GridOwnProps {
     tag: string,
-    onRemove?: (_: string) => void
+    onRemove?: (_: string) => void,
+    onClick?: () => void
 }
 
-export default function Tag({ tag, onRemove, ...props }: ITagProps) {
+export default function Tag({ tag, onRemove, onClick, ...props }: ITagProps) {
     return (
-        <StyledTagGrid item {...props}>
+        <StyledTagGrid item {...props} onClick={onClick} sx={onClick ? { cursor: 'pointer' } : {}}>
             #{tag}
             {!!onRemove &&
               <RemoveCircleOutlineIcon fontSize="small"
                                        sx={{ cursor: 'pointer', color: styleVariables.warnColor }}
-                                       onClick={() => onRemove(tag)}/>
+                                       onClick={(e) => {
+                                           e.stopPropagation();
+                                           onRemove(tag);
+                                       }}/>
             }
         </StyledTagGrid>
     );

@@ -101,6 +101,7 @@ export type BookSearchInput = {
   pageType?: InputMaybe<Scalars['ID']['input']>;
   publishingHouse?: InputMaybe<Scalars['ID']['input']>;
   quickSearch?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type BookSeries = {

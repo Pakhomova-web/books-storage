@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import { IBookFilter } from '@/lib/data/types';
+import { BookFilter } from '@/lib/data/types';
 import { useLanguageOptions } from '@/lib/graphql/queries/language/hooks';
 import { Grid } from '@mui/material';
 import CustomSelectField from '@/components/form-fields/custom-select-field';
@@ -13,20 +13,20 @@ import { useAuthorOptions } from '@/lib/graphql/queries/author/hook';
 import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
 
 export function BookFilters({ tableKeys, onApply, pageSettings, onSort }) {
-    const formContext = useForm<IBookFilter>();
+    const formContext = useForm<BookFilter>();
     const { items: bookTypeOptions } = useBookTypeOptions();
     const { items: pageTypeOptions } = usePageTypeOptions();
     const { items: authorOptions } = useAuthorOptions();
     const { items: languageOptions } = useLanguageOptions();
     const { items: coverTypeOptions } = useCoverTypeOptions();
-    const { quickSearch, bookType, author, coverType, pageType, name, language } = formContext.watch();
+    const { quickSearch, bookType, author, coverType, pageType, name, language, tags } = formContext.watch();
 
     function onClearClick() {
         formContext.reset();
         onApply();
     }
 
-    function clearValue(controlName: keyof IBookFilter) {
+    function clearValue(controlName: keyof BookFilter) {
         formContext.setValue(controlName, null);
     }
 
@@ -41,10 +41,19 @@ export function BookFilters({ tableKeys, onApply, pageSettings, onSort }) {
                     <Grid item xs={12}>
                         <CustomTextField fullWidth
                                          id="quickSearch"
-                                         label="Пошук"
+                                         label="Швидкий пошук"
                                          name="quickSearch"
                                          showClear={!!quickSearch}
                                          onClear={() => clearValue('quickSearch')}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <CustomTextField fullWidth
+                                         id="tags"
+                                         label="Теги"
+                                         name="tags"
+                                         showClear={!!tags}
+                                         onClear={() => clearValue('tags')}/>
                     </Grid>
 
                     <Grid item xs={12}>

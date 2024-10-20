@@ -67,7 +67,7 @@ export default function CustomModal(props: ICustomModalProps) {
                     </Box>
 
                     <Box sx={buttonsContainerStyles}>
-                        <Button variant="outlined" onClick={props.onClose}>Close</Button>
+                        <Button variant="outlined" onClick={props.onClose}>Закрити</Button>
                         {props.onSubmit ?
                             <Button onClick={props.onSubmit} variant="contained" disabled={props.isSubmitDisabled}
                                     sx={{ marginLeft: styleVariables.margin }}>Submit</Button>

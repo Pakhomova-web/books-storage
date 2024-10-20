@@ -1,10 +1,10 @@
-import { BookEntity, IBookFilter, IPageable } from '@/lib/data/types';
+import { BookEntity, BookFilter, IPageable } from '@/lib/data/types';
 import Book from '@/lib/data/models/book';
 import { GraphQLError } from 'graphql/error';
 import { getValidFilters } from '@/lib/data/base';
 import BookSeries from '@/lib/data/models/book-series';
 
-export async function getBooks(pageSettings?: IPageable, filters?: IBookFilter): Promise<{
+export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): Promise<{
     items: BookEntity[],
     totalCount: number
 }> {
