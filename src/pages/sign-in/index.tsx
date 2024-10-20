@@ -27,14 +27,14 @@ export default function SignIn() {
     useEffect(() => {
         if (formContext.formState.touchedFields.password || formContext.formState.touchedFields.confirmPassword) {
             if (password && !passwordValidatorExp.test(password)) {
-                formContext.setError('password', { message: 'Min 8 chars: A-Z, a-z, 0-9' });
+                formContext.setError('password', { message: 'Мін 8 симовлів: A-Z, a-z, 0-9' });
             } else if (!password && formContext.formState.touchedFields.password) {
-                formContext.setError('password', { message: 'Password is required' });
+                formContext.setError('password', { message: 'Пароль обов\'язковий' });
             } else if (!confirmPassword && formContext.formState.touchedFields.confirmPassword) {
-                formContext.setError('confirmPassword', { message: 'Confirm Password is required' });
+                formContext.setError('confirmPassword', { message: 'Пароль обов\'язковий' });
             } else if (password !== confirmPassword && formContext.formState.touchedFields.confirmPassword && formContext.formState.touchedFields.password) {
-                formContext.setError('password', { message: 'Passwords should match' });
-                formContext.setError('confirmPassword', { message: 'Passwords should match' });
+                formContext.setError('password', { message: 'Паролі повинні співпадати' });
+                formContext.setError('confirmPassword', { message: 'Паролі повинні співпадати' });
             } else {
                 formContext.clearErrors('password');
                 formContext.clearErrors('confirmPassword');
@@ -45,9 +45,9 @@ export default function SignIn() {
     useEffect(() => {
         if (formContext.formState.touchedFields.email) {
             if (!email) {
-                formContext.setError('email', { message: 'Email is required' });
+                formContext.setError('email', { message: 'Ел. адреса обов\'язкова' });
             } else if (!emailValidatorExp.test(email)) {
-                formContext.setError('email', { message: 'Email is invalid' });
+                formContext.setError('email', { message: 'Ел. адреса невірна' });
             } else {
                 formContext.clearErrors('email');
             }
@@ -86,7 +86,7 @@ export default function SignIn() {
             <Box sx={authStyles.container}>
                 <Loading show={loading}></Loading>
 
-                <Box sx={authStyles.title}>Sign In</Box>
+                <Box sx={authStyles.title}>Реєстрація</Box>
                 <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
                     <CustomTextField fullWidth name="email" required type="email" label="Ел. адреса" id="email"/>
 
@@ -115,7 +115,7 @@ export default function SignIn() {
                     Створити аккаунт
                 </Button>
                 <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>або</Box>
-                <Button variant="outlined" onClick={() => goToLoginPage()}>Вже є аккаунт</Button>
+                <Button variant="outlined" onClick={() => goToLoginPage()}>Увійти в аккаунт</Button>
 
                 {error && <ErrorNotification error={error}></ErrorNotification>}
             </Box>

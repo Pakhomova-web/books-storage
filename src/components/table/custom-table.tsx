@@ -96,6 +96,7 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
                                      count={props.totalCount}
                                      page={page}
                                      colSpan={colSpan}
+                                     labelRowsPerPage="Кількість на сторінці"
                                      sx={styleVariables.paginatorStyles}
                                      rowsPerPage={rowsPerPage}
                                      onPageChange={(_e, val: number) => onPageChange(val)}

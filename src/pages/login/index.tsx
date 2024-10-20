@@ -27,9 +27,9 @@ export default function Login() {
 
     useEffect(() => {
         if (password && !passwordValidatorExp.test(password)) {
-            formContext.setError('password', { message: 'Min 8 chars: A-Z, a-z, 0-9' });
+            formContext.setError('password', { message: 'Мін 8 символів: A-Z, a-z, 0-9' });
         } else if (!password && formContext.formState.touchedFields.password) {
-            formContext.setError('password', { message: 'Password is required' });
+            formContext.setError('password', { message: 'Пароль обов\'язковий' });
         } else {
             formContext.clearErrors('password');
         }
@@ -38,9 +38,9 @@ export default function Login() {
     useEffect(() => {
         if (formContext.formState.touchedFields.email) {
             if (!email) {
-                formContext.setError('email', { message: 'Email is required' });
+                formContext.setError('email', { message: 'Ел. пошта обов\'язкова' });
             } else if (!emailValidatorExp.test(email)) {
-                formContext.setError('email', { message: 'Email is invalid' });
+                formContext.setError('email', { message: 'Ел. пошта невірна' });
             } else {
                 formContext.clearErrors('email');
             }
@@ -80,7 +80,7 @@ export default function Login() {
             <Box sx={authStyles.container}>
                 <Loading show={loading}></Loading>
 
-                <Box sx={authStyles.title}>Login</Box>
+                <Box sx={authStyles.title}>Вхід</Box>
                 <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
                     <CustomTextField fullWidth name="email" required label="Ел. пошта" type="email"/>
 
@@ -92,19 +92,19 @@ export default function Login() {
                                            required/>
 
                     <Box sx={forgotPasswordLink}>
-                        <Box sx={styleVariables.cursorPointer} onClick={onForgotPasswordClick}>Forgot password?</Box>
+                        <Box sx={styleVariables.cursorPointer} onClick={onForgotPasswordClick}>Забули пароль?</Box>
                     </Box>
                     <Button variant="contained"
                             fullWidth
                             type="submit"
                             sx={authStyles.buttonMargin}
                             disabled={isFormInvalid()}>
-                        Login
+                        Вхід
                     </Button>
                 </FormContainer>
 
-                <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>or</Box>
-                <Button variant="outlined" onClick={() => goToSignInPage()}>Create new account</Button>
+                <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>або</Box>
+                <Button variant="outlined" onClick={() => goToSignInPage()}>Створити новий аккаунт</Button>
 
                 {error && <ErrorNotification error={error}></ErrorNotification>}
             </Box>
