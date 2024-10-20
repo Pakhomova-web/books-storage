@@ -34,7 +34,7 @@ export default function SortButton(props: ISortButtonProps) {
 
     return (
         <>
-            <Button fullWidth onClick={onSortClick}><SortIcon/> Sort</Button>
+            <Button fullWidth onClick={onSortClick}><SortIcon/> Сортування</Button>
 
             <CustomModal open={openSortModal} onClose={() => setOpenSortModal(false)}>
                 <Grid container>{props.sortKeys?.map(key => (

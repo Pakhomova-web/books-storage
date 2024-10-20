@@ -27,7 +27,7 @@ export function FiltersButton({ onApply, onClear, children }) {
 
     return (
         <>
-            <Button fullWidth onClick={openFilters}><TuneIcon/> Filters</Button>
+            <Button fullWidth onClick={openFilters}><TuneIcon/> Фільтри</Button>
 
             <CustomModal open={openFiltersModal}
                          onClose={() => setOpenFiltersModal(false)}
