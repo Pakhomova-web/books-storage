@@ -34,3 +34,8 @@ ul.MuiList-root {
     cursor: pointer;
     background: var(--light-background);
 }
+
+.selectedToolbarMenuItem, .selectedToolbarMenuItem:hover {
+    background-color: white;
+    color: var(--background);
+}

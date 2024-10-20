@@ -33,11 +33,6 @@ interface IProps {
     changeDisplayingSettings: ({ show, attached }) => void
 }
 
-const selectedMenuItemStyles = {
-    backgroundColor: styleVariables.gray,
-    color: 'var(--background)'
-};
-
 export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, changeDisplayingSettings }: IProps) {
     const { user, logout } = useAuth();
     const router = useRouter();
@@ -142,7 +137,7 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                     <Box>
                         {isAdmin(user) &&
                           <IconButton color="inherit"
-                                      sx={selectedMenuItem === MainMenuItem.settings ? selectedMenuItemStyles : {}}
+                                      className={selectedMenuItem === MainMenuItem.settings ? 'selectedToolbarMenuItem' : ''}
                                       aria-label="settings"
                                       onClick={handleClickOnSettings}>
                             <SettingsIcon/>
@@ -155,9 +150,7 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                     <Box sx={styleVariables.flexNoWrap}>
                         <IconButton onClick={() => goToPage('/')}
                                     color="inherit"
-                                    sx={{
-                                        mr: 1, ...(selectedMenuItem === MainMenuItem.home ? selectedMenuItemStyles : {})
-                                    }}>
+                                    className={selectedMenuItem === MainMenuItem.home ? 'selectedToolbarMenuItem' : ''}>
                             <HomeIcon/>
                         </IconButton>
                         {mobileMatches && !!user ?
@@ -176,7 +169,7 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                                 <>
                                     <IconButton color="inherit"
                                                 onClick={() => goToProfilePage()}
-                                                sx={{ mr: 1, ...(selectedMenuItem === MainMenuItem.profile ? selectedMenuItemStyles : {}) }}>
+                                                className={selectedMenuItem === MainMenuItem.profile ? 'selectedToolbarMenuItem' : ''}>
                                         <ProfileIcon/>
                                     </IconButton>
                                     <IconButton color="inherit" onClick={() => onLogoutClick()}>

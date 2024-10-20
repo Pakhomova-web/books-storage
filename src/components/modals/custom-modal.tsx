@@ -70,7 +70,7 @@ export default function CustomModal(props: ICustomModalProps) {
                         <Button variant="outlined" onClick={props.onClose}>Закрити</Button>
                         {props.onSubmit ?
                             <Button onClick={props.onSubmit} variant="contained" disabled={props.isSubmitDisabled}
-                                    sx={{ marginLeft: styleVariables.margin }}>Submit</Button>
+                                    sx={{ marginLeft: styleVariables.margin }}>Зберегти</Button>
                             : null}
                         {props.actions?.length && props.actions.map((action, index) => (
                             <Button key={index}

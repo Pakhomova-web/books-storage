@@ -14,30 +14,41 @@ import ErrorNotification from '@/components/error-notification';
 import AddIcon from '@mui/icons-material/Add';
 import BookModal from '@/components/modals/book-modal';
 import { BookNumberInStockModal } from '@/components/modals/book-number-in-stock-modal';
+import CustomImage from '@/components/custom-image';
+import HdrStrongIcon from '@mui/icons-material/HdrStrong';
+import HdrWeakIcon from '@mui/icons-material/HdrWeak';
 
 const subTitleStyles = {
     ...styleVariables.hintFontSize,
     display: 'flex',
-    alignItems: 'center',
     margin: `${styleVariables.margin} 0`
 };
-
-const numberInStockBox = (inStock: boolean) => ({
-    padding: `0 ${styleVariables.rowMargin}`,
-    margin: `0 ${styleVariables.rowMargin}`,
-    borderRadius: styleVariables.borderRadius,
-    background: inStock ? styleVariables.greenLightColor : styleVariables.redLightColor,
-    border: `1px solid ${inStock ? 'green' : styleVariables.warnColor}`
-});
 
 export default function BooksSettingsTable() {
     const { user, checkAuth } = useAuth();
     const tableActions: TableKey<BookEntity> = {
         renderMobileLabel: (item: BookEntity) => (
-            <Box sx={subTitleStyles}>
-                {item.bookType.name}/{item.bookSeries.publishingHouse.name}/{item.bookSeries.name}
-                {isAdmin(user) && <Box sx={numberInStockBox(!!item.numberInStock)}>{item.numberInStock}</Box>}
-            </Box>
+            <>
+                <Box sx={subTitleStyles}>
+                    <Box height={75} width={100} mr={1}><CustomImage imageId={item.imageId}
+                                                                     isBookDetails={true}></CustomImage></Box>
+                    <Box display="flex" flexDirection="column" gap={1}>
+                        <Box>{item.bookType.name}</Box>
+                        <Box>{item.bookSeries.publishingHouse.name}</Box>
+                        <Box>{item.bookSeries.name}</Box>
+                    </Box>
+                </Box>
+
+                <Box display="flex" alignItems="center" gap={1} mb={1} sx={styleVariables.hintFontSize}>
+                    {item.numberInStock ?
+                        <>
+                            <HdrStrongIcon fontSize="small" style={{ color: "green" }}/>
+                            В наявності ({item.numberInStock})
+                        </> :
+                        <><HdrWeakIcon fontSize="small" style={{ color: styleVariables.warnColor }}/>Відсутня</>
+                    }
+                </Box>
+            </>
         ),
         type: 'actions',
         actions: isAdmin(user) ? [

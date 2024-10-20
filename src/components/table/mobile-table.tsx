@@ -32,7 +32,7 @@ export function MobileTable<T>(props: IMobileTableProps<T>) {
     function renderItem(item: T, index: number) {
         return <>
             {props.actions &&
-              <Grid container sx={styleVariables.alignItemsCenter}>
+              <Grid container>
                 <Grid item xs={9}>{props.actions.renderMobileLabel && props.actions.renderMobileLabel(item)}</Grid>
                 <Grid item xs={3} sx={styleVariables.flexEnd}>
                     {renderActions(index, props.actions.actions, item, anchorMenuEl, (val: IMenuAnchorEl) => setAnchorMenuEl(val))}
