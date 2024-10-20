@@ -12,7 +12,7 @@ import { usePageTypeOptions } from '@/lib/graphql/queries/page-type/hook';
 import { useAuthorOptions } from '@/lib/graphql/queries/author/hook';
 import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
 
-export function BookFilters({ tableKeys, onApply, pageSettings, showAlwaysSorting, onSort }) {
+export function BookFilters({ tableKeys, onApply, pageSettings, showAlwaysSorting = false, onSort }) {
     const formContext = useForm<BookFilter>();
     const { items: bookTypeOptions } = useBookTypeOptions();
     const { items: pageTypeOptions } = usePageTypeOptions();
