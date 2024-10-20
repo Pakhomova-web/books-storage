@@ -108,7 +108,7 @@ export default function Home() {
 
                 <StyledSocialsBox display="flex" alignItems="center" gap={2} width="100%" p={1} mt={1}
                                   justifyContent="end">
-                    <Box>Social media:</Box>
+                    <Box>Соц. мережі:</Box>
                     <IconButton onClick={onInstagramClick}><InstagramIcon color="primary"
                                                                           fontSize="medium"/></IconButton>
                 </StyledSocialsBox>
