@@ -53,10 +53,15 @@ export function BookFilters(props: IBookFiltersProps) {
     useEffect(() => {
         if (publishingHouses) {
             refetchBookSeries({ publishingHouse }, false);
-        } else {
-            formContext.setValue('bookSeries', null);
         }
+        formContext.setValue('bookSeries', null);
     }, [publishingHouse]);
+
+    useEffect(() => {
+        Object.keys(props.defaultValues).forEach((key) => {
+            formContext.setValue(key as keyof BookFilter, props.defaultValues[key]);
+        });
+    }, [props.defaultValues]);
 
     function onClearClick() {
         formContext.reset();

@@ -65,12 +65,18 @@ export default function Books() {
     ]);
     const [filters, setFilters] = useState<BookFilter>(new BookFilter(router.query));
     const [option, setOption] = useState<{ title: string, param?: string }[]>();
+    const [toRefreshData, setToRefreshData] = useState<boolean>(true);
     const [loadingOption, setLoadingOption] = useState<boolean>();
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
     const [error, setError] = useState<ApolloError>();
 
     useEffect(() => {
-        refreshData();
+        if (toRefreshData) {
+            updateOption(filters, false);
+            refreshData();
+        } else {
+            setToRefreshData(true);
+        }
     }, [filters, pageSettings]);
 
     useEffect(() => {
@@ -80,12 +86,20 @@ export default function Books() {
     }, [gettingError]);
 
     useEffect(() => {
+        updateOption(router.query);
+    }, [router.query]);
+
+    function updateOption(data: BookFilter, updateFilters = true) {
         setOption(null);
         setLoadingOption(true);
         let promise: Promise<any>;
+        if (updateFilters) {
+            setToRefreshData(false);
+            setFilters(new BookFilter(data));
+        }
 
-        if (router.query?.bookSeries) {
-            promise = getBookSeriesById(router.query?.bookSeries as string)
+        if (data?.bookSeries) {
+            promise = getBookSeriesById(data?.bookSeries as string)
                 .then((item: BookSeriesEntity) => [
                     { title: 'Видавництво' },
                     {
@@ -95,20 +109,20 @@ export default function Books() {
                     { title: 'Серія' },
                     { title: item.name }
                 ]);
-        } else if (router.query?.language) {
-            promise = getLanguageById(router.query?.language as string)
+        } else if (data?.language) {
+            promise = getLanguageById(data?.language as string)
                 .then((item: LanguageEntity) => [{ title: 'Мова' }, { title: item.name }]);
-        } else if (router.query?.bookType) {
-            promise = getBookTypeById(router.query?.bookType as string)
+        } else if (data?.bookType) {
+            promise = getBookTypeById(data?.bookType as string)
                 .then((item: BookTypeEntity) => [{ title: 'Тип' }, { title: item.name }]);
-        } else if (router.query?.author) {
-            promise = getAuthorById(router.query?.author as string)
+        } else if (data?.author) {
+            promise = getAuthorById(data?.author as string)
                 .then((item: AuthorEntity) => [{ title: 'Автор' }, { title: item.name }]);
-        } else if (router.query?.publishingHouse) {
-            promise = getPublishingHouseById(router.query?.publishingHouse as string)
+        } else if (data?.publishingHouse) {
+            promise = getPublishingHouseById(data?.publishingHouse as string)
                 .then((item: PublishingHouseEntity) => [{ title: 'Видавництво' }, { title: item.name }]);
-        } else if (router.query?.tags) {
-            setOption([{ title: 'Тег' }, { title: router.query.tags as string }]);
+        } else if (data?.tags) {
+            setOption([{ title: 'Тег' }, { title: data.tags as string }]);
         }
 
         if (promise) {
@@ -123,14 +137,12 @@ export default function Books() {
         } else {
             setLoadingOption(false);
         }
-    }, [router.query]);
+    }
 
-    function refreshData(resetOption = true) {
+    function refreshData() {
         refetch();
-        if (resetOption) {
-            setError(null);
-            setOption(null);
-        }
+        setOption(null);
+        setError(null);
     }
 
     function onPageChange(val: number) {
