@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import { BookFilter } from '@/lib/data/types';
+import { BookEntity, BookFilter, IPageable } from '@/lib/data/types';
 import { useLanguageOptions } from '@/lib/graphql/queries/language/hooks';
 import { Grid } from '@mui/material';
 import CustomSelectField from '@/components/form-fields/custom-select-field';
@@ -11,19 +11,41 @@ import { useBookTypeOptions } from '@/lib/graphql/queries/book-type/hook';
 import { usePageTypeOptions } from '@/lib/graphql/queries/page-type/hook';
 import { useAuthorOptions } from '@/lib/graphql/queries/author/hook';
 import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
+import { usePublishingHouseOptions } from '@/lib/graphql/queries/publishing-house/hook';
+import { TableKey } from '@/components/table/table-key';
 
-export function BookFilters({ tableKeys, onApply, pageSettings, showAlwaysSorting = false, onSort }) {
-    const formContext = useForm<BookFilter>();
+interface IBookFiltersProps {
+    defaultValues?: BookFilter,
+    tableKeys: TableKey<BookEntity>[],
+    onApply: (values?: BookFilter) => void,
+    pageSettings: IPageable,
+    showAlwaysSorting?: boolean,
+    onSort: (pageSettings: IPageable) => void
+}
+
+export function BookFilters(props: IBookFiltersProps) {
+    const formContext = useForm<BookFilter>({ defaultValues: props.defaultValues });
     const { items: bookTypeOptions } = useBookTypeOptions();
     const { items: pageTypeOptions } = usePageTypeOptions();
     const { items: authorOptions } = useAuthorOptions();
     const { items: languageOptions } = useLanguageOptions();
     const { items: coverTypeOptions } = useCoverTypeOptions();
-    const { quickSearch, bookType, author, coverType, pageType, name, language, tags } = formContext.watch();
+    const { items: publishingHouses } = usePublishingHouseOptions();
+    const {
+        quickSearch,
+        bookType,
+        author,
+        coverType,
+        pageType,
+        name,
+        language,
+        tags,
+        publishingHouse
+    } = formContext.watch();
 
     function onClearClick() {
         formContext.reset();
-        onApply();
+        props.onApply();
     }
 
     function clearValue(controlName: keyof BookFilter) {
@@ -31,12 +53,12 @@ export function BookFilters({ tableKeys, onApply, pageSettings, showAlwaysSortin
     }
 
     return (
-        <SortFiltersContainer tableKeys={tableKeys}
-                              showAlwaysSorting={showAlwaysSorting}
-                              pageSettings={pageSettings}
-                              onApply={() => onApply(formContext.getValues())}
+        <SortFiltersContainer tableKeys={props.tableKeys}
+                              showAlwaysSorting={props.showAlwaysSorting}
+                              pageSettings={props.pageSettings}
+                              onApply={() => props.onApply(formContext.getValues())}
                               onClear={() => onClearClick()}
-                              onSort={onSort}>
+                              onSort={props.onSort}>
             <FormContainer formContext={formContext}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
@@ -55,6 +77,16 @@ export function BookFilters({ tableKeys, onApply, pageSettings, showAlwaysSortin
                                          name="tags"
                                          showClear={!!tags}
                                          onClear={() => clearValue('tags')}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <CustomSelectField fullWidth
+                                           options={publishingHouses}
+                                           id="publishing-house-id"
+                                           label="Видавництво"
+                                           name="publishingHouse"
+                                           showClear={!!publishingHouse}
+                                           onClear={() => clearValue('publishingHouse')}/>
                     </Grid>
 
                     <Grid item xs={12}>

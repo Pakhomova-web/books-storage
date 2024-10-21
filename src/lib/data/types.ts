@@ -92,6 +92,7 @@ export class BookFilter {
     isbn?: string;
     language?: string;
     author?: string;
+    publishingHouse?: string;
     isInStock?: boolean;
     tags?: string;
 
@@ -109,6 +110,7 @@ export class BookFilter {
             this.language = data.language;
             this.author = data.author;
             this.isInStock = data.isInStock;
+            this.publishingHouse = data.publishingHouse;
             this.tags = data.tags;
         }
     }

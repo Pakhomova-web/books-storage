@@ -177,6 +177,7 @@ export default function Books() {
 
             <Box sx={pageStyles}>
                 <BookFilters tableKeys={tableKeys}
+                             defaultValues={filters}
                              onApply={(filters: BookFilter) => setFilters(filters)}
                              pageSettings={pageSettings}
                              showAlwaysSorting={true}
