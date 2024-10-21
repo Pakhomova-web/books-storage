@@ -64,7 +64,7 @@ export default function Books() {
         { title: 'Наявність', sortValue: 'numberInStock', type: 'text' }
     ]);
     const [filters, setFilters] = useState<BookFilter>(new BookFilter(router.query));
-    const [option, setOption] = useState<{ title: string, param?: { key: string, item: any } }[]>();
+    const [option, setOption] = useState<{ title: string, param?: string }[]>();
     const [loadingOption, setLoadingOption] = useState<boolean>();
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
     const [error, setError] = useState<ApolloError>();
