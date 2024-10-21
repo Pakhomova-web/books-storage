@@ -84,8 +84,20 @@ export default function Books() {
         }
     }, [gettingError]);
 
+    function clearOptions(clearPublishingHouse = true) {
+        setTag(null);
+        setAuthor(null);
+        setBookSeries(null);
+        if (clearPublishingHouse) {
+            setPublishingHouse(null);
+        }
+        setBookType(null);
+        setLanguage(null);
+    }
+
     useEffect(() => {
         if (router.query?.bookSeries) {
+            clearOptions();
             setLoadingOption(true);
             getBookSeriesById(router.query?.bookSeries as string)
                 .then((item: BookSeriesEntity) => {
@@ -96,6 +108,7 @@ export default function Books() {
                     setLoadingOption(false);
                 });
         } else if (router.query?.language) {
+            clearOptions();
             setLoadingOption(true);
             getLanguageById(router.query?.language as string)
                 .then((item: LanguageEntity) => {
@@ -106,6 +119,7 @@ export default function Books() {
                     setLoadingOption(false);
                 });
         } else if (router.query?.bookType) {
+            clearOptions();
             setLoadingOption(true);
             getBookTypeById(router.query?.bookType as string)
                 .then((item: BookTypeEntity) => {
@@ -116,6 +130,7 @@ export default function Books() {
                     setLoadingOption(false);
                 });
         } else if (router.query?.author) {
+            clearOptions();
             setLoadingOption(true);
             getAuthorById(router.query?.author as string)
                 .then((item: AuthorEntity) => {
@@ -126,28 +141,42 @@ export default function Books() {
                     setLoadingOption(false);
                 });
         } else if (router.query?.publishingHouse) {
-            setLoadingOption(true);
-            getPublishingHouseById(router.query?.publishingHouse as string)
-                .then((item: PublishingHouseEntity) => {
-                    setPublishingHouse(item);
-                    setLoadingOption(false);
-                })
-                .catch(() => {
-                    setLoadingOption(false);
-                });
+            if (bookSeries) {
+                // todo after clicking on publishing house in row -> set it in filters
+                setPublishingHouse(bookSeries.publishingHouse);
+                clearOptions(false);
+                setBookSeries(null);
+                setFilters(router.query);
+            } else {
+                clearOptions();
+                setLoadingOption(true);
+                getPublishingHouseById(router.query?.publishingHouse as string)
+                    .then((item: PublishingHouseEntity) => {
+                        setPublishingHouse(item);
+                        setLoadingOption(false);
+                    })
+                    .catch(() => {
+                        setLoadingOption(false);
+                    });
+            }
         } else if (router.query?.tags) {
+            clearOptions();
             setTag(router.query.tags as string);
         }
     }, [router.query]);
 
-    function refreshData() {
+    function refreshData(resetOption = true) {
+        console.log('refetch');
         refetch();
-        setError(null);
-        setTag(null);
-        setPublishingHouse(null);
-        setAuthor(null);
-        setBookType(null);
-        setBookSeries(null);
+        if (resetOption) {
+            setError(null);
+            setTag(null);
+            setPublishingHouse(null);
+            setAuthor(null);
+            setBookType(null);
+            setBookSeries(null);
+            setLanguage(null);
+        }
     }
 
     function onPageChange(val: number) {

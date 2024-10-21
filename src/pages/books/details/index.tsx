@@ -16,6 +16,7 @@ import { styled } from '@mui/material/styles';
 import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
 import CustomLink from '@/components/custom-link';
+import bookSeries from '@/lib/data/models/book-series';
 
 const StyledImageBox = styled(Box)(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
@@ -57,7 +58,7 @@ export default function BookDetails() {
                 {
                     title: 'Серія',
                     type: 'text',
-                    renderValue: (book: BookEntity) => book.bookSeries.name,
+                    renderValue: (book: BookEntity) => book.bookSeries.name === '-' ? '' : book.bookSeries.name,
                     onValueClick: () => {
                         router.push(`/books?bookSeries=${book.bookSeries.id}`);
                     }
