@@ -64,12 +64,7 @@ export default function Books() {
         { title: 'Наявність', sortValue: 'numberInStock', type: 'text' }
     ]);
     const [filters, setFilters] = useState<BookFilter>(new BookFilter(router.query));
-    const [bookType, setBookType] = useState<BookTypeEntity>();
-    const [author, setAuthor] = useState<AuthorEntity>();
-    const [language, setLanguage] = useState<LanguageEntity>();
-    const [publishingHouse, setPublishingHouse] = useState<PublishingHouseEntity>();
-    const [bookSeries, setBookSeries] = useState<BookSeriesEntity>();
-    const [tag, setTag] = useState<string>();
+    const [option, setOption] = useState<{ title: string, param?: { key: string, item: any } }[]>();
     const [loadingOption, setLoadingOption] = useState<boolean>();
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
     const [error, setError] = useState<ApolloError>();
@@ -84,98 +79,57 @@ export default function Books() {
         }
     }, [gettingError]);
 
-    function clearOptions(clearPublishingHouse = true) {
-        setTag(null);
-        setAuthor(null);
-        setBookSeries(null);
-        if (clearPublishingHouse) {
-            setPublishingHouse(null);
-        }
-        setBookType(null);
-        setLanguage(null);
-    }
-
     useEffect(() => {
+        setOption(null);
+        setLoadingOption(true);
+        let promise: Promise<any>;
+
         if (router.query?.bookSeries) {
-            clearOptions();
-            setLoadingOption(true);
-            getBookSeriesById(router.query?.bookSeries as string)
-                .then((item: BookSeriesEntity) => {
-                    setBookSeries(item);
-                    setLoadingOption(false);
-                })
-                .catch(() => {
-                    setLoadingOption(false);
-                });
+            promise = getBookSeriesById(router.query?.bookSeries as string)
+                .then((item: BookSeriesEntity) => [
+                    { title: 'Видавництво' },
+                    {
+                        title: item.publishingHouse.name,
+                        param: `publishingHouse=${item.publishingHouse.id}`
+                    },
+                    { title: 'Серія' },
+                    { title: item.name }
+                ]);
         } else if (router.query?.language) {
-            clearOptions();
-            setLoadingOption(true);
-            getLanguageById(router.query?.language as string)
-                .then((item: LanguageEntity) => {
-                    setLanguage(item);
-                    setLoadingOption(false);
-                })
-                .catch(() => {
-                    setLoadingOption(false);
-                });
+            promise = getLanguageById(router.query?.language as string)
+                .then((item: LanguageEntity) => [{ title: 'Мова' }, { title: item.name }]);
         } else if (router.query?.bookType) {
-            clearOptions();
-            setLoadingOption(true);
-            getBookTypeById(router.query?.bookType as string)
-                .then((item: BookTypeEntity) => {
-                    setBookType(item);
-                    setLoadingOption(false);
-                })
-                .catch(() => {
-                    setLoadingOption(false);
-                });
+            promise = getBookTypeById(router.query?.bookType as string)
+                .then((item: BookTypeEntity) => [{ title: 'Тип' }, { title: item.name }]);
         } else if (router.query?.author) {
-            clearOptions();
-            setLoadingOption(true);
-            getAuthorById(router.query?.author as string)
-                .then((item: AuthorEntity) => {
-                    setAuthor(item);
+            promise = getAuthorById(router.query?.author as string)
+                .then((item: AuthorEntity) => [{ title: 'Автор' }, { title: item.name }]);
+        } else if (router.query?.publishingHouse) {
+            promise = getPublishingHouseById(router.query?.publishingHouse as string)
+                .then((item: PublishingHouseEntity) => [{ title: 'Видавництво' }, { title: item.name }]);
+        } else if (router.query?.tags) {
+            setOption([{ title: 'Тег' }, { title: router.query.tags as string }]);
+        }
+
+        if (promise) {
+            promise
+                .then(newOpt => {
+                    setOption(newOpt);
                     setLoadingOption(false);
                 })
                 .catch(() => {
                     setLoadingOption(false);
                 });
-        } else if (router.query?.publishingHouse) {
-            if (bookSeries) {
-                // todo after clicking on publishing house in row -> set it in filters
-                setPublishingHouse(bookSeries.publishingHouse);
-                clearOptions(false);
-                setBookSeries(null);
-                setFilters(router.query);
-            } else {
-                clearOptions();
-                setLoadingOption(true);
-                getPublishingHouseById(router.query?.publishingHouse as string)
-                    .then((item: PublishingHouseEntity) => {
-                        setPublishingHouse(item);
-                        setLoadingOption(false);
-                    })
-                    .catch(() => {
-                        setLoadingOption(false);
-                    });
-            }
-        } else if (router.query?.tags) {
-            clearOptions();
-            setTag(router.query.tags as string);
+        } else {
+            setLoadingOption(false);
         }
     }, [router.query]);
 
     function refreshData(resetOption = true) {
-        console.log('refetch');
         refetch();
         if (resetOption) {
             setError(null);
-            setTag(null);
-            setPublishingHouse(null);
-            setAuthor(null);
-            setBookType(null);
-            setBookSeries(null);
-            setLanguage(null);
+            setOption(null);
         }
     }
 
@@ -203,11 +157,11 @@ export default function Books() {
         router.push(`/books/details?${getParamsQueryString({ id: book.id, filters: query })}`);
     }
 
-    function renderBackBox(items: { title: string, param?: string }[]) {
+    function renderBackBox() {
         return (
             <Box ml={1} display="flex" alignItems="center" flexWrap="wrap" gap={1}>
                 <CustomLink onClick={() => router.push('/')}>Головна</CustomLink>
-                {items.map((item, index) =>
+                {option.map((item, index) =>
                     <Box key={index} display="flex" alignItems="center" gap={1}>
                         <ArrowForwardIcon fontSize="small"/>
                         {item.param ?
@@ -235,24 +189,7 @@ export default function Books() {
                              onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></BookFilters>
 
                 <Box p={1} display="flex" flexWrap="wrap" alignItems="center">
-                    {!loadingOption &&
-                        (
-                            !!bookType && renderBackBox([{ title: bookType.name }]) ||
-                            !!author && renderBackBox([{ title: 'Автор' }, { title: author.name }]) ||
-                            !!publishingHouse && renderBackBox([{ title: 'Видавництво' }, { title: publishingHouse.name }]) ||
-                            !!language && renderBackBox([{ title: 'Мова' }, { title: language.name }]) ||
-                            !!tag && renderBackBox([{ title: 'Тег' }, { title: tag }]) ||
-                            !!bookSeries && renderBackBox([
-                                { title: 'Видавництво' },
-                                {
-                                    title: bookSeries.publishingHouse.name,
-                                    param: `publishingHouse=${bookSeries.publishingHouse.id}`
-                                },
-                                { title: 'Серія' },
-                                { title: bookSeries.name }
-                            ])
-                        )
-                    }
+                    {!loadingOption && option && renderBackBox()}
                 </Box>
 
                 {items.length ?
