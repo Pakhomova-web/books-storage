@@ -65,15 +65,22 @@ export default function Books() {
     ]);
     const [filters, setFilters] = useState<BookFilter>(new BookFilter(router.query));
     const [option, setOption] = useState<{ title: string, param?: string }[]>();
-    const [toRefreshData, setToRefreshData] = useState<boolean>(true);
+    const [toRefreshData, setToRefreshData] = useState<boolean>(false);
     const [loadingOption, setLoadingOption] = useState<boolean>();
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
     const [error, setError] = useState<ApolloError>();
 
     useEffect(() => {
         if (toRefreshData) {
+            const url = new URL(window.location.href);
+
+            Object.keys(filters).forEach(key => {
+                if (filters[key] !== null && filters[key] !== undefined) {
+                    url.searchParams.set(key, filters[key]);
+                }
+            });
             updateOption(filters, false);
-            refreshData();
+            window.history.pushState(null, '', url.toString());
         } else {
             setToRefreshData(true);
         }

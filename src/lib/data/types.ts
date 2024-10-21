@@ -104,7 +104,7 @@ export class BookFilter {
             this.isbn = data.isbn;
             this.language = data.language;
             this.author = data.author;
-            this.isInStock = data.isInStock;
+            this.isInStock = data.isInStock?.toString() === 'true';
             this.publishingHouse = data.publishingHouse;
             this.tags = data.tags;
         }
