@@ -55,7 +55,7 @@ export default function OrderModal({ open, item, onClose, isAdmin }: IOrderModal
     });
     const { update, updating, updatingError } = useUpdateOrder();
     const { create, creating, creatingError } = useCreateOrder();
-    const { items: deliveryOptions, loading: loadingDeliveryOptions } = useDeliveryOptions<IOption>();
+    const { items: deliveryOptions, loading: loadingDeliveryOptions } = useDeliveryOptions();
     const { checkAuth } = useAuth();
     const { deliveryId } = formContext.watch();
 

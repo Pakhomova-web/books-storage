@@ -1,4 +1,4 @@
-import { BookTypeEntity, IPageable } from '@/lib/data/types';
+import { BookTypeEntity, IOption, IPageable, NameFilter } from '@/lib/data/types';
 import {
     _useCreateItem,
     _useDeleteItemById,
@@ -16,15 +16,15 @@ import {
 } from '@/lib/graphql/queries/book-type/queries';
 
 export function useBookTypes(pageSettings?: IPageable, filters?: BookTypeEntity) {
-    return _useItems<BookTypeEntity>(bookTypesQuery, pageSettings, filters);
+    return _useItems<BookTypeEntity, NameFilter>(bookTypesQuery, pageSettings, filters);
 }
 
 export function getBookTypeById(id: string): Promise<BookTypeEntity> {
     return getItemById<BookTypeEntity>(bookTypeByIdQuery, id);
 }
 
-export function useBookTypeOptions<T>(pageSettings?: IPageable) {
-    return _useItems<T>(bookTypeOptionsQuery, pageSettings);
+export function useBookTypeOptions() {
+    return _useItems<IOption, NameFilter>(bookTypeOptionsQuery);
 }
 
 export function useUpdateBookType() {

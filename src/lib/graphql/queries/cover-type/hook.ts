@@ -1,4 +1,4 @@
-import { CoverTypeEntity, IPageable } from '@/lib/data/types';
+import { CoverTypeEntity, IOption, IPageable, NameFilter } from '@/lib/data/types';
 import { _useCreateItem, _useDeleteItemById, _useItems, _useUpdateItem } from '@/lib/graphql/base-hooks';
 import {
     coverTypeOptionsQuery,
@@ -12,8 +12,8 @@ export function useCoverTypes(pageSettings?: IPageable, filters?: CoverTypeEntit
     return _useItems(coverTypesQuery, pageSettings, filters);
 }
 
-export function useCoverTypeOptions<T>(pageSettings?: IPageable) {
-    return _useItems<T>(coverTypeOptionsQuery, pageSettings);
+export function useCoverTypeOptions() {
+    return _useItems<IOption, NameFilter>(coverTypeOptionsQuery);
 }
 
 export function useUpdateCoverType() {

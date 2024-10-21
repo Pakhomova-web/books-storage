@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useBookSeries, useDeleteBookSeries } from '@/lib/graphql/queries/book-series/hook';
-import { BookSeriesEntity, IBookSeriesFilter, IPageable } from '@/lib/data/types';
+import { BookSeriesEntity, BookSeriesFilter, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
@@ -46,7 +46,7 @@ export default function BookSeries() {
     ]);
     const [selectedItem, setSelectedItem] = useState<BookSeriesEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
-    const [filters, setFilters] = useState<IBookSeriesFilter>();
+    const [filters, setFilters] = useState<BookSeriesFilter>();
     const { items, totalCount, gettingError, loading, refetch } = useBookSeries(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteBookSeries();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
@@ -99,7 +99,7 @@ export default function BookSeries() {
             {isAdmin(user) &&
               <Box sx={pageStyles}>
                 <BookSeriesFilters tableKeys={tableKeys}
-                                   onApply={(filters: IBookSeriesFilter) => setFilters(filters)}
+                                   onApply={(filters: BookSeriesFilter) => setFilters(filters)}
                                    pageSettings={pageSettings}
                                    onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></BookSeriesFilters>
 

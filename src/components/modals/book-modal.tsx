@@ -1,4 +1,4 @@
-import { BookEntity, BookSeriesEntity, IBookSeriesFilter, IOption } from '@/lib/data/types';
+import { BookEntity, BookSeriesEntity, BookSeriesFilter, IOption } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useCreateBook, useUpdateBook } from '@/lib/graphql/queries/book/hook';
 import React, { useEffect, useState } from 'react';
@@ -72,13 +72,13 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     const { publishingHouseId, bookSeriesId, imageLink, tags, tag } = formContext.watch();
     const { update, updating, updatingError } = useUpdateBook();
     const { create, creating, creatingError } = useCreateBook();
-    const { items: pageTypeOptions, loading: loadingPageTypes } = usePageTypeOptions<IOption>();
-    const { items: authorOptions, loading: loadingAuthors } = useAuthorOptions<IOption>();
-    const { items: languageOptions, loading: loadingLanguages } = useLanguageOptions<IOption>();
+    const { items: pageTypeOptions, loading: loadingPageTypes } = usePageTypeOptions();
+    const { items: authorOptions, loading: loadingAuthors } = useAuthorOptions();
+    const { items: languageOptions, loading: loadingLanguages } = useLanguageOptions();
     const [bookSeriesOptions, setBookSeriesOptions] = useState<BookSeriesEntity[]>([]);
-    const { items: bookTypeOptions, loading: loadingBookTypes } = useBookTypeOptions<IOption>();
-    const { items: publishingHouseOptions, loading: loadingPublishingHouses } = usePublishingHouseOptions<IOption>();
-    const { items: coverTypeOptions, loading: loadingCoverTypes } = useCoverTypeOptions<IOption>();
+    const { items: bookTypeOptions, loading: loadingBookTypes } = useBookTypeOptions();
+    const { items: publishingHouseOptions, loading: loadingPublishingHouses } = usePublishingHouseOptions();
+    const { items: coverTypeOptions, loading: loadingCoverTypes } = useCoverTypeOptions();
     const [loadingBookSeries, setLoadingBookSeries] = useState<boolean>();
     const { checkAuth } = useAuth();
 
@@ -86,7 +86,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         if (publishingHouseId) {
             setLoadingBookSeries(true);
             setBookSeriesOptions([]);
-            getBookSeriesOptions({ publishingHouse: publishingHouseId } as IBookSeriesFilter)
+            getBookSeriesOptions({ publishingHouse: publishingHouseId } as BookSeriesFilter)
                 .then(options => {
                     setLoadingBookSeries(false);
                     setBookSeriesOptions(options);

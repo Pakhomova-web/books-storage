@@ -75,11 +75,6 @@ export interface IPageable {
     rowsPerPage?: number
 }
 
-export interface IBookSeriesFilter {
-    name?: string,
-    publishingHouse?: string
-}
-
 export class BookFilter {
     quickSearch?: string;
     id?: string;
@@ -112,6 +107,28 @@ export class BookFilter {
             this.isInStock = data.isInStock;
             this.publishingHouse = data.publishingHouse;
             this.tags = data.tags;
+        }
+    }
+}
+
+export class BookSeriesFilter {
+    name?: string;
+    publishingHouse?: string;
+
+    constructor(data?) {
+        if (data) {
+            this.publishingHouse = data.publishingHouse;
+            this.name = data.name;
+        }
+    }
+}
+
+export class NameFilter {
+    name?: string;
+
+    constructor(data?) {
+        if (data) {
+            this.name = data.name;
         }
     }
 }

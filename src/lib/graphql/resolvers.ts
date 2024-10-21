@@ -27,7 +27,7 @@ import {
 import {
     createBookSeries,
     deleteBookSeries,
-    getBookSeries,
+    getBookSeries, getBookSeriesById,
     getBookSeriesOptions,
     updateBookSeries
 } from '@/lib/data/book-series';
@@ -133,6 +133,13 @@ const resolvers: Resolvers = {
                 parseError(error);
             }
         },
+        fullBookSeriesOptions: async (_root, { filters }) => {
+            try {
+                return getBookSeriesOptions(filters, true);
+            } catch (error) {
+                parseError(error);
+            }
+        },
         books: async (_root, { pageSettings, filters }) => {
             try {
                 return getBooks(<IPageable>pageSettings, filters);
@@ -171,6 +178,13 @@ const resolvers: Resolvers = {
         languageById: async (_root, { id }) => {
             try {
                 return getLanguageById(id);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        bookSeriesByIdQuery: async (_root, { id }) => {
+            try {
+                return getBookSeriesById(id);
             } catch (error) {
                 parseError(error);
             }

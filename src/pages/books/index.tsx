@@ -7,8 +7,10 @@ import {
     AuthorEntity,
     BookEntity,
     BookFilter,
+    BookSeriesEntity,
     BookTypeEntity,
-    IPageable, LanguageEntity,
+    IPageable,
+    LanguageEntity,
     PublishingHouseEntity
 } from '@/lib/data/types';
 import { styled } from '@mui/material/styles';
@@ -28,6 +30,7 @@ import HdrWeakIcon from '@mui/icons-material/HdrWeak';
 import { useAuth } from '@/components/auth-context';
 import { TableKey } from '@/components/table/table-key';
 import { getLanguageById } from '@/lib/graphql/queries/language/hooks';
+import { getBookSeriesById } from '@/lib/graphql/queries/book-series/hook';
 
 const bookBoxStyles = { height: '250px', maxHeight: '50vw' };
 const bookPriceStyles = {
@@ -64,6 +67,7 @@ export default function Books() {
     const [author, setAuthor] = useState<AuthorEntity>();
     const [language, setLanguage] = useState<LanguageEntity>();
     const [publishingHouse, setPublishingHouse] = useState<PublishingHouseEntity>();
+    const [bookSeries, setBookSeries] = useState<BookSeriesEntity>();
     const [tag, setTag] = useState<string>();
     const [loadingOption, setLoadingOption] = useState<boolean>();
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
@@ -80,7 +84,17 @@ export default function Books() {
     }, [gettingError]);
 
     useEffect(() => {
-        if (router.query?.language) {
+        if (router.query?.bookSeries) {
+            setLoadingOption(true);
+            getBookSeriesById(router.query?.bookSeries as string)
+                .then((item: BookSeriesEntity) => {
+                    setBookSeries(item);
+                    setLoadingOption(false);
+                })
+                .catch(() => {
+                    setLoadingOption(false);
+                });
+        } else if (router.query?.language) {
             setLoadingOption(true);
             getLanguageById(router.query?.language as string)
                 .then((item: LanguageEntity) => {
@@ -132,6 +146,7 @@ export default function Books() {
         setPublishingHouse(null);
         setAuthor(null);
         setBookType(null);
+        setBookSeries(null);
     }
 
     function onPageChange(val: number) {
@@ -158,13 +173,19 @@ export default function Books() {
         router.push(`/books/details?${getParamsQueryString({ id: book.id, filters: query })}`);
     }
 
-    function renderBackBox(items: string[]) {
+    function renderBackBox(items: { title: string, param?: string }[]) {
         return (
             <Box ml={1} display="flex" alignItems="center" flexWrap="wrap" gap={1}>
                 <CustomLink onClick={() => router.push('/')}>Головна</CustomLink>
                 {items.map((item, index) =>
                     <Box key={index} display="flex" alignItems="center" gap={1}>
-                        <ArrowForwardIcon fontSize="small"/>{item}
+                        <ArrowForwardIcon fontSize="small"/>
+                        {item.param ?
+                            <CustomLink onClick={() => router.push(`/books?${item.param}`)}>
+                                {item.title}
+                            </CustomLink> :
+                            item.title
+                        }
                     </Box>)
                 }
             </Box>
@@ -186,11 +207,20 @@ export default function Books() {
                 <Box p={1} display="flex" flexWrap="wrap" alignItems="center">
                     {!loadingOption &&
                         (
-                            !!bookType && renderBackBox([bookType.name]) ||
-                            !!author && renderBackBox(['Автор', author.name]) ||
-                            !!publishingHouse && renderBackBox(['Видавництво', publishingHouse.name]) ||
-                            !!language && renderBackBox(['Мова', language.name]) ||
-                            !!tag && renderBackBox(['Тег', tag])
+                            !!bookType && renderBackBox([{ title: bookType.name }]) ||
+                            !!author && renderBackBox([{ title: 'Автор' }, { title: author.name }]) ||
+                            !!publishingHouse && renderBackBox([{ title: 'Видавництво' }, { title: publishingHouse.name }]) ||
+                            !!language && renderBackBox([{ title: 'Мова' }, { title: language.name }]) ||
+                            !!tag && renderBackBox([{ title: 'Тег' }, { title: tag }]) ||
+                            !!bookSeries && renderBackBox([
+                                { title: 'Видавництво' },
+                                {
+                                    title: bookSeries.publishingHouse.name,
+                                    param: `publishingHouse=${bookSeries.publishingHouse.id}`
+                                },
+                                { title: 'Серія' },
+                                { title: bookSeries.name }
+                            ])
                         )
                     }
                 </Box>

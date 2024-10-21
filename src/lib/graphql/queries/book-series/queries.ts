@@ -24,6 +24,15 @@ export const bookSeriesQuery = gql`
     ${bookSeriesFragment}
 `;
 
+export const fullBookSeriesOptionsQuery = gql`
+    query BookSeries($filters: BookSeriesSearchInput) {
+        items: fullBookSeriesOptions(filters: $filters) {
+            ...BookSeries
+        }
+    }
+    ${bookSeriesFragment}
+`;
+
 export const bookSeriesOptionsQuery = gql`
     query BookSeries($filters: BookSeriesSearchInput) {
         items: bookSeriesOptions(filters: $filters) {
@@ -40,6 +49,16 @@ export const deleteBookSeriesQuery = gql`
         }
     }
 `;
+
+export const bookSeriesByIdQuery = gql`
+    query BookSeries($id: ID!) {
+        item: bookSeriesByIdQuery(id: $id) {
+            ...BookSeries
+        }
+    }
+    ${bookSeriesFragment}
+`;
+
 
 export const createBookSeriesQuery = gql`
     mutation CreateBookSeries($input: BookSeriesCreateInput!) {

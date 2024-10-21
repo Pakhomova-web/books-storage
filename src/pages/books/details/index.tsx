@@ -54,7 +54,14 @@ export default function BookDetails() {
                         router.push(`/books?publishingHouse=${book.bookSeries.publishingHouse.id}`);
                     }
                 },
-                { title: 'Серія', type: 'text', renderValue: (book: BookEntity) => book.bookSeries.name },
+                {
+                    title: 'Серія',
+                    type: 'text',
+                    renderValue: (book: BookEntity) => book.bookSeries.name,
+                    onValueClick: () => {
+                        router.push(`/books?bookSeries=${book.bookSeries.id}`);
+                    }
+                },
                 {
                     title: 'Тип',
                     type: 'text',

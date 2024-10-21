@@ -112,12 +112,14 @@ const typeDefs =  /* GraphQL */ `
         deliveries(pageSettings: PageableInput, filters: SearchByNameInput): [Delivery!]
         orders(pageSettings: PageableInput, filters: SearchByNameInput): OrderSubList
         bookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
+        fullBookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
         bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): [BookType!]
         bookById(id: ID!): Book
         bookTypeById(id: ID!): BookType
         authorById(id: ID!): Author
         publishingHouseById(id: ID!): PublishingHouse
         languageById(id: ID!): Language
+        bookSeriesByIdQuery(id: ID!): BookSeries
 
         refreshToken(refreshToken: String!): UserToken!
     }

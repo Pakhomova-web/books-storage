@@ -1,9 +1,9 @@
-import { BookSeriesEntity, IBookSeriesFilter, IPageable } from '@/lib/data/types';
+import { BookSeriesEntity, BookSeriesFilter, IPageable } from '@/lib/data/types';
 import BookSeries from '@/lib/data/models/book-series';
 import { GraphQLError } from 'graphql/error';
 import { getByName, getValidFilters, setFiltersAndPageSettingsToQuery } from '@/lib/data/base';
 
-export async function getBookSeries(pageSettings?: IPageable, filters?: IBookSeriesFilter): Promise<{
+export async function getBookSeries(pageSettings?: IPageable, filters?: BookSeriesFilter): Promise<{
     items: BookSeriesEntity[],
     totalCount: number
 }> {
@@ -22,15 +22,28 @@ export async function getBookSeries(pageSettings?: IPageable, filters?: IBookSer
     return { items, totalCount };
 }
 
-export async function getBookSeriesOptions(filters?: IBookSeriesFilter): Promise<BookSeriesEntity[]> {
+export async function getBookSeriesOptions(filters?: BookSeriesFilter, fully = false): Promise<BookSeriesEntity[]> {
     const { andFilters } = getValidFilters(filters);
+    const query = BookSeries.find();
 
-    return BookSeries.find().and(andFilters).sort({ name: 'asc' });
+    if (!!andFilters.length) {
+        query.and(andFilters);
+    }
+    if (fully) {
+        query.populate('publishingHouse')
+    }
+    return query.sort({ name: 'asc' });
 }
 
 
 export async function getBookSeriesById(id: string) {
-    return BookSeries.findById(id);
+    if (!id) {
+        throw new GraphQLError(`No Book Series found with id ${id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+
+    return BookSeries.findById(id).populate('publishingHouse');
 }
 
 export async function createBookSeries(input: BookSeriesEntity) {

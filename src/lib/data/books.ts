@@ -11,10 +11,8 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
     const { quickSearch, andFilters } = getValidFilters(filters);
     const indexFilterByPublishingHouse = andFilters.findIndex(filter => filter.publishingHouse);
 
-    console.log(andFilters);
     if (indexFilterByPublishingHouse !== -1) {
         const bookSeries = await BookSeries.find(andFilters[indexFilterByPublishingHouse], 'id');
-        console.log(bookSeries);
 
         if (bookSeries.length) {
             andFilters.push({ bookSeries: bookSeries.map(bookSeries => bookSeries.id) });

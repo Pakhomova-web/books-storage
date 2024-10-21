@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import { BookEntity, BookFilter, IPageable } from '@/lib/data/types';
+import { BookEntity, BookFilter, BookSeriesFilter, IPageable } from '@/lib/data/types';
 import { useLanguageOptions } from '@/lib/graphql/queries/language/hooks';
 import { Grid } from '@mui/material';
 import CustomSelectField from '@/components/form-fields/custom-select-field';
@@ -13,6 +13,7 @@ import { useAuthorOptions } from '@/lib/graphql/queries/author/hook';
 import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
 import { usePublishingHouseOptions } from '@/lib/graphql/queries/publishing-house/hook';
 import { TableKey } from '@/components/table/table-key';
+import { useBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 
 interface IBookFiltersProps {
     defaultValues?: BookFilter,
@@ -25,12 +26,6 @@ interface IBookFiltersProps {
 
 export function BookFilters(props: IBookFiltersProps) {
     const formContext = useForm<BookFilter>({ defaultValues: props.defaultValues });
-    const { items: bookTypeOptions } = useBookTypeOptions();
-    const { items: pageTypeOptions } = usePageTypeOptions();
-    const { items: authorOptions } = useAuthorOptions();
-    const { items: languageOptions } = useLanguageOptions();
-    const { items: coverTypeOptions } = useCoverTypeOptions();
-    const { items: publishingHouses } = usePublishingHouseOptions();
     const {
         quickSearch,
         bookType,
@@ -40,8 +35,28 @@ export function BookFilters(props: IBookFiltersProps) {
         name,
         language,
         tags,
-        publishingHouse
+        publishingHouse,
+        bookSeries
     } = formContext.watch();
+    const { items: bookTypeOptions } = useBookTypeOptions();
+    const { items: pageTypeOptions } = usePageTypeOptions();
+    const { items: authorOptions } = useAuthorOptions();
+    const { items: languageOptions } = useLanguageOptions();
+    const { items: coverTypeOptions } = useCoverTypeOptions();
+    const { items: publishingHouses } = usePublishingHouseOptions();
+    const {
+        items: bookSeriesOptions,
+        loading: loadingBookSeries,
+        refetch: refetchBookSeries
+    } = useBookSeriesOptions(publishingHouse ? new BookSeriesFilter({ publishingHouse }) : null, !publishingHouse);
+
+    useEffect(() => {
+        if (publishingHouses) {
+            refetchBookSeries({ publishingHouse }, false);
+        } else {
+            formContext.setValue('bookSeries', null);
+        }
+    }, [publishingHouse]);
 
     function onClearClick() {
         formContext.reset();
@@ -87,6 +102,17 @@ export function BookFilters(props: IBookFiltersProps) {
                                            name="publishingHouse"
                                            showClear={!!publishingHouse}
                                            onClear={() => clearValue('publishingHouse')}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <CustomSelectField fullWidth
+                                           options={bookSeriesOptions}
+                                           id="book-series-id"
+                                           loading={loadingBookSeries}
+                                           label="Серія"
+                                           name="bookSeries"
+                                           showClear={!!bookSeries}
+                                           onClear={() => clearValue('bookSeries')}/>
                     </Grid>
 
                     <Grid item xs={12}>

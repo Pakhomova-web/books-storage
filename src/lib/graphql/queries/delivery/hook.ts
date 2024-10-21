@@ -1,4 +1,4 @@
-import { DeliveryEntity, IPageable } from '@/lib/data/types';
+import { DeliveryEntity, IOption, IPageable, NameFilter } from '@/lib/data/types';
 import { _useCreateItem, _useDeleteItemById, _useItems, _useUpdateItem } from '@/lib/graphql/base-hooks';
 import {
     createDeliveryQuery, deleteDeliveryQuery,
@@ -8,11 +8,11 @@ import {
 } from '@/lib/graphql/queries/delivery/queries';
 
 export function useDeliveries(pageSettings?: IPageable, filters?: DeliveryEntity) {
-    return _useItems<DeliveryEntity>(deliveriesQuery, pageSettings, filters);
+    return _useItems<DeliveryEntity, NameFilter>(deliveriesQuery, pageSettings, filters);
 }
 
-export function useDeliveryOptions<T>(pageSettings?: IPageable) {
-    return _useItems<T>(deliveryOptionsQuery, pageSettings);
+export function useDeliveryOptions() {
+    return _useItems<IOption, NameFilter>(deliveryOptionsQuery);
 }
 
 export function useUpdateDelivery() {

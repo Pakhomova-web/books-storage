@@ -2,7 +2,7 @@ import { ApolloError, DocumentNode, useMutation, useQuery } from '@apollo/client
 import { IPageable } from '@/lib/data/types';
 import { apolloClient } from '@/lib/apollo';
 
-export function _useItems<T>(query: DocumentNode, pageSettings?: IPageable, filters?): {
+export function _useItems<T, K>(query: DocumentNode, pageSettings?: IPageable, filters?: K): {
     items: T[],
     totalCount?: number,
     loading: boolean,
