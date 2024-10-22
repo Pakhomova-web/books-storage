@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { FormContainer, useForm } from 'react-hook-form-mui';
+import { FormContainer, MultiSelectElement, useForm } from 'react-hook-form-mui';
 import { BookEntity, BookFilter, BookSeriesFilter, IPageable } from '@/lib/data/types';
 import { useLanguageOptions } from '@/lib/graphql/queries/language/hooks';
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import CustomSelectField from '@/components/form-fields/custom-select-field';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import CustomCheckbox from '@/components/form-fields/custom-checkbox';
@@ -15,6 +15,8 @@ import { usePublishingHouseOptions } from '@/lib/graphql/queries/publishing-hous
 import { TableKey } from '@/components/table/table-key';
 import { useBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 import CustomMultiSelectField from '@/components/form-fields/custom-multi-select-field';
+import { customFieldClearBtnStyles, styleVariables } from '@/constants/styles-variables';
+import Loading from '@/components/loading';
 
 interface IBookFiltersProps {
     defaultValues?: BookFilter,
@@ -173,13 +175,14 @@ export function BookFilters(props: IBookFiltersProps) {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <CustomMultiSelectField fullWidth
+                        <Box sx={styleVariables.positionRelative}>
+                            <MultiSelectElement fullWidth
                                                 options={authorOptions}
                                                 id="authors"
                                                 label="Автори"
-                                                name="authors"
-                                                showClear={!!authors?.length}
-                                                onClear={() => clearValue('authors')}/>
+                                                name="authors" showCheckbox variant="standard"/>
+                            <Box sx={customFieldClearBtnStyles} onClick={() => clearValue('authors')}>Очистити</Box>
+                        </Box>
                     </Grid>
 
                     <Grid item xs={12}>

@@ -19,7 +19,7 @@ export default function CustomTextField({ loading, showClear, onClear, ...props 
         <Box sx={styleVariables.positionRelative}>
             <Loading show={!!loading} isSmall={true}/>
             <StyledTextField {...props} variant="standard"/>
-            {showClear && onClear && <Box sx={customFieldClearBtnStyles} onClick={onClear}>Clear</Box>}
+            {showClear && onClear && <Box sx={customFieldClearBtnStyles} onClick={onClear}>Очистити</Box>}
         </Box>
     );
 }

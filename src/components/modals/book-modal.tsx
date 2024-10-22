@@ -1,5 +1,5 @@
 import { BookEntity, BookSeriesEntity, BookSeriesFilter } from '@/lib/data/types';
-import { FormContainer, useForm } from 'react-hook-form-mui';
+import { FormContainer, MultiSelectElement, useForm } from 'react-hook-form-mui';
 import { useCreateBook, useUpdateBook } from '@/lib/graphql/queries/book/hook';
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Grid } from '@mui/material';
@@ -19,7 +19,8 @@ import { getBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
 import { parseImageFromLink } from '@/utils/utils';
-import CustomMultiSelectField from '@/components/form-fields/custom-multi-select-field';
+import { customFieldClearBtnStyles, styleVariables } from '@/constants/styles-variables';
+import Loading from '@/components/loading';
 
 interface IBookModalProps {
     open: boolean,
@@ -250,13 +251,18 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                  label="Кількість сторінок"
                                  name="numberOfPages"/>
 
-                <CustomMultiSelectField fullWidth
+
+                <Box sx={styleVariables.positionRelative}>
+                    <Loading isSmall={true} show={loadingAuthors}></Loading>
+                    <MultiSelectElement fullWidth
                                         options={authorOptions}
-                                        disabled={!isAdmin}
-                                        loading={loadingAuthors}
-                                        id="authorIds"
+                                        id="authors"
                                         label="Автори"
-                                        name="authorIds"/>
+                                        name="authors" showCheckbox variant="standard"/>
+                    <Box sx={customFieldClearBtnStyles} onClick={() => formContext.setValue('authorIds', null)}>
+                        Очистити
+                    </Box>
+                </Box>
 
                 {isAdmin && <CustomTextField fullWidth
                                              id="numberInStock"

@@ -73,7 +73,8 @@ export const customFieldClearBtnStyles = {
     top: 0,
     right: 0,
     cursor: 'pointer',
-    ...styleVariables.hintFontSize
+    ...styleVariables.hintFontSize,
+    textDecoration: 'underline'
 };
 
 export const positionRelative = { position: 'relative' };

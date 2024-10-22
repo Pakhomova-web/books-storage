@@ -19,7 +19,7 @@ export default function CustomSelectField({ loading, showClear, onClear, ...prop
         <Box sx={styleVariables.positionRelative}>
             <Loading show={!!loading} isSmall={true}/>
             <StyledSelectField {...props} variant="standard" />
-            {showClear && onClear && <Box sx={customFieldClearBtnStyles} onClick={onClear}>Clear</Box>}
+            {showClear && onClear && <Box sx={customFieldClearBtnStyles} onClick={onClear}>Очистити</Box>}
         </Box>
     );
 }
