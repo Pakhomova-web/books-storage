@@ -45,7 +45,7 @@ export function renderActions<T>(rowIndex: number, actions: ITableAction[], item
     }
 
     return (!actions.length || actions.length === 1) ?
-        <Button onClick={() => handleClick(actions[0])}>{getActionItem(actions[0])}</Button> :
+        <Button onClick={() => handleClick(actions[0])}>{getActionItem(actions[0], item)}</Button> :
         <Box>
             <IconButton aria-haspopup="true" onClick={onMenuClick}>
                 <MoreVertIcon/>
@@ -58,7 +58,7 @@ export function renderActions<T>(rowIndex: number, actions: ITableAction[], item
                     MenuListProps={{ 'aria-labelledby': 'basic-button' }}>
                   {actions.map((action, index) => (
                       <MenuItem key={index} onClick={() => handleClick(action)}>
-                          {getActionItem(action)}
+                          {getActionItem(action, item)}
                       </MenuItem>)
                   )}
               </Menu>
@@ -66,7 +66,7 @@ export function renderActions<T>(rowIndex: number, actions: ITableAction[], item
         </Box>;
 }
 
-export function getActionItem(action: ITableAction) {
+export function getActionItem(action: ITableAction, item) {
     let icon = null;
     const styles = {
         display: 'flex',
@@ -84,5 +84,5 @@ export function getActionItem(action: ITableAction) {
             icon = <AddIcon color="primary"/>;
     }
 
-    return <Box gap={1} sx={styles}>{icon}{action.label || ''}</Box>;
+    return <Box gap={1} sx={styles}>{icon}{action.label(item) || ''}</Box>;
 }

@@ -19,8 +19,8 @@ const settingMenuBackdrop = {
     zIndex: 3
 };
 
-const authUrls = ['login', 'sign-in'];
-const commonUrls = ['books', 'books/details'];
+const authUrls = ['/login', '/sign-in'];
+const commonUrls = ['/books', '/books/details'];
 
 export default function Main({ children }) {
     const [loading, setLoading] = useState<boolean>(false);

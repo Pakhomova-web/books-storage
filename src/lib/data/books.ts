@@ -133,12 +133,6 @@ export async function updateBookNumberInStock(input: { id: string, numberInStock
     return input as BookEntity;
 }
 
-export async function deleteBook(id: string) {
-    await Book.findByIdAndDelete(id);
-
-    return { id } as BookEntity;
-}
-
 function _getBookByUnique(name: string, bookSeries: string, bookType: string) {
     return Book.findOne({
         name: new RegExp(`^${name}$`, "i"),

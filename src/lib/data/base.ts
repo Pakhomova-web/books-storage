@@ -47,11 +47,13 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
             if (key === 'quickSearch') {
                 return;
             }
-            if (filters[key]) {
+            if (filters[key] !== null) {
                 if (key === 'name') {
                     andFilters.push({ [key]: getCaseInsensitiveSubstringOption(filters[key]) });
-                } else if (key === 'isInStock' && filters[key]) {
+                } else if (key === 'isInStock') {
                     andFilters.push({ numberInStock: { $gt: 0 } });
+                } else if (key === 'archived') {
+                    andFilters.push({ archived: { $in: [null, false] } });
                 } else {
                     andFilters.push({ [key]: filters[key] });
                 }

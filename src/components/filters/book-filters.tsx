@@ -30,7 +30,6 @@ export function BookFilters(props: IBookFiltersProps) {
     const {
         quickSearch,
         bookType,
-        authors,
         coverType,
         pageType,
         name,

@@ -20,7 +20,7 @@ export default function Orders() {
         type: 'actions',
         actions: isAdmin(user) ? [
             {
-                label: 'Видалити',
+                label: () => 'Видалити',
                 type: TableActionEnum.delete,
                 onClick: (item: OrderEntity) => deleteHandler(item)
             }

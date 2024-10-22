@@ -8,6 +8,7 @@ const bookFragment = gql`
         description
         numberInStock
         numberOfPages
+        archived
         isbn
         format
         imageIds
@@ -42,6 +43,7 @@ const bookFragment = gql`
             description
         }
         tags
+        archived
     }
 `;
 
@@ -64,14 +66,6 @@ export const bookByIdQuery = gql`
         }
     }
     ${bookFragment}
-`;
-
-export const deleteBookQuery = gql`
-    mutation DeleteBook($id: ID!) {
-        item: deleteBook(id: $id) {
-            id
-        }
-    }
 `;
 
 export const createBookQuery = gql`

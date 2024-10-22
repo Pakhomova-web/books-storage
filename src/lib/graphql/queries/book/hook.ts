@@ -1,8 +1,8 @@
 import { BookEntity, BookFilter, IPageable } from '@/lib/data/types';
 import {
-    _useAllItems, _useItemById,
+    _useAllItems,
     _useCreateItem,
-    _useDeleteItemById,
+    _useItemById,
     _usePageableItems,
     _useUpdateItem
 } from '@/lib/graphql/base-hooks';
@@ -10,14 +10,15 @@ import {
     bookByIdQuery,
     booksQuery,
     createBookQuery,
-    deleteBookQuery,
     updateBookNumberInStockQuery,
     updateBookQuery
 } from '@/lib/graphql/queries/book/queries';
-import { GraphQLError } from 'graphql/error';
 
 export function useBooks(pageSettings?: IPageable, filters?: BookFilter) {
-    return _usePageableItems<BookEntity>(booksQuery, 'books', pageSettings, filters);
+    const data =_usePageableItems<BookEntity>(booksQuery, 'books', pageSettings, filters);
+
+    data.items = data.items.map(item => new BookEntity(item));
+    return data;
 }
 
 export function useBook(id: string) {
@@ -26,10 +27,6 @@ export function useBook(id: string) {
 
 export function getAllBooks(pageSettings?: IPageable, filters?: BookFilter) {
     return _useAllItems<BookEntity>(booksQuery, 'books', pageSettings, filters);
-}
-
-export function useDeleteBook() {
-    return _useDeleteItemById(deleteBookQuery);
 }
 
 export function useCreateBook() {

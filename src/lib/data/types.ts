@@ -47,6 +47,7 @@ export class BookEntity {
     numberOfPages: number;
     numberInStock: number;
     price: number;
+    archived: boolean;
     bookSeriesId: string;
     bookSeries?: BookSeriesEntity;
     coverTypeId: string;
@@ -85,6 +86,29 @@ export class BookEntity {
         this.tags = data.tags;
         this.authorIds = data.authorIds;
         this.authors = data.authors;
+        this.archived = data.archived;
+    }
+
+    get dataToUpdate(): Partial<BookEntity> {
+        return {
+            id: this.id,
+            name: this.name,
+            description: this.description,
+            isbn: this.isbn,
+            format: this.format,
+            numberOfPages: this.numberOfPages,
+            numberInStock: this.numberInStock,
+            price: this.price,
+            archived: this.archived,
+            bookTypeId: this.bookTypeId || this.bookType?.id,
+            bookSeriesId: this.bookSeriesId || this.bookSeries?.id,
+            coverTypeId: this.coverTypeId || this.coverType?.id,
+            pageTypeId: this.pageTypeId || this.pageType?.id,
+            languageId: this.languageId || this.language?.id,
+            authorIds: this.authorIds || this.authors.map(({ id }) => id),
+            imageIds: this.imageIds,
+            tags: this.tags
+        };
     }
 }
 
@@ -115,6 +139,7 @@ export class BookFilter {
     publishingHouse?: string;
     isInStock?: boolean;
     tags?: string;
+    archived?: boolean;
 
     constructor(data?) {
         if (data) {
@@ -132,6 +157,7 @@ export class BookFilter {
             this.isInStock = data.isInStock ? data.isInStock.toString() === 'true' : null;
             this.publishingHouse = data.publishingHouse;
             this.tags = data.tags;
+            this.archived = data.archived !== undefined ? data.archived : false;
         }
     }
 }

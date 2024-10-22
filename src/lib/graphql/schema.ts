@@ -50,6 +50,7 @@ const typeDefs =  /* GraphQL */ `
         numberOfPages: Int!
         price: Float!
         numberInStock: Int
+        archived: Boolean
         bookType: BookType!
         bookSeries: BookSeries!
         coverType: CoverType!
@@ -152,7 +153,6 @@ const typeDefs =  /* GraphQL */ `
         updateBook(input: BookUpdateInput!): Book
         updateBookNumberInStock(input: BookUpdateNumberInStockUpdateInput!): Book!
         createBook(input: BookCreateInput!): Book
-        deleteBook(id: ID!): Book
 
         updateAuthor(input: AuthorUpdateInput!): Author
         createAuthor(input: AuthorCreateInput!): Author
@@ -272,6 +272,7 @@ const typeDefs =  /* GraphQL */ `
         format: String
         imageIds: [String],
         tags: [String]
+        archived: Boolean
     }
 
     input BookUpdateInput {
@@ -289,8 +290,9 @@ const typeDefs =  /* GraphQL */ `
         languageId: ID!
         authorIds: [ID]
         format: String
-        imageIds: [String],
+        imageIds: [String]
         tags: [String]
+        archived: Boolean
     }
 
     input BookSearchInput {
@@ -308,6 +310,7 @@ const typeDefs =  /* GraphQL */ `
         isInStock: Boolean
         quickSearch: String
         tags: String
+        archived: Boolean
     }
 
     type BookSubList {
@@ -337,7 +340,7 @@ const typeDefs =  /* GraphQL */ `
         items: [BookSeries!]!
         totalCount: Int!
     }
-    
+
     #    user
 
     input UserCreateInput {

@@ -93,7 +93,7 @@ export default function Books() {
     }, [gettingError]);
 
     useEffect(() => {
-        updateOption(router.query);
+        updateOption({ ...router.query, archived: false });
     }, [router.query]);
 
     function updateOption(data: BookFilter, updateFilters = true) {
@@ -223,21 +223,22 @@ export default function Books() {
                                              justifyContent="space-between"
                                              height="100%">
                                             <Box sx={bookBoxStyles} mb={1}>
-                                                <CustomImage isBookDetails={true} imageId={book.imageIds[0]}></CustomImage>
+                                                <CustomImage isBookDetails={true}
+                                                             imageId={book.imageIds[0]}></CustomImage>
                                             </Box>
                                             <Box sx={bookInfoStyles} textAlign="center">
                                                 {book.bookSeries.publishingHouse.name}{book.bookSeries.name === '-' ? '' : `, ${book.bookSeries.name}`}
                                             </Box>
                                             <Box sx={styleVariables.titleFontSize} textAlign="center">{book.name}</Box>
-                                            {isAdmin(user) &&
-                                              <Box display="flex" alignItems="center" textAlign="center" gap={1}>
-                                                  {book.numberInStock ?
-                                                      <><HdrStrongIcon style={{ color: "green" }}/>В наявності
-                                                          ({book.numberInStock})</> :
-                                                      <><HdrWeakIcon
-                                                          style={{ color: styleVariables.warnColor }}/>Відсутня</>
-                                                  }
-                                              </Box>}
+
+                                            <Box display="flex" alignItems="center" textAlign="center" gap={1}>
+                                                {book.numberInStock ?
+                                                    <><HdrStrongIcon style={{ color: "green" }}/>В наявності
+                                                        {isAdmin(user) && `(${book.numberInStock})`}</> :
+                                                    <><HdrWeakIcon
+                                                        style={{ color: styleVariables.warnColor }}/>Відсутня</>
+                                                }
+                                            </Box>
                                             <Box sx={bookPriceStyles} mt={1}>{renderPrice(book.price)} грн</Box>
                                         </Box>
                                     </StyledGrid>

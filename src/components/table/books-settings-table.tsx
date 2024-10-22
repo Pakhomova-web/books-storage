@@ -5,7 +5,7 @@ import { BookEntity, BookFilter, IPageable } from '@/lib/data/types';
 import { Box, Button } from '@mui/material';
 import { downloadCsv, isAdmin, renderPrice } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
-import { getAllBooks, useBooks, useDeleteBook } from '@/lib/graphql/queries/book/hook';
+import { getAllBooks, useBooks, useUpdateBook } from '@/lib/graphql/queries/book/hook';
 import { ApolloError } from '@apollo/client';
 import Loading from '@/components/loading';
 import { BookFilters } from '@/components/filters/book-filters';
@@ -25,7 +25,8 @@ const subTitleStyles = {
 };
 
 export default function BooksSettingsTable() {
-    const { user, checkAuth } = useAuth();
+    const { user } = useAuth();
+    const { update, updating, updatingError } = useUpdateBook();
     const tableActions: TableKey<BookEntity> = {
         renderMobileLabel: (item: BookEntity) => (
             <>
@@ -53,7 +54,7 @@ export default function BooksSettingsTable() {
         type: 'actions',
         actions: isAdmin(user) ? [
             {
-                label: 'Додати кількість в наявності',
+                label: () => 'Додати кількість в наявності',
                 type: TableActionEnum.add,
                 onClick: (item: BookEntity) => {
                     setError(null);
@@ -62,19 +63,20 @@ export default function BooksSettingsTable() {
                 }
             },
             {
-                label: 'Скопіювати',
+                label: () => 'Скопіювати',
                 type: TableActionEnum.copy,
                 onClick: (item: BookEntity) => {
-                    const data = { ...item, name: null };
+                    const data = new BookEntity({ ...item, name: null, id: null, imageIds: [] });
 
-                    delete data.id;
                     onAdd(data);
                 }
             },
             {
-                label: 'Видалити',
+                label: (item: BookEntity) => item.archived ? 'Разархівувати' : 'Заархівувати',
                 type: TableActionEnum.delete,
-                onClick: (item: BookEntity) => deleteHandler(item)
+                onClick: (item: BookEntity) => {
+                    update({ ...item.dataToUpdate, archived: !item.archived }).then(() => refreshData()).catch();
+                }
             }
         ] : []
     };
@@ -85,6 +87,12 @@ export default function BooksSettingsTable() {
             renderValue: (item: BookEntity) => item.name,
             type: 'text',
             mobileStyleClasses: { ...styleVariables.boldFont, ...styleVariables.mobileBigFontSize }
+        },
+        {
+            title: 'Заархівована',
+            sortValue: 'archived',
+            renderValue: (item: BookEntity) => item.archived ? 'Так' : 'Ні',
+            type: 'text'
         },
         {
             title: 'Кількість сторінок',
@@ -148,9 +156,8 @@ export default function BooksSettingsTable() {
     const [pageSettings, setPageSettings] = useState<IPageable>({
         order: 'asc', orderBy: '', page: 0, rowsPerPage: 5
     });
-    const [filters, setFilters] = useState<BookFilter>();
+    const [filters, setFilters] = useState<BookFilter>({ archived: null });
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
-    const { deleteItem, deletingError, deleting } = useDeleteBook();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [openNumberInStockModal, setOpenNumberInStockModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -159,10 +166,10 @@ export default function BooksSettingsTable() {
     useEffect(() => {
         if (gettingError) {
             setError(gettingError);
-        } else if (deletingError) {
-            setError(deletingError);
+        } else if (updatingError) {
+            setError(updatingError);
         }
-    }, [gettingError, deletingError]);
+    }, [gettingError, updatingError]);
 
     useEffect(() => {
         refreshData();
@@ -172,15 +179,6 @@ export default function BooksSettingsTable() {
         return !numberInStock ? {
             background: styleVariables.redLightColor
         } : {};
-    }
-
-    async function deleteHandler(item: BookEntity) {
-        try {
-            await deleteItem(item.id);
-            refreshData();
-        } catch (err) {
-            checkAuth(err);
-        }
     }
 
     function refreshData(updated = true) {
@@ -220,7 +218,7 @@ export default function BooksSettingsTable() {
 
     return (
         <Box sx={positionRelative}>
-            <Loading show={loading || deleting || downloadingCsv}></Loading>
+            <Loading show={loading || downloadingCsv || updating}></Loading>
 
             {isAdmin(user) &&
               <Box sx={pageStyles}>

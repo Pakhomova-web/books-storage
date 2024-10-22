@@ -12,7 +12,7 @@ export interface TableKey<K> {
 }
 
 export interface ITableAction {
-    label?: string,
+    label?: (item?) => string,
     type: TableActionEnum,
     onClick: Function
 }

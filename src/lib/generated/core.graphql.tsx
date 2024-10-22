@@ -51,6 +51,7 @@ export type AuthorUpdateInput = {
 };
 
 export type Book = {
+  archived?: Maybe<Scalars['Boolean']['output']>;
   authors?: Maybe<Array<Maybe<Author>>>;
   bookSeries: BookSeries;
   bookType: BookType;
@@ -88,6 +89,7 @@ export type BookCreateInput = {
 };
 
 export type BookSearchInput = {
+  archived?: InputMaybe<Scalars['Boolean']['input']>;
   authors?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   bookSeries?: InputMaybe<Scalars['ID']['input']>;
   bookType?: InputMaybe<Scalars['ID']['input']>;
@@ -232,7 +234,6 @@ export type Mutation = {
   createPublishingHouse?: Maybe<PublishingHouse>;
   createUser?: Maybe<User>;
   deleteAuthor?: Maybe<Author>;
-  deleteBook?: Maybe<Book>;
   deleteBookSeries?: Maybe<BookSeries>;
   deleteBookType?: Maybe<BookType>;
   deleteCoverType?: Maybe<CoverType>;
@@ -314,11 +315,6 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationDeleteAuthorArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type MutationDeleteBookArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -891,6 +887,7 @@ export type AuthorResolvers<ContextType = any, ParentType extends ResolversParen
 };
 
 export type BookResolvers<ContextType = any, ParentType extends ResolversParentTypes['Book'] = ResolversParentTypes['Book']> = {
+  archived?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   authors?: Resolver<Maybe<Array<Maybe<ResolversTypes['Author']>>>, ParentType, ContextType>;
   bookSeries?: Resolver<ResolversTypes['BookSeries'], ParentType, ContextType>;
   bookType?: Resolver<ResolversTypes['BookType'], ParentType, ContextType>;
@@ -967,7 +964,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createPublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationCreatePublishingHouseArgs, 'input'>>;
   createUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationCreateUserArgs, 'input'>>;
   deleteAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationDeleteAuthorArgs, 'id'>>;
-  deleteBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationDeleteBookArgs, 'id'>>;
   deleteBookSeries?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType, RequireFields<MutationDeleteBookSeriesArgs, 'id'>>;
   deleteBookType?: Resolver<Maybe<ResolversTypes['BookType']>, ParentType, ContextType, RequireFields<MutationDeleteBookTypeArgs, 'id'>>;
   deleteCoverType?: Resolver<Maybe<ResolversTypes['CoverType']>, ParentType, ContextType, RequireFields<MutationDeleteCoverTypeArgs, 'id'>>;

@@ -110,13 +110,13 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
 
         delete values.publishingHouseId;
         delete values.tag;
-        const data = new BookEntity({
+        const data = {
             id: item?.id,
             ...values,
             price: Number(values.price),
             numberOfPages: Number(values.numberOfPages),
             numberInStock: values.numberInStock ? Number(values.numberInStock) : 0
-        });
+        };
 
         try {
             if (item?.id) {
@@ -272,7 +272,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                         options={authorOptions}
                                         id="authors"
                                         label="Автори"
-                                        name="authors" showCheckbox variant="standard"/>
+                                        name="authorIds" showCheckbox variant="standard"/>
                     <Box sx={customFieldClearBtnStyles} onClick={() => formContext.setValue('authorIds', null)}>
                         Очистити
                     </Box>
