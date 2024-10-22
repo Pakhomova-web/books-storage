@@ -58,9 +58,11 @@ export function BookFilters(props: IBookFiltersProps) {
     }, [publishingHouse]);
 
     useEffect(() => {
-        Object.keys(props.defaultValues).forEach((key) => {
-            formContext.setValue(key as keyof BookFilter, props.defaultValues[key]);
-        });
+        if (props.defaultValues) {
+            Object.keys(props.defaultValues).forEach((key) => {
+                formContext.setValue(key as keyof BookFilter, props.defaultValues[key]);
+            });
+        }
     }, [props.defaultValues]);
 
     function onClearClick() {
