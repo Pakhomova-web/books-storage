@@ -58,7 +58,7 @@ export type Book = {
   description?: Maybe<Scalars['String']['output']>;
   format?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
-  imageId?: Maybe<Scalars['String']['output']>;
+  imageIds?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   isbn?: Maybe<Scalars['String']['output']>;
   language: Language;
   name: Scalars['String']['output'];
@@ -76,7 +76,7 @@ export type BookCreateInput = {
   coverTypeId: Scalars['ID']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   format?: InputMaybe<Scalars['String']['input']>;
-  imageId?: InputMaybe<Scalars['String']['input']>;
+  imageIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   isbn?: InputMaybe<Scalars['String']['input']>;
   languageId: Scalars['ID']['input'];
   name: Scalars['String']['input'];
@@ -161,7 +161,7 @@ export type BookUpdateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   format?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
-  imageId?: InputMaybe<Scalars['String']['input']>;
+  imageIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   isbn?: InputMaybe<Scalars['String']['input']>;
   languageId: Scalars['ID']['input'];
   name: Scalars['String']['input'];
@@ -898,7 +898,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   format?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
-  imageId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  imageIds?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   isbn?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   language?: Resolver<ResolversTypes['Language'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

@@ -58,7 +58,7 @@ const typeDefs =  /* GraphQL */ `
         language: Language!
         authors: [Author]
         format: String
-        imageId: String
+        imageIds: [String]
         tags: [String]
     }
 
@@ -270,7 +270,7 @@ const typeDefs =  /* GraphQL */ `
         languageId: ID!
         authorIds: [ID]
         format: String
-        imageId: String,
+        imageIds: [String],
         tags: [String]
     }
 
@@ -289,7 +289,7 @@ const typeDefs =  /* GraphQL */ `
         languageId: ID!
         authorIds: [ID]
         format: String
-        imageId: String,
+        imageIds: [String],
         tags: [String]
     }
 

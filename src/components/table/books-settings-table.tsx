@@ -30,8 +30,8 @@ export default function BooksSettingsTable() {
         renderMobileLabel: (item: BookEntity) => (
             <>
                 <Box sx={subTitleStyles}>
-                    <Box height={75} width={100} mr={1}><CustomImage imageId={item.imageId}
-                                                                     isBookDetails={true}></CustomImage></Box>
+                    <Box height={75} width={100} mr={1}>
+                        <CustomImage imageId={item.imageIds[0]} isBookDetails={true}></CustomImage></Box>
                     <Box display="flex" flexDirection="column" gap={1}>
                         <Box>{item.bookType.name}</Box>
                         <Box>{item.bookSeries.publishingHouse.name}</Box>

@@ -38,29 +38,54 @@ export interface BookSeriesEntity {
     publishingHouse: PublishingHouseEntity
 }
 
-export interface BookEntity {
-    id: string,
-    name: string,
-    description: string,
-    isbn: string,
-    format: string,
-    numberOfPages: number,
-    numberInStock: number,
-    price: number,
-    bookSeriesId: string,
-    bookSeries?: BookSeriesEntity,
-    coverTypeId: string,
-    coverType?: CoverTypeEntity,
-    bookTypeId: string,
-    bookType?: BookTypeEntity,
-    pageTypeId: string,
-    pageType?: PageTypeEntity,
-    languageId: string,
-    language?: LanguageEntity,
-    authorIds: string[],
-    authors?: AuthorEntity[],
-    imageId?: string,
-    tags?: string[]
+export class BookEntity {
+    id: string;
+    name: string;
+    description: string;
+    isbn: string;
+    format: string;
+    numberOfPages: number;
+    numberInStock: number;
+    price: number;
+    bookSeriesId: string;
+    bookSeries?: BookSeriesEntity;
+    coverTypeId: string;
+    coverType?: CoverTypeEntity;
+    bookTypeId: string;
+    bookType?: BookTypeEntity;
+    pageTypeId: string;
+    pageType?: PageTypeEntity;
+    languageId: string;
+    language?: LanguageEntity;
+    authorIds: string[];
+    authors?: AuthorEntity[];
+    imageIds?: string[];
+    tags?: string[];
+
+    constructor(data?) {
+        this.id = data.id;
+        this.name = data.name;
+        this.description = data.description;
+        this.isbn = data.isbn;
+        this.format = data.format;
+        this.numberOfPages = data.numberOfPages;
+        this.numberInStock = data.numberInStock;
+        this.price = data.price;
+        this.bookSeriesId = data.bookSeriesId;
+        this.bookSeries = data.bookSeries;
+        this.coverTypeId = data.coverTypeId;
+        this.coverType = data.coverType;
+        this.bookTypeId = data.bookTypeId;
+        this.bookType = data.bookType;
+        this.pageTypeId = data.pageTypeId;
+        this.pageType = data.pageType;
+        this.languageId = data.languageId;
+        this.language = data.language;
+        this.imageIds = data.imageIds;
+        this.tags = data.tags;
+        this.authorIds = data.authorIds;
+        this.authors = data.authors;
+    }
 }
 
 export interface IOption {

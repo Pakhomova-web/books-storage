@@ -13,7 +13,7 @@ const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
     numberOfPages: Number,
     numberInStock: Number,
     price: Number,
-    imageId: String,
+    imageIds: [String],
     bookSeries: {
         ref: 'bookSeries',
         type: Schema.Types.ObjectId,

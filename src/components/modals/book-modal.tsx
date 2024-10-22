@@ -21,6 +21,7 @@ import Tag from '@/components/tag';
 import { parseImageFromLink } from '@/utils/utils';
 import { customFieldClearBtnStyles, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 
 interface IBookModalProps {
     open: boolean,
@@ -47,7 +48,7 @@ interface IForm {
     bookTypeId: string,
     bookSeriesId: string,
     publishingHouseId?: string,
-    imageId?: string,
+    imageIds?: string[],
     imageLink?: string,
     tags?: string[],
     tag?: string
@@ -70,7 +71,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             format: item?.format,
             description: item?.description,
             publishingHouseId: item?.bookSeries.publishingHouse.id,
-            imageId: item?.id ? item.imageId : null,
+            imageIds: item?.id ? item.imageIds : null,
             tags: item?.tags
         }
     });
@@ -109,13 +110,13 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
 
         delete values.publishingHouseId;
         delete values.tag;
-        const data = {
+        const data = new BookEntity({
             id: item?.id,
             ...values,
             price: Number(values.price),
             numberOfPages: Number(values.numberOfPages),
             numberInStock: values.numberInStock ? Number(values.numberInStock) : 0
-        } as BookEntity;
+        });
 
         try {
             if (item?.id) {
@@ -130,7 +131,16 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     }
 
     function parseImage() {
-        formContext.setValue('imageId', parseImageFromLink(imageLink));
+        const id = parseImageFromLink(imageLink);
+
+        if (id) {
+            const imageIds = formContext.getValues().imageIds || [];
+
+            if (!imageIds.some(imageId => id === imageId)) {
+                formContext.setValue('imageIds', [...imageIds, id]);
+            }
+            formContext.setValue('imageLink', null);
+        }
     }
 
     function addTag(e?) {
@@ -148,6 +158,10 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 formContext.setValue('tag', null);
             }
         }
+    }
+
+    function removeImage(imageId: string) {
+        formContext.setValue('imageIds', formContext.getValues().imageIds.filter(id => imageId !== id));
     }
 
     function removeTag(tag: string) {
@@ -298,20 +312,22 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 <CustomTextField fullWidth
                                  disabled={!isAdmin}
                                  id="imageLink"
-                                 label="Посилання на ілюстрацію"
+                                 label="Посилання на фото"
                                  name="imageLink"/>
                 {!!imageLink &&
-                  <Button fullWidth variant="outlined" onClick={parseImage}>Відокремити ID</Button>}
+                  <Button fullWidth variant="outlined" onClick={parseImage}>Додати фото</Button>}
 
-                <CustomTextField fullWidth
-                                 disabled={!isAdmin}
-                                 id="imageId"
-                                 label="ID ілюстрації"
-                                 name="imageId"/>
-
-                <Box sx={bookBoxStyles} mb={1}>
-                    <CustomImage isBookDetails={true} imageId={formContext.getValues('imageId')}></CustomImage>
-                </Box>
+                {formContext.getValues('imageIds')?.map((imageId, index) =>
+                    <Box key={index} mt={1}>
+                        <Box sx={bookBoxStyles} mb={1}>
+                            <CustomImage isBookDetails={true} imageId={imageId}></CustomImage>
+                        </Box>
+                        <Box display="flex" justifyContent="center" gap={1}>
+                            {index === 0 ? 'Головне фото' : 'Додаткове фото'}
+                            <RemoveCircleOutlineIcon fontSize="small"
+                                                     sx={styleVariables.deleteIconBtn}
+                                                     onClick={() => removeImage(imageId)}/></Box>
+                    </Box>)}
             </FormContainer>
 
             {(creatingError || updatingError) &&

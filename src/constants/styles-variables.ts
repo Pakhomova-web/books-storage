@@ -1,10 +1,12 @@
 const rowMargin = '5px';
 const gray = 'rgb(244, 244, 244)';
+const warnColor = '#AB332C';
 
 export const styleVariables = {
     titleFontSize: {
         fontSize: '20px'
     },
+    deleteIconBtn: { cursor: 'pointer', color: warnColor },
     bigTitleFontSize: (theme) => ({
         fontSize: '28px',
         [theme.breakpoints.down('md')]: {
@@ -21,7 +23,7 @@ export const styleVariables = {
     padding: '10px',
     doubleMargin: '20px',
     doublePadding: '20px',
-    warnColor: '#AB332C',
+    warnColor,
     redLightColor: 'rgba(171, 51, 44, 0.2)',
     greenLightColor: 'rgba(0, 128, 0, 0.2)',
     primaryColor: 'rgba(68, 138, 255, 0.2)',

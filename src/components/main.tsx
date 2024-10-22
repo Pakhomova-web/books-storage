@@ -37,7 +37,7 @@ export default function Main({ children }) {
             .then((user: UserEntity) => {
                 setUser(user);
                 setLoading(false);
-                if (authUrls.some(url => pathname.includes(url))) {
+                if (authUrls.some(url => url === pathname)) {
                     router.push('/');
                 }
             })
@@ -46,7 +46,7 @@ export default function Main({ children }) {
                 setShowSettingsMenu(false);
                 setAttachedSettingsMenu(false);
                 logout();
-                if (![...authUrls, ...commonUrls].some(url => pathname.includes(url))) {
+                if (![...authUrls, ...commonUrls].some(url => pathname === url)) {
                     router.push('/');
                 }
             });

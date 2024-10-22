@@ -223,7 +223,7 @@ export default function Books() {
                                              justifyContent="space-between"
                                              height="100%">
                                             <Box sx={bookBoxStyles} mb={1}>
-                                                <CustomImage isBookDetails={true} imageId={book.imageId}></CustomImage>
+                                                <CustomImage isBookDetails={true} imageId={book.imageIds[0]}></CustomImage>
                                             </Box>
                                             <Box sx={bookInfoStyles} textAlign="center">
                                                 {book.bookSeries.publishingHouse.name}{book.bookSeries.name === '-' ? '' : `, ${book.bookSeries.name}`}

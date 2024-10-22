@@ -14,9 +14,7 @@ import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
 import { usePublishingHouseOptions } from '@/lib/graphql/queries/publishing-house/hook';
 import { TableKey } from '@/components/table/table-key';
 import { useBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
-import CustomMultiSelectField from '@/components/form-fields/custom-multi-select-field';
 import { customFieldClearBtnStyles, styleVariables } from '@/constants/styles-variables';
-import Loading from '@/components/loading';
 
 interface IBookFiltersProps {
     defaultValues?: BookFilter,

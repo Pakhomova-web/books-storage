@@ -129,7 +129,7 @@ export default function BookDetails() {
                   <Grid container>
                     <Grid item p={1} sm={6} xs={12}>
                       <StyledImageBox mb={1}>
-                        <CustomImage isBookDetails={true} imageId={book.imageId}></CustomImage>
+                        <CustomImage isBookDetails={true} imageId={book.imageIds[0]}></CustomImage>
                       </StyledImageBox>
                     </Grid>
 
@@ -170,7 +170,7 @@ export default function BookDetails() {
 
                         {!!book.description &&
                           <Box m={1}>
-                            <Box mb={1}><b>Description</b></Box>
+                            <Box mb={1}><b>Опис</b></Box>
                             <Box>{book.description}</Box>
                           </Box>
                         }

@@ -79,15 +79,15 @@ export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTyp
                 <CustomTextField fullWidth
                                  disabled={!isAdmin}
                                  id="imageLink"
-                                 label="Посилання на ілюстрацію"
+                                 label="Посилання на фото"
                                  name="imageLink"/>
                 {!!imageLink &&
-                  <Button fullWidth variant="outlined" onClick={parseImage}>Відокремити ID</Button>}
+                  <Button fullWidth variant="outlined" onClick={parseImage}>Додати фото</Button>}
 
                 <CustomTextField fullWidth
                                  disabled={!isAdmin}
                                  id="imageId"
-                                 label="ID ілюстрації"
+                                 label="ID фото"
                                  name="imageId"/>
 
                 <Box sx={bookBoxStyles} mb={1}>
