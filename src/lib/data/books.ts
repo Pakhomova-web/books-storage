@@ -37,16 +37,16 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
         .populate('pageType')
         .populate('coverType')
         .populate('language')
-        .populate('author')
+        .populate('authors')
         .sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
 
     let res = { items: [], totalCount: 0 };
 
     await query.exec().then((items: BookEntity[]) => {
         if (quickSearch) {
-            items = items.filter(({ author, name, bookSeries, bookType, tags }) =>
+            items = items.filter(({ authors, name, bookSeries, bookType, tags }) =>
                 quickSearch.test(name) ||
-                (author && quickSearch.test(author.name)) ||
+                (authors?.length && authors.some(author => quickSearch.test(author.name))) ||
                 quickSearch.test(bookType.name) ||
                 quickSearch.test(bookSeries.name) ||
                 quickSearch.test(bookSeries.publishingHouse.name) ||
@@ -71,7 +71,7 @@ export function getBookById(id: string) {
     const item = Book.findById(id)
         .populate('language')
         .populate('bookType')
-        .populate('author')
+        .populate('authors')
         .populate({
             path: 'bookSeries',
             populate: {
@@ -150,7 +150,7 @@ function _getBookByUnique(name: string, bookSeries: string, bookType: string) {
 function _getBookData(input: BookEntity) {
     return {
         ...input,
-        author: input.authorId,
+        authors: input.authorIds,
         language: input.languageId,
         bookSeries: input.bookSeriesId,
         coverType: input.coverTypeId,

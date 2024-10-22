@@ -111,9 +111,8 @@ export default function BooksSettingsTable() {
             type: 'text'
         },
         {
-            title: 'Автор',
-            sortValue: 'author',
-            renderValue: (item: BookEntity) => item.author?.name,
+            title: 'Автори',
+            renderValue: (item: BookEntity) => item.authors?.map(author => author.name).join(', '),
             type: 'text'
         },
         {

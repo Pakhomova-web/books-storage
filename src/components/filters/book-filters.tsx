@@ -14,6 +14,7 @@ import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
 import { usePublishingHouseOptions } from '@/lib/graphql/queries/publishing-house/hook';
 import { TableKey } from '@/components/table/table-key';
 import { useBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
+import CustomMultiSelectField from '@/components/form-fields/custom-multi-select-field';
 
 interface IBookFiltersProps {
     defaultValues?: BookFilter,
@@ -29,7 +30,7 @@ export function BookFilters(props: IBookFiltersProps) {
     const {
         quickSearch,
         bookType,
-        author,
+        authors,
         coverType,
         pageType,
         name,
@@ -172,13 +173,13 @@ export function BookFilters(props: IBookFiltersProps) {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <CustomSelectField fullWidth
-                                           options={authorOptions}
-                                           id="author"
-                                           label="Автор"
-                                           name="author"
-                                           showClear={!!author}
-                                           onClear={() => clearValue('author')}/>
+                        <CustomMultiSelectField fullWidth
+                                                options={authorOptions}
+                                                id="authors"
+                                                label="Автори"
+                                                name="authors"
+                                                showClear={!!authors?.length}
+                                                onClear={() => clearValue('authors')}/>
                     </Grid>
 
                     <Grid item xs={12}>

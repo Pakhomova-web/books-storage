@@ -39,10 +39,10 @@ const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
         type: Schema.Types.ObjectId,
         required: true
     },
-    author: {
+    authors: [{
         ref: 'author',
         type: Schema.Types.ObjectId
-    },
+    }],
     tags: [String]
 });
 

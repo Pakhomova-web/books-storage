@@ -56,7 +56,7 @@ const typeDefs =  /* GraphQL */ `
         pageType: PageType!
         isbn: String
         language: Language!
-        author: Author
+        authors: [Author]
         format: String
         imageId: String
         tags: [String]
@@ -268,7 +268,7 @@ const typeDefs =  /* GraphQL */ `
         pageTypeId: ID!
         isbn: String
         languageId: ID!
-        authorId: ID
+        authorIds: [ID]
         format: String
         imageId: String,
         tags: [String]
@@ -287,7 +287,7 @@ const typeDefs =  /* GraphQL */ `
         pageTypeId: ID!
         isbn: String
         languageId: ID!
-        authorId: ID
+        authorIds: [ID]
         format: String
         imageId: String,
         tags: [String]
@@ -303,7 +303,7 @@ const typeDefs =  /* GraphQL */ `
         pageType: ID
         isbn: String
         language: ID
-        author: ID
+        authors: [ID]
         publishingHouse: ID
         isInStock: Boolean
         quickSearch: String

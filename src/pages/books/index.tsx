@@ -122,8 +122,8 @@ export default function Books() {
         } else if (data?.bookType) {
             promise = getBookTypeById(data?.bookType as string)
                 .then((item: BookTypeEntity) => [{ title: 'Тип' }, { title: item.name }]);
-        } else if (data?.author) {
-            promise = getAuthorById(data?.author as string)
+        } else if (data?.authors?.length) {
+            promise = getAuthorById(data?.authors[0])
                 .then((item: AuthorEntity) => [{ title: 'Автор' }, { title: item.name }]);
         } else if (data?.publishingHouse) {
             promise = getPublishingHouseById(data?.publishingHouse as string)

@@ -68,6 +68,13 @@ export const styleVariables = {
     }
 };
 
+export const customFieldClearBtnStyles = {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    cursor: 'pointer',
+    ...styleVariables.hintFontSize
+};
 
 export const positionRelative = { position: 'relative' };
 export const fullHeight = { height: '100svh' };

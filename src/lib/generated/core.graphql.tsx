@@ -51,7 +51,7 @@ export type AuthorUpdateInput = {
 };
 
 export type Book = {
-  author?: Maybe<Author>;
+  authors?: Maybe<Array<Maybe<Author>>>;
   bookSeries: BookSeries;
   bookType: BookType;
   coverType: CoverType;
@@ -70,7 +70,7 @@ export type Book = {
 };
 
 export type BookCreateInput = {
-  authorId?: InputMaybe<Scalars['ID']['input']>;
+  authorIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   bookSeriesId: Scalars['ID']['input'];
   bookTypeId: Scalars['ID']['input'];
   coverTypeId: Scalars['ID']['input'];
@@ -88,7 +88,7 @@ export type BookCreateInput = {
 };
 
 export type BookSearchInput = {
-  author?: InputMaybe<Scalars['ID']['input']>;
+  authors?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   bookSeries?: InputMaybe<Scalars['ID']['input']>;
   bookType?: InputMaybe<Scalars['ID']['input']>;
   coverType?: InputMaybe<Scalars['ID']['input']>;
@@ -154,7 +154,7 @@ export type BookTypeUpdateInput = {
 };
 
 export type BookUpdateInput = {
-  authorId?: InputMaybe<Scalars['ID']['input']>;
+  authorIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   bookSeriesId: Scalars['ID']['input'];
   bookTypeId: Scalars['ID']['input'];
   coverTypeId: Scalars['ID']['input'];
@@ -891,7 +891,7 @@ export type AuthorResolvers<ContextType = any, ParentType extends ResolversParen
 };
 
 export type BookResolvers<ContextType = any, ParentType extends ResolversParentTypes['Book'] = ResolversParentTypes['Book']> = {
-  author?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType>;
+  authors?: Resolver<Maybe<Array<Maybe<ResolversTypes['Author']>>>, ParentType, ContextType>;
   bookSeries?: Resolver<ResolversTypes['BookSeries'], ParentType, ContextType>;
   bookType?: Resolver<ResolversTypes['BookType'], ParentType, ContextType>;
   coverType?: Resolver<ResolversTypes['CoverType'], ParentType, ContextType>;

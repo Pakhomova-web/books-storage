@@ -56,7 +56,7 @@ export async function getAuthorById(id: string) {
 }
 
 export async function deleteAuthor(id: string) {
-    await checkUsageInBook('author', [id], 'Author');
+    await checkUsageInBook('authors', [id], 'Author');
     await Author.findByIdAndDelete(id);
 
     return { id } as AuthorEntity;

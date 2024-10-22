@@ -57,8 +57,8 @@ export interface BookEntity {
     pageType?: PageTypeEntity,
     languageId: string,
     language?: LanguageEntity,
-    authorId: string,
-    author?: AuthorEntity,
+    authorIds: string[],
+    authors?: AuthorEntity[],
     imageId?: string,
     tags?: string[]
 }
@@ -86,7 +86,7 @@ export class BookFilter {
     pageType?: string;
     isbn?: string;
     language?: string;
-    author?: string;
+    authors?: string[];
     publishingHouse?: string;
     isInStock?: boolean;
     tags?: string;
@@ -103,8 +103,8 @@ export class BookFilter {
             this.pageType = data.pageType;
             this.isbn = data.isbn;
             this.language = data.language;
-            this.author = data.author;
-            this.isInStock = data.isInStock?.toString() === 'true';
+            this.authors = data.authors ? data.authors.split(',') : null;
+            this.isInStock = data.isInStock ? data.isInStock.toString() === 'true' : null;
             this.publishingHouse = data.publishingHouse;
             this.tags = data.tags;
         }

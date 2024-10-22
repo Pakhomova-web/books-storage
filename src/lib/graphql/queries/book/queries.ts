@@ -36,7 +36,7 @@ const bookFragment = gql`
                 tags
             }
         }
-        author {
+        authors {
             id
             name
             description

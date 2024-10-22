@@ -1,4 +1,4 @@
-import { BookEntity, BookSeriesEntity, BookSeriesFilter, IOption } from '@/lib/data/types';
+import { BookEntity, BookSeriesEntity, BookSeriesFilter } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useCreateBook, useUpdateBook } from '@/lib/graphql/queries/book/hook';
 import React, { useEffect, useState } from 'react';
@@ -19,6 +19,7 @@ import { getBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
 import { parseImageFromLink } from '@/utils/utils';
+import CustomMultiSelectField from '@/components/form-fields/custom-multi-select-field';
 
 interface IBookModalProps {
     open: boolean,
@@ -38,12 +39,12 @@ interface IForm {
     numberOfPages: number,
     numberInStock: number,
     price: number,
+    authorIds: string[],
     coverTypeId: string,
     languageId: string,
     pageTypeId: string,
     bookTypeId: string,
     bookSeriesId: string,
-    authorId?: string,
     publishingHouseId?: string,
     imageId?: string,
     imageLink?: string,
@@ -58,7 +59,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             numberOfPages: item?.numberOfPages,
             numberInStock: item?.numberInStock,
             price: item?.price,
-            authorId: item?.author?.id,
+            authorIds: item?.authors.map(({ id }) => id),
             languageId: item?.language?.id,
             coverTypeId: item?.coverType.id,
             pageTypeId: item?.pageType.id,
@@ -249,13 +250,13 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                  label="Кількість сторінок"
                                  name="numberOfPages"/>
 
-                <CustomSelectField fullWidth
-                                   options={authorOptions}
-                                   disabled={!isAdmin}
-                                   loading={loadingAuthors}
-                                   id="author"
-                                   label="Автор"
-                                   name="authorId"/>
+                <CustomMultiSelectField fullWidth
+                                        options={authorOptions}
+                                        disabled={!isAdmin}
+                                        loading={loadingAuthors}
+                                        id="authorIds"
+                                        label="Автори"
+                                        name="authorIds"/>
 
                 {isAdmin && <CustomTextField fullWidth
                                              id="numberInStock"

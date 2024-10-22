@@ -16,7 +16,6 @@ import { styled } from '@mui/material/styles';
 import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
 import CustomLink from '@/components/custom-link';
-import bookSeries from '@/lib/data/models/book-series';
 
 const StyledImageBox = styled(Box)(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
@@ -46,7 +45,7 @@ export default function BookDetails() {
 
     useEffect(() => {
         if (book) {
-            setKeys(([
+            const keys = [
                 {
                     title: 'Видавництво',
                     type: 'text',
@@ -73,15 +72,21 @@ export default function BookDetails() {
                 },
                 { title: 'Тип сторінок', type: 'text', renderValue: (book: BookEntity) => book.pageType?.name },
                 { title: 'Тип обкладинки', type: 'text', renderValue: (book: BookEntity) => book.coverType?.name },
-                { title: 'Кількість сторінок', type: 'text', renderValue: (book: BookEntity) => book.numberOfPages },
-                {
-                    title: 'Автор',
-                    type: 'text',
-                    renderValue: (book: BookEntity) => book.author?.name,
-                    onValueClick: () => {
-                        router.push(`/books?author=${book.author.id}`);
+                { title: 'Кількість сторінок', type: 'text', renderValue: (book: BookEntity) => book.numberOfPages }
+            ];
+            book.authors?.forEach((author, i) => {
+                keys.push(
+                    {
+                        title: i === 0 ? 'Автор' : '',
+                        type: 'text',
+                        renderValue: () => author.name,
+                        onValueClick: () => {
+                            router.push(`/books?authors=${author.id}`);
+                        }
                     }
-                },
+                );
+            });
+            keys.push(...[
                 {
                     title: 'Мова',
                     type: 'text',
@@ -92,7 +97,8 @@ export default function BookDetails() {
                 },
                 { title: 'ISBN', type: 'text', renderValue: (book: BookEntity) => book.isbn },
                 { title: 'Формат, мм', type: 'text', renderValue: (book: BookEntity) => book.format }
-            ] as TableKey<BookEntity>[]).filter(key => !!key.renderValue(book)));
+            ]);
+            setKeys((keys as TableKey<BookEntity>[]).filter(key => !!key.renderValue(book)));
         }
     }, [book]);
 

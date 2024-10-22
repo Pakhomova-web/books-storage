@@ -1,6 +1,6 @@
 import { Box, TextFieldProps } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { styleVariables } from '@/constants/styles-variables';
+import { customFieldClearBtnStyles, styleVariables } from '@/constants/styles-variables';
 import { TextFieldElement, TextFieldElementProps } from 'react-hook-form-mui';
 import Loading from '@/components/loading';
 
@@ -14,20 +14,12 @@ interface ITextFieldElementProps extends TextFieldElementProps {
     onClear?;
 }
 
-const clearBtnStyles = {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    cursor: 'pointer',
-    ...styleVariables.hintFontSize
-};
-
 export default function CustomTextField({ loading, showClear, onClear, ...props }: ITextFieldElementProps) {
     return (
         <Box sx={styleVariables.positionRelative}>
             <Loading show={!!loading} isSmall={true}/>
             <StyledTextField {...props} variant="standard"/>
-            {showClear && onClear && <Box sx={clearBtnStyles} onClick={onClear}>Clear</Box>}
+            {showClear && onClear && <Box sx={customFieldClearBtnStyles} onClick={onClear}>Clear</Box>}
         </Box>
     );
 }
