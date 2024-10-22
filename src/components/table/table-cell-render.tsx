@@ -84,5 +84,5 @@ export function getActionItem(action: ITableAction, item) {
             icon = <AddIcon color="primary"/>;
     }
 
-    return <Box gap={1} sx={styles}>{icon}{action.label(item) || ''}</Box>;
+    return <Box gap={1} sx={styles}>{icon}{action.label ? action.label(item) : ''}</Box>;
 }
