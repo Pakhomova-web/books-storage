@@ -64,8 +64,11 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             pageTypeId: item?.pageType.id,
             bookTypeId: item?.bookType.id,
             bookSeriesId: item?.bookSeries.id,
+            isbn: item?.isbn,
+            format: item?.format,
+            description: item?.description,
             publishingHouseId: item?.bookSeries.publishingHouse.id,
-            imageId: item?.imageId,
+            imageId: item?.id ? item.imageId : null,
             tags: item?.tags
         }
     });
@@ -273,11 +276,11 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                  disabled={!isAdmin}
                                  id="tag"
                                  label="Тег"
-                                 helperText="Click enter to add a tag, 3 chars at least"
+                                 helperText="Натисність Enter, щоб додати. Мін 3 літери"
                                  onKeyDown={addTag}
                                  name="tag"></CustomTextField>
 
-                {!!tags?.length && <Grid container gap={1}>
+                {!!tags?.length && <Grid container gap={1} mb={1}>
                     {tags.map(((tag, index) =>
                         <Tag key={index}
                              tag={tag}
