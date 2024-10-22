@@ -17,10 +17,12 @@ import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
 import CustomLink from '@/components/custom-link';
 
+const StyledSmallImageBox = styled(Box)(() => ({
+    height: '120px',
+    maxHeight: '30vh'
+}));
+
 const StyledImageBox = styled(Box)(({ theme }) => ({
-    [theme.breakpoints.down('md')]: {
-        maxHeight: '30vh'
-    },
     height: '400px',
     maxHeight: '50vh'
 }));
@@ -128,9 +130,23 @@ export default function BookDetails() {
                 {book &&
                   <Grid container>
                     <Grid item p={1} sm={6} xs={12}>
-                      <StyledImageBox mb={1}>
-                        <CustomImage isBookDetails={true} imageId={book.imageIds[0]}></CustomImage>
-                      </StyledImageBox>
+                      <Grid container>
+                        <Grid item md={book.imageIds.length > 1 ? 9 : 12} xs={book.imageIds.length > 1 ? 7 : 12}>
+                          <StyledImageBox mb={1}>
+                            <CustomImage isBookDetails={true} imageId={book.imageIds[0]}></CustomImage>
+                          </StyledImageBox>
+                        </Grid>
+
+                        <Grid item md={3} xs={5}>
+                            {book.imageIds.map((imageId, index) =>
+                                (index !== 0 &&
+                                  <StyledSmallImageBox key={index} mb={1}>
+                                    <CustomImage isBookDetails={true} imageId={imageId}></CustomImage>
+                                  </StyledSmallImageBox>
+                                )
+                            )}
+                        </Grid>
+                      </Grid>
                     </Grid>
 
                     <Grid item p={1} sm={6} xs={12}>

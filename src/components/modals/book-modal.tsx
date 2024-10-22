@@ -266,7 +266,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                  name="numberOfPages"/>
 
 
-                <Box sx={styleVariables.positionRelative}>
+                <Box sx={styleVariables.positionRelative} mb={1}>
                     <Loading isSmall={true} show={loadingAuthors}></Loading>
                     <MultiSelectElement fullWidth
                                         options={authorOptions}
