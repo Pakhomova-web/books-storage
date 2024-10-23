@@ -5,6 +5,7 @@ const publishingHouseFragment = gql`
         id
         name
         tags
+        imageId
     }
 `;
 

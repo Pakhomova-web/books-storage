@@ -13,6 +13,7 @@ const typeDefs =  /* GraphQL */ `
         id: ID
         name: String!
         tags: String
+        imageId: String
     }
 
     type PageType {
@@ -194,6 +195,7 @@ const typeDefs =  /* GraphQL */ `
     input PublishingHouseCreateInput {
         name: String!
         tags: String
+        imageId: String
     }
 
     input PageTypeCreateInput {
@@ -221,6 +223,7 @@ const typeDefs =  /* GraphQL */ `
         id: ID!
         name: String!
         tags: String
+        imageId: String
     }
 
     input AuthorUpdateInput {

@@ -7,7 +7,8 @@ const publishingHouseSchema = new Schema<PublishingHouseEntity, Model<Publishing
         required: true,
         unique: true
     },
-    tags: String
+    tags: String,
+    imageId: String
 });
 
 export default models?.publishingHouse || model('publishingHouse', publishingHouseSchema);

@@ -54,7 +54,7 @@ export async function updatePublishingHouse(input: PublishingHouseEntity) {
     }
     const itemByName = await getByName<PublishingHouseEntity>(PublishingHouse, input.name);
 
-    if (itemByName && itemByName.id.toString() !== input.id) {
+    if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Publishing House with name '${input.name}' already exists.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });

@@ -3,6 +3,7 @@ import React, { ReactNode, useState } from 'react';
 import { styleVariables } from '@/constants/styles-variables';
 import { TableKey } from '@/components/table/table-key';
 import { renderActions } from '@/components/table/table-cell-render';
+import CustomImage from '@/components/custom-image';
 
 const mobileBoxStyles = {
     borderRadius: styleVariables.borderRadius,
@@ -41,11 +42,14 @@ export function MobileTable<T>(props: IMobileTableProps<T>) {
             {props.keys.map((key, i) => (
                 <Grid container key={i}
                       sx={{ ...(i !== props.keys.length - 1 ? styleVariables.mobileRow : {}), ...styleVariables.hintFontSize }}>
-                    <Grid item xs={6} sx={key.mobileStyleClasses || {}}>{key.title}</Grid>
-                    <Grid item xs={6} sx={{
-                        ...styleVariables.flexEnd,
-                        ...(key.mobileStyleClasses || {})
-                    }}>{key.renderValue(item)}</Grid>
+                    <Grid item xs={6} display="flex" alignItems="center" sx={key.mobileStyleClasses}>{key.title}</Grid>
+                    <Grid item xs={6} display="flex" justifyContent="end" alignItems="center"
+                          sx={key.mobileStyleClasses}>
+                        {key.type === 'text' && key.renderValue(item)}
+                        {key.type === 'image' && <Box sx={{ width: '80px', height: '80px' }}>
+                          <CustomImage imageId={key.renderValue(item) as string} isBookType={true}></CustomImage>
+                        </Box>}
+                    </Grid>
                 </Grid>
             ))}
         </>;

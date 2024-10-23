@@ -35,7 +35,7 @@ export async function updateAuthor(input: AuthorEntity) {
     }
     const itemByName = await getByName<AuthorEntity>(Author, input.name);
 
-    if (itemByName && itemByName.id.toString() !== input.id) {
+    if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Author with name '${input.name}' already exists.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });

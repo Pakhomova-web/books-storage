@@ -6,6 +6,7 @@ import CopyIcon from '@mui/icons-material/ContentCopy';
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { IMenuAnchorEl } from '@/components/table/mobile-table';
+import CustomImage from '@/components/custom-image';
 
 const tableCellActionsStyles = {
     display: 'flex',
@@ -15,7 +16,10 @@ const tableCellActionsStyles = {
 export function renderTableCell<T>(key: TableKey<T>, item: T, index: number, rowStyleClass?: Function): ReactNode {
     return (
         <TableCell key={index} sx={rowStyleClass ? rowStyleClass(item) : {}}>
-            {key.renderValue ? key.renderValue(item) : ''}
+            {key.type === 'text' && (key.renderValue ? key.renderValue(item) : '')}
+            {key.type === 'image' && <Box sx={{ width: '80px', height: '80px' }}>
+              <CustomImage imageId={key.renderValue(item) as string} isBookType={true}></CustomImage>
+            </Box>}
         </TableCell>
     );
 }

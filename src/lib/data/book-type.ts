@@ -35,7 +35,7 @@ export async function updateBookType(input: BookTypeEntity) {
     }
     const itemByName = await getByName<BookTypeEntity>(BookType, input.name);
 
-    if (itemByName && itemByName.id.toString() !== input.id) {
+    if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Book Type with name '${input.name}' already exists.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });

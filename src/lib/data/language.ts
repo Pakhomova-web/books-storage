@@ -35,7 +35,7 @@ export async function updateLanguage(input: LanguageEntity) {
     }
     const itemByName = await getByName<LanguageEntity>(Language, input.name);
 
-    if (itemByName && itemByName.id.toString() !== input.id) {
+    if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Language with name '${input.name}' already exists.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });

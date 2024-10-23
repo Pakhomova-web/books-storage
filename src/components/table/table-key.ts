@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
 export interface TableKey<K> {
-    type: 'actions' | 'text',
+    type: 'actions' | 'text' | 'image',
     sortValue?: string,
     title?: string,
     renderValue?: (item: K) => string | number,

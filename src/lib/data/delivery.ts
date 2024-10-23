@@ -35,7 +35,7 @@ export async function updateDelivery(input: DeliveryEntity) {
     }
     const itemByName = await getByName<DeliveryEntity>(Delivery, input.name);
 
-    if (itemByName && itemByName.id.toString() !== input.id) {
+    if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Delivery with name '${input.name}' already exists.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });

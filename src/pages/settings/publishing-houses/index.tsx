@@ -33,6 +33,7 @@ export default function PublishingHouses() {
         ] : []
     });
     const [mobileKeys] = useState<TableKey<PublishingHouseEntity>[]>([
+        { type: 'image', title: 'Фото', renderValue: (item: PublishingHouseEntity) => item.imageId },
         { type: 'text', title: 'Теги', sortValue: 'tags', renderValue: (item: PublishingHouseEntity) => item.tags }
     ])
     const [tableKeys] = useState<TableKey<PublishingHouseEntity>[]>([

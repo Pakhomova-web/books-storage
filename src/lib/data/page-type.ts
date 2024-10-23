@@ -36,7 +36,7 @@ export async function updatePageType(input: PageTypeEntity) {
     }
     const itemByName = await getByName<PageTypeEntity>(PageType, input.name);
 
-    if (itemByName && itemByName.id.toString() !== input.id) {
+    if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Page Type with name '${input.name}' already exists.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });

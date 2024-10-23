@@ -9,10 +9,20 @@ export interface LanguageEntity {
     name: string
 }
 
-export interface PublishingHouseEntity {
-    id: string,
-    name: string,
-    tags: string
+export class PublishingHouseEntity {
+    id: string;
+    name: string;
+    tags: string;
+    imageId?: string;
+
+    constructor(data?) {
+        if (data) {
+            this.id = data.id;
+            this.name = data.name;
+            this.tags = data.tags;
+            this.imageId = data.imageId;
+        }
+    }
 }
 
 export interface PageTypeEntity {

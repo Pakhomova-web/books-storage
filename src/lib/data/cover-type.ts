@@ -34,7 +34,7 @@ export async function updateCoverType(input: CoverTypeEntity) {
     }
     const itemByName = await getByName<CoverTypeEntity>(CoverType, input.name);
 
-    if (itemByName && itemByName.id.toString() !== input.id) {
+    if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Cover Type with name '${input.name}' already exists.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });

@@ -112,7 +112,7 @@ export async function updateBook(input: BookEntity) {
     }
     const itemByName = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeId);
 
-    if (itemByName && itemByName.id.toString() !== input.id) {
+    if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Book with name '${input.name}' already exists.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
