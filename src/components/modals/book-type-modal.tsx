@@ -61,7 +61,7 @@ export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTyp
     }
 
     return (
-        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' Тип книги'}
+        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' тип книги'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}

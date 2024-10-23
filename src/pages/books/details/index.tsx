@@ -22,7 +22,7 @@ const StyledSmallImageBox = styled(Box)(() => ({
     maxHeight: '30vh'
 }));
 
-const StyledImageBox = styled(Box)(({ theme }) => ({
+const StyledImageBox = styled(Box)(() => ({
     height: '400px',
     maxHeight: '50vh'
 }));

@@ -42,7 +42,7 @@ export default function PublishingHouseModal({ open, item, onClose, isAdmin }: I
     }
 
     return (
-        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' Видавництво'}
+        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' видавництво'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}

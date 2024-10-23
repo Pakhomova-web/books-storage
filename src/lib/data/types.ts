@@ -62,6 +62,7 @@ export class BookEntity {
     authors?: AuthorEntity[];
     imageIds?: string[];
     tags?: string[];
+    ages: number[];
 
     constructor(data?) {
         this.id = data.id;

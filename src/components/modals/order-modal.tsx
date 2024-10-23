@@ -95,7 +95,7 @@ export default function OrderModal({ open, item, onClose, isAdmin }: IOrderModal
     }
 
     return (
-        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' Замовлення'}
+        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' замовлення'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}

@@ -35,7 +35,7 @@ export default function LanguageModal({ open, item, onClose, isAdmin }: ILanguag
     }
 
     return (
-        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' Мову'}
+        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' мову'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}

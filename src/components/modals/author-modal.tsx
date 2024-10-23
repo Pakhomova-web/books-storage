@@ -40,7 +40,7 @@ export default function AuthorModal({ open, item, onClose, isAdmin }: IAuthorMod
     }
 
     return (
-        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' Автора'}
+        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' автора'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}

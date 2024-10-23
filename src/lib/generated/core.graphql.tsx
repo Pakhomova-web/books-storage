@@ -71,6 +71,7 @@ export type Book = {
 };
 
 export type BookCreateInput = {
+  archived?: InputMaybe<Scalars['Boolean']['input']>;
   authorIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   bookSeriesId: Scalars['ID']['input'];
   bookTypeId: Scalars['ID']['input'];
@@ -156,6 +157,7 @@ export type BookTypeUpdateInput = {
 };
 
 export type BookUpdateInput = {
+  archived?: InputMaybe<Scalars['Boolean']['input']>;
   authorIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   bookSeriesId: Scalars['ID']['input'];
   bookTypeId: Scalars['ID']['input'];

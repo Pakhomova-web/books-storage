@@ -169,7 +169,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     }
 
     return (
-        <CustomModal title={(!item || !item.id ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' Книгу'}
+        <CustomModal title={(!item || !item.id ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' книгу'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
