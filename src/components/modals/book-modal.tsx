@@ -281,7 +281,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                          name="numberOfPages"/>
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Grid item xs={12} md={6} lg={4}>
                         <Box sx={styleVariables.positionRelative} mb={1}>
                             <Loading isSmall={true} show={loadingAuthors}></Loading>
                             <MultiSelectElement fullWidth
