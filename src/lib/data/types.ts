@@ -88,6 +88,7 @@ export class BookEntity {
         this.authorIds = data.authorIds;
         this.authors = data.authors;
         this.archived = data.archived;
+        this.ages = (data.ages || []).sort();
     }
 
     get dataToUpdate(): Partial<BookEntity> {
@@ -108,13 +109,14 @@ export class BookEntity {
             languageId: this.languageId || this.language?.id,
             authorIds: this.authorIds || this.authors.map(({ id }) => id),
             imageIds: this.imageIds,
-            tags: this.tags
+            tags: this.tags,
+            ages: this.ages
         };
     }
 }
 
-export interface IOption {
-    id: string,
+export interface IOption<T> {
+    id: T,
     label: string
 }
 
@@ -141,6 +143,7 @@ export class BookFilter {
     isInStock?: boolean;
     tags?: string;
     archived?: boolean;
+    ages?: number[];
 
     constructor(data?) {
         if (data) {
@@ -159,6 +162,7 @@ export class BookFilter {
             this.publishingHouse = data.publishingHouse;
             this.tags = data.tags;
             this.archived = data.archived !== undefined ? data.archived : false;
+            this.ages = data.ages ? data.ages.split(',').map(age => +age) : null;
         }
     }
 }

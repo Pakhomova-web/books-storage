@@ -13,7 +13,7 @@ export function usePageTypes(pageSettings?: IPageable, filters?: PageTypeEntity)
 }
 
 export function usePageTypeOptions() {
-    return _useItems<IOption, NameFilter>(pageTypeOptionsQuery);
+    return _useItems<IOption<string>, NameFilter>(pageTypeOptionsQuery);
 }
 
 export function useCreatePageType() {

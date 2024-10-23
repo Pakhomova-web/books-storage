@@ -12,6 +12,7 @@ const bookFragment = gql`
         isbn
         format
         imageIds
+        ages
         language {
             id
             name

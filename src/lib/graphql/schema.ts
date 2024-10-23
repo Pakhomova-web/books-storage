@@ -61,6 +61,7 @@ const typeDefs =  /* GraphQL */ `
         format: String
         imageIds: [String]
         tags: [String]
+        ages: [Int]
     }
 
     type User {
@@ -273,6 +274,7 @@ const typeDefs =  /* GraphQL */ `
         imageIds: [String],
         tags: [String]
         archived: Boolean
+        ages: [Int]
     }
 
     input BookUpdateInput {
@@ -293,6 +295,7 @@ const typeDefs =  /* GraphQL */ `
         imageIds: [String]
         tags: [String]
         archived: Boolean
+        ages: [Int]
     }
 
     input BookSearchInput {
@@ -311,6 +314,7 @@ const typeDefs =  /* GraphQL */ `
         quickSearch: String
         tags: String
         archived: Boolean
+        ages: [Int]
     }
 
     type BookSubList {

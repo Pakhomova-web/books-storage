@@ -13,7 +13,7 @@ export function useCoverTypes(pageSettings?: IPageable, filters?: CoverTypeEntit
 }
 
 export function useCoverTypeOptions() {
-    return _useItems<IOption, NameFilter>(coverTypeOptionsQuery);
+    return _useItems<IOption<string>, NameFilter>(coverTypeOptionsQuery);
 }
 
 export function useUpdateCoverType() {

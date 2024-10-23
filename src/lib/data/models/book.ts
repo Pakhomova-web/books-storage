@@ -44,7 +44,8 @@ const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
         type: Schema.Types.ObjectId
     }],
     tags: [String],
-    archived: Boolean
+    archived: Boolean,
+    ages: [Number]
 });
 
 bookSchema.index({ name: 1, bookSeries: 1, bookType: 1 }, { unique: true });

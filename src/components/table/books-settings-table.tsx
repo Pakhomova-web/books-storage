@@ -3,7 +3,7 @@ import { useAuth } from '@/components/auth-context';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import { BookEntity, BookFilter, IPageable } from '@/lib/data/types';
 import { Box, Button } from '@mui/material';
-import { downloadCsv, isAdmin, renderPrice } from '@/utils/utils';
+import { downloadCsv, isAdmin, renderAges, renderPrice } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
 import { getAllBooks, useBooks, useUpdateBook } from '@/lib/graphql/queries/book/hook';
 import { ApolloError } from '@apollo/client';
@@ -127,6 +127,12 @@ export default function BooksSettingsTable() {
             title: 'Ціна',
             sortValue: 'price',
             renderValue: (item: BookEntity) => renderPrice(item.price),
+            type: 'text'
+        },
+        {
+            title: 'Вік',
+            sortValue: 'price',
+            renderValue: (item: BookEntity) => renderAges(item.ages),
             type: 'text'
         }
     ]);

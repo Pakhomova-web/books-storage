@@ -16,6 +16,7 @@ import { styled } from '@mui/material/styles';
 import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
 import CustomLink from '@/components/custom-link';
+import Ages from '@/components/ages';
 
 const StyledSmallImageBox = styled(Box)(() => ({
     height: '120px',
@@ -112,6 +113,10 @@ export default function BookDetails() {
         router.push(`/books?tags=${tag}`);
     }
 
+    function onAgeClick(age: number) {
+        router.push(`/books?ages=${age}`);
+    }
+
     return (
         <Box sx={styleVariables.positionRelative}>
             <Loading show={loading}></Loading>
@@ -172,6 +177,10 @@ export default function BookDetails() {
                                   <Tag key={index} tag={tag} onClick={() => onTagClick(tag)}/>)}
                           </Grid>
                         }
+
+                        {!!book.ages?.length && <Box pl={1}>
+                          <Ages selected={book.ages} showOnlySelected={true} onOptionClick={onAgeClick}></Ages>
+                        </Box>}
 
                         {keys.map((key, index) =>
                             <StyledStripedGrid key={index} container>

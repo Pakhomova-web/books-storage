@@ -54,6 +54,8 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
                     andFilters.push({ numberInStock: { $gt: 0 } });
                 } else if (key === 'archived') {
                     andFilters.push({ archived: { $in: [null, false] } });
+                } else if (key === 'ages') {
+                    andFilters.push({ [key]: { $all: filters[key] } });
                 } else {
                     andFilters.push({ [key]: filters[key] });
                 }

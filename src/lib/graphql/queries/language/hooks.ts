@@ -14,7 +14,7 @@ export function useLanguages(pageSettings?: IPageable, filters?: LanguageEntity)
 }
 
 export function useLanguageOptions() {
-    return _useItems<IOption, NameFilter>(languageOptionsQuery);
+    return _useItems<IOption<string>, NameFilter>(languageOptionsQuery);
 }
 
 export function useUpdateLanguage() {

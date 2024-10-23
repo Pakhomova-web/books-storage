@@ -6,7 +6,7 @@ import { renderActions } from '@/components/table/table-cell-render';
 
 const mobileBoxStyles = {
     borderRadius: styleVariables.borderRadius,
-    border: `1px solid ${styleVariables.primaryColor}`,
+    border: `1px solid ${styleVariables.primaryLightColor}`,
     padding: styleVariables.padding,
     margin: styleVariables.margin
 };

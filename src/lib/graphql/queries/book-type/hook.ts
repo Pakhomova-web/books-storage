@@ -2,7 +2,6 @@ import { BookTypeEntity, IOption, IPageable, NameFilter } from '@/lib/data/types
 import {
     _useCreateItem,
     _useDeleteItemById,
-    _useItemById,
     _useItems,
     _useUpdateItem,
     getItemById
@@ -24,7 +23,7 @@ export function getBookTypeById(id: string): Promise<BookTypeEntity> {
 }
 
 export function useBookTypeOptions() {
-    return _useItems<IOption, NameFilter>(bookTypeOptionsQuery);
+    return _useItems<IOption<string>, NameFilter>(bookTypeOptionsQuery);
 }
 
 export function useUpdateBookType() {

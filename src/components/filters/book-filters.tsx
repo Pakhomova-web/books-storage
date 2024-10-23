@@ -15,6 +15,7 @@ import { usePublishingHouseOptions } from '@/lib/graphql/queries/publishing-hous
 import { TableKey } from '@/components/table/table-key';
 import { useBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 import { customFieldClearBtnStyles, styleVariables } from '@/constants/styles-variables';
+import Ages from '@/components/ages';
 
 interface IBookFiltersProps {
     defaultValues?: BookFilter,
@@ -36,7 +37,8 @@ export function BookFilters(props: IBookFiltersProps) {
         language,
         tags,
         publishingHouse,
-        bookSeries
+        bookSeries,
+        ages
     } = formContext.watch();
     const { items: bookTypeOptions } = useBookTypeOptions();
     const { items: pageTypeOptions } = usePageTypeOptions();
@@ -72,6 +74,14 @@ export function BookFilters(props: IBookFiltersProps) {
 
     function clearValue(controlName: keyof BookFilter) {
         formContext.setValue(controlName, null);
+    }
+
+    function onAgeClick(opt: number) {
+        if (ages.includes(opt)) {
+            formContext.setValue('ages', ages.filter(age => age !== opt));
+        } else {
+            formContext.setValue('ages', [...ages, opt]);
+        }
     }
 
     return (
@@ -180,6 +190,10 @@ export function BookFilters(props: IBookFiltersProps) {
                                                 name="authors" showCheckbox variant="standard"/>
                             <Box sx={customFieldClearBtnStyles} onClick={() => clearValue('authors')}>Очистити</Box>
                         </Box>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Ages selected={ages} onOptionClick={onAgeClick}></Ages>
                     </Grid>
 
                     <Grid item xs={12}>

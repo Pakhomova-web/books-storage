@@ -1,6 +1,7 @@
 import { TableKey } from '@/components/table/table-key';
 import { UserEntity } from '@/lib/data/types';
 import { ROLES } from '@/constants/roles';
+import { ageOptions } from '@/constants/options';
 
 export function downloadCsv<K>(items: K[], tableKeys: TableKey<K>[], filename = 'data') {
     const blob = new Blob(
@@ -83,6 +84,10 @@ export function renderPrice(price: number): string {
     }
 
     return res;
+}
+
+export function renderAges(ages: number[]) {
+    return ages.map(age => ageOptions.find(opt => opt.id === age)?.label).join(', ');
 }
 
 export function parseImageFromLink(imageLink: string) {

@@ -26,7 +26,7 @@ export const styleVariables = {
     warnColor,
     redLightColor: 'rgba(171, 51, 44, 0.2)',
     greenLightColor: 'rgba(0, 128, 0, 0.2)',
-    primaryColor: 'rgba(68, 138, 255, 0.2)',
+    primaryLightColor: 'rgba(68, 138, 255, 0.2)',
     gray,
     flexEnd: { display: 'flex', justifyContent: 'end' },
     alignItemsCenter: { alignItems: 'center' },

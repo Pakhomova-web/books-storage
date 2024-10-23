@@ -22,6 +22,7 @@ import { parseImageFromLink } from '@/utils/utils';
 import { customFieldClearBtnStyles, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import Ages from '@/components/ages';
 
 interface IBookModalProps {
     open: boolean,
@@ -48,10 +49,11 @@ interface IForm {
     bookTypeId: string,
     bookSeriesId: string,
     publishingHouseId?: string,
-    imageIds?: string[],
-    imageLink?: string,
-    tags?: string[],
-    tag?: string
+    imageIds: string[],
+    imageLink: string,
+    tags: string[],
+    tag: string,
+    ages: number[]
 }
 
 export default function BookModal({ open, item, onClose, isAdmin }: IBookModalProps) {
@@ -72,10 +74,11 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             description: item?.description,
             publishingHouseId: item?.bookSeries.publishingHouse.id,
             imageIds: item?.id ? item.imageIds : null,
-            tags: item?.tags
+            tags: item?.tags,
+            ages: item?.ages
         }
     });
-    const { publishingHouseId, bookSeriesId, imageLink, tags, tag, description } = formContext.watch();
+    const { publishingHouseId, bookSeriesId, imageLink, tags, tag, description, ages } = formContext.watch();
     const { update, updating, updatingError } = useUpdateBook();
     const { create, creating, creatingError } = useCreateBook();
     const { items: pageTypeOptions, loading: loadingPageTypes } = usePageTypeOptions();
@@ -166,6 +169,14 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
 
     function removeTag(tag: string) {
         formContext.setValue('tags', tags.filter(t => t !== tag));
+    }
+
+    function onAgeClick(opt: number) {
+        if (ages.includes(opt)) {
+            formContext.setValue('ages', ages.filter(age => age !== opt));
+        } else {
+            formContext.setValue('ages', [...ages, opt]);
+        }
     }
 
     return (
@@ -317,6 +328,10 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                     </Grid>
                 </Grid>
 
+                <Grid item xs={12}>
+                    <Ages selected={ages} onOptionClick={isAdmin ? onAgeClick : null}></Ages>
+                </Grid>
+
                 <Grid container spacing={2} alignItems="center">
                     <Grid item xs={12}>
                         <CustomTextField fullWidth
@@ -365,8 +380,9 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={3} lg={2}>
-                        <Button fullWidth variant="outlined" disabled={!imageLink} onClick={parseImage}>Додати
-                            фото</Button>
+                        <Button fullWidth variant="outlined" disabled={!imageLink} onClick={parseImage}>
+                            Додати фото
+                        </Button>
                     </Grid>
 
                     <Grid item xs={12} display="flex" flexWrap="wrap">
@@ -377,9 +393,11 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                 </Box>
                                 <Box display="flex" justifyContent="center" gap={1}>
                                     {index === 0 ? 'Головне фото' : `Додаткове фото ${index}`}
-                                    <RemoveCircleOutlineIcon fontSize="small"
-                                                             sx={styleVariables.deleteIconBtn}
-                                                             onClick={() => removeImage(imageId)}/></Box>
+                                    {isAdmin &&
+                                      <RemoveCircleOutlineIcon fontSize="small"
+                                                               sx={styleVariables.deleteIconBtn}
+                                                               onClick={() => removeImage(imageId)}/>}
+                                </Box>
                             </Box>)}
                     </Grid>
                 </Grid>

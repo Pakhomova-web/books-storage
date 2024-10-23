@@ -12,7 +12,7 @@ export function useDeliveries(pageSettings?: IPageable, filters?: DeliveryEntity
 }
 
 export function useDeliveryOptions() {
-    return _useItems<IOption, NameFilter>(deliveryOptionsQuery);
+    return _useItems<IOption<string>, NameFilter>(deliveryOptionsQuery);
 }
 
 export function useUpdateDelivery() {

@@ -18,7 +18,7 @@ export function getPublishingHouseById(id: string): Promise<AuthorEntity> {
 }
 
 export function usePublishingHouseOptions() {
-    return _useItems<IOption, NameFilter>(publishingHouseOptionsQuery);
+    return _useItems<IOption<string>, NameFilter>(publishingHouseOptionsQuery);
 }
 
 export function useDeletePublishingHouse() {
