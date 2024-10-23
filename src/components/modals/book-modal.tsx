@@ -31,7 +31,7 @@ interface IBookModalProps {
     onClose: (updated?: boolean) => void
 }
 
-const bookBoxStyles = { height: '150px', maxHeight: '50vw' };
+const imageBoxStyles = { height: '150px', maxHeight: '50vw' };
 
 interface IForm {
     name: string,
@@ -75,7 +75,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             tags: item?.tags
         }
     });
-    const { publishingHouseId, bookSeriesId, imageLink, tags, tag } = formContext.watch();
+    const { publishingHouseId, bookSeriesId, imageLink, tags, tag, description } = formContext.watch();
     const { update, updating, updatingError } = useUpdateBook();
     const { create, creating, creatingError } = useCreateBook();
     const { items: pageTypeOptions, loading: loadingPageTypes } = usePageTypeOptions();
@@ -172,162 +172,218 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         <CustomModal title={(!item || !item.id ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' книгу'}
                      open={open}
                      disableBackdropClick={true}
+                     big={true}
                      onClose={() => onClose()}
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={isAdmin ? onSubmit : null}>
             <FormContainer formContext={formContext}>
-                <CustomTextField fullWidth
-                                 required
-                                 disabled={!isAdmin}
-                                 autoFocus
-                                 id="book-name"
-                                 label="Назва"
-                                 name="name"/>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomTextField fullWidth
+                                         required
+                                         disabled={!isAdmin}
+                                         autoFocus
+                                         id="book-name"
+                                         label="Назва"
+                                         name="name"/>
+                    </Grid>
 
-                <CustomSelectField fullWidth
-                                   required
-                                   disabled={!isAdmin}
-                                   options={bookTypeOptions}
-                                   loading={loadingBookTypes}
-                                   id="book-type-id"
-                                   label="Тип"
-                                   name="bookTypeId"/>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomSelectField fullWidth
+                                           required
+                                           disabled={!isAdmin}
+                                           options={bookTypeOptions}
+                                           loading={loadingBookTypes}
+                                           id="book-type-id"
+                                           label="Тип"
+                                           name="bookTypeId"/>
+                    </Grid>
 
-                <CustomSelectField fullWidth
-                                   required
-                                   disabled={!isAdmin}
-                                   loading={loadingPublishingHouses}
-                                   options={publishingHouseOptions}
-                                   id="publishing-house-id"
-                                   label="Видавництво"
-                                   name="publishingHouseId"/>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomSelectField fullWidth
+                                           required
+                                           disabled={!isAdmin}
+                                           loading={loadingPublishingHouses}
+                                           options={publishingHouseOptions}
+                                           id="publishing-house-id"
+                                           label="Видавництво"
+                                           name="publishingHouseId"/>
+                    </Grid>
 
-                <CustomSelectField fullWidth
-                                   required
-                                   disabled={!isAdmin || !publishingHouseId}
-                                   loading={loadingBookSeries}
-                                   options={bookSeriesOptions}
-                                   id="book-series-id"
-                                   label="Серія"
-                                   name="bookSeriesId"/>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomSelectField fullWidth
+                                           required
+                                           disabled={!isAdmin || !publishingHouseId}
+                                           loading={loadingBookSeries}
+                                           options={bookSeriesOptions}
+                                           id="book-series-id"
+                                           label="Серія"
+                                           name="bookSeriesId"/>
+                    </Grid>
 
-                <CustomSelectField fullWidth
-                                   required
-                                   disabled={!isAdmin}
-                                   loading={loadingLanguages}
-                                   options={languageOptions}
-                                   id="language-id"
-                                   label="Мова"
-                                   name="languageId"/>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomSelectField fullWidth
+                                           required
+                                           disabled={!isAdmin}
+                                           loading={loadingLanguages}
+                                           options={languageOptions}
+                                           id="language-id"
+                                           label="Мова"
+                                           name="languageId"/>
+                    </Grid>
 
-                <CustomSelectField fullWidth
-                                   required
-                                   disabled={!isAdmin}
-                                   loading={loadingPageTypes}
-                                   options={pageTypeOptions}
-                                   id="page-type-id"
-                                   label="Тип сторінок"
-                                   name="pageTypeId"/>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomSelectField fullWidth
+                                           required
+                                           disabled={!isAdmin}
+                                           loading={loadingPageTypes}
+                                           options={pageTypeOptions}
+                                           id="page-type-id"
+                                           label="Тип сторінок"
+                                           name="pageTypeId"/>
+                    </Grid>
 
-                <CustomSelectField fullWidth
-                                   required
-                                   disabled={!isAdmin}
-                                   loading={loadingCoverTypes}
-                                   options={coverTypeOptions}
-                                   id="cover-type-id"
-                                   label="Тип обкладинки"
-                                   name="coverTypeId"/>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomSelectField fullWidth
+                                           required
+                                           disabled={!isAdmin}
+                                           loading={loadingCoverTypes}
+                                           options={coverTypeOptions}
+                                           id="cover-type-id"
+                                           label="Тип обкладинки"
+                                           name="coverTypeId"/>
+                    </Grid>
 
-                <CustomTextField fullWidth
-                                 disabled={!isAdmin}
-                                 id="description"
-                                 label="Опис"
-                                 name="description"/>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomTextField fullWidth
+                                         disabled={!isAdmin}
+                                         id="isbn"
+                                         label="ISBN"
+                                         name="isbn"/>
+                    </Grid>
 
-                <CustomTextField fullWidth
-                                 disabled={!isAdmin}
-                                 id="isbn"
-                                 label="ISBN"
-                                 name="isbn"/>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomTextField fullWidth
+                                         disabled={!isAdmin}
+                                         id="format"
+                                         label="Формат, мм"
+                                         name="format"/>
+                    </Grid>
 
-                <CustomTextField fullWidth
-                                 disabled={!isAdmin}
-                                 id="format"
-                                 label="Формат, мм"
-                                 name="format"/>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomTextField fullWidth
+                                         required
+                                         disabled={!isAdmin}
+                                         id="numberOfPages"
+                                         type="number"
+                                         label="Кількість сторінок"
+                                         name="numberOfPages"/>
+                    </Grid>
 
-                <CustomTextField fullWidth
-                                 required
-                                 disabled={!isAdmin}
-                                 id="numberOfPages"
-                                 type="number"
-                                 label="Кількість сторінок"
-                                 name="numberOfPages"/>
-
-
-                <Box sx={styleVariables.positionRelative} mb={1}>
-                    <Loading isSmall={true} show={loadingAuthors}></Loading>
-                    <MultiSelectElement fullWidth
-                                        options={authorOptions}
-                                        id="authors"
-                                        label="Автори"
-                                        name="authorIds" showCheckbox variant="standard"/>
-                    <Box sx={customFieldClearBtnStyles} onClick={() => formContext.setValue('authorIds', null)}>
-                        Очистити
-                    </Box>
-                </Box>
-
-                {isAdmin && <CustomTextField fullWidth
-                                             id="numberInStock"
-                                             disabled={!isAdmin}
-                                             type="number"
-                                             label="Кількість в наявності"
-                                             name="numberInStock"/>}
-
-                <CustomTextField fullWidth
-                                 required
-                                 disabled={!isAdmin}
-                                 type="number"
-                                 id="price"
-                                 label="Price"
-                                 name="price"/>
-
-                <CustomTextField fullWidth
-                                 disabled={!isAdmin}
-                                 id="tag"
-                                 label="Тег"
-                                 helperText="Натисність Enter, щоб додати. Мін 3 літери"
-                                 onKeyDown={addTag}
-                                 name="tag"></CustomTextField>
-
-                {!!tags?.length && <Grid container gap={1} mb={1}>
-                    {tags.map(((tag, index) =>
-                        <Tag key={index}
-                             tag={tag}
-                             gap={1}
-                             onRemove={isAdmin ? (tag: string) => removeTag(tag) : null}/>))}
-                </Grid>}
-
-                <CustomTextField fullWidth
-                                 disabled={!isAdmin}
-                                 id="imageLink"
-                                 label="Посилання на фото"
-                                 name="imageLink"/>
-                {!!imageLink &&
-                  <Button fullWidth variant="outlined" onClick={parseImage}>Додати фото</Button>}
-
-                {formContext.getValues('imageIds')?.map((imageId, index) =>
-                    <Box key={index} mt={1}>
-                        <Box sx={bookBoxStyles} mb={1}>
-                            <CustomImage isBookDetails={true} imageId={imageId}></CustomImage>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <Box sx={styleVariables.positionRelative} mb={1}>
+                            <Loading isSmall={true} show={loadingAuthors}></Loading>
+                            <MultiSelectElement fullWidth
+                                                options={authorOptions}
+                                                id="authors"
+                                                label="Автори"
+                                                name="authorIds" showCheckbox variant="standard"/>
+                            {isAdmin &&
+                              <Box sx={customFieldClearBtnStyles}
+                                   onClick={() => formContext.setValue('authorIds', null)}>
+                                Очистити
+                              </Box>}
                         </Box>
-                        <Box display="flex" justifyContent="center" gap={1}>
-                            {index === 0 ? 'Головне фото' : 'Додаткове фото'}
-                            <RemoveCircleOutlineIcon fontSize="small"
-                                                     sx={styleVariables.deleteIconBtn}
-                                                     onClick={() => removeImage(imageId)}/></Box>
-                    </Box>)}
+                    </Grid>
+
+                    {isAdmin &&
+                      <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomTextField fullWidth
+                                         id="numberInStock"
+                                         type="number"
+                                         label="Кількість в наявності"
+                                         name="numberInStock"/>
+                      </Grid>}
+
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomTextField fullWidth
+                                         required
+                                         disabled={!isAdmin}
+                                         type="number"
+                                         id="price"
+                                         label="Ціна, грн"
+                                         name="price"/>
+                    </Grid>
+                </Grid>
+
+                <Grid container spacing={2} alignItems="center">
+                    <Grid item xs={12}>
+                        <CustomTextField fullWidth
+                                         disabled={!isAdmin}
+                                         id="description"
+                                         label="Опис"
+                                         multiline={true}
+                                         name="description"/>
+                    </Grid>
+
+                    {description && <Grid item xs={12}>
+                      <Box mb={1}><b>Попередній огляд опису:</b></Box>
+                      <Box dangerouslySetInnerHTML={{ __html: description }}></Box>
+                    </Grid>}
+
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomTextField fullWidth
+                                         disabled={!isAdmin}
+                                         id="tag"
+                                         label="Тег"
+                                         helperText="Мін. 3 літери"
+                                         onKeyDown={addTag}
+                                         name="tag"></CustomTextField>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <Button fullWidth disabled={!tag} variant="outlined">Додати тег</Button>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        {!!tags?.length && <Grid container gap={1} mb={1}>
+                            {tags.map(((tag, index) =>
+                                <Tag key={index}
+                                     tag={tag}
+                                     gap={1}
+                                     onRemove={isAdmin ? (tag: string) => removeTag(tag) : null}/>))}
+                        </Grid>}
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomTextField fullWidth
+                                         disabled={!isAdmin}
+                                         id="imageLink"
+                                         label="Посилання на фото"
+                                         name="imageLink"/>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <Button fullWidth variant="outlined" disabled={!imageLink} onClick={parseImage}>Додати
+                            фото</Button>
+                    </Grid>
+
+                    <Grid item xs={12} display="flex" flexWrap="wrap">
+                        {formContext.getValues('imageIds')?.map((imageId, index) =>
+                            <Box key={index} mt={1}>
+                                <Box sx={imageBoxStyles} mb={1}>
+                                    <CustomImage isBookDetails={true} imageId={imageId}></CustomImage>
+                                </Box>
+                                <Box display="flex" justifyContent="center" gap={1}>
+                                    {index === 0 ? 'Головне фото' : `Додаткове фото ${index}`}
+                                    <RemoveCircleOutlineIcon fontSize="small"
+                                                             sx={styleVariables.deleteIconBtn}
+                                                             onClick={() => removeImage(imageId)}/></Box>
+                            </Box>)}
+                    </Grid>
+                </Grid>
+
             </FormContainer>
 
             {(creatingError || updatingError) &&

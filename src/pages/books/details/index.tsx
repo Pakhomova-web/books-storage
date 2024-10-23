@@ -187,7 +187,7 @@ export default function BookDetails() {
                         {!!book.description &&
                           <Box m={1}>
                             <Box mb={1}><b>Опис</b></Box>
-                            <Box>{book.description}</Box>
+                            <Box dangerouslySetInnerHTML={{ __html: book.description }}></Box>
                           </Box>
                         }
                     </Grid>

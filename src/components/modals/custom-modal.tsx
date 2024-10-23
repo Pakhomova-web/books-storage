@@ -10,15 +10,15 @@ const modalContainerStyle = {
     justifyContent: 'center'
 };
 
-const mainContainerStyle = {
+const mainContainerStyle = (big = false) => ({
     position: 'relative',
-    width: '400px',
+    width: big ? '90vw' : '400px',
     maxWidth: '90vw',
     bgcolor: 'background.paper',
     borderRadius: styleVariables.borderRadius,
     boxShadow: styleVariables.boxShadow,
     p: styleVariables.doublePadding
-};
+});
 
 const innerContainer = { position: 'relative', paddingBottom: '50px' };
 const childrenContainer = {
@@ -45,8 +45,9 @@ interface ICustomModalProps {
     isSubmitDisabled?: boolean,
     onClose: () => void,
     hideSubmit?: boolean,
-    onSubmit?: () => void
-    actions?: { title: string, onClick: () => void }[];
+    onSubmit?: () => void,
+    actions?: { title: string, onClick: () => void }[],
+    big?: boolean
 }
 
 export default function CustomModal(props: ICustomModalProps) {
@@ -57,7 +58,7 @@ export default function CustomModal(props: ICustomModalProps) {
 
     return (
         <Modal open={props.open} onClose={closeModalHandler} disableEscapeKeyDown sx={modalContainerStyle}>
-            <Box sx={mainContainerStyle}>
+            <Box sx={mainContainerStyle(props.big)}>
                 {props.loading && <Loading show={props.loading}></Loading>}
 
                 <Box sx={innerContainer}>
