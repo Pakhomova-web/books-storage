@@ -8,6 +8,7 @@ import { useBookTypes } from '@/lib/graphql/queries/book-type/hook';
 import CustomImage from '@/components/custom-image';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import { usePublishingHouses } from '@/lib/graphql/queries/publishing-house/hook';
 
 const bookTypeBoxStyles = {
     borderRadius: styleVariables.borderRadius,
@@ -60,13 +61,17 @@ const bookTypeNameStyles = {
 };
 
 const mobileImageBoxStyles = {
-    height: '50px',
-    width: '50px',
+    height: '70px',
+    width: '70px',
     overflow: 'hidden'
 };
 
 export default function Home() {
-    const { loading, items } = useBookTypes({ orderBy: 'name', order: 'asc' });
+    const { loading: loadingBookTypes, items: bookTypes } = useBookTypes({ orderBy: 'name', order: 'asc' });
+    const { loading: loadingPublishingHouses, items: publishingHouses } = usePublishingHouses({
+        orderBy: 'name',
+        order: 'asc'
+    });
     const router = useRouter();
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
@@ -77,12 +82,14 @@ export default function Home() {
 
     return (
         <Box sx={positionRelative}>
-            <Loading show={loading}></Loading>
+            <Loading show={loadingBookTypes || loadingPublishingHouses}></Loading>
 
             <Box sx={pageStyles}>
-                {!!items?.length &&
+                {!!bookTypes?.length &&
                   <Grid container>
-                      {items?.map((type, index) => (
+                    <Grid item xs={12} p={2} sx={styleVariables.bigTitleFontSize}>Типи книг</Grid>
+
+                      {bookTypes?.map((type, index) => (
                           mobileMatches ?
                               <Grid xs={12} sm={6} key={index} item p={1}
                                     onClick={() => router.push(`/books?bookType=${type.id}`)}>
@@ -103,6 +110,23 @@ export default function Home() {
                                   </StyledBookTypeBox>
                               </Grid>
                       ))}
+                  </Grid>
+                }
+
+                {!!publishingHouses?.length &&
+                  <Grid container>
+                    <Grid item xs={12} p={2} sx={styleVariables.bigTitleFontSize}>Видавництва</Grid>
+
+                      {publishingHouses.map((publishingHouse, index) =>
+                          <Grid xs={12} sm={6} md={3} lg={2} key={index} item p={1}
+                                onClick={() => router.push(`/books?publishingHouse=${publishingHouse.id}`)}>
+                              <StyledMobileBookTypeBox gap={2}>
+                                  <Box sx={mobileImageBoxStyles}>
+                                      <CustomImage isBookType={true}></CustomImage>
+                                  </Box>
+                                  {publishingHouse.name}
+                              </StyledMobileBookTypeBox>
+                          </Grid>)}
                   </Grid>
                 }
 

@@ -146,12 +146,6 @@ export default function Books() {
         }
     }
 
-    function refreshData() {
-        refetch();
-        setOption(null);
-        setError(null);
-    }
-
     function onPageChange(val: number) {
         setPageSettings({
             ...pageSettings,
