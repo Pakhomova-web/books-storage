@@ -87,7 +87,10 @@ export default function Home() {
             <Box sx={pageStyles}>
                 {!!bookTypes?.length &&
                   <Grid container>
-                    <Grid item xs={12} p={2} sx={styleVariables.bigTitleFontSize}>Типи книг</Grid>
+                    <Grid item xs={12} p={2} display="flex" justifyContent="center"
+                          sx={styleVariables.bigTitleFontSize}>
+                      Типи книг
+                    </Grid>
 
                       {bookTypes?.map((type, index) => (
                           mobileMatches ?
@@ -115,7 +118,10 @@ export default function Home() {
 
                 {!!publishingHouses?.length &&
                   <Grid container>
-                    <Grid item xs={12} p={2} sx={styleVariables.bigTitleFontSize}>Видавництва</Grid>
+                    <Grid item xs={12} p={2} display="flex" justifyContent="center"
+                          sx={styleVariables.bigTitleFontSize}>
+                      Видавництва
+                    </Grid>
 
                       {publishingHouses.map((publishingHouse, index) =>
                           <Grid xs={12} sm={6} md={3} lg={2} key={index} item p={1}
