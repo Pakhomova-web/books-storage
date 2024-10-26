@@ -50,6 +50,8 @@ const StyledGrid = styled(Grid)(() => ({
     }
 }));
 
+const imageBoxStyles = { width: '50px', height: '50px' };
+
 export default function Books() {
     const router = useRouter();
     const { user } = useAuth();
@@ -64,10 +66,10 @@ export default function Books() {
         { title: 'Наявність', sortValue: 'numberInStock', type: 'text' }
     ]);
     const [filters, setFilters] = useState<BookFilter>(new BookFilter(router.query));
-    const [option, setOption] = useState<{ title: string, param?: string }[]>();
+    const [option, setOption] = useState<{ title: string, param?: string, imageId?: string }[]>();
     const [toRefreshData, setToRefreshData] = useState<boolean>(false);
     const [loadingOption, setLoadingOption] = useState<boolean>();
-    const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
+    const { items, totalCount, gettingError, loading } = useBooks(pageSettings, filters);
     const [error, setError] = useState<ApolloError>();
 
     useEffect(() => {
@@ -111,6 +113,7 @@ export default function Books() {
                     { title: 'Видавництво' },
                     {
                         title: item.publishingHouse.name,
+                        imageId: item.publishingHouse.imageId,
                         param: `publishingHouse=${item.publishingHouse.id}`
                     },
                     { title: 'Серія' },
@@ -127,7 +130,10 @@ export default function Books() {
                 .then((item: AuthorEntity) => [{ title: 'Автор' }, { title: item.name }]);
         } else if (data?.publishingHouse) {
             promise = getPublishingHouseById(data?.publishingHouse as string)
-                .then((item: PublishingHouseEntity) => [{ title: 'Видавництво' }, { title: item.name }]);
+                .then((item: PublishingHouseEntity) => [
+                    { title: 'Видавництво' },
+                    { title: item.name, imageId: item.imageId }
+                ]);
         } else if (data?.tags) {
             setOption([{ title: 'Тег' }, { title: data.tags as string }]);
         }
@@ -177,6 +183,8 @@ export default function Books() {
                 {option.map((item, index) =>
                     <Box key={index} display="flex" alignItems="center" gap={1}>
                         <ArrowForwardIcon fontSize="small"/>
+                        {!!item.imageId &&
+                          <Box sx={imageBoxStyles}><CustomImage imageId={item.imageId} isBookType={true}></CustomImage></Box>}
                         {item.param ?
                             <CustomLink onClick={() => router.push(`/books?${item.param}`)}>
                                 {item.title}
