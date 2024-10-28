@@ -17,16 +17,19 @@ import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
 import CustomLink from '@/components/custom-link';
 import Ages from '@/components/ages';
+import ImagesModal from '@/components/modals/images-modal';
 
 const StyledSmallImageBox = styled(Box)(() => ({
     height: '120px',
-    maxHeight: '30vh'
+    maxHeight: '30vh',
+    cursor: 'pointer'
 }));
 
-const StyledImageBox = styled(Box)(() => ({
+const imageBoxStyles = (clickable = false) => ({
     height: '400px',
-    maxHeight: '50vh'
-}));
+    maxHeight: '50vh',
+    ...(clickable ? { cursor: 'pointer' } : {})
+});
 
 const StyledTitleGrid = styled(Grid)(({ theme }) => ({
     ...styleVariables.bigTitleFontSize(theme),
@@ -45,6 +48,7 @@ export default function BookDetails() {
     const router = useRouter();
     const { loading, error, item: book } = useBook(router.query.id as string);
     const [keys, setKeys] = useState<TableKey<BookEntity>[]>([]);
+    const [imageIds, setImageIds] = useState<string[] | null>();
 
     useEffect(() => {
         if (book) {
@@ -137,15 +141,16 @@ export default function BookDetails() {
                     <Grid item p={1} sm={6} xs={12}>
                       <Grid container>
                         <Grid item md={book.imageIds.length > 1 ? 9 : 12} xs={book.imageIds.length > 1 ? 7 : 12}>
-                          <StyledImageBox mb={1}>
+                          <Box sx={imageBoxStyles(!!book.imageIds.length)} mb={1}
+                               onClick={() => setImageIds(book.imageIds)}>
                             <CustomImage isBookDetails={true} imageId={book.imageIds[0]}></CustomImage>
-                          </StyledImageBox>
+                          </Box>
                         </Grid>
 
                         <Grid item md={3} xs={5}>
                             {book.imageIds.map((imageId, index) =>
                                 (index !== 0 &&
-                                  <StyledSmallImageBox key={index} mb={1}>
+                                  <StyledSmallImageBox key={index} mb={1} onClick={() => setImageIds(book.imageIds)}>
                                     <CustomImage isBookDetails={true} imageId={imageId}></CustomImage>
                                   </StyledSmallImageBox>
                                 )
@@ -202,6 +207,9 @@ export default function BookDetails() {
                       }
                   </Grid>
                 }
+
+                {!!imageIds?.length &&
+                  <ImagesModal open={true} imageIds={imageIds} onClose={() => setImageIds(null)}></ImagesModal>}
 
                 {error && <ErrorNotification error={error}></ErrorNotification>}
             </Box>
