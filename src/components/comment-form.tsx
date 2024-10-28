@@ -52,7 +52,7 @@ export default function CommentForm({ bookId }: ICommentFormProps) {
         } else {
             formContext.clearErrors('email');
         }
-    }, [email]);
+    }, [email, formContext]);
 
     function onSubmit() {
         addComment(bookId, new CommentEntity({ ...formContext.getValues(), date: new Date().toISOString() }))
@@ -100,7 +100,7 @@ export default function CommentForm({ bookId }: ICommentFormProps) {
             {openModal &&
               <CustomModal open={true} onClose={() => setOpenModal(false)}>
                 <Box textAlign="center" sx={styleVariables.titleFontSize} mb={1}>Дякуємо за ваш відгук!</Box>
-                <Box textAlign="center">Він з'явиться для перегляду після перевірки адміністратором.</Box>
+                <Box textAlign="center">Він з{'\''}явиться для перегляду після перевірки адміністратором.</Box>
               </CustomModal>}
         </FormContainer>
     );
