@@ -5,17 +5,16 @@ import { styleVariables } from '@/constants/styles-variables';
 import { IOption } from '@/lib/data/types';
 
 const ageOptStyles = (clickable = false, selected = false, showOnlySelected = false) => ({
-    padding: '3px 6px',
+    padding: '2px 6px',
     border: `2px solid ${!showOnlySelected ? 'var(--background)' : styleVariables.gray}`,
-        color: 'var(--background)',
-        borderRadius: styleVariables.borderRadius,
-        cursor: clickable ? 'pointer' : null,
-        ...(selected ? {
-            backgroundColor: !showOnlySelected ? 'var(--background)' : styleVariables.gray,
-            color: !showOnlySelected ? 'white' : 'black'
-        } : {})
-    })
-;
+    color: 'var(--background)',
+    borderRadius: styleVariables.borderRadius,
+    cursor: clickable ? 'pointer' : null,
+    ...(selected ? {
+        backgroundColor: !showOnlySelected ? 'var(--background)' : styleVariables.gray,
+        color: !showOnlySelected ? 'white' : 'black'
+    } : {})
+});
 
 interface IAgesProps {
     selected: number[],

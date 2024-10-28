@@ -192,14 +192,14 @@ export default function BookDetails() {
                                 </Grid>
                             </StyledStripedGrid>
                         )}
-
-                        {!!book.description &&
-                          <Box m={1}>
-                            <Box mb={1}><b>Опис</b></Box>
-                            <Box dangerouslySetInnerHTML={{ __html: book.description }}></Box>
-                          </Box>
-                        }
                     </Grid>
+
+                      {!!book.description &&
+                        <Box m={1}>
+                          <Box mb={1}><b>Опис</b></Box>
+                          <Box dangerouslySetInnerHTML={{ __html: book.description }}></Box>
+                        </Box>
+                      }
                   </Grid>
                 }
 
