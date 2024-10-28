@@ -73,6 +73,7 @@ export class BookEntity {
     imageIds?: string[];
     tags?: string[];
     ages: number[];
+    comments?: CommentEntity[];
 
     constructor(data?) {
         this.id = data.id;
@@ -247,4 +248,24 @@ export class OrderEntity {
 
 export interface IOrderFilter {
     quickSearch?: string
+}
+
+export class CommentEntity {
+    id: string;
+    email: string;
+    username: string;
+    value: string;
+    approved: boolean;
+    date: string;
+
+    constructor(data?) {
+        if (data) {
+            this.id = data.id;
+            this.email = data.email;
+            this.username = data.username;
+            this.value = data.value;
+            this.approved = data.approved;
+            this.date = data.date;
+        }
+    }
 }

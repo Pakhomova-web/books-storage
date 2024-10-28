@@ -1,4 +1,4 @@
-import { BookEntity, BookFilter, IPageable } from '@/lib/data/types';
+import { BookEntity, BookFilter, CommentEntity, IPageable } from '@/lib/data/types';
 import Book from '@/lib/data/models/book';
 import { GraphQLError } from 'graphql/error';
 import { getValidFilters } from '@/lib/data/base';
@@ -67,8 +67,8 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
     return res;
 }
 
-export function getBookById(id: string) {
-    const item = Book.findById(id)
+export async function getBookById(id: string) {
+    const item = await Book.findById(id)
         .populate('language')
         .populate('bookType')
         .populate('authors')
@@ -86,6 +86,8 @@ export function getBookById(id: string) {
             extensions: { code: 'NOT_FOUND' }
         });
     }
+
+    item.comments = item.comments.filter(c => !!c.approved);
 
     return item;
 }
@@ -131,6 +133,20 @@ export async function updateBookNumberInStock(input: { id: string, numberInStock
     await Book.findByIdAndUpdate(input.id, { numberInStock: input.numberInStock });
 
     return input as BookEntity;
+}
+
+export async function addComment(id: string, input: CommentEntity) {
+    if (!id) {
+        throw new GraphQLError(`No Book found with id ${id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+    const book = await Book.findById(id);
+
+    book.comments.push(input);
+    await book.save();
+
+    return book as BookEntity;
 }
 
 function _getBookByUnique(name: string, bookSeries: string, bookType: string) {

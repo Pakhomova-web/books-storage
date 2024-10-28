@@ -1,4 +1,4 @@
-import { Box, BoxProps, Grid, IconButton, useTheme } from '@mui/material';
+import { Box, BoxProps, Grid, useTheme } from '@mui/material';
 import React from 'react';
 import Loading from '@/components/loading';
 import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
@@ -7,8 +7,8 @@ import { useRouter } from 'next/router';
 import { useBookTypes } from '@/lib/graphql/queries/book-type/hook';
 import CustomImage from '@/components/custom-image';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import InstagramIcon from '@mui/icons-material/Instagram';
 import { usePublishingHouses } from '@/lib/graphql/queries/publishing-house/hook';
+import SocialMediaBox from '@/components/social-media-box';
 
 const bookTypeBoxStyles = {
     borderRadius: styleVariables.borderRadius,
@@ -17,13 +17,6 @@ const bookTypeBoxStyles = {
     alignItems: 'center',
     backgroundColor: styleVariables.gray
 };
-
-const StyledSocialsBox = styled(Box)(() => ({
-    position: 'sticky',
-    backgroundColor: 'white',
-    bottom: 0,
-    borderTop: `1px solid ${styleVariables.gray}`
-}));
 
 const StyledMobileBookTypeBox = styled(Box)<BoxProps>(() => ({
     padding: styleVariables.padding,
@@ -75,10 +68,6 @@ export default function Home() {
     const router = useRouter();
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
-
-    function onInstagramClick() {
-        window.open('https://instagram.com/ph_smart_kids', "_blank")
-    }
 
     return (
         <Box sx={positionRelative}>
@@ -136,12 +125,7 @@ export default function Home() {
                   </Grid>
                 }
 
-                <StyledSocialsBox display="flex" alignItems="center" gap={2} width="100%" p={1} mt={1}
-                                  justifyContent="end">
-                    <Box>Соц. мережі:</Box>
-                    <IconButton onClick={onInstagramClick}><InstagramIcon color="primary"
-                                                                          fontSize="medium"/></IconButton>
-                </StyledSocialsBox>
+                <SocialMediaBox></SocialMediaBox>
             </Box>
         </Box>
     );

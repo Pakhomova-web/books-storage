@@ -63,14 +63,24 @@ const typeDefs =  /* GraphQL */ `
         imageIds: [String]
         tags: [String]
         ages: [Int]
+        comments: [Comment]
+    }
+    
+    type Comment {
+        id: ID!
+        value: String!
+        email: String!
+        username: String!
+        approved: Boolean
+        date: String!
     }
 
     type User {
-        id: ID!,
-        email: String!,
-        password: String,
-        firstName: String,
-        lastName: String,
+        id: ID!
+        email: String!
+        password: String
+        firstName: String
+        lastName: String
         role: String
     }
 
@@ -154,6 +164,7 @@ const typeDefs =  /* GraphQL */ `
 
         updateBook(input: BookUpdateInput!): Book
         updateBookNumberInStock(input: BookUpdateNumberInStockUpdateInput!): Book!
+        addBookComment(id: ID!, input: CommentInput!): Book!
         createBook(input: BookCreateInput!): Book
 
         updateAuthor(input: AuthorUpdateInput!): Author
@@ -260,6 +271,13 @@ const typeDefs =  /* GraphQL */ `
         numberInStock: Int!
     }
 
+    input CommentInput {
+        username: String!
+        email: String!
+        value: String!
+        date: String!
+    }
+    
     input BookCreateInput {
         name: String!
         description: String

@@ -45,7 +45,26 @@ const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
     }],
     tags: [String],
     archived: Boolean,
-    ages: [Number]
+    ages: [Number],
+    comments: [{
+        email: {
+            type: String,
+            required: true
+        },
+        username: {
+            type: String,
+            required: true
+        },
+        value: {
+            type: String,
+            required: true
+        },
+        approved: Boolean,
+        date: {
+            type: String,
+            required: true
+        }
+    }]
 });
 
 bookSchema.index({ name: 1, bookSeries: 1, bookType: 1 }, { unique: true });

@@ -45,6 +45,13 @@ const bookFragment = gql`
         }
         tags
         archived
+        comments {
+            id
+            username
+            value
+            approved
+            date
+        }
     }
 `;
 
@@ -88,6 +95,14 @@ export const updateBookQuery = gql`
 export const updateBookNumberInStockQuery = gql`
     mutation UpdateBookNumberInStock($input: BookUpdateNumberInStockUpdateInput!) {
         item: updateBookNumberInStock(input: $input) {
+            id
+        }
+    }
+`;
+
+export const addBookCommentQuery = gql`
+    mutation AddBookComment($id: ID!, $input: CommentInput!) {
+        item: addBookComment(id: $id, input: $input) {
             id
         }
     }

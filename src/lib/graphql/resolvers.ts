@@ -13,7 +13,7 @@ import {
     AuthorEntity,
     BookEntity,
     BookSeriesEntity,
-    BookTypeEntity,
+    BookTypeEntity, CommentEntity,
     CoverTypeEntity,
     DeliveryEntity,
     IOrderFilter,
@@ -31,7 +31,7 @@ import {
     getBookSeriesOptions,
     updateBookSeries
 } from '@/lib/data/book-series';
-import { createBook, getBookById, getBooks, updateBook, updateBookNumberInStock } from '@/lib/data/books';
+import { addComment, createBook, getBookById, getBooks, updateBook, updateBookNumberInStock } from '@/lib/data/books';
 import { createAuthor, deleteAuthor, getAuthorById, getAuthors, updateAuthor } from '@/lib/data/author';
 import { GraphQLError } from 'graphql/error';
 import { createUser, getNewToken, login, updateUser } from '@/lib/data/user';
@@ -39,7 +39,6 @@ import { createDelivery, deleteDelivery, getDeliveries, updateDelivery } from '@
 import { createOrder, deleteOrder, getOrders, updateOrder } from '@/lib/data/order';
 
 function parseError(error) {
-    console.log(error.extensions?.code);
     switch (error.extensions?.code) {
         case 'BAD_USER_INPUT':
         case 'GRAPHQL_PARSE_FAILED':
@@ -399,10 +398,8 @@ const resolvers: Resolvers = {
         updateBook: async (_root, { input }: { input: BookEntity }, { user }) => {
             _checkUser(user);
             try {
-                console.log('update book resolver');
                 return updateBook(input);
             } catch (error) {
-                console.log('catch update book resolver');
                 parseError(error);
             }
         },
@@ -412,6 +409,13 @@ const resolvers: Resolvers = {
             _checkUser(user);
             try {
                 return updateBookNumberInStock(input);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        addBookComment: async (_root, { id, input }: { id: string, input: CommentEntity }) => {
+            try {
+                return addComment(id, input);
             } catch (error) {
                 parseError(error);
             }

@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import HdrStrongIcon from '@mui/icons-material/HdrStrong';
 import HdrWeakIcon from '@mui/icons-material/HdrWeak';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { styled } from '@mui/material/styles';
+import ProfileIcon from '@mui/icons-material/AccountCircle';
 
 import { pageStyles, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
@@ -12,12 +14,13 @@ import ErrorNotification from '@/components/error-notification';
 import { TableKey } from '@/components/table/table-key';
 import { BookEntity } from '@/lib/data/types';
 import { renderPrice } from '@/utils/utils';
-import { styled } from '@mui/material/styles';
 import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
 import CustomLink from '@/components/custom-link';
 import Ages from '@/components/ages';
 import ImagesModal from '@/components/modals/images-modal';
+import CommentForm from '@/components/comment-form';
+import SocialMediaBox from '@/components/social-media-box';
 
 const StyledSmallImageBox = styled(Box)(() => ({
     height: '120px',
@@ -200,11 +203,43 @@ export default function BookDetails() {
                     </Grid>
 
                       {!!book.description &&
-                        <Box m={1}>
-                          <Box mb={1}><b>Опис</b></Box>
+                        <Grid item xs={12} p={1}>
+                          <Box sx={styleVariables.titleFontSize} mb={1} borderBottom={1} py={1}><b>Опис</b></Box>
                           <Box dangerouslySetInnerHTML={{ __html: book.description }}></Box>
-                        </Box>
+                        </Grid>
                       }
+
+                    <Grid item xs={12} p={1}>
+                      <Box display="flex" alignItems="center" borderBottom={1} py={1} mb={1}>
+                        <Box sx={styleVariables.titleFontSize}><b>Відгуки покупців</b></Box>
+                      </Box>
+
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} md={6} lg={8}>
+                            {!!book.comments?.length ?
+                                book.comments.map((comment, index) => (
+                                    <Box key={index} borderBottom={1} pb={2} borderColor={styleVariables.primaryLightColor}>
+                                        <Box mb={1} display="flex" justifyContent="space-between">
+                                            <Box display="flex" alignItems="center" gap={1}>
+                                                <ProfileIcon fontSize="large"/><b>{comment.username}</b>
+                                            </Box>
+                                            <Box sx={styleVariables.hintFontSize}>
+                                                {new Date(comment.date).toLocaleDateString()}
+                                            </Box>
+                                        </Box>
+                                        <Box>{comment.value}</Box>
+                                    </Box>
+                                )) :
+                                <Box p={1} display="flex" justifyContent="center">Тут ще немає відгуків</Box>}
+                        </Grid>
+
+                        <Grid item xs={12} md={5} lg={4}>
+                          <Box py={2} pl={2}>
+                            <CommentForm bookId={book.id}></CommentForm>
+                          </Box>
+                        </Grid>
+                      </Grid>
+                    </Grid>
                   </Grid>
                 }
 
@@ -212,6 +247,8 @@ export default function BookDetails() {
                   <ImagesModal open={true} imageIds={imageIds} onClose={() => setImageIds(null)}></ImagesModal>}
 
                 {error && <ErrorNotification error={error}></ErrorNotification>}
+
+                <SocialMediaBox></SocialMediaBox>
             </Box>
         </Box>
     );

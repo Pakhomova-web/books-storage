@@ -56,6 +56,7 @@ export type Book = {
   authors?: Maybe<Array<Maybe<Author>>>;
   bookSeries: BookSeries;
   bookType: BookType;
+  comments?: Maybe<Array<Maybe<Comment>>>;
   coverType: CoverType;
   description?: Maybe<Scalars['String']['output']>;
   format?: Maybe<Scalars['String']['output']>;
@@ -185,6 +186,22 @@ export type BookUpdateNumberInStockUpdateInput = {
   numberInStock: Scalars['Int']['input'];
 };
 
+export type Comment = {
+  approved?: Maybe<Scalars['Boolean']['output']>;
+  date: Scalars['String']['output'];
+  email: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  username: Scalars['String']['output'];
+  value: Scalars['String']['output'];
+};
+
+export type CommentInput = {
+  date: Scalars['String']['input'];
+  email: Scalars['String']['input'];
+  username: Scalars['String']['input'];
+  value: Scalars['String']['input'];
+};
+
 export type CoverType = {
   id?: Maybe<Scalars['ID']['output']>;
   name: Scalars['String']['output'];
@@ -228,6 +245,7 @@ export type LanguageUpdateInput = {
 };
 
 export type Mutation = {
+  addBookComment: Book;
   createAuthor?: Maybe<Author>;
   createBook?: Maybe<Book>;
   createBookSeries?: Maybe<BookSeries>;
@@ -262,6 +280,12 @@ export type Mutation = {
   updatePublishingHouse?: Maybe<PublishingHouse>;
   updateUser: User;
   user?: Maybe<User>;
+};
+
+
+export type MutationAddBookCommentArgs = {
+  id: Scalars['ID']['input'];
+  input: CommentInput;
 };
 
 
@@ -788,6 +812,8 @@ export type ResolversTypes = {
   BookUpdateInput: BookUpdateInput;
   BookUpdateNumberInStockUpdateInput: BookUpdateNumberInStockUpdateInput;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  Comment: ResolverTypeWrapper<Comment>;
+  CommentInput: CommentInput;
   CoverType: ResolverTypeWrapper<CoverTypeEntity>;
   CoverTypeCreateInput: CoverTypeCreateInput;
   CoverTypeUpdateInput: CoverTypeUpdateInput;
@@ -845,6 +871,8 @@ export type ResolversParentTypes = {
   BookUpdateInput: BookUpdateInput;
   BookUpdateNumberInStockUpdateInput: BookUpdateNumberInStockUpdateInput;
   Boolean: Scalars['Boolean']['output'];
+  Comment: Comment;
+  CommentInput: CommentInput;
   CoverType: CoverTypeEntity;
   CoverTypeCreateInput: CoverTypeCreateInput;
   CoverTypeUpdateInput: CoverTypeUpdateInput;
@@ -901,6 +929,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
   authors?: Resolver<Maybe<Array<Maybe<ResolversTypes['Author']>>>, ParentType, ContextType>;
   bookSeries?: Resolver<ResolversTypes['BookSeries'], ParentType, ContextType>;
   bookType?: Resolver<ResolversTypes['BookType'], ParentType, ContextType>;
+  comments?: Resolver<Maybe<Array<Maybe<ResolversTypes['Comment']>>>, ParentType, ContextType>;
   coverType?: Resolver<ResolversTypes['CoverType'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   format?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -943,6 +972,16 @@ export type BookTypeResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CommentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Comment'] = ResolversParentTypes['Comment']> = {
+  approved?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  date?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  value?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type CoverTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['CoverType'] = ResolversParentTypes['CoverType']> = {
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -962,6 +1001,7 @@ export type LanguageResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  addBookComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationAddBookCommentArgs, 'id' | 'input'>>;
   createAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationCreateAuthorArgs, 'input'>>;
   createBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationCreateBookArgs, 'input'>>;
   createBookSeries?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType, RequireFields<MutationCreateBookSeriesArgs, 'input'>>;
@@ -1090,6 +1130,7 @@ export type Resolvers<ContextType = any> = {
   BookSeriesSubList?: BookSeriesSubListResolvers<ContextType>;
   BookSubList?: BookSubListResolvers<ContextType>;
   BookType?: BookTypeResolvers<ContextType>;
+  Comment?: CommentResolvers<ContextType>;
   CoverType?: CoverTypeResolvers<ContextType>;
   Delivery?: DeliveryResolvers<ContextType>;
   Language?: LanguageResolvers<ContextType>;

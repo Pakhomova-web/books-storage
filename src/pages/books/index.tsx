@@ -264,7 +264,7 @@ export default function Books() {
                             </Table>
                         </Box>
                     </>
-                    : (!loading && <Box p={1} display="flex" justifyContent="center">No books</Box>)}
+                    : (!loading && <Box p={1} display="flex" justifyContent="center">Немає книг</Box>)}
 
                 {error && <ErrorNotification error={error}></ErrorNotification>}
             </Box>
