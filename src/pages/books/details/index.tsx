@@ -204,13 +204,17 @@ export default function BookDetails() {
 
                       {!!book.description &&
                         <Grid item xs={12} p={1}>
-                          <Box sx={styleVariables.titleFontSize} mb={1} borderBottom={1} py={1}><b>Опис</b></Box>
+                          <Box sx={styleVariables.titleFontSize} mb={1} borderBottom={1}
+                               borderColor={styleVariables.primaryLightColor} py={1}>
+                            <b>Опис</b>
+                          </Box>
                           <Box dangerouslySetInnerHTML={{ __html: book.description }}></Box>
                         </Grid>
                       }
 
                     <Grid item xs={12} p={1}>
-                      <Box display="flex" alignItems="center" borderBottom={1} py={1} mb={1}>
+                      <Box display="flex" alignItems="center" borderBottom={1}
+                           borderColor={styleVariables.primaryLightColor} py={1} mb={1}>
                         <Box sx={styleVariables.titleFontSize}><b>Відгуки покупців</b></Box>
                       </Box>
 
@@ -218,7 +222,8 @@ export default function BookDetails() {
                         <Grid item xs={12} md={6} lg={8}>
                             {!!book.comments?.length ?
                                 book.comments.map((comment, index) => (
-                                    <Box key={index} borderBottom={1} pb={2} borderColor={styleVariables.primaryLightColor}>
+                                    <Box key={index} borderBottom={1} pb={2}
+                                         borderColor={styleVariables.primaryLightColor}>
                                         <Box mb={1} display="flex" justifyContent="space-between">
                                             <Box display="flex" alignItems="center" gap={1}>
                                                 <ProfileIcon fontSize="large"/><b>{comment.username}</b>
