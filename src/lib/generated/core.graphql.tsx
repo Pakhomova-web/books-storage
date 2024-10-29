@@ -565,6 +565,7 @@ export type Query = {
   authorById?: Maybe<Author>;
   authors?: Maybe<Array<Author>>;
   bookById?: Maybe<Book>;
+  bookComments?: Maybe<Array<Comment>>;
   bookSeries?: Maybe<BookSeriesSubList>;
   bookSeriesByIdQuery?: Maybe<BookSeries>;
   bookSeriesOptions?: Maybe<Array<BookSeries>>;
@@ -597,6 +598,13 @@ export type QueryAuthorsArgs = {
 
 export type QueryBookByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryBookCommentsArgs = {
+  id: Scalars['ID']['input'];
+  page: Scalars['Int']['input'];
+  rowsPerPage: Scalars['Int']['input'];
 };
 
 
@@ -1087,6 +1095,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   authorById?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<QueryAuthorByIdArgs, 'id'>>;
   authors?: Resolver<Maybe<Array<ResolversTypes['Author']>>, ParentType, ContextType, Partial<QueryAuthorsArgs>>;
   bookById?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QueryBookByIdArgs, 'id'>>;
+  bookComments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType, RequireFields<QueryBookCommentsArgs, 'id' | 'page' | 'rowsPerPage'>>;
   bookSeries?: Resolver<Maybe<ResolversTypes['BookSeriesSubList']>, ParentType, ContextType, Partial<QueryBookSeriesArgs>>;
   bookSeriesByIdQuery?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType, RequireFields<QueryBookSeriesByIdQueryArgs, 'id'>>;
   bookSeriesOptions?: Resolver<Maybe<Array<ResolversTypes['BookSeries']>>, ParentType, ContextType, Partial<QueryBookSeriesOptionsArgs>>;

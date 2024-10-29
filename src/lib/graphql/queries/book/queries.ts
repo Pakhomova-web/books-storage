@@ -45,13 +45,6 @@ const bookFragment = gql`
         }
         tags
         archived
-        comments {
-            id
-            username
-            value
-            approved
-            date
-        }
     }
 `;
 
@@ -107,3 +100,17 @@ export const addBookCommentQuery = gql`
         }
     }
 `;
+
+export const bookCommentsQuery = gql`
+    query BookComments($id: ID!, $page: Int!, $rowsPerPage: Int!) {
+        items: bookComments(id: $id, page: $page, rowsPerPage: $rowsPerPage) {
+            id
+            username
+            value
+            approved
+            date
+        }
+    }
+`;
+
+

@@ -31,7 +31,15 @@ import {
     getBookSeriesOptions,
     updateBookSeries
 } from '@/lib/data/book-series';
-import { addComment, createBook, getBookById, getBooks, updateBook, updateBookNumberInStock } from '@/lib/data/books';
+import {
+    addComment,
+    createBook,
+    getBookById,
+    getBookComments,
+    getBooks,
+    updateBook,
+    updateBookNumberInStock
+} from '@/lib/data/books';
 import { createAuthor, deleteAuthor, getAuthorById, getAuthors, updateAuthor } from '@/lib/data/author';
 import { GraphQLError } from 'graphql/error';
 import { createUser, getNewToken, login, updateUser } from '@/lib/data/user';
@@ -209,7 +217,14 @@ const resolvers: Resolvers = {
             } catch (error) {
                 parseError(error);
             }
-        }
+        },
+        bookComments: async (_root, { id, page, rowsPerPage }) => {
+            try {
+                return getBookComments(id, page, rowsPerPage);
+            } catch (error) {
+                parseError(error);
+            }
+        },
     },
     Mutation: {
         updateLanguage: async (_root, { input }: { input: LanguageEntity }, { user }) => {

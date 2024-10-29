@@ -133,6 +133,7 @@ const typeDefs =  /* GraphQL */ `
         publishingHouseById(id: ID!): PublishingHouse
         languageById(id: ID!): Language
         bookSeriesByIdQuery(id: ID!): BookSeries
+        bookComments(id: ID!, page: Int!, rowsPerPage: Int!): [Comment!]
 
         refreshToken(refreshToken: String!): UserToken!
     }

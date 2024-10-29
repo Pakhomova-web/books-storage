@@ -157,6 +157,24 @@ function _getBookByUnique(name: string, bookSeries: string, bookType: string) {
     });
 }
 
+export async function getBookComments(id: string, page: number, rowsPerPage: number) {
+    if (!id) {
+        throw new GraphQLError(`No Book found with id ${id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+
+    const book = await Book.findById(id);
+
+    if (!book) {
+        throw new GraphQLError(`No Book found with id ${id}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+
+    return book.comments.splice(rowsPerPage * page, rowsPerPage);
+}
+
 function _getBookData(input: BookEntity) {
     return {
         ...input,

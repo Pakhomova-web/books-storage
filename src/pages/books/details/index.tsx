@@ -9,10 +9,10 @@ import ProfileIcon from '@mui/icons-material/AccountCircle';
 
 import { pageStyles, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
-import { useBook } from '@/lib/graphql/queries/book/hook';
+import { getBookComments, useBook } from '@/lib/graphql/queries/book/hook';
 import ErrorNotification from '@/components/error-notification';
 import { TableKey } from '@/components/table/table-key';
-import { BookEntity } from '@/lib/data/types';
+import { BookEntity, CommentEntity } from '@/lib/data/types';
 import { renderPrice } from '@/utils/utils';
 import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
@@ -21,6 +21,7 @@ import Ages from '@/components/ages';
 import ImagesModal from '@/components/modals/images-modal';
 import CommentForm from '@/components/comment-form';
 import SocialMediaBox from '@/components/social-media-box';
+import { ApolloError } from '@apollo/client';
 
 const StyledSmallImageBox = styled(Box)(() => ({
     height: '120px',
@@ -50,11 +51,19 @@ const StyledStripedGrid = styled(Grid)(() => ({
 export default function BookDetails() {
     const router = useRouter();
     const { loading, error, item: book } = useBook(router.query.id as string);
+    const [commentsPage, setCommentsPage] = useState<number>(0);
+    const [commentsRowsPerPage] = useState<number>(3);
     const [keys, setKeys] = useState<TableKey<BookEntity>[]>([]);
+    const [comments, setComments] = useState<CommentEntity[]>([]);
+    const [loadingComments, setLoadingComments] = useState<boolean>(false);
+    const [commentsError, setCommentsError] = useState<ApolloError>();
     const [imageIds, setImageIds] = useState<string[] | null>();
 
     useEffect(() => {
         if (book) {
+            setComments([]);
+            setCommentsPage(0);
+            refetchComments();
             const keys = [
                 {
                     title: 'Видавництво',
@@ -111,6 +120,25 @@ export default function BookDetails() {
             setKeys((keys as TableKey<BookEntity>[]).filter(key => !!key.renderValue(book)));
         }
     }, [book]);
+
+    function refetchComments() {
+        setCommentsError(null);
+        setLoadingComments(true);
+        getBookComments(book.id, commentsPage, commentsRowsPerPage)
+            .then(items => {
+                if (items.length < commentsRowsPerPage) {
+                    setCommentsPage(-1);
+                } else {
+                    setCommentsPage(commentsPage + 1);
+                }
+                setComments([...comments, ...items]);
+                setLoadingComments(false);
+            })
+            .catch(error => {
+                setLoadingComments(false);
+                setCommentsError(error);
+            });
+    }
 
     function onBackClick() {
         router.push(`/books${router.query.filters ? `?${router.query.filters}` : ''}`);
@@ -218,23 +246,32 @@ export default function BookDetails() {
                         <Box sx={styleVariables.titleFontSize}><b>Відгуки покупців</b></Box>
                       </Box>
 
-                      <Grid container spacing={2}>
+                      <Grid container spacing={2} sx={styleVariables.positionRelative}>
+                        <Loading show={!loading && loadingComments}></Loading>
+
                         <Grid item xs={12} md={6} lg={8}>
-                            {!!book.comments?.length ?
-                                book.comments.map((comment, index) => (
-                                    <Box key={index} borderBottom={1} pb={2}
-                                         borderColor={styleVariables.primaryLightColor}>
-                                        <Box mb={1} display="flex" justifyContent="space-between">
-                                            <Box display="flex" alignItems="center" gap={1}>
-                                                <ProfileIcon fontSize="large"/><b>{comment.username}</b>
+                            {!!comments?.length ?
+                                <Box>
+                                    {comments.map((comment, index) => (
+                                        <Box key={index} borderBottom={1} pb={2}
+                                             borderColor={styleVariables.primaryLightColor}>
+                                            <Box mb={1} display="flex" justifyContent="space-between">
+                                                <Box display="flex" alignItems="center" gap={1}>
+                                                    <ProfileIcon fontSize="large"/><b>{comment.username}</b>
+                                                </Box>
+                                                <Box sx={styleVariables.hintFontSize}>
+                                                    {new Date(comment.date).toLocaleDateString()}
+                                                </Box>
                                             </Box>
-                                            <Box sx={styleVariables.hintFontSize}>
-                                                {new Date(comment.date).toLocaleDateString()}
-                                            </Box>
+                                            <Box>{comment.value}</Box>
                                         </Box>
-                                        <Box>{comment.value}</Box>
+                                    ))}
+
+                                    <Box display="flex" justifyContent="center">
+                                        {commentsPage !== -1 &&
+                                          <Button variant="outlined" onClick={refetchComments}>Показате ще</Button>}
                                     </Box>
-                                )) :
+                                </Box> :
                                 <Box p={1} display="flex" justifyContent="center">Тут ще немає відгуків</Box>}
                         </Grid>
 
@@ -243,6 +280,8 @@ export default function BookDetails() {
                             <CommentForm bookId={book.id}></CommentForm>
                           </Box>
                         </Grid>
+
+                          {commentsError && <ErrorNotification error={commentsError}></ErrorNotification>}
                       </Grid>
                     </Grid>
                   </Grid>

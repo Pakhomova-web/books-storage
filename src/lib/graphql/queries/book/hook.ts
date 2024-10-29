@@ -9,12 +9,14 @@ import {
 import {
     addBookCommentQuery,
     bookByIdQuery,
+    bookCommentsQuery,
     booksQuery,
     createBookQuery,
     updateBookNumberInStockQuery,
     updateBookQuery
 } from '@/lib/graphql/queries/book/queries';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
+import { apolloClient } from '@/lib/apollo';
 
 export function useBooks(pageSettings?: IPageable, filters?: BookFilter) {
     const data = _usePageableItems<BookEntity>(booksQuery, 'books', pageSettings, filters);
@@ -25,6 +27,16 @@ export function useBooks(pageSettings?: IPageable, filters?: BookFilter) {
 
 export function useBook(id: string) {
     return _useItemById<BookEntity>(bookByIdQuery, 'bookById', id);
+}
+
+export async function getBookComments(id: string, page: number, rowsPerPage: number) {
+    const { data: { items } } = await apolloClient.query({
+        query: bookCommentsQuery,
+        fetchPolicy: 'no-cache',
+        variables: { id, page, rowsPerPage }
+    });
+
+    return items;
 }
 
 export function getAllBooks(pageSettings?: IPageable, filters?: BookFilter) {
