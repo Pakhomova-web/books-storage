@@ -5,11 +5,11 @@ import { styleVariables } from '@/constants/styles-variables';
 import { IOption } from '@/lib/data/types';
 
 const ageOptStyles = (clickable = false, selected = false, showOnlySelected = false) => ({
-    padding: '2px 6px',
-    border: `2px solid ${!showOnlySelected ? 'var(--background)' : styleVariables.primaryLightColor}`,
+    padding: '4px 8px',
     color: 'var(--background)',
     borderRadius: styleVariables.borderRadius,
     cursor: clickable ? 'pointer' : null,
+    backgroundColor: styleVariables.gray,
     ...(selected ? {
         backgroundColor: !showOnlySelected ? 'var(--background)' : styleVariables.primaryLightColor,
         color: !showOnlySelected ? 'white' : 'black'
