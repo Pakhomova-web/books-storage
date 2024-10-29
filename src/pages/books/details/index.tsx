@@ -249,7 +249,7 @@ export default function BookDetails() {
                       <Grid container spacing={2} sx={styleVariables.positionRelative}>
                         <Loading show={!loading && loadingComments}></Loading>
 
-                        <Grid item xs={12} md={6} lg={8}>
+                        <Grid item xs={12} md={7} lg={8}>
                             {!!comments?.length ?
                                 <Box>
                                     {comments.map((comment, index) => (
