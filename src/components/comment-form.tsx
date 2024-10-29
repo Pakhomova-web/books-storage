@@ -14,7 +14,7 @@ import CustomModal from '@/components/modals/custom-modal';
 
 const commentFormStyles = {
     borderRadius: styleVariables.borderRadius,
-    backgroundColor: styleVariables.gray,
+    border: `1px solid ${styleVariables.primaryLightColor}`,
     position: 'relative'
 };
 
