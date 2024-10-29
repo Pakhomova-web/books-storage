@@ -6,12 +6,12 @@ import { IOption } from '@/lib/data/types';
 
 const ageOptStyles = (clickable = false, selected = false, showOnlySelected = false) => ({
     padding: '2px 6px',
-    border: `2px solid ${!showOnlySelected ? 'var(--background)' : styleVariables.gray}`,
+    border: `2px solid ${!showOnlySelected ? 'var(--background)' : styleVariables.primaryLightColor}`,
     color: 'var(--background)',
     borderRadius: styleVariables.borderRadius,
     cursor: clickable ? 'pointer' : null,
     ...(selected ? {
-        backgroundColor: !showOnlySelected ? 'var(--background)' : styleVariables.gray,
+        backgroundColor: !showOnlySelected ? 'var(--background)' : styleVariables.primaryLightColor,
         color: !showOnlySelected ? 'white' : 'black'
     } : {})
 });

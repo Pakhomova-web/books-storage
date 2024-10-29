@@ -7,7 +7,7 @@ import React from 'react';
 const StyledTagGrid = styled(Grid)<GridOwnProps>(({ theme }) => ({
     padding: '4px 8px',
     borderRadius: styleVariables.borderRadius,
-    backgroundColor: styleVariables.gray,
+    backgroundColor: styleVariables.primaryLightColor,
     display: 'flex',
     alignItems: 'center'
 }));

@@ -42,7 +42,7 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
 
 const StyledStripedGrid = styled(Grid)(() => ({
     '&:nth-of-type(even)': {
-        backgroundColor: styleVariables.gray,
+        backgroundColor: styleVariables.primaryLightColor,
         borderRadius: styleVariables.borderRadius
     }
 }));
