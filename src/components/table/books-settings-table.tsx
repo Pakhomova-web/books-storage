@@ -1,4 +1,4 @@
-import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
+import { pageStyles, positionRelative, redLightColor, styleVariables } from '@/constants/styles-variables';
 import { useAuth } from '@/components/auth-context';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import { BookEntity, BookFilter, IPageable } from '@/lib/data/types';
@@ -183,7 +183,7 @@ export default function BooksSettingsTable() {
 
     function highlightInRed(numberInStock: number) {
         return !numberInStock ? {
-            background: styleVariables.redLightColor
+            background: redLightColor
         } : {};
     }
 

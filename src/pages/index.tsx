@@ -1,7 +1,7 @@
 import { Box, BoxProps, Grid, useTheme } from '@mui/material';
 import React from 'react';
 import Loading from '@/components/loading';
-import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
+import { borderRadius, pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { useBookTypes } from '@/lib/graphql/queries/book-type/hook';
@@ -11,7 +11,7 @@ import { usePublishingHouses } from '@/lib/graphql/queries/publishing-house/hook
 import SocialMediaBox from '@/components/social-media-box';
 
 const bookTypeBoxStyles = {
-    borderRadius: styleVariables.borderRadius,
+    borderRadius,
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',

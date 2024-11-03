@@ -1,7 +1,7 @@
 import { Box, Button } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import { ReactNode } from 'react';
-import { styleVariables, titleStyles } from '@/constants/styles-variables';
+import { borderRadius, styleVariables, titleStyles } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 
 const modalContainerStyle = {
@@ -15,7 +15,7 @@ const mainContainerStyle = (big = false) => ({
     width: big ? '90vw' : '400px',
     maxWidth: '90vw',
     bgcolor: 'background.paper',
-    borderRadius: styleVariables.borderRadius,
+    borderRadius,
     boxShadow: styleVariables.boxShadow,
     p: styleVariables.doublePadding
 });

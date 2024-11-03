@@ -1,10 +1,15 @@
 const rowMargin = '5px';
 const gray = 'rgb(244, 244, 244)';
 const warnColor = '#AB332C';
+export const primaryLightColor = 'rgba(68, 138, 255, 0.2)';
+export const redLightColor = 'rgba(171, 51, 44, 0.2)';
+export const greenLightColor = 'rgba(0, 128, 0, 0.2)';
+export const borderRadius = '4px';
+export const titleFontSize = '20px';
 
 export const styleVariables = {
     titleFontSize: {
-        fontSize: '20px'
+        fontSize: titleFontSize
     },
     deleteIconBtn: { cursor: 'pointer', color: warnColor },
     bigTitleFontSize: (theme) => ({
@@ -17,16 +22,12 @@ export const styleVariables = {
         fontSize: '14px'
     },
     boxShadow: 24,
-    borderRadius: '4px',
     margin: '10px',
     rowMargin,
     padding: '10px',
     doubleMargin: '20px',
     doublePadding: '20px',
     warnColor,
-    redLightColor: 'rgba(171, 51, 44, 0.2)',
-    greenLightColor: 'rgba(0, 128, 0, 0.2)',
-    primaryLightColor: 'rgba(68, 138, 255, 0.2)',
     gray,
     flexEnd: { display: 'flex', justifyContent: 'end' },
     alignItemsCenter: { alignItems: 'center' },
@@ -67,6 +68,11 @@ export const styleVariables = {
     paginatorStyles: {
         borderTop: `1px solid ${gray}`,
         background: 'white'
+    },
+    sectionTitle: {
+        backgroundColor: primaryLightColor,
+        borderRadius,
+        fontSize: titleFontSize
     }
 };
 

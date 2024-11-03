@@ -1,4 +1,4 @@
-import { styleVariables } from '@/constants/styles-variables';
+import { borderRadius, styleVariables } from '@/constants/styles-variables';
 
 export const authStyles = {
     container: {
@@ -8,7 +8,7 @@ export const authStyles = {
         maxWidth: '95vw',
         padding: styleVariables.doublePadding,
         margin: `${styleVariables.margin} auto`,
-        borderRadius: styleVariables.borderRadius,
+        borderRadius,
         border: `1px solid ${styleVariables.gray}`,
         position: 'relative'
     },

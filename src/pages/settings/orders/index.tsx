@@ -4,7 +4,7 @@ import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import { IOrderFilter, IPageable, OrderEntity } from '@/lib/data/types';
 import { isAdmin } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
-import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
+import { pageStyles, positionRelative, redLightColor, styleVariables } from '@/constants/styles-variables';
 import { useDeleteOrder, useOrders } from '@/lib/graphql/queries/order/hook';
 import { ApolloError } from '@apollo/client';
 import Loading from '@/components/loading';
@@ -73,7 +73,7 @@ export default function Orders() {
 
     function highlightInRed(order: OrderEntity) {
         return !order.isPartlyPaid ? {
-            background: styleVariables.redLightColor
+            background: redLightColor
         } : {};
     }
 

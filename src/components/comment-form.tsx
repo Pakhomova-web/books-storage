@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import { useAuth } from '@/components/auth-context';
 import CustomTextField from '@/components/form-fields/custom-text-field';
-import { styleVariables } from '@/constants/styles-variables';
+import { borderRadius, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import { CommentEntity } from '@/lib/data/types';
 import { emailValidatorExp } from '@/constants/validators-exp';
 import { useAddBookComment } from '@/lib/graphql/queries/book/hook';
@@ -13,8 +13,8 @@ import ErrorNotification from '@/components/error-notification';
 import CustomModal from '@/components/modals/custom-modal';
 
 const commentFormStyles = {
-    borderRadius: styleVariables.borderRadius,
-    border: `1px solid ${styleVariables.primaryLightColor}`,
+    borderRadius,
+    border: `1px solid ${primaryLightColor}`,
     position: 'relative'
 };
 

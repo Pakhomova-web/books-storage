@@ -7,7 +7,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { styled } from '@mui/material/styles';
 import ProfileIcon from '@mui/icons-material/AccountCircle';
 
-import { pageStyles, styleVariables } from '@/constants/styles-variables';
+import { borderRadius, pageStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import { getBookComments, useBook } from '@/lib/graphql/queries/book/hook';
 import ErrorNotification from '@/components/error-notification';
@@ -41,13 +41,6 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
     alignItems: 'center'
 }));
 
-const StyledStripedGrid = styled(Grid)(() => ({
-    '&:nth-of-type(even)': {
-        backgroundColor: styleVariables.primaryLightColor,
-        borderRadius: styleVariables.borderRadius
-    }
-}));
-
 export default function BookDetails() {
     const router = useRouter();
     const { loading, error, item: book } = useBook(router.query.id as string);
@@ -61,9 +54,7 @@ export default function BookDetails() {
 
     useEffect(() => {
         if (book) {
-            setComments([]);
-            setCommentsPage(0);
-            refetchComments();
+            refetchComments(true);
             const keys = [
                 {
                     title: 'Видавництво',
@@ -121,17 +112,20 @@ export default function BookDetails() {
         }
     }, [book]);
 
-    function refetchComments() {
+    function refetchComments(refresh?: boolean) {
         setCommentsError(null);
         setLoadingComments(true);
-        getBookComments(book.id, commentsPage, commentsRowsPerPage)
+        if (refresh) {
+            setCommentsPage(0);
+        }
+        getBookComments(book.id, refresh ? 0 : commentsPage, commentsRowsPerPage)
             .then(items => {
                 if (items.length < commentsRowsPerPage) {
                     setCommentsPage(-1);
                 } else {
                     setCommentsPage(commentsPage + 1);
                 }
-                setComments([...comments, ...items]);
+                setComments(refresh ? items : [...comments, ...items]);
                 setLoadingComments(false);
             })
             .catch(error => {
@@ -208,7 +202,7 @@ export default function BookDetails() {
 
                         {!!book.tags?.length &&
                           <Grid container mb={2} pl={1} alignItems="center" gap={1}>
-                            Tags:
+                            Теги:
                               {book.tags.map((tag, index) =>
                                   <Tag key={index} tag={tag} onClick={() => onTagClick(tag)}/>)}
                           </Grid>
@@ -218,35 +212,34 @@ export default function BookDetails() {
                           <Ages selected={book.ages} showOnlySelected={true} onOptionClick={onAgeClick}></Ages>
                         </Box>}
 
+                      <Box sx={styleVariables.sectionTitle} p={1} mb={1}>
+                        Деталі
+                      </Box>
                         {keys.map((key, index) =>
-                            <StyledStripedGrid key={index} container>
+                            <Grid key={index} container borderBottom={1} borderColor={primaryLightColor}>
                                 <Grid item pr={1} xs={6} my={1} px={1}>{key.title}</Grid>
                                 <Grid item xs={6} my={1} px={1}>
                                     {key.onValueClick ?
                                         <CustomLink onClick={key.onValueClick}>{key.renderValue(book)}</CustomLink> :
                                         key.renderValue(book)}
                                 </Grid>
-                            </StyledStripedGrid>
+                            </Grid>
                         )}
                     </Grid>
 
                       {!!book.description &&
                         <Grid item xs={12} p={1}>
-                          <Box sx={styleVariables.titleFontSize} mb={1} borderBottom={1}
-                               borderColor={styleVariables.primaryLightColor} py={1}>
-                            <b>Опис</b>
-                          </Box>
-                          <Box dangerouslySetInnerHTML={{ __html: book.description }}></Box>
+                          <Box sx={styleVariables.sectionTitle} p={1} mb={1}>Опис</Box>
+                          <Box px={1} dangerouslySetInnerHTML={{ __html: book.description }}></Box>
                         </Grid>
                       }
 
                     <Grid item xs={12} p={1}>
-                      <Box display="flex" alignItems="center" borderBottom={1}
-                           borderColor={styleVariables.primaryLightColor} py={1} mb={1}>
-                        <Box sx={styleVariables.titleFontSize}><b>Відгуки покупців</b></Box>
+                      <Box sx={styleVariables.sectionTitle} p={1} mb={1}>
+                        Відгуки покупців
                       </Box>
 
-                      <Grid container spacing={2} sx={styleVariables.positionRelative}>
+                      <Grid container spacing={2} sx={styleVariables.positionRelative} px={1}>
                         <Loading show={!loading && loadingComments}></Loading>
 
                         <Grid item xs={12} md={7} lg={8}>
@@ -254,7 +247,7 @@ export default function BookDetails() {
                                 <Box>
                                     {comments.map((comment, index) => (
                                         <Box key={index} borderBottom={1} pb={2}
-                                             borderColor={styleVariables.primaryLightColor}>
+                                             borderColor={primaryLightColor}>
                                             <Box mb={1} display="flex" justifyContent="space-between">
                                                 <Box display="flex" alignItems="center" gap={1}>
                                                     <ProfileIcon fontSize="large"/><b>{comment.username}</b>
@@ -269,7 +262,9 @@ export default function BookDetails() {
 
                                     <Box display="flex" justifyContent="center">
                                         {commentsPage !== -1 &&
-                                          <Button variant="outlined" onClick={refetchComments}>Показате ще</Button>}
+                                          <Button variant="outlined" onClick={() => refetchComments()}>
+                                            Показате ще
+                                          </Button>}
                                     </Box>
                                 </Box> :
                                 <Box p={1} display="flex" justifyContent="center">Тут ще немає відгуків</Box>}

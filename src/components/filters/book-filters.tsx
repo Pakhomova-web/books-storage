@@ -77,10 +77,10 @@ export function BookFilters(props: IBookFiltersProps) {
     }
 
     function onAgeClick(opt: number) {
-        if (ages.includes(opt)) {
+        if (ages?.includes(opt)) {
             formContext.setValue('ages', ages.filter(age => age !== opt));
         } else {
-            formContext.setValue('ages', [...ages, opt]);
+            formContext.setValue('ages', ages ? [...ages, opt] : [opt]);
         }
     }
 

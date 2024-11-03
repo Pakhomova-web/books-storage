@@ -1,18 +1,16 @@
 import { ageOptions } from '@/constants/options';
 import { Box } from '@mui/material';
 import React from 'react';
-import { styleVariables } from '@/constants/styles-variables';
+import { borderRadius, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import { IOption } from '@/lib/data/types';
 
 const ageOptStyles = (clickable = false, selected = false, showOnlySelected = false) => ({
     padding: '4px 8px',
-    color: 'var(--background)',
-    borderRadius: styleVariables.borderRadius,
+    borderRadius,
     cursor: clickable ? 'pointer' : null,
-    backgroundColor: styleVariables.gray,
+    border: `1px solid ${primaryLightColor}`,
     ...(selected ? {
-        backgroundColor: !showOnlySelected ? 'var(--background)' : styleVariables.primaryLightColor,
-        color: !showOnlySelected ? 'white' : 'black'
+        backgroundColor: !showOnlySelected ? primaryLightColor : 'transparent'
     } : {})
 });
 
@@ -33,7 +31,7 @@ export default function Ages(props: IAgesProps) {
     return (
         <Box display="flex" alignItems="center" flexWrap="wrap" gap={1} my={2}>
             Вік:{ageOptions.map((opt, index) => {
-            if (props.selected.includes(opt.id)) {
+            if (props.selected?.includes(opt.id)) {
                 return <Box key={index}
                             sx={ageOptStyles(!!props.onOptionClick, true, props.showOnlySelected)}
                             onClick={() => onOptionClick(opt)}>{opt.label}</Box>;

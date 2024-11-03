@@ -2,7 +2,7 @@ import { Box, Grid, Table, TableFooter, TablePagination, TableRow } from '@mui/m
 import React, { useEffect, useState } from 'react';
 import { useBooks } from '@/lib/graphql/queries/book/hook';
 import Loading from '@/components/loading';
-import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
+import { borderRadius, pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 import {
     AuthorEntity,
     BookEntity,
@@ -46,7 +46,7 @@ const StyledGrid = styled(Grid)(() => ({
     cursor: 'pointer',
     '&:hover': {
         backgroundColor: styleVariables.gray,
-        borderRadius: styleVariables.borderRadius
+        borderRadius
     }
 }));
 

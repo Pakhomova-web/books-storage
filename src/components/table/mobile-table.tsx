@@ -1,13 +1,13 @@
 import { Box, Grid } from '@mui/material';
 import React, { ReactNode, useState } from 'react';
-import { styleVariables } from '@/constants/styles-variables';
+import { borderRadius, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import { TableKey } from '@/components/table/table-key';
 import { renderActions } from '@/components/table/table-cell-render';
 import CustomImage from '@/components/custom-image';
 
 const mobileBoxStyles = {
-    borderRadius: styleVariables.borderRadius,
-    border: `1px solid ${styleVariables.primaryLightColor}`,
+    borderRadius,
+    border: `1px solid ${primaryLightColor}`,
     padding: styleVariables.padding,
     margin: styleVariables.margin
 };
