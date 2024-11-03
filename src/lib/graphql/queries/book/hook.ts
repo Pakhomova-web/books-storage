@@ -7,15 +7,16 @@ import {
     _useUpdateItem
 } from '@/lib/graphql/base-hooks';
 import {
-    addBookCommentQuery,
+    addBookCommentQuery, approveComment,
     bookByIdQuery,
     bookCommentsQuery,
     booksQuery,
-    createBookQuery,
+    booksWithNotApprovedCommentsQuery,
+    createBookQuery, removeComment,
     updateBookNumberInStockQuery,
     updateBookQuery
 } from '@/lib/graphql/queries/book/queries';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { apolloClient } from '@/lib/apollo';
 
 export function useBooks(pageSettings?: IPageable, filters?: BookFilter) {
@@ -43,6 +44,10 @@ export function getAllBooks(pageSettings?: IPageable, filters?: BookFilter) {
     return _useAllItems<BookEntity>(booksQuery, 'books', pageSettings, filters);
 }
 
+export function useBooksComments(pageSettings?: IPageable) {
+    return _usePageableItems<BookEntity>(booksWithNotApprovedCommentsQuery, 'booksWithNotApprovedComments', pageSettings);
+}
+
 export function useCreateBook() {
     return _useCreateItem<BookEntity>(createBookQuery);
 }
@@ -53,6 +58,14 @@ export function useUpdateBook() {
 
 export function useUpdateBookNumberInStock() {
     return _useUpdateItem<BookEntity>(updateBookNumberInStockQuery);
+}
+
+export function useApproveComment() {
+    return _useUpdateItem<BookEntity>(approveComment);
+}
+
+export function useRemoveComment() {
+    return _useUpdateItem<BookEntity>(removeComment);
 }
 
 export function useAddBookComment() {

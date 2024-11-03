@@ -60,6 +60,35 @@ export const booksQuery = gql`
     ${bookFragment}
 `;
 
+export const booksWithNotApprovedCommentsQuery = gql`
+    query BooksWithComments($pageSettings: PageableInput) {
+        booksWithNotApprovedComments(pageSettings: $pageSettings) {
+            items {
+                id
+                name
+                bookType {
+                    name
+                }
+                bookSeries {
+                    name
+                    publishingHouse {
+                        name
+                    }
+                }
+                comments {
+                    id
+                    username
+                    date
+                    value
+                    email
+                    approved
+                }
+            }
+            totalCount
+        }
+    }
+`;
+
 export const bookByIdQuery = gql`
     query BookById($id: ID!) {
         bookById(id: $id) {
@@ -89,6 +118,36 @@ export const updateBookNumberInStockQuery = gql`
     mutation UpdateBookNumberInStock($input: BookUpdateNumberInStockUpdateInput!) {
         item: updateBookNumberInStock(input: $input) {
             id
+        }
+    }
+`;
+
+export const approveComment = gql`
+    mutation ApproveComment($input: UpdateCommentInput!) {
+        item: approveComment(input: $input) {
+            comments {
+                id
+                username
+                value
+                email
+                date
+                approved
+            }
+        }
+    }
+`;
+
+export const removeComment = gql`
+    mutation RemoveComment($input: UpdateCommentInput!) {
+        item: removeComment(input: $input) {
+            comments {
+                id
+                username
+                value
+                email
+                date
+                approved
+            }
         }
     }
 `;

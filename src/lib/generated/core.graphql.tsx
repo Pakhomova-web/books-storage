@@ -246,6 +246,7 @@ export type LanguageUpdateInput = {
 
 export type Mutation = {
   addBookComment: Book;
+  approveComment: Book;
   createAuthor?: Maybe<Author>;
   createBook?: Maybe<Book>;
   createBookSeries?: Maybe<BookSeries>;
@@ -267,6 +268,7 @@ export type Mutation = {
   deletePageType?: Maybe<PageType>;
   deletePublishingHouse?: Maybe<PublishingHouse>;
   login: UserToken;
+  removeComment: Book;
   updateAuthor?: Maybe<Author>;
   updateBook?: Maybe<Book>;
   updateBookNumberInStock: Book;
@@ -286,6 +288,11 @@ export type Mutation = {
 export type MutationAddBookCommentArgs = {
   id: Scalars['ID']['input'];
   input: CommentInput;
+};
+
+
+export type MutationApproveCommentArgs = {
+  input: UpdateCommentInput;
 };
 
 
@@ -392,6 +399,11 @@ export type MutationDeletePublishingHouseArgs = {
 export type MutationLoginArgs = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+
+export type MutationRemoveCommentArgs = {
+  input: UpdateCommentInput;
 };
 
 
@@ -572,6 +584,7 @@ export type Query = {
   bookTypeById?: Maybe<BookType>;
   bookTypes?: Maybe<Array<BookType>>;
   books?: Maybe<BookSubList>;
+  booksWithNotApprovedComments?: Maybe<BookSubList>;
   coverTypes?: Maybe<Array<CoverType>>;
   deliveries?: Maybe<Array<Delivery>>;
   fullBookSeriesOptions?: Maybe<Array<BookSeries>>;
@@ -641,6 +654,11 @@ export type QueryBooksArgs = {
 };
 
 
+export type QueryBooksWithNotApprovedCommentsArgs = {
+  pageSettings?: InputMaybe<PageableInput>;
+};
+
+
 export type QueryCoverTypesArgs = {
   filters?: InputMaybe<SearchByNameInput>;
   pageSettings?: InputMaybe<PageableInput>;
@@ -698,6 +716,11 @@ export type QueryRefreshTokenArgs = {
 
 export type SearchByNameInput = {
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateCommentInput = {
+  bookId: Scalars['ID']['input'];
+  commentId: Scalars['ID']['input'];
 };
 
 export type User = {
@@ -851,6 +874,7 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   SearchByNameInput: SearchByNameInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
+  UpdateCommentInput: UpdateCommentInput;
   User: ResolverTypeWrapper<UserEntity>;
   UserCreateInput: UserCreateInput;
   UserToken: ResolverTypeWrapper<Omit<UserToken, 'user'> & { user: ResolversTypes['User'] }>;
@@ -910,6 +934,7 @@ export type ResolversParentTypes = {
   Query: {};
   SearchByNameInput: SearchByNameInput;
   String: Scalars['String']['output'];
+  UpdateCommentInput: UpdateCommentInput;
   User: UserEntity;
   UserCreateInput: UserCreateInput;
   UserToken: Omit<UserToken, 'user'> & { user: ResolversParentTypes['User'] };
@@ -1010,6 +1035,7 @@ export type LanguageResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addBookComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationAddBookCommentArgs, 'id' | 'input'>>;
+  approveComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationApproveCommentArgs, 'input'>>;
   createAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationCreateAuthorArgs, 'input'>>;
   createBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationCreateBookArgs, 'input'>>;
   createBookSeries?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType, RequireFields<MutationCreateBookSeriesArgs, 'input'>>;
@@ -1031,6 +1057,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deletePageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationDeletePageTypeArgs, 'id'>>;
   deletePublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationDeletePublishingHouseArgs, 'id'>>;
   login?: Resolver<ResolversTypes['UserToken'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
+  removeComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationRemoveCommentArgs, 'input'>>;
   updateAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationUpdateAuthorArgs, 'input'>>;
   updateBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationUpdateBookArgs, 'input'>>;
   updateBookNumberInStock?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationUpdateBookNumberInStockArgs, 'input'>>;
@@ -1102,6 +1129,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   bookTypeById?: Resolver<Maybe<ResolversTypes['BookType']>, ParentType, ContextType, RequireFields<QueryBookTypeByIdArgs, 'id'>>;
   bookTypes?: Resolver<Maybe<Array<ResolversTypes['BookType']>>, ParentType, ContextType, Partial<QueryBookTypesArgs>>;
   books?: Resolver<Maybe<ResolversTypes['BookSubList']>, ParentType, ContextType, Partial<QueryBooksArgs>>;
+  booksWithNotApprovedComments?: Resolver<Maybe<ResolversTypes['BookSubList']>, ParentType, ContextType, Partial<QueryBooksWithNotApprovedCommentsArgs>>;
   coverTypes?: Resolver<Maybe<Array<ResolversTypes['CoverType']>>, ParentType, ContextType, Partial<QueryCoverTypesArgs>>;
   deliveries?: Resolver<Maybe<Array<ResolversTypes['Delivery']>>, ParentType, ContextType, Partial<QueryDeliveriesArgs>>;
   fullBookSeriesOptions?: Resolver<Maybe<Array<ResolversTypes['BookSeries']>>, ParentType, ContextType, Partial<QueryFullBookSeriesOptionsArgs>>;

@@ -87,8 +87,6 @@ export async function getBookById(id: string) {
         });
     }
 
-    item.comments = item.comments.filter(c => !!c.approved);
-
     return item;
 }
 
@@ -135,6 +133,40 @@ export async function updateBookNumberInStock(input: { id: string, numberInStock
     return input as BookEntity;
 }
 
+export async function approveComment(input: { bookId: string, commentId: string }) {
+    if (!input.bookId) {
+        throw new GraphQLError(`No Book found with id ${input.bookId}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+    const book = await Book.findById(input.bookId);
+
+    book.comments.find(c => c.id === input.commentId).approved = true;
+    await book.save();
+
+    return { ...book, comments: book.comments.filter(c => !c.approved) } as BookEntity;
+}
+
+export async function removeComment(input: { bookId: string, commentId: string }) {
+    if (!input.bookId) {
+        throw new GraphQLError(`No Book found with id ${input.bookId}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+    const book = await Book.findById(input.bookId);
+
+    if (!book) {
+        throw new GraphQLError(`No Book found with id ${input.bookId}`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+
+    book.comments = book.comments.filter(c => c.id !== input.commentId);
+    await book.save();
+
+    return { ...book, comments: book.comments.filter(c => !c.approved) } as BookEntity;
+}
+
 export async function addComment(id: string, input: CommentEntity) {
     if (!id) {
         throw new GraphQLError(`No Book found with id ${id}`, {
@@ -173,6 +205,34 @@ export async function getBookComments(id: string, page: number, rowsPerPage: num
     }
 
     return book.comments.splice(rowsPerPage * page, rowsPerPage);
+}
+
+export async function getBooksWithNotApprovedComments(pageSettings?: IPageable) {
+    const query = Book
+        .find()
+        .and([{ archived: { $in: [null, false] } }])
+        .populate('bookType')
+        .populate({
+            path: 'bookSeries',
+            populate: {
+                path: 'publishingHouse'
+            }
+        });
+    let res = { items: [], totalCount: 0 };
+
+    await query.exec().then((items: BookEntity[]) => {
+        const startIndex = pageSettings.page * pageSettings.rowsPerPage;
+
+        items = items.filter(i => {
+            i.comments = i.comments.filter(({ approved }) => !approved);
+
+            return !!i.comments.length;
+        });
+
+        res = { items: items.slice(startIndex, startIndex + pageSettings.rowsPerPage), totalCount: items.length };
+    });
+
+    return res;
 }
 
 function _getBookData(input: BookEntity) {

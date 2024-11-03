@@ -11,6 +11,7 @@ const leftNavigationStyles = {
 export const settingsList: SettingListItem[] = [
     { title: 'Замовлення', link: 'orders' },
     { title: 'Книги', link: 'books' },
+    { title: 'Коментарі', link: 'comments' },
     { title: 'Видавництва', link: 'publishing-houses' },
     { title: 'Серії', link: 'book-series' },
     { title: 'Види обкладинок', link: 'cover-types' },

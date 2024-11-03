@@ -32,11 +32,11 @@ import {
     updateBookSeries
 } from '@/lib/data/book-series';
 import {
-    addComment,
+    addComment, approveComment,
     createBook,
     getBookById,
     getBookComments,
-    getBooks,
+    getBooks, getBooksWithNotApprovedComments, removeComment,
     updateBook,
     updateBookNumberInStock
 } from '@/lib/data/books';
@@ -221,6 +221,13 @@ const resolvers: Resolvers = {
         bookComments: async (_root, { id, page, rowsPerPage }) => {
             try {
                 return getBookComments(id, page, rowsPerPage);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        booksWithNotApprovedComments: async (_root, { pageSettings }) => {
+            try {
+                return getBooksWithNotApprovedComments(<IPageable>pageSettings);
             } catch (error) {
                 parseError(error);
             }
@@ -424,6 +431,22 @@ const resolvers: Resolvers = {
             _checkUser(user);
             try {
                 return updateBookNumberInStock(input);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        approveComment: async (_root, { input }: { input: { bookId: string, commentId: string } }, { user }) => {
+            _checkUser(user);
+            try {
+                return approveComment(input);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        removeComment: async (_root, { input }: { input: { bookId: string, commentId: string } }, { user }) => {
+            _checkUser(user);
+            try {
+                return removeComment(input);
             } catch (error) {
                 parseError(error);
             }

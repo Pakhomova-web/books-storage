@@ -65,7 +65,7 @@ const typeDefs =  /* GraphQL */ `
         ages: [Int]
         comments: [Comment]
     }
-    
+
     type Comment {
         id: ID!
         value: String!
@@ -134,6 +134,7 @@ const typeDefs =  /* GraphQL */ `
         languageById(id: ID!): Language
         bookSeriesByIdQuery(id: ID!): BookSeries
         bookComments(id: ID!, page: Int!, rowsPerPage: Int!): [Comment!]
+        booksWithNotApprovedComments(pageSettings: PageableInput): BookSubList
 
         refreshToken(refreshToken: String!): UserToken!
     }
@@ -165,6 +166,8 @@ const typeDefs =  /* GraphQL */ `
 
         updateBook(input: BookUpdateInput!): Book
         updateBookNumberInStock(input: BookUpdateNumberInStockUpdateInput!): Book!
+        approveComment(input: UpdateCommentInput!): Book!
+        removeComment(input: UpdateCommentInput!): Book!
         addBookComment(id: ID!, input: CommentInput!): Book!
         createBook(input: BookCreateInput!): Book
 
@@ -272,13 +275,18 @@ const typeDefs =  /* GraphQL */ `
         numberInStock: Int!
     }
 
+    input UpdateCommentInput {
+        bookId: ID!
+        commentId: ID!
+    }
+
     input CommentInput {
         username: String!
         email: String!
         value: String!
         date: String!
     }
-    
+
     input BookCreateInput {
         name: String!
         description: String
