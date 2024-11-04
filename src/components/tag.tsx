@@ -1,11 +1,11 @@
 import { styled } from '@mui/material/styles';
 import { Grid, GridOwnProps } from '@mui/material';
-import { borderRadius, primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import { borderRadius, boxPadding, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import React from 'react';
 
 const StyledTagGrid = styled(Grid)<GridOwnProps>(({ theme }) => ({
-    padding: styleVariables.boxPadding,
+    padding: boxPadding,
     borderRadius,
     border: `1px solid ${primaryLightColor}`,
     display: 'flex',

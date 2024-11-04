@@ -5,10 +5,11 @@ import { styled } from '@mui/material/styles';
 import CustomImage from '@/components/custom-image';
 import {
     borderRadius,
+    boxPadding,
     greenLightColor,
     redLightColor,
     styleVariables,
-    yellowColor
+    warnColor
 } from '@/constants/styles-variables';
 import { renderPrice } from '@/utils/utils';
 
@@ -31,21 +32,10 @@ const StyledGrid = styled(Grid)(() => ({
     }
 }));
 
-const discountBoxStyles = {
-    position: 'absolute',
-    top: 0,
-    left: 1,
-    backgroundColor: yellowColor,
-    textAlign: 'center',
-    padding: styleVariables.boxPadding,
-    width: '50%',
-    borderRadius: `0 0 ${borderRadius} ${borderRadius}`
-};
-
 const inStockStyles = (inStock = true) => ({
     backgroundColor: inStock ? greenLightColor : redLightColor,
     borderRadius,
-    padding: styleVariables.boxPadding,
+    padding: boxPadding,
     display: 'flex',
     alignItems: 'center'
 });
@@ -60,7 +50,7 @@ export default function BooksList({ items, onClick, isAdmin }) {
                      justifyContent="space-between"
                      position="relative"
                      height="100%">
-                    {!!book.discount && <Box sx={discountBoxStyles}>Знижка: {book.discount}%</Box>}
+                    {!!book.discount && <Box sx={styleVariables.discountBoxStyles}>Знижка: {book.discount}%</Box>}
                     <Box sx={bookBoxStyles} mb={1} mt={book.discount ? 1 : 0}>
                         <CustomImage isBookDetails={true} imageId={book.imageIds[0]}></CustomImage>
                     </Box>

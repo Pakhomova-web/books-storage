@@ -1,11 +1,11 @@
 import { ageOptions } from '@/constants/options';
 import { Box } from '@mui/material';
 import React from 'react';
-import { borderRadius, primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import { borderRadius, boxPadding, primaryLightColor } from '@/constants/styles-variables';
 import { IOption } from '@/lib/data/types';
 
 const ageOptStyles = (clickable = false, selected = false, showOnlySelected = false) => ({
-    padding: styleVariables.boxPadding,
+    padding: boxPadding,
     borderRadius,
     cursor: clickable ? 'pointer' : null,
     border: `1px solid ${primaryLightColor}`,

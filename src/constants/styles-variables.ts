@@ -1,6 +1,6 @@
 const rowMargin = '5px';
 const gray = 'rgb(244, 244, 244)';
-const warnColor = '#AB332C';
+export const warnColor = '#d00';
 export const primaryLightColor = 'rgba(68, 138, 255, 0.2)';
 export const yellowColor = '#ffdd04';
 export const redLightColor = 'rgba(171, 51, 44, 0.2)';
@@ -8,13 +8,23 @@ export const greenLightColor = 'rgba(0, 128, 0, 0.2)';
 export const borderRadius = '4px';
 export const titleFontSize = '20px';
 export const hintFontSize = '14px';
+export const boxPadding = `4px 8px`;
 
 export const styleVariables = {
+    discountBoxStyles: {
+        position: 'absolute',
+        top: 0,
+        left: 1,
+        backgroundColor: warnColor,
+        color: 'white',
+        textAlign: 'center',
+        padding: boxPadding,
+        borderRadius: `0 0 ${borderRadius} ${borderRadius}`
+    },
     titleFontSize: {
         fontSize: titleFontSize
     },
     deleteIconBtn: { cursor: 'pointer', color: warnColor },
-    boxPadding: `4px 8px`,
     bigTitleFontSize: (theme) => ({
         fontSize: '28px',
         [theme.breakpoints.down('md')]: {

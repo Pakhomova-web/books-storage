@@ -4,6 +4,7 @@ import { useBooks } from '@/lib/graphql/queries/book/hook';
 import Loading from '@/components/loading';
 import {
     borderRadius,
+    boxPadding,
     pageStyles,
     positionRelative,
     primaryLightColor,
@@ -42,7 +43,7 @@ const backBoxStyles = {
     justifyContent: 'center',
     backgroundColor: primaryLightColor,
     borderRadius: `0 0 ${borderRadius} ${borderRadius}`,
-    padding: styleVariables.boxPadding
+    padding: boxPadding
 };
 
 export default function Books() {

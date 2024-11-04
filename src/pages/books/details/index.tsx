@@ -8,12 +8,12 @@ import { ApolloError } from '@apollo/client';
 
 import {
     borderRadius,
+    boxPadding,
     greenLightColor,
     pageStyles,
     primaryLightColor,
     redLightColor,
-    styleVariables,
-    yellowColor
+    styleVariables
 } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import { getBookComments, getBooksFromSeries, useBook } from '@/lib/graphql/queries/book/hook';
@@ -52,24 +52,16 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
 const inStockStyles = (inStock = true) => ({
     backgroundColor: inStock ? greenLightColor : redLightColor,
     borderRadius,
-    padding: styleVariables.boxPadding,
+    padding: boxPadding,
     display: 'flex',
     alignItems: 'center'
 });
-
-const discountStyles = {
-    backgroundColor: yellowColor,
-    borderRadius,
-    padding: styleVariables.boxPadding,
-    display: 'flex',
-    alignItems: 'center'
-};
 
 const priceStyles = (theme) => ({
     color: 'var(--background)',
     fontSize: styleVariables.bigTitleFontSize(theme),
     borderRadius,
-    padding: styleVariables.boxPadding,
+    padding: boxPadding,
     border: `1px solid ${primaryLightColor}`
 });
 
@@ -211,7 +203,13 @@ export default function BookDetails() {
                   <Grid container>
                     <Grid item p={1} sm={6} xs={12}>
                       <Grid container>
-                        <Grid item md={book.imageIds.length > 1 ? 9 : 12} xs={book.imageIds.length > 1 ? 7 : 12}>
+                        <Grid item
+                              md={book.imageIds.length > 1 ? 9 : 12}
+                              xs={book.imageIds.length > 1 ? 7 : 12}
+                              position="relative">
+                            {!!book.discount &&
+                              <Box sx={styleVariables.discountBoxStyles}>Знижка: {book.discount}%</Box>}
+
                           <Box sx={imageBoxStyles(!!book.imageIds.length)} mb={1}
                                onClick={() => setImageIds(book.imageIds)}>
                             <CustomImage isBookDetails={true} imageId={book.imageIds[0]}></CustomImage>
@@ -239,8 +237,6 @@ export default function BookDetails() {
                         </Grid>
 
                         <Grid item display="flex" gap={2}>
-                            {!!book.discount && <Box sx={discountStyles}>Знижка: {book.discount}%</Box>}
-
                             {book.numberInStock ?
                                 <Box sx={inStockStyles(true)}>
                                     В наявності{isAdmin(user) && ` (${book.numberInStock})`}
