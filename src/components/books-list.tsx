@@ -9,12 +9,12 @@ import { borderRadius, styleVariables } from '@/constants/styles-variables';
 import { renderPrice } from '@/utils/utils';
 import { BookEntity } from '@/lib/data/types';
 import { useAuth } from '@/components/auth-context';
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 
 const bookBoxStyles = { height: '250px', maxHeight: '50vw' };
 
 const bookPriceStyles = (inStock = true) => ({
     ...styleVariables.titleFontSize,
+    color: inStock ? 'var(--background)' : 'black',
     ...(inStock ? styleVariables.boldFont : {})
 });
 

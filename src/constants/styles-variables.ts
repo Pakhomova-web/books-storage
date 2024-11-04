@@ -8,7 +8,7 @@ export const greenLightColor = 'rgba(0, 128, 0)';
 export const borderRadius = '4px';
 export const titleFontSize = '20px';
 export const hintFontSize = '14px';
-export const boxPadding = `4px 8px`;
+export const boxPadding = `5px 10px`;
 
 export const styleVariables = {
     discountBoxStyles: (withDiscount = false) => ({
