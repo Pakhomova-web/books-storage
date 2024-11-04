@@ -51,6 +51,7 @@ export default function BooksList({ items, onClick, isAdmin }) {
                      position="relative"
                      height="100%">
                     {!!book.discount && <Box sx={styleVariables.discountBoxStyles}>Знижка: {book.discount}%</Box>}
+
                     <Box sx={bookBoxStyles} mb={1} mt={book.discount ? 1 : 0}>
                         <CustomImage isBookDetails={true} imageId={book.imageIds[0]}></CustomImage>
                     </Box>
@@ -59,14 +60,6 @@ export default function BooksList({ items, onClick, isAdmin }) {
                     </Box>
                     <Box sx={styleVariables.titleFontSize} textAlign="center" mb={1}>{book.name}</Box>
 
-                    <Box display="flex" mb={1}>
-                        {book.numberInStock ?
-                            <>{isAdmin && <Box sx={inStockStyles(true)}>
-                              В наявності ({book.numberInStock})
-                            </Box>}</> :
-                            <Box sx={inStockStyles(false)}>Немає в наявності</Box>
-                        }
-                    </Box>
                     {!!book.discount && <Box sx={styleVariables.hintFontSize} mb={1}>
                       <s>{renderPrice(book.price)}</s>
                     </Box>}
