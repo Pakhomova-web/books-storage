@@ -3,10 +3,15 @@
     --light-background: rgba(68, 138, 255, 0.2);
     --text-primary: white;
     --text-secondary: black;
+    --secondary: red;
 }
 
 div {
     box-sizing: border-box;
+}
+
+.MuiBadge-badge {
+    border: 1px solid white;
 }
 
 html, body {

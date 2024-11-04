@@ -32,6 +32,8 @@ import { useAuth } from '@/components/auth-context';
 import BooksList from '@/components/books-list';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import { LIKED_BOOKS_ITEM } from '@/constants/local-storage';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 
 const StyledSmallImageBox = styled(Box)(() => ({
     height: '120px',
@@ -74,6 +76,7 @@ export default function BookDetails() {
     const router = useRouter();
     const { loading, error, item: book } = useBook(router.query.id as string);
     const [commentsPage, setCommentsPage] = useState<number>(0);
+    const { likedBooks, setLikedBooks, booksToBuy, setBooksToBuy } = useAuth();
     const [commentsRowsPerPage] = useState<number>(3);
     const [keys, setKeys] = useState<TableKey<BookEntity>[]>([]);
     const [comments, setComments] = useState<CommentEntity[]>([]);
@@ -87,7 +90,6 @@ export default function BookDetails() {
     useEffect(() => {
         if (book) {
             refetchComments(true);
-
             setBooksFromSeries([]);
             setLoadingBooksFromSeries(true);
             getBooksFromSeries(book.bookSeries.id).then(books => {
@@ -189,20 +191,12 @@ export default function BookDetails() {
         router.push(`/books/details?${getParamsQueryString({ id: book.id, filters: router.query.filters })}`);
     }
 
-    function onBuy(book: BookEntity) {
-
-    }
-
-    function onLike(book: BookEntity) {
-
-    }
-
     function isLiked(book: BookEntity) {
-        return false;
+        return likedBooks.some(id => id === book.id);
     }
 
-    function isInBasket(book: BookEntity) {
-        return false;
+    function isBookToBuy(book: BookEntity) {
+        return booksToBuy.some(id => id === book.id);
     }
 
     return (
@@ -268,18 +262,21 @@ export default function BookDetails() {
 
                       <Grid container mb={2} spacing={1} display="flex" alignItems="center">
                         <Grid item xs={12} sm={6} lg={4}>
-                          <Button variant="outlined" fullWidth
-                                  onClick={() => onBuy(book)}
-                                  disabled={!book.numberInStock}>
-                              {!!book.numberInStock ? (isInBasket(book) ? 'Купити' : 'У кошику') : 'Очікується'}
-                          </Button>
+                            {isBookToBuy(book) ?
+                                <Button variant="outlined" fullWidth disabled={true}>В кошику</Button> :
+                                <Button variant="outlined" fullWidth
+                                        onClick={() => setBooksToBuy(book.id)}
+                                        disabled={!book.numberInStock}>
+                                    {!!book.numberInStock ? 'Купити' : 'Очікується'}
+                                </Button>}
                         </Grid>
 
                         <Grid item xs={12} sm={6} lg={4} textAlign="center">
-                          <Button onClick={() => onLike(book)} color="warning" fullWidth>
-                              {isLiked(book) ?
-                                  <><FavoriteIcon/>В обраному</> :
-                                  <><FavoriteBorderIcon/>Додати в обране</>}
+                          <Button onClick={() => setLikedBooks(book.id)} color="warning" fullWidth>
+                            <Box gap={1} display="flex" alignItems="center">{isLiked(book) ?
+                                <><FavoriteIcon/>В обраному</> :
+                                <><FavoriteBorderIcon/>Додати в обране</>}
+                            </Box>
                           </Button>
                         </Grid>
                       </Grid>
@@ -381,8 +378,7 @@ export default function BookDetails() {
                             justifyContent="center">
                         <Loading show={loadingBooksFromSeries}></Loading>
 
-                        <BooksList items={booksFromSeries} onClick={onBookClick}
-                                   isAdmin={isAdmin(user)}></BooksList>
+                        <BooksList items={booksFromSeries} onClick={onBookClick}></BooksList>
                           {!booksFromSeries?.length &&
                             <Grid item xs={12} display="flex" justifyContent="center">
                               В цій серії більше немає книг

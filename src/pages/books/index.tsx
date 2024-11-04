@@ -21,7 +21,7 @@ import {
     PublishingHouseEntity
 } from '@/lib/data/types';
 import { useRouter } from 'next/router';
-import { getParamsQueryString, isAdmin } from '@/utils/utils';
+import { getParamsQueryString } from '@/utils/utils';
 import { getBookTypeById } from '@/lib/graphql/queries/book-type/hook';
 import CustomLink from '@/components/custom-link';
 import ErrorNotification from '@/components/error-notification';
@@ -205,7 +205,7 @@ export default function Books() {
                 {items.length ?
                     <>
                         <Grid container justifyContent="center">
-                            <BooksList items={items} isAdmin={isAdmin(user)} onClick={handleClickOnBook}></BooksList>
+                            <BooksList items={items} onClick={handleClickOnBook}></BooksList>
                         </Grid>
 
                         <Box sx={{ position: 'sticky', bottom: 0 }}>

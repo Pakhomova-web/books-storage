@@ -5,9 +5,11 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import CustomImage from '@/components/custom-image';
-import { borderRadius, boxPadding, greenLightColor, redLightColor, styleVariables } from '@/constants/styles-variables';
+import { borderRadius, styleVariables } from '@/constants/styles-variables';
 import { renderPrice } from '@/utils/utils';
 import { BookEntity } from '@/lib/data/types';
+import { useAuth } from '@/components/auth-context';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 
 const bookBoxStyles = { height: '250px', maxHeight: '50vw' };
 
@@ -28,27 +30,25 @@ const StyledGrid = styled(Grid)(() => ({
     }
 }));
 
-const inStockStyles = (inStock = true) => ({
-    backgroundColor: inStock ? greenLightColor : redLightColor,
-    borderRadius,
-    padding: boxPadding,
-    display: 'flex',
-    alignItems: 'center'
-});
-
-export default function BooksList({ items, onClick, isAdmin }) {
-    function onBuy(e, book: BookEntity) {
-        e.stopPropagation();
-        console.log(book);
-    }
+export default function BooksList({ items, onClick }) {
+    const { likedBooks, setLikedBooks, booksToBuy, setBooksToBuy } = useAuth();
 
     function onLike(e, book: BookEntity) {
         e.stopPropagation();
-        console.log(book);
+        setLikedBooks(book.id);
     }
 
     function isLiked(book: BookEntity) {
-        return false;
+        return likedBooks.some(id => id === book.id);
+    }
+
+    function isBookToBuy(book: BookEntity) {
+        return booksToBuy.some(id => id === book.id);
+    }
+
+    function onBuy(e, book: BookEntity) {
+        e.stopPropagation();
+        setBooksToBuy(book.id);
     }
 
     return (
@@ -78,16 +78,20 @@ export default function BooksList({ items, onClick, isAdmin }) {
 
                     <Grid container spacing={1}>
                         <Grid item xs={6}>
-                            <Button variant="outlined" fullWidth
-                                    onClick={e => onBuy(e, book)}
-                                    disabled={!book.numberInStock}>
-                                {!!book.numberInStock ? 'Купити' : 'Очікується'}
-                            </Button>
+                            {isBookToBuy(book) ?
+                                <Button variant="outlined" fullWidth disabled={true}>В кошику</Button> :
+                                <Button variant="outlined" fullWidth
+                                        onClick={e => onBuy(e, book)}
+                                        disabled={!book.numberInStock}>
+                                    {!!book.numberInStock ? 'Купити' : 'Очікується'}
+                                </Button>}
                         </Grid>
 
                         <Grid item xs={6} textAlign="center">
                             <IconButton onClick={e => onLike(e, book)} color="warning">
-                                {isLiked(book) ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
+                                <Box gap={1} display="flex" alignItems="center">
+                                    {isLiked(book) ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
+                                </Box>
                             </IconButton>
                         </Grid>
                     </Grid>

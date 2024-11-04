@@ -11,6 +11,7 @@ import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import { useRouter } from 'next/router';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { usePathname } from 'next/navigation';
+import Badge from '@mui/material/Badge';
 
 import { useAuth } from '@/components/auth-context';
 import { styleVariables } from '@/constants/styles-variables';
@@ -39,7 +40,7 @@ interface IProps {
 }
 
 export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, changeDisplayingSettings }: IProps) {
-    const { user, logout } = useAuth();
+    const { user, logout, likedBooks, booksToBuy } = useAuth();
     const router = useRouter();
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('sm'));
@@ -164,17 +165,25 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                             <HomeIcon/>
                         </IconButton>
 
-                        <IconButton onClick={() => goToPage('/likes')}
-                                    color="inherit"
-                                    className={selectedMenuItem === MainMenuItem.likes ? 'selectedToolbarMenuItem' : ''}>
-                            <FavoriteIcon/>
-                        </IconButton>
+                        <Box mx={!likedBooks?.length ? 0 : 1}>
+                            <Badge badgeContent={likedBooks?.length ? likedBooks.length : null}>
+                                <IconButton onClick={() => goToPage('/likes')}
+                                            color="inherit"
+                                            className={selectedMenuItem === MainMenuItem.likes ? 'selectedToolbarMenuItem' : ''}>
+                                    <FavoriteIcon/>
+                                </IconButton>
+                            </Badge>
+                        </Box>
 
-                        <IconButton onClick={() => goToPage('/order')}
-                                    color="inherit"
-                                    className={selectedMenuItem === MainMenuItem.basket ? 'selectedToolbarMenuItem' : ''}>
-                            <ShoppingBasketIcon/>
-                        </IconButton>
+                        <Box mx={!booksToBuy?.length ? 0 : 1}>
+                            <Badge badgeContent={booksToBuy?.length ? booksToBuy.length : null}>
+                                <IconButton onClick={() => goToPage('/order')}
+                                            color="inherit"
+                                            className={selectedMenuItem === MainMenuItem.basket ? 'selectedToolbarMenuItem' : ''}>
+                                    <ShoppingBasketIcon/>
+                                </IconButton>
+                            </Badge>
+                        </Box>
 
                         {mobileMatches && !!user ?
                             <>
