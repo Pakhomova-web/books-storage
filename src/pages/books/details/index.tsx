@@ -1,19 +1,25 @@
 import { Box, Button, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import HdrStrongIcon from '@mui/icons-material/HdrStrong';
-import HdrWeakIcon from '@mui/icons-material/HdrWeak';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { styled } from '@mui/material/styles';
 import ProfileIcon from '@mui/icons-material/AccountCircle';
+import { ApolloError } from '@apollo/client';
 
-import { borderRadius, pageStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import {
+    borderRadius,
+    greenLightColor,
+    pageStyles,
+    primaryLightColor,
+    redLightColor,
+    styleVariables
+} from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import { getBookComments, useBook } from '@/lib/graphql/queries/book/hook';
 import ErrorNotification from '@/components/error-notification';
 import { TableKey } from '@/components/table/table-key';
 import { BookEntity, CommentEntity } from '@/lib/data/types';
-import { renderPrice } from '@/utils/utils';
+import { isAdmin, renderPrice } from '@/utils/utils';
 import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
 import CustomLink from '@/components/custom-link';
@@ -21,7 +27,7 @@ import Ages from '@/components/ages';
 import ImagesModal from '@/components/modals/images-modal';
 import CommentForm from '@/components/comment-form';
 import SocialMediaBox from '@/components/social-media-box';
-import { ApolloError } from '@apollo/client';
+import { useAuth } from '@/components/auth-context';
 
 const StyledSmallImageBox = styled(Box)(() => ({
     height: '120px',
@@ -41,6 +47,22 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
     alignItems: 'center'
 }));
 
+const inStockStyles = (inStock = true) => ({
+    backgroundColor: inStock ? greenLightColor : redLightColor,
+    borderRadius,
+    padding: '4px 8px',
+    display: 'flex',
+    alignItems: 'center'
+});
+
+const priceStyles = (theme) => ({
+    color: 'var(--background)',
+    fontSize: styleVariables.bigTitleFontSize(theme),
+    borderRadius,
+    padding: '4px 8px',
+    border: `1px solid ${primaryLightColor}`
+});
+
 export default function BookDetails() {
     const router = useRouter();
     const { loading, error, item: book } = useBook(router.query.id as string);
@@ -51,6 +73,7 @@ export default function BookDetails() {
     const [loadingComments, setLoadingComments] = useState<boolean>(false);
     const [commentsError, setCommentsError] = useState<ApolloError>();
     const [imageIds, setImageIds] = useState<string[] | null>();
+    const { user } = useAuth();
 
     useEffect(() => {
         if (book) {
@@ -185,19 +208,20 @@ export default function BookDetails() {
                     </Grid>
 
                     <Grid item p={1} sm={6} xs={12}>
-                      <Grid container mb={3}>
-                        <Grid item xs={6} px={1} display="flex" alignItems="center">
-                          <Box display="flex" alignItems="center" gap={1}>
-                              {book.numberInStock ?
-                                  <><HdrStrongIcon style={{ color: "green" }}/>В наявності</> :
-                                  <><HdrWeakIcon style={{ color: styleVariables.warnColor }}/>Відсутня</>
-                              }
-                          </Box>
+                      <Grid container mb={3} gap={1} display="flex" alignItems="flex-start" flexWrap="wrap"
+                            justifyContent="space-between">
+                        <Grid item display="flex">
+                          <Box sx={priceStyles}><b>{renderPrice(book.price)} грн</b></Box>
                         </Grid>
 
-                        <StyledTitleGrid item xs={6} px={1} sx={!!book.numberInStock ? styleVariables.boldFont : {}}>
-                            {renderPrice(book.price)} грн
-                        </StyledTitleGrid>
+                        <Grid item display="flex">
+                            {book.numberInStock ?
+                                <Box sx={inStockStyles(true)}>
+                                    В наявності{isAdmin(user) && ` (${book.numberInStock})`}
+                                </Box> :
+                                <Box sx={inStockStyles(false)}>Немає в наявності</Box>
+                            }
+                        </Grid>
                       </Grid>
 
                         {!!book.tags?.length &&

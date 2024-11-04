@@ -2,7 +2,14 @@ import { Box, Grid, Table, TableFooter, TablePagination, TableRow } from '@mui/m
 import React, { useEffect, useState } from 'react';
 import { useBooks } from '@/lib/graphql/queries/book/hook';
 import Loading from '@/components/loading';
-import { borderRadius, pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
+import {
+    borderRadius,
+    greenLightColor,
+    pageStyles,
+    positionRelative,
+    redLightColor,
+    styleVariables
+} from '@/constants/styles-variables';
 import {
     AuthorEntity,
     BookEntity,
@@ -25,18 +32,16 @@ import { getAuthorById } from '@/lib/graphql/queries/author/hook';
 import { getPublishingHouseById } from '@/lib/graphql/queries/publishing-house/hook';
 import { BookFilters } from '@/components/filters/book-filters';
 import { ApolloError } from '@apollo/client';
-import HdrStrongIcon from '@mui/icons-material/HdrStrong';
-import HdrWeakIcon from '@mui/icons-material/HdrWeak';
 import { useAuth } from '@/components/auth-context';
 import { TableKey } from '@/components/table/table-key';
 import { getLanguageById } from '@/lib/graphql/queries/language/hooks';
 import { getBookSeriesById } from '@/lib/graphql/queries/book-series/hook';
 
 const bookBoxStyles = { height: '250px', maxHeight: '50vw' };
-const bookPriceStyles = {
+const bookPriceStyles = (inStock = true) => ({
     ...styleVariables.titleFontSize,
-    ...styleVariables.boldFont
-};
+    ...(inStock ? styleVariables.boldFont : {})
+});
 
 const bookInfoStyles = {
     ...styleVariables.hintFontSize
@@ -51,6 +56,14 @@ const StyledGrid = styled(Grid)(() => ({
 }));
 
 const imageBoxStyles = { width: '50px', height: '50px' };
+
+const inStockStyles = (inStock = true) => ({
+    backgroundColor: inStock ? greenLightColor : redLightColor,
+    borderRadius,
+    padding: '4px 8px',
+    display: 'flex',
+    alignItems: 'center'
+});
 
 export default function Books() {
     const router = useRouter();
@@ -231,17 +244,17 @@ export default function Books() {
                                             <Box sx={bookInfoStyles} textAlign="center">
                                                 {book.bookSeries.publishingHouse.name}{book.bookSeries.name === '-' ? '' : `. ${book.bookSeries.name}`}
                                             </Box>
-                                            <Box sx={styleVariables.titleFontSize} textAlign="center">{book.name}</Box>
+                                            <Box sx={styleVariables.titleFontSize} textAlign="center" mb={1}>{book.name}</Box>
 
-                                            <Box display="flex" alignItems="center" textAlign="center" gap={1}>
+                                            <Box display="flex" mb={1}>
                                                 {book.numberInStock ?
-                                                    <><HdrStrongIcon style={{ color: "green" }}/>В наявності
-                                                        {isAdmin(user) && ` (${book.numberInStock})`}</> :
-                                                    <><HdrWeakIcon
-                                                        style={{ color: styleVariables.warnColor }}/>Відсутня</>
+                                                    <Box sx={inStockStyles(true)}>
+                                                        В наявності{isAdmin(user) && ` (${book.numberInStock})`}
+                                                    </Box> :
+                                                    <Box sx={inStockStyles(false)}>Немає в наявності</Box>
                                                 }
                                             </Box>
-                                            <Box sx={bookPriceStyles} mt={1}>{renderPrice(book.price)} грн</Box>
+                                            <Box sx={bookPriceStyles(!!book.numberInStock)}>{renderPrice(book.price)} грн</Box>
                                         </Box>
                                     </StyledGrid>
                             ))}

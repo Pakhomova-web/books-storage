@@ -46,7 +46,7 @@ export default function BooksSettingsTable() {
                             <HdrStrongIcon fontSize="small" style={{ color: "green" }}/>
                             В наявності ({item.numberInStock})
                         </> :
-                        <><HdrWeakIcon fontSize="small" style={{ color: styleVariables.warnColor }}/>Відсутня</>
+                        <><HdrWeakIcon fontSize="small" style={{ color: styleVariables.warnColor }}/>Немає в наявності</>
                     }
                 </Box>
             </>
