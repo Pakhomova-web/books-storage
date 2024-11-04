@@ -3,15 +3,18 @@ import React from 'react';
 interface ICustomImageProps {
     imageId?: string,
     isBookDetails?: boolean,
-    isBookType?: boolean
+    isBookType?: boolean,
+    isNoComments?: boolean
 }
 
-export default function CustomImage({ imageId, isBookDetails, isBookType }: ICustomImageProps) {
+export default function CustomImage({ imageId, isBookDetails, isBookType, isNoComments }: ICustomImageProps) {
     function getEmptySrcImage() {
         if (isBookDetails) {
             return '/book_details_empty.png';
         } else if (isBookType) {
             return '/book_type_empty.png';
+        } else if (isNoComments) {
+            return '/no_comments.svg';
         }
     }
 

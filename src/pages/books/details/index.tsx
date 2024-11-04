@@ -1,4 +1,4 @@
-import { Box, Button, Grid, IconButton } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -201,6 +201,10 @@ export default function BookDetails() {
         return false;
     }
 
+    function isInBasket(book: BookEntity) {
+        return false;
+    }
+
     return (
         <Box sx={styleVariables.positionRelative}>
             <Loading show={loading}></Loading>
@@ -254,7 +258,7 @@ export default function BookDetails() {
                     </Grid>
 
                     <Grid item p={1} sm={6} xs={12}>
-                      <Grid container mb={3} gap={1} display="flex" alignItems="flex-start" flexWrap="wrap"
+                      <Grid container mb={1} gap={1} display="flex" alignItems="flex-start" flexWrap="wrap"
                             justifyContent="space-between">
                         <Grid item display="flex" gap={2} alignItems="center">
                           <Box sx={priceStyles}><b>{renderPrice(book.price, book.discount)}</b></Box>
@@ -262,12 +266,12 @@ export default function BookDetails() {
                         </Grid>
                       </Grid>
 
-                      <Grid container mb={1} spacing={1} display="flex" alignItems="center">
+                      <Grid container mb={2} spacing={1} display="flex" alignItems="center">
                         <Grid item xs={12} sm={6} lg={4}>
                           <Button variant="outlined" fullWidth
                                   onClick={() => onBuy(book)}
                                   disabled={!book.numberInStock}>
-                              {!!book.numberInStock ? 'Купити' : 'Очікується'}
+                              {!!book.numberInStock ? (isInBasket(book) ? 'Купити' : 'У кошику') : 'Очікується'}
                           </Button>
                         </Grid>
 
@@ -322,7 +326,7 @@ export default function BookDetails() {
                       <Grid container spacing={2} sx={styleVariables.positionRelative} px={1}>
                         <Loading show={!loading && loadingComments}></Loading>
 
-                        <Grid item xs={12} md={7} lg={8}>
+                        <Grid item xs={12} md={7} lg={8} display="flex" alignItems="center" justifyContent="center">
                             {!!comments?.length ?
                                 <Box>
                                     {comments.map((comment, index) => (
@@ -347,7 +351,15 @@ export default function BookDetails() {
                                           </Button>}
                                     </Box>
                                 </Box> :
-                                <Box p={1} display="flex" justifyContent="center">Тут ще немає відгуків</Box>}
+                                <Box display="flex" alignItems="center" flexDirection="column" gap={1}>
+                                    <Box sx={{ width: '100px' }}>
+                                        <CustomImage isNoComments={true}></CustomImage>
+                                    </Box>
+                                    <Box>
+                                        На даний момент список відгуків порожній
+                                    </Box>
+                                    <Box sx={styleVariables.hintFontSize}>Додайте свій відгук про товар</Box>
+                                </Box>}
                         </Grid>
 
                         <Grid item xs={12} md={5} lg={4}>
