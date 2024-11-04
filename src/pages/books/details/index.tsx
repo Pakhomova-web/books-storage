@@ -1,4 +1,4 @@
-import { Box, Button, Grid } from '@mui/material';
+import { Box, Button, Grid, IconButton } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -30,6 +30,8 @@ import CommentForm from '@/components/comment-form';
 import SocialMediaBox from '@/components/social-media-box';
 import { useAuth } from '@/components/auth-context';
 import BooksList from '@/components/books-list';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 const StyledSmallImageBox = styled(Box)(() => ({
     height: '120px',
@@ -187,6 +189,18 @@ export default function BookDetails() {
         router.push(`/books/details?${getParamsQueryString({ id: book.id, filters: router.query.filters })}`);
     }
 
+    function onBuy(book: BookEntity) {
+
+    }
+
+    function onLike(book: BookEntity) {
+
+    }
+
+    function isLiked(book: BookEntity) {
+        return false;
+    }
+
     return (
         <Box sx={styleVariables.positionRelative}>
             <Loading show={loading}></Loading>
@@ -218,7 +232,8 @@ export default function BookDetails() {
                             }
 
                             {!!book.discount &&
-                              <Box sx={styleVariables.discountBoxStyles(!!book.numberInStock)}>Знижка: {book.discount}%</Box>}
+                              <Box
+                                sx={styleVariables.discountBoxStyles(!!book.numberInStock)}>Знижка: {book.discount}%</Box>}
 
                           <Box sx={imageBoxStyles(!!book.imageIds.length)} mb={1}
                                onClick={() => setImageIds(book.imageIds)}>
@@ -244,6 +259,24 @@ export default function BookDetails() {
                         <Grid item display="flex" gap={2} alignItems="center">
                           <Box sx={priceStyles}><b>{renderPrice(book.price, book.discount)}</b></Box>
                             {!!book.discount && <Box><s>{renderPrice(book.price)}</s></Box>}
+                        </Grid>
+                      </Grid>
+
+                      <Grid container mb={1} spacing={1} display="flex" alignItems="center">
+                        <Grid item xs={12} sm={6} lg={4}>
+                          <Button variant="outlined" fullWidth
+                                  onClick={() => onBuy(book)}
+                                  disabled={!book.numberInStock}>
+                              {!!book.numberInStock ? 'Купити' : 'Очікується'}
+                          </Button>
+                        </Grid>
+
+                        <Grid item xs={12} sm={6} lg={4} textAlign="center">
+                          <Button onClick={() => onLike(book)} color="warning" fullWidth>
+                              {isLiked(book) ?
+                                  <><FavoriteIcon/>В обраному</> :
+                                  <><FavoriteBorderIcon/>Додати в обране</>}
+                          </Button>
                         </Grid>
                       </Grid>
 
