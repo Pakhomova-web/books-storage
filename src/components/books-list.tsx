@@ -34,10 +34,11 @@ const StyledGrid = styled(Grid)(() => ({
 const discountBoxStyles = {
     position: 'absolute',
     top: 0,
+    left: 1,
     backgroundColor: yellowColor,
     textAlign: 'center',
     padding: styleVariables.boxPadding,
-    width: '100%',
+    width: '50%',
     borderRadius: `0 0 ${borderRadius} ${borderRadius}`
 };
 
@@ -70,9 +71,9 @@ export default function BooksList({ items, onClick, isAdmin }) {
 
                     <Box display="flex" mb={1}>
                         {book.numberInStock ?
-                            <Box sx={inStockStyles(true)}>
-                                В наявності{isAdmin && ` (${book.numberInStock})`}
-                            </Box> :
+                            <>{isAdmin && <Box sx={inStockStyles(true)}>
+                              В наявності ({book.numberInStock})
+                            </Box>}</> :
                             <Box sx={inStockStyles(false)}>Немає в наявності</Box>
                         }
                     </Box>

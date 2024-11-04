@@ -59,6 +59,7 @@ export type Book = {
   comments?: Maybe<Array<Maybe<Comment>>>;
   coverType: CoverType;
   description?: Maybe<Scalars['String']['output']>;
+  discount?: Maybe<Scalars['Float']['output']>;
   format?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
   imageIds?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
@@ -973,6 +974,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
   comments?: Resolver<Maybe<Array<Maybe<ResolversTypes['Comment']>>>, ParentType, ContextType>;
   coverType?: Resolver<ResolversTypes['CoverType'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  discount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   format?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   imageIds?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;

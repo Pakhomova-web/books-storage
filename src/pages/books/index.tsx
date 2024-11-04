@@ -1,8 +1,14 @@
-import { Box, Grid, Table, TableFooter, TablePagination, TableRow } from '@mui/material';
+import { Box, Grid, IconButton, Table, TableFooter, TablePagination, TableRow } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useBooks } from '@/lib/graphql/queries/book/hook';
 import Loading from '@/components/loading';
-import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
+import {
+    borderRadius,
+    pageStyles,
+    positionRelative,
+    primaryLightColor,
+    styleVariables
+} from '@/constants/styles-variables';
 import {
     AuthorEntity,
     BookEntity,
@@ -15,8 +21,6 @@ import {
 } from '@/lib/data/types';
 import { useRouter } from 'next/router';
 import { getParamsQueryString, isAdmin } from '@/utils/utils';
-import CustomImage from '@/components/custom-image';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { getBookTypeById } from '@/lib/graphql/queries/book-type/hook';
 import CustomLink from '@/components/custom-link';
 import ErrorNotification from '@/components/error-notification';
@@ -29,8 +33,17 @@ import { TableKey } from '@/components/table/table-key';
 import { getLanguageById } from '@/lib/graphql/queries/language/hooks';
 import { getBookSeriesById } from '@/lib/graphql/queries/book-series/hook';
 import BooksList from '@/components/books-list';
+import HomeIcon from '@mui/icons-material/Home';
 
-const imageBoxStyles = { width: '50px', height: '50px' };
+const backBoxStyles = {
+    display: 'flex',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    backgroundColor: primaryLightColor,
+    borderRadius: `0 0 ${borderRadius} ${borderRadius}`,
+    padding: styleVariables.boxPadding
+};
 
 export default function Books() {
     const router = useRouter();
@@ -93,7 +106,6 @@ export default function Books() {
                     { title: 'Видавництво' },
                     {
                         title: item.publishingHouse.name,
-                        imageId: item.publishingHouse.imageId,
                         param: `publishingHouse=${item.publishingHouse.id}`
                     },
                     { title: 'Серія' },
@@ -101,10 +113,10 @@ export default function Books() {
                 ]);
         } else if (data?.language) {
             promise = getLanguageById(data?.language as string)
-                .then((item: LanguageEntity) => [{ title: 'Мова' }, { title: item.name }]);
+                .then((item: LanguageEntity) => [{ title: 'Мова видавництва' }, { title: item.name }]);
         } else if (data?.bookType) {
             promise = getBookTypeById(data?.bookType as string)
-                .then((item: BookTypeEntity) => [{ title: 'Тип' }, { title: item.name }]);
+                .then((item: BookTypeEntity) => [{ title: 'Тип книги' }, { title: item.name }]);
         } else if (data?.authors?.length) {
             promise = getAuthorById(data?.authors[0])
                 .then((item: AuthorEntity) => [{ title: 'Автор' }, { title: item.name }]);
@@ -112,7 +124,7 @@ export default function Books() {
             promise = getPublishingHouseById(data?.publishingHouse as string)
                 .then((item: PublishingHouseEntity) => [
                     { title: 'Видавництво' },
-                    { title: item.name, imageId: item.imageId }
+                    { title: item.name }
                 ]);
         } else if (data?.tags) {
             setOption([{ title: 'Тег' }, { title: data.tags as string }]);
@@ -158,13 +170,11 @@ export default function Books() {
 
     function renderBackBox() {
         return (
-            <Box ml={1} display="flex" alignItems="center" flexWrap="wrap" gap={1}>
-                <CustomLink onClick={() => router.push('/')}>Головна</CustomLink>
+            <Box gap={1} sx={backBoxStyles} mt={1}>
+                <IconButton onClick={() => router.push('/')}><HomeIcon/></IconButton>
                 {option.map((item, index) =>
                     <Box key={index} display="flex" alignItems="center" gap={1}>
-                        <ArrowForwardIcon fontSize="small"/>
-                        {!!item.imageId &&
-                          <Box sx={imageBoxStyles}><CustomImage imageId={item.imageId} isBookType={true}></CustomImage></Box>}
+                        <Box>/</Box>
                         {item.param ?
                             <CustomLink onClick={() => router.push(`/books?${item.param}`)}>
                                 {item.title}
@@ -189,9 +199,7 @@ export default function Books() {
                              showAlwaysSorting={true}
                              onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></BookFilters>
 
-                <Box p={1} display="flex" flexWrap="wrap" alignItems="center">
-                    {!loadingOption && option && renderBackBox()}
-                </Box>
+                {!loadingOption && option && renderBackBox()}
 
                 {items.length ?
                     <>
