@@ -28,7 +28,7 @@ import { useAuth } from '@/components/auth-context';
 import { TableKey } from '@/components/table/table-key';
 import { getLanguageById } from '@/lib/graphql/queries/language/hooks';
 import { getBookSeriesById } from '@/lib/graphql/queries/book-series/hook';
-import BookBox from '@/components/book-box';
+import BooksList from '@/components/books-list';
 
 const imageBoxStyles = { width: '50px', height: '50px' };
 
@@ -151,7 +151,7 @@ export default function Books() {
         const filterQueries: string[] = Object.keys(filters)
             .map(key => !!filters[key] ? `${key}=${filters[key]}` : '')
             .filter(query => !!query);
-        const query = !!filterQueries.length ? filterQueries.join('&') : '';
+        const query = !!filterQueries.length ? filterQueries.join('&') : null;
 
         router.push(`/books/details?${getParamsQueryString({ id: book.id, filters: query })}`);
     }
@@ -196,10 +196,7 @@ export default function Books() {
                 {items.length ?
                     <>
                         <Grid container justifyContent="center">
-                            {items.map(((book, index) =>
-                                    <BookBox book={book} key={index} isAdmin={isAdmin(user)}
-                                             onClick={() => handleClickOnBook(book)}></BookBox>
-                            ))}
+                            <BooksList items={items} isAdmin={isAdmin(user)} onClick={handleClickOnBook}></BooksList>
                         </Grid>
 
                         <Box sx={{ position: 'sticky', bottom: 0 }}>

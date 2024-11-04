@@ -19,7 +19,7 @@ import { getBookComments, getBooksFromSeries, useBook } from '@/lib/graphql/quer
 import ErrorNotification from '@/components/error-notification';
 import { TableKey } from '@/components/table/table-key';
 import { BookEntity, CommentEntity } from '@/lib/data/types';
-import { isAdmin, renderPrice } from '@/utils/utils';
+import { getParamsQueryString, isAdmin, renderPrice } from '@/utils/utils';
 import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
 import CustomLink from '@/components/custom-link';
@@ -28,7 +28,7 @@ import ImagesModal from '@/components/modals/images-modal';
 import CommentForm from '@/components/comment-form';
 import SocialMediaBox from '@/components/social-media-box';
 import { useAuth } from '@/components/auth-context';
-import BookBox from '@/components/book-box';
+import BooksList from '@/components/books-list';
 
 const StyledSmallImageBox = styled(Box)(() => ({
     height: '120px',
@@ -180,7 +180,7 @@ export default function BookDetails() {
     }
 
     function onBookClick(book: BookEntity) {
-        router.push(`/books/details?id=${book.id}`);
+        router.push(`/books/details?${getParamsQueryString({ id: book.id, filters: router.query.filters })}`);
     }
 
     return (
@@ -323,13 +323,11 @@ export default function BookDetails() {
                           Інші книги із цієї серії
                         </Box>
 
-                        <Grid container spacing={2} sx={styleVariables.positionRelative} px={1} display="flex" justifyContent="center">
+                        <Grid container spacing={2} sx={styleVariables.positionRelative} px={1} display="flex"
+                              justifyContent="center">
                           <Loading show={loadingBooksFromSeries}></Loading>
 
-                            {booksFromSeries.map((book, index) => (
-                                <BookBox book={book} key={index} onClick={() => onBookClick(book)}
-                                         isAdmin={isAdmin(user)}></BookBox>
-                            ))}
+                          <BooksList items={booksFromSeries} onClick={onBookClick} isAdmin={isAdmin(user)}></BooksList>
                         </Grid>
                       </Grid>}
                   </Grid>
