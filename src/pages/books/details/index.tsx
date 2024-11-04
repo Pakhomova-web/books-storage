@@ -71,7 +71,7 @@ export default function BookDetails() {
     const [commentsRowsPerPage] = useState<number>(3);
     const [keys, setKeys] = useState<TableKey<BookEntity>[]>([]);
     const [comments, setComments] = useState<CommentEntity[]>([]);
-    const [booksFromSeries, setBooksFromSeries] = useState<BookEntity[]>(null);
+    const [booksFromSeries, setBooksFromSeries] = useState<BookEntity[]>([]);
     const [loadingBooksFromSeries, setLoadingBooksFromSeries] = useState<boolean>(false);
     const [loadingComments, setLoadingComments] = useState<boolean>(false);
     const [commentsError, setCommentsError] = useState<ApolloError>();
@@ -82,7 +82,7 @@ export default function BookDetails() {
         if (book) {
             refetchComments(true);
 
-            setBooksFromSeries(null);
+            setBooksFromSeries([]);
             setLoadingBooksFromSeries(true);
             getBooksFromSeries(book.bookSeries.id).then(books => {
                 setLoadingBooksFromSeries(false);
@@ -318,18 +318,23 @@ export default function BookDetails() {
                       </Grid>
                     </Grid>
 
-                      {!!booksFromSeries?.length && <Grid item xs={12} px={1}>
-                        <Box sx={styleVariables.sectionTitle} p={1} mb={2}>
-                          Інші книги із цієї серії
-                        </Box>
+                    <Grid item xs={12} px={1}>
+                      <Box sx={styleVariables.sectionTitle} p={1} mb={2}>
+                        Інші книги із цієї серії
+                      </Box>
 
-                        <Grid container spacing={2} sx={styleVariables.positionRelative} px={1} display="flex"
-                              justifyContent="center">
-                          <Loading show={loadingBooksFromSeries}></Loading>
+                      <Grid container spacing={2} sx={styleVariables.positionRelative} px={1} display="flex"
+                            justifyContent="center">
+                        <Loading show={loadingBooksFromSeries}></Loading>
 
-                          <BooksList items={booksFromSeries} onClick={onBookClick} isAdmin={isAdmin(user)}></BooksList>
-                        </Grid>
-                      </Grid>}
+                        <BooksList items={booksFromSeries} onClick={onBookClick}
+                                   isAdmin={isAdmin(user)}></BooksList>
+                          {!booksFromSeries?.length &&
+                            <Grid item xs={12} display="flex" justifyContent="center">
+                              В цій серії більше немає книг
+                            </Grid>}
+                      </Grid>
+                    </Grid>
                   </Grid>
                 }
 
