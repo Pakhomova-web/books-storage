@@ -12,7 +12,8 @@ import {
     pageStyles,
     primaryLightColor,
     redLightColor,
-    styleVariables
+    styleVariables,
+    yellowColor
 } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import { getBookComments, getBooksFromSeries, useBook } from '@/lib/graphql/queries/book/hook';
@@ -55,6 +56,14 @@ const inStockStyles = (inStock = true) => ({
     display: 'flex',
     alignItems: 'center'
 });
+
+const discountStyles = {
+    backgroundColor: yellowColor,
+    borderRadius,
+    padding: styleVariables.boxPadding,
+    display: 'flex',
+    alignItems: 'center'
+};
 
 const priceStyles = (theme) => ({
     color: 'var(--background)',
@@ -224,11 +233,14 @@ export default function BookDetails() {
                     <Grid item p={1} sm={6} xs={12}>
                       <Grid container mb={3} gap={1} display="flex" alignItems="flex-start" flexWrap="wrap"
                             justifyContent="space-between">
-                        <Grid item display="flex">
+                        <Grid item display="flex" gap={2} alignItems="center">
                           <Box sx={priceStyles}><b>{renderPrice(book.price, book.discount)}</b></Box>
+                            {!!book.discount && <Box><s>{renderPrice(book.price)}</s></Box>}
                         </Grid>
 
-                        <Grid item display="flex">
+                        <Grid item display="flex" gap={2}>
+                            {!!book.discount && <Box sx={discountStyles}>Знижка: {book.discount}%</Box>}
+
                             {book.numberInStock ?
                                 <Box sx={inStockStyles(true)}>
                                     В наявності{isAdmin(user) && ` (${book.numberInStock})`}

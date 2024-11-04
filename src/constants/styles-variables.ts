@@ -2,6 +2,7 @@ const rowMargin = '5px';
 const gray = 'rgb(244, 244, 244)';
 const warnColor = '#AB332C';
 export const primaryLightColor = 'rgba(68, 138, 255, 0.2)';
+export const yellowColor = '#ffdd04';
 export const redLightColor = 'rgba(171, 51, 44, 0.2)';
 export const greenLightColor = 'rgba(0, 128, 0, 0.2)';
 export const borderRadius = '4px';
