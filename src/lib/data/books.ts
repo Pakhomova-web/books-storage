@@ -38,6 +38,7 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
         .populate('coverType')
         .populate('language')
         .populate('authors')
+        .sort({ numberInStock: 'desc' })
         .sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
 
     let res = { items: [], totalCount: 0 };
@@ -226,7 +227,8 @@ export async function getBooksFromSeries(bookSeriesId: string) {
         .populate('pageType')
         .populate('coverType')
         .populate('language')
-        .populate('authors');
+        .populate('authors')
+        .sort({ numberInStock: 'desc' });
 }
 
 export async function getBooksWithNotApprovedComments(pageSettings?: IPageable) {
