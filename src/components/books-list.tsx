@@ -58,7 +58,10 @@ export default function BooksList({ items, onClick, isAdmin }) {
                             <Box sx={inStockStyles(false)}>Немає в наявності</Box>
                         }
                     </Box>
-                    <Box sx={bookPriceStyles(!!book.numberInStock)}>{renderPrice(book.price)} грн</Box>
+                    {!!book.discount && <Box sx={styleVariables.hintFontSize} mb={1}>
+                      <s>{renderPrice(book.price)}</s>
+                    </Box>}
+                    <Box sx={bookPriceStyles(!!book.numberInStock)}>{renderPrice(book.price, book.discount)}</Box>
                 </Box>
             </StyledGrid>
         )))

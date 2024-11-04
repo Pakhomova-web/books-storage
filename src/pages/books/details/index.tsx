@@ -225,7 +225,7 @@ export default function BookDetails() {
                       <Grid container mb={3} gap={1} display="flex" alignItems="flex-start" flexWrap="wrap"
                             justifyContent="space-between">
                         <Grid item display="flex">
-                          <Box sx={priceStyles}><b>{renderPrice(book.price)} грн</b></Box>
+                          <Box sx={priceStyles}><b>{renderPrice(book.price, book.discount)}</b></Box>
                         </Grid>
 
                         <Grid item display="flex">

@@ -73,8 +73,8 @@ export function isAdmin(user?: UserEntity): boolean {
     return user?.role === ROLES.admin;
 }
 
-export function renderPrice(price: number): string {
-    let res = `${price}`;
+export function renderPrice(price: number, discount = 0): string {
+    let res = (price * (100 - discount) / 100).toFixed(2);
 
     if (res.split('.').length === 1) {
         res = `${res}.00`;
@@ -83,7 +83,7 @@ export function renderPrice(price: number): string {
         res = `${res}0`;
     }
 
-    return res;
+    return `${res} грн`;
 }
 
 export function renderAges(ages: number[]) {

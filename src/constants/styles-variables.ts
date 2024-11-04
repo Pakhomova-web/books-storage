@@ -6,6 +6,7 @@ export const redLightColor = 'rgba(171, 51, 44, 0.2)';
 export const greenLightColor = 'rgba(0, 128, 0, 0.2)';
 export const borderRadius = '4px';
 export const titleFontSize = '20px';
+export const hintFontSize = '14px';
 
 export const styleVariables = {
     titleFontSize: {
@@ -20,7 +21,7 @@ export const styleVariables = {
         }
     }),
     hintFontSize: {
-        fontSize: '14px'
+        fontSize: hintFontSize
     },
     boxShadow: 24,
     margin: '10px',
