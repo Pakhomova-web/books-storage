@@ -103,5 +103,15 @@ export function parseImageFromLink(imageLink: string) {
 }
 
 export function getParamsQueryString(params: any): string {
-    return new URLSearchParams(params).toString();
+    Object.keys(params).forEach(key => {
+        if (params[key] === null || params[key] === undefined || params[key] === '') {
+            delete params[key];
+        }
+    });
+
+    if (!!Object.keys(params).length) {
+        return new URLSearchParams(params).toString();
+    } else {
+        return '';
+    }
 }
