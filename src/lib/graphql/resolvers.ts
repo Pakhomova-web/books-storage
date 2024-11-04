@@ -36,7 +36,7 @@ import {
     createBook,
     getBookById,
     getBookComments,
-    getBooks, getBooksWithNotApprovedComments, removeComment,
+    getBooks, getBooksFromSeries, getBooksWithNotApprovedComments, removeComment,
     updateBook,
     updateBookNumberInStock
 } from '@/lib/data/books';
@@ -221,6 +221,13 @@ const resolvers: Resolvers = {
         bookComments: async (_root, { id, page, rowsPerPage }) => {
             try {
                 return getBookComments(id, page, rowsPerPage);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        booksFromSeries: async (_root, { bookSeriesId }) => {
+            try {
+                return getBooksFromSeries(bookSeriesId);
             } catch (error) {
                 parseError(error);
             }

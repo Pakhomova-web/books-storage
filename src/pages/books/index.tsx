@@ -2,14 +2,7 @@ import { Box, Grid, Table, TableFooter, TablePagination, TableRow } from '@mui/m
 import React, { useEffect, useState } from 'react';
 import { useBooks } from '@/lib/graphql/queries/book/hook';
 import Loading from '@/components/loading';
-import {
-    borderRadius,
-    greenLightColor,
-    pageStyles,
-    positionRelative,
-    redLightColor,
-    styleVariables
-} from '@/constants/styles-variables';
+import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 import {
     AuthorEntity,
     BookEntity,
@@ -20,9 +13,8 @@ import {
     LanguageEntity,
     PublishingHouseEntity
 } from '@/lib/data/types';
-import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
-import { getParamsQueryString, isAdmin, renderPrice } from '@/utils/utils';
+import { getParamsQueryString, isAdmin } from '@/utils/utils';
 import CustomImage from '@/components/custom-image';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { getBookTypeById } from '@/lib/graphql/queries/book-type/hook';
@@ -36,34 +28,9 @@ import { useAuth } from '@/components/auth-context';
 import { TableKey } from '@/components/table/table-key';
 import { getLanguageById } from '@/lib/graphql/queries/language/hooks';
 import { getBookSeriesById } from '@/lib/graphql/queries/book-series/hook';
-
-const bookBoxStyles = { height: '250px', maxHeight: '50vw' };
-const bookPriceStyles = (inStock = true) => ({
-    ...styleVariables.titleFontSize,
-    ...(inStock ? styleVariables.boldFont : {})
-});
-
-const bookInfoStyles = {
-    ...styleVariables.hintFontSize
-};
-
-const StyledGrid = styled(Grid)(() => ({
-    cursor: 'pointer',
-    '&:hover': {
-        backgroundColor: styleVariables.gray,
-        borderRadius
-    }
-}));
+import BookBox from '@/components/book-box';
 
 const imageBoxStyles = { width: '50px', height: '50px' };
-
-const inStockStyles = (inStock = true) => ({
-    backgroundColor: inStock ? greenLightColor : redLightColor,
-    borderRadius,
-    padding: styleVariables.boxPadding,
-    display: 'flex',
-    alignItems: 'center'
-});
 
 export default function Books() {
     const router = useRouter();
@@ -229,34 +196,9 @@ export default function Books() {
                 {items.length ?
                     <>
                         <Grid container justifyContent="center">
-                            {items.map(((book, i) =>
-                                    <StyledGrid item key={i} xl={2} md={3} sm={4} xs={6} p={2}
-                                                onClick={() => handleClickOnBook(book)}>
-                                        <Box display="flex"
-                                             flexDirection="column"
-                                             alignItems="center"
-                                             justifyContent="space-between"
-                                             height="100%">
-                                            <Box sx={bookBoxStyles} mb={1}>
-                                                <CustomImage isBookDetails={true}
-                                                             imageId={book.imageIds[0]}></CustomImage>
-                                            </Box>
-                                            <Box sx={bookInfoStyles} textAlign="center">
-                                                {book.bookSeries.publishingHouse.name}{book.bookSeries.name === '-' ? '' : `. ${book.bookSeries.name}`}
-                                            </Box>
-                                            <Box sx={styleVariables.titleFontSize} textAlign="center" mb={1}>{book.name}</Box>
-
-                                            <Box display="flex" mb={1}>
-                                                {book.numberInStock ?
-                                                    <Box sx={inStockStyles(true)}>
-                                                        В наявності{isAdmin(user) && ` (${book.numberInStock})`}
-                                                    </Box> :
-                                                    <Box sx={inStockStyles(false)}>Немає в наявності</Box>
-                                                }
-                                            </Box>
-                                            <Box sx={bookPriceStyles(!!book.numberInStock)}>{renderPrice(book.price)} грн</Box>
-                                        </Box>
-                                    </StyledGrid>
+                            {items.map(((book, index) =>
+                                    <BookBox book={book} key={index} isAdmin={isAdmin(user)}
+                                             onClick={() => handleClickOnBook(book)}></BookBox>
                             ))}
                         </Grid>
 

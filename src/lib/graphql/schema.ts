@@ -134,6 +134,7 @@ const typeDefs =  /* GraphQL */ `
         languageById(id: ID!): Language
         bookSeriesByIdQuery(id: ID!): BookSeries
         bookComments(id: ID!, page: Int!, rowsPerPage: Int!): [Comment!]
+        booksFromSeries(bookSeriesId: ID!): [Book!]
         booksWithNotApprovedComments(pageSettings: PageableInput): BookSubList
 
         refreshToken(refreshToken: String!): UserToken!

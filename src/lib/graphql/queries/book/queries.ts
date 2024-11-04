@@ -172,4 +172,13 @@ export const bookCommentsQuery = gql`
     }
 `;
 
+export const booksFromSeries = gql`
+    query BooksFromSeries($bookSeriesId: ID!) {
+        items: booksFromSeries(bookSeriesId: $bookSeriesId) {
+            ...Book
+        }
+    }
+    ${bookFragment}
+`;
+
 

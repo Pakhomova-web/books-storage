@@ -15,7 +15,7 @@ import {
     styleVariables
 } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
-import { getBookComments, useBook } from '@/lib/graphql/queries/book/hook';
+import { getBookComments, getBooksFromSeries, useBook } from '@/lib/graphql/queries/book/hook';
 import ErrorNotification from '@/components/error-notification';
 import { TableKey } from '@/components/table/table-key';
 import { BookEntity, CommentEntity } from '@/lib/data/types';
@@ -28,6 +28,7 @@ import ImagesModal from '@/components/modals/images-modal';
 import CommentForm from '@/components/comment-form';
 import SocialMediaBox from '@/components/social-media-box';
 import { useAuth } from '@/components/auth-context';
+import BookBox from '@/components/book-box';
 
 const StyledSmallImageBox = styled(Box)(() => ({
     height: '120px',
@@ -70,6 +71,8 @@ export default function BookDetails() {
     const [commentsRowsPerPage] = useState<number>(3);
     const [keys, setKeys] = useState<TableKey<BookEntity>[]>([]);
     const [comments, setComments] = useState<CommentEntity[]>([]);
+    const [booksFromSeries, setBooksFromSeries] = useState<BookEntity[]>(null);
+    const [loadingBooksFromSeries, setLoadingBooksFromSeries] = useState<boolean>(false);
     const [loadingComments, setLoadingComments] = useState<boolean>(false);
     const [commentsError, setCommentsError] = useState<ApolloError>();
     const [imageIds, setImageIds] = useState<string[] | null>();
@@ -78,6 +81,13 @@ export default function BookDetails() {
     useEffect(() => {
         if (book) {
             refetchComments(true);
+
+            setBooksFromSeries(null);
+            setLoadingBooksFromSeries(true);
+            getBooksFromSeries(book.bookSeries.id).then(books => {
+                setLoadingBooksFromSeries(false);
+                setBooksFromSeries(books.filter(b => b.id !== book.id));
+            });
             const keys = [
                 {
                     title: 'Видавництво',
@@ -167,6 +177,10 @@ export default function BookDetails() {
 
     function onAgeClick(age: number) {
         router.push(`/books?ages=${age}`);
+    }
+
+    function onBookClick(book: BookEntity) {
+        router.push(`/books/details?id=${book.id}`);
     }
 
     return (
@@ -303,6 +317,21 @@ export default function BookDetails() {
                           {commentsError && <ErrorNotification error={commentsError}></ErrorNotification>}
                       </Grid>
                     </Grid>
+
+                      {!!booksFromSeries?.length && <Grid item xs={12} px={1}>
+                        <Box sx={styleVariables.sectionTitle} p={1} mb={2}>
+                          Інші книги із цієї серії
+                        </Box>
+
+                        <Grid container spacing={2} sx={styleVariables.positionRelative} px={1} display="flex" justifyContent="center">
+                          <Loading show={loadingBooksFromSeries}></Loading>
+
+                            {booksFromSeries.map((book, index) => (
+                                <BookBox book={book} key={index} onClick={() => onBookClick(book)}
+                                         isAdmin={isAdmin(user)}></BookBox>
+                            ))}
+                        </Grid>
+                      </Grid>}
                   </Grid>
                 }
 

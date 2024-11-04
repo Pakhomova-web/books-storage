@@ -9,7 +9,7 @@ import {
 import {
     addBookCommentQuery, approveComment,
     bookByIdQuery,
-    bookCommentsQuery,
+    bookCommentsQuery, booksFromSeries,
     booksQuery,
     booksWithNotApprovedCommentsQuery,
     createBookQuery, removeComment,
@@ -35,6 +35,16 @@ export async function getBookComments(id: string, page: number, rowsPerPage: num
         query: bookCommentsQuery,
         fetchPolicy: 'no-cache',
         variables: { id, page, rowsPerPage }
+    });
+
+    return items;
+}
+
+export async function getBooksFromSeries(bookSeriesId: string) {
+    const { data: { items } } = await apolloClient.query({
+        query: booksFromSeries,
+        fetchPolicy: 'no-cache',
+        variables: { bookSeriesId }
     });
 
     return items;

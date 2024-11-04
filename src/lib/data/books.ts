@@ -207,6 +207,28 @@ export async function getBookComments(id: string, page: number, rowsPerPage: num
     return book.comments.splice(rowsPerPage * page, rowsPerPage);
 }
 
+export async function getBooksFromSeries(bookSeriesId: string) {
+    if (!bookSeriesId) {
+        throw new GraphQLError(`No Books found`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+
+    return Book
+        .find({ bookSeries: bookSeriesId })
+        .populate({
+            path: 'bookSeries',
+            populate: {
+                path: 'publishingHouse'
+            }
+        })
+        .populate('bookType')
+        .populate('pageType')
+        .populate('coverType')
+        .populate('language')
+        .populate('authors');
+}
+
 export async function getBooksWithNotApprovedComments(pageSettings?: IPageable) {
     const query = Book
         .find()
