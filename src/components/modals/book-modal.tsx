@@ -78,7 +78,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             ages: item?.ages
         }
     });
-    const { publishingHouseId, bookSeriesId, imageLink, tags, tag, description, ages } = formContext.watch();
+    const { publishingHouseId, bookSeriesId, imageLink, tags, tag, description, ages, authorIds } = formContext.watch();
     const { update, updating, updatingError } = useUpdateBook();
     const { create, creating, creatingError } = useCreateBook();
     const { items: pageTypeOptions, loading: loadingPageTypes } = usePageTypeOptions();
@@ -125,6 +125,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             if (item?.id) {
                 await update(data);
             } else {
+                delete data.id;
                 await create(data);
             }
             onClose(true);
@@ -300,7 +301,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                                 id="authors"
                                                 label="Автори"
                                                 name="authorIds" showCheckbox variant="standard"/>
-                            {isAdmin &&
+                            {isAdmin && !!authorIds?.length &&
                               <Box sx={customFieldClearBtnStyles}
                                    onClick={() => formContext.setValue('authorIds', null)}>
                                 Очистити

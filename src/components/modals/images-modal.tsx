@@ -18,14 +18,14 @@ export default function ImagesModal(props: IImagesModalProps) {
     return (
         <CustomModal open={props.open} onClose={props.onClose} big={true}>
             <Grid container spacing={2} display="flex" justifyContent="center">
-                <Grid item xs={12} md={3} lg={2}>
+                <Grid item xs={12} md={3}>
                     <StyledImageBox>
                         <CustomImage imageId={props.imageIds[0]}></CustomImage>
                     </StyledImageBox>
                 </Grid>
 
                 {props.imageIds.map((imageId, index) => (
-                    !!index && <Grid key={index} item xs={12} md={8} lg={5}>
+                    !!index && <Grid key={index} item xs={12} md={8}>
                       <StyledImageBox>
                         <CustomImage imageId={imageId}></CustomImage>
                       </StyledImageBox>

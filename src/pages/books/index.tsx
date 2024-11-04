@@ -229,14 +229,14 @@ export default function Books() {
                                                              imageId={book.imageIds[0]}></CustomImage>
                                             </Box>
                                             <Box sx={bookInfoStyles} textAlign="center">
-                                                {book.bookSeries.publishingHouse.name}{book.bookSeries.name === '-' ? '' : `, ${book.bookSeries.name}`}
+                                                {book.bookSeries.publishingHouse.name}{book.bookSeries.name === '-' ? '' : `. ${book.bookSeries.name}`}
                                             </Box>
                                             <Box sx={styleVariables.titleFontSize} textAlign="center">{book.name}</Box>
 
                                             <Box display="flex" alignItems="center" textAlign="center" gap={1}>
                                                 {book.numberInStock ?
                                                     <><HdrStrongIcon style={{ color: "green" }}/>В наявності
-                                                        {isAdmin(user) && `(${book.numberInStock})`}</> :
+                                                        {isAdmin(user) && ` (${book.numberInStock})`}</> :
                                                     <><HdrWeakIcon
                                                         style={{ color: styleVariables.warnColor }}/>Відсутня</>
                                                 }

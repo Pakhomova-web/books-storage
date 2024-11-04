@@ -38,7 +38,8 @@ export function BookFilters(props: IBookFiltersProps) {
         tags,
         publishingHouse,
         bookSeries,
-        ages
+        ages,
+        authors
     } = formContext.watch();
     const { items: bookTypeOptions } = useBookTypeOptions();
     const { items: pageTypeOptions } = usePageTypeOptions();
@@ -188,7 +189,8 @@ export function BookFilters(props: IBookFiltersProps) {
                                                 id="authors"
                                                 label="Автори"
                                                 name="authors" showCheckbox variant="standard"/>
-                            <Box sx={customFieldClearBtnStyles} onClick={() => clearValue('authors')}>Очистити</Box>
+                            {!!authors?.length &&
+                              <Box sx={customFieldClearBtnStyles} onClick={() => clearValue('authors')}>Очистити</Box>}
                         </Box>
                     </Grid>
 
