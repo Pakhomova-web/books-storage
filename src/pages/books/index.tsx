@@ -60,7 +60,7 @@ const imageBoxStyles = { width: '50px', height: '50px' };
 const inStockStyles = (inStock = true) => ({
     backgroundColor: inStock ? greenLightColor : redLightColor,
     borderRadius,
-    padding: '4px 8px',
+    padding: styleVariables.boxPadding,
     display: 'flex',
     alignItems: 'center'
 });

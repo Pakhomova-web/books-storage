@@ -50,7 +50,7 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
 const inStockStyles = (inStock = true) => ({
     backgroundColor: inStock ? greenLightColor : redLightColor,
     borderRadius,
-    padding: '4px 8px',
+    padding: styleVariables.boxPadding,
     display: 'flex',
     alignItems: 'center'
 });
@@ -59,7 +59,7 @@ const priceStyles = (theme) => ({
     color: 'var(--background)',
     fontSize: styleVariables.bigTitleFontSize(theme),
     borderRadius,
-    padding: '4px 8px',
+    padding: styleVariables.boxPadding,
     border: `1px solid ${primaryLightColor}`
 });
 

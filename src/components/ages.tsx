@@ -5,7 +5,7 @@ import { borderRadius, primaryLightColor, styleVariables } from '@/constants/sty
 import { IOption } from '@/lib/data/types';
 
 const ageOptStyles = (clickable = false, selected = false, showOnlySelected = false) => ({
-    padding: '4px 8px',
+    padding: styleVariables.boxPadding,
     borderRadius,
     cursor: clickable ? 'pointer' : null,
     border: `1px solid ${primaryLightColor}`,

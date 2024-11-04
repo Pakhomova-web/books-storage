@@ -12,6 +12,7 @@ export const styleVariables = {
         fontSize: titleFontSize
     },
     deleteIconBtn: { cursor: 'pointer', color: warnColor },
+    boxPadding: `4px 8px`,
     bigTitleFontSize: (theme) => ({
         fontSize: '28px',
         [theme.breakpoints.down('md')]: {

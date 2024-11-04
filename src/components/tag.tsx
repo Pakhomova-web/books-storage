@@ -5,7 +5,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import React from 'react';
 
 const StyledTagGrid = styled(Grid)<GridOwnProps>(({ theme }) => ({
-    padding: '4px 8px',
+    padding: styleVariables.boxPadding,
     borderRadius,
     border: `1px solid ${primaryLightColor}`,
     display: 'flex',
