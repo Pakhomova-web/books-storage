@@ -5,13 +5,16 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ProfileIcon from '@mui/icons-material/AccountCircle';
 import LoginIcon from '@mui/icons-material/Login';
-import React, { useEffect, useState } from 'react';
-import { useAuth } from '@/components/auth-context';
+import React, { useEffect, useState } from 'react'
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import { useRouter } from 'next/router';
-import { styleVariables } from '@/constants/styles-variables';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import SettingsMenu, { settingsList } from '@/components/settings-menu';
 import { usePathname } from 'next/navigation';
+
+import { useAuth } from '@/components/auth-context';
+import { styleVariables } from '@/constants/styles-variables';
+import SettingsMenu, { settingsList } from '@/components/settings-menu';
 import { SettingListItem } from '@/components/types';
 import { isAdmin } from '@/utils/utils';
 
@@ -24,7 +27,9 @@ const toolbarTitle = {
 enum MainMenuItem {
     home,
     settings,
-    profile
+    profile,
+    likes,
+    basket
 }
 
 interface IProps {
@@ -56,6 +61,10 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                 setSelectedMenuItem(MainMenuItem.profile);
             } else if (pathname.includes('login') || pathname.includes('sign-in')) {
                 setSelectedMenuItem(null);
+            } else if (pathname === '/likes') {
+                setSelectedMenuItem(MainMenuItem.likes);
+            } else if (pathname === '/order') {
+                setSelectedMenuItem(MainMenuItem.basket);
             } else if (pathname === '/') {
                 setSelectedMenuItem(MainMenuItem.home);
             } else {
@@ -144,8 +153,9 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                           </IconButton>}
                     </Box>
 
-                    <Box
-                        sx={toolbarTitle}>{activeSettingsTab?.title || (selectedMenuItem === MainMenuItem.profile && 'Profile') || ''}</Box>
+                    <Box sx={toolbarTitle}>
+                        {activeSettingsTab?.title || (selectedMenuItem === MainMenuItem.profile && 'Profile') || ''}
+                    </Box>
 
                     <Box sx={styleVariables.flexNoWrap}>
                         <IconButton onClick={() => goToPage('/')}
@@ -153,6 +163,19 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                                     className={selectedMenuItem === MainMenuItem.home ? 'selectedToolbarMenuItem' : ''}>
                             <HomeIcon/>
                         </IconButton>
+
+                        <IconButton onClick={() => goToPage('/likes')}
+                                    color="inherit"
+                                    className={selectedMenuItem === MainMenuItem.likes ? 'selectedToolbarMenuItem' : ''}>
+                            <FavoriteIcon/>
+                        </IconButton>
+
+                        <IconButton onClick={() => goToPage('/order')}
+                                    color="inherit"
+                                    className={selectedMenuItem === MainMenuItem.basket ? 'selectedToolbarMenuItem' : ''}>
+                            <ShoppingBasketIcon/>
+                        </IconButton>
+
                         {mobileMatches && !!user ?
                             <>
                                 <IconButton color="inherit" aria-label="mobile-menu" aria-haspopup="true"

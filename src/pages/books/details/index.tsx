@@ -12,8 +12,8 @@ import {
     greenLightColor,
     pageStyles,
     primaryLightColor,
-    redLightColor,
-    styleVariables
+    styleVariables,
+    warnColor
 } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import { getBookComments, getBooksFromSeries, useBook } from '@/lib/graphql/queries/book/hook';
@@ -50,8 +50,11 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
 }));
 
 const inStockStyles = (inStock = true) => ({
-    backgroundColor: inStock ? greenLightColor : redLightColor,
-    borderRadius,
+    position: 'absolute',
+    top: 0,
+    backgroundColor: inStock ? greenLightColor : warnColor,
+    borderRadius: `0 0 ${borderRadius} ${borderRadius}`,
+    color: 'white',
     padding: boxPadding,
     display: 'flex',
     alignItems: 'center'
@@ -207,8 +210,15 @@ export default function BookDetails() {
                               md={book.imageIds.length > 1 ? 9 : 12}
                               xs={book.imageIds.length > 1 ? 7 : 12}
                               position="relative">
+                            {book.numberInStock ?
+                                <Box sx={inStockStyles(true)}>
+                                    В наявності{isAdmin(user) && ` (${book.numberInStock})`}
+                                </Box> :
+                                <Box sx={inStockStyles(false)}>Немає в наявності</Box>
+                            }
+
                             {!!book.discount &&
-                              <Box sx={styleVariables.discountBoxStyles}>Знижка: {book.discount}%</Box>}
+                              <Box sx={styleVariables.discountBoxStyles(!!book.numberInStock)}>Знижка: {book.discount}%</Box>}
 
                           <Box sx={imageBoxStyles(!!book.imageIds.length)} mb={1}
                                onClick={() => setImageIds(book.imageIds)}>
@@ -234,15 +244,6 @@ export default function BookDetails() {
                         <Grid item display="flex" gap={2} alignItems="center">
                           <Box sx={priceStyles}><b>{renderPrice(book.price, book.discount)}</b></Box>
                             {!!book.discount && <Box><s>{renderPrice(book.price)}</s></Box>}
-                        </Grid>
-
-                        <Grid item display="flex" gap={2}>
-                            {book.numberInStock ?
-                                <Box sx={inStockStyles(true)}>
-                                    В наявності{isAdmin(user) && ` (${book.numberInStock})`}
-                                </Box> :
-                                <Box sx={inStockStyles(false)}>Немає в наявності</Box>
-                            }
                         </Grid>
                       </Grid>
 
