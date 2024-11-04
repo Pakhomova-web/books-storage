@@ -89,7 +89,7 @@ export default function BooksSettingsTable() {
             mobileStyleClasses: { ...styleVariables.boldFont, ...styleVariables.mobileBigFontSize }
         },
         {
-            title: 'Заархівована',
+            title: 'Активна',
             sortValue: 'archived',
             renderValue: (item: BookEntity) => item.archived ? 'Так' : 'Ні',
             type: 'text'
@@ -129,12 +129,7 @@ export default function BooksSettingsTable() {
             renderValue: (item: BookEntity) => renderPrice(item.price),
             type: 'text'
         },
-        {
-            title: 'Вік',
-            sortValue: 'price',
-            renderValue: (item: BookEntity) => renderAges(item.ages),
-            type: 'text'
-        }
+        { title: 'Знижка', renderValue: (item: BookEntity) => item.discount, type: 'text' }
     ]);
     const [tableKeys] = useState<TableKey<BookEntity>[]>([
         { title: 'Тип', sortValue: 'bookType', renderValue: (item: BookEntity) => item.bookType?.name, type: 'text' },

@@ -53,7 +53,9 @@ interface IForm {
     imageLink: string,
     tags: string[],
     tag: string,
-    ages: number[]
+    ages: number[],
+    discount: number,
+    finalPrice: number
 }
 
 export default function BookModal({ open, item, onClose, isAdmin }: IBookModalProps) {
@@ -75,10 +77,12 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             publishingHouseId: item?.bookSeries.publishingHouse.id,
             imageIds: item?.id ? item.imageIds : null,
             tags: item?.tags,
-            ages: item?.ages
+            ages: item?.ages,
+            discount: item?.discount,
+            finalPrice: item ? +(item.price * (100 - item.discount) / 100).toFixed(2) : 0
         }
     });
-    const { publishingHouseId, bookSeriesId, imageLink, tags, tag, description, ages, authorIds } = formContext.watch();
+    const { publishingHouseId, bookSeriesId, imageLink, tags, tag, description, ages, authorIds, discount } = formContext.watch();
     const { update, updating, updatingError } = useUpdateBook();
     const { create, creating, creatingError } = useCreateBook();
     const { items: pageTypeOptions, loading: loadingPageTypes } = usePageTypeOptions();
@@ -106,6 +110,10 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 });
         }
     }, [publishingHouseId]);
+
+    useEffect(() => {
+        formContext.setValue('finalPrice', +(formContext.getValues().price * (100 - discount) / 100).toFixed(2));
+    }, [discount]);
 
     async function onSubmit() {
         parseImage();
@@ -326,6 +334,26 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                          id="price"
                                          label="Ціна, грн"
                                          name="price"/>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomTextField fullWidth
+                                         disabled={!isAdmin}
+                                         type="number"
+                                         id="discount"
+                                         label="Знижка, %"
+                                         showClear={!!discount}
+                                         onClear={() => formContext.setValue('discount', null)}
+                                         name="discount"/>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomTextField fullWidth
+                                         disabled={true}
+                                         type="number"
+                                         id="finalPrice"
+                                         label="Ціна зі знижкою, грн"
+                                         name="finalPrice"/>
                     </Grid>
                 </Grid>
 

@@ -64,6 +64,7 @@ const typeDefs =  /* GraphQL */ `
         tags: [String]
         ages: [Int]
         comments: [Comment]
+        discount: Float
     }
 
     type Comment {
@@ -306,6 +307,7 @@ const typeDefs =  /* GraphQL */ `
         tags: [String]
         archived: Boolean
         ages: [Int]
+        discount: Float
     }
 
     input BookUpdateInput {
@@ -327,6 +329,7 @@ const typeDefs =  /* GraphQL */ `
         tags: [String]
         archived: Boolean
         ages: [Int]
+        discount: Float
     }
 
     input BookSearchInput {

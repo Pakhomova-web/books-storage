@@ -80,6 +80,7 @@ export type BookCreateInput = {
   bookTypeId: Scalars['ID']['input'];
   coverTypeId: Scalars['ID']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
+  discount?: InputMaybe<Scalars['Float']['input']>;
   format?: InputMaybe<Scalars['String']['input']>;
   imageIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   isbn?: InputMaybe<Scalars['String']['input']>;
@@ -168,6 +169,7 @@ export type BookUpdateInput = {
   bookTypeId: Scalars['ID']['input'];
   coverTypeId: Scalars['ID']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
+  discount?: InputMaybe<Scalars['Float']['input']>;
   format?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   imageIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;

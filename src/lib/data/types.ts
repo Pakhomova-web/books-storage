@@ -74,6 +74,7 @@ export class BookEntity {
     tags?: string[];
     ages: number[];
     comments?: CommentEntity[];
+    discount?: number;
 
     constructor(data?) {
         this.id = data.id;
@@ -100,6 +101,7 @@ export class BookEntity {
         this.authors = data.authors;
         this.archived = data.archived;
         this.ages = (data.ages || []).sort();
+        this.discount = data.discount;
     }
 
     get dataToUpdate(): Partial<BookEntity> {
@@ -121,7 +123,8 @@ export class BookEntity {
             authorIds: this.authorIds || this.authors.map(({ id }) => id),
             imageIds: this.imageIds,
             tags: this.tags,
-            ages: this.ages
+            ages: this.ages,
+            discount: this.discount
         };
     }
 }

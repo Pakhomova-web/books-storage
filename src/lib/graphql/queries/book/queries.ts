@@ -44,6 +44,7 @@ const bookFragment = gql`
             description
         }
         tags
+        discount
         archived
     }
 `;
