@@ -3,7 +3,13 @@ import React from 'react';
 import { styled } from '@mui/material/styles';
 
 import CustomImage from '@/components/custom-image';
-import { borderRadius, greenLightColor, redLightColor, styleVariables } from '@/constants/styles-variables';
+import {
+    borderRadius,
+    greenLightColor,
+    redLightColor,
+    styleVariables,
+    yellowColor
+} from '@/constants/styles-variables';
 import { renderPrice } from '@/utils/utils';
 
 const bookBoxStyles = { height: '250px', maxHeight: '50vw' };
@@ -25,6 +31,16 @@ const StyledGrid = styled(Grid)(() => ({
     }
 }));
 
+const discountBoxStyles = {
+    position: 'absolute',
+    top: 0,
+    backgroundColor: yellowColor,
+    textAlign: 'center',
+    padding: styleVariables.boxPadding,
+    width: '100%',
+    borderRadius: `0 0 ${borderRadius} ${borderRadius}`
+};
+
 const inStockStyles = (inStock = true) => ({
     backgroundColor: inStock ? greenLightColor : redLightColor,
     borderRadius,
@@ -41,8 +57,10 @@ export default function BooksList({ items, onClick, isAdmin }) {
                      flexDirection="column"
                      alignItems="center"
                      justifyContent="space-between"
+                     position="relative"
                      height="100%">
-                    <Box sx={bookBoxStyles} mb={1}>
+                    {!!book.discount && <Box sx={discountBoxStyles}>Знижка: {book.discount}%</Box>}
+                    <Box sx={bookBoxStyles} mb={1} mt={book.discount ? 1 : 0}>
                         <CustomImage isBookDetails={true} imageId={book.imageIds[0]}></CustomImage>
                     </Box>
                     <Box sx={bookInfoStyles} textAlign="center">
