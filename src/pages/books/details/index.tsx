@@ -213,7 +213,7 @@ export default function BookDetails() {
                         </Box>}
 
                       <Box sx={styleVariables.sectionTitle} p={1} mb={1}>
-                        Деталі
+                        Характеристики
                       </Box>
                         {keys.map((key, index) =>
                             <Grid key={index} container borderBottom={1} borderColor={primaryLightColor}>
@@ -260,7 +260,7 @@ export default function BookDetails() {
                                         </Box>
                                     ))}
 
-                                    <Box display="flex" justifyContent="center">
+                                    <Box display="flex" justifyContent="center" mt={1}>
                                         {commentsPage !== -1 &&
                                           <Button variant="outlined" onClick={() => refetchComments()}>
                                             Показате ще
