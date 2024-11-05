@@ -77,7 +77,7 @@ export default function BooksList({ items, onClick }) {
                          mb={1}>{renderPrice(book.price, book.discount)}</Box>
 
                     <Grid container spacing={1}>
-                        <Grid item xs={6}>
+                        <Grid item xs={8}>
                             {isBookInBasket(book) ?
                                 <Button variant="outlined" fullWidth disabled={true}>В кошику</Button> :
                                 <Button variant="outlined" fullWidth
@@ -87,7 +87,7 @@ export default function BooksList({ items, onClick }) {
                                 </Button>}
                         </Grid>
 
-                        <Grid item xs={6} textAlign="center">
+                        <Grid item xs={4} textAlign="center">
                             <IconButton onClick={e => onLike(e, book)} color="warning">
                                 <Box gap={1} display="flex" alignItems="center">
                                     {isLiked(book) ? <FavoriteIcon/> : <FavoriteBorderIcon/>}

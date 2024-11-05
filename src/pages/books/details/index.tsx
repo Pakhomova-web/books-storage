@@ -171,7 +171,7 @@ export default function BookDetails() {
     }
 
     function onBackClick() {
-        router.push(`/books${router.query.filters ? `?${router.query.filters}` : ''}`);
+        router.push(`${router.query.pageUrl ? router.query.pageUrl : '/books'}${router.query.filters ? `?${router.query.filters}` : ''}`);
     }
 
     function onTagClick(tag: string) {
@@ -183,7 +183,11 @@ export default function BookDetails() {
     }
 
     function onBookClick(book: BookEntity) {
-        router.push(`/books/details?${getParamsQueryString({ id: book.id, filters: router.query.filters })}`);
+        router.push(`/books/details?${getParamsQueryString({
+            id: book.id,
+            filters: router.query.filters,
+            pageUrl: router.query.pageUrl
+        })}`);
     }
 
     function isLiked(book: BookEntity) {
@@ -363,7 +367,7 @@ export default function BookDetails() {
                                     </Box>
                                 </Box> :
                                 <Box display="flex" alignItems="center" flexDirection="column" gap={1}>
-                                    <Box sx={{ width: '100px' }}>
+                                    <Box width="100px">
                                         <CustomImage isNoComments={true}></CustomImage>
                                     </Box>
                                     <Box>

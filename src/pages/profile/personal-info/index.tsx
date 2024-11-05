@@ -58,7 +58,7 @@ export default function PersonalInfo() {
 
                   <Box sx={styleVariables.buttonsContainer}>
                     <Button variant="contained" type="submit" disabled={!formContext.formState.isValid}>
-                      Save
+                      Зберегти
                     </Button>
                   </Box>
                 </FormContainer>
