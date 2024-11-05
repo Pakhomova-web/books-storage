@@ -70,7 +70,7 @@ export async function getOrderById(id: string) {
 }
 
 export async function deleteOrder(id: string) {
-    // TODO recalculate count of books in Books table for each order details after deleting
+    // TODO recalculate count of books in Books table for each basket details after deleting
     await Order.findByIdAndDelete(id);
 
     return { id } as OrderEntity;

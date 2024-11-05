@@ -30,7 +30,6 @@ enum MainMenuItem {
     home,
     settings,
     profile,
-    likes,
     basket
 }
 
@@ -63,12 +62,10 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                 setSelectedMenuItem(MainMenuItem.profile);
             } else if (pathname.includes('login') || pathname.includes('sign-in')) {
                 setSelectedMenuItem(null);
-            } else if (pathname === '/profile/likes') {
-                setSelectedMenuItem(MainMenuItem.likes);
-            } else if (pathname === '/order') {
-                setSelectedMenuItem(MainMenuItem.basket);
             } else if (pathname === '/') {
                 setSelectedMenuItem(MainMenuItem.home);
+            }  else if (pathname === '/basket') {
+                setSelectedMenuItem(MainMenuItem.basket);
             } else {
                 setSelectedMenuItem(null);
             }
@@ -156,7 +153,7 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                     </Box>
 
                     <Box sx={toolbarTitle}>
-                        {activeSettingsTab?.title || (selectedMenuItem === MainMenuItem.profile && 'Профіль') || ''}
+                        {activeSettingsTab?.title || ''}
                     </Box>
 
                     <Box sx={styleVariables.flexNoWrap}>
@@ -166,19 +163,17 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                             <HomeIcon/>
                         </IconButton>
 
-                        <Box mx={!user?.likedBookIds?.length ? 0 : 1}>
+                        <Box mr={!user?.likedBookIds?.length ? 0 : 1}>
                             <Badge badgeContent={user?.likedBookIds?.length ? user.likedBookIds.length : null}>
-                                <IconButton onClick={() => goToPage('/profile/likes')}
-                                            color="inherit"
-                                            className={selectedMenuItem === MainMenuItem.likes ? 'selectedToolbarMenuItem' : ''}>
+                                <IconButton onClick={() => goToPage('/profile/likes')} color="inherit">
                                     <FavoriteIcon/>
                                 </IconButton>
                             </Badge>
                         </Box>
 
-                        <Box mx={!user?.bookIdsInBasket?.length ? 0 : 1}>
+                        <Box mr={!user?.bookIdsInBasket?.length ? 0 : 1}>
                             <Badge badgeContent={user?.bookIdsInBasket?.length ? user.bookIdsInBasket.length : null}>
-                                <IconButton onClick={() => goToPage('/profile/order')}
+                                <IconButton onClick={() => goToPage('/basket')}
                                             color="inherit"
                                             className={selectedMenuItem === MainMenuItem.basket ? 'selectedToolbarMenuItem' : ''}>
                                     <ShoppingBasketIcon/>

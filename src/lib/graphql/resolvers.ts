@@ -569,7 +569,7 @@ const resolvers: Resolvers = {
                 parseError(error);
             }
         },
-        // order
+        // basket
         updateOrder: async (_root, { input }: { input: OrderEntity }, { user }) => {
             _checkUser(user);
             try {
