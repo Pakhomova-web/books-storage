@@ -25,13 +25,15 @@ const commonUrls = ['/books', '/books/details'];
 export default function Main({ children }) {
     const [loading, setLoading] = useState<boolean>(false);
     const { fetchUser } = useUser();
-    const { logout, setUser } = useAuth();
+    const { logout, setUser, refetchLikedBooks, refetchBooksToBuy } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
     const [showSettingsMenu, setShowSettingsMenu] = useState<boolean>(false);
     const [attachedSettingsMenu, setAttachedSettingsMenu] = useState<boolean>(false);
 
     useEffect(() => {
+        refetchBooksToBuy();
+        refetchLikedBooks();
         setLoading(true);
         fetchUser()
             .then((user: UserEntity) => {

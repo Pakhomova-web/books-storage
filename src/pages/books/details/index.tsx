@@ -32,8 +32,6 @@ import { useAuth } from '@/components/auth-context';
 import BooksList from '@/components/books-list';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import { LIKED_BOOKS_ITEM } from '@/constants/local-storage';
-import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 
 const StyledSmallImageBox = styled(Box)(() => ({
     height: '120px',
@@ -56,8 +54,9 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
 const inStockStyles = (inStock = true) => ({
     position: 'absolute',
     top: 0,
+    left: 0,
     backgroundColor: inStock ? greenLightColor : warnColor,
-    borderRadius: `0 0 ${borderRadius} ${borderRadius}`,
+    borderRadius: `0 0 ${borderRadius} 0`,
     color: 'white',
     padding: boxPadding,
     display: 'flex',
@@ -76,9 +75,10 @@ export default function BookDetails() {
     const router = useRouter();
     const { loading, error, item: book } = useBook(router.query.id as string);
     const [commentsPage, setCommentsPage] = useState<number>(0);
-    const { likedBooks, setLikedBooks, booksToBuy, setBooksToBuy } = useAuth();
+    const { likedBooks, setLikedBook, booksToBuy, setBookToBuy } = useAuth();
     const [commentsRowsPerPage] = useState<number>(3);
     const [keys, setKeys] = useState<TableKey<BookEntity>[]>([]);
+    const [mainDetailsKeys, setMainDetailsKeys] = useState<TableKey<BookEntity>[]>([]);
     const [comments, setComments] = useState<CommentEntity[]>([]);
     const [booksFromSeries, setBooksFromSeries] = useState<BookEntity[]>([]);
     const [loadingBooksFromSeries, setLoadingBooksFromSeries] = useState<boolean>(false);
@@ -98,6 +98,22 @@ export default function BookDetails() {
             });
             const keys = [
                 {
+                    title: 'Тип',
+                    type: 'text',
+                    renderValue: (book: BookEntity) => book.bookType.name,
+                    onValueClick: () => {
+                        router.push(`/books?bookType=${book.bookType.id}`);
+                    }
+                },
+                { title: 'Тип сторінок', type: 'text', renderValue: (book: BookEntity) => book.pageType?.name },
+                { title: 'Тип обкладинки', type: 'text', renderValue: (book: BookEntity) => book.coverType?.name },
+                { title: 'Кількість сторінок', type: 'text', renderValue: (book: BookEntity) => book.numberOfPages },
+                { title: 'ISBN', type: 'text', renderValue: (book: BookEntity) => book.isbn },
+                { title: 'Формат, мм', type: 'text', renderValue: (book: BookEntity) => book.format }
+            ];
+            setKeys((keys as TableKey<BookEntity>[]).filter(key => !!key.renderValue(book)));
+            setMainDetailsKeys([
+                {
                     title: 'Видавництво',
                     type: 'text',
                     renderValue: (book: BookEntity) => book.bookSeries.publishingHouse.name,
@@ -113,31 +129,14 @@ export default function BookDetails() {
                         router.push(`/books?bookSeries=${book.bookSeries.id}`);
                     }
                 },
-                {
-                    title: 'Тип',
+                ...(book.authors || []).map((author, i) => ({
+                    title: i === 0 ? 'Автор' : '',
                     type: 'text',
-                    renderValue: (book: BookEntity) => book.bookType.name,
+                    renderValue: () => author.name,
                     onValueClick: () => {
-                        router.push(`/books?bookType=${book.bookType.id}`);
+                        router.push(`/books?authors=${author.id}`);
                     }
-                },
-                { title: 'Тип сторінок', type: 'text', renderValue: (book: BookEntity) => book.pageType?.name },
-                { title: 'Тип обкладинки', type: 'text', renderValue: (book: BookEntity) => book.coverType?.name },
-                { title: 'Кількість сторінок', type: 'text', renderValue: (book: BookEntity) => book.numberOfPages }
-            ];
-            book.authors?.forEach((author, i) => {
-                keys.push(
-                    {
-                        title: i === 0 ? 'Автор' : '',
-                        type: 'text',
-                        renderValue: () => author.name,
-                        onValueClick: () => {
-                            router.push(`/books?authors=${author.id}`);
-                        }
-                    }
-                );
-            });
-            keys.push(...[
+                } as TableKey<BookEntity>)),
                 {
                     title: 'Мова',
                     type: 'text',
@@ -145,11 +144,8 @@ export default function BookDetails() {
                     onValueClick: () => {
                         router.push(`/books?language=${book.language.id}`);
                     }
-                },
-                { title: 'ISBN', type: 'text', renderValue: (book: BookEntity) => book.isbn },
-                { title: 'Формат, мм', type: 'text', renderValue: (book: BookEntity) => book.format }
+                }
             ]);
-            setKeys((keys as TableKey<BookEntity>[]).filter(key => !!key.renderValue(book)));
         }
     }, [book]);
 
@@ -265,14 +261,14 @@ export default function BookDetails() {
                             {isBookToBuy(book) ?
                                 <Button variant="outlined" fullWidth disabled={true}>В кошику</Button> :
                                 <Button variant="outlined" fullWidth
-                                        onClick={() => setBooksToBuy(book.id)}
+                                        onClick={() => setBookToBuy(book.id)}
                                         disabled={!book.numberInStock}>
                                     {!!book.numberInStock ? 'Купити' : 'Очікується'}
                                 </Button>}
                         </Grid>
 
                         <Grid item xs={12} sm={6} lg={4} textAlign="center">
-                          <Button onClick={() => setLikedBooks(book.id)} color="warning" fullWidth>
+                          <Button onClick={() => setLikedBook(book.id)} color="warning" fullWidth>
                             <Box gap={1} display="flex" alignItems="center">{isLiked(book) ?
                                 <><FavoriteIcon/>В обраному</> :
                                 <><FavoriteBorderIcon/>Додати в обране</>}
@@ -293,10 +289,9 @@ export default function BookDetails() {
                           <Ages selected={book.ages} showOnlySelected={true} onOptionClick={onAgeClick}></Ages>
                         </Box>}
 
-                      <Box sx={styleVariables.sectionTitle} p={1} mb={1}>
-                        Характеристики
-                      </Box>
-                        {keys.map((key, index) =>
+                      <Box sx={styleVariables.sectionTitle} p={1} mb={1}>Характеристики</Box>
+
+                        {mainDetailsKeys.map((key, index) =>
                             <Grid key={index} container borderBottom={1} borderColor={primaryLightColor}>
                                 <Grid item pr={1} xs={6} my={1} px={1}>{key.title}</Grid>
                                 <Grid item xs={6} my={1} px={1}>
@@ -306,6 +301,26 @@ export default function BookDetails() {
                                 </Grid>
                             </Grid>
                         )}
+                    </Grid>
+
+                    <Grid item xs={12} p={1}>
+                      <Box sx={styleVariables.sectionTitle} p={1} mb={1}>Додаткові деталі</Box>
+
+                      <Grid container columnSpacing={1}>
+                          {keys.map((key, index) =>
+                              <Grid item key={index} xs={12} md={6}>
+                                  <Grid container borderBottom={1} borderColor={primaryLightColor}>
+                                      <Grid item xs={6} my={1} px={1}>{key.title}</Grid>
+                                      <Grid item xs={6} my={1} px={1}>
+                                          {key.onValueClick ?
+                                              <CustomLink
+                                                  onClick={key.onValueClick}>{key.renderValue(book)}</CustomLink> :
+                                              key.renderValue(book)}
+                                      </Grid>
+                                  </Grid>
+                              </Grid>
+                          )}
+                      </Grid>
                     </Grid>
 
                       {!!book.description &&

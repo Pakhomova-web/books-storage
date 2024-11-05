@@ -14,8 +14,10 @@ type authContextType = {
     logout: () => void;
     setUser: (user: UserEntity) => void;
     checkAuth: (error: ApolloError) => void;
-    setLikedBooks: (bookId: string) => void;
-    setBooksToBuy: (bookId: string) => void;
+    setLikedBook: (bookId: string) => void;
+    setBookToBuy: (bookId: string) => void;
+    refetchLikedBooks: () => void;
+    refetchBooksToBuy: () => void;
 };
 
 const authContextDefaultValues: authContextType = {
@@ -30,10 +32,12 @@ const authContextDefaultValues: authContextType = {
     },
     checkAuth: (_error: ApolloError) => {
     },
-    setLikedBooks: (_bookId: string) => {
+    setLikedBook: (_bookId: string) => {
     },
-    setBooksToBuy: (_bookId: string) => {
-    }
+    setBookToBuy: (_bookId: string) => {
+    },
+    refetchLikedBooks: () => {},
+    refetchBooksToBuy: () => {}
 };
 
 const AuthContext = createContext<authContextType>(authContextDefaultValues);
@@ -69,7 +73,7 @@ export function AuthProvider({ children }) {
                 }
             }
         },
-        setLikedBooks: (bookId: string) => {
+        setLikedBook: (bookId: string) => {
             let newList;
 
             if (likedBooks.some(id => id === bookId)) {
@@ -81,7 +85,7 @@ export function AuthProvider({ children }) {
             setLikedBooks(newList);
             localStorage.setItem(LIKED_BOOKS_ITEM, JSON.stringify(newList));
         },
-        setBooksToBuy: (bookId: string) => {
+        setBookToBuy: (bookId: string) => {
             let newList;
 
             if (booksToBuy.some(id => id === bookId)) {
@@ -92,6 +96,12 @@ export function AuthProvider({ children }) {
 
             setBooksToBuy(newList);
             localStorage.setItem(BOOKS_TO_BUY_ITEM, JSON.stringify(newList));
+        },
+        refetchLikedBooks: () => {
+            setLikedBooks(JSON.parse(localStorage.getItem(LIKED_BOOKS_ITEM)) || []);
+        },
+        refetchBooksToBuy: () => {
+            setBooksToBuy(JSON.parse(localStorage.getItem(BOOKS_TO_BUY_ITEM)) || []);
         }
     };
 

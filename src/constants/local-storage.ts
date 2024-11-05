@@ -1,2 +1,2 @@
-export const LIKED_BOOKS_ITEM = 'likedBooks';
-export const BOOKS_TO_BUY_ITEM = 'booksToBuy';
+export const LIKED_BOOKS_ITEM = 'LIKED_BOOKS';
+export const BOOKS_TO_BUY_ITEM = 'BOOKS_TO_BUY';

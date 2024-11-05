@@ -31,11 +31,11 @@ const StyledGrid = styled(Grid)(() => ({
 }));
 
 export default function BooksList({ items, onClick }) {
-    const { likedBooks, setLikedBooks, booksToBuy, setBooksToBuy } = useAuth();
+    const { likedBooks, setLikedBook, booksToBuy, setBookToBuy } = useAuth();
 
     function onLike(e, book: BookEntity) {
         e.stopPropagation();
-        setLikedBooks(book.id);
+        setLikedBook(book.id);
     }
 
     function isLiked(book: BookEntity) {
@@ -48,7 +48,7 @@ export default function BooksList({ items, onClick }) {
 
     function onBuy(e, book: BookEntity) {
         e.stopPropagation();
-        setBooksToBuy(book.id);
+        setBookToBuy(book.id);
     }
 
     return (

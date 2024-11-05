@@ -2,7 +2,6 @@ const rowMargin = '5px';
 const gray = 'rgb(244, 244, 244)';
 export const warnColor = '#d00';
 export const primaryLightColor = 'rgba(68, 138, 255, 0.2)';
-export const yellowColor = '#ffdd04';
 export const redLightColor = 'rgba(171, 51, 44, 0.2)';
 export const greenLightColor = 'rgba(0, 128, 0)';
 export const borderRadius = '4px';
@@ -14,12 +13,12 @@ export const styleVariables = {
     discountBoxStyles: (withDiscount = false) => ({
         position: 'absolute',
         top: withDiscount ? '30px' : 0,
-        left: 1,
+        left: 0,
         backgroundColor: warnColor,
         color: 'white',
         textAlign: 'center',
         padding: boxPadding,
-        borderRadius: `0 0 ${borderRadius} ${borderRadius}`
+        borderRadius: `0 0 ${borderRadius} 0`
     }),
     titleFontSize: {
         fontSize: titleFontSize
