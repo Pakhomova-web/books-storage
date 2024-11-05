@@ -138,6 +138,22 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
         setActiveSettingsTab(item);
     }
 
+    function goToLikedBooks() {
+        if (!user) {
+            setOpenLoginModal(true);
+        } else {
+            goToPage('/profile/likes');
+        }
+    }
+
+    function goToBasket() {
+        if (!user) {
+            setOpenLoginModal(true);
+        } else {
+            goToPage('/basket');
+        }
+    }
+
     return (
         <>
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
@@ -165,7 +181,7 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
 
                         <Box mr={!user?.likedBookIds?.length ? 0 : 1}>
                             <Badge badgeContent={user?.likedBookIds?.length ? user.likedBookIds.length : null}>
-                                <IconButton onClick={() => goToPage('/profile/likes')} color="inherit">
+                                <IconButton onClick={goToLikedBooks} color="inherit">
                                     <FavoriteIcon/>
                                 </IconButton>
                             </Badge>
@@ -173,7 +189,7 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
 
                         <Box mr={!user?.bookIdsInBasket?.length ? 0 : 1}>
                             <Badge badgeContent={user?.bookIdsInBasket?.length ? user.bookIdsInBasket.length : null}>
-                                <IconButton onClick={() => goToPage('/basket')}
+                                <IconButton onClick={goToBasket}
                                             color="inherit"
                                             className={selectedMenuItem === MainMenuItem.basket ? 'selectedToolbarMenuItem' : ''}>
                                     <ShoppingBasketIcon/>
