@@ -4,26 +4,23 @@ import { removeTokenFromLocalStorage, saveTokenToLocalStorage } from '@/utils/ut
 import { useRouter } from 'next/router';
 import { ApolloError } from '@apollo/client';
 import { GraphQLError } from 'graphql/error';
-import { BOOKS_TO_BUY_ITEM, LIKED_BOOKS_ITEM } from '@/constants/local-storage';
+import { addBookInBasket, likeBook, removeBookFromBasket, unlikeBook } from '@/lib/graphql/queries/book/hook';
 
 type authContextType = {
     user: UserEntity;
-    likedBooks: string[];
-    booksToBuy: string[];
+    openLoginModal: boolean,
+    setOpenLoginModal: (open: boolean) => void,
     login: (user: UserEntity, token: string, refreshToken: string) => void;
     logout: () => void;
     setUser: (user: UserEntity) => void;
     checkAuth: (error: ApolloError) => void;
     setLikedBook: (bookId: string) => void;
-    setBookToBuy: (bookId: string) => void;
-    refetchLikedBooks: () => void;
-    refetchBooksToBuy: () => void;
+    setBookInBasket: (bookId: string) => void;
 };
 
 const authContextDefaultValues: authContextType = {
     user: null,
-    likedBooks: [],
-    booksToBuy: [],
+    openLoginModal: false,
     login: (_user: UserEntity, _token: string, _refreshToken: string) => {
     },
     logout: () => {
@@ -34,10 +31,10 @@ const authContextDefaultValues: authContextType = {
     },
     setLikedBook: (_bookId: string) => {
     },
-    setBookToBuy: (_bookId: string) => {
+    setBookInBasket: (_bookId: string) => {
     },
-    refetchLikedBooks: () => {},
-    refetchBooksToBuy: () => {}
+    setOpenLoginModal: (_open: boolean) => {
+    }
 };
 
 const AuthContext = createContext<authContextType>(authContextDefaultValues);
@@ -49,15 +46,13 @@ export function useAuth() {
 export function AuthProvider({ children }) {
     const router = useRouter();
     const [user, setUser] = useState<UserEntity>(null);
-    const [likedBooks, setLikedBooks] = useState<string[]>([]);
-    const [booksToBuy, setBooksToBuy] = useState<string[]>([]);
+    const [openLoginModal, setOpenLoginModal] = useState<boolean>(false);
     const value = {
         user,
-        likedBooks,
-        booksToBuy,
+        openLoginModal,
         login: (user: UserEntity, token: string, refreshToken: string) => {
             saveTokenToLocalStorage(token, refreshToken);
-            setUser(user);
+            setUser(user ? new UserEntity(user) : null);
         },
         logout: () => {
             removeTokenFromLocalStorage();
@@ -74,34 +69,46 @@ export function AuthProvider({ children }) {
             }
         },
         setLikedBook: (bookId: string) => {
-            let newList;
+            if (!user) {
+                setOpenLoginModal(true);
+                return;
+            }
+            let promise;
 
-            if (likedBooks.some(id => id === bookId)) {
-                newList = likedBooks.filter(id => id !== bookId);
+            if (user.likedBookIds?.some(id => id === bookId)) {
+                promise = unlikeBook(bookId);
             } else {
-                newList = [...likedBooks, bookId];
+                promise = likeBook(bookId);
             }
 
-            setLikedBooks(newList);
-            localStorage.setItem(LIKED_BOOKS_ITEM, JSON.stringify(newList));
+            promise
+                .then(bookIds => setUser({ ...user, likedBookIds: bookIds }))
+                .catch(e => {
+                    console.log(e);
+                });
         },
-        setBookToBuy: (bookId: string) => {
-            let newList;
-
-            if (booksToBuy.some(id => id === bookId)) {
-                newList = booksToBuy.filter(id => id !== bookId);
-            } else {
-                newList = [...booksToBuy, bookId];
+        setBookInBasket: (bookId: string) => {
+            if (!user) {
+                setOpenLoginModal(true);
+                return;
             }
 
-            setBooksToBuy(newList);
-            localStorage.setItem(BOOKS_TO_BUY_ITEM, JSON.stringify(newList));
+            let promise;
+
+            if (user.bookIdsInBasket?.some(id => id === bookId)) {
+                promise = removeBookFromBasket(bookId);
+            } else {
+                promise = addBookInBasket(bookId);
+            }
+
+            promise
+                .then(bookIds => setUser({ ...user, bookIdsInBasket: bookIds }))
+                .catch(e => {
+                    console.log(e);
+                });
         },
-        refetchLikedBooks: () => {
-            setLikedBooks(JSON.parse(localStorage.getItem(LIKED_BOOKS_ITEM)) || []);
-        },
-        refetchBooksToBuy: () => {
-            setBooksToBuy(JSON.parse(localStorage.getItem(BOOKS_TO_BUY_ITEM)) || []);
+        setOpenLoginModal: (open: boolean) => {
+            setOpenLoginModal(open);
         }
     };
 

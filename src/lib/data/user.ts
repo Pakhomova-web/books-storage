@@ -109,3 +109,55 @@ export async function updateUser(input: UserEntity): Promise<UserEntity> {
 export async function getUserById(id: string): Promise<UserEntity> {
     return User.findById(id);
 }
+
+export async function likeBook(userId: string, bookId: string) {
+    const user =  await User.findById(userId);
+
+    if (user.likedBookIds) {
+        user.likedBookIds.push(bookId);
+    } else {
+        user.likedBookIds = [bookId];
+    }
+    await user.save();
+
+    return user.likedBookIds;
+}
+
+export async function unlikeBook(userId: string, bookId: string) {
+    const user =  await User.findById(userId);
+
+    if (user.likedBookIds) {
+        user.likedBookIds = user.likedBookIds.filter(id => id !== bookId);
+    } else {
+        user.likedBookIds = [];
+    }
+    await user.save();
+
+    return user.likedBookIds;
+}
+
+export async function addBookInBasket(userId: string, bookId: string) {
+    const user =  await User.findById(userId);
+
+    if (user.bookIdsInBasket) {
+        user.bookIdsInBasket.push(bookId);
+    } else {
+        user.bookIdsInBasket = [bookId];
+    }
+    await user.save();
+
+    return user.bookIdsInBasket;
+}
+
+export async function removeBookFromBasket(userId: string, bookId: string) {
+    const user =  await User.findById(userId);
+
+    if (user.bookIdsInBasket) {
+        user.bookIdsInBasket = user.bookIdsInBasket.filter(id => id !== bookId);
+    } else {
+        user.bookIdsInBasket = [];
+    }
+    await user.save();
+
+    return user.bookIdsInBasket;
+}

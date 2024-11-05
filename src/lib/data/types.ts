@@ -210,6 +210,21 @@ export class UserEntity {
     firstName?: string;
     lastName?: string;
     role?: string;
+    likedBookIds?: string[];
+    bookIdsInBasket?: string[];
+
+    constructor(data?) {
+        if (data) {
+            this.id = data.id;
+            this.email = data.email;
+            this.password = data.password;
+            this.firstName = data.firstName;
+            this.lastName = data.lastName;
+            this.role = data.role;
+            this.likedBookIds = data.likedBookIds ? data.likedBookIds : [];
+            this.bookIdsInBasket = data.bookIdsInBasket ? data.bookIdsInBasket : [];
+        }
+    }
 }
 
 export class DeliveryEntity {

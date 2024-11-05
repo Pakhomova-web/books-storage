@@ -18,6 +18,7 @@ import { styleVariables } from '@/constants/styles-variables';
 import SettingsMenu, { settingsList } from '@/components/settings-menu';
 import { SettingListItem } from '@/components/types';
 import { isAdmin } from '@/utils/utils';
+import LoginModal from '@/components/login-modal';
 
 const toolbarTitle = {
     textWrap: 'nowrap',
@@ -40,7 +41,7 @@ interface IProps {
 }
 
 export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, changeDisplayingSettings }: IProps) {
-    const { user, logout, likedBooks, booksToBuy } = useAuth();
+    const { user, logout, openLoginModal, setOpenLoginModal } = useAuth();
     const router = useRouter();
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('sm'));
@@ -49,8 +50,8 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
     const pathname = usePathname();
     const [activeSettingsTab, setActiveSettingsTab] = useState<SettingListItem>();
     const [mobileMenuItems] = useState([
-        { title: 'Profile', onClick: () => goToProfilePage() },
-        { title: 'Logout', onClick: () => onLogoutClick() }
+        { title: 'Профіль', onClick: () => goToProfilePage() },
+        { title: 'Вийти', onClick: () => onLogoutClick() }
     ]);
 
     useEffect(() => {
@@ -62,7 +63,7 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                 setSelectedMenuItem(MainMenuItem.profile);
             } else if (pathname.includes('login') || pathname.includes('sign-in')) {
                 setSelectedMenuItem(null);
-            } else if (pathname === '/likes') {
+            } else if (pathname === '/profile/likes') {
                 setSelectedMenuItem(MainMenuItem.likes);
             } else if (pathname === '/order') {
                 setSelectedMenuItem(MainMenuItem.basket);
@@ -103,7 +104,7 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
 
     function onLoginClick() {
         setSelectedMenuItem(null);
-        goToPage('../login');
+        setOpenLoginModal(true);
     }
 
     function goToPage(url: string) {
@@ -121,7 +122,7 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
     }
 
     function goToProfilePage() {
-        goToPage('../profile');
+        goToPage('../profile/personal-info');
     }
 
     function closeMenu() {
@@ -155,7 +156,7 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                     </Box>
 
                     <Box sx={toolbarTitle}>
-                        {activeSettingsTab?.title || (selectedMenuItem === MainMenuItem.profile && 'Profile') || ''}
+                        {activeSettingsTab?.title || (selectedMenuItem === MainMenuItem.profile && 'Профіль') || ''}
                     </Box>
 
                     <Box sx={styleVariables.flexNoWrap}>
@@ -165,9 +166,9 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                             <HomeIcon/>
                         </IconButton>
 
-                        <Box mx={!likedBooks?.length ? 0 : 1}>
-                            <Badge badgeContent={likedBooks?.length ? likedBooks.length : null}>
-                                <IconButton onClick={() => goToPage('/likes')}
+                        <Box mx={!user?.likedBookIds?.length ? 0 : 1}>
+                            <Badge badgeContent={user?.likedBookIds?.length ? user.likedBookIds.length : null}>
+                                <IconButton onClick={() => goToPage('/profile/likes')}
                                             color="inherit"
                                             className={selectedMenuItem === MainMenuItem.likes ? 'selectedToolbarMenuItem' : ''}>
                                     <FavoriteIcon/>
@@ -175,9 +176,9 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                             </Badge>
                         </Box>
 
-                        <Box mx={!booksToBuy?.length ? 0 : 1}>
-                            <Badge badgeContent={booksToBuy?.length ? booksToBuy.length : null}>
-                                <IconButton onClick={() => goToPage('/order')}
+                        <Box mx={!user?.bookIdsInBasket?.length ? 0 : 1}>
+                            <Badge badgeContent={user?.bookIdsInBasket?.length ? user.bookIdsInBasket.length : null}>
+                                <IconButton onClick={() => goToPage('/profile/order')}
                                             color="inherit"
                                             className={selectedMenuItem === MainMenuItem.basket ? 'selectedToolbarMenuItem' : ''}>
                                     <ShoppingBasketIcon/>
@@ -215,6 +216,8 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                     </Box>
                 </Toolbar>
             </AppBar>
+
+            <LoginModal open={openLoginModal} onClose={() => setOpenLoginModal(false)}></LoginModal>
 
             {isAdmin(user) && (showSettingsMenu || attachedSettingsMenu) &&
               <SettingsMenu activeSettingsTab={activeSettingsTab}

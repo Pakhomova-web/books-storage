@@ -19,21 +19,19 @@ const settingMenuBackdrop = {
     zIndex: 3
 };
 
-const authUrls = ['/login', '/sign-in'];
-const commonUrls = ['/books', '/books/details'];
+const authUrls = ['/sign-in'];
+const commonUrls = ['/books', '/books/details', '/profile/likes', '/order'];
 
 export default function Main({ children }) {
     const [loading, setLoading] = useState<boolean>(false);
     const { fetchUser } = useUser();
-    const { logout, setUser, refetchLikedBooks, refetchBooksToBuy } = useAuth();
+    const { logout, setUser } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
     const [showSettingsMenu, setShowSettingsMenu] = useState<boolean>(false);
     const [attachedSettingsMenu, setAttachedSettingsMenu] = useState<boolean>(false);
 
     useEffect(() => {
-        refetchBooksToBuy();
-        refetchLikedBooks();
         setLoading(true);
         fetchUser()
             .then((user: UserEntity) => {

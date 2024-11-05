@@ -7,6 +7,8 @@ const userFragment = gql`
         lastName
         email
         role
+        bookIdsInBasket
+        likedBookIds
     }
 `;
 

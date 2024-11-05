@@ -75,7 +75,7 @@ export default function BookDetails() {
     const router = useRouter();
     const { loading, error, item: book } = useBook(router.query.id as string);
     const [commentsPage, setCommentsPage] = useState<number>(0);
-    const { likedBooks, setLikedBook, booksToBuy, setBookToBuy } = useAuth();
+    const { user, setLikedBook, setBookInBasket } = useAuth();
     const [commentsRowsPerPage] = useState<number>(3);
     const [keys, setKeys] = useState<TableKey<BookEntity>[]>([]);
     const [mainDetailsKeys, setMainDetailsKeys] = useState<TableKey<BookEntity>[]>([]);
@@ -85,7 +85,6 @@ export default function BookDetails() {
     const [loadingComments, setLoadingComments] = useState<boolean>(false);
     const [commentsError, setCommentsError] = useState<ApolloError>();
     const [imageIds, setImageIds] = useState<string[] | null>();
-    const { user } = useAuth();
 
     useEffect(() => {
         if (book) {
@@ -188,11 +187,11 @@ export default function BookDetails() {
     }
 
     function isLiked(book: BookEntity) {
-        return likedBooks.some(id => id === book.id);
+        return user?.likedBookIds?.some(id => id === book.id);
     }
 
-    function isBookToBuy(book: BookEntity) {
-        return booksToBuy.some(id => id === book.id);
+    function isBookInBasket(book: BookEntity) {
+        return user?.bookIdsInBasket?.some(id => id === book.id);
     }
 
     return (
@@ -258,10 +257,10 @@ export default function BookDetails() {
 
                       <Grid container mb={2} spacing={1} display="flex" alignItems="center">
                         <Grid item xs={12} sm={6} lg={4}>
-                            {isBookToBuy(book) ?
+                            {isBookInBasket(book) ?
                                 <Button variant="outlined" fullWidth disabled={true}>В кошику</Button> :
                                 <Button variant="outlined" fullWidth
-                                        onClick={() => setBookToBuy(book.id)}
+                                        onClick={() => setBookInBasket(book.id)}
                                         disabled={!book.numberInStock}>
                                     {!!book.numberInStock ? 'Купити' : 'Очікується'}
                                 </Button>}

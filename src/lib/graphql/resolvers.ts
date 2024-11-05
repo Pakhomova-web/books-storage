@@ -36,13 +36,22 @@ import {
     createBook,
     getBookById,
     getBookComments,
-    getBooks, getBooksFromSeries, getBooksWithNotApprovedComments, removeComment,
+    getBooks, getBooksByIds, getBooksFromSeries, getBooksWithNotApprovedComments, removeComment,
     updateBook,
     updateBookNumberInStock
 } from '@/lib/data/books';
 import { createAuthor, deleteAuthor, getAuthorById, getAuthors, updateAuthor } from '@/lib/data/author';
 import { GraphQLError } from 'graphql/error';
-import { createUser, getNewToken, login, updateUser } from '@/lib/data/user';
+import {
+    addBookInBasket,
+    createUser,
+    getNewToken,
+    likeBook,
+    login,
+    removeBookFromBasket,
+    unlikeBook,
+    updateUser
+} from '@/lib/data/user';
 import { createDelivery, deleteDelivery, getDeliveries, updateDelivery } from '@/lib/data/delivery';
 import { createOrder, deleteOrder, getOrders, updateOrder } from '@/lib/data/order';
 
@@ -232,13 +241,20 @@ const resolvers: Resolvers = {
                 parseError(error);
             }
         },
+        booksByIds: async (_root, { ids }) => {
+            try {
+                return getBooksByIds(ids);
+            } catch (error) {
+                parseError(error);
+            }
+        },
         booksWithNotApprovedComments: async (_root, { pageSettings }) => {
             try {
                 return getBooksWithNotApprovedComments(<IPageable>pageSettings);
             } catch (error) {
                 parseError(error);
             }
-        },
+        }
     },
     Mutation: {
         updateLanguage: async (_root, { input }: { input: LanguageEntity }, { user }) => {
@@ -468,6 +484,38 @@ const resolvers: Resolvers = {
         createUser: async (_root, { input }: { input: UserEntity }) => {
             try {
                 return createUser(input);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        likeBook: async (_root, { id }, { user }) => {
+            _checkUser(user);
+            try {
+                return likeBook(user.id, id);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        unlikeBook: async (_root, { id }, { user }) => {
+            _checkUser(user);
+            try {
+                return unlikeBook(user.id, id);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        addBookInBasket: async (_root, { id }, { user }) => {
+            _checkUser(user);
+            try {
+                return addBookInBasket(user.id, id);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        removeBookInBasket: async (_root, { id }, { user }) => {
+            _checkUser(user);
+            try {
+                return removeBookFromBasket(user.id, id);
             } catch (error) {
                 parseError(error);
             }

@@ -231,6 +231,27 @@ export async function getBooksFromSeries(bookSeriesId: string) {
         .sort({ numberInStock: 'desc' });
 }
 
+export async function getBooksByIds(ids: string[]) {
+    if (!ids?.length) {
+        return [];
+    }
+
+    return Book
+        .find({ _id: ids })
+        .populate({
+            path: 'bookSeries',
+            populate: {
+                path: 'publishingHouse'
+            }
+        })
+        .populate('bookType')
+        .populate('pageType')
+        .populate('coverType')
+        .populate('language')
+        .populate('authors')
+        .sort({ numberInStock: 'desc' });
+}
+
 export async function getBooksWithNotApprovedComments(pageSettings?: IPageable) {
     const query = Book
         .find()

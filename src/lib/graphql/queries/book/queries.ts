@@ -61,6 +61,15 @@ export const booksQuery = gql`
     ${bookFragment}
 `;
 
+export const booksByIdsQuery = gql`
+    query BooksByIds($ids: [ID!]) {
+        items: booksByIds(ids: $ids) {
+            ...Book
+        }
+    }
+    ${bookFragment}
+`;
+
 export const booksWithNotApprovedCommentsQuery = gql`
     query BooksWithComments($pageSettings: PageableInput) {
         booksWithNotApprovedComments(pageSettings: $pageSettings) {
@@ -158,6 +167,30 @@ export const addBookCommentQuery = gql`
         item: addBookComment(id: $id, input: $input) {
             id
         }
+    }
+`;
+
+export const likeBookQuery = gql`
+    mutation LikeBook($id: ID!) {
+        ids: likeBook(id: $id)
+    }
+`;
+
+export const unlikeBookQuery = gql`
+    mutation UnlikeBookQuery($id: ID!) {
+        ids: unlikeBook(id: $id)
+    }
+`;
+
+export const addBookInBasketQuery = gql`
+    mutation AddBookInBasket($id: ID!) {
+        ids: addBookInBasket(id: $id)
+    }
+`;
+
+export const removeBookFromBasketQuery = gql`
+    mutation RemoveBookInBasket($id: ID!) {
+        ids: removeBookInBasket(id: $id)
     }
 `;
 

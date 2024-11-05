@@ -20,7 +20,11 @@ const mainContainerStyle = (big = false) => ({
     p: styleVariables.doublePadding
 });
 
-const innerContainer = { position: 'relative', paddingBottom: '50px' };
+const innerContainer = (withActions = true) => ({
+    position: 'relative',
+    paddingBottom: withActions ? '50px' : 0
+});
+
 const childrenContainer = {
     overflow: 'auto',
     position: 'relative',
@@ -43,7 +47,7 @@ interface ICustomModalProps {
     open: boolean,
     disableBackdropClick?: boolean,
     isSubmitDisabled?: boolean,
-    onClose: () => void,
+    onClose?: () => void,
     hideSubmit?: boolean,
     onSubmit?: () => void,
     actions?: { title: string, onClick: () => void }[],
@@ -53,7 +57,13 @@ interface ICustomModalProps {
 export default function CustomModal(props: ICustomModalProps) {
     function closeModalHandler(_event: {}, reason: 'backdropClick' | 'escapeKeyDown') {
         if (props.disableBackdropClick && reason && reason === 'backdropClick') return;
-        props.onClose();
+        if (props.onClose) {
+            props.onClose();
+        }
+    }
+
+    function isWithActions(): boolean {
+        return !!props.onClose || !!props.onSubmit || !!props.actions?.length;
     }
 
     return (
@@ -61,14 +71,14 @@ export default function CustomModal(props: ICustomModalProps) {
             <Box sx={mainContainerStyle(props.big)}>
                 {props.loading && <Loading show={props.loading}></Loading>}
 
-                <Box sx={innerContainer}>
+                <Box sx={innerContainer(isWithActions())}>
                     {!!props.title && <Box sx={titleStyles}>{props.title}</Box>}
                     <Box sx={childrenContainer}>
                         {props.children}
                     </Box>
 
-                    <Box sx={buttonsContainerStyles}>
-                        <Button variant="outlined" onClick={props.onClose}>Закрити</Button>
+                    {isWithActions() && <Box sx={buttonsContainerStyles}>
+                        {props.onClose && <Button variant="outlined" onClick={props.onClose}>Закрити</Button>}
                         {props.onSubmit ?
                             <Button onClick={props.onSubmit} variant="contained" disabled={props.isSubmitDisabled}
                                     sx={{ marginLeft: styleVariables.margin }}>Зберегти</Button>
@@ -80,7 +90,7 @@ export default function CustomModal(props: ICustomModalProps) {
                                     disabled={props.isSubmitDisabled}
                                     sx={{ marginLeft: styleVariables.margin }}>{action.title}</Button>
                         ))}
-                    </Box>
+                    </Box>}
                 </Box>
             </Box>
         </Modal>

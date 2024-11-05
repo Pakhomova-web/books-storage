@@ -31,7 +31,7 @@ const StyledGrid = styled(Grid)(() => ({
 }));
 
 export default function BooksList({ items, onClick }) {
-    const { likedBooks, setLikedBook, booksToBuy, setBookToBuy } = useAuth();
+    const { user, setLikedBook, setBookInBasket } = useAuth();
 
     function onLike(e, book: BookEntity) {
         e.stopPropagation();
@@ -39,16 +39,16 @@ export default function BooksList({ items, onClick }) {
     }
 
     function isLiked(book: BookEntity) {
-        return likedBooks.some(id => id === book.id);
+        return user?.likedBookIds?.some(id => id === book.id);
     }
 
-    function isBookToBuy(book: BookEntity) {
-        return booksToBuy.some(id => id === book.id);
+    function isBookInBasket(book: BookEntity) {
+        return user?.bookIdsInBasket?.some(id => id === book.id);
     }
 
     function onBuy(e, book: BookEntity) {
         e.stopPropagation();
-        setBookToBuy(book.id);
+        setBookInBasket(book.id);
     }
 
     return (
@@ -78,7 +78,7 @@ export default function BooksList({ items, onClick }) {
 
                     <Grid container spacing={1}>
                         <Grid item xs={6}>
-                            {isBookToBuy(book) ?
+                            {isBookInBasket(book) ?
                                 <Button variant="outlined" fullWidth disabled={true}>В кошику</Button> :
                                 <Button variant="outlined" fullWidth
                                         onClick={e => onBuy(e, book)}

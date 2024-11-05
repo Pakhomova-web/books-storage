@@ -16,7 +16,9 @@ const userSchema = new Schema<UserEntity, Model<UserEntity>>({
     role: {
         type: String,
         required: true
-    }
+    },
+    likedBookIds: [String],
+    bookIdsInBasket: [String]
 });
 
-export default models.user || model('user', userSchema);
+export default models?.user || model('user', userSchema);

@@ -83,6 +83,8 @@ const typeDefs =  /* GraphQL */ `
         firstName: String
         lastName: String
         role: String
+        bookIdsInBasket: [String]
+        likedBookIds: [String]
     }
 
     type Address {
@@ -137,6 +139,7 @@ const typeDefs =  /* GraphQL */ `
         bookComments(id: ID!, page: Int!, rowsPerPage: Int!): [Comment!]
         booksFromSeries(bookSeriesId: ID!): [Book!]
         booksWithNotApprovedComments(pageSettings: PageableInput): BookSubList
+        booksByIds(ids: [ID!]): [Book!]
 
         refreshToken(refreshToken: String!): UserToken!
     }
@@ -172,6 +175,10 @@ const typeDefs =  /* GraphQL */ `
         removeComment(input: UpdateCommentInput!): Book!
         addBookComment(id: ID!, input: CommentInput!): Book!
         createBook(input: BookCreateInput!): Book
+        likeBook(id: ID!): [ID!]
+        unlikeBook(id: ID!): [ID!]
+        addBookInBasket(id: ID!): [ID!]
+        removeBookInBasket(id: ID!): [ID!]
 
         updateAuthor(input: AuthorUpdateInput!): Author
         createAuthor(input: AuthorCreateInput!): Author

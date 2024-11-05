@@ -7,16 +7,23 @@ import {
     _useUpdateItem
 } from '@/lib/graphql/base-hooks';
 import {
-    addBookCommentQuery, approveComment,
+    addBookCommentQuery,
+    addBookInBasketQuery,
+    approveComment,
     bookByIdQuery,
-    bookCommentsQuery, booksFromSeries,
+    bookCommentsQuery,
+    booksByIdsQuery,
+    booksFromSeries,
     booksQuery,
     booksWithNotApprovedCommentsQuery,
-    createBookQuery, removeComment,
+    createBookQuery,
+    likeBookQuery,
+    removeBookFromBasketQuery,
+    removeComment, unlikeBookQuery,
     updateBookNumberInStockQuery,
     updateBookQuery
 } from '@/lib/graphql/queries/book/queries';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { apolloClient } from '@/lib/apollo';
 
 export function useBooks(pageSettings?: IPageable, filters?: BookFilter) {
@@ -52,6 +59,15 @@ export async function getBooksFromSeries(bookSeriesId: string) {
 
 export function getAllBooks(pageSettings?: IPageable, filters?: BookFilter) {
     return _useAllItems<BookEntity>(booksQuery, 'books', pageSettings, filters);
+}
+
+export function useBooksByIds(ids: string[]) {
+    const { data, loading, error, refetch } = useQuery(booksByIdsQuery, {
+        fetchPolicy: 'no-cache',
+        variables: { ids }
+    });
+
+    return { items: data ? data.items : [], loading, error, refetch };
 }
 
 export function useBooksComments(pageSettings?: IPageable) {
@@ -93,4 +109,28 @@ export function useAddBookComment() {
         addingComment: loading,
         addingCommentError: error
     };
+}
+
+export async function likeBook(id: string): Promise<string[]> {
+    const { data: { ids } } = await apolloClient.mutate({ mutation: likeBookQuery, variables: { id } });
+
+    return ids;
+}
+
+export async function unlikeBook(id: string): Promise<string[]> {
+    const { data: { ids } } = await apolloClient.mutate({ mutation: unlikeBookQuery, variables: { id } });
+
+    return ids;
+}
+
+export async function addBookInBasket(id: string): Promise<string[]> {
+    const { data: { ids } } = await apolloClient.mutate({ mutation: addBookInBasketQuery, variables: { id } });
+
+    return ids;
+}
+
+export async function removeBookFromBasket(id: string): Promise<string[]> {
+    const { data: { ids } } = await apolloClient.mutate({ mutation: removeBookFromBasketQuery, variables: { id } });
+
+    return ids;
 }
