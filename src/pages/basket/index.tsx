@@ -66,7 +66,8 @@ export default function Basket() {
 
         update(bookId, newCount)
             .then(items => setUser({ ...user, basketItems: items }))
-            .catch(() => {});
+            .catch(() => {
+            });
     }
 
     return (
@@ -80,13 +81,17 @@ export default function Basket() {
                     <Grid item xs={12} md={9} display="flex" flexDirection="column" gap={1}>
                         {items.map((book, index) => (
                             <Grid container key={index} p={2} borderBottom={1} borderColor={primaryLightColor} mb={1}>
-                                <Grid item xs={6} sm={4} md={2} lg={1} display="flex" alignItems="center">
+                                <Grid item xs={6} sm={4} md={2} lg={1} display="flex" alignItems="center"
+                                      justifyContent="center"
+                                      order={{ xs: 2, sm: 1 }}>
                                     <IconButton onClick={() => onRemoveBook(book)}>
                                         <ClearIcon color={!book.numberInStock ? 'warning' : 'inherit'}/>
                                     </IconButton>
                                 </Grid>
 
-                                <Grid item xs={6} sm={4} md={2} display="flex" alignItems="center" position="relative">
+                                <Grid item xs={6} sm={4} md={2} display="flex" alignItems="center" position="relative"
+                                      justifyContent="center"
+                                      order={{ xs: 1, sm: 2 }}>
                                     {!book.numberInStock &&
                                       <Box sx={styleVariables.fixedInStockBox(false)}>Немає в наявності</Box>}
 
@@ -95,8 +100,9 @@ export default function Basket() {
                                     </StyledImageBox>
                                 </Grid>
 
-                                <Grid item xs={12} md={4} lg={5} display="flex" flexDirection="column" gap={1}
-                                      position="relative">
+                                <Grid item xs={12} md={4} lg={5} mt={{ xs: 2, sm: 0 }}
+                                      display="flex" flexDirection="column" gap={1}
+                                      position="relative" order={3} alignItems={{ xs: 'center', sm: 'flex-start' }}>
                                     <Box sx={styleVariables.hintFontSize}>
                                         {book.bookSeries.publishingHouse.name}. {book.bookSeries.name}
                                     </Box>
@@ -109,7 +115,8 @@ export default function Basket() {
                                     <Box>{renderPrice(book.price)}</Box>
                                 </Grid>
 
-                                <Grid item xs={12} sm={4} md={2} display="flex" flexDirection="column" gap={2}
+                                <Grid item xs={12} sm={4} md={2} order={4} mt={{ xs: 2, sm: 0 }} display="flex"
+                                      flexDirection="column" gap={2}
                                       alignItems="center">
                                     Кількість
                                     <Grid container spacing={2} display="flex" flexWrap="nowrap" alignItems="center"
@@ -131,10 +138,13 @@ export default function Basket() {
                                     </Grid>
                                 </Grid>
 
-                                <Grid item xs={12} sm={4} md={2} display="flex" flexDirection="column" gap={2}
+                                <Grid item xs={12} sm={4} md={2} mt={{ xs: 2, sm: 0 }} order={5} display="flex"
+                                      flexDirection="column" gap={2}
                                       alignItems="center">
                                     Кінцева ціна
-                                    <Box sx={priceStyles}>{renderPrice(book.price, book.discount)}</Box>
+                                    <Box sx={priceStyles}>
+                                        {renderPrice(countFields.get(book.id) * book.price, book.discount)}
+                                    </Box>
                                 </Grid>
                             </Grid>
                         ))}
