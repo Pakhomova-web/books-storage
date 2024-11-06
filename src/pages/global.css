@@ -12,6 +12,9 @@ div {
 
 .MuiBadge-badge {
     border: 1px solid white;
+    top: 2px;
+    right: 2px;
+    background: var(--background);
 }
 
 html, body {

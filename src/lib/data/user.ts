@@ -161,3 +161,19 @@ export async function removeBookFromBasket(userId: string, bookId: string) {
 
     return user.basketItems;
 }
+
+export async function updateBookCountInBasket(userId: string, bookId: string, count: number) {
+    const user =  await User.findById(userId);
+    const item = user.basketItems?.find(i => i.bookId === bookId);
+
+    if (!!item) {
+        item.count = count;
+        await user.save();
+    } else {
+        throw new GraphQLError(`No such book in a basket.`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+
+    return user.basketItems;
+}

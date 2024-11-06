@@ -200,6 +200,15 @@ export const removeBookFromBasketQuery = gql`
     }
 `;
 
+export const updateBookCountInBasketQuery = gql`
+    mutation UpdateBookCountInBasket($id: ID!, $count: Int!) {
+        items: updateBookCountInBasket(id: $id, count: $count) {
+            bookId
+            count
+        }
+    }
+`;
+
 export const bookCommentsQuery = gql`
     query BookComments($id: ID!, $page: Int!, $rowsPerPage: Int!) {
         items: bookComments(id: $id, page: $page, rowsPerPage: $rowsPerPage) {

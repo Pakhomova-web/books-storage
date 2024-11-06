@@ -2,7 +2,7 @@ import { Box, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import { primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import { pageStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import CustomImage from '@/components/custom-image';
 
 const menuItems = [
@@ -65,8 +65,8 @@ export default function ProfileMenu({ children, activeUrl }) {
                 </Grid>
             </Grid>
 
-            <Grid item xs={12} md={9} lg={10} p={2}>
-                {children}
+            <Grid item xs={12} md={9} lg={10}>
+                <Box sx={pageStyles} p={1}>{children}</Box>
             </Grid>
         </Grid>
     );

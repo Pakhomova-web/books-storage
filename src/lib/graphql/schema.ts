@@ -184,6 +184,7 @@ const typeDefs =  /* GraphQL */ `
         unlikeBook(id: ID!): [ID!]
         addBookInBasket(id: ID!): [BasketItem!]
         removeBookInBasket(id: ID!): [BasketItem!]
+        updateBookCountInBasket(id: ID!, count: Int!): [BasketItem!]
 
         updateAuthor(input: AuthorUpdateInput!): Author
         createAuthor(input: AuthorCreateInput!): Author

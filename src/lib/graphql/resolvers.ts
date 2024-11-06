@@ -49,7 +49,7 @@ import {
     likeBook,
     login,
     removeBookFromBasket,
-    unlikeBook,
+    unlikeBook, updateBookCountInBasket,
     updateUser
 } from '@/lib/data/user';
 import { createDelivery, deleteDelivery, getDeliveries, updateDelivery } from '@/lib/data/delivery';
@@ -516,6 +516,14 @@ const resolvers: Resolvers = {
             _checkUser(user);
             try {
                 return removeBookFromBasket(user.id, id);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        updateBookCountInBasket: async (_root, { id, count }, { user }) => {
+            _checkUser(user);
+            try {
+                return updateBookCountInBasket(user.id, id, count);
             } catch (error) {
                 parseError(error);
             }

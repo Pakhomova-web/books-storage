@@ -283,6 +283,7 @@ export type Mutation = {
   unlikeBook?: Maybe<Array<Scalars['ID']['output']>>;
   updateAuthor?: Maybe<Author>;
   updateBook?: Maybe<Book>;
+  updateBookCountInBasket?: Maybe<Array<BasketItem>>;
   updateBookNumberInStock: Book;
   updateBookSeries?: Maybe<BookSeries>;
   updateBookType?: Maybe<BookType>;
@@ -446,6 +447,12 @@ export type MutationUpdateAuthorArgs = {
 
 export type MutationUpdateBookArgs = {
   input: BookUpdateInput;
+};
+
+
+export type MutationUpdateBookCountInBasketArgs = {
+  count: Scalars['Int']['input'];
+  id: Scalars['ID']['input'];
 };
 
 
@@ -1119,6 +1126,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   unlikeBook?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType, RequireFields<MutationUnlikeBookArgs, 'id'>>;
   updateAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationUpdateAuthorArgs, 'input'>>;
   updateBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationUpdateBookArgs, 'input'>>;
+  updateBookCountInBasket?: Resolver<Maybe<Array<ResolversTypes['BasketItem']>>, ParentType, ContextType, RequireFields<MutationUpdateBookCountInBasketArgs, 'count' | 'id'>>;
   updateBookNumberInStock?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationUpdateBookNumberInStockArgs, 'input'>>;
   updateBookSeries?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType, RequireFields<MutationUpdateBookSeriesArgs, 'input'>>;
   updateBookType?: Resolver<Maybe<ResolversTypes['BookType']>, ParentType, ContextType, RequireFields<MutationUpdateBookTypeArgs, 'input'>>;

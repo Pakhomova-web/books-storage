@@ -19,7 +19,9 @@ import {
     createBookQuery,
     likeBookQuery,
     removeBookFromBasketQuery,
-    removeComment, unlikeBookQuery,
+    removeComment,
+    unlikeBookQuery,
+    updateBookCountInBasketQuery,
     updateBookNumberInStockQuery,
     updateBookQuery
 } from '@/lib/graphql/queries/book/queries';
@@ -133,4 +135,21 @@ export async function removeBookFromBasket(id: string): Promise<string[]> {
     const { data: { items } } = await apolloClient.mutate({ mutation: removeBookFromBasketQuery, variables: { id } });
 
     return items;
+}
+
+export function useUpdateBookCountInBasket() {
+    const [mutate, { loading, error }] = useMutation(updateBookCountInBasketQuery);
+
+    return {
+        update: async (id: string, count: number) => {
+            const { data: { items } } = await mutate({
+                fetchPolicy: 'no-cache',
+                variables: { id, count }
+            });
+
+            return items;
+        },
+        updating: loading,
+        updatingError: error
+    };
 }

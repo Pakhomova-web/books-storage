@@ -4,7 +4,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
-import { useBooksByIds } from '@/lib/graphql/queries/book/hook';
+import { useBooksByIds, useUpdateBookCountInBasket } from '@/lib/graphql/queries/book/hook';
 import {
     borderRadius,
     boxPadding,
@@ -41,18 +41,20 @@ const priceStyles = (theme) => ({
 });
 
 export default function Basket() {
-    const { user, setBookInBasket } = useAuth();
+    const { user, setUser, setBookInBasket } = useAuth();
     const { loading, error, items, refetch } = useBooksByIds(user?.basketItems.map(({ bookId }) => bookId));
     const [countFields, setCountFields] = useState<Map<string, number>>(new Map());
+    const { updating, updatingError, update } = useUpdateBookCountInBasket();
 
     useEffect(() => {
-        setCountFields(new Map());
-        const map = new Map();
+        if (!!items?.length) {
+            const map = new Map();
 
-        items.forEach(({ id }) => {
-            map.set(id, user.basketItems.find(({ bookId }) => bookId === id).count);
-        });
-        setCountFields(map);
+            items.forEach(({ id }) => {
+                map.set(id, user.basketItems.find(({ bookId }) => bookId === id).count);
+            });
+            setCountFields(map);
+        }
     }, [items, user]);
 
     function onRemoveBook(book: BookEntity) {
@@ -60,12 +62,16 @@ export default function Basket() {
     }
 
     function onChangeCountInBasket(bookId: string, count: number) {
+        const newCount = countFields.get(bookId) + count;
 
+        update(bookId, newCount)
+            .then(items => setUser({ ...user, basketItems: items }))
+            .catch(() => {});
     }
 
     return (
         <Box sx={positionRelative}>
-            <Loading show={loading}/>
+            <Loading show={loading || updating}/>
 
             <Box sx={pageStyles}>
                 <TitleBoxStyled pb={1} m={1}>Кошик</TitleBoxStyled>
@@ -89,7 +95,7 @@ export default function Basket() {
                                     </StyledImageBox>
                                 </Grid>
 
-                                <Grid item xs={6} sm={4} md={3} display="flex" flexDirection="column" gap={1}
+                                <Grid item xs={12} md={4} lg={5} display="flex" flexDirection="column" gap={1}
                                       position="relative">
                                     <Box sx={styleVariables.hintFontSize}>
                                         {book.bookSeries.publishingHouse.name}. {book.bookSeries.name}
@@ -103,28 +109,29 @@ export default function Basket() {
                                     <Box>{renderPrice(book.price)}</Box>
                                 </Grid>
 
-                                <Grid item xs={6} sm={4} md={2} display="flex" flexDirection="column" gap={2}
+                                <Grid item xs={12} sm={4} md={2} display="flex" flexDirection="column" gap={2}
                                       alignItems="center">
                                     Кількість
                                     <Grid container spacing={2} display="flex" flexWrap="nowrap" alignItems="center"
                                           justifyContent="center">
                                         <Grid item>
                                             <IconButton disabled={!book.numberInStock || countFields.get(book.id) === 1}
-                                                        onClick={() => onChangeCountInBasket(book.id, 1)}>
+                                                        onClick={() => onChangeCountInBasket(book.id, -1)}>
                                                 <RemoveCircleOutlineIcon fontSize="large"/>
                                             </IconButton>
                                         </Grid>
-                                        <Grid item>{countFields.get(book.id)}</Grid>
+                                        <Grid item sx={styleVariables.titleFontSize}>{countFields.get(book.id)}</Grid>
                                         <Grid item>
-                                            <IconButton disabled={!book.numberInStock}
-                                                        onClick={() => onChangeCountInBasket(book.id, -1)}>
+                                            <IconButton
+                                                disabled={!book.numberInStock || countFields.get(book.id) === book.numberInStock}
+                                                onClick={() => onChangeCountInBasket(book.id, 1)}>
                                                 <AddCircleOutlineIcon fontSize="large"/>
                                             </IconButton>
                                         </Grid>
                                     </Grid>
                                 </Grid>
 
-                                <Grid item xs={6} sm={4} md={2} display="flex" flexDirection="column" gap={2}
+                                <Grid item xs={12} sm={4} md={2} display="flex" flexDirection="column" gap={2}
                                       alignItems="center">
                                     Кінцева ціна
                                     <Box sx={priceStyles}>{renderPrice(book.price, book.discount)}</Box>
@@ -135,6 +142,7 @@ export default function Basket() {
                 </Grid>
 
                 {error && <ErrorNotification error={error}/>}
+                {updatingError && <ErrorNotification error={updatingError}/>}
             </Box>
         </Box>
     );
