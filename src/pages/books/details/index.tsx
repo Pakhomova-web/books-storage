@@ -6,15 +6,7 @@ import { styled } from '@mui/material/styles';
 import ProfileIcon from '@mui/icons-material/AccountCircle';
 import { ApolloError } from '@apollo/client';
 
-import {
-    borderRadius,
-    boxPadding,
-    greenLightColor,
-    pageStyles,
-    primaryLightColor,
-    styleVariables,
-    warnColor
-} from '@/constants/styles-variables';
+import { borderRadius, boxPadding, pageStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import { getBookComments, getBooksFromSeries, useBook } from '@/lib/graphql/queries/book/hook';
 import ErrorNotification from '@/components/error-notification';
@@ -268,17 +260,29 @@ export default function BookDetails() {
                         </Grid>
                       </Grid>
 
-                        {!!book.tags?.length &&
-                          <Grid container mb={2} pl={1} alignItems="center" gap={1}>
-                            Теги:
-                              {book.tags.map((tag, index) =>
-                                  <Tag key={index} tag={tag} onClick={() => onTagClick(tag)}/>)}
-                          </Grid>
-                        }
+                      <Grid container>
+                        <Grid item xs={12} sm={9}>
+                            {!!book.tags?.length &&
+                              <Grid container mb={2} pl={1} alignItems="center" gap={1}>
+                                Теги:
+                                  {book.tags.map((tag, index) =>
+                                      <Tag key={index} tag={tag} onClick={() => onTagClick(tag)}/>)}
+                              </Grid>
+                            }
 
-                        {!!book.ages?.length && <Box pl={1}>
-                          <Ages selected={book.ages} showOnlySelected={true} onOptionClick={onAgeClick}></Ages>
-                        </Box>}
+                            {!!book.ages?.length && <Box pl={1}>
+                              <Ages selected={book.ages} showOnlySelected={true} onOptionClick={onAgeClick}></Ages>
+                            </Box>}
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                            {!!book.bookSeries.publishingHouse.imageId &&
+                              <StyledSmallImageBox mb={1}>
+                                <CustomImage isBookDetails={true} imageId={book.bookSeries.publishingHouse.imageId}></CustomImage>
+                              </StyledSmallImageBox>
+                            }
+                        </Grid>
+                      </Grid>
+
 
                       <Box sx={styleVariables.sectionTitle} p={1} mb={1}>Характеристики</Box>
 
@@ -331,7 +335,7 @@ export default function BookDetails() {
 
                         <Grid item xs={12} md={7} lg={8} display="flex" alignItems="center" justifyContent="center">
                             {!!comments?.length ?
-                                <Box>
+                                <Box width="100%">
                                     {comments.map((comment, index) => (
                                         <Box key={index} borderBottom={1} pb={2}
                                              borderColor={primaryLightColor}>
