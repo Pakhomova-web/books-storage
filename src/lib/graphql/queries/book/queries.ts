@@ -184,13 +184,19 @@ export const unlikeBookQuery = gql`
 
 export const addBookInBasketQuery = gql`
     mutation AddBookInBasket($id: ID!) {
-        ids: addBookInBasket(id: $id)
+        items: addBookInBasket(id: $id) {
+            bookId
+            count
+        }
     }
 `;
 
 export const removeBookFromBasketQuery = gql`
     mutation RemoveBookInBasket($id: ID!) {
-        ids: removeBookInBasket(id: $id)
+        items: removeBookInBasket(id: $id) {
+            bookId
+            count
+        }
     }
 `;
 

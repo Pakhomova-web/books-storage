@@ -124,13 +124,13 @@ export async function unlikeBook(id: string): Promise<string[]> {
 }
 
 export async function addBookInBasket(id: string): Promise<string[]> {
-    const { data: { ids } } = await apolloClient.mutate({ mutation: addBookInBasketQuery, variables: { id } });
+    const { data: { items } } = await apolloClient.mutate({ mutation: addBookInBasketQuery, variables: { id } });
 
-    return ids;
+    return items;
 }
 
 export async function removeBookFromBasket(id: string): Promise<string[]> {
-    const { data: { ids } } = await apolloClient.mutate({ mutation: removeBookFromBasketQuery, variables: { id } });
+    const { data: { items } } = await apolloClient.mutate({ mutation: removeBookFromBasketQuery, variables: { id } });
 
-    return ids;
+    return items;
 }

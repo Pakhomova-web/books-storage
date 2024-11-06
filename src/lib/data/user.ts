@@ -139,25 +139,25 @@ export async function unlikeBook(userId: string, bookId: string) {
 export async function addBookInBasket(userId: string, bookId: string) {
     const user =  await User.findById(userId);
 
-    if (user.bookIdsInBasket) {
-        user.bookIdsInBasket.push(bookId);
+    if (user.basketItems) {
+        user.basketItems.push({ bookId, count: 1 });
     } else {
-        user.bookIdsInBasket = [bookId];
+        user.basketItems = [{ bookId, count: 1 }];
     }
     await user.save();
 
-    return user.bookIdsInBasket;
+    return user.basketItems;
 }
 
 export async function removeBookFromBasket(userId: string, bookId: string) {
     const user =  await User.findById(userId);
 
-    if (user.bookIdsInBasket) {
-        user.bookIdsInBasket = user.bookIdsInBasket.filter(id => id !== bookId);
+    if (user.basketItems) {
+        user.basketItems = user.basketItems.filter(item => item.bookId !== bookId);
     } else {
-        user.bookIdsInBasket = [];
+        user.basketItems = [];
     }
     await user.save();
 
-    return user.bookIdsInBasket;
+    return user.basketItems;
 }

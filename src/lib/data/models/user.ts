@@ -18,7 +18,10 @@ const userSchema = new Schema<UserEntity, Model<UserEntity>>({
         required: true
     },
     likedBookIds: [String],
-    bookIdsInBasket: [String]
+    basketItems: [{
+        bookId: { type: String, required: true },
+        count: { type: Number, required: true }
+    }]
 });
 
 export default models?.user || model('user', userSchema);

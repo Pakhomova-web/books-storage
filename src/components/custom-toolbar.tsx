@@ -187,8 +187,8 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                             </Badge>
                         </Box>
 
-                        <Box mr={!user?.bookIdsInBasket?.length ? 0 : 1}>
-                            <Badge badgeContent={user?.bookIdsInBasket?.length ? user.bookIdsInBasket.length : null}>
+                        <Box mr={!user?.basketItems?.length ? 0 : 1}>
+                            <Badge badgeContent={user?.basketItems?.length ? user.basketItems.length : null}>
                                 <IconButton onClick={goToBasket}
                                             color="inherit"
                                             className={selectedMenuItem === MainMenuItem.basket ? 'selectedToolbarMenuItem' : ''}>

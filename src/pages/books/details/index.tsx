@@ -51,18 +51,6 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
     alignItems: 'center'
 }));
 
-const inStockStyles = (inStock = true) => ({
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    backgroundColor: inStock ? greenLightColor : warnColor,
-    borderRadius: `0 0 ${borderRadius} 0`,
-    color: 'white',
-    padding: boxPadding,
-    display: 'flex',
-    alignItems: 'center'
-});
-
 const priceStyles = (theme) => ({
     color: 'var(--background)',
     fontSize: styleVariables.bigTitleFontSize(theme),
@@ -195,7 +183,7 @@ export default function BookDetails() {
     }
 
     function isBookInBasket(book: BookEntity) {
-        return user?.bookIdsInBasket?.some(id => id === book.id);
+        return user?.basketItems?.some(item => item.bookId === book.id);
     }
 
     return (
@@ -222,15 +210,15 @@ export default function BookDetails() {
                               xs={book.imageIds.length > 1 ? 7 : 12}
                               position="relative">
                             {book.numberInStock ?
-                                <Box sx={inStockStyles(true)}>
+                                <Box sx={styleVariables.fixedInStockBox(true)}>
                                     В наявності{isAdmin(user) && ` (${book.numberInStock})`}
                                 </Box> :
-                                <Box sx={inStockStyles(false)}>Немає в наявності</Box>
+                                <Box sx={styleVariables.fixedInStockBox(false)}>Немає в наявності</Box>
                             }
 
                             {!!book.discount &&
                               <Box
-                                sx={styleVariables.discountBoxStyles(!!book.numberInStock)}>Знижка: {book.discount}%</Box>}
+                                sx={styleVariables.fixedDiscountBox(!!book.numberInStock)}>Знижка: {book.discount}%</Box>}
 
                           <Box sx={imageBoxStyles(!!book.imageIds.length)} mb={1}
                                onClick={() => setImageIds(book.imageIds)}>

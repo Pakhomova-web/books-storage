@@ -95,14 +95,14 @@ export function AuthProvider({ children }) {
 
             let promise;
 
-            if (user.bookIdsInBasket?.some(id => id === bookId)) {
+            if (user.basketItems?.some(item => item.bookId === bookId)) {
                 promise = removeBookFromBasket(bookId);
             } else {
                 promise = addBookInBasket(bookId);
             }
 
             promise
-                .then(bookIds => setUser({ ...user, bookIdsInBasket: bookIds }))
+                .then(basketItems => setUser({ ...user, basketItems: basketItems }))
                 .catch(e => {
                     console.log(e);
                 });

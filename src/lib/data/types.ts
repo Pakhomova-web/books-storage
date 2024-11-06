@@ -211,7 +211,7 @@ export class UserEntity {
     lastName?: string;
     role?: string;
     likedBookIds?: string[];
-    bookIdsInBasket?: string[];
+    basketItems?: { bookId: string, count: number }[];
 
     constructor(data?) {
         if (data) {
@@ -222,7 +222,7 @@ export class UserEntity {
             this.lastName = data.lastName;
             this.role = data.role;
             this.likedBookIds = data.likedBookIds ? data.likedBookIds : [];
-            this.bookIdsInBasket = data.bookIdsInBasket ? data.bookIdsInBasket : [];
+            this.basketItems = data.basketItems ? data.basketItems : [];
         }
     }
 }

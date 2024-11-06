@@ -43,7 +43,7 @@ export default function BooksList({ items, onClick }) {
     }
 
     function isBookInBasket(book: BookEntity) {
-        return user?.bookIdsInBasket?.some(id => id === book.id);
+        return user?.basketItems?.some(item => item.bookId === book.id);
     }
 
     function onBuy(e, book: BookEntity) {
@@ -60,7 +60,7 @@ export default function BooksList({ items, onClick }) {
                      justifyContent="space-between"
                      position="relative"
                      height="100%">
-                    {!!book.discount && <Box sx={styleVariables.discountBoxStyles()}>Знижка: {book.discount}%</Box>}
+                    {!!book.discount && <Box sx={styleVariables.fixedDiscountBox()}>Знижка: {book.discount}%</Box>}
 
                     <Box sx={bookBoxStyles} mb={1} mt={book.discount ? 1 : 0}>
                         <CustomImage isBookDetails={true} imageId={book.imageIds[0]}></CustomImage>

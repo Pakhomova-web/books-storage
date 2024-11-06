@@ -9,17 +9,33 @@ export const titleFontSize = '20px';
 export const hintFontSize = '14px';
 export const boxPadding = `5px 10px`;
 
+const discountBox = {
+    backgroundColor: warnColor,
+    color: 'white',
+    textAlign: 'center',
+    padding: boxPadding,
+    borderRadius: `0 0 ${borderRadius} 0`
+};
+
 export const styleVariables = {
-    discountBoxStyles: (withDiscount = false) => ({
+    fixedDiscountBox: (withDiscount = false) => ({
         position: 'absolute',
         top: withDiscount ? '30px' : 0,
         left: 0,
-        backgroundColor: warnColor,
-        color: 'white',
-        textAlign: 'center',
-        padding: boxPadding,
-        borderRadius: `0 0 ${borderRadius} 0`
+        ...discountBox
     }),
+    fixedInStockBox: (inStock = true) => ({
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        backgroundColor: inStock ? greenLightColor : warnColor,
+        borderRadius: `0 0 ${borderRadius} 0`,
+        color: 'white',
+        padding: boxPadding,
+        display: 'flex',
+        alignItems: 'center'
+    }),
+    discountBoxStyles: discountBox,
     titleFontSize: {
         fontSize: titleFontSize
     },

@@ -50,6 +50,11 @@ export type AuthorUpdateInput = {
   name: Scalars['String']['input'];
 };
 
+export type BasketItem = {
+  bookId: Scalars['ID']['output'];
+  count: Scalars['Int']['output'];
+};
+
 export type Book = {
   ages?: Maybe<Array<Maybe<Scalars['Int']['output']>>>;
   archived?: Maybe<Scalars['Boolean']['output']>;
@@ -249,7 +254,7 @@ export type LanguageUpdateInput = {
 
 export type Mutation = {
   addBookComment: Book;
-  addBookInBasket?: Maybe<Array<Scalars['ID']['output']>>;
+  addBookInBasket?: Maybe<Array<BasketItem>>;
   approveComment: Book;
   createAuthor?: Maybe<Author>;
   createBook?: Maybe<Book>;
@@ -273,7 +278,7 @@ export type Mutation = {
   deletePublishingHouse?: Maybe<PublishingHouse>;
   likeBook?: Maybe<Array<Scalars['ID']['output']>>;
   login: UserToken;
-  removeBookInBasket?: Maybe<Array<Scalars['ID']['output']>>;
+  removeBookInBasket?: Maybe<Array<BasketItem>>;
   removeComment: Book;
   unlikeBook?: Maybe<Array<Scalars['ID']['output']>>;
   updateAuthor?: Maybe<Author>;
@@ -763,7 +768,7 @@ export type UpdateCommentInput = {
 };
 
 export type User = {
-  bookIdsInBasket?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  basketItems?: Maybe<Array<BasketItem>>;
   email: Scalars['String']['output'];
   firstName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
@@ -869,6 +874,7 @@ export type ResolversTypes = {
   Author: ResolverTypeWrapper<AuthorEntity>;
   AuthorCreateInput: AuthorCreateInput;
   AuthorUpdateInput: AuthorUpdateInput;
+  BasketItem: ResolverTypeWrapper<BasketItem>;
   Book: ResolverTypeWrapper<BookEntity>;
   BookCreateInput: BookCreateInput;
   BookSearchInput: BookSearchInput;
@@ -929,6 +935,7 @@ export type ResolversParentTypes = {
   Author: AuthorEntity;
   AuthorCreateInput: AuthorCreateInput;
   AuthorUpdateInput: AuthorUpdateInput;
+  BasketItem: BasketItem;
   Book: BookEntity;
   BookCreateInput: BookCreateInput;
   BookSearchInput: BookSearchInput;
@@ -994,6 +1001,12 @@ export type AuthorResolvers<ContextType = any, ParentType extends ResolversParen
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type BasketItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['BasketItem'] = ResolversParentTypes['BasketItem']> = {
+  bookId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1077,7 +1090,7 @@ export type LanguageResolvers<ContextType = any, ParentType extends ResolversPar
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addBookComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationAddBookCommentArgs, 'id' | 'input'>>;
-  addBookInBasket?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType, RequireFields<MutationAddBookInBasketArgs, 'id'>>;
+  addBookInBasket?: Resolver<Maybe<Array<ResolversTypes['BasketItem']>>, ParentType, ContextType, RequireFields<MutationAddBookInBasketArgs, 'id'>>;
   approveComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationApproveCommentArgs, 'input'>>;
   createAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationCreateAuthorArgs, 'input'>>;
   createBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationCreateBookArgs, 'input'>>;
@@ -1101,7 +1114,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deletePublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationDeletePublishingHouseArgs, 'id'>>;
   likeBook?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType, RequireFields<MutationLikeBookArgs, 'id'>>;
   login?: Resolver<ResolversTypes['UserToken'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
-  removeBookInBasket?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType, RequireFields<MutationRemoveBookInBasketArgs, 'id'>>;
+  removeBookInBasket?: Resolver<Maybe<Array<ResolversTypes['BasketItem']>>, ParentType, ContextType, RequireFields<MutationRemoveBookInBasketArgs, 'id'>>;
   removeComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationRemoveCommentArgs, 'input'>>;
   unlikeBook?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType, RequireFields<MutationUnlikeBookArgs, 'id'>>;
   updateAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationUpdateAuthorArgs, 'input'>>;
@@ -1191,7 +1204,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
-  bookIdsInBasket?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  basketItems?: Resolver<Maybe<Array<ResolversTypes['BasketItem']>>, ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -1212,6 +1225,7 @@ export type UserTokenResolvers<ContextType = any, ParentType extends ResolversPa
 export type Resolvers<ContextType = any> = {
   Address?: AddressResolvers<ContextType>;
   Author?: AuthorResolvers<ContextType>;
+  BasketItem?: BasketItemResolvers<ContextType>;
   Book?: BookResolvers<ContextType>;
   BookSeries?: BookSeriesResolvers<ContextType>;
   BookSeriesSubList?: BookSeriesSubListResolvers<ContextType>;

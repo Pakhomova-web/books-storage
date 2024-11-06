@@ -75,6 +75,11 @@ const typeDefs =  /* GraphQL */ `
         approved: Boolean
         date: String!
     }
+    
+    type BasketItem {
+        bookId: ID!
+        count: Int!
+    }
 
     type User {
         id: ID!
@@ -83,7 +88,7 @@ const typeDefs =  /* GraphQL */ `
         firstName: String
         lastName: String
         role: String
-        bookIdsInBasket: [String]
+        basketItems: [BasketItem!]
         likedBookIds: [String]
     }
 
@@ -177,8 +182,8 @@ const typeDefs =  /* GraphQL */ `
         createBook(input: BookCreateInput!): Book
         likeBook(id: ID!): [ID!]
         unlikeBook(id: ID!): [ID!]
-        addBookInBasket(id: ID!): [ID!]
-        removeBookInBasket(id: ID!): [ID!]
+        addBookInBasket(id: ID!): [BasketItem!]
+        removeBookInBasket(id: ID!): [BasketItem!]
 
         updateAuthor(input: AuthorUpdateInput!): Author
         createAuthor(input: AuthorCreateInput!): Author

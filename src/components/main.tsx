@@ -20,7 +20,7 @@ const settingMenuBackdrop = {
 };
 
 const authUrls = ['/sign-in'];
-const commonUrls = ['/books', '/books/details', '/profile/likes', '/basket'];
+const commonUrls = ['/books', '/books/details'];
 
 export default function Main({ children }) {
     const [loading, setLoading] = useState<boolean>(false);
