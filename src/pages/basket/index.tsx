@@ -11,7 +11,7 @@ import {
     pageStyles,
     positionRelative,
     primaryLightColor,
-    styleVariables
+    styleVariables, titleFontSize
 } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import ErrorNotification from '@/components/error-notification';
@@ -45,18 +45,28 @@ const priceStyles = (theme) => ({
 export default function Basket() {
     const router = useRouter();
     const { user, setUser, setBookInBasket } = useAuth();
-    const { loading, error, items, refetch } = useBooksByIds(user?.basketItems.map(({ bookId }) => bookId));
+    const { loading, error, items } = useBooksByIds(user?.basketItems.map(({ bookId }) => bookId));
     const [countFields, setCountFields] = useState<Map<string, number>>(new Map());
+    const [finalFullSum, setFinalFullSum] = useState<number>();
+    const [finalSumWithDiscounts, setFinalSumWithDiscounts] = useState<number>();
     const { updating, updatingError, update } = useUpdateBookCountInBasket();
 
     useEffect(() => {
         if (!!items?.length) {
             const map = new Map();
+            let finalSum = 0;
+            let finalSumWithDiscounts = 0;
 
-            items.forEach(({ id }) => {
-                map.set(id, user.basketItems.find(({ bookId }) => bookId === id).count);
+            items.forEach(({ id, price, discount }) => {
+                const count = user.basketItems.find(({ bookId }) => bookId === id).count;
+
+                map.set(id, count);
+                finalSum += count * price;
+                finalSumWithDiscounts += count * price * (100 - discount) / 100;
             });
             setCountFields(map);
+            setFinalFullSum(finalSum);
+            setFinalSumWithDiscounts(finalSumWithDiscounts);
         }
     }, [items, user]);
 
@@ -77,6 +87,10 @@ export default function Basket() {
         router.push(`/books/details?${getParamsQueryString({ id: book.id, pageUrl: '/basket' })}`);
     }
 
+    function renderFinalSum() {
+        return '';
+    }
+
     return (
         <Box sx={positionRelative}>
             <Loading show={loading || updating}/>
@@ -87,29 +101,31 @@ export default function Basket() {
                 <Grid container display="flex" justifyContent="center">
                     <Grid item xs={12} md={9} display="flex" flexDirection="column" gap={1}>
                         {items.map((book, index) => (
-                            <Grid container key={index} p={2} borderBottom={1} borderColor={primaryLightColor} mb={1}>
-                                <Grid item xs={6} sm={4} md={2} lg={1} display="flex" alignItems="center"
-                                      justifyContent="center"
-                                      order={{ xs: 2, sm: 1 }}>
+                            <Grid container key={index} px={2} spacing={1} mt={2} position="relative">
+                                {!book.numberInStock &&
+                                  <Box sx={styleVariables.fixedInStockBox(false)}>Немає в наявності</Box>}
+
+                                <Grid item xs={6} sm={4} md={2} lg={1} display="flex"
+                                      alignItems={{ md: 'center', xs: 'flex-start' }}
+                                      justifyContent={{ md: 'center', xs: 'flex-end' }}
+                                      order={{ xs: 2, sm: 3, md: 1 }}>
                                     <IconButton onClick={() => onRemoveBook(book)}>
                                         <ClearIcon color={!book.numberInStock ? 'warning' : 'inherit'}/>
                                     </IconButton>
                                 </Grid>
 
-                                <Grid item xs={6} sm={4} md={2} display="flex" alignItems="center" position="relative"
+                                <Grid item xs={6} sm={4} md={2} display="flex" alignItems="center"
                                       justifyContent="center"
-                                      order={{ xs: 1, sm: 2 }}>
-                                    {!book.numberInStock &&
-                                      <Box sx={styleVariables.fixedInStockBox(false)}>Немає в наявності</Box>}
-
+                                      order={{ xs: 1, sm: 1, md: 2 }}>
                                     <StyledImageBox>
                                         <CustomImage imageId={book.imageIds[0]} isBookDetails={true}></CustomImage>
                                     </StyledImageBox>
                                 </Grid>
 
-                                <Grid item xs={12} md={4} lg={5} mt={{ xs: 2, sm: 0 }}
+                                <Grid item xs={12} sm={4} md={4} lg={5} mt={{ xs: 2, sm: 0 }}
                                       display="flex" flexDirection="column" gap={1}
-                                      position="relative" order={3} alignItems={{ xs: 'center', sm: 'flex-start' }}>
+                                      order={{ xs: 3, sm: 2, md: 3 }}
+                                      position="relative" alignItems={{ xs: 'center', sm: 'flex-start' }}>
                                     <Box sx={styleVariables.hintFontSize}>
                                         {book.bookSeries.publishingHouse.name}. {book.bookSeries.name}
                                     </Box>
@@ -124,7 +140,7 @@ export default function Basket() {
                                     <Box>{renderPrice(book.price)}</Box>
                                 </Grid>
 
-                                <Grid item xs={12} sm={4} md={2} order={4} mt={{ xs: 2, sm: 0 }} display="flex"
+                                <Grid item xs={12} sm={6} md={2} order={4} mt={{ xs: 2, sm: 0 }} display="flex"
                                       flexDirection="column" gap={1}
                                       alignItems="center">
                                     Кількість
@@ -147,16 +163,57 @@ export default function Basket() {
                                     </Grid>
                                 </Grid>
 
-                                <Grid item xs={12} sm={4} md={2} mt={{ xs: 2, sm: 0 }} order={5} display="flex"
+                                <Grid item xs={12} sm={6} md={2} mt={{ xs: 2, sm: 0 }} order={5} display="flex"
                                       flexDirection="column" gap={1}
                                       alignItems="center">
                                     Кінцева ціна
-                                    <Box sx={priceStyles}>
+                                    <Box sx={priceStyles} textAlign="center">
                                         {renderPrice(countFields.get(book.id) * book.price, book.discount)}
                                     </Box>
                                 </Grid>
+
+                                <Grid item xs={12} borderTop={1} borderColor={primaryLightColor}></Grid>
                             </Grid>
                         ))}
+
+                        {!loading && <>
+                          <Grid item xs={12} borderBottom={1} borderColor={primaryLightColor} p={1} display="flex"
+                                justifyContent="flex-end">
+                            <Grid container spacing={2}>
+                              <Grid item xs={9} md={10} display="flex" justifyContent="flex-end">
+                                Сума замовлення без знижки:
+                              </Grid>
+                              <Grid item xs={3} md={2} textAlign="center">
+                                  {renderPrice(finalFullSum)}
+                              </Grid>
+                            </Grid>
+                          </Grid>
+
+                          <Grid item xs={12} borderBottom={1} borderColor={primaryLightColor} p={1} display="flex"
+                                justifyContent="flex-end">
+                            <Grid container spacing={2}>
+                              <Grid item xs={9} md={10} display="flex" justifyContent="flex-end">
+                                Знижка:
+                              </Grid>
+                              <Grid item xs={3} md={2} textAlign="center">
+                                  {renderPrice(finalFullSum - finalSumWithDiscounts)}
+                              </Grid>
+                            </Grid>
+                          </Grid>
+
+                          <Grid item xs={12} borderBottom={1} borderColor={primaryLightColor} p={1} display="flex"
+                                justifyContent="flex-end" mb={2}>
+                            <Grid container spacing={2} alignItems="center">
+                              <Grid item xs={9} md={10} display="flex" justifyContent="flex-end"
+                                    sx={styleVariables.titleFontSize}>
+                                <b>Кінцева сума замовлення:</b>
+                              </Grid>
+                              <Grid item xs={3} md={2} display="flex" justifyContent="center">
+                                <Box sx={priceStyles} textAlign="center">{renderPrice(finalSumWithDiscounts)}</Box>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </>}
                     </Grid>
                 </Grid>
 
