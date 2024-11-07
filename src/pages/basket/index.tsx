@@ -99,7 +99,9 @@ export default function Basket() {
                         {items.map((book, index) => (
                             <Grid container key={index} px={2} spacing={1} mt={2} position="relative">
                                 {!book.numberInStock &&
-                                  <Box sx={styleVariables.fixedInStockBox(false)}>Немає в наявності</Box>}
+                                  <Box sx={styleVariables.fixedInStockBox(false)} ml={2} mt={{ sm: 1, md: 0 }}>
+                                    Немає в наявності
+                                  </Box>}
 
                                 <Grid item xs={6} sm={4} md={2} lg={1} display="flex"
                                       alignItems={{ md: 'center', xs: 'flex-start' }}
