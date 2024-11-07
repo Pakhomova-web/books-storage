@@ -138,12 +138,10 @@ export default function Orders() {
 
                     {isAdmin(user) &&
                       <Box sx={styleVariables.buttonsContainer}>
-                        <Button variant="outlined" onClick={() => onAdd()}
-                                sx={items.length ? { mr: styleVariables.margin } : {}}>
+                        <Button variant="outlined" onClick={() => onAdd()}>
                           <AddIcon></AddIcon>Додати замовлення
                         </Button>
-                      </Box>
-                    }
+                      </Box>}
                 </CustomTable>
 
                   {openNewModal &&

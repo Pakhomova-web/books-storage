@@ -1,4 +1,3 @@
-const rowMargin = '5px';
 const gray = 'rgb(244, 244, 244)';
 export const warnColor = '#d00';
 export const primaryLightColor = 'rgba(68, 138, 255, 0.2)';
@@ -57,10 +56,8 @@ export const styleVariables = {
     mobileBigFontSize: {
         fontSize: '16px'
     },
-    mobileRow: {
-        paddingBottom: rowMargin,
-        marginBottom: rowMargin,
-        borderBottom: `1px solid ${gray}`
+    borderBottom: {
+        borderBottom: `1px solid ${primaryLightColor}`
     },
     boldFont: {
         fontWeight: 'bold'

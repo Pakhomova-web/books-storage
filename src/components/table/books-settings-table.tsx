@@ -3,7 +3,7 @@ import { useAuth } from '@/components/auth-context';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import { BookEntity, BookFilter, IPageable } from '@/lib/data/types';
 import { Box, Button } from '@mui/material';
-import { downloadCsv, isAdmin, renderAges, renderPrice } from '@/utils/utils';
+import { downloadCsv, isAdmin, renderPrice } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
 import { getAllBooks, useBooks, useUpdateBook } from '@/lib/graphql/queries/book/hook';
 import { ApolloError } from '@apollo/client';
@@ -20,8 +20,7 @@ import HdrWeakIcon from '@mui/icons-material/HdrWeak';
 
 const subTitleStyles = {
     ...styleVariables.hintFontSize,
-    display: 'flex',
-    margin: `${styleVariables.margin} 0`
+    display: 'flex'
 };
 
 export default function BooksSettingsTable() {
@@ -30,7 +29,7 @@ export default function BooksSettingsTable() {
     const tableActions: TableKey<BookEntity> = {
         renderMobileLabel: (item: BookEntity) => (
             <>
-                <Box sx={subTitleStyles}>
+                <Box sx={subTitleStyles} mx={1}>
                     <Box height={75} width={100} mr={1}>
                         <CustomImage imageId={item.imageIds[0]} isBookDetails={true}></CustomImage></Box>
                     <Box display="flex" flexDirection="column" gap={1}>
@@ -243,9 +242,8 @@ export default function BooksSettingsTable() {
                     {error && <ErrorNotification error={error}></ErrorNotification>}
 
                     {isAdmin(user) &&
-                      <Box sx={styleVariables.buttonsContainer}>
-                        <Button variant="outlined" onClick={() => onAdd()}
-                                sx={items.length ? { mr: styleVariables.margin } : {}}>
+                      <Box sx={styleVariables.buttonsContainer} gap={2}>
+                        <Button variant="outlined" onClick={() => onAdd()}>
                           <AddIcon></AddIcon>Додати книгу
                         </Button>
 

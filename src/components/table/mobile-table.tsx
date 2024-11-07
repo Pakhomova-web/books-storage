@@ -38,8 +38,8 @@ export function MobileTable<T>(props: IMobileTableProps<T>) {
                 </Grid>
               </Grid>}
             {props.keys.map((key, i) => (
-                <Grid container key={i}
-                      sx={{ ...(i !== props.keys.length - 1 ? styleVariables.mobileRow : {}), ...styleVariables.hintFontSize }}>
+                <Grid container key={i} mb={1}
+                      sx={{ ...(i !== props.keys.length - 1 ? styleVariables.borderBottom : {}), ...styleVariables.hintFontSize }}>
                     <Grid item xs={6} display="flex" alignItems="center" sx={key.mobileStyleClasses}>{key.title}</Grid>
                     <Grid item xs={6} display="flex" justifyContent="end" alignItems="center"
                           sx={key.mobileStyleClasses}>

@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 import Loading from '@/components/loading';
 
 const StyledSelectField = styled(SelectElement)<SelectElementProps>(() => ({
-    marginBottom: styleVariables.margin
+    mb: 1
 }));
 
 interface ICustomSelectField extends SelectElementProps {
@@ -18,7 +18,7 @@ export default function CustomSelectField({ loading, showClear, onClear, ...prop
     return (
         <Box sx={styleVariables.positionRelative}>
             <Loading show={!!loading} isSmall={true}/>
-            <StyledSelectField {...props} variant="standard" />
+            <StyledSelectField {...props} variant="standard"/>
             {showClear && onClear && <Box sx={customFieldClearBtnStyles} onClick={onClear}>Очистити</Box>}
         </Box>
     );

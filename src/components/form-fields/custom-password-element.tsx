@@ -3,7 +3,7 @@ import { styleVariables } from '@/constants/styles-variables';
 import { PasswordElement, PasswordElementProps } from 'react-hook-form-mui';
 
 const StyledPasswordElement = styled(PasswordElement)<PasswordElementProps>(() => ({
-    marginBottom: styleVariables.margin
+    marginBottom: 1
 }));
 
 export default function CustomPasswordElement(props: PasswordElementProps) {
