@@ -97,111 +97,115 @@ export default function Basket() {
                 <Grid container display="flex" justifyContent="center">
                     <Grid item xs={12} md={9} display="flex" flexDirection="column" gap={1}>
                         {items.map((book, index) => (
-                            <Grid container key={index} px={2} spacing={1} mt={2} position="relative">
-                                {!book.numberInStock &&
-                                  <Box sx={styleVariables.fixedInStockBox(false)} ml={2} mt={{ sm: 1, md: 0 }}>
-                                    Немає в наявності
-                                  </Box>}
+                            <>
+                                <Grid container key={index} px={2} spacing={1} position="relative">
+                                    {!book.numberInStock &&
+                                      <Box sx={styleVariables.fixedInStockBox(false)} ml={2}>
+                                        Немає в наявності
+                                      </Box>}
 
-                                <Grid item xs={6} sm={4} md={2} lg={1} display="flex"
-                                      alignItems={{ md: 'center', xs: 'flex-start' }}
-                                      justifyContent={{ md: 'center', xs: 'flex-end' }}
-                                      order={{ xs: 2, sm: 3, md: 1 }}>
-                                    <IconButton onClick={() => onRemoveBook(book)}>
-                                        <ClearIcon color={!book.numberInStock ? 'warning' : 'inherit'}/>
-                                    </IconButton>
-                                </Grid>
+                                    <Grid item xs={6} sm={4} md={2} lg={1} display="flex"
+                                          alignItems={{ md: 'center', xs: 'flex-start' }}
+                                          justifyContent={{ md: 'center', xs: 'flex-end' }}
+                                          order={{ xs: 2, sm: 3, md: 1 }}>
+                                        <IconButton onClick={() => onRemoveBook(book)}>
+                                            <ClearIcon color={!book.numberInStock ? 'warning' : 'inherit'}/>
+                                        </IconButton>
+                                    </Grid>
 
-                                <Grid item xs={6} sm={4} md={2} display="flex" alignItems="center"
-                                      justifyContent="center"
-                                      order={{ xs: 1, sm: 1, md: 2 }}>
-                                    <StyledImageBox>
-                                        <CustomImage imageId={book.imageIds[0]} isBookDetails={true}></CustomImage>
-                                    </StyledImageBox>
-                                </Grid>
+                                    <Grid item xs={6} sm={4} md={2} display="flex" alignItems="center"
+                                          justifyContent="center"
+                                          order={{ xs: 1, sm: 1, md: 2 }}>
+                                        <StyledImageBox>
+                                            <CustomImage imageId={book.imageIds[0]} isBookDetails={true}></CustomImage>
+                                        </StyledImageBox>
+                                    </Grid>
 
-                                <Grid item xs={12} sm={4} md={4} lg={5} mt={{ xs: 2, sm: 0 }}
-                                      display="flex" flexDirection="column" gap={1}
-                                      order={{ xs: 3, sm: 2, md: 3 }}
-                                      position="relative" alignItems={{ xs: 'center', sm: 'flex-start' }}>
-                                    <Box sx={styleVariables.hintFontSize}>
-                                        {book.bookSeries.publishingHouse.name}. {book.bookSeries.name}
-                                    </Box>
-                                    <Box sx={styleVariables.titleFontSize}>
-                                        <CustomLink onClick={() => onBookClick(book)}><b>{book.name}</b></CustomLink>
-                                    </Box>
+                                    <Grid item xs={12} sm={4} md={4} lg={5} mt={{ xs: 2, sm: 0 }}
+                                          display="flex" flexDirection="column" gap={1}
+                                          order={{ xs: 3, sm: 2, md: 3 }}
+                                          position="relative" alignItems={{ xs: 'center', sm: 'flex-start' }}>
+                                        <Box sx={styleVariables.hintFontSize}>
+                                            {book.bookSeries.publishingHouse.name}. {book.bookSeries.name}
+                                        </Box>
+                                        <Box sx={styleVariables.titleFontSize}>
+                                            <CustomLink
+                                                onClick={() => onBookClick(book)}><b>{book.name}</b></CustomLink>
+                                        </Box>
 
-                                    {!!book.discount && <Box display="flex"><Box sx={styleVariables.discountBoxStyles}>
-                                      Знижка: {book.discount}%
-                                    </Box></Box>}
+                                        {!!book.discount &&
+                                          <Box display="flex"><Box sx={styleVariables.discountBoxStyles}>
+                                            Знижка: {book.discount}%
+                                          </Box></Box>}
 
-                                    <Box>{renderPrice(book.price)}</Box>
-                                </Grid>
+                                        <Box>{renderPrice(book.price)}</Box>
+                                    </Grid>
 
-                                <Grid item xs={12} sm={6} md={2} order={4} mt={{ xs: 2, sm: 0 }} display="flex"
-                                      flexDirection="column" gap={1}
-                                      alignItems="center">
-                                    Кількість
-                                    <Grid container spacing={2} display="flex" flexWrap="nowrap" alignItems="center"
-                                          justifyContent="center">
-                                        <Grid item>
-                                            <IconButton disabled={!book.numberInStock || countFields.get(book.id) === 1}
-                                                        onClick={() => onChangeCountInBasket(book.id, -1)}>
-                                                <RemoveCircleOutlineIcon fontSize="large"/>
-                                            </IconButton>
+                                    <Grid item xs={12} sm={6} md={2} order={4} mt={{ xs: 2, sm: 0 }} display="flex"
+                                          flexDirection="column" gap={1}
+                                          alignItems="center">
+                                        Кількість
+                                        <Grid container spacing={2} display="flex" flexWrap="nowrap" alignItems="center"
+                                              justifyContent="center">
+                                            <Grid item>
+                                                <IconButton
+                                                    disabled={!book.numberInStock || countFields.get(book.id) === 1}
+                                                    onClick={() => onChangeCountInBasket(book.id, -1)}>
+                                                    <RemoveCircleOutlineIcon fontSize="large"/>
+                                                </IconButton>
+                                            </Grid>
+                                            <Grid item
+                                                  sx={styleVariables.titleFontSize}>{countFields.get(book.id)}</Grid>
+                                            <Grid item>
+                                                <IconButton
+                                                    disabled={!book.numberInStock || countFields.get(book.id) === book.numberInStock}
+                                                    onClick={() => onChangeCountInBasket(book.id, 1)}>
+                                                    <AddCircleOutlineIcon fontSize="large"/>
+                                                </IconButton>
+                                            </Grid>
                                         </Grid>
-                                        <Grid item sx={styleVariables.titleFontSize}>{countFields.get(book.id)}</Grid>
-                                        <Grid item>
-                                            <IconButton
-                                                disabled={!book.numberInStock || countFields.get(book.id) === book.numberInStock}
-                                                onClick={() => onChangeCountInBasket(book.id, 1)}>
-                                                <AddCircleOutlineIcon fontSize="large"/>
-                                            </IconButton>
-                                        </Grid>
+                                    </Grid>
+
+                                    <Grid item xs={12} sm={6} md={2} mt={{ xs: 2, sm: 0 }} order={5} display="flex"
+                                          flexDirection="column" gap={1}
+                                          alignItems="center">
+                                        Кінцева ціна
+                                        <Box sx={priceStyles} textAlign="center">
+                                            {renderPrice(countFields.get(book.id) * book.price, book.discount)}
+                                        </Box>
                                     </Grid>
                                 </Grid>
 
-                                <Grid item xs={12} sm={6} md={2} mt={{ xs: 2, sm: 0 }} order={5} display="flex"
-                                      flexDirection="column" gap={1}
-                                      alignItems="center">
-                                    Кінцева ціна
-                                    <Box sx={priceStyles} textAlign="center">
-                                        {renderPrice(countFields.get(book.id) * book.price, book.discount)}
-                                    </Box>
+                                <Grid item xs={12}>
+                                    <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
                                 </Grid>
-
-                                <Grid item xs={12} borderTop={1} borderColor={primaryLightColor} order={6} mt={1}></Grid>
-                            </Grid>
+                            </>
                         ))}
 
-                        {!loading && <>
-                          <Grid item xs={12} borderBottom={1} borderColor={primaryLightColor} p={1} display="flex"
-                                justifyContent="flex-end">
-                            <Grid container spacing={2}>
+                        <Grid container display="flex" alignItems="center" spacing={1} mb={2}>
+                            {!loading && <>
                               <Grid item xs={9} md={10} display="flex" justifyContent="flex-end">
                                 Сума замовлення без знижки:
                               </Grid>
                               <Grid item xs={3} md={2} textAlign="center">
                                   {renderPrice(finalFullSum)}
                               </Grid>
-                            </Grid>
-                          </Grid>
 
-                          <Grid item xs={12} borderBottom={1} borderColor={primaryLightColor} p={1} display="flex"
-                                justifyContent="flex-end">
-                            <Grid container spacing={2}>
+                              <Grid item xs={12}>
+                                <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
+                              </Grid>
+
                               <Grid item xs={9} md={10} display="flex" justifyContent="flex-end">
                                 Знижка:
                               </Grid>
                               <Grid item xs={3} md={2} textAlign="center">
                                   {renderPrice(finalFullSum - finalSumWithDiscounts)}
                               </Grid>
-                            </Grid>
-                          </Grid>
 
-                          <Grid item xs={12} borderBottom={1} borderColor={primaryLightColor} p={1} display="flex"
-                                justifyContent="flex-end" mb={2}>
-                            <Grid container spacing={2} alignItems="center">
+                              <Grid item xs={12}>
+                                <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
+                              </Grid>
+
                               <Grid item xs={9} md={10} display="flex" justifyContent="flex-end"
                                     sx={styleVariables.titleFontSize}>
                                 <b>Кінцева сума замовлення:</b>
@@ -209,9 +213,12 @@ export default function Basket() {
                               <Grid item xs={3} md={2} display="flex" justifyContent="center">
                                 <Box sx={priceStyles} textAlign="center">{renderPrice(finalSumWithDiscounts)}</Box>
                               </Grid>
-                            </Grid>
-                          </Grid>
-                        </>}
+
+                              <Grid item xs={12}>
+                                <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
+                              </Grid>
+                            </>}
+                        </Grid>
                     </Grid>
                 </Grid>
 
