@@ -1,4 +1,4 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Menu } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { styled } from '@mui/material/styles';
@@ -31,6 +31,12 @@ const ProfileMenuStyledGrid = styled(Grid)((active) => ({
     cursor: 'pointer'
 }));
 
+const StyledMenuContainer = styled(Grid)(() => ({
+    md: {
+        height: '100vh'
+    }
+}))
+
 export default function ProfileMenu({ children, activeUrl }) {
     const router = useRouter();
 
@@ -47,7 +53,7 @@ export default function ProfileMenu({ children, activeUrl }) {
                 Особистий кабінет
             </Grid>
 
-            <Grid item xs={12} md={3} lg={2} borderRight={1} borderColor={primaryLightColor} height="100vh">
+            <StyledMenuContainer item xs={12} md={3} lg={2} borderRight={1} borderColor={primaryLightColor}>
                 <Grid container>
                     {menuItems.map((item, index) => (
                         <ProfileMenuStyledGrid item xs={6} md={12} key={index}
@@ -63,7 +69,7 @@ export default function ProfileMenu({ children, activeUrl }) {
                         </ProfileMenuStyledGrid>
                     ))}
                 </Grid>
-            </Grid>
+            </StyledMenuContainer>
 
             <Grid item xs={12} md={9} lg={10}>
                 <Box sx={pageStyles} p={1}>{children}</Box>
