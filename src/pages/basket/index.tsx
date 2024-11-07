@@ -11,7 +11,7 @@ import {
     pageStyles,
     positionRelative,
     primaryLightColor,
-    styleVariables, titleFontSize
+    styleVariables
 } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import ErrorNotification from '@/components/error-notification';
@@ -85,10 +85,6 @@ export default function Basket() {
 
     function onBookClick(book: BookEntity) {
         router.push(`/books/details?${getParamsQueryString({ id: book.id, pageUrl: '/basket' })}`);
-    }
-
-    function renderFinalSum() {
-        return '';
     }
 
     return (
@@ -172,7 +168,7 @@ export default function Basket() {
                                     </Box>
                                 </Grid>
 
-                                <Grid item xs={12} borderTop={1} borderColor={primaryLightColor}></Grid>
+                                <Grid item xs={12} borderTop={1} borderColor={primaryLightColor} order={6} mt={1}></Grid>
                             </Grid>
                         ))}
 
