@@ -13,8 +13,7 @@ const filtersPanelContainer = {
     position: 'sticky',
     top: 0,
     zIndex: 3,
-    background: 'white',
-    paddingBottom: styleVariables.padding
+    background: 'white'
 };
 
 interface ISortFiltersContainerProps<T> {
@@ -38,7 +37,7 @@ export default function SortFiltersContainer<T>(props: ISortFiltersContainerProp
     }
 
     return <>
-        <Grid container spacing={1} sx={filtersPanelContainer}>
+        <Grid container spacing={1} sx={filtersPanelContainer} p={2}>
             {(mobileMatches || props.showAlwaysSorting) && sortKeys?.length ?
                 <>
                     <Grid item xs={6}>{renderFiltersButton(props.children)}</Grid>

@@ -18,7 +18,7 @@ export default function SocialMediaBox() {
     }
 
     return (
-        <StyledSocialsBox display="flex" alignItems="center" gap={2} width="100%" p={1} mt={1}
+        <StyledSocialsBox display="flex" alignItems="center" gap={1} width="100%" p={1} mt={1}
                           justifyContent="end">
             <Box>Соц. мережі:</Box>
             <IconButton onClick={onInstagramClick}><InstagramIcon color="primary"

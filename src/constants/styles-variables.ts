@@ -50,11 +50,6 @@ export const styleVariables = {
         fontSize: hintFontSize
     },
     boxShadow: 24,
-    margin: '10px',
-    rowMargin,
-    padding: '10px',
-    doubleMargin: '20px',
-    doublePadding: '20px',
     warnColor,
     gray,
     flexEnd: { display: 'flex', justifyContent: 'end' },
@@ -116,11 +111,5 @@ export const customFieldClearBtnStyles = {
 export const positionRelative = { position: 'relative' };
 export const fullHeight = { height: '100svh' };
 export const pageStyles = { overflowY: 'auto', height: 'calc(100svh - 64px)' };
-
-export const titleStyles = {
-    ...styleVariables.titleFontSize,
-    fontWeight: 'bold',
-    marginBottom: styleVariables.doubleMargin
-};
 
 export const drawerWidth = 240;

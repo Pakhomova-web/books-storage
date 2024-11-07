@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { ApolloError } from '@apollo/client';
 import { GraphQLError } from 'graphql/error';
 import { addBookInBasket, likeBook, removeBookFromBasket, unlikeBook } from '@/lib/graphql/queries/book/hook';
+import { usePathname } from 'next/navigation';
 
 type authContextType = {
     user: UserEntity;
@@ -45,6 +46,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
     const router = useRouter();
+    const pathname = usePathname();
     const [user, setUser] = useState<UserEntity>(null);
     const [openLoginModal, setOpenLoginModal] = useState<boolean>(false);
     const value = {
@@ -53,6 +55,9 @@ export function AuthProvider({ children }) {
         login: (user: UserEntity, token: string, refreshToken: string) => {
             saveTokenToLocalStorage(token, refreshToken);
             setUser(user ? new UserEntity(user) : null);
+            if (pathname === '/sign-in') {
+                router.push('/');
+            }
         },
         logout: () => {
             removeTokenFromLocalStorage();

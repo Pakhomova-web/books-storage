@@ -8,13 +8,7 @@ interface IErrorNotificationProps {
     error?: ApolloError
 }
 
-const mainContainer = {
-    display: 'flex',
-    margin: styleVariables.margin
-};
-
 const errorIcon = {
-    marginRight: styleVariables.margin,
     outline: `1px solid ${styleVariables.warnColor}`,
     boxShadow: '0 0 1px 6px #F9E9E8',
     borderRadius: '50%'
@@ -23,14 +17,13 @@ const errorIcon = {
 const StyledBox = styled(Box)<BoxProps>(() => ({
     display: 'flex',
     alignItems: 'center',
-    padding: styleVariables.padding,
     color: styleVariables.warnColor
 }));
 
 export default function ErrorNotification({ error }: IErrorNotificationProps) {
     return (
-        <Box sx={mainContainer}>
-            <StyledBox>
+        <Box display="flex" m={2}>
+            <StyledBox p={1} gap={2}>
                 <Error sx={errorIcon}></Error>
 
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>

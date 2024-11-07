@@ -18,11 +18,6 @@ const bookTypeBoxStyles = {
     backgroundColor: styleVariables.gray
 };
 
-const StyledMobileBookTypeBox = styled(Box)<BoxProps>(() => ({
-    padding: styleVariables.padding,
-    ...bookTypeBoxStyles
-}));
-
 const StyledBookTypeBox = styled(Box)<BoxProps>(() => ({
     height: '350px',
     maxHeight: '50vh',
@@ -49,7 +44,6 @@ const bookTypeNameStyles = {
     bottom: 0,
     background: 'rgba(255, 255, 255, 0.8)',
     width: '100%',
-    padding: styleVariables.doublePadding,
     textAlign: 'center'
 };
 
@@ -85,12 +79,12 @@ export default function Home() {
                           mobileMatches ?
                               <Grid xs={12} sm={6} key={index} item p={1}
                                     onClick={() => router.push(`/books?bookType=${type.id}`)}>
-                                  <StyledMobileBookTypeBox gap={2}>
+                                  <Box sx={bookTypeBoxStyles} gap={1} p={1}>
                                       <Box sx={mobileImageBoxStyles}>
                                           <CustomImage imageId={type.imageId} isBookType={true}></CustomImage>
                                       </Box>
                                       {type.name}
-                                  </StyledMobileBookTypeBox>
+                                  </Box>
                               </Grid> :
                               <Grid key={index} item p={1} md={3} lg={2}
                                     onClick={() => router.push(`/books?bookType=${type.id}`)}>
@@ -98,7 +92,7 @@ export default function Home() {
                                       <Box sx={imageBoxStyles}>
                                           <CustomImage imageId={type.imageId} isBookType={true}></CustomImage>
                                       </Box>
-                                      <Box sx={bookTypeNameStyles} className="bookTypeBox">{type.name}</Box>
+                                      <Box sx={bookTypeNameStyles} p={2} className="bookTypeBox">{type.name}</Box>
                                   </StyledBookTypeBox>
                               </Grid>
                       ))}
@@ -115,12 +109,12 @@ export default function Home() {
                       {publishingHouses.map((publishingHouse, index) =>
                           <Grid xs={12} sm={6} md={3} lg={2} key={index} item p={1}
                                 onClick={() => router.push(`/books?publishingHouse=${publishingHouse.id}`)}>
-                              <StyledMobileBookTypeBox gap={2}>
+                              <Box sx={bookTypeBoxStyles} gap={1} p={1}>
                                   <Box sx={mobileImageBoxStyles}>
                                       <CustomImage imageId={publishingHouse.imageId} isBookType={true}></CustomImage>
                                   </Box>
                                   {publishingHouse.name}
-                              </StyledMobileBookTypeBox>
+                              </Box>
                           </Grid>)}
                   </Grid>
                 }

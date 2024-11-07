@@ -1,7 +1,7 @@
 import { Box, Button } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import { ReactNode } from 'react';
-import { borderRadius, styleVariables, titleStyles } from '@/constants/styles-variables';
+import { borderRadius, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 
 const modalContainerStyle = {
@@ -17,8 +17,13 @@ const mainContainerStyle = (big = false) => ({
     bgcolor: 'background.paper',
     borderRadius,
     boxShadow: styleVariables.boxShadow,
-    p: styleVariables.doublePadding
+    p: 2
 });
+
+const titleStyles = {
+    ...styleVariables.titleFontSize,
+    fontWeight: 'bold'
+};
 
 const innerContainer = (withActions = true) => ({
     position: 'relative',
@@ -37,7 +42,7 @@ const buttonsContainerStyles = {
     width: '100%',
     display: 'flex',
     justifyContent: 'center',
-    marginTop: styleVariables.margin
+    marginTop: 2
 }
 
 interface ICustomModalProps {
@@ -72,23 +77,23 @@ export default function CustomModal(props: ICustomModalProps) {
                 {props.loading && <Loading show={props.loading}></Loading>}
 
                 <Box sx={innerContainer(isWithActions())}>
-                    {!!props.title && <Box sx={titleStyles}>{props.title}</Box>}
+                    {!!props.title && <Box sx={titleStyles} mb={1}>{props.title}</Box>}
                     <Box sx={childrenContainer}>
                         {props.children}
                     </Box>
 
-                    {isWithActions() && <Box sx={buttonsContainerStyles}>
+                    {isWithActions() && <Box sx={buttonsContainerStyles} gap={2}>
                         {props.onClose && <Button variant="outlined" onClick={props.onClose}>Закрити</Button>}
                         {props.onSubmit ?
-                            <Button onClick={props.onSubmit} variant="contained" disabled={props.isSubmitDisabled}
-                                    sx={{ marginLeft: styleVariables.margin }}>Зберегти</Button>
+                            <Button onClick={props.onSubmit} variant="contained" disabled={props.isSubmitDisabled}>
+                                Зберегти
+                            </Button>
                             : null}
                         {props.actions?.length && props.actions.map((action, index) => (
                             <Button key={index}
                                     onClick={action.onClick}
                                     variant="contained"
-                                    disabled={props.isSubmitDisabled}
-                                    sx={{ marginLeft: styleVariables.margin }}>{action.title}</Button>
+                                    disabled={props.isSubmitDisabled}>{action.title}</Button>
                         ))}
                     </Box>}
                 </Box>

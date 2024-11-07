@@ -7,9 +7,7 @@ import CustomImage from '@/components/custom-image';
 
 const mobileBoxStyles = {
     borderRadius,
-    border: `1px solid ${primaryLightColor}`,
-    padding: styleVariables.padding,
-    margin: styleVariables.margin
+    border: `1px solid ${primaryLightColor}`
 };
 
 interface IMobileTableProps<T> {
@@ -68,7 +66,7 @@ export function MobileTable<T>(props: IMobileTableProps<T>) {
             <Grid container>
                 {props.data.map((item, index) =>
                     <Grid item key={index} sm={6} xs={12}>
-                        <Box sx={mobileBoxStyles} onClick={() => props.onRowClick ? onRowClick(item) : {}}>
+                        <Box sx={mobileBoxStyles} p={1} m={1} onClick={() => props.onRowClick ? onRowClick(item) : {}}>
                             {props.renderMobileView ? props.renderMobileView(item) : renderItem(item, index)}
                         </Box>
                     </Grid>

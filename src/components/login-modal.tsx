@@ -14,12 +14,6 @@ import { useAuth } from '@/components/auth-context';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomLink from '@/components/custom-link';
 
-const forgotPasswordLink = {
-    display: 'flex',
-    ...styleVariables.hintFontSize,
-    margin: `${styleVariables.margin} 0`
-};
-
 export default function LoginModal({ open, onClose }) {
     const router = useRouter();
     const formContext = useForm<{ email: string, password: string }>();
@@ -80,19 +74,20 @@ export default function LoginModal({ open, onClose }) {
 
     return (
         <CustomModal open={open} loading={loading}>
-            <Box sx={authStyles.title}>Вхід</Box>
+            <Box sx={authStyles.title} mb={2}>Вхід</Box>
+
             <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
-                <CustomTextField fullWidth name="email" required label="Ел. пошта" type="email"/>
+                <Box display="flex" flexDirection="column" gap={1} mb={2}>
+                    <CustomTextField fullWidth name="email" required label="Ел. пошта" type="email"/>
 
-                <CustomPasswordElement fullWidth
-                                       variant="standard"
-                                       id="password"
-                                       label="Пароль"
-                                       name="password"
-                                       required/>
+                    <CustomPasswordElement fullWidth
+                                           variant="standard"
+                                           id="password"
+                                           label="Пароль"
+                                           name="password"
+                                           required/>
 
-                <Box sx={forgotPasswordLink}>
-                    <Box sx={styleVariables.cursorPointer} onClick={onForgotPasswordClick}>Забули пароль?</Box>
+                    <CustomLink onClick={onForgotPasswordClick}>Забули пароль?</CustomLink>
                 </Box>
 
                 <Grid container spacing={2} mb={1}>
@@ -113,8 +108,8 @@ export default function LoginModal({ open, onClose }) {
                 </Grid>
             </FormContainer>
 
-            <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>
-                <Box mb={1}>або</Box>
+            <Box display="flex" flexDirection="column" gap={1} alignItems="center" mb={1}>
+                або
                 <CustomLink onClick={() => goToSignInPage()}>
                     Створити новий аккаунт
                 </CustomLink>

@@ -4,16 +4,21 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 
 import { authStyles } from '@/styles/auth';
 import CustomTextField from '@/components/form-fields/custom-text-field';
-import { pageStyles, styleVariables } from '@/constants/styles-variables';
+import { pageStyles, primaryLightColor, borderRadius, positionRelative } from '@/constants/styles-variables';
 import ErrorNotification from '@/components/error-notification';
 import Loading from '@/components/loading';
 import { useSignIn } from '@/lib/graphql/queries/auth/hook';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
 import { emailValidatorExp, passwordValidatorExp } from '@/constants/validators-exp';
+import { useAuth } from '@/components/auth-context';
+
+const containerStyles = {
+    width: '400px',
+    maxWidth: '85vw'
+};
 
 export default function SignIn() {
-    const router = useRouter();
     const formContext = useForm<{
         email: string,
         password: string,
@@ -23,6 +28,7 @@ export default function SignIn() {
     }>();
     const { loading, error, signIn } = useSignIn();
     const { password, confirmPassword, email } = formContext.watch();
+    const { setOpenLoginModal } = useAuth();
 
     useEffect(() => {
         if (formContext.formState.touchedFields.password || formContext.formState.touchedFields.confirmPassword) {
@@ -67,14 +73,14 @@ export default function SignIn() {
                     firstName: values.firstName,
                     lastName: values.lastName
                 });
-                goToLoginPage();
+                openLoginModal();
             } catch (_) {
             }
         }
     }
 
-    function goToLoginPage() {
-        router.push('login');
+    function openLoginModal() {
+        setOpenLoginModal(true);
     }
 
     function isFormInvalid(): boolean {
@@ -82,42 +88,53 @@ export default function SignIn() {
     }
 
     return (
-        <Box sx={pageStyles}>
-            <Box sx={authStyles.container}>
-                <Loading show={loading}></Loading>
+        <Box sx={positionRelative} display="flex" justifyContent="center">
+            <Loading show={loading}></Loading>
 
-                <Box sx={authStyles.title}>Реєстрація</Box>
-                <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
-                    <CustomTextField fullWidth name="email" required type="email" label="Ел. адреса" id="email"/>
+            <Box sx={pageStyles}>
+                <Box p={2} m={2} border={1} borderColor={primaryLightColor} borderRadius={borderRadius} sx={containerStyles}>
+                    <Box sx={authStyles.title} mb={2}>Реєстрація</Box>
 
-                    <CustomPasswordElement fullWidth
-                                           variant="standard"
-                                           id="password"
-                                           label="Пароль"
-                                           name="password"
-                                           required/>
+                    <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
+                        <Box gap={1} display="flex" flexDirection="column">
+                            <CustomTextField fullWidth name="email" required type="email" label="Ел. адреса"
+                                             id="email"/>
 
-                    <CustomPasswordElement fullWidth
-                                           variant="standard"
-                                           id="confirmPassword"
-                                           label="Підтвердіть пароль"
-                                           name="confirmPassword"
-                                           required/>
+                            <CustomPasswordElement fullWidth
+                                                   variant="standard"
+                                                   id="password"
+                                                   label="Пароль"
+                                                   name="password"
+                                                   required/>
 
-                    <CustomTextField fullWidth name="firstName" label="Ім'я"/>
+                            <CustomPasswordElement fullWidth
+                                                   variant="standard"
+                                                   id="confirmPassword"
+                                                   label="Підтвердіть пароль"
+                                                   name="confirmPassword"
+                                                   required/>
 
-                    <CustomTextField fullWidth name="lastName" label="Прізвище"/>
-                </FormContainer>
-                <Button variant="contained"
-                        sx={authStyles.buttonMargin}
-                        disabled={isFormInvalid()}
-                        onClick={onSubmit}>
-                    Створити аккаунт
-                </Button>
-                <Box sx={{ ...styleVariables.textCenter, ...authStyles.boxStyles }}>або</Box>
-                <Button variant="outlined" onClick={() => goToLoginPage()}>Увійти в аккаунт</Button>
+                            <CustomTextField fullWidth name="firstName" label="Ім'я"/>
 
-                {error && <ErrorNotification error={error}></ErrorNotification>}
+                            <CustomTextField fullWidth name="lastName" label="Прізвище"/>
+                        </Box>
+                    </FormContainer>
+
+                    <Box display="flex" alignItems="center" gap={1} mt={2} flexDirection="column">
+                        <Button variant="contained"
+                                fullWidth
+                                disabled={isFormInvalid()}
+                                onClick={onSubmit}>
+                            Створити аккаунт
+                        </Button>
+
+                        або
+
+                        <Button variant="outlined" fullWidth onClick={openLoginModal}>Увійти в аккаунт</Button>
+                    </Box>
+
+                    {error && <ErrorNotification error={error}></ErrorNotification>}
+                </Box>
             </Box>
         </Box>
     );

@@ -125,7 +125,7 @@ export default function Basket() {
                                 </Grid>
 
                                 <Grid item xs={12} sm={4} md={2} order={4} mt={{ xs: 2, sm: 0 }} display="flex"
-                                      flexDirection="column" gap={2}
+                                      flexDirection="column" gap={1}
                                       alignItems="center">
                                     Кількість
                                     <Grid container spacing={2} display="flex" flexWrap="nowrap" alignItems="center"
@@ -148,7 +148,7 @@ export default function Basket() {
                                 </Grid>
 
                                 <Grid item xs={12} sm={4} md={2} mt={{ xs: 2, sm: 0 }} order={5} display="flex"
-                                      flexDirection="column" gap={2}
+                                      flexDirection="column" gap={1}
                                       alignItems="center">
                                     Кінцева ціна
                                     <Box sx={priceStyles}>

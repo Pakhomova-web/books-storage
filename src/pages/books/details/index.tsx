@@ -25,6 +25,12 @@ import BooksList from '@/components/books-list';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
+const StyledPublishingHouseImageBox = styled(Box)(() => ({
+    height: '40px',
+    width: '80px',
+    maxHeight: '20vh'
+}));
+
 const StyledSmallImageBox = styled(Box)(() => ({
     height: '120px',
     maxHeight: '30vh',
@@ -77,6 +83,14 @@ export default function BookDetails() {
             });
             const keys = [
                 {
+                    title: 'Мова',
+                    type: 'text',
+                    renderValue: (book: BookEntity) => book.language?.name,
+                    onValueClick: () => {
+                        router.push(`/books?language=${book.language.id}`);
+                    }
+                },
+                {
                     title: 'Тип',
                     type: 'text',
                     renderValue: (book: BookEntity) => book.bookType.name,
@@ -86,20 +100,11 @@ export default function BookDetails() {
                 },
                 { title: 'Тип сторінок', type: 'text', renderValue: (book: BookEntity) => book.pageType?.name },
                 { title: 'Тип обкладинки', type: 'text', renderValue: (book: BookEntity) => book.coverType?.name },
-                { title: 'Кількість сторінок', type: 'text', renderValue: (book: BookEntity) => book.numberOfPages },
                 { title: 'ISBN', type: 'text', renderValue: (book: BookEntity) => book.isbn },
                 { title: 'Формат, мм', type: 'text', renderValue: (book: BookEntity) => book.format }
             ];
             setKeys((keys as TableKey<BookEntity>[]).filter(key => !!key.renderValue(book)));
             setMainDetailsKeys([
-                {
-                    title: 'Видавництво',
-                    type: 'text',
-                    renderValue: (book: BookEntity) => book.bookSeries.publishingHouse.name,
-                    onValueClick: () => {
-                        router.push(`/books?publishingHouse=${book.bookSeries.publishingHouse.id}`);
-                    }
-                },
                 {
                     title: 'Серія',
                     type: 'text',
@@ -116,14 +121,7 @@ export default function BookDetails() {
                         router.push(`/books?authors=${author.id}`);
                     }
                 } as TableKey<BookEntity>)),
-                {
-                    title: 'Мова',
-                    type: 'text',
-                    renderValue: (book: BookEntity) => book.language?.name,
-                    onValueClick: () => {
-                        router.push(`/books?language=${book.language.id}`);
-                    }
-                }
+                { title: 'Кількість сторінок', type: 'text', renderValue: (book: BookEntity) => book.numberOfPages }
             ]);
         }
     }, [book]);
@@ -160,6 +158,10 @@ export default function BookDetails() {
 
     function onAgeClick(age: number) {
         router.push(`/books?ages=${age}`);
+    }
+
+    function onPublishingHouseClick() {
+        router.push(`/books?publishingHouse=${book.bookSeries.publishingHouse.id}`);
     }
 
     function onBookClick(book: BookEntity) {
@@ -233,14 +235,14 @@ export default function BookDetails() {
                     <Grid item p={1} sm={6} xs={12}>
                       <Grid container mb={1} gap={1} display="flex" alignItems="flex-start" flexWrap="wrap"
                             justifyContent="space-between">
-                        <Grid item display="flex" gap={2} alignItems="center">
+                        <Grid item display="flex" gap={1} alignItems="center">
                           <Box sx={priceStyles}><b>{renderPrice(book.price, book.discount)}</b></Box>
                             {!!book.discount && <Box><s>{renderPrice(book.price)}</s></Box>}
                         </Grid>
                       </Grid>
 
-                      <Grid container mb={2} spacing={1} display="flex" alignItems="center">
-                        <Grid item xs={12} sm={6} lg={4}>
+                      <Grid container mb={2} spacing={1} display="flex">
+                        <Grid item xs={12} md={6} textAlign="center">
                             {isBookInBasket(book) ?
                                 <Button variant="outlined" fullWidth disabled={true}>В кошику</Button> :
                                 <Button variant="outlined" fullWidth
@@ -248,9 +250,7 @@ export default function BookDetails() {
                                         disabled={!book.numberInStock}>
                                     {!!book.numberInStock ? 'Купити' : 'Очікується'}
                                 </Button>}
-                        </Grid>
 
-                        <Grid item xs={12} sm={6} lg={4} textAlign="center">
                           <Button onClick={() => setLikedBook(book.id)} color="warning" fullWidth>
                             <Box gap={1} display="flex" alignItems="center">{isLiked(book) ?
                                 <><FavoriteIcon/>В обраному</> :
@@ -258,30 +258,35 @@ export default function BookDetails() {
                             </Box>
                           </Button>
                         </Grid>
-                      </Grid>
 
-                      <Grid container>
-                        <Grid item xs={12} sm={9}>
-                            {!!book.tags?.length &&
-                              <Grid container mb={2} pl={1} alignItems="center" gap={1}>
-                                Теги:
-                                  {book.tags.map((tag, index) =>
-                                      <Tag key={index} tag={tag} onClick={() => onTagClick(tag)}/>)}
-                              </Grid>
-                            }
+                        <Grid item xs={12} md={6}>
+                          <Box gap={1} sx={styleVariables.sectionTitle} p={1}>
+                            <Box>Видавництво</Box>
+                          </Box>
 
-                            {!!book.ages?.length && <Box pl={1}>
-                              <Ages selected={book.ages} showOnlySelected={true} onOptionClick={onAgeClick}></Ages>
-                            </Box>}
-                        </Grid>
-                        <Grid item xs={12} sm={3}>
-                            {!!book.bookSeries.publishingHouse.imageId &&
-                              <StyledSmallImageBox mb={1}>
-                                <CustomImage isBookDetails={true} imageId={book.bookSeries.publishingHouse.imageId}></CustomImage>
-                              </StyledSmallImageBox>
-                            }
+                          <Box gap={1} display="flex" flexWrap="nowrap" sx={styleVariables.cursorPointer}
+                               justifyContent="space-between" p={1} onClick={onPublishingHouseClick}>
+                            <Box>{book.bookSeries.publishingHouse.name}</Box>
+                              {!!book.bookSeries.publishingHouse.imageId &&
+                                <StyledPublishingHouseImageBox>
+                                  <CustomImage imageId={book.bookSeries.publishingHouse.imageId}></CustomImage>
+                                </StyledPublishingHouseImageBox>}
+                          </Box>
                         </Grid>
                       </Grid>
+
+                        {!!book.tags?.length &&
+                          <Grid container mb={2} pl={1} alignItems="center" gap={1}>
+                            Теги:
+                              {book.tags.map((tag, index) =>
+                                  <Tag key={index} tag={tag} onClick={() => onTagClick(tag)}/>)}
+                          </Grid>
+                        }
+
+                        {!!book.ages?.length &&
+                          <Box pl={1}>
+                            <Ages selected={book.ages} showOnlySelected={true} onOptionClick={onAgeClick}></Ages>
+                          </Box>}
 
 
                       <Box sx={styleVariables.sectionTitle} p={1} mb={1}>Характеристики</Box>
