@@ -19,7 +19,9 @@ import { useAuth } from '@/components/auth-context';
 import { styled } from '@mui/material/styles';
 import CustomImage from '@/components/custom-image';
 import { BookEntity } from '@/lib/data/types';
-import { renderPrice } from '@/utils/utils';
+import { getParamsQueryString, renderPrice } from '@/utils/utils';
+import CustomLink from '@/components/custom-link';
+import { useRouter } from 'next/router';
 
 const StyledImageBox = styled(Box)(() => ({
     width: '150px',
@@ -41,6 +43,7 @@ const priceStyles = (theme) => ({
 });
 
 export default function Basket() {
+    const router = useRouter();
     const { user, setUser, setBookInBasket } = useAuth();
     const { loading, error, items, refetch } = useBooksByIds(user?.basketItems.map(({ bookId }) => bookId));
     const [countFields, setCountFields] = useState<Map<string, number>>(new Map());
@@ -68,6 +71,10 @@ export default function Basket() {
             .then(items => setUser({ ...user, basketItems: items }))
             .catch(() => {
             });
+    }
+
+    function onBookClick(book: BookEntity) {
+        router.push(`/books/details?${getParamsQueryString({ id: book.id, pageUrl: '/basket' })}`);
     }
 
     return (
@@ -106,7 +113,9 @@ export default function Basket() {
                                     <Box sx={styleVariables.hintFontSize}>
                                         {book.bookSeries.publishingHouse.name}. {book.bookSeries.name}
                                     </Box>
-                                    <Box sx={styleVariables.titleFontSize}><b>{book.name}</b></Box>
+                                    <Box sx={styleVariables.titleFontSize}>
+                                        <CustomLink onClick={() => onBookClick(book)}><b>{book.name}</b></CustomLink>
+                                    </Box>
 
                                     {!!book.discount && <Box display="flex"><Box sx={styleVariables.discountBoxStyles}>
                                       Знижка: {book.discount}%
