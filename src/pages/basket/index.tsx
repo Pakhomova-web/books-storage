@@ -95,10 +95,10 @@ export default function Basket() {
                 <TitleBoxStyled pb={1} m={1}>Кошик</TitleBoxStyled>
 
                 <Grid container display="flex" justifyContent="center">
-                    <Grid item xs={12} md={9} display="flex" flexDirection="column" gap={1}>
+                    <Grid item xs={12} sm={11} md={10} lg={9} display="flex" flexDirection="column" gap={1} px={{ xs: 1 }}>
                         {items.map((book, index) => (
-                            <>
-                                <Grid container key={index} px={2} spacing={1} position="relative">
+                            <Box key={index}>
+                                <Grid container spacing={1} position="relative">
                                     {!book.numberInStock &&
                                       <Box sx={styleVariables.fixedInStockBox(false)} ml={2}>
                                         Немає в наявності
@@ -145,7 +145,7 @@ export default function Basket() {
                                           flexDirection="column" gap={1}
                                           alignItems="center">
                                         Кількість
-                                        <Grid container spacing={2} display="flex" flexWrap="nowrap" alignItems="center"
+                                        <Grid container spacing={1} display="flex" flexWrap="nowrap" alignItems="center"
                                               justifyContent="center">
                                             <Grid item>
                                                 <IconButton
@@ -176,10 +176,10 @@ export default function Basket() {
                                     </Grid>
                                 </Grid>
 
-                                <Grid item xs={12}>
+                                <Grid item xs={12} mt={1}>
                                     <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
                                 </Grid>
-                            </>
+                            </Box>
                         ))}
 
                         <Grid container display="flex" alignItems="center" spacing={1} mb={2}>
