@@ -95,7 +95,8 @@ export default function Basket() {
                 <TitleBoxStyled pb={1} m={1}>Кошик</TitleBoxStyled>
 
                 <Grid container display="flex" justifyContent="center">
-                    <Grid item xs={12} sm={11} md={10} lg={9} display="flex" flexDirection="column" gap={1} px={{ xs: 1 }}>
+                    <Grid item xs={12} sm={11} md={10} lg={9} display="flex" flexDirection="column" gap={1}
+                          px={{ xs: 1 }}>
                         {items.map((book, index) => (
                             <Box key={index}>
                                 <Grid container spacing={1} position="relative">
@@ -128,7 +129,7 @@ export default function Basket() {
                                         <Box sx={styleVariables.hintFontSize}>
                                             {book.bookSeries.publishingHouse.name}. {book.bookSeries.name}
                                         </Box>
-                                        <Box sx={styleVariables.titleFontSize}>
+                                        <Box sx={styleVariables.titleFontSize} textAlign="center">
                                             <CustomLink
                                                 onClick={() => onBookClick(book)}><b>{book.name}</b></CustomLink>
                                         </Box>
@@ -184,10 +185,10 @@ export default function Basket() {
 
                         <Grid container display="flex" alignItems="center" spacing={1} mb={2}>
                             {!loading && <>
-                              <Grid item xs={9} md={10} display="flex" justifyContent="flex-end">
+                              <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end" textAlign="end">
                                 Сума замовлення без знижки:
                               </Grid>
-                              <Grid item xs={3} md={2} textAlign="center">
+                              <Grid item xs={5} sm={4} md={3} textAlign="center">
                                   {renderPrice(finalFullSum)}
                               </Grid>
 
@@ -195,10 +196,10 @@ export default function Basket() {
                                 <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
                               </Grid>
 
-                              <Grid item xs={9} md={10} display="flex" justifyContent="flex-end">
+                              <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end" textAlign="end">
                                 Знижка:
                               </Grid>
-                              <Grid item xs={3} md={2} textAlign="center">
+                              <Grid item xs={5} sm={4} md={3} textAlign="center">
                                   {renderPrice(finalFullSum - finalSumWithDiscounts)}
                               </Grid>
 
@@ -206,11 +207,11 @@ export default function Basket() {
                                 <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
                               </Grid>
 
-                              <Grid item xs={9} md={10} display="flex" justifyContent="flex-end"
-                                    sx={styleVariables.titleFontSize}>
+                              <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end"
+                                    sx={styleVariables.titleFontSize} textAlign="end">
                                 <b>Кінцева сума замовлення:</b>
                               </Grid>
-                              <Grid item xs={3} md={2} display="flex" justifyContent="center">
+                              <Grid item xs={5} sm={4} md={3} display="flex" justifyContent="center">
                                 <Box sx={priceStyles} textAlign="center">{renderPrice(finalSumWithDiscounts)}</Box>
                               </Grid>
 
