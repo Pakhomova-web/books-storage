@@ -29,7 +29,6 @@ import { getAuthorById } from '@/lib/graphql/queries/author/hook';
 import { getPublishingHouseById } from '@/lib/graphql/queries/publishing-house/hook';
 import { BookFilters } from '@/components/filters/book-filters';
 import { ApolloError } from '@apollo/client';
-import { useAuth } from '@/components/auth-context';
 import { TableKey } from '@/components/table/table-key';
 import { getLanguageById } from '@/lib/graphql/queries/language/hooks';
 import { getBookSeriesById } from '@/lib/graphql/queries/book-series/hook';
@@ -48,7 +47,6 @@ const backBoxStyles = {
 
 export default function Books() {
     const router = useRouter();
-    const { user } = useAuth();
     const [pageSettings, setPageSettings] = useState<IPageable>({
         order: 'asc', orderBy: '', page: 0, rowsPerPage: 25
     });
@@ -89,7 +87,7 @@ export default function Books() {
     }, [gettingError]);
 
     useEffect(() => {
-        updateOption({ ...router.query, archived: false });
+        updateOption(new BookFilter({ ...router.query, archived: false }));
     }, [router.query]);
 
     function updateOption(data: BookFilter, updateFilters = true) {

@@ -171,7 +171,7 @@ export class BookFilter {
             this.pageType = data.pageType;
             this.isbn = data.isbn;
             this.language = data.language;
-            this.authors = data.authors ? data.authors.split(',') : null;
+            this.authors = data.authors && typeof data.authors === 'string' ? data.authors.split(',') : null;
             this.isInStock = data.isInStock ? data.isInStock.toString() === 'true' : null;
             this.publishingHouse = data.publishingHouse;
             this.tags = data.tags;
