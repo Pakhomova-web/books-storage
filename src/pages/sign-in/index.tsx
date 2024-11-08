@@ -1,10 +1,9 @@
 import { Box, Button } from '@mui/material';
-import { useRouter } from 'next/router';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 
 import { authStyles } from '@/styles/auth';
 import CustomTextField from '@/components/form-fields/custom-text-field';
-import { pageStyles, primaryLightColor, borderRadius, positionRelative } from '@/constants/styles-variables';
+import { borderRadius, pageStyles, positionRelative, primaryLightColor } from '@/constants/styles-variables';
 import ErrorNotification from '@/components/error-notification';
 import Loading from '@/components/loading';
 import { useSignIn } from '@/lib/graphql/queries/auth/hook';
@@ -62,20 +61,17 @@ export default function SignIn() {
         }
     }, [email]);
 
-    async function onSubmit() {
-        if (isFormInvalid()) {
-            const values = formContext.getValues();
+    function onSubmit() {
+        if (!isFormInvalid()) {
+            const { email, password, firstName, lastName } = formContext.getValues();
 
-            try {
-                await signIn({
-                    email: values.email,
-                    password: values.password,
-                    firstName: values.firstName,
-                    lastName: values.lastName
-                });
-                openLoginModal();
-            } catch (_) {
-            }
+            signIn({ email, password, firstName, lastName })
+                .then(() => {
+                    formContext.reset();
+                    openLoginModal();
+                })
+                .catch(() => {
+                })
         }
     }
 
@@ -92,7 +88,8 @@ export default function SignIn() {
             <Loading show={loading}></Loading>
 
             <Box sx={pageStyles}>
-                <Box p={2} m={2} border={1} borderColor={primaryLightColor} borderRadius={borderRadius} sx={containerStyles}>
+                <Box p={2} m={2} border={1} borderColor={primaryLightColor} borderRadius={borderRadius}
+                     sx={containerStyles}>
                     <Box sx={authStyles.title} mb={2}>Реєстрація</Box>
 
                     <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
@@ -117,19 +114,18 @@ export default function SignIn() {
                             <CustomTextField fullWidth name="firstName" label="Ім'я"/>
 
                             <CustomTextField fullWidth name="lastName" label="Прізвище"/>
+
+                            <Button variant="contained"
+                                    fullWidth
+                                    disabled={isFormInvalid()}
+                                    onClick={onSubmit}>
+                                Створити аккаунт
+                            </Button>
                         </Box>
                     </FormContainer>
 
-                    <Box display="flex" alignItems="center" gap={1} mt={2} flexDirection="column">
-                        <Button variant="contained"
-                                fullWidth
-                                disabled={isFormInvalid()}
-                                onClick={onSubmit}>
-                            Створити аккаунт
-                        </Button>
-
+                    <Box display="flex" alignItems="center" gap={1} mt={1} flexDirection="column">
                         або
-
                         <Button variant="outlined" fullWidth onClick={openLoginModal}>Увійти в аккаунт</Button>
                     </Box>
 
