@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
 import { emailValidatorExp, passwordValidatorExp } from '@/constants/validators-exp';
 import { useAuth } from '@/components/auth-context';
+import { useRouter } from 'next/router';
 
 const containerStyles = {
     width: '400px',
@@ -18,6 +19,7 @@ const containerStyles = {
 };
 
 export default function SignIn() {
+    const router = useRouter();
     const formContext = useForm<{
         email: string,
         password: string,
@@ -69,6 +71,7 @@ export default function SignIn() {
                 .then(() => {
                     formContext.reset();
                     openLoginModal();
+                    router.push('/');
                 })
                 .catch(() => {
                 })
