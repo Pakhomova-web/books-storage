@@ -171,12 +171,12 @@ export class BookFilter {
             this.pageType = data.pageType;
             this.isbn = data.isbn;
             this.language = data.language;
-            this.authors = data.authors && typeof data.authors === 'string' ? data.authors.split(',') : null;
+            this.authors = data.authors && typeof data.authors === 'string' ? data.authors.split(',') : data.authors;
             this.isInStock = data.isInStock ? data.isInStock.toString() === 'true' : null;
             this.publishingHouse = data.publishingHouse;
             this.tags = data.tags;
             this.archived = data.archived !== undefined ? data.archived : false;
-            this.ages = data.ages ? data.ages.split(',').map(age => +age) : null;
+            this.ages = data.ages && typeof data.authors === 'string' ? data.ages.split(',').map(age => +age) : data.ages;
         }
     }
 }
