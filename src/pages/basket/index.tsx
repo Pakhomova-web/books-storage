@@ -184,7 +184,7 @@ export default function Basket() {
                         ))}
 
                         <Grid container display="flex" alignItems="center" spacing={1} mb={2}>
-                            {!loading && <>
+                            {!loading && !!items?.length && <>
                               <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end" textAlign="end">
                                 Сума замовлення без знижки:
                               </Grid>
