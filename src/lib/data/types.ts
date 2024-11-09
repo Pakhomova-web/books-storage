@@ -176,7 +176,7 @@ export class BookFilter {
             this.publishingHouse = data.publishingHouse;
             this.tags = data.tags;
             this.archived = data.archived !== undefined ? data.archived : false;
-            this.ages = data.ages && typeof data.authors === 'string' ? data.ages.split(',').map(age => +age) : data.ages;
+            this.ages = data.ages && typeof data.ages === 'string' ? data.ages.split(',').map(age => +age) : data.ages;
         }
     }
 }
