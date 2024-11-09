@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton } from '@mui/material';
+import { Box, Button, Grid, IconButton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
@@ -41,6 +41,12 @@ const priceStyles = (theme) => ({
     padding: boxPadding,
     border: `1px solid ${primaryLightColor}`
 });
+
+const emptyBasketImageBoxStyles = {
+    width: '100px',
+    height: '100px',
+    opacity: 0.5
+};
 
 export default function Basket() {
     const router = useRouter();
@@ -184,41 +190,54 @@ export default function Basket() {
                         ))}
 
                         <Grid container display="flex" alignItems="center" spacing={1} mb={2}>
-                            {!loading && !!items?.length && <>
-                              <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end" textAlign="end">
-                                Сума замовлення без знижки:
-                              </Grid>
-                              <Grid item xs={5} sm={4} md={3} textAlign="center">
-                                  {renderPrice(finalFullSum)}
-                              </Grid>
+                            {!loading && (!!items?.length ?
+                                <>
+                                    <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end"
+                                          textAlign="end">
+                                        Сума замовлення без знижки:
+                                    </Grid>
+                                    <Grid item xs={5} sm={4} md={3} textAlign="center">
+                                        {renderPrice(finalFullSum)}
+                                    </Grid>
 
-                              <Grid item xs={12}>
-                                <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
-                              </Grid>
+                                    <Grid item xs={12}>
+                                        <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
+                                    </Grid>
 
-                              <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end" textAlign="end">
-                                Знижка:
-                              </Grid>
-                              <Grid item xs={5} sm={4} md={3} textAlign="center">
-                                  {renderPrice(finalFullSum - finalSumWithDiscounts)}
-                              </Grid>
+                                    <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end"
+                                          textAlign="end">
+                                        Знижка:
+                                    </Grid>
+                                    <Grid item xs={5} sm={4} md={3} textAlign="center">
+                                        {renderPrice(finalFullSum - finalSumWithDiscounts)}
+                                    </Grid>
 
-                              <Grid item xs={12}>
-                                <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
-                              </Grid>
+                                    <Grid item xs={12}>
+                                        <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
+                                    </Grid>
 
-                              <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end"
-                                    sx={styleVariables.titleFontSize} textAlign="end">
-                                <b>Кінцева сума замовлення:</b>
-                              </Grid>
-                              <Grid item xs={5} sm={4} md={3} display="flex" justifyContent="center">
-                                <Box sx={priceStyles} textAlign="center">{renderPrice(finalSumWithDiscounts)}</Box>
-                              </Grid>
+                                    <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end"
+                                          sx={styleVariables.titleFontSize} textAlign="end">
+                                        <b>Кінцева сума замовлення:</b>
+                                    </Grid>
+                                    <Grid item xs={5} sm={4} md={3} display="flex" justifyContent="center">
+                                        <Box sx={priceStyles}
+                                             textAlign="center">{renderPrice(finalSumWithDiscounts)}</Box>
+                                    </Grid>
 
-                              <Grid item xs={12}>
-                                <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
-                              </Grid>
-                            </>}
+                                    <Grid item xs={12}>
+                                        <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
+                                    </Grid>
+                                </> :
+                                <Grid item display="flex" width="100%" alignItems="center" flexDirection="column" gap={2} mt={3}>
+                                    <Box sx={emptyBasketImageBoxStyles}>
+                                        <CustomImage imageLink="/empty_basket.png"></CustomImage>
+                                    </Box>
+                                    <Box sx={styleVariables.titleFontSize}>Кошик пустий</Box>
+                                    <Button variant="outlined" onClick={() => router.push('/')}>
+                                        До вибору книг
+                                    </Button>
+                                </Grid>)}
                         </Grid>
                     </Grid>
                 </Grid>
