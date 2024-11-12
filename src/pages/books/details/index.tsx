@@ -5,10 +5,13 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { styled } from '@mui/material/styles';
 import ProfileIcon from '@mui/icons-material/AccountCircle';
 import { ApolloError } from '@apollo/client';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 import { borderRadius, boxPadding, pageStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
-import { getBookComments, getBooksFromSeries, useBook } from '@/lib/graphql/queries/book/hook';
+import { getBookComments, getBooksByAuthors, getBooksFromSeries, useBook } from '@/lib/graphql/queries/book/hook';
 import ErrorNotification from '@/components/error-notification';
 import { TableKey } from '@/components/table/table-key';
 import { BookEntity, CommentEntity } from '@/lib/data/types';
@@ -22,8 +25,6 @@ import CommentForm from '@/components/comment-form';
 import SocialMediaBox from '@/components/social-media-box';
 import { useAuth } from '@/components/auth-context';
 import BooksList from '@/components/books-list';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
     height: '40px',
@@ -68,6 +69,8 @@ export default function BookDetails() {
     const [comments, setComments] = useState<CommentEntity[]>([]);
     const [booksFromSeries, setBooksFromSeries] = useState<BookEntity[]>([]);
     const [loadingBooksFromSeries, setLoadingBooksFromSeries] = useState<boolean>(false);
+    const [booksByAuthor, setBooksByAuthor] = useState<BookEntity[]>([]);
+    const [loadingBooksByAuthor, setLoadingBooksByAuthor] = useState<boolean>(false);
     const [loadingComments, setLoadingComments] = useState<boolean>(false);
     const [commentsError, setCommentsError] = useState<ApolloError>();
     const [imageIds, setImageIds] = useState<string[] | null>();
@@ -75,6 +78,15 @@ export default function BookDetails() {
     useEffect(() => {
         if (book) {
             refetchComments(true);
+            setBooksByAuthor([]);
+            if (book.authors.length === 1) {
+                setLoadingBooksByAuthor(true);
+                getBooksByAuthors(book.authors[0].id, 5, book.bookSeries.name !== '-' ? book.bookSeries.id : null)
+                    .then(books => {
+                        setLoadingBooksByAuthor(false);
+                        setBooksByAuthor(books.filter(b => b.id !== book.id));
+                    });
+            }
             setBooksFromSeries([]);
             setLoadingBooksFromSeries(true);
             getBooksFromSeries(book.bookSeries.id).then(books => {
@@ -400,6 +412,25 @@ export default function BookDetails() {
                             </Grid>}
                       </Grid>
                     </Grid>
+
+                      {book.authors.length === 1 && !!booksByAuthor?.length && <Grid item xs={12} px={1}>
+                        <Box sx={styleVariables.sectionTitle} p={1} mb={2}>
+                          Інші книги цього автора
+                        </Box>
+
+                        <Grid container spacing={2} sx={styleVariables.positionRelative} px={1} display="flex"
+                              justifyContent="center">
+                          <Loading show={loadingBooksByAuthor}></Loading>
+
+                          <BooksList items={booksByAuthor} onClick={onBookClick}></BooksList>
+
+                          <Grid item xs={12} textAlign="center">
+                            <Button variant="outlined"
+                                    onClick={() => router.push(`/books?authors=${book.authors[0].id}`)}>
+                              Подивитися усі книги<ArrowForwardIcon/></Button>
+                          </Grid>
+                        </Grid>
+                      </Grid>}
                   </Grid>
                 }
 

@@ -11,7 +11,7 @@ import {
     addBookInBasketQuery,
     approveComment,
     bookByIdQuery,
-    bookCommentsQuery,
+    bookCommentsQuery, booksByAuthor,
     booksByIdsQuery,
     booksFromSeries,
     booksQuery,
@@ -54,6 +54,16 @@ export async function getBooksFromSeries(bookSeriesId: string) {
         query: booksFromSeries,
         fetchPolicy: 'no-cache',
         variables: { bookSeriesId }
+    });
+
+    return items;
+}
+
+export async function getBooksByAuthors(authorId: string, rowsPerPage: number, excludeBookSeriesId?: string) {
+    const { data: { items } } = await apolloClient.query({
+        query: booksByAuthor,
+        fetchPolicy: 'no-cache',
+        variables: { authorId, rowsPerPage, excludeBookSeriesId }
     });
 
     return items;

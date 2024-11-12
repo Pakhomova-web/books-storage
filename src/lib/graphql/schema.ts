@@ -143,6 +143,7 @@ const typeDefs =  /* GraphQL */ `
         bookSeriesByIdQuery(id: ID!): BookSeries
         bookComments(id: ID!, page: Int!, rowsPerPage: Int!): [Comment!]
         booksFromSeries(bookSeriesId: ID!): [Book!]
+        booksByAuthor(authorId: ID!, rowsPerPage: Int!, excludeBookSeriesId: ID): [Book!]
         booksWithNotApprovedComments(pageSettings: PageableInput): BookSubList
         booksByIds(ids: [ID!]): [Book!]
 

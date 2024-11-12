@@ -231,6 +231,30 @@ export async function getBooksFromSeries(bookSeriesId: string) {
         .sort({ numberInStock: 'desc' });
 }
 
+export async function getBooksByAuthor(authorId: string, rowsPerPage: number, excludeBookSeriesId?: string) {
+    if (!authorId) {
+        throw new GraphQLError(`No Books found`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+
+    return Book
+        .find({ authors: authorId, ...(excludeBookSeriesId ? { bookSeries: { $ne: excludeBookSeriesId } } : {}) })
+        .sort({ numberInStock: 'desc' })
+        .limit(rowsPerPage)
+        .populate({
+            path: 'bookSeries',
+            populate: {
+                path: 'publishingHouse'
+            }
+        })
+        .populate('bookType')
+        .populate('pageType')
+        .populate('coverType')
+        .populate('language')
+        .populate('authors');
+}
+
 export async function getBooksByIds(ids: string[]) {
     if (!ids?.length) {
         return [];
