@@ -103,7 +103,7 @@ const StyledMenuContainer = styled(Grid)(({ theme }) => ({
     }
 }));
 
-export default function SettingsMenu({ children, activeUrl, onAddClick = () => {} }) {
+export default function SettingsMenu({ children, activeUrl, onAddClick = null }) {
     const router = useRouter();
 
     function navigateTo(url: string) {

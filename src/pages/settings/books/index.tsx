@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import BooksSettingsTable from '@/components/table/books-settings-table';
 import SettingsMenu from '@/pages/settings/settings-menu';
 import Loading from '@/components/loading';
 import { downloadCsv, isAdmin, renderPrice } from '@/utils/utils';
 import { Box, Button } from '@mui/material';
-import { pageStyles, redLightColor, styleVariables } from '@/constants/styles-variables';
+import { redLightColor, styleVariables } from '@/constants/styles-variables';
 import { BookFilters } from '@/components/filters/book-filters';
 import { BookEntity, BookFilter, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
