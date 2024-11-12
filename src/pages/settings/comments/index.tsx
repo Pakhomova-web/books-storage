@@ -10,6 +10,7 @@ import { useApproveComment, useRemoveComment, useBooksComments } from '@/lib/gra
 import Loading from '@/components/loading';
 import ErrorNotification from '@/components/error-notification';
 import CustomModal from '@/components/modals/custom-modal';
+import SettingsMenu from '@/pages/settings/settings-menu';
 
 const CommentStyledGrid = styled(Grid)(() => ({
     display: 'flex',
@@ -78,7 +79,7 @@ export default function Comments() {
     }
 
     return (
-        <Box sx={styleVariables.positionRelative}>
+        <SettingsMenu activeUrl="comments">
             <Loading show={loading}></Loading>
 
             {!!items?.length && items.map((item, index) => (
@@ -141,6 +142,6 @@ export default function Comments() {
                   {errorApproving && <ErrorNotification error={errorApproving}></ErrorNotification>}
                   {errorRemoving && <ErrorNotification error={errorRemoving}></ErrorNotification>}
               </CustomModal>}
-        </Box>
+        </SettingsMenu>
     );
 }

@@ -14,6 +14,7 @@ import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 import { isAdmin } from '@/utils/utils';
 import { useAuth } from '@/components/auth-context';
+import SettingsMenu from '@/pages/settings/settings-menu';
 
 export default function Languages() {
     const { user, checkAuth } = useAuth();
@@ -85,11 +86,11 @@ export default function Languages() {
     }
 
     return (
-        <Box sx={positionRelative}>
+        <SettingsMenu activeUrl="languages" onAddClick={onAdd}>
             <Loading show={loading || deleting}></Loading>
 
             {isAdmin(user) &&
-              <Box sx={pageStyles}>
+              <>
                 <NameFiltersPanel tableKeys={tableKeys}
                                   onApply={(filters: LanguageEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
@@ -105,13 +106,6 @@ export default function Languages() {
                              withFilters={true}
                              onRowClick={item => onEdit(item)}>
                     {error && <ErrorNotification error={error}></ErrorNotification>}
-
-                    {isAdmin(user) &&
-                      <Box sx={styleVariables.buttonsContainer}>
-                        <Button variant="outlined" onClick={() => onAdd()}>
-                          <AddIcon></AddIcon>Додати мову
-                        </Button>
-                      </Box>}
                 </CustomTable>
 
                   {(openNewModal || selectedItem) &&
@@ -119,8 +113,8 @@ export default function Languages() {
                                    item={selectedItem}
                                    isAdmin={isAdmin(user)}
                                    onClose={(updated = false) => refreshData(updated)}></LanguageModal>}
-              </Box>
+              </>
             }
-        </Box>
+        </SettingsMenu>
     );
 }

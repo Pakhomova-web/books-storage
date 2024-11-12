@@ -15,16 +15,8 @@ import Badge from '@mui/material/Badge';
 
 import { useAuth } from '@/components/auth-context';
 import { styleVariables } from '@/constants/styles-variables';
-import SettingsMenu, { settingsList } from '@/components/settings-menu';
-import { SettingListItem } from '@/components/types';
 import { isAdmin } from '@/utils/utils';
 import LoginModal from '@/components/login-modal';
-
-const toolbarTitle = {
-    textWrap: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis'
-};
 
 enum MainMenuItem {
     home,
@@ -33,13 +25,7 @@ enum MainMenuItem {
     basket
 }
 
-interface IProps {
-    showSettingsMenu: boolean,
-    attachedSettingsMenu: boolean,
-    changeDisplayingSettings: ({ show, attached }) => void
-}
-
-export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, changeDisplayingSettings }: IProps) {
+export default function CustomToolbar() {
     const { user, logout, openLoginModal, setOpenLoginModal } = useAuth();
     const router = useRouter();
     const theme = useTheme();
@@ -47,7 +33,6 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
     const [anchorMenuEl, setAnchorMenuEl] = useState<HTMLElement>();
     const [selectedMenuItem, setSelectedMenuItem] = useState<MainMenuItem>();
     const pathname = usePathname();
-    const [activeSettingsTab, setActiveSettingsTab] = useState<SettingListItem>();
     const [mobileMenuItems] = useState([
         { title: 'Профіль', onClick: () => goToProfilePage() },
         { title: 'Вийти', onClick: () => onLogoutClick() }
@@ -55,12 +40,11 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
 
     useEffect(() => {
         if (pathname.includes('settings')) {
-            setActiveSettingsTab(settingsList.find(i => i.link === pathname.split('/settings/')[1]));
             setSelectedMenuItem(MainMenuItem.settings);
         } else {
             if (pathname.includes('profile')) {
                 setSelectedMenuItem(MainMenuItem.profile);
-            } else if (pathname.includes('login') || pathname.includes('sign-in')) {
+            } else if (pathname.includes('sign-in')) {
                 setSelectedMenuItem(null);
             } else if (pathname === '/') {
                 setSelectedMenuItem(MainMenuItem.home);
@@ -69,7 +53,6 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
             } else {
                 setSelectedMenuItem(null);
             }
-            setActiveSettingsTab(null);
         }
     }, [pathname]);
 
@@ -78,19 +61,11 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
         setAnchorMenuEl(event.currentTarget);
     }
 
-    function changeDisplayingSettingsMenu() {
-        if (activeSettingsTab) {
-            changeDisplayingSettings({ show: !mobileMatches, attached: !mobileMatches });
-        }
-    }
-
-    useEffect(() => changeDisplayingSettingsMenu(), [activeSettingsTab]);
 
     useEffect(() => {
         if (!mobileMatches) {
             setAnchorMenuEl(null);
         }
-        changeDisplayingSettingsMenu();
     }, [mobileMatches]);
 
     function onLogoutClick() {
@@ -105,17 +80,8 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
     }
 
     function goToPage(url: string) {
-        toggleSettingsMenu(true);
         closeMenu();
         router.push(url);
-    }
-
-    function toggleSettingsMenu(close = false) {
-        if (close || showSettingsMenu) {
-            changeDisplayingSettings({ show: false, attached: false });
-        } else {
-            changeDisplayingSettings({ show: true, attached: pathname.includes('settings') && !mobileMatches });
-        }
     }
 
     function goToProfilePage() {
@@ -124,18 +90,6 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
 
     function closeMenu() {
         setAnchorMenuEl(null);
-    }
-
-    function handleClickOnSettings() {
-        closeMenu();
-        toggleSettingsMenu();
-    }
-
-    function onSettingItemClick(item: SettingListItem) {
-        if (!attachedSettingsMenu) {
-            changeDisplayingSettings({ show: !mobileMatches, attached: !mobileMatches });
-        }
-        setActiveSettingsTab(item);
     }
 
     function goToLikedBooks() {
@@ -163,13 +117,9 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
                           <IconButton color="inherit"
                                       className={selectedMenuItem === MainMenuItem.settings ? 'selectedToolbarMenuItem' : ''}
                                       aria-label="settings"
-                                      onClick={handleClickOnSettings}>
+                                      onClick={() => goToPage('/settings/books')}>
                             <SettingsIcon/>
                           </IconButton>}
-                    </Box>
-
-                    <Box sx={toolbarTitle}>
-                        {activeSettingsTab?.title || ''}
                     </Box>
 
                     <Box sx={styleVariables.flexNoWrap}>
@@ -229,10 +179,6 @@ export default function CustomToolbar({ showSettingsMenu, attachedSettingsMenu, 
             </AppBar>
 
             <LoginModal open={openLoginModal} onClose={() => setOpenLoginModal(false)}></LoginModal>
-
-            {isAdmin(user) && (showSettingsMenu || attachedSettingsMenu) &&
-              <SettingsMenu activeSettingsTab={activeSettingsTab}
-                            onMenuItemClick={(item: SettingListItem) => onSettingItemClick(item)}/>}
         </>
     );
 }

@@ -37,7 +37,7 @@ export default function SortFiltersContainer<T>(props: ISortFiltersContainerProp
     }
 
     return <>
-        <Grid container spacing={1} sx={filtersPanelContainer} p={2}>
+        <Grid container sx={filtersPanelContainer} p={1}>
             {(mobileMatches || props.showAlwaysSorting) && sortKeys?.length ?
                 <>
                     <Grid item xs={6}>{renderFiltersButton(props.children)}</Grid>

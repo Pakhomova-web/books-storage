@@ -4,7 +4,7 @@ import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import { IOrderFilter, IPageable, OrderEntity } from '@/lib/data/types';
 import { isAdmin } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
-import { pageStyles, positionRelative, redLightColor, styleVariables } from '@/constants/styles-variables';
+import { pageStyles, redLightColor, styleVariables } from '@/constants/styles-variables';
 import { useDeleteOrder, useOrders } from '@/lib/graphql/queries/order/hook';
 import { ApolloError } from '@apollo/client';
 import Loading from '@/components/loading';
@@ -13,6 +13,7 @@ import ErrorNotification from '@/components/error-notification';
 import AddIcon from '@mui/icons-material/Add';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 import OrderModal from '@/components/modals/order-modal';
+import SettingsMenu from '@/pages/settings/settings-menu';
 
 export default function Orders() {
     const { user, checkAuth } = useAuth();
@@ -112,11 +113,11 @@ export default function Orders() {
     }
 
     return (
-        <Box sx={positionRelative}>
+        <SettingsMenu activeUrl="orders" onAddClick={onAdd}>
             <Loading show={loading || deleting || downloadingCsv}></Loading>
 
             {isAdmin(user) &&
-              <Box sx={pageStyles}>
+              <>
                 <NameFiltersPanel tableKeys={tableKeys}
                                   onApply={(filters: IOrderFilter) => setFilters(filters)}
                                   pageSettings={pageSettings}
@@ -135,13 +136,6 @@ export default function Orders() {
                              totalCount={totalCount}
                              onRowClick={(item: OrderEntity) => onEdit(item)}>
                     {error && <ErrorNotification error={error}></ErrorNotification>}
-
-                    {isAdmin(user) &&
-                      <Box sx={styleVariables.buttonsContainer}>
-                        <Button variant="outlined" onClick={() => onAdd()}>
-                          <AddIcon></AddIcon>Додати замовлення
-                        </Button>
-                      </Box>}
                 </CustomTable>
 
                   {openNewModal &&
@@ -149,8 +143,8 @@ export default function Orders() {
                                 item={selectedItem}
                                 isAdmin={isAdmin(user)}
                                 onClose={(updated = false) => refreshData(updated)}></OrderModal>}
-              </Box>
+              </>
             }
-        </Box>
+        </SettingsMenu>
     );
 }

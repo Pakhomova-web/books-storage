@@ -14,6 +14,7 @@ import { BookSeriesFilters } from '@/components/filters/book-series-filters';
 import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 import { isAdmin } from '@/utils/utils';
 import { useAuth } from '@/components/auth-context';
+import SettingsMenu from '@/pages/settings/settings-menu';
 
 export default function BookSeries() {
     const { user, checkAuth } = useAuth();
@@ -93,11 +94,11 @@ export default function BookSeries() {
     }
 
     return (
-        <Box sx={positionRelative}>
+        <SettingsMenu activeUrl="book-series" onAddClick={onAdd}>
             <Loading show={loading || deleting}></Loading>
 
             {isAdmin(user) &&
-              <Box sx={pageStyles}>
+              <>
                 <BookSeriesFilters tableKeys={tableKeys}
                                    onApply={(filters: BookSeriesFilter) => setFilters(filters)}
                                    pageSettings={pageSettings}
@@ -115,13 +116,6 @@ export default function BookSeries() {
                              totalCount={totalCount}
                              onRowClick={(item: BookSeriesEntity) => onEdit(item)}>
                     {error && <ErrorNotification error={error}></ErrorNotification>}
-
-                    {isAdmin(user) &&
-                      <Box sx={styleVariables.buttonsContainer}>
-                        <Button variant="outlined" onClick={() => onAdd()}>
-                          <AddIcon></AddIcon>Додати серію
-                        </Button>
-                      </Box>}
                 </CustomTable>
 
                   {(openNewModal || selectedItem) &&
@@ -129,8 +123,8 @@ export default function BookSeries() {
                                      item={selectedItem}
                                      isAdmin={isAdmin(user)}
                                      onClose={(updated = false) => refreshData(updated)}></BookSeriesModal>}
-              </Box>
+              </>
             }
-        </Box>
+        </SettingsMenu>
     );
 }

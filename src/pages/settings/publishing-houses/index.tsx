@@ -13,7 +13,8 @@ import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 import { isAdmin } from '@/utils/utils';
 import { useAuth } from '@/components/auth-context';
-import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
+import { styleVariables } from '@/constants/styles-variables';
+import SettingsMenu from '@/pages/settings/settings-menu';
 
 export default function PublishingHouses() {
     const { user, checkAuth } = useAuth();
@@ -84,11 +85,11 @@ export default function PublishingHouses() {
     }
 
     return (
-        <Box sx={positionRelative}>
+        <SettingsMenu activeUrl="publishing-houses" onAddClick={onAdd}>
             <Loading show={loading || deleting}></Loading>
 
             {isAdmin(user) &&
-              <Box sx={pageStyles}>
+              <>
                 <NameFiltersPanel tableKeys={tableKeys}
                                   onApply={(filters: PublishingHouseEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
@@ -104,13 +105,6 @@ export default function PublishingHouses() {
                              withFilters={true}
                              onRowClick={(item: PublishingHouseEntity) => onEdit(item)}>
                     {error && <ErrorNotification error={error}></ErrorNotification>}
-
-                    {isAdmin(user) &&
-                      <Box sx={styleVariables.buttonsContainer}>
-                        <Button variant="outlined" onClick={() => onAdd()}>
-                          <AddIcon></AddIcon>Додати Видавництво
-                        </Button>
-                      </Box>}
                 </CustomTable>
 
                   {(selectedItem || openNewModal) &&
@@ -118,8 +112,8 @@ export default function PublishingHouses() {
                                           item={selectedItem}
                                           isAdmin={isAdmin(user)}
                                           onClose={(updated = false) => refreshData(updated)}></PublishingHouseModal>}
-              </Box>
+              </>
             }
-        </Box>
+        </SettingsMenu>
     );
 }

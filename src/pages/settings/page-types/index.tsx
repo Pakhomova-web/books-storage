@@ -11,9 +11,10 @@ import Loading from '@/components/loading';
 import PageTypeModal from '@/components/modals/page-type-modal';
 import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
-import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
+import { pageStyles, styleVariables } from '@/constants/styles-variables';
 import { isAdmin } from '@/utils/utils';
 import { useAuth } from '@/components/auth-context';
+import SettingsMenu from '@/pages/settings/settings-menu';
 
 export default function PageTypes() {
     const { user, checkAuth } = useAuth();
@@ -85,11 +86,11 @@ export default function PageTypes() {
     }
 
     return (
-        <Box sx={positionRelative}>
+        <SettingsMenu activeUrl="page-types" onAddClick={onAdd}>
             <Loading show={loading || deleting}></Loading>
 
             {isAdmin(user) &&
-              <Box sx={pageStyles}>
+              <>
                 <NameFiltersPanel tableKeys={tableKeys}
                                   onApply={(filters: PageTypeEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
@@ -105,13 +106,6 @@ export default function PageTypes() {
                              withFilters={true}
                              onRowClick={(item: PageTypeEntity) => onEdit(item)}>
                     {error && <ErrorNotification error={error}></ErrorNotification>}
-
-                    {isAdmin(user) &&
-                      <Box sx={styleVariables.buttonsContainer}>
-                        <Button variant="outlined" onClick={() => onAdd()}>
-                          <AddIcon></AddIcon>Додати тип сторінок
-                        </Button>
-                      </Box>}
                 </CustomTable>
 
                   {(openNewModal || selectedItem) &&
@@ -119,8 +113,8 @@ export default function PageTypes() {
                                    item={selectedItem}
                                    isAdmin={isAdmin(user)}
                                    onClose={(updated = false) => refreshData(updated)}></PageTypeModal>}
-              </Box>
+              </>
             }
-        </Box>
+        </SettingsMenu>
     );
 }
