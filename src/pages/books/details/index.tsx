@@ -212,7 +212,7 @@ export default function BookDetails() {
 
                             {!!book.discount &&
                               <Box
-                                sx={styleVariables.fixedDiscountBox(!!book.numberInStock)}>Знижка: {book.discount}%</Box>}
+                                sx={styleVariables.fixedDiscountBox(!book.numberInStock)}>Знижка: {book.discount}%</Box>}
 
                           <Box sx={imageBoxStyles(!!book.imageIds.length)} mb={1}
                                onClick={() => setImageIds(book.imageIds)}>
@@ -242,7 +242,7 @@ export default function BookDetails() {
                       </Grid>
 
                       <Grid container mb={2} spacing={1} display="flex">
-                        <Grid item xs={12} md={6} textAlign="center">
+                        <Grid item xs={12} md={6} textAlign="center" display="flex" gap={1} flexDirection="column">
                             {isBookInBasket(book) ?
                                 <Button variant="outlined" fullWidth disabled={true}>В кошику</Button> :
                                 <Button variant="outlined" fullWidth

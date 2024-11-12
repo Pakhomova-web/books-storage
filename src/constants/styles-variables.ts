@@ -17,9 +17,9 @@ const discountBox = {
 };
 
 export const styleVariables = {
-    fixedDiscountBox: (withDiscount = false) => ({
+    fixedDiscountBox: (theSecondMark = false) => ({
         position: 'absolute',
-        top: withDiscount ? '30px' : 0,
+        top: theSecondMark ? '35px' : 0,
         left: 0,
         ...discountBox
     }),
