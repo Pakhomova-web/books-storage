@@ -19,7 +19,7 @@ import { useAuth } from '@/components/auth-context';
 import { styled } from '@mui/material/styles';
 import CustomImage from '@/components/custom-image';
 import { BookEntity } from '@/lib/data/types';
-import { getParamsQueryString, renderPrice } from '@/utils/utils';
+import { getParamsQueryString, isAdmin, renderPrice } from '@/utils/utils';
 import CustomLink from '@/components/custom-link';
 import { useRouter } from 'next/router';
 
@@ -91,6 +91,32 @@ export default function Basket() {
 
     function onBookClick(book: BookEntity) {
         router.push(`/books/details?${getParamsQueryString({ id: book.id, pageUrl: '/basket' })}`);
+    }
+
+    function onCopyOrderClick() {
+        let value = items
+            .map((item, i) =>
+                `${item.bookSeries !== '-' ?
+                    `${!i || item.bookSeries.id !== items[i - 1].bookSeries.id ? `${item.bookSeries.name} (${item.bookSeries.publishingHouse.name})\n\t` : '\t'}` : ''
+                }${item.name} (${countFields.get(item.id)} шт по ${renderPrice(item.price)})`)
+            .join('\n');
+        const selBox = document.createElement('textarea');
+
+        value = `${value}\n\nСума замовлення: ${renderPrice(finalFullSum)}`;
+        if (finalSumWithDiscounts) {
+            value = `${value}\nЗнижка: ${renderPrice(finalFullSum - finalSumWithDiscounts)}`;
+            value = `${value}\nКінцева сума замовлення зі знижкою: ${renderPrice(finalSumWithDiscounts)}`;
+        }
+        selBox.style.position = 'fixed';
+        selBox.style.left = '0';
+        selBox.style.top = '0';
+        selBox.style.opacity = '0';
+        selBox.value = value;
+        document.body.appendChild(selBox);
+        selBox.focus();
+        selBox.select();
+        document.execCommand('copy');
+        document.body.removeChild(selBox);
     }
 
     return (
@@ -229,7 +255,8 @@ export default function Basket() {
                                         <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
                                     </Grid>
                                 </> :
-                                <Grid item display="flex" width="100%" alignItems="center" flexDirection="column" gap={2} mt={3}>
+                                <Grid item display="flex" width="100%" alignItems="center" flexDirection="column"
+                                      gap={2} mt={3}>
                                     <Box sx={emptyBasketImageBoxStyles}>
                                         <CustomImage imageLink="/empty_basket.png"></CustomImage>
                                     </Box>
@@ -244,6 +271,12 @@ export default function Basket() {
 
                 {error && <ErrorNotification error={error}/>}
                 {updatingError && <ErrorNotification error={updatingError}/>}
+
+                {isAdmin(user) && !!items.length &&
+                  <Box display="flex" mb={3} justifyContent="center">
+                    <Button variant="outlined" onClick={onCopyOrderClick}>Скопіювати зміст замовлення</Button>
+                  </Box>
+                }
             </Box>
         </Box>
     );

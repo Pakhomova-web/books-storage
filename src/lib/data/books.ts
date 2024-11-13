@@ -273,7 +273,7 @@ export async function getBooksByIds(ids: string[]) {
         .populate('coverType')
         .populate('language')
         .populate('authors')
-        .sort({ numberInStock: 'desc' });
+        .sort({ bookSeries: 'desc', numberInStock: 'desc' });
 }
 
 export async function getBooksWithNotApprovedComments(pageSettings?: IPageable) {
