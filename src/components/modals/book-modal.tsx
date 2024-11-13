@@ -77,7 +77,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             publishingHouseId: item?.bookSeries.publishingHouse.id,
             imageIds: item?.id ? item.imageIds : null,
             tags: item?.tags,
-            ages: item?.ages,
+            ages: item?.ages || [],
             discount: item?.discount,
             finalPrice: item ? +(item.price * (100 - item.discount) / 100).toFixed(2) : 0
         }

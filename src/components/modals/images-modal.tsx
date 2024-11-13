@@ -17,18 +17,12 @@ interface IImagesModalProps {
 export default function ImagesModal(props: IImagesModalProps) {
     return (
         <CustomModal open={props.open} onClose={props.onClose} big={true}>
-            <Grid container spacing={2} display="flex" justifyContent="center">
-                <Grid item xs={12} md={3}>
-                    <StyledImageBox>
-                        <CustomImage imageId={props.imageIds[0]}></CustomImage>
-                    </StyledImageBox>
-                </Grid>
-
+            <Grid container spacing={1} display="flex" justifyContent="center">
                 {props.imageIds.map((imageId, index) => (
-                    !!index && <Grid key={index} item xs={12} md={8}>
-                      <StyledImageBox>
-                        <CustomImage imageId={imageId}></CustomImage>
-                      </StyledImageBox>
+                    <Grid key={index} item xs={12} md={6}>
+                        <StyledImageBox>
+                            <CustomImage imageId={imageId}></CustomImage>
+                        </StyledImageBox>
                     </Grid>
                 ))}
             </Grid>
