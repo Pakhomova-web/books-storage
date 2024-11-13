@@ -174,7 +174,7 @@ export default function SettingsMenu({ children, activeUrl, onAddClick = null })
 
                 <Grid item xs={12} md={9} lg={10}
                       sx={theme => ({ [theme.breakpoints.down('md')]: { display: !showMenu ? 'block' : 'none' } })}>
-                    {!showMenu &&
+                    {!showMenu && !!activeMenuItems &&
                       <Box sx={styleVariables.sectionTitle} gap={1} display="flex" alignItems="center" p={1}
                            justifyContent="center">
                         <Box sx={imageBoxStyles}>
