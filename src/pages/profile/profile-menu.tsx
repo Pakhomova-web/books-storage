@@ -31,7 +31,7 @@ const ProfileMenuContainerStyledGrid = styled(Grid)(({ theme }) => ({
     }
 }));
 
-const ProfileMenuItemStyledGrid = styled(Grid)(({ theme }) => ({
+const ProfileMenuItemStyledGrid = styled(Grid)(() => ({
     display: 'flex',
     alignItems: 'center',
     borderBottom: `1px solid ${primaryLightColor}`,

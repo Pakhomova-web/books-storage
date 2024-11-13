@@ -1,10 +1,15 @@
-import { Box, Grid, IconButton } from '@mui/material';
+import { Backdrop, Box, Grid, IconButton, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
+import AddIcon from '@mui/icons-material/Add';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import MenuIcon from '@mui/icons-material/Menu';
+
 import { pageStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import CustomImage from '@/components/custom-image';
-import AddIcon from '@mui/icons-material/Add';
+import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const menuItems = [
     {
@@ -80,13 +85,18 @@ const imageBoxStyles = {
 };
 
 const SettingsMenuContainerStyledGrid = styled(Grid)(({ theme }) => ({
+    backgroundColor: 'white',
     [theme.breakpoints.up('md')]: {
         position: 'sticky',
+        top: 0
+    },
+    [theme.breakpoints.down('md')]: {
+        position: 'absolute',
         top: 0
     }
 }));
 
-const SettingsMenuItemStyledGrid = styled(Grid)(({ theme }) => ({
+const SettingsMenuItemStyledGrid = styled(Grid)(() => ({
     display: 'flex',
     alignItems: 'center',
     borderBottom: `1px solid ${primaryLightColor}`,
@@ -105,8 +115,19 @@ const StyledMenuContainer = styled(Grid)(({ theme }) => ({
 
 export default function SettingsMenu({ children, activeUrl, onAddClick = null }) {
     const router = useRouter();
+    const theme = useTheme();
+    const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
+    const [activeMenuItems] = useState(menuItems.find(item => item.url === activeUrl));
+    const [showMenu, setShowMenu] = useState<boolean>(!theme.breakpoints.down('md'));
+
+    useEffect(() => {
+        setShowMenu(!mobileMatches);
+    }, [mobileMatches])
 
     function navigateTo(url: string) {
+        if (theme.breakpoints.down('md')) {
+            setShowMenu(false);
+        }
         router.push(`/settings/${url}`);
     }
 
@@ -118,7 +139,14 @@ export default function SettingsMenu({ children, activeUrl, onAddClick = null })
                       sx={styleVariables.bigTitleFontSize}
                       display="flex" justifyContent="space-between"
                       p={2}>
-                    <Box>Налаштування</Box>
+                    <Box display="flex" gap={1} alignItems="center" flexWrap="wrap">
+                        <Box display={{ xs: 'flex', md: 'none' }}>
+                            <IconButton onClick={() => setShowMenu(!showMenu)}>
+                                {showMenu ? <CloseIcon/> : <MenuIcon/>}
+                            </IconButton>
+                        </Box>
+                        Налаштування
+                    </Box>
                     {!!onAddClick &&
                       <Box>
                         <IconButton onClick={onAddClick}><AddIcon/></IconButton>
@@ -126,25 +154,36 @@ export default function SettingsMenu({ children, activeUrl, onAddClick = null })
                     }
                 </Grid>
 
-                <StyledMenuContainer item xs={12} md={3} lg={2}>
-                    <SettingsMenuContainerStyledGrid container>
-                        {menuItems.map((item, index) => (
-                            <SettingsMenuItemStyledGrid item xs={6} md={12} key={index}
-                                                        sx={{ backgroundColor: activeUrl === item.url ? primaryLightColor : 'white' }}
-                                                        onClick={() => navigateTo(item.url)}>
-                                <Box m={2} display="flex" flexWrap="nowrap" alignItems="center" gap={1}>
-                                    <Box sx={imageBoxStyles}>
-                                        <CustomImage
-                                            imageLink={activeUrl === item.url ? item.activeImg : item.img}></CustomImage>
-                                    </Box>
-                                    {item.title}
-                                </Box>
-                            </SettingsMenuItemStyledGrid>
-                        ))}
-                    </SettingsMenuContainerStyledGrid>
-                </StyledMenuContainer>
+                {showMenu && <StyledMenuContainer item xs={12} md={3} lg={2}>
+                  <SettingsMenuContainerStyledGrid container>
+                      {menuItems.map((item, index) => (
+                          <SettingsMenuItemStyledGrid item xs={6} md={12} key={index}
+                                                      sx={{ backgroundColor: activeUrl === item.url ? primaryLightColor : 'white' }}
+                                                      onClick={() => navigateTo(item.url)}>
+                              <Box m={2} display="flex" flexWrap="nowrap" alignItems="center" gap={1}>
+                                  <Box sx={imageBoxStyles}>
+                                      <CustomImage
+                                          imageLink={activeUrl === item.url ? item.activeImg : item.img}></CustomImage>
+                                  </Box>
+                                  {item.title}
+                              </Box>
+                          </SettingsMenuItemStyledGrid>
+                      ))}
+                  </SettingsMenuContainerStyledGrid>
+                </StyledMenuContainer>}
 
-                <Grid item xs={12} md={9} lg={10}>
+                <Grid item xs={12} md={9} lg={10}
+                      sx={theme => ({ [theme.breakpoints.down('md')]: { display: !showMenu ? 'block' : 'none' } })}>
+                    {!showMenu &&
+                      <Box sx={styleVariables.sectionTitle} gap={1} display="flex" alignItems="center" p={1}
+                           justifyContent="center">
+                        <Box sx={imageBoxStyles}>
+                          <CustomImage imageLink={activeMenuItems.activeImg}></CustomImage>
+                        </Box>
+                          {activeMenuItems.title}
+                      </Box>
+                    }
+
                     {children}
                 </Grid>
             </Grid>
