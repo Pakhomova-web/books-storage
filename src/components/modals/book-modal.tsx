@@ -37,7 +37,7 @@ interface IBookModalProps {
     onClose: (updated?: boolean) => void
 }
 
-const imageBoxStyles = { height: '150px', maxHeight: '50vw' };
+const imageBoxStyles = { height: '150px', maxHeight: '50vw', cursor: 'pointer' };
 
 interface IForm {
     name: string,
@@ -109,6 +109,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     const { items: coverTypeOptions, loading: loadingCoverTypes } = useCoverTypeOptions();
     const [loadingBookSeries, setLoadingBookSeries] = useState<boolean>();
     const { checkAuth } = useAuth();
+    const [activeImage, setActiveImage] = useState<string>();
 
     useEffect(() => {
         if (publishingHouseId) {
@@ -200,6 +201,22 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             formContext.setValue('ages', ages.filter(age => age !== opt));
         } else {
             formContext.setValue('ages', [...ages, opt]);
+        }
+    }
+
+    function onImageClick(imageId: string) {
+        if (activeImage === imageId) {
+            setActiveImage(null);
+        } else if (activeImage) {
+            const imageIds = formContext.getValues().imageIds;
+            const indexActive = imageIds.findIndex(id => id === activeImage);
+            const index = imageIds.findIndex(id => id === imageId);
+
+            imageIds[indexActive] = imageId;
+            imageIds[index] = activeImage;
+            setActiveImage(null);
+        } else {
+            setActiveImage(imageId);
         }
     }
 
@@ -433,9 +450,10 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
 
                     <Grid item xs={12} display="flex" flexWrap="wrap" gap={1}>
                         {formContext.getValues('imageIds')?.map((imageId, index) =>
-                            <Box key={index} mt={1} border={1} borderColor={primaryLightColor} p={1}
+                            <Box key={index} mt={1} border={activeImage === imageId ? 3 : 1}
+                                 borderColor={primaryLightColor} p={1}
                                  borderRadius={borderRadius}>
-                                <Box sx={imageBoxStyles} mb={1}>
+                                <Box sx={imageBoxStyles} mb={1} onClick={() => onImageClick(imageId)}>
                                     <CustomImage isBookDetails={true} imageId={imageId}></CustomImage>
                                 </Box>
                                 <Box display="flex" justifyContent="center" gap={1}>
