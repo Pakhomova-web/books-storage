@@ -402,7 +402,9 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={3} lg={2}>
-                        <Button fullWidth disabled={!tag} variant="outlined">Додати тег</Button>
+                        <Button fullWidth disabled={!tag} variant="outlined" onClick={() => addTag()}>
+                            Додати тег
+                        </Button>
                     </Grid>
 
                     <Grid item xs={12}>
