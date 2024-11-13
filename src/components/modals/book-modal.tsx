@@ -19,7 +19,12 @@ import { getBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
 import { parseImageFromLink } from '@/utils/utils';
-import { customFieldClearBtnStyles, styleVariables } from '@/constants/styles-variables';
+import {
+    borderRadius,
+    customFieldClearBtnStyles,
+    primaryLightColor,
+    styleVariables
+} from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Ages from '@/components/ages';
@@ -82,7 +87,17 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             finalPrice: item ? +(item.price * (100 - item.discount) / 100).toFixed(2) : 0
         }
     });
-    const { publishingHouseId, bookSeriesId, imageLink, tags, tag, description, ages, authorIds, discount } = formContext.watch();
+    const {
+        publishingHouseId,
+        bookSeriesId,
+        imageLink,
+        tags,
+        tag,
+        description,
+        ages,
+        authorIds,
+        discount
+    } = formContext.watch();
     const { update, updating, updatingError } = useUpdateBook();
     const { create, creating, creatingError } = useCreateBook();
     const { items: pageTypeOptions, loading: loadingPageTypes } = usePageTypeOptions();
@@ -414,9 +429,10 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                         </Button>
                     </Grid>
 
-                    <Grid item xs={12} display="flex" flexWrap="wrap">
+                    <Grid item xs={12} display="flex" flexWrap="wrap" gap={1}>
                         {formContext.getValues('imageIds')?.map((imageId, index) =>
-                            <Box key={index} mt={1}>
+                            <Box key={index} mt={1} border={1} borderColor={primaryLightColor} p={1}
+                                 borderRadius={borderRadius}>
                                 <Box sx={imageBoxStyles} mb={1}>
                                     <CustomImage isBookDetails={true} imageId={imageId}></CustomImage>
                                 </Box>

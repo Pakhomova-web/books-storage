@@ -77,7 +77,8 @@ export default function CustomModal(props: ICustomModalProps) {
                 {props.loading && <Loading show={props.loading}></Loading>}
 
                 <Box sx={innerContainer(isWithActions())}>
-                    {!!props.title && <Box sx={titleStyles} mb={1}>{props.title}</Box>}
+                    {!!props.title && <Box sx={titleStyles} mb={2}>{props.title}</Box>}
+
                     <Box sx={childrenContainer}>
                         {props.children}
                     </Box>
