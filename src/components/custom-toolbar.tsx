@@ -1,4 +1,4 @@
-import { AppBar, Box, IconButton, Menu, MenuItem, Toolbar, useTheme } from '@mui/material';
+import { AppBar, Box, Button, IconButton, Menu, MenuItem, Toolbar, useTheme } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -7,6 +7,7 @@ import ProfileIcon from '@mui/icons-material/AccountCircle';
 import LoginIcon from '@mui/icons-material/Login';
 import React, { useEffect, useState } from 'react'
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import SearchIcon from '@mui/icons-material/Search';
 import ShoppingBasketIcon from '@mui/icons-material/ShoppingBasket';
 import { useRouter } from 'next/router';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -14,9 +15,11 @@ import { usePathname } from 'next/navigation';
 import Badge from '@mui/material/Badge';
 
 import { useAuth } from '@/components/auth-context';
-import { styleVariables } from '@/constants/styles-variables';
 import { isAdmin } from '@/utils/utils';
 import LoginModal from '@/components/login-modal';
+import CustomModal from '@/components/modals/custom-modal';
+import { FormContainer, useForm, useFormContext } from 'react-hook-form-mui';
+import CustomTextField from '@/components/form-fields/custom-text-field';
 
 enum MainMenuItem {
     home,
@@ -32,6 +35,9 @@ export default function CustomToolbar() {
     const mobileMatches = useMediaQuery(theme.breakpoints.down('sm'));
     const [anchorMenuEl, setAnchorMenuEl] = useState<HTMLElement>();
     const [selectedMenuItem, setSelectedMenuItem] = useState<MainMenuItem>();
+    const [openSearchModal, setOpenSearchModal] = useState<boolean>(false);
+    const formContext = useForm<{ quickSearch: string }>();
+    const { quickSearch } = formContext.watch();
     const pathname = usePathname();
     const [mobileMenuItems] = useState([
         { title: 'Профіль', onClick: () => goToProfilePage() },
@@ -48,7 +54,7 @@ export default function CustomToolbar() {
                 setSelectedMenuItem(null);
             } else if (pathname === '/') {
                 setSelectedMenuItem(MainMenuItem.home);
-            }  else if (pathname === '/basket') {
+            } else if (pathname === '/basket') {
                 setSelectedMenuItem(MainMenuItem.basket);
             } else {
                 setSelectedMenuItem(null);
@@ -61,6 +67,10 @@ export default function CustomToolbar() {
         setAnchorMenuEl(event.currentTarget);
     }
 
+    function onQuickSearchClick(value: string) {
+        setOpenSearchModal(false);
+        router.push(`/books?quickSearch=${value}`);
+    }
 
     useEffect(() => {
         if (!mobileMatches) {
@@ -122,14 +132,35 @@ export default function CustomToolbar() {
                           </IconButton>}
                     </Box>
 
-                    <Box sx={styleVariables.flexNoWrap}>
+                    <Box display="flex" alignItems="center" flexWrap="nowrap" gap={1}>
+                        <IconButton color="inherit" onClick={() => setOpenSearchModal(true)}>
+                            <SearchIcon/>
+                        </IconButton>
+
+                        <CustomModal open={openSearchModal} title="Швидкий пошук">
+                            <FormContainer formContext={formContext}
+                                           handleSubmit={() => onQuickSearchClick(quickSearch)}>
+                                <CustomTextField name="quickSearch" placeholder="Пошук" fullWidth required={true}/>
+
+                                <Box display="flex" alignItems="center" flexWrap="wrap" gap={1} mt={1}
+                                     justifyContent="center">
+                                    <Button variant="outlined" onClick={() => setOpenSearchModal(false)}>
+                                        Закрити
+                                    </Button>
+
+                                    <Button variant="contained" type="submit"
+                                            disabled={!quickSearch}>Знайти</Button>
+                                </Box>
+                            </FormContainer>
+                        </CustomModal>
+
                         <IconButton onClick={() => goToPage('/')}
                                     color="inherit"
                                     className={selectedMenuItem === MainMenuItem.home ? 'selectedToolbarMenuItem' : ''}>
                             <HomeIcon/>
                         </IconButton>
 
-                        <Box mr={!user?.likedBookIds?.length ? 0 : 1}>
+                        <Box>
                             <Badge badgeContent={user?.likedBookIds?.length ? user.likedBookIds.length : null}>
                                 <IconButton onClick={goToLikedBooks} color="inherit">
                                     <FavoriteIcon/>
@@ -137,7 +168,7 @@ export default function CustomToolbar() {
                             </Badge>
                         </Box>
 
-                        <Box mr={!user?.basketItems?.length ? 0 : 1}>
+                        <Box>
                             <Badge badgeContent={user?.basketItems?.length ? user.basketItems.length : null}>
                                 <IconButton onClick={goToBasket}
                                             color="inherit"
