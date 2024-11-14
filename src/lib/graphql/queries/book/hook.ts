@@ -94,7 +94,7 @@ export function useUpdateBook() {
     const [mutate, { loading, error }] = useMutation(updateBookQuery);
 
     return {
-        update: async (input: BookEntity, updateAllBooksInSeries?: boolean) => {
+        update: async (input, updateAllBooksInSeries?: boolean) => {
             const { data: { item } } = await mutate({
                 fetchPolicy: 'no-cache',
                 variables: { input, updateAllBooksInSeries }

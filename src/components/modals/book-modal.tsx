@@ -76,7 +76,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             pageTypeId: item?.pageType.id,
             bookTypeId: item?.bookType.id,
             bookSeriesId: item?.bookSeries.id,
-            isbn: item?.isbn,
+            isbn: item?.id ? item?.isbn : null,
             format: item?.format,
             description: item?.description,
             publishingHouseId: item?.bookSeries.publishingHouse.id,
@@ -91,6 +91,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         publishingHouseId,
         bookSeriesId,
         imageLink,
+        imageIds,
         tags,
         tag,
         description,
@@ -230,7 +231,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                      onClose={() => onClose()}
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
-                     onSubmit={isAdmin ? () => (item?.bookSeries.default ? onSubmit() : setShowModalForSeries(true)) : null}>
+                     onSubmit={isAdmin ? () => (!item || item?.bookSeries.default ? onSubmit() : setShowModalForSeries(true)) : null}>
             <FormContainer formContext={formContext}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6} md={3} lg={2}>
@@ -438,9 +439,10 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
 
                     <Grid item xs={12} sm={6} md={3} lg={2}>
                         <CustomTextField fullWidth
-                                         disabled={!isAdmin}
+                                         disabled={!isAdmin || imageIds.length === 5}
                                          id="imageLink"
                                          label="Посилання на фото"
+                                         helperText="Макс. 5 фото"
                                          name="imageLink"/>
                     </Grid>
 
