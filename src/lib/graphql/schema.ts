@@ -176,7 +176,7 @@ const typeDefs =  /* GraphQL */ `
         createBookSeries(input: BookSeriesCreateInput!): BookSeries
         deleteBookSeries(id: ID!): BookSeries
 
-        updateBook(input: BookUpdateInput!): Book
+        updateBook(input: BookUpdateInput!, updateAllBooksInSeries: Boolean): Book
         updateBookNumberInStock(input: BookUpdateNumberInStockUpdateInput!): Book!
         approveComment(input: UpdateCommentInput!): Book!
         removeComment(input: UpdateCommentInput!): Book!

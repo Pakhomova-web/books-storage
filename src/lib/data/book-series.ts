@@ -70,7 +70,7 @@ export async function createBookSeries(input: BookSeriesEntity) {
     }
 }
 
-export async function updateBookSeries(input: BookSeriesEntity) {
+export async function updateBookSeries(input: BookSeriesEntity, updateAllBooksInSeries = false) {
     if (!input.id) {
         throw new GraphQLError(`No Book Series found with id ${input.id}`, {
             extensions: { code: 'NOT_FOUND' }

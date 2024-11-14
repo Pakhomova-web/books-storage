@@ -105,7 +105,7 @@ export async function createBook(input: BookEntity) {
     }
 }
 
-export async function updateBook(input: BookEntity) {
+export async function updateBook(input: BookEntity, updateAllBooksInSeries = false) {
     if (!input.id) {
         throw new GraphQLError(`No Book found with id ${input.id}`, {
             extensions: { code: 'NOT_FOUND' }
@@ -117,6 +117,20 @@ export async function updateBook(input: BookEntity) {
         throw new GraphQLError(`Book with name '${input.name}' already exists.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
+    }
+
+    if (updateAllBooksInSeries) {
+        const itemsBySeries = await Book.find({ bookSeries: input.bookSeriesId });
+
+        await Promise.all(itemsBySeries.map(item => {
+            item.format = input.format;
+            item.description = input.description;
+            item.ages = input.ages;
+            item.tags = input.tags;
+            item.authors = input.authorIds;
+
+            return item.save();
+        }));
     }
     await Book.findByIdAndUpdate(input.id, _getBookData(input));
 

@@ -91,7 +91,20 @@ export function useCreateBook() {
 }
 
 export function useUpdateBook() {
-    return _useUpdateItem<BookEntity>(updateBookQuery);
+    const [mutate, { loading, error }] = useMutation(updateBookQuery);
+
+    return {
+        update: async (input: BookEntity, updateAllBooksInSeries?: boolean) => {
+            const { data: { item } } = await mutate({
+                fetchPolicy: 'no-cache',
+                variables: { input, updateAllBooksInSeries }
+            });
+
+            return item;
+        },
+        updating: loading,
+        updatingError: error
+    };
 }
 
 export function useUpdateBookNumberInStock() {

@@ -119,8 +119,8 @@ export const createBookQuery = gql`
 `;
 
 export const updateBookQuery = gql`
-    mutation UpdateBook($input: BookUpdateInput!) {
-        item: updateBook(input: $input) {
+    mutation UpdateBook($input: BookUpdateInput!, $updateAllBooksInSeries: Boolean) {
+        item: updateBook(input: $input, updateAllBooksInSeries: $updateAllBooksInSeries) {
             id
         }
     }

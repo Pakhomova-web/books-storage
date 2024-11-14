@@ -108,6 +108,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     const { items: publishingHouseOptions, loading: loadingPublishingHouses } = usePublishingHouseOptions();
     const { items: coverTypeOptions, loading: loadingCoverTypes } = useCoverTypeOptions();
     const [loadingBookSeries, setLoadingBookSeries] = useState<boolean>();
+    const [showModalForSeries, setShowModalForSeries] = useState<boolean>();
     const { checkAuth } = useAuth();
     const [activeImage, setActiveImage] = useState<string>();
 
@@ -131,7 +132,8 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         formContext.setValue('finalPrice', +(formContext.getValues().price * (100 - discount) / 100).toFixed(2));
     }, [discount]);
 
-    async function onSubmit() {
+    async function onSubmit(updateAllBooksInSeries = false) {
+        setShowModalForSeries(false);
         parseImage();
         const { imageLink, ...values } = formContext.getValues();
 
@@ -147,7 +149,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
 
         try {
             if (item?.id) {
-                await update(data);
+                await update(data, updateAllBooksInSeries);
             } else {
                 delete data.id;
                 await create(data);
@@ -228,7 +230,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                      onClose={() => onClose()}
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
-                     onSubmit={isAdmin ? onSubmit : null}>
+                     onSubmit={isAdmin ? () => (item?.bookSeries.default ? onSubmit() : setShowModalForSeries(true)) : null}>
             <FormContainer formContext={formContext}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6} md={3} lg={2}>
@@ -472,6 +474,26 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             {(creatingError || updatingError) &&
               <ErrorNotification error={creatingError || updatingError}></ErrorNotification>
             }
+
+            {showModalForSeries &&
+              <CustomModal open={true} title="Відредагувати одну книгу чи всю серію?">
+                <Box textAlign="center" mb={1}>В усій серії буде відредаговано:</Box>
+                <Box textAlign="center" mb={2}>формат, опис, теги, вік, авторів.</Box>
+
+                <Box display="flex" gap={1} alignItems="center" justifyContent="center" flexWrap="wrap">
+                  <Button variant="contained" onClick={() => onSubmit(true)}>
+                    Усю серію
+                  </Button>
+
+                  <Button variant="contained" onClick={() => onSubmit()}>
+                    Одну книгу
+                  </Button>
+
+                  <Button variant="outlined" onClick={() => setShowModalForSeries(false)}>
+                    Закрити
+                  </Button>
+                </Box>
+              </CustomModal>}
         </CustomModal>
     );
 }

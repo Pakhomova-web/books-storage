@@ -450,6 +450,7 @@ export type MutationUpdateAuthorArgs = {
 
 export type MutationUpdateBookArgs = {
   input: BookUpdateInput;
+  updateAllBooksInSeries?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 

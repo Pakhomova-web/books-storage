@@ -447,10 +447,10 @@ const resolvers: Resolvers = {
                 parseError(error);
             }
         },
-        updateBook: async (_root, { input }: { input: BookEntity }, { user }) => {
+        updateBook: async (_root, { input, updateAllBooksInSeries }, { user }) => {
             _checkUser(user);
             try {
-                return updateBook(input);
+                return updateBook(<BookEntity>input, updateAllBooksInSeries);
             } catch (error) {
                 parseError(error);
             }
