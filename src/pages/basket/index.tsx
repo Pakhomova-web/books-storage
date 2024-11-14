@@ -96,7 +96,7 @@ export default function Basket() {
     function onCopyOrderClick() {
         let value = items
             .map((item, i) =>
-                `${item.bookSeries !== '-' ?
+                `${!item.bookSeries.default ?
                     `${!i || item.bookSeries.id !== items[i - 1].bookSeries.id ? `${item.bookSeries.name} (${item.bookSeries.publishingHouse.name})\n\t` : '\t'}` : ''
                 }${item.name} (${countFields.get(item.id)} шт по ${renderPrice(item.price)})`)
             .join('\n');

@@ -41,11 +41,22 @@ export interface CoverTypeEntity {
     name: string
 }
 
-export interface BookSeriesEntity {
-    id: string,
-    name: string,
-    publishingHouseId: string,
-    publishingHouse: PublishingHouseEntity
+export class BookSeriesEntity {
+    id: string;
+    name: string;
+    publishingHouseId: string;
+    publishingHouse: PublishingHouseEntity;
+    default?: boolean;
+
+    constructor(data?) {
+        if (data) {
+            this.id = data.id;
+            this.name = data.name;
+            this.publishingHouseId = data.publishingHouseId;
+            this.publishingHouse = new PublishingHouseEntity(data.publishingHouse);
+            this.default = !!data.default;
+        }
+    }
 }
 
 export class BookEntity {

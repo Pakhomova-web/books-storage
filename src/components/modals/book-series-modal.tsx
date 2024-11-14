@@ -21,7 +21,8 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
         defaultValues: {
             id: item?.id,
             name: item?.name,
-            publishingHouseId: item?.publishingHouse.id
+            publishingHouseId: item?.publishingHouse.id,
+            default: item?.default
         }
     });
     const { update, updating, updatingError } = useUpdateBookSeries();
@@ -44,17 +45,18 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
     }
 
     return (
-        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' серію'}
+        <CustomModal title={(!item ? 'Додати' : (!isAdmin || item?.default ? 'Подивитися' : 'Відредагувати')) + ' серію'}
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
-                     onSubmit={isAdmin ? onSubmit : null}>
+                     onSubmit={isAdmin && !item?.default ? onSubmit : null}>
             <FormContainer formContext={formContext}>
                 <CustomTextField fullWidth
                                  required
                                  autoFocus
+                                 disabled={item?.default}
                                  id="book-series-name"
                                  label="Name"
                                  name="name"/>
@@ -63,6 +65,7 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
                                    required
                                    options={publishingHouseOptions}
                                    loading={loadingPublishingHouses}
+                                   disabled={item?.default}
                                    id="publishing-house-id"
                                    label="Видавництво"
                                    name="publishingHouseId"/>

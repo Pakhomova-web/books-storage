@@ -10,6 +10,7 @@ const bookSeriesFragment = gql`
             tags
             imageId
         }
+        default
     }
 `;
 

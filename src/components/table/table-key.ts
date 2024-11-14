@@ -14,7 +14,8 @@ export interface TableKey<K> {
 export interface ITableAction {
     label?: (item?) => string,
     type: TableActionEnum,
-    onClick: Function
+    onClick: Function,
+    disable?: (item?) => boolean
 }
 
 export enum TableActionEnum {

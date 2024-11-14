@@ -10,7 +10,8 @@ const bookSeriesSchema = new Schema<BookSeriesEntity, Model<BookSeriesEntity>>({
         ref: 'publishingHouse',
         type: Schema.Types.ObjectId,
         required: true
-    }
+    },
+    default: Boolean
 });
 
 bookSeriesSchema.index({ name: 1, publishingHouse: 1 }, { unique: true });

@@ -38,6 +38,7 @@ const bookFragment = gql`
                 tags
                 imageId
             }
+            default
         }
         authors {
             id

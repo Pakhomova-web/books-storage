@@ -36,6 +36,7 @@ const typeDefs =  /* GraphQL */ `
         id: ID
         name: String!
         publishingHouse: PublishingHouse!
+        default: Boolean
     }
 
     type Author {
@@ -375,12 +376,14 @@ const typeDefs =  /* GraphQL */ `
     input BookSeriesCreateInput {
         name: String!
         publishingHouseId: ID!
+        default: Boolean
     }
 
     input BookSeriesUpdateInput {
         id: ID!
         name: String!
         publishingHouseId: ID!
+        default: Boolean
     }
 
     input BookSeriesSearchInput {

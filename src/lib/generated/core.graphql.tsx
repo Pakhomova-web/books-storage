@@ -119,12 +119,14 @@ export type BookSearchInput = {
 };
 
 export type BookSeries = {
+  default?: Maybe<Scalars['Boolean']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
   name: Scalars['String']['output'];
   publishingHouse: PublishingHouse;
 };
 
 export type BookSeriesCreateInput = {
+  default?: InputMaybe<Scalars['Boolean']['input']>;
   name: Scalars['String']['input'];
   publishingHouseId: Scalars['ID']['input'];
 };
@@ -140,6 +142,7 @@ export type BookSeriesSubList = {
 };
 
 export type BookSeriesUpdateInput = {
+  default?: InputMaybe<Scalars['Boolean']['input']>;
   id: Scalars['ID']['input'];
   name: Scalars['String']['input'];
   publishingHouseId: Scalars['ID']['input'];
@@ -1050,6 +1053,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type BookSeriesResolvers<ContextType = any, ParentType extends ResolversParentTypes['BookSeries'] = ResolversParentTypes['BookSeries']> = {
+  default?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   publishingHouse?: Resolver<ResolversTypes['PublishingHouse'], ParentType, ContextType>;

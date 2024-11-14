@@ -24,6 +24,7 @@ export default function BookSeries() {
         actions: isAdmin(user) ? [
             {
                 type: TableActionEnum.delete,
+                disable: (item: BookSeriesEntity) => item.default,
                 onClick: (item: BookSeriesEntity) => deleteHandler(item)
             }
         ] : []

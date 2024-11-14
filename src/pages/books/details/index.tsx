@@ -81,18 +81,20 @@ export default function BookDetails() {
             setBooksByAuthor([]);
             if (book.authors.length === 1) {
                 setLoadingBooksByAuthor(true);
-                getBooksByAuthors(book.authors[0].id, 5, book.bookSeries.name !== '-' ? book.bookSeries.id : null)
+                getBooksByAuthors(book.authors[0].id, 5, !book.bookSeries.default ? book.bookSeries.id : null)
                     .then(books => {
                         setLoadingBooksByAuthor(false);
                         setBooksByAuthor(books.filter(b => b.id !== book.id));
                     });
             }
             setBooksFromSeries([]);
-            setLoadingBooksFromSeries(true);
-            getBooksFromSeries(book.bookSeries.id).then(books => {
-                setLoadingBooksFromSeries(false);
-                setBooksFromSeries(books.filter(b => b.id !== book.id));
-            });
+            if (!book.bookSeries.default) {
+                setLoadingBooksFromSeries(true);
+                getBooksFromSeries(book.bookSeries.id).then(books => {
+                    setLoadingBooksFromSeries(false);
+                    setBooksFromSeries(books.filter(b => b.id !== book.id));
+                });
+            }
             const keys = [
                 {
                     title: 'Мова',
@@ -120,7 +122,7 @@ export default function BookDetails() {
                 {
                     title: 'Серія',
                     type: 'text',
-                    renderValue: (book: BookEntity) => book.bookSeries.name === '-' ? '' : book.bookSeries.name,
+                    renderValue: (book: BookEntity) => book.bookSeries.default ? '' : book.bookSeries.name,
                     onValueClick: () => {
                         router.push(`/books?bookSeries=${book.bookSeries.id}`);
                     }

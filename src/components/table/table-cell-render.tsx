@@ -49,7 +49,9 @@ export function renderActions<T>(rowIndex: number, actions: ITableAction[], item
     }
 
     return (!actions.length || actions.length === 1) ?
-        <Button onClick={() => handleClick(actions[0])}>{getActionItem(actions[0], item)}</Button> :
+        <Button onClick={() => handleClick(actions[0])} disabled={!!actions[0].disable && actions[0].disable(item)}>
+            {getActionItem(actions[0], item, !!actions[0].disable && actions[0].disable(item))}
+        </Button> :
         <Box>
             <IconButton aria-haspopup="true" onClick={onMenuClick}>
                 <MoreVertIcon/>
@@ -61,8 +63,9 @@ export function renderActions<T>(rowIndex: number, actions: ITableAction[], item
                     onClose={() => onAnchorMenuElChange(null)}
                     MenuListProps={{ 'aria-labelledby': 'basic-button' }}>
                   {actions.map((action, index) => (
-                      <MenuItem key={index} onClick={() => handleClick(action)}>
-                          {getActionItem(action, item)}
+                      <MenuItem key={index} onClick={() => handleClick(action)}
+                                disabled={!!action.disable && action.disable(item)}>
+                          {getActionItem(action, item, !!action.disable && action.disable(item))}
                       </MenuItem>)
                   )}
               </Menu>
@@ -70,7 +73,7 @@ export function renderActions<T>(rowIndex: number, actions: ITableAction[], item
         </Box>;
 }
 
-export function getActionItem(action: ITableAction, item) {
+export function getActionItem(action: ITableAction, item, disabled = false) {
     let icon = null;
     const styles = {
         display: 'flex',
@@ -79,13 +82,13 @@ export function getActionItem(action: ITableAction, item) {
 
     switch (action.type) {
         case TableActionEnum.delete:
-            icon = <DeleteIcon color="warning"/>;
+            icon = <DeleteIcon color={disabled ? 'inherit' : 'warning'}/>;
             break;
         case TableActionEnum.copy:
-            icon = <CopyIcon color="primary"/>;
+            icon = <CopyIcon color={disabled ? 'inherit' : 'primary'}/>;
             break;
         case TableActionEnum.add:
-            icon = <AddIcon color="primary"/>;
+            icon = <AddIcon color={disabled ? 'inherit' : 'primary'}/>;
     }
 
     return <Box gap={1} sx={styles}>{icon}{action.label ? action.label(item) : ''}</Box>;

@@ -66,7 +66,7 @@ export default function BooksList({ items, onClick }) {
                         <CustomImage isBookDetails={true} imageId={book.imageIds[0]}></CustomImage>
                     </Box>
                     <Box sx={bookInfoStyles} textAlign="center">
-                        {book.bookSeries.publishingHouse.name}{book.bookSeries.name === '-' ? '' : `. ${book.bookSeries.name}`}
+                        {book.bookSeries.publishingHouse.name}{book.bookSeries.default ? '' : `. ${book.bookSeries.name}`}
                     </Box>
                     <Box sx={styleVariables.titleFontSize} textAlign="center" mb={1}>{book.name}</Box>
 

@@ -36,7 +36,8 @@ export async function createPublishingHouse(input: PublishingHouseEntity) {
     } else {
         const bookSeries = new BookSeries({
             name: '-',
-            publishingHouse: new PublishingHouse(input)
+            publishingHouse: new PublishingHouse(input),
+            default: true
         });
 
         await bookSeries.save();

@@ -10,7 +10,7 @@ export async function getBookSeries(pageSettings?: IPageable, filters?: BookSeri
     const { andFilters } = getValidFilters(filters);
     const query = setFiltersAndPageSettingsToQuery(
         BookSeries
-            .find()
+            .find({ default: { $ne: true }})
             .populate('publishingHouse'),
         andFilters,
         pageSettings
@@ -78,7 +78,7 @@ export async function updateBookSeries(input: BookSeriesEntity) {
     }
     const itemByName = await getByName<BookSeriesEntity>(BookSeries, input.name);
 
-    if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
+    if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id && input.publishingHouseId === itemByName.publishingHouse.id) {
         throw new GraphQLError(`Book Series with name '${input.name}' already exists.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
