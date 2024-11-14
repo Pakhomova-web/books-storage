@@ -57,6 +57,7 @@ const priceStyles = (theme) => ({
     padding: boxPadding,
     border: `1px solid ${primaryLightColor}`
 });
+const numberBooksByAuthor = 5;
 
 export default function BookDetails() {
     const router = useRouter();
@@ -81,7 +82,7 @@ export default function BookDetails() {
             setBooksByAuthor([]);
             if (book.authors.length === 1) {
                 setLoadingBooksByAuthor(true);
-                getBooksByAuthors(book.authors[0].id, 5, !book.bookSeries.default ? book.bookSeries.id : null)
+                getBooksByAuthors(book.authors[0].id, numberBooksByAuthor, !book.bookSeries.default ? book.bookSeries.id : null)
                     .then(books => {
                         setLoadingBooksByAuthor(false);
                         setBooksByAuthor(books.filter(b => b.id !== book.id));
@@ -426,11 +427,11 @@ export default function BookDetails() {
 
                           <BooksList items={booksByAuthor} onClick={onBookClick}></BooksList>
 
-                          <Grid item xs={12} textAlign="center">
-                            <Button variant="outlined"
-                                    onClick={() => router.push(`/books?authors=${book.authors[0].id}`)}>
-                              Подивитися усі книги<ArrowForwardIcon/></Button>
-                          </Grid>
+                            {booksByAuthor.length === numberBooksByAuthor && <Grid item xs={12} textAlign="center">
+                              <Button variant="outlined"
+                                      onClick={() => router.push(`/books?authors=${book.authors[0].id}`)}>
+                                Подивитися усі книги<ArrowForwardIcon/></Button>
+                            </Grid>}
                         </Grid>
                       </Grid>}
                   </Grid>
