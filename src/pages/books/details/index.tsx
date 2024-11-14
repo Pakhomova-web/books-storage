@@ -398,22 +398,22 @@ export default function BookDetails() {
                       </Grid>
                     </Grid>
 
-                    <Grid item xs={12} px={1}>
-                      <Box sx={styleVariables.sectionTitle} p={1} mb={2}>
-                        Інші книги із цієї серії
-                      </Box>
+                      {!book.bookSeries.default && <Grid item xs={12} px={1}>
+                        <Box sx={styleVariables.sectionTitle} p={1} mb={2}>
+                          Інші книги із цієї серії
+                        </Box>
 
-                      <Grid container spacing={2} sx={styleVariables.positionRelative} px={1} display="flex"
-                            justifyContent="center">
-                        <Loading show={loadingBooksFromSeries}></Loading>
+                        <Grid container spacing={2} sx={styleVariables.positionRelative} px={1} display="flex"
+                              justifyContent="center">
+                          <Loading show={loadingBooksFromSeries}></Loading>
 
-                        <BooksList items={booksFromSeries} onClick={onBookClick}></BooksList>
-                          {!booksFromSeries?.length &&
-                            <Grid item xs={12} display="flex" justifyContent="center">
-                              В цій серії більше немає книг
-                            </Grid>}
-                      </Grid>
-                    </Grid>
+                          <BooksList items={booksFromSeries} onClick={onBookClick}></BooksList>
+                            {!booksFromSeries?.length &&
+                              <Grid item xs={12} mb={2} display="flex" justifyContent="center">
+                                В цій серії більше немає книг
+                              </Grid>}
+                        </Grid>
+                      </Grid>}
 
                       {book.authors.length === 1 && !!booksByAuthor?.length && <Grid item xs={12} px={1}>
                         <Box sx={styleVariables.sectionTitle} p={1} mb={2}>
