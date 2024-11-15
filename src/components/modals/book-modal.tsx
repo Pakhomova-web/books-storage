@@ -439,7 +439,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
 
                     <Grid item xs={12} sm={6} md={3} lg={2}>
                         <CustomTextField fullWidth
-                                         disabled={!isAdmin || imageIds.length === 5}
+                                         disabled={!isAdmin || imageIds?.length === 5}
                                          id="imageLink"
                                          label="Посилання на фото"
                                          helperText="Макс. 5 фото"
