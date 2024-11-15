@@ -8,7 +8,6 @@ import { BookFilters } from '@/components/filters/book-filters';
 import { BookEntity, BookFilter, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import ErrorNotification from '@/components/error-notification';
-import AddIcon from '@mui/icons-material/Add';
 import BookModal from '@/components/modals/book-modal';
 import { BookNumberInStockModal } from '@/components/modals/book-number-in-stock-modal';
 import { useAuth } from '@/components/auth-context';
@@ -91,7 +90,7 @@ export default function Books() {
         {
             title: 'Активна',
             sortValue: 'archived',
-            renderValue: (item: BookEntity) => item.archived ? 'Так' : 'Ні',
+            renderValue: (item: BookEntity) => !item.archived ? 'Так' : 'Ні',
             type: 'text'
         },
         {
@@ -228,7 +227,7 @@ export default function Books() {
     }
 
     return (
-        <SettingsMenu activeUrl="books">
+        <SettingsMenu activeUrl="books" onAddClick={onAdd}>
             <Loading show={loading || downloadingCsv || updating}></Loading>
 
             {isAdmin(user) &&
@@ -254,10 +253,6 @@ export default function Books() {
 
                     {isAdmin(user) &&
                       <Box sx={styleVariables.buttonsContainer} gap={2}>
-                        <Button variant="outlined" onClick={() => onAdd()}>
-                          <AddIcon></AddIcon>Додати книгу
-                        </Button>
-
                           {!!items?.length &&
                             <Button variant="outlined" onClick={() => onDownloadCSV()}>
                               Скачати CSV
