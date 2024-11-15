@@ -217,6 +217,7 @@ export default function BookDetails() {
                         <Grid item
                               md={book.imageIds.length > 1 ? 9 : 12}
                               xs={book.imageIds.length > 1 ? 7 : 12}
+                              display="flex" justifyContent="center"
                               position="relative">
                             {book.numberInStock ?
                                 <Box sx={styleVariables.fixedInStockBox(true)}>
@@ -226,8 +227,9 @@ export default function BookDetails() {
                             }
 
                             {!!book.discount &&
-                              <Box
-                                sx={styleVariables.fixedDiscountBox(!book.numberInStock)}>Знижка: {book.discount}%</Box>}
+                              <Box sx={styleVariables.fixedDiscountBox(true)}>
+                                Знижка: {book.discount}%
+                              </Box>}
 
                           <Box sx={imageBoxStyles(!!book.imageIds.length)} mb={1}
                                onClick={() => setImageIds(book.imageIds)}>
@@ -235,7 +237,7 @@ export default function BookDetails() {
                           </Box>
                         </Grid>
 
-                        <Grid item md={3} xs={5}>
+                        <Grid item md={3} xs={5} display="flex" flexDirection="column" justifyContent="center">
                             {book.imageIds.map((imageId, index) =>
                                 (index !== 0 &&
                                   <StyledSmallImageBox key={index} mb={1} onClick={() => setImageIds(book.imageIds)}>
@@ -248,13 +250,11 @@ export default function BookDetails() {
                     </Grid>
 
                     <Grid item p={1} sm={6} xs={12}>
-                      <Grid container mb={1} gap={1} display="flex" alignItems="flex-start" flexWrap="wrap"
-                            justifyContent="space-between">
-                        <Grid item display="flex" gap={1} alignItems="center">
-                          <Box sx={priceStyles}><b>{renderPrice(book.price, book.discount)}</b></Box>
-                            {!!book.discount && <Box><s>{renderPrice(book.price)}</s></Box>}
-                        </Grid>
-                      </Grid>
+                      <Box display="flex" gap={1} alignItems="center"
+                           justifyContent={{ xs: 'center', md: 'flex-start' }} mb={1}>
+                        <Box sx={priceStyles}><b>{renderPrice(book.price, book.discount)}</b></Box>
+                          {!!book.discount && <Box><s>{renderPrice(book.price)}</s></Box>}
+                      </Box>
 
                       <Grid container mb={2} spacing={1} display="flex">
                         <Grid item xs={12} md={6} textAlign="center" display="flex" gap={1} flexDirection="column">
