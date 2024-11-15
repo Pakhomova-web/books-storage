@@ -70,6 +70,10 @@ export default function BooksList({ items, onClick }) {
                     </Box>
                     <Box sx={styleVariables.titleFontSize} textAlign="center" mb={1}>{book.name}</Box>
 
+                    <Box sx={styleVariables.hintFontSize} mb={1}>
+                        {book.language.name}
+                    </Box>
+
                     {!!book.discount && <Box sx={styleVariables.hintFontSize} mb={1}>
                       <s>{renderPrice(book.price)}</s>
                     </Box>}
