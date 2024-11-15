@@ -172,10 +172,6 @@ export default function Books() {
         }
     }, [gettingError, updatingError]);
 
-    useEffect(() => {
-        refreshData();
-    }, [filters, pageSettings]);
-
     function highlightInRed(numberInStock: number) {
         return !numberInStock ? {
             background: redLightColor
@@ -217,6 +213,20 @@ export default function Books() {
             });
     }
 
+    function onChangeFilters(filters: BookFilter) {
+        setPageSettings({
+            ...pageSettings,
+            page: 0
+        });
+        setFilters(filters);
+        refreshData();
+    }
+
+    function onChangePageSettings(pageSettings: IPageable) {
+        setPageSettings(pageSettings);
+        refreshData();
+    }
+
     return (
         <SettingsMenu activeUrl="books">
             <Loading show={loading || downloadingCsv || updating}></Loading>
@@ -224,16 +234,16 @@ export default function Books() {
             {isAdmin(user) &&
               <>
                 <BookFilters tableKeys={tableKeys}
-                             onApply={(filters: BookFilter) => setFilters(filters)}
+                             onApply={(filters: BookFilter) => onChangeFilters(filters)}
                              pageSettings={pageSettings}
-                             onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></BookFilters>
+                             onSort={(pageSettings: IPageable) => onChangePageSettings(pageSettings)}></BookFilters>
 
                 <CustomTable data={items}
                              keys={tableKeys}
                              mobileKeys={mobileKeys}
                              actions={tableActions}
                              renderKey={(item: BookEntity) => item.id}
-                             onChange={(settings: IPageable) => setPageSettings(settings)}
+                             onChange={(settings: IPageable) => onChangePageSettings(settings)}
                              pageSettings={pageSettings}
                              usePagination={true}
                              withFilters={true}

@@ -134,6 +134,11 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     }, [discount]);
 
     async function onSubmit(updateAllBooksInSeries = false) {
+        if (!!item?.id && item?.bookSeries.default) {
+            setShowModalForSeries(true);
+            return;
+        }
+
         setShowModalForSeries(false);
         parseImage();
         const { imageLinks, ...values } = formContext.getValues();
@@ -235,7 +240,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                      onClose={() => onClose()}
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
-                     onSubmit={isAdmin ? () => (!item || item?.bookSeries.default ? onSubmit() : setShowModalForSeries(true)) : null}>
+                     onSubmit={isAdmin ? () => onSubmit() : null}>
             <FormContainer formContext={formContext}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6} md={3} lg={2}>

@@ -11,7 +11,7 @@ import {
     TableSortLabel,
     useTheme
 } from '@mui/material';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import { TableKey } from '@/components/table/table-key';
@@ -51,6 +51,10 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
     const [anchorMenuEl, setAnchorMenuEl] = useState<IMenuAnchorEl>(null);
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
+
+    useEffect(() => {
+        setPage(props.pageSettings.page);
+    }, [props.pageSettings?.page]);
 
     function handleRequestSort(orderBy?: string) {
         if (props.pageSettings && props.onChange) {
