@@ -201,6 +201,10 @@ export function BookFilters(props: IBookFiltersProps) {
                     <Grid item xs={12}>
                         <CustomCheckbox label="В наявності" name="isInStock"/>
                     </Grid>
+
+                    <Grid item xs={12}>
+                        <CustomCheckbox label="Акційні" name="withDiscount"/>
+                    </Grid>
                 </Grid>
             </FormContainer>
         </SortFiltersContainer>

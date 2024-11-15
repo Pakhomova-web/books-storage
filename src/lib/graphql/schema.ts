@@ -360,6 +360,7 @@ const typeDefs =  /* GraphQL */ `
         authors: [ID]
         publishingHouse: ID
         isInStock: Boolean
+        withDiscount: Boolean
         quickSearch: String
         tags: String
         archived: Boolean

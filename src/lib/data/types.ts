@@ -166,6 +166,7 @@ export class BookFilter {
     authors?: string[];
     publishingHouse?: string;
     isInStock?: boolean;
+    withDiscount?: boolean;
     tags?: string;
     archived?: boolean;
     ages?: number[];
@@ -184,6 +185,7 @@ export class BookFilter {
             this.language = data.language;
             this.authors = data.authors && typeof data.authors === 'string' ? data.authors.split(',') : data.authors;
             this.isInStock = data.isInStock ? data.isInStock.toString() === 'true' : null;
+            this.withDiscount = data.withDiscount ? data.withDiscount.toString() === 'true' : null;
             this.publishingHouse = data.publishingHouse;
             this.tags = data.tags;
             this.archived = data.archived !== undefined ? data.archived : false;

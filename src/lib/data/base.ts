@@ -52,6 +52,8 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
                     andFilters.push({ [key]: getCaseInsensitiveSubstringOption(filters[key]) });
                 } else if (key === 'isInStock') {
                     andFilters.push({ numberInStock: { $gt: 0 } });
+                } else if (key === 'withDiscount') {
+                    andFilters.push({ discount: { $gt: 0 } });
                 } else if (key === 'archived') {
                     andFilters.push({ archived: { $in: [null, false] } });
                 } else if (key === 'ages') {
