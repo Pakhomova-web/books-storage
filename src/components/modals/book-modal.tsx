@@ -55,7 +55,7 @@ interface IForm {
     bookSeriesId: string,
     publishingHouseId?: string,
     imageIds: string[],
-    imageLink: string,
+    imageLinks: string,
     tags: string[],
     tag: string,
     ages: number[],
@@ -90,7 +90,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     const {
         publishingHouseId,
         bookSeriesId,
-        imageLink,
+        imageLinks,
         imageIds,
         tags,
         tag,
@@ -136,7 +136,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     async function onSubmit(updateAllBooksInSeries = false) {
         setShowModalForSeries(false);
         parseImage();
-        const { imageLink, ...values } = formContext.getValues();
+        const { imageLinks, ...values } = formContext.getValues();
 
         delete values.publishingHouseId;
         delete values.tag;
@@ -162,15 +162,19 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     }
 
     function parseImage() {
-        const id = parseImageFromLink(imageLink);
+        if (imageLinks) {
+            imageLinks.replaceAll(' ', '').split(',').forEach(imageLink => {
+                const id = parseImageFromLink(imageLink);
 
-        if (id) {
-            const imageIds = formContext.getValues().imageIds || [];
+                if (id) {
+                    const imageIds = formContext.getValues().imageIds || [];
 
-            if (!imageIds.some(imageId => id === imageId)) {
-                formContext.setValue('imageIds', [...imageIds, id]);
-            }
-            formContext.setValue('imageLink', null);
+                    if (!imageIds.some(imageId => id === imageId)) {
+                        formContext.setValue('imageIds', [...imageIds, id]);
+                    }
+                    formContext.setValue('imageLinks', null);
+                }
+            });
         }
     }
 
@@ -440,14 +444,14 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                     <Grid item xs={12} sm={6} md={3} lg={2}>
                         <CustomTextField fullWidth
                                          disabled={!isAdmin || imageIds?.length === 5}
-                                         id="imageLink"
+                                         id="imageLinks"
                                          label="Посилання на фото"
-                                         helperText="Макс. 5 фото"
-                                         name="imageLink"/>
+                                         helperText="Макс. 5 фото, розділені через кому"
+                                         name="imageLinks"/>
                     </Grid>
 
                     <Grid item xs={12} sm={6} md={3} lg={2}>
-                        <Button fullWidth variant="outlined" disabled={!imageLink} onClick={parseImage}>
+                        <Button fullWidth variant="outlined" disabled={!imageLinks} onClick={parseImage}>
                             Додати фото
                         </Button>
                     </Grid>
