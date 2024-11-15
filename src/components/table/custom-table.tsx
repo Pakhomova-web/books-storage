@@ -53,8 +53,8 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
 
     useEffect(() => {
-        setPage(props.pageSettings.page);
-    }, [props.pageSettings?.page]);
+        setPage(props?.pageSettings?.page || 0);
+    }, [props.pageSettings]);
 
     function handleRequestSort(orderBy?: string) {
         if (props.pageSettings && props.onChange) {
