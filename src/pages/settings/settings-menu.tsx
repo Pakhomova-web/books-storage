@@ -125,7 +125,7 @@ export default function SettingsMenu({ children, activeUrl, onAddClick = null })
     }, [mobileMatches])
 
     function navigateTo(url: string) {
-        if (theme.breakpoints.down('md')) {
+        if (mobileMatches) {
             setShowMenu(false);
         }
         router.push(`/settings/${url}`);
