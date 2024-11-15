@@ -92,7 +92,7 @@ export async function getBookById(id: string) {
 }
 
 export async function createBook(input: BookEntity) {
-    const item = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeId);
+    const item = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeId, input.pageTypeId, input.coverTypeId, input.languageId);
 
     if (item) {
         return null;
@@ -111,7 +111,7 @@ export async function updateBook(input: BookEntity, updateAllBooksInSeries = fal
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const itemByName = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeId);
+    const itemByName = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeId, input.pageTypeId, input.coverTypeId, input.languageId);
 
     if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Book with name '${input.name}' already exists.`, {
@@ -196,11 +196,14 @@ export async function addComment(id: string, input: CommentEntity) {
     return book as BookEntity;
 }
 
-function _getBookByUnique(name: string, bookSeries: string, bookType: string) {
+function _getBookByUnique(name: string, bookSeries: string, bookType: string, pageType: string, coverType: string, language: string) {
     return Book.findOne({
         name: new RegExp(`^${name}$`, "i"),
         bookSeries,
-        bookType
+        bookType,
+        pageType,
+        coverType,
+        language
     });
 }
 

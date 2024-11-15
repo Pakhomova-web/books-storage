@@ -39,7 +39,10 @@ export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTyp
     const { checkAuth } = useAuth();
 
     function parseImage() {
-        formContext.setValue('imageId', parseImageFromLink(imageLink));
+        if (!!imageLink) {
+            formContext.setValue('imageId', parseImageFromLink(imageLink));
+            formContext.setValue('imageLink', null);
+        }
     }
 
     async function onSubmit() {
@@ -82,7 +85,7 @@ export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTyp
                                  label="Посилання на фото"
                                  name="imageLink"/>
                 {!!imageLink &&
-                  <Button fullWidth variant="outlined" onClick={parseImage}>Додати фото</Button>}
+                  <Box mt={2}><Button fullWidth variant="outlined" onClick={parseImage}>Додати фото</Button></Box>}
 
                 <CustomTextField fullWidth
                                  disabled={!isAdmin}
@@ -90,7 +93,7 @@ export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTyp
                                  label="ID фото"
                                  name="imageId"/>
 
-                <Box sx={bookBoxStyles} mb={1}>
+                <Box sx={bookBoxStyles} my={1}>
                     <CustomImage isBookType={true} imageId={formContext.getValues('imageId')}></CustomImage>
                 </Box>
             </FormContainer>

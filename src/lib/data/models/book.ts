@@ -4,8 +4,7 @@ import { BookEntity } from '@/lib/data/types';
 const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
     name: {
         type: String,
-        required: true,
-        unique: true
+        required: true
     },
     description: String,
     isbn: String,
@@ -68,6 +67,6 @@ const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
     }]
 });
 
-bookSchema.index({ name: 1, bookSeries: 1, bookType: 1 }, { unique: true });
+bookSchema.index({ name: 1, bookSeries: 1, bookType: 1, pageType: 1, coverType: 1, language: 1 }, { unique: true });
 
 export default models?.book || model('book', bookSchema);

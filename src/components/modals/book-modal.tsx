@@ -70,16 +70,16 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             numberOfPages: item?.numberOfPages,
             numberInStock: item?.numberInStock,
             price: item?.price,
-            authorIds: item?.authors.map(({ id }) => id),
+            authorIds: item?.authors?.map(({ id }) => id),
             languageId: item?.language?.id,
-            coverTypeId: item?.coverType.id,
-            pageTypeId: item?.pageType.id,
-            bookTypeId: item?.bookType.id,
-            bookSeriesId: item?.bookSeries.id,
+            coverTypeId: item?.coverType?.id,
+            pageTypeId: item?.pageType?.id,
+            bookTypeId: item?.bookType?.id,
+            bookSeriesId: item?.bookSeries?.id,
             isbn: item?.id ? item?.isbn : null,
             format: item?.format,
             description: item?.description,
-            publishingHouseId: item?.bookSeries.publishingHouse.id,
+            publishingHouseId: item?.bookSeries?.publishingHouse?.id,
             imageIds: item?.id ? item.imageIds : null,
             tags: item?.tags,
             ages: item?.ages || [],
@@ -133,8 +133,8 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         formContext.setValue('finalPrice', +(formContext.getValues().price * (100 - discount) / 100).toFixed(2));
     }, [discount]);
 
-    async function onSubmit(updateAllBooksInSeries = false) {
-        if (!!item?.id && item?.bookSeries.default) {
+    async function onSubmit(submit = true, updateAllBooksInSeries = false) {
+        if (!submit && !!item?.id && !item?.bookSeries.default) {
             setShowModalForSeries(true);
             return;
         }
@@ -240,7 +240,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                      onClose={() => onClose()}
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
-                     onSubmit={isAdmin ? () => onSubmit() : null}>
+                     onSubmit={isAdmin ? () => onSubmit(false) : null}>
             <FormContainer formContext={formContext}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} sm={6} md={3} lg={2}>
@@ -492,7 +492,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 <Box textAlign="center" mb={2}>формат, опис, теги, вік, авторів.</Box>
 
                 <Box display="flex" gap={1} alignItems="center" justifyContent="center" flexWrap="wrap">
-                  <Button variant="contained" onClick={() => onSubmit(true)}>
+                  <Button variant="contained" onClick={() => onSubmit(true, true)}>
                     Усю серію
                   </Button>
 

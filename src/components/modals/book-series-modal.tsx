@@ -7,6 +7,7 @@ import CustomTextField from '@/components/form-fields/custom-text-field';
 import CustomSelectField from '@/components/form-fields/custom-select-field';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
+import { Box } from '@mui/material';
 
 interface IBookSeriesModalProps {
     open: boolean,
@@ -45,30 +46,33 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
     }
 
     return (
-        <CustomModal title={(!item ? 'Додати' : (!isAdmin || item?.default ? 'Подивитися' : 'Відредагувати')) + ' серію'}
-                     open={open}
-                     disableBackdropClick={true}
-                     onClose={() => onClose()}
-                     loading={updating || creating}
-                     isSubmitDisabled={!formContext.formState.isValid}
-                     onSubmit={isAdmin && !item?.default ? onSubmit : null}>
+        <CustomModal
+            title={(!item ? 'Додати' : (!isAdmin || item?.default ? 'Подивитися' : 'Відредагувати')) + ' серію'}
+            open={open}
+            disableBackdropClick={true}
+            onClose={() => onClose()}
+            loading={updating || creating}
+            isSubmitDisabled={!formContext.formState.isValid}
+            onSubmit={isAdmin && !item?.default ? onSubmit : null}>
             <FormContainer formContext={formContext}>
-                <CustomTextField fullWidth
-                                 required
-                                 autoFocus
-                                 disabled={item?.default}
-                                 id="book-series-name"
-                                 label="Name"
-                                 name="name"/>
+                <Box display="flex" gap={1} flexDirection="column">
+                    <CustomTextField fullWidth
+                                     required
+                                     autoFocus
+                                     disabled={item?.default}
+                                     id="book-series-name"
+                                     label="Name"
+                                     name="name"/>
 
-                <CustomSelectField fullWidth
-                                   required
-                                   options={publishingHouseOptions}
-                                   loading={loadingPublishingHouses}
-                                   disabled={item?.default}
-                                   id="publishing-house-id"
-                                   label="Видавництво"
-                                   name="publishingHouseId"/>
+                    <CustomSelectField fullWidth
+                                       required
+                                       options={publishingHouseOptions}
+                                       loading={loadingPublishingHouses}
+                                       disabled={item?.default}
+                                       id="publishing-house-id"
+                                       label="Видавництво"
+                                       name="publishingHouseId"/>
+                </Box>
             </FormContainer>
 
             {(creatingError || updatingError) &&
