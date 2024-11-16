@@ -81,13 +81,14 @@ export default function Home() {
             <Box sx={pageStyles}>
                 <SocialMediaBox></SocialMediaBox>
 
-                <Grid container sx={positionRelative}>
+                <Grid container sx={positionRelative} display="flex" justifyContent="center" alignItems="center">
                     <Loading
                         show={loadingBooksWithDiscounts && (!loadingBookTypes && loadingPublishingHouses || loadingBookTypes && !loadingPublishingHouses)}></Loading>
 
                     {(loadingBooksWithDiscounts && !booksWithDiscounts?.length ||
                             !loadingBooksWithDiscounts && !!booksWithDiscounts?.length) &&
-                      <Grid item xs={12} py={1} px={2} display="flex" justifyContent="center" alignItems="center" gap={1}
+                      <Grid item xs={12} py={1} px={2} display="flex" justifyContent="center" alignItems="center"
+                            gap={1}
                             mb={loadingBooksWithDiscounts ? 1 : 0}
                             sx={styleVariables.sectionTitle}>
                         Акційні товари
@@ -97,11 +98,8 @@ export default function Home() {
                               Дивитися усі<ArrowForwardIcon/></Button>}
                       </Grid>}
 
-                    {!!booksWithDiscounts?.length && <>
-                      <Grid item xs={12} display="flex" justifyContent="center">
-                        <BooksList items={booksWithDiscounts}></BooksList>
-                      </Grid>
-                    </>}
+                    {!!booksWithDiscounts?.length &&
+                      <BooksList items={booksWithDiscounts}></BooksList>}
                 </Grid>
 
 
