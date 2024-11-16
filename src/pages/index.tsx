@@ -84,11 +84,12 @@ export default function Home() {
                     {(loadingBooksWithDiscounts && !booksWithDiscounts?.length ||
                             !loadingBooksWithDiscounts && !!booksWithDiscounts?.length) &&
                       <Grid item xs={12} p={2} display="flex" justifyContent="center"
+                            mb={loadingBooksWithDiscounts ? 1 : 0}
                             sx={styleVariables.sectionTitle}>
                         Акційні товари
                       </Grid>}
 
-                    {booksWithDiscounts?.length && <>
+                    {!!booksWithDiscounts?.length && <>
                       <Grid item xs={12} display="flex" justifyContent="center">
                         <BooksList items={booksWithDiscounts}></BooksList>
                       </Grid>
