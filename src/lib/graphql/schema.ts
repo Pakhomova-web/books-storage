@@ -364,7 +364,7 @@ const typeDefs =  /* GraphQL */ `
         isInStock: Boolean
         withDiscount: Boolean
         quickSearch: String
-        tags: String
+        tags: [String]
         archived: Boolean
         ages: [Int]
     }

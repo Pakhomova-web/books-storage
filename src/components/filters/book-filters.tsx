@@ -74,7 +74,7 @@ export function BookFilters(props: IBookFiltersProps) {
     }
 
     function clearValue(controlName: keyof BookFilter) {
-        formContext.setValue(controlName, null);
+        formContext.setValue(controlName, []);
     }
 
     function onAgeClick(opt: number) {
@@ -108,7 +108,7 @@ export function BookFilters(props: IBookFiltersProps) {
                                          id="tags"
                                          label="Теги"
                                          name="tags"
-                                         showClear={!!tags}
+                                         showClear={!!tags?.length}
                                          onClear={() => clearValue('tags')}/>
                     </Grid>
 

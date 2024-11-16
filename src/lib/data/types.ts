@@ -167,7 +167,7 @@ export class BookFilter {
     publishingHouse?: string;
     isInStock?: boolean;
     withDiscount?: boolean;
-    tags?: string;
+    tags?: string[];
     archived?: boolean;
     ages?: number[];
 
@@ -187,7 +187,7 @@ export class BookFilter {
             this.isInStock = data.isInStock ? data.isInStock.toString() === 'true' : null;
             this.withDiscount = data.withDiscount ? data.withDiscount.toString() === 'true' : null;
             this.publishingHouse = data.publishingHouse;
-            this.tags = data.tags;
+            this.tags = !!data.tags ? (typeof data.tags === 'string' ? data.tags.split(',') : data.tags) : [];
             this.archived = data.archived !== undefined ? data.archived : false;
             this.ages = data.ages && typeof data.ages === 'string' ? data.ages.split(',').map(age => +age) : data.ages;
         }

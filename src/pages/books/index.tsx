@@ -8,7 +8,7 @@ import {
     pageStyles,
     positionRelative,
     primaryLightColor,
-    styleVariables
+    styleVariables, titleFontSize
 } from '@/constants/styles-variables';
 import {
     AuthorEntity,
@@ -21,7 +21,6 @@ import {
     PublishingHouseEntity
 } from '@/lib/data/types';
 import { useRouter } from 'next/router';
-import { getParamsQueryString } from '@/utils/utils';
 import { getBookTypeById } from '@/lib/graphql/queries/book-type/hook';
 import CustomLink from '@/components/custom-link';
 import ErrorNotification from '@/components/error-notification';
@@ -34,6 +33,7 @@ import { getLanguageById } from '@/lib/graphql/queries/language/hooks';
 import { getBookSeriesById } from '@/lib/graphql/queries/book-series/hook';
 import BooksList from '@/components/books-list';
 import HomeIcon from '@mui/icons-material/Home';
+import { styled } from '@mui/material/styles';
 
 const backBoxStyles = {
     display: 'flex',
@@ -44,6 +44,21 @@ const backBoxStyles = {
     borderRadius: `0 0 ${borderRadius} ${borderRadius}`,
     padding: boxPadding
 };
+
+const StyledAdditionalTopicGrid = styled(Grid)(() => ({
+    display: 'flex',
+    justifyContent: 'center',
+    border: `1px solid`,
+    borderRadius,
+    borderColor: primaryLightColor,
+    alignItems: 'center',
+    textAlign: 'center',
+    cursor: 'pointer',
+    fontSize: titleFontSize,
+    ':hover': {
+        backgroundColor: primaryLightColor
+    }
+}));
 
 export default function Books() {
     const router = useRouter();
@@ -125,8 +140,8 @@ export default function Books() {
                     { title: 'Видавництво' },
                     { title: item.name }
                 ]);
-        } else if (data?.tags) {
-            setOption([{ title: 'Тег' }, { title: data.tags as string }]);
+        } else if (!!data?.tags?.length) {
+            setOption([{ title: 'Теги' }, { title: data.tags.join(', ') }]);
         } else if (!!data?.withDiscount) {
             setOption([{ title: 'Акційні товари' }]);
         }
@@ -190,6 +205,25 @@ export default function Books() {
                              pageSettings={pageSettings}
                              showAlwaysSorting={true}
                              onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></BookFilters>
+
+                <Grid container mb={1}>
+                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
+                                               onClick={() => router.push('/books?quickSearch=англ')}>
+                        Англійська дітям
+                    </StyledAdditionalTopicGrid>
+                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
+                                               onClick={() => router.push('/books?bookType=66901099d4b33119e2069792')}>
+                        Наліпки для найменших
+                    </StyledAdditionalTopicGrid>
+                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
+                                               onClick={() => router.push('/books?tags=новорічна,різдвяна,зимова')}>
+                        Новорічні книги
+                    </StyledAdditionalTopicGrid>
+                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
+                                               onClick={() => router.push('/books?bookType=671389883908259306710c62')}>
+                        Розмальовки
+                    </StyledAdditionalTopicGrid>
+                </Grid>
 
                 {!loadingOption && option && renderBackBox()}
 

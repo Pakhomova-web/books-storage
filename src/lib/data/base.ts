@@ -58,6 +58,10 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
                     andFilters.push({ archived: { $in: [null, false] } });
                 } else if (key === 'ages') {
                     andFilters.push({ [key]: { $all: filters[key] } });
+                } else if (key === 'tags') {
+                    if (!!filters[key]?.length) {
+                        andFilters.push({ [key]: { $in: filters[key].map(i => getCaseInsensitiveSubstringOption(i)) } });
+                    }
                 } else {
                     andFilters.push({ [key]: filters[key] });
                 }
