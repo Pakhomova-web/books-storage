@@ -7,6 +7,7 @@ const typeDefs =  /* GraphQL */ `
     type Delivery {
         id: ID
         name: String!
+        imageId: String
     }
 
     type PublishingHouse {
@@ -419,10 +420,12 @@ const typeDefs =  /* GraphQL */ `
     input DeliveryUpdateInput {
         id: ID!
         name: String!
+        imageId: String
     }
 
     input DeliveryCreateInput {
         name: String!
+        imageId: String
     }
 
     input OrderBookInput {

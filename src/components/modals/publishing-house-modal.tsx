@@ -27,7 +27,7 @@ interface IForm {
     imageLink: string
 }
 
-const bookBoxStyles = { height: '150px', maxHeight: '50vw' };
+const imageBoxStyles = { height: '150px', maxHeight: '50vw' };
 
 export default function PublishingHouseModal({ open, item, onClose, isAdmin }: IPublishingHouseModalProps) {
     const formContext = useForm<IForm>({
@@ -96,7 +96,7 @@ export default function PublishingHouseModal({ open, item, onClose, isAdmin }: I
                                  label="ID фото"
                                  name="imageId"/>
 
-                <Box sx={bookBoxStyles} mb={1}>
+                <Box sx={imageBoxStyles} mb={1}>
                     <CustomImage isBookType={true} imageId={formContext.getValues('imageId')}></CustomImage>
                 </Box>
             </FormContainer>

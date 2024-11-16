@@ -230,15 +230,18 @@ export type CoverTypeUpdateInput = {
 
 export type Delivery = {
   id?: Maybe<Scalars['ID']['output']>;
+  imageId?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
 };
 
 export type DeliveryCreateInput = {
+  imageId?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
 };
 
 export type DeliveryUpdateInput = {
   id: Scalars['ID']['input'];
+  imageId?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
 };
 
@@ -1105,6 +1108,7 @@ export type CoverTypeResolvers<ContextType = any, ParentType extends ResolversPa
 
 export type DeliveryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Delivery'] = ResolversParentTypes['Delivery']> = {
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  imageId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

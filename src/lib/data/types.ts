@@ -243,6 +243,15 @@ export class UserEntity {
 export class DeliveryEntity {
     id?: string;
     name: string;
+    imageId?: string;
+
+    constructor(data?) {
+        if (data) {
+            this.id = data.id;
+            this.name = data.name;
+            this.imageId = data.imageId;
+        }
+    }
 }
 
 export class Address {

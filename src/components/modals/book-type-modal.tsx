@@ -24,7 +24,7 @@ interface IForm {
     imageId: string
 }
 
-const bookBoxStyles = { height: '150px', maxHeight: '50vw' };
+const imageBoxStyles = { height: '150px', maxHeight: '50vw' };
 
 export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTypeModalProps) {
     const formContext = useForm<IForm>({
@@ -93,7 +93,7 @@ export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTyp
                                  label="ID фото"
                                  name="imageId"/>
 
-                <Box sx={bookBoxStyles} my={1}>
+                <Box sx={imageBoxStyles} my={1}>
                     <CustomImage isBookType={true} imageId={formContext.getValues('imageId')}></CustomImage>
                 </Box>
             </FormContainer>

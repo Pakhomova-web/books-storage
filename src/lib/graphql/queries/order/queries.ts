@@ -20,6 +20,7 @@ const orderFragment = gql`
         }
         delivery {
             name
+            imageId
         }
         books {
             book {

@@ -6,7 +6,8 @@ const deliverySchema = new Schema<DeliveryEntity, Model<DeliveryEntity>>({
         type: String,
         required: true,
         unique: true
-    }
+    },
+    imageId: String
 });
 
 export default models.delivery || model('delivery', deliverySchema);

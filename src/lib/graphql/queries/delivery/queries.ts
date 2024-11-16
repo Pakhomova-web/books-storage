@@ -5,6 +5,7 @@ export const deliveriesQuery = gql`
         items: deliveries(pageSettings: $pageSettings, filters: $filters) {
             id
             name
+            imageId
         }
     }
 `;
@@ -22,7 +23,6 @@ export const createDeliveryQuery = gql`
     mutation CreateDelivery($input: DeliveryCreateInput!) {
         item: createDelivery(input: $input) {
             id
-            name
         }
     }
 `;
@@ -31,7 +31,6 @@ export const updateDeliveryQuery = gql`
     mutation UpdateDelivery($input: DeliveryUpdateInput!) {
         item: updateDelivery(input: $input) {
             id
-            name
         }
     }
 `;
