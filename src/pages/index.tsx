@@ -98,8 +98,10 @@ export default function Home() {
                               Дивитися усі<ArrowForwardIcon/></Button>}
                       </Grid>}
 
-                    {!!booksWithDiscounts?.length &&
-                      <BooksList items={booksWithDiscounts}></BooksList>}
+                    <Grid container display="flex" justifyContent="center">
+                        {!!booksWithDiscounts?.length &&
+                          <BooksList items={booksWithDiscounts}></BooksList>}
+                    </Grid>
                 </Grid>
 
 
