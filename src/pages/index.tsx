@@ -10,8 +10,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { usePublishingHouses } from '@/lib/graphql/queries/publishing-house/hook';
 import SocialMediaBox from '@/components/social-media-box';
 import BooksList from '@/components/books-list';
-import { useBooksWithDiscounts } from '@/lib/graphql/queries/book/hook';
+import { useBooksWithDiscount } from '@/lib/graphql/queries/book/hook';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 
 const bookTypeBoxStyles = {
     borderRadius,
@@ -60,10 +61,11 @@ const rowsPerPageBooksWithDiscount = 5;
 
 export default function Home() {
     const { loading: loadingBookTypes, items: bookTypes } = useBookTypes({ orderBy: 'name', order: 'asc' });
+    const { loading: loadingDeliveries, items: deliveries } = useDeliveries({ orderBy: 'name', order: 'asc' });
     const {
         loading: loadingBooksWithDiscounts,
         items: booksWithDiscounts
-    } = useBooksWithDiscounts(rowsPerPageBooksWithDiscount);
+    } = useBooksWithDiscount(rowsPerPageBooksWithDiscount);
     const { loading: loadingPublishingHouses, items: publishingHouses } = usePublishingHouses({
         orderBy: 'name',
         order: 'asc'
@@ -85,22 +87,20 @@ export default function Home() {
 
                     {(loadingBooksWithDiscounts && !booksWithDiscounts?.length ||
                             !loadingBooksWithDiscounts && !!booksWithDiscounts?.length) &&
-                      <Grid item xs={12} p={2} display="flex" justifyContent="center"
+                      <Grid item xs={12} py={1} px={2} display="flex" justifyContent="center" alignItems="center" gap={1}
                             mb={loadingBooksWithDiscounts ? 1 : 0}
                             sx={styleVariables.sectionTitle}>
                         Акційні товари
+
+                          {booksWithDiscounts?.length === rowsPerPageBooksWithDiscount &&
+                            <Button variant="outlined" onClick={() => router.push(`/books?withDiscount=true`)}>
+                              Дивитися усі<ArrowForwardIcon/></Button>}
                       </Grid>}
 
                     {!!booksWithDiscounts?.length && <>
                       <Grid item xs={12} display="flex" justifyContent="center">
                         <BooksList items={booksWithDiscounts}></BooksList>
                       </Grid>
-
-                        {booksWithDiscounts?.length === rowsPerPageBooksWithDiscount &&
-                          <Grid item xs={12} textAlign="center">
-                            <Button variant="outlined" onClick={() => router.push(`/books?withDiscount=true`)}>
-                              Подивитися усі книги<ArrowForwardIcon/></Button>
-                          </Grid>}
                     </>}
                 </Grid>
 
@@ -140,7 +140,8 @@ export default function Home() {
                     <Loading
                         show={loadingPublishingHouses && (!loadingBookTypes && loadingBooksWithDiscounts || loadingBookTypes && !loadingBooksWithDiscounts)}></Loading>
 
-                    <Grid item xs={12} p={2} display="flex" justifyContent="center" sx={styleVariables.sectionTitle}>
+                    <Grid item xs={12} p={2} display="flex" justifyContent="center" sx={styleVariables.sectionTitle}
+                          mb={loadingPublishingHouses ? 1 : 0}>
                         Видавництва
                     </Grid>
 
@@ -155,6 +156,22 @@ export default function Home() {
                                 {publishingHouse.name}
                             </Box>
                         </Grid>)}
+
+                    <Grid container sx={positionRelative}>
+                        <Grid item xs={12} p={1} textAlign="center" sx={styleVariables.sectionTitle}>
+                            Способи доставки
+                        </Grid>
+
+                        {!!deliveries?.length && deliveries.map((delivery, index) =>
+                            <Grid key={index} item xs={12} md={6} display="flex" alignItems="center"
+                                  justifyContent="center"
+                                  p={1} gap={1}>
+                                {delivery.name}
+                                <Box sx={{ width: '100px', height: '50px' }}><CustomImage
+                                    imageId={delivery.imageId}></CustomImage></Box>
+                            </Grid>
+                        )}
+                    </Grid>
                 </Grid>
             </Box>
         </Box>

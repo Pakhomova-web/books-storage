@@ -422,7 +422,7 @@ export default function BookDetails() {
                             {booksByAuthor.length === numberBooksByAuthor && <Grid item xs={12} textAlign="center">
                               <Button variant="outlined"
                                       onClick={() => router.push(`/books?authors=${book.authors[0].id}`)}>
-                                Подивитися усі книги<ArrowForwardIcon/></Button>
+                                Дивитися усі<ArrowForwardIcon/></Button>
                             </Grid>}
                         </Grid>
                       </Grid>}

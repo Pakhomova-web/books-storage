@@ -41,7 +41,7 @@ import {
     getBooksByAuthor,
     getBooksByIds,
     getBooksFromSeries,
-    getBooksWithDiscounts,
+    getBooksWithDiscount,
     getBooksWithNotApprovedComments,
     removeComment,
     updateBook,
@@ -264,7 +264,7 @@ const resolvers: Resolvers = {
         },
         booksWithDiscount: async (_root, { rowsPerPage }) => {
             try {
-                return getBooksWithDiscounts(rowsPerPage);
+                return getBooksWithDiscount(rowsPerPage);
             } catch (error) {
                 parseError(error);
             }

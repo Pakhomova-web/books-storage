@@ -297,7 +297,7 @@ export async function getBooksByIds(ids: string[]) {
         .sort({ bookSeries: 'desc', numberInStock: 'desc' });
 }
 
-export async function getBooksWithDiscounts(rowsPerPage: number) {
+export async function getBooksWithDiscount(rowsPerPage: number) {
     return Book
         .find({ discount: { $gt: 0 }, archived: { $in: [false, null] } })
         .populate({
@@ -311,6 +311,7 @@ export async function getBooksWithDiscounts(rowsPerPage: number) {
         .populate('coverType')
         .populate('language')
         .populate('authors')
+        .sort({ numberInStock: 'desc' })
         .limit(rowsPerPage);
 }
 

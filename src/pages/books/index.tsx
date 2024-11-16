@@ -127,6 +127,8 @@ export default function Books() {
                 ]);
         } else if (data?.tags) {
             setOption([{ title: 'Тег' }, { title: data.tags as string }]);
+        } else if (!!data?.withDiscount) {
+            setOption([{ title: 'Акційні товари' }]);
         }
 
         if (promise) {

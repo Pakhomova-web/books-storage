@@ -71,7 +71,7 @@ export async function getBooksByAuthors(authorId: string, rowsPerPage: number, e
     return items;
 }
 
-export function useBooksWithDiscounts(rowsPerPage: number) {
+export function useBooksWithDiscount(rowsPerPage: number) {
     const { data, loading, error } = useQuery(booksWithDiscountQuery, {
         fetchPolicy: 'no-cache',
         variables: { rowsPerPage }
