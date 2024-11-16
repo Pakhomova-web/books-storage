@@ -5,7 +5,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import CustomImage from '@/components/custom-image';
-import { borderRadius, styleVariables } from '@/constants/styles-variables';
+import { borderRadius, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import { getParamsQueryString, renderPrice } from '@/utils/utils';
 import { BookEntity } from '@/lib/data/types';
 import { useAuth } from '@/components/auth-context';
@@ -95,8 +95,8 @@ export default function BooksList({ items, filters = {}, pageUrl = '/' }) {
                     </Box>
 
 
-                    <Grid container spacing={1}>
-                        <Grid item xs={8}>
+                    <Grid container display="flex" alignItems="center">
+                        <Grid item xs={9}>
                             {isBookInBasket(book) ?
                                 <Button variant="outlined" fullWidth disabled={true}>В кошику</Button> :
                                 <Button variant="outlined" fullWidth
@@ -106,7 +106,7 @@ export default function BooksList({ items, filters = {}, pageUrl = '/' }) {
                                 </Button>}
                         </Grid>
 
-                        <Grid item xs={4} textAlign="center">
+                        <Grid item xs={3} textAlign="center">
                             <IconButton onClick={e => onLike(e, book)} color="warning">
                                 <Box gap={1} display="flex" alignItems="center">
                                     {isLiked(book) ? <FavoriteIcon/> : <FavoriteBorderIcon/>}
@@ -117,5 +117,6 @@ export default function BooksList({ items, filters = {}, pageUrl = '/' }) {
                 </Box>
             </StyledGrid>
         )))
-    );
+    )
+        ;
 }
