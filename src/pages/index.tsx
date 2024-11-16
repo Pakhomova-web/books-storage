@@ -1,4 +1,4 @@
-import { Box, BoxProps, Grid, useTheme } from '@mui/material';
+import { Box, BoxProps, Button, Grid, useTheme } from '@mui/material';
 import React from 'react';
 import Loading from '@/components/loading';
 import { borderRadius, pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
@@ -9,6 +9,9 @@ import CustomImage from '@/components/custom-image';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { usePublishingHouses } from '@/lib/graphql/queries/publishing-house/hook';
 import SocialMediaBox from '@/components/social-media-box';
+import BooksList from '@/components/books-list';
+import { useBooksWithDiscounts } from '@/lib/graphql/queries/book/hook';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const bookTypeBoxStyles = {
     borderRadius,
@@ -53,8 +56,14 @@ const mobileImageBoxStyles = {
     overflow: 'hidden'
 };
 
+const rowsPerPageBooksWithDiscount = 5;
+
 export default function Home() {
     const { loading: loadingBookTypes, items: bookTypes } = useBookTypes({ orderBy: 'name', order: 'asc' });
+    const {
+        loading: loadingBooksWithDiscounts,
+        items: booksWithDiscounts
+    } = useBooksWithDiscounts(rowsPerPageBooksWithDiscount);
     const { loading: loadingPublishingHouses, items: publishingHouses } = usePublishingHouses({
         orderBy: 'name',
         order: 'asc'
@@ -65,59 +74,85 @@ export default function Home() {
 
     return (
         <Box sx={positionRelative}>
-            <Loading show={loadingBookTypes || loadingPublishingHouses}></Loading>
+            <Loading show={loadingBookTypes && loadingBooksWithDiscounts && loadingPublishingHouses}></Loading>
 
             <Box sx={pageStyles}>
-                {!!bookTypes?.length &&
-                  <Grid container>
-                    <Grid item xs={12} p={2} display="flex" justifyContent="center"
-                          sx={styleVariables.bigTitleFontSize}>
-                      Типи книг
+                <Grid container sx={positionRelative}>
+                    <Loading
+                        show={loadingBooksWithDiscounts && (!loadingBookTypes && loadingPublishingHouses || loadingBookTypes && !loadingPublishingHouses)}></Loading>
+
+                    {(loadingBooksWithDiscounts && !booksWithDiscounts?.length ||
+                            !loadingBooksWithDiscounts && !!booksWithDiscounts?.length) &&
+                      <Grid item xs={12} p={2} display="flex" justifyContent="center"
+                            sx={styleVariables.sectionTitle}>
+                        Акційні товари
+                      </Grid>}
+
+                    {booksWithDiscounts?.length && <>
+                      <Grid item xs={12} display="flex" justifyContent="center">
+                        <BooksList items={booksWithDiscounts}></BooksList>
+                      </Grid>
+
+                        {booksWithDiscounts?.length === rowsPerPageBooksWithDiscount &&
+                          <Grid item xs={12} textAlign="center">
+                            <Button variant="outlined" onClick={() => router.push(`/books?withDiscount=true`)}>
+                              Подивитися усі книги<ArrowForwardIcon/></Button>
+                          </Grid>}
+                    </>}
+                </Grid>
+
+
+                <Grid container sx={positionRelative} mb={loadingBookTypes ? 1 : 0}>
+                    <Loading
+                        show={loadingBookTypes && (!loadingPublishingHouses && loadingBooksWithDiscounts || loadingPublishingHouses && !loadingBooksWithDiscounts)}></Loading>
+
+                    <Grid item xs={12} p={2} display="flex" justifyContent="center" sx={styleVariables.sectionTitle}>
+                        Типи книг
                     </Grid>
 
-                      {bookTypes?.map((type, index) => (
-                          mobileMatches ?
-                              <Grid xs={12} sm={6} key={index} item p={1}
-                                    onClick={() => router.push(`/books?bookType=${type.id}`)}>
-                                  <Box sx={bookTypeBoxStyles} gap={1} p={1}>
-                                      <Box sx={mobileImageBoxStyles}>
-                                          <CustomImage imageId={type.imageId} isBookType={true}></CustomImage>
-                                      </Box>
-                                      {type.name}
-                                  </Box>
-                              </Grid> :
-                              <Grid key={index} item p={1} md={3} lg={2}
-                                    onClick={() => router.push(`/books?bookType=${type.id}`)}>
-                                  <StyledBookTypeBox>
-                                      <Box sx={imageBoxStyles}>
-                                          <CustomImage imageId={type.imageId} isBookType={true}></CustomImage>
-                                      </Box>
-                                      <Box sx={bookTypeNameStyles} p={2} className="bookTypeBox">{type.name}</Box>
-                                  </StyledBookTypeBox>
-                              </Grid>
-                      ))}
-                  </Grid>
-                }
+                    {!!bookTypes?.length && bookTypes?.map((type, index) => (
+                        mobileMatches ?
+                            <Grid xs={12} sm={6} key={index} item p={1}
+                                  onClick={() => router.push(`/books?bookType=${type.id}`)}>
+                                <Box sx={bookTypeBoxStyles} gap={1} p={1}>
+                                    <Box sx={mobileImageBoxStyles}>
+                                        <CustomImage imageId={type.imageId} isBookType={true}></CustomImage>
+                                    </Box>
+                                    {type.name}
+                                </Box>
+                            </Grid> :
+                            <Grid key={index} item p={1} md={3} lg={2}
+                                  onClick={() => router.push(`/books?bookType=${type.id}`)}>
+                                <StyledBookTypeBox>
+                                    <Box sx={imageBoxStyles}>
+                                        <CustomImage imageId={type.imageId} isBookType={true}></CustomImage>
+                                    </Box>
+                                    <Box sx={bookTypeNameStyles} p={2} className="bookTypeBox">{type.name}</Box>
+                                </StyledBookTypeBox>
+                            </Grid>
+                    ))}
+                </Grid>
 
-                {!!publishingHouses?.length &&
-                  <Grid container>
-                    <Grid item xs={12} p={2} display="flex" justifyContent="center"
-                          sx={styleVariables.bigTitleFontSize}>
-                      Видавництва
+                <Grid container sx={positionRelative}>
+                    <Loading
+                        show={loadingPublishingHouses && (!loadingBookTypes && loadingBooksWithDiscounts || loadingBookTypes && !loadingBooksWithDiscounts)}></Loading>
+
+                    <Grid item xs={12} p={2} display="flex" justifyContent="center" sx={styleVariables.sectionTitle}>
+                        Видавництва
                     </Grid>
 
-                      {publishingHouses.map((publishingHouse, index) =>
-                          <Grid xs={12} sm={6} md={3} lg={2} key={index} item p={1}
-                                onClick={() => router.push(`/books?publishingHouse=${publishingHouse.id}`)}>
-                              <Box sx={bookTypeBoxStyles} gap={1} p={1}>
-                                  <Box sx={mobileImageBoxStyles}>
-                                      <CustomImage imageId={publishingHouse.imageId} isBookType={true}></CustomImage>
-                                  </Box>
-                                  {publishingHouse.name}
-                              </Box>
-                          </Grid>)}
-                  </Grid>
-                }
+                    {!!publishingHouses?.length && publishingHouses.map((publishingHouse, index) =>
+                        <Grid xs={12} sm={6} md={3} lg={2} key={index} item p={1}
+                              onClick={() => router.push(`/books?publishingHouse=${publishingHouse.id}`)}>
+                            <Box sx={bookTypeBoxStyles} gap={1} p={1}>
+                                <Box sx={mobileImageBoxStyles}>
+                                    <CustomImage imageId={publishingHouse.imageId}
+                                                 isBookType={true}></CustomImage>
+                                </Box>
+                                {publishingHouse.name}
+                            </Box>
+                        </Grid>)}
+                </Grid>
 
                 <SocialMediaBox></SocialMediaBox>
             </Box>

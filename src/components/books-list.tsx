@@ -6,9 +6,10 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import CustomImage from '@/components/custom-image';
 import { borderRadius, styleVariables } from '@/constants/styles-variables';
-import { renderPrice } from '@/utils/utils';
+import { getParamsQueryString, renderPrice } from '@/utils/utils';
 import { BookEntity } from '@/lib/data/types';
 import { useAuth } from '@/components/auth-context';
+import { useRouter } from 'next/router';
 
 const bookBoxStyles = { height: '250px', maxHeight: '50vw' };
 
@@ -30,8 +31,9 @@ const StyledGrid = styled(Grid)(() => ({
     }
 }));
 
-export default function BooksList({ items, onClick }) {
+export default function BooksList({ items, filters = {}, pageUrl = '/' }) {
     const { user, setLikedBook, setBookInBasket } = useAuth();
+    const router = useRouter();
 
     function onLike(e, book: BookEntity) {
         e.stopPropagation();
@@ -49,6 +51,15 @@ export default function BooksList({ items, onClick }) {
     function onBuy(e, book: BookEntity) {
         e.stopPropagation();
         setBookInBasket(book.id);
+    }
+
+    function onClick(book: BookEntity) {
+        const filterQueries: string[] = Object.keys(filters)
+            .map(key => !!filters[key] ? `${key}=${filters[key]}` : '')
+            .filter(query => !!query);
+        const query = !!filterQueries.length ? filterQueries.join('&') : null;
+
+        router.push(`/books/details?${getParamsQueryString({ id: book.id, filters: query, pageUrl })}`);
     }
 
     return (
@@ -74,11 +85,15 @@ export default function BooksList({ items, onClick }) {
                         {book.language.name}
                     </Box>
 
-                    {!!book.discount && <Box sx={styleVariables.hintFontSize} mb={1}>
-                      <s>{renderPrice(book.price)}</s>
-                    </Box>}
-                    <Box sx={bookPriceStyles(!!book.numberInStock)}
-                         mb={1}>{renderPrice(book.price, book.discount)}</Box>
+                    <Box display="flex" alignItems="center" justifyContent="center" gap={1} mb={1}>
+                        <Box sx={bookPriceStyles(!!book.numberInStock)}>
+                            {renderPrice(book.price, book.discount)}
+                        </Box>
+                        {!!book.discount && <Box sx={styleVariables.hintFontSize}>
+                          <s>{renderPrice(book.price)}</s>
+                        </Box>}
+                    </Box>
+
 
                     <Grid container spacing={1}>
                         <Grid item xs={8}>

@@ -232,9 +232,18 @@ export const booksFromSeries = gql`
     ${bookFragment}
 `;
 
-export const booksByAuthor = gql`
+export const booksByAuthorQuery = gql`
     query BooksByAuthor($authorId: ID!, $rowsPerPage: Int!, $excludeBookSeriesId: ID) {
         items: booksByAuthor(authorId: $authorId, rowsPerPage: $rowsPerPage, excludeBookSeriesId: $excludeBookSeriesId) {
+            ...Book
+        }
+    }
+    ${bookFragment}
+`;
+
+export const booksWithDiscountQuery = gql`
+    query BooksWithDiscount($rowsPerPage: Int!) {
+        items: booksWithDiscount(rowsPerPage: $rowsPerPage) {
             ...Book
         }
     }

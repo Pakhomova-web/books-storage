@@ -233,7 +233,7 @@ export async function getBooksFromSeries(bookSeriesId: string) {
     }
 
     return Book
-        .find({ bookSeries: bookSeriesId })
+        .find({ bookSeries: bookSeriesId, archived: { $in: [false, null] } })
         .populate({
             path: 'bookSeries',
             populate: {
@@ -256,7 +256,11 @@ export async function getBooksByAuthor(authorId: string, rowsPerPage: number, ex
     }
 
     return Book
-        .find({ authors: authorId, ...(excludeBookSeriesId ? { bookSeries: { $ne: excludeBookSeriesId } } : {}) })
+        .find({
+            authors: authorId,
+            archived: { $in: [false, null] },
+            ...(excludeBookSeriesId ? { bookSeries: { $ne: excludeBookSeriesId } } : {})
+        })
         .sort({ numberInStock: 'desc' })
         .limit(rowsPerPage)
         .populate({
@@ -278,7 +282,7 @@ export async function getBooksByIds(ids: string[]) {
     }
 
     return Book
-        .find({ _id: ids })
+        .find({ _id: ids, archived: { $in: [false, null] } })
         .populate({
             path: 'bookSeries',
             populate: {
@@ -291,6 +295,23 @@ export async function getBooksByIds(ids: string[]) {
         .populate('language')
         .populate('authors')
         .sort({ bookSeries: 'desc', numberInStock: 'desc' });
+}
+
+export async function getBooksWithDiscounts(rowsPerPage: number) {
+    return Book
+        .find({ discount: { $gt: 0 }, archived: { $in: [false, null] } })
+        .populate({
+            path: 'bookSeries',
+            populate: {
+                path: 'publishingHouse'
+            }
+        })
+        .populate('bookType')
+        .populate('pageType')
+        .populate('coverType')
+        .populate('language')
+        .populate('authors')
+        .limit(rowsPerPage);
 }
 
 export async function getBooksWithNotApprovedComments(pageSettings?: IPageable) {

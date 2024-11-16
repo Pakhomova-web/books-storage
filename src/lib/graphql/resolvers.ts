@@ -32,11 +32,18 @@ import {
     updateBookSeries
 } from '@/lib/data/book-series';
 import {
-    addComment, approveComment,
+    addComment,
+    approveComment,
     createBook,
     getBookById,
     getBookComments,
-    getBooks, getBooksByAuthor, getBooksByIds, getBooksFromSeries, getBooksWithNotApprovedComments, removeComment,
+    getBooks,
+    getBooksByAuthor,
+    getBooksByIds,
+    getBooksFromSeries,
+    getBooksWithDiscounts,
+    getBooksWithNotApprovedComments,
+    removeComment,
     updateBook,
     updateBookNumberInStock
 } from '@/lib/data/books';
@@ -251,6 +258,13 @@ const resolvers: Resolvers = {
         booksByIds: async (_root, { ids }) => {
             try {
                 return getBooksByIds(ids);
+            } catch (error) {
+                parseError(error);
+            }
+        },
+        booksWithDiscount: async (_root, { rowsPerPage }) => {
+            try {
+                return getBooksWithDiscounts(rowsPerPage);
             } catch (error) {
                 parseError(error);
             }

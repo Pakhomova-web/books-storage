@@ -15,7 +15,7 @@ import { getBookComments, getBooksByAuthors, getBooksFromSeries, useBook } from 
 import ErrorNotification from '@/components/error-notification';
 import { TableKey } from '@/components/table/table-key';
 import { BookEntity, CommentEntity } from '@/lib/data/types';
-import { getParamsQueryString, isAdmin, renderPrice } from '@/utils/utils';
+import { isAdmin, renderPrice } from '@/utils/utils';
 import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
 import CustomLink from '@/components/custom-link';
@@ -177,14 +177,6 @@ export default function BookDetails() {
 
     function onPublishingHouseClick() {
         router.push(`/books?publishingHouse=${book.bookSeries.publishingHouse.id}`);
-    }
-
-    function onBookClick(book: BookEntity) {
-        router.push(`/books/details?${getParamsQueryString({
-            id: book.id,
-            filters: router.query.filters,
-            pageUrl: router.query.pageUrl
-        })}`);
     }
 
     function isLiked(book: BookEntity) {
@@ -408,7 +400,7 @@ export default function BookDetails() {
                               justifyContent="center">
                           <Loading show={loadingBooksFromSeries}></Loading>
 
-                          <BooksList items={booksFromSeries} onClick={onBookClick}></BooksList>
+                          <BooksList items={booksFromSeries} pageUrl={router.query.pageUrl as string}></BooksList>
                             {!booksFromSeries?.length &&
                               <Grid item xs={12} mb={2} display="flex" justifyContent="center">
                                 В цій серії більше немає книг
@@ -425,7 +417,7 @@ export default function BookDetails() {
                               justifyContent="center">
                           <Loading show={loadingBooksByAuthor}></Loading>
 
-                          <BooksList items={booksByAuthor} onClick={onBookClick}></BooksList>
+                          <BooksList items={booksByAuthor} pageUrl={router.query.pageUrl as string}></BooksList>
 
                             {booksByAuthor.length === numberBooksByAuthor && <Grid item xs={12} textAlign="center">
                               <Button variant="outlined"

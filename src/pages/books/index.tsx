@@ -158,18 +158,9 @@ export default function Books() {
         });
     }
 
-    function handleClickOnBook(book: BookEntity) {
-        const filterQueries: string[] = Object.keys(filters)
-            .map(key => !!filters[key] ? `${key}=${filters[key]}` : '')
-            .filter(query => !!query);
-        const query = !!filterQueries.length ? filterQueries.join('&') : null;
-
-        router.push(`/books/details?${getParamsQueryString({ id: book.id, filters: query })}`);
-    }
-
     function renderBackBox() {
         return (
-            <Box gap={1} sx={backBoxStyles} mt={1}>
+            <Box gap={1} sx={backBoxStyles}>
                 <IconButton onClick={() => router.push('/')}><HomeIcon/></IconButton>
                 {option.map((item, index) =>
                     <Box key={index} display="flex" alignItems="center" gap={1}>
@@ -203,7 +194,7 @@ export default function Books() {
                 {items.length ?
                     <>
                         <Grid container justifyContent="center">
-                            <BooksList items={items} onClick={handleClickOnBook}></BooksList>
+                            <BooksList items={items} filters={filters} pageUrl="/books"></BooksList>
                         </Grid>
 
                         <Box sx={{ position: 'sticky', bottom: 0 }}>

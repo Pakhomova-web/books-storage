@@ -11,10 +11,12 @@ import {
     addBookInBasketQuery,
     approveComment,
     bookByIdQuery,
-    bookCommentsQuery, booksByAuthor,
+    bookCommentsQuery,
+    booksByAuthorQuery,
     booksByIdsQuery,
     booksFromSeries,
     booksQuery,
+    booksWithDiscountQuery,
     booksWithNotApprovedCommentsQuery,
     createBookQuery,
     likeBookQuery,
@@ -61,12 +63,21 @@ export async function getBooksFromSeries(bookSeriesId: string) {
 
 export async function getBooksByAuthors(authorId: string, rowsPerPage: number, excludeBookSeriesId?: string) {
     const { data: { items } } = await apolloClient.query({
-        query: booksByAuthor,
+        query: booksByAuthorQuery,
         fetchPolicy: 'no-cache',
         variables: { authorId, rowsPerPage, excludeBookSeriesId }
     });
 
     return items;
+}
+
+export function useBooksWithDiscounts(rowsPerPage: number) {
+    const { data, loading, error } = useQuery(booksWithDiscountQuery, {
+        fetchPolicy: 'no-cache',
+        variables: { rowsPerPage }
+    });
+
+    return { items: data?.items ? data.items : [], loading, error };
 }
 
 export function getAllBooks(pageSettings?: IPageable, filters?: BookFilter) {

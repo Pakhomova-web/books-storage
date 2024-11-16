@@ -145,6 +145,7 @@ const typeDefs =  /* GraphQL */ `
         bookComments(id: ID!, page: Int!, rowsPerPage: Int!): [Comment!]
         booksFromSeries(bookSeriesId: ID!): [Book!]
         booksByAuthor(authorId: ID!, rowsPerPage: Int!, excludeBookSeriesId: ID): [Book!]
+        booksWithDiscount(rowsPerPage: Int!): [Book!]
         booksWithNotApprovedComments(pageSettings: PageableInput): BookSubList
         booksByIds(ids: [ID!]): [Book!]
 

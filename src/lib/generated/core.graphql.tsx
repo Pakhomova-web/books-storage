@@ -116,6 +116,7 @@ export type BookSearchInput = {
   publishingHouse?: InputMaybe<Scalars['ID']['input']>;
   quickSearch?: InputMaybe<Scalars['String']['input']>;
   tags?: InputMaybe<Scalars['String']['input']>;
+  withDiscount?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type BookSeries = {
@@ -630,6 +631,7 @@ export type Query = {
   booksByAuthor?: Maybe<Array<Book>>;
   booksByIds?: Maybe<Array<Book>>;
   booksFromSeries?: Maybe<Array<Book>>;
+  booksWithDiscount?: Maybe<Array<Book>>;
   booksWithNotApprovedComments?: Maybe<BookSubList>;
   coverTypes?: Maybe<Array<CoverType>>;
   deliveries?: Maybe<Array<Delivery>>;
@@ -714,6 +716,11 @@ export type QueryBooksByIdsArgs = {
 
 export type QueryBooksFromSeriesArgs = {
   bookSeriesId: Scalars['ID']['input'];
+};
+
+
+export type QueryBooksWithDiscountArgs = {
+  rowsPerPage: Scalars['Int']['input'];
 };
 
 
@@ -1212,6 +1219,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   booksByAuthor?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryBooksByAuthorArgs, 'authorId' | 'rowsPerPage'>>;
   booksByIds?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, Partial<QueryBooksByIdsArgs>>;
   booksFromSeries?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryBooksFromSeriesArgs, 'bookSeriesId'>>;
+  booksWithDiscount?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryBooksWithDiscountArgs, 'rowsPerPage'>>;
   booksWithNotApprovedComments?: Resolver<Maybe<ResolversTypes['BookSubList']>, ParentType, ContextType, Partial<QueryBooksWithNotApprovedCommentsArgs>>;
   coverTypes?: Resolver<Maybe<Array<ResolversTypes['CoverType']>>, ParentType, ContextType, Partial<QueryCoverTypesArgs>>;
   deliveries?: Resolver<Maybe<Array<ResolversTypes['Delivery']>>, ParentType, ContextType, Partial<QueryDeliveriesArgs>>;

@@ -28,16 +28,12 @@ export default function Likes() {
         refetch();
     }, [user]);
 
-    function onBookClick(book: BookEntity) {
-        router.push(`/books/details?${getParamsQueryString({ id: book.id, pageUrl: '/profile/likes' })}`);
-    }
-
     return (
         <ProfileMenu activeUrl="likes">
             <Loading show={loading}></Loading>
 
             <Grid container spacing={2} p={1}>
-                <BooksList items={items} onClick={onBookClick}></BooksList>
+                <BooksList items={items} pageUrl="/profile/likes"></BooksList>
             </Grid>
 
             {!items?.length &&
