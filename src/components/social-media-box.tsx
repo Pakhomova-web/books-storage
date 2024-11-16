@@ -4,7 +4,6 @@ import { styleVariables } from '@/constants/styles-variables';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import React from 'react';
 import CustomImage from '@/components/custom-image';
-import { Instagram } from '@mui/icons-material';
 
 const StyledSocialsGrid = styled(Grid)(() => ({
     backgroundColor: 'white',
