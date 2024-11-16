@@ -8,6 +8,7 @@ import { Instagram } from '@mui/icons-material';
 
 const StyledSocialsGrid = styled(Grid)(() => ({
     backgroundColor: 'white',
+    borderTop: `1px solid ${styleVariables.gray}`,
     borderBottom: `1px solid ${styleVariables.gray}`
 }));
 
