@@ -77,6 +77,8 @@ export default function Home() {
             <Loading show={loadingBookTypes && loadingBooksWithDiscounts && loadingPublishingHouses}></Loading>
 
             <Box sx={pageStyles}>
+                <SocialMediaBox></SocialMediaBox>
+
                 <Grid container sx={positionRelative}>
                     <Loading
                         show={loadingBooksWithDiscounts && (!loadingBookTypes && loadingPublishingHouses || loadingBookTypes && !loadingPublishingHouses)}></Loading>
@@ -154,8 +156,6 @@ export default function Home() {
                             </Box>
                         </Grid>)}
                 </Grid>
-
-                <SocialMediaBox></SocialMediaBox>
             </Box>
         </Box>
     );
