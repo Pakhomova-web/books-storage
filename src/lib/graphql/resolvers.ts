@@ -11,7 +11,7 @@ import { createBookType, deleteBookType, getBookTypeById, getBookTypes, updateBo
 import { createCoverType, deleteCoverType, getCoverTypes, updateCoverType } from '@/lib/data/cover-type';
 import {
     AuthorEntity,
-    BookEntity,
+    BookEntity, BookFilter,
     BookSeriesEntity,
     BookTypeEntity, CommentEntity,
     CoverTypeEntity,
@@ -166,7 +166,7 @@ const resolvers: Resolvers = {
         },
         books: async (_root, { pageSettings, filters }) => {
             try {
-                return getBooks(<IPageable>pageSettings, filters);
+                return getBooks(<IPageable>pageSettings, new BookFilter(filters));
             } catch (error) {
                 parseError(error);
             }
