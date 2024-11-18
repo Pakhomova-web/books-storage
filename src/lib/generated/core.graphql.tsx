@@ -115,7 +115,7 @@ export type BookSearchInput = {
   pageType?: InputMaybe<Scalars['ID']['input']>;
   publishingHouse?: InputMaybe<Scalars['ID']['input']>;
   quickSearch?: InputMaybe<Scalars['String']['input']>;
-  tags?: InputMaybe<Scalars['String']['input']>;
+  tags?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   withDiscount?: InputMaybe<Scalars['Boolean']['input']>;
 };
 

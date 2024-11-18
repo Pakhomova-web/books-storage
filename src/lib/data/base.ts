@@ -47,7 +47,7 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
             if (key === 'quickSearch') {
                 return;
             }
-            if (filters[key] !== null) {
+            if (filters[key] !== null && filters[key] !== undefined) {
                 if (key === 'name') {
                     andFilters.push({ [key]: getCaseInsensitiveSubstringOption(filters[key]) });
                 } else if (key === 'isInStock') {
@@ -55,9 +55,7 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
                 } else if (key === 'withDiscount') {
                     andFilters.push({ discount: { $gt: 0 } });
                 } else if (key === 'archived') {
-                    if (filters[key] !== null) {
-                        andFilters.push({ archived: { $in: [null, false] } });
-                    }
+                    andFilters.push({ archived: !!filters[key] ? true : { $in: [null, false] } });
                 } else if (key === 'ages') {
                     andFilters.push({ [key]: { $all: filters[key] } });
                 } else if (key === 'tags') {
