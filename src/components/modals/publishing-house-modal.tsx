@@ -74,7 +74,7 @@ export default function PublishingHouseModal({ open, item, onClose, isAdmin }: I
                                  required
                                  autoFocus
                                  id="publishing-house-name"
-                                 label="Name"
+                                 label="Назва"
                                  name="name"/>
 
                 <CustomTextField fullWidth

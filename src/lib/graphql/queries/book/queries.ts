@@ -39,6 +39,7 @@ const bookFragment = gql`
                 imageId
             }
             default
+            description
         }
         authors {
             id
@@ -86,6 +87,7 @@ export const booksWithNotApprovedCommentsQuery = gql`
                     publishingHouse {
                         name
                     }
+                    description
                 }
                 comments {
                     id

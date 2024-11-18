@@ -7,7 +7,8 @@ import CustomTextField from '@/components/form-fields/custom-text-field';
 import CustomSelectField from '@/components/form-fields/custom-select-field';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
+import React from 'react';
 
 interface IBookSeriesModalProps {
     open: boolean,
@@ -23,9 +24,11 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
             id: item?.id,
             name: item?.name,
             publishingHouseId: item?.publishingHouse.id,
-            default: item?.default
+            default: item?.default,
+            description: item?.description
         }
     });
+    const { description } = formContext.watch();
     const { update, updating, updatingError } = useUpdateBookSeries();
     const { create, creating, creatingError } = useCreateBookSeries();
     const { items: publishingHouseOptions, loading: loadingPublishingHouses } = usePublishingHouseOptions();
@@ -52,27 +55,46 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
             disableBackdropClick={true}
             onClose={() => onClose()}
             loading={updating || creating}
+            big={true}
             isSubmitDisabled={!formContext.formState.isValid}
             onSubmit={isAdmin && !item?.default ? onSubmit : null}>
             <FormContainer formContext={formContext}>
-                <Box display="flex" gap={1} flexDirection="column">
-                    <CustomTextField fullWidth
-                                     required
-                                     autoFocus
-                                     disabled={item?.default}
-                                     id="book-series-name"
-                                     label="Name"
-                                     name="name"/>
+                <Grid container display="flex" gap={1}>
+                    <Grid item xs={12} sm={6} md={3}>
+                        <CustomTextField fullWidth
+                                         required
+                                         autoFocus
+                                         disabled={item?.default}
+                                         id="book-series-name"
+                                         label="Назва"
+                                         name="name"/>
+                    </Grid>
 
-                    <CustomSelectField fullWidth
-                                       required
-                                       options={publishingHouseOptions}
-                                       loading={loadingPublishingHouses}
-                                       disabled={item?.default}
-                                       id="publishing-house-id"
-                                       label="Видавництво"
-                                       name="publishingHouseId"/>
-                </Box>
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomSelectField fullWidth
+                                           required
+                                           options={publishingHouseOptions}
+                                           loading={loadingPublishingHouses}
+                                           disabled={item?.default}
+                                           id="publishing-house-id"
+                                           label="Видавництво"
+                                           name="publishingHouseId"/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <CustomTextField fullWidth
+                                         disabled={item?.default}
+                                         id="book-series-desc"
+                                         multiline={true}
+                                         label="Опис"
+                                         name="description"/>
+                    </Grid>
+
+                    {description && <Grid item xs={12}>
+                      <Box mb={1}><b>Попередній огляд опису:</b></Box>
+                      <Box dangerouslySetInnerHTML={{ __html: description }}></Box>
+                    </Grid>}
+                </Grid>
             </FormContainer>
 
             {(creatingError || updatingError) &&

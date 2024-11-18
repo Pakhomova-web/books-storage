@@ -47,7 +47,7 @@ export default function PageTypeModal({ open, item, onClose, isAdmin }: IPageTyp
                                  required
                                  autoFocus
                                  id="page-type-name"
-                                 label="Name"
+                                 label="Назва"
                                  name="name"/>
             </FormContainer>
 

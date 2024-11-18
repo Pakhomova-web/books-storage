@@ -38,6 +38,7 @@ const typeDefs =  /* GraphQL */ `
         name: String!
         publishingHouse: PublishingHouse!
         default: Boolean
+        description: String
     }
 
     type Author {
@@ -380,6 +381,7 @@ const typeDefs =  /* GraphQL */ `
         name: String!
         publishingHouseId: ID!
         default: Boolean
+        description: String
     }
 
     input BookSeriesUpdateInput {
@@ -387,11 +389,12 @@ const typeDefs =  /* GraphQL */ `
         name: String!
         publishingHouseId: ID!
         default: Boolean
+        description: String
     }
 
     input BookSeriesSearchInput {
         name: String,
-        publishingHouse: ID!
+        publishingHouse: ID
     }
 
     type BookSeriesSubList {

@@ -11,7 +11,8 @@ const bookSeriesSchema = new Schema<BookSeriesEntity, Model<BookSeriesEntity>>({
         type: Schema.Types.ObjectId,
         required: true
     },
-    default: Boolean
+    default: Boolean,
+    description: String
 });
 
 bookSeriesSchema.index({ name: 1, publishingHouse: 1 }, { unique: true });

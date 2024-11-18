@@ -30,6 +30,7 @@ const orderFragment = gql`
                     publishingHouse {
                         name
                     }
+                    description
                 }
                 bookType {
                     name

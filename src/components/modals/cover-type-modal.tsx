@@ -47,7 +47,7 @@ export default function CoverTypeModal({ open, item, onClose, isAdmin }: ICoverT
                                  required
                                  autoFocus
                                  id="cover-type-name"
-                                 label="Name"
+                                 label="Назва"
                                  name="name"/>
             </FormContainer>
 

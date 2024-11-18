@@ -11,6 +11,7 @@ const bookSeriesFragment = gql`
             imageId
         }
         default
+        description
     }
 `;
 

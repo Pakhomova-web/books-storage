@@ -47,6 +47,7 @@ export class BookSeriesEntity {
     publishingHouseId: string;
     publishingHouse: PublishingHouseEntity;
     default?: boolean;
+    description?: string;
 
     constructor(data?) {
         if (data) {
@@ -55,6 +56,7 @@ export class BookSeriesEntity {
             this.publishingHouseId = data.publishingHouseId;
             this.publishingHouse = new PublishingHouseEntity(data.publishingHouse);
             this.default = !!data.default;
+            this.description = data.description;
         }
     }
 }

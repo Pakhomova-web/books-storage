@@ -331,10 +331,20 @@ export default function BookDetails() {
                       </Grid>
                     </Grid>
 
-                      {!!book.description &&
+                      {(!!book.description || !!book.bookSeries.description) &&
                         <Grid item xs={12} p={1}>
                           <Box sx={styleVariables.sectionTitle} p={1} mb={1}>Опис</Box>
+                        </Grid>}
+
+                      {!!book.description &&
+                        <Grid item xs={12} p={1}>
                           <Box px={1} dangerouslySetInnerHTML={{ __html: book.description }}></Box>
+                        </Grid>
+                      }
+
+                      {!!book.bookSeries.description &&
+                        <Grid item xs={12} p={1}>
+                          <Box px={1} dangerouslySetInnerHTML={{ __html: book.bookSeries.description }}></Box>
                         </Grid>
                       }
 

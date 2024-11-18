@@ -65,7 +65,7 @@ export default function DeliveryModal({ open, item, onClose, isAdmin }: IDeliver
                                  required
                                  autoFocus
                                  id="delivery-name"
-                                 label="Name"
+                                 label="Назва"
                                  name="name"/>
 
                 <CustomTextField fullWidth

@@ -125,10 +125,7 @@ export async function updateBook(input: BookEntity, updateAllBooksInSeries = fal
 
         await Promise.all(itemsBySeries.map(item => {
             item.format = input.format;
-            item.description = input.description;
             item.ages = input.ages;
-            item.tags = input.tags;
-            item.authors = input.authorIds;
 
             return item.save();
         }));

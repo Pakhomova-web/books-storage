@@ -490,7 +490,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             {showModalForSeries &&
               <CustomModal open={true} title="Відредагувати одну книгу чи всю серію?">
                 <Box textAlign="center" mb={1}>В усій серії буде відредаговано:</Box>
-                <Box textAlign="center" mb={2}>формат, опис, теги, вік, авторів.</Box>
+                <Box textAlign="center" mb={2}>формат, вік.</Box>
 
                 <Box display="flex" gap={1} alignItems="center" justifyContent="center" flexWrap="wrap">
                   <Button variant="contained" onClick={() => onSubmit(true, true)}>

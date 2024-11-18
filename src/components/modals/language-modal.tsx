@@ -47,7 +47,7 @@ export default function LanguageModal({ open, item, onClose, isAdmin }: ILanguag
                                  required
                                  autoFocus
                                  id="language-name"
-                                 label="Name"
+                                 label="Назва"
                                  name="name"/>
             </FormContainer>
 
