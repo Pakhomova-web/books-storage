@@ -36,7 +36,7 @@ export default function Likes() {
                 <BooksList items={items} pageUrl="/profile/likes"></BooksList>
             </Grid>
 
-            {!items?.length &&
+            {!loading && !items?.length &&
               <Grid item display="flex" width="100%" alignItems="center" flexDirection="column">
                 <Box sx={emptyListImageBoxStyles} mb={2}>
                   <CustomImage imageLink="/liked_books.png"></CustomImage>
