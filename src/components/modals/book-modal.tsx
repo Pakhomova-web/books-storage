@@ -34,7 +34,7 @@ interface IBookModalProps {
     item?: BookEntity,
     isSubmitDisabled?: boolean,
     isAdmin?: boolean,
-    onClose: (updated?: boolean) => void
+    onClose: (updated?: boolean, bookSeriesId?: string) => void
 }
 
 const imageBoxStyles = { height: '150px', maxHeight: '50vw', cursor: 'pointer' };
@@ -156,11 +156,12 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         try {
             if (item?.id) {
                 await update(data, updateAllBooksInSeries);
+                onClose(true);
             } else {
                 delete data.id;
                 await create(data);
+                onClose(true, bookSeriesOptions.find(bS => bS.id === values.bookSeriesId).default ? null : data.bookSeriesId);
             }
-            onClose(true);
         } catch (err) {
             checkAuth(err);
         }
@@ -346,7 +347,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                     </Grid>
 
                     <Grid item xs={12} md={6} lg={4}>
-                        <Box sx={styleVariables.positionRelative} mb={1}>
+                        <Box position="relative" mb={1}>
                             <Loading isSmall={true} show={loadingAuthors}></Loading>
                             <MultiSelectElement fullWidth
                                                 options={authorOptions}

@@ -45,7 +45,8 @@ export default function Books() {
                             <HdrStrongIcon fontSize="small" style={{ color: "green" }}/>
                             В наявності ({item.numberInStock})
                         </> :
-                        <><HdrWeakIcon fontSize="small" style={{ color: styleVariables.warnColor }}/>Немає в наявності</>
+                        <><HdrWeakIcon fontSize="small" style={{ color: styleVariables.warnColor }}/>Немає в
+                            наявності</>
                     }
                 </Box>
             </>
@@ -94,21 +95,15 @@ export default function Books() {
             type: 'text'
         },
         {
-            title: 'Кількість сторінок',
+            title: 'Cторінки',
             sortValue: 'numberOfPages',
-            renderValue: (item: BookEntity) => item.numberOfPages,
+            renderValue: (item: BookEntity) => `${item.numberOfPages} / ${item.pageType?.name}`,
             type: 'text'
         },
         {
             title: 'Мова',
             sortValue: 'language',
             renderValue: (item: BookEntity) => item.language?.name,
-            type: 'text'
-        },
-        {
-            title: 'Тип сторінок',
-            sortValue: 'pageType',
-            renderValue: (item: BookEntity) => item.pageType?.name,
             type: 'text'
         },
         {
@@ -131,22 +126,20 @@ export default function Books() {
         { title: 'Знижка', renderValue: (item: BookEntity) => item.discount, type: 'text' }
     ]);
     const [tableKeys] = useState<TableKey<BookEntity>[]>([
-        { title: 'Тип', sortValue: 'bookType', renderValue: (item: BookEntity) => item.bookType?.name, type: 'text' },
         {
-            title: 'Видавництво',
-            sortValue: 'publishingHouse',
-            renderValue: (item: BookEntity) => item.bookSeries?.publishingHouse?.name,
-            type: 'text'
+            type: 'image',
+            title: 'Фото',
+            renderValue: (item: BookEntity) => item.imageIds?.length ? item.imageIds[0] : null
         },
         {
-            title: 'Серія',
-            sortValue: 'bookSeries',
-            renderValue: (item: BookEntity) => item.bookSeries?.name,
+            title: 'Тип/Видавництво/Серія',
+            sortValue: 'bookType',
+            renderValue: (item: BookEntity) => `${item.bookType?.name}/${item.bookSeries?.publishingHouse?.name}/${item.bookSeries?.name}`,
             type: 'text'
         },
         ...mobileKeys,
         {
-            title: 'В наявності',
+            title: 'Кільк.',
             sortValue: 'numberInStock',
             renderValue: (item: BookEntity) => item.numberInStock,
             type: 'text'
@@ -177,7 +170,10 @@ export default function Books() {
         } : {};
     }
 
-    function refreshData(updated = true) {
+    function refreshData(updated = true, bookSeries?: string) {
+        if (bookSeries) {
+            setFilters(new BookFilter({ archived: null, bookSeries }));
+        }
         if (updated) {
             refetch();
         }
@@ -266,7 +262,7 @@ export default function Books() {
                     <BookModal open={openNewModal}
                                item={selectedItem}
                                isAdmin={isAdmin(user)}
-                               onClose={(updated = false) => refreshData(updated)}></BookModal>}
+                               onClose={(updated = false, bookSeries?) => refreshData(updated, bookSeries)}></BookModal>}
 
                   {openNumberInStockModal && selectedItem &&
                     <BookNumberInStockModal open={openNumberInStockModal}

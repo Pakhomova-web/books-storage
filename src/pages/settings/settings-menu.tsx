@@ -1,9 +1,8 @@
-import { Backdrop, Box, Grid, IconButton, useTheme } from '@mui/material';
+import { Box, Grid, IconButton, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import { pageStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
@@ -172,7 +171,7 @@ export default function SettingsMenu({ children, activeUrl, onAddClick = null })
                   </SettingsMenuContainerStyledGrid>
                 </StyledMenuContainer>}
 
-                <Grid item xs={12} md={9} lg={10}
+                <Grid item xs={12} md={9} lg={10} position="relative"
                       sx={theme => ({ [theme.breakpoints.down('md')]: { display: !showMenu ? 'block' : 'none' } })}>
                     {!showMenu && !!activeMenuItems &&
                       <Box sx={styleVariables.sectionTitle} gap={1} display="flex" alignItems="center" p={1}

@@ -6,7 +6,6 @@ import {
     borderRadius,
     boxPadding,
     pageStyles,
-    positionRelative,
     primaryLightColor,
     styleVariables, titleFontSize
 } from '@/constants/styles-variables';
@@ -195,7 +194,7 @@ export default function Books() {
     }
 
     return (
-        <Box sx={positionRelative}>
+        <Box position="relative">
             <Loading show={loading}></Loading>
 
             <Box sx={pageStyles}>

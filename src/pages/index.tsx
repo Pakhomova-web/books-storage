@@ -1,7 +1,7 @@
 import { Box, BoxProps, Button, Grid, useTheme } from '@mui/material';
 import React from 'react';
 import Loading from '@/components/loading';
-import { borderRadius, pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
+import { borderRadius, pageStyles, styleVariables } from '@/constants/styles-variables';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
 import { useBookTypes } from '@/lib/graphql/queries/book-type/hook';
@@ -75,13 +75,13 @@ export default function Home() {
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
 
     return (
-        <Box sx={positionRelative}>
+        <Box position="relative">
             <Loading show={loadingBookTypes && loadingBooksWithDiscounts && loadingPublishingHouses}></Loading>
 
             <Box sx={pageStyles}>
                 <SocialMediaBox></SocialMediaBox>
 
-                <Grid container sx={positionRelative} display="flex" justifyContent="center" alignItems="center">
+                <Grid container position="relative" display="flex" justifyContent="center" alignItems="center">
                     <Loading
                         show={loadingBooksWithDiscounts && (!loadingBookTypes && loadingPublishingHouses || loadingBookTypes && !loadingPublishingHouses)}></Loading>
 
@@ -105,7 +105,7 @@ export default function Home() {
                 </Grid>
 
 
-                <Grid container sx={positionRelative} mb={loadingBookTypes ? 1 : 0}>
+                <Grid container position="relative" mb={loadingBookTypes ? 1 : 0}>
                     <Loading
                         show={loadingBookTypes && (!loadingPublishingHouses && loadingBooksWithDiscounts || loadingPublishingHouses && !loadingBooksWithDiscounts)}></Loading>
 
@@ -136,7 +136,7 @@ export default function Home() {
                     ))}
                 </Grid>
 
-                <Grid container sx={positionRelative}>
+                <Grid container position="relative">
                     <Loading
                         show={loadingPublishingHouses && (!loadingBookTypes && loadingBooksWithDiscounts || loadingBookTypes && !loadingBooksWithDiscounts)}></Loading>
 
@@ -157,7 +157,7 @@ export default function Home() {
                             </Box>
                         </Grid>)}
 
-                    <Grid container sx={positionRelative}>
+                    <Grid container position="relative">
                         <Grid item xs={12} p={1} textAlign="center" sx={styleVariables.sectionTitle}>
                             Способи доставки
                         </Grid>

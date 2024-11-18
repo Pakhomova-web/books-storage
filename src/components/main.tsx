@@ -2,7 +2,7 @@ import { Box, Toolbar } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react';
-import { fullHeight, positionRelative, styleVariables } from '@/constants/styles-variables';
+import { fullHeight, styleVariables } from '@/constants/styles-variables';
 import CustomToolbar from '@/components/custom-toolbar';
 import { useUser } from '@/lib/graphql/queries/auth/hook';
 import Loading from '@/components/loading';
@@ -39,7 +39,7 @@ export default function Main({ children }) {
     }, []);
 
     return (
-        <Box sx={{ ...positionRelative, ...fullHeight }}>
+        <Box sx={fullHeight} position="relative">
             <Loading show={loading}></Loading>
 
             <CustomToolbar/>

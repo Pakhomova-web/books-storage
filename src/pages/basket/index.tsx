@@ -9,7 +9,6 @@ import {
     borderRadius,
     boxPadding,
     pageStyles,
-    positionRelative,
     primaryLightColor,
     styleVariables
 } from '@/constants/styles-variables';
@@ -120,7 +119,7 @@ export default function Basket() {
     }
 
     return (
-        <Box sx={positionRelative}>
+        <Box position="relative">
             <Loading show={loading || updating}/>
 
             <Box sx={pageStyles}>

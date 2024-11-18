@@ -1,5 +1,4 @@
-import { Box, Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
@@ -11,7 +10,6 @@ import Loading from '@/components/loading';
 import BookSeriesModal from '@/components/modals/book-series-modal';
 import ErrorNotification from '@/components/error-notification';
 import { BookSeriesFilters } from '@/components/filters/book-series-filters';
-import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
 import { isAdmin } from '@/utils/utils';
 import { useAuth } from '@/components/auth-context';
 import SettingsMenu from '@/pages/settings/settings-menu';

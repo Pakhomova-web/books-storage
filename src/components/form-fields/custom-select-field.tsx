@@ -16,7 +16,7 @@ interface ICustomSelectField extends SelectElementProps {
 
 export default function CustomSelectField({ loading, showClear, onClear, ...props}: ICustomSelectField) {
     return (
-        <Box sx={styleVariables.positionRelative}>
+        <Box position="relative">
             <Loading show={!!loading} isSmall={true}/>
             <StyledSelectField {...props} variant="standard"/>
             {showClear && onClear && <Box sx={customFieldClearBtnStyles} onClick={onClear}>Очистити</Box>}

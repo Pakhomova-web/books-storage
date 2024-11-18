@@ -12,7 +12,7 @@ interface ICustomCheckbox {
 
 export default function CustomCheckbox({ loading, label, name }: ICustomCheckbox) {
     return (
-        <Box sx={styleVariables.positionRelative}>
+        <Box position="relative">
             <Loading show={!!loading} isSmall={true}/>
             <CheckboxElement label={label} name={name} sx={{ marginLeft: 1 }}/>
         </Box>

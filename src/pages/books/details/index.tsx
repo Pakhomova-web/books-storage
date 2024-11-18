@@ -188,7 +188,7 @@ export default function BookDetails() {
     }
 
     return (
-        <Box sx={styleVariables.positionRelative}>
+        <Box position="relative">
             <Loading show={loading}></Loading>
 
             <Box sx={pageStyles}>
@@ -343,7 +343,7 @@ export default function BookDetails() {
                         Відгуки покупців
                       </Box>
 
-                      <Grid container spacing={2} sx={styleVariables.positionRelative} px={1}>
+                      <Grid container spacing={2} position="relative" px={1}>
                         <Loading show={!loading && loadingComments}></Loading>
 
                         <Grid item xs={12} md={7} lg={8} display="flex" alignItems="center" justifyContent="center">
@@ -397,7 +397,7 @@ export default function BookDetails() {
                           Інші книги із цієї серії
                         </Box>
 
-                        <Grid container spacing={2} sx={styleVariables.positionRelative} px={1} display="flex"
+                        <Grid container spacing={2} position="relative" px={1} display="flex"
                               justifyContent="center">
                           <Loading show={loadingBooksFromSeries}></Loading>
 
@@ -414,7 +414,7 @@ export default function BookDetails() {
                           Інші книги цього автора
                         </Box>
 
-                        <Grid container spacing={2} sx={styleVariables.positionRelative} px={1} display="flex"
+                        <Grid container spacing={2} position="relative" px={1} display="flex"
                               justifyContent="center">
                           <Loading show={loadingBooksByAuthor}></Loading>
 

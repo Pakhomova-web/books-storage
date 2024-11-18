@@ -1,17 +1,16 @@
-import { Box, Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useBookTypes, useDeleteBookType } from '@/lib/graphql/queries/book-type/hook';
-import { BookTypeEntity, IPageable } from '@/lib/data/types';
+import { BookTypeEntity, DeliveryEntity, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import BookTypeModal from '@/components/modals/book-type-modal';
 import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
-import { pageStyles, positionRelative, styleVariables } from '@/constants/styles-variables';
+import { styleVariables } from '@/constants/styles-variables';
 import { isAdmin } from '@/utils/utils';
 import { useAuth } from '@/components/auth-context';
 import SettingsMenu from '@/pages/settings/settings-menu';
@@ -42,7 +41,8 @@ export default function BookTypes() {
             renderValue: (item: BookTypeEntity) => item.name,
             type: 'text',
             mobileStyleClasses: styleVariables.boldFont
-        }
+        },
+        { type: 'image', title: 'Фото', renderValue: (item: DeliveryEntity) => item.imageId }
     ]);
     const [selectedItem, setSelectedItem] = useState<BookTypeEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });

@@ -3,7 +3,7 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 
 import { authStyles } from '@/styles/auth';
 import CustomTextField from '@/components/form-fields/custom-text-field';
-import { borderRadius, pageStyles, positionRelative, primaryLightColor } from '@/constants/styles-variables';
+import { borderRadius, pageStyles, primaryLightColor } from '@/constants/styles-variables';
 import ErrorNotification from '@/components/error-notification';
 import Loading from '@/components/loading';
 import { useSignIn } from '@/lib/graphql/queries/auth/hook';
@@ -87,7 +87,7 @@ export default function SignIn() {
     }
 
     return (
-        <Box sx={positionRelative} display="flex" justifyContent="center">
+        <Box position="relative" display="flex" justifyContent="center">
             <Loading show={loading}></Loading>
 
             <Box sx={pageStyles}>

@@ -183,7 +183,7 @@ export function BookFilters(props: IBookFiltersProps) {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Box sx={styleVariables.positionRelative}>
+                        <Box position="relative">
                             <MultiSelectElement fullWidth
                                                 options={authorOptions}
                                                 id="authors"

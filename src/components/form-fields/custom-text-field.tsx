@@ -16,7 +16,7 @@ interface ITextFieldElementProps extends TextFieldElementProps {
 
 export default function CustomTextField({ loading, showClear, onClear, ...props }: ITextFieldElementProps) {
     return (
-        <Box sx={styleVariables.positionRelative}>
+        <Box position="relative">
             <Loading show={!!loading} isSmall={true}/>
             <StyledTextField {...props} variant="standard"/>
             {showClear && onClear && <Box sx={customFieldClearBtnStyles} onClick={onClear}>Очистити</Box>}

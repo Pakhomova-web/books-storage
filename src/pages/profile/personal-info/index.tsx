@@ -2,7 +2,7 @@ import { useAuth } from '@/components/auth-context';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import { Box, Button, Grid } from '@mui/material';
-import { pageStyles, positionRelative, primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import { styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import React from 'react';
 import { useCurrentUser } from '@/lib/graphql/queries/auth/hook';
@@ -31,7 +31,7 @@ export default function PersonalInfo() {
 
     return (
         <ProfileMenu activeUrl="personal-info">
-            <Box sx={positionRelative}>
+            <Box position="relative">
                 <Loading show={updating}></Loading>
 
                 <Box>

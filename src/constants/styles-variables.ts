@@ -78,9 +78,6 @@ export const styleVariables = {
         display: 'flex',
         flexWrap: 'nowrap'
     },
-    positionRelative: {
-        position: 'relative'
-    },
     flexBetween: {
         display: 'flex',
         justifyContent: 'space-between'
@@ -104,8 +101,6 @@ export const customFieldClearBtnStyles = {
     ...styleVariables.hintFontSize,
     textDecoration: 'underline'
 };
-
-export const positionRelative = { position: 'relative' };
 export const fullHeight = { height: '100svh' };
 export const pageStyles = { overflowY: 'auto', height: 'calc(100svh - 64px)' };
 
