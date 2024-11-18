@@ -164,6 +164,7 @@ export default function Basket() {
                                             <CustomLink
                                                 onClick={() => onBookClick(book)}><b>{book.name}</b></CustomLink>
                                         </Box>
+                                        <Box>{book.language.name}</Box>
 
                                         {!!book.discount &&
                                           <Box display="flex"><Box sx={styleVariables.discountBoxStyles}>

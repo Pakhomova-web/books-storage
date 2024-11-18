@@ -136,7 +136,7 @@ export type BookSeriesCreateInput = {
 
 export type BookSeriesSearchInput = {
   name?: InputMaybe<Scalars['String']['input']>;
-  publishingHouse: Scalars['ID']['input'];
+  publishingHouse?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type BookSeriesSubList = {
