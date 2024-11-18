@@ -319,7 +319,6 @@ export async function getBooksWithDiscount(rowsPerPage: number) {
 export async function getBooksWithNotApprovedComments(pageSettings?: IPageable) {
     const query = Book
         .find()
-        .and([{ archived: { $in: [null, false] } }])
         .populate('bookType')
         .populate({
             path: 'bookSeries',

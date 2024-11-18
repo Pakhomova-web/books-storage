@@ -55,10 +55,9 @@ export default function BooksList({ items, filters = {}, pageUrl = '/' }) {
 
     function onClick(book: BookEntity) {
         const filterQueries: string[] = Object.keys(filters)
-            .map(key => !!filters[key] ? `${key}=${filters[key]}` : '')
+            .map(key => !(filters[key] === null || filters[key] === undefined || filters[key].length === 0) ? `${key}=${filters[key]}` : '')
             .filter(query => !!query);
         const query = !!filterQueries.length ? filterQueries.join('&') : router.query.filters;
-        console.log(router.query.filters);
 
         router.push(`/books/details?${getParamsQueryString({ id: book.id, filters: query, pageUrl })}`);
     }
