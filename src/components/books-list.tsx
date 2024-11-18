@@ -57,7 +57,8 @@ export default function BooksList({ items, filters = {}, pageUrl = '/' }) {
         const filterQueries: string[] = Object.keys(filters)
             .map(key => !!filters[key] ? `${key}=${filters[key]}` : '')
             .filter(query => !!query);
-        const query = !!filterQueries.length ? filterQueries.join('&') : null;
+        const query = !!filterQueries.length ? filterQueries.join('&') : router.query.filters;
+        console.log(router.query.filters);
 
         router.push(`/books/details?${getParamsQueryString({ id: book.id, filters: query, pageUrl })}`);
     }
