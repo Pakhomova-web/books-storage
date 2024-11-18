@@ -5,7 +5,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
 import CustomImage from '@/components/custom-image';
-import { borderRadius, primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import { borderRadius, styleVariables } from '@/constants/styles-variables';
 import { getParamsQueryString, renderPrice } from '@/utils/utils';
 import { BookEntity } from '@/lib/data/types';
 import { useAuth } from '@/components/auth-context';

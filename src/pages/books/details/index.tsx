@@ -208,8 +208,8 @@ export default function BookDetails() {
                       <Grid container>
                         <Grid item
                               md={book.imageIds.length > 1 ? 9 : 12}
-                              xs={book.imageIds.length > 1 ? 7 : 12}
-                              display="flex" justifyContent="center"
+                              xs={12}
+                              display="flex" justifyContent="center" alignItems="center"
                               position="relative">
                             {book.numberInStock ?
                                 <Box sx={styleVariables.fixedInStockBox(true)}>
@@ -229,10 +229,11 @@ export default function BookDetails() {
                           </Box>
                         </Grid>
 
-                        <Grid item md={3} xs={5} display="flex" flexDirection="column" justifyContent="center">
+                        <Grid item md={3} xs={12} display="flex" flexDirection={{ xs: 'row', md: 'column' }} gap={1}
+                              justifyContent="center">
                             {book.imageIds.map((imageId, index) =>
                                 (index !== 0 &&
-                                  <StyledSmallImageBox key={index} mb={1} onClick={() => setImageIds(book.imageIds)}>
+                                  <StyledSmallImageBox key={index} onClick={() => setImageIds(book.imageIds)}>
                                     <CustomImage isBookDetails={true} imageId={imageId}></CustomImage>
                                   </StyledSmallImageBox>
                                 )
