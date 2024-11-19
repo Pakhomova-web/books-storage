@@ -811,7 +811,7 @@ export type User = {
   password?: Maybe<Scalars['String']['output']>;
   phoneNumber?: Maybe<Scalars['String']['output']>;
   postcode?: Maybe<Scalars['Int']['output']>;
-  preferredDelivery?: Maybe<Delivery>;
+  preferredDeliveryId?: Maybe<Scalars['ID']['output']>;
   region?: Maybe<Scalars['String']['output']>;
   role?: Maybe<Scalars['String']['output']>;
 };
@@ -825,7 +825,7 @@ export type UserCreateInput = {
   password: Scalars['String']['input'];
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
   postcode?: InputMaybe<Scalars['Int']['input']>;
-  preferredDelivery?: InputMaybe<Scalars['ID']['input']>;
+  preferredDeliveryId?: InputMaybe<Scalars['ID']['input']>;
   region?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -844,7 +844,7 @@ export type UserUpdateInput = {
   novaPostOffice?: InputMaybe<Scalars['Int']['input']>;
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
   postcode?: InputMaybe<Scalars['Int']['input']>;
-  preferredDelivery?: InputMaybe<Scalars['ID']['input']>;
+  preferredDeliveryId?: InputMaybe<Scalars['ID']['input']>;
   region?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -1271,7 +1271,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   phoneNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   postcode?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  preferredDelivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType>;
+  preferredDeliveryId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

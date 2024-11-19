@@ -1,7 +1,7 @@
 import { GraphQLError } from 'graphql/error';
 
 import { UserEntity } from '@/lib/data/types';
-import { getByEmail, getCaseInsensitiveSubstringOption } from '@/lib/data/base';
+import { getByEmail } from '@/lib/data/base';
 import User from '@/lib/data/models/user';
 import { ROLES } from '@/constants/roles';
 import {
@@ -54,7 +54,7 @@ export async function login(email: string, password: string): Promise<{
             extensions: { code: 'BAD_DATA' }
         });
     }
-    const item = await User.findOne({ email: getCaseInsensitiveSubstringOption(email) }).populate('preferredDelivery');
+    const item = await getByEmail<UserEntity>(User, email);
 
     if (!item) {
         throw new GraphQLError(`User with email ${email} doesn't exist.`, {
@@ -105,13 +105,13 @@ export async function updateUser(input: UserEntity): Promise<UserEntity> {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
-    const item = await User.findByIdAndUpdate(input.id, input).populate('preferredDelivery');
+    const item = await User.findByIdAndUpdate(input.id, input);
 
     return item as UserEntity;
 }
 
 export async function getUserById(id: string): Promise<UserEntity> {
-    return User.findById(id).populate('preferredDelivery');
+    return User.findById(id);
 }
 
 export async function likeBook(userId: string, bookId: string) {

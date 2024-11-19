@@ -17,9 +17,7 @@ const userFragment = gql`
         region
         novaPostOffice
         phoneNumber
-        preferredDelivery {
-            id
-        }
+        preferredDeliveryId
     }
 `;
 

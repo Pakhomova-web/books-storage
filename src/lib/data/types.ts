@@ -228,7 +228,7 @@ export class UserEntity {
     likedBookIds?: string[];
     basketItems?: { bookId: string, count: number }[];
 
-    preferredDelivery?: DeliveryEntity;
+    preferredDeliveryId?: string;
     region?: string;
     city?: string;
     postcode?: number;
@@ -250,7 +250,7 @@ export class UserEntity {
             this.postcode = data.postcode;
             this.novaPostOffice = data.novaPostOffice;
             this.phoneNumber = data.phoneNumber;
-            this.preferredDelivery = data.preferredDelivery;
+            this.preferredDeliveryId = data.preferredDeliveryId;
         }
     }
 }

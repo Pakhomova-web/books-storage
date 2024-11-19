@@ -23,7 +23,7 @@ export default function PersonalInfo() {
             city: user?.city,
             novaPostOffice: user?.novaPostOffice,
             postcode: user?.postcode,
-            preferredDelivery: user?.preferredDelivery?.id
+            preferredDeliveryId: user?.preferredDeliveryId
         }
     });
     const { updating, update, updatingError } = useCurrentUser();
@@ -101,8 +101,8 @@ export default function PersonalInfo() {
                             Спосіб доставки
                         </Box>
 
-                        <RadioGroup defaultValue={user?.preferredDelivery?.id}
-                                    onChange={(_, value) => formContext.setValue('preferredDelivery', value)}>
+                        <RadioGroup defaultValue={user?.preferredDeliveryId}
+                                    onChange={(_, value) => formContext.setValue('preferredDeliveryId', value)}>
                             <Grid container spacing={2}>
                                 {deliveries.map((delivery, index) => (
                                     <Grid key={index} item xs={12} sm={6} pl={2}>

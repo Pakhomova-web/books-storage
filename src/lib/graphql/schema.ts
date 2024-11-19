@@ -98,7 +98,7 @@ const typeDefs =  /* GraphQL */ `
         region: String
         novaPostOffice: Int
         phoneNumber: String
-        preferredDelivery: Delivery
+        preferredDeliveryId: ID
     }
 
     type Address {
@@ -420,7 +420,7 @@ const typeDefs =  /* GraphQL */ `
         region: String,
         city: String,
         phoneNumber: String
-        preferredDelivery: ID
+        preferredDeliveryId: ID
     }
 
     input UserUpdateInput {
@@ -433,7 +433,7 @@ const typeDefs =  /* GraphQL */ `
         region: String,
         city: String,
         phoneNumber: String
-        preferredDelivery: ID
+        preferredDeliveryId: ID
     }
 
     #    order
