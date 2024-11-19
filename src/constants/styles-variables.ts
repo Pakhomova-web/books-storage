@@ -69,7 +69,7 @@ export const styleVariables = {
         justifyContent: 'center',
         py: 2,
         background: 'white',
-        zIndex: 2,
+        zIndex: 3,
         width: '100%'
     },
     border: { border: '1px solid' },

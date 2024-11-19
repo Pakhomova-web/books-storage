@@ -95,21 +95,15 @@ export default function Books() {
             type: 'text'
         },
         {
-            title: 'Cторінки',
+            title: 'Cторінки / Обкладинка',
             sortValue: 'numberOfPages',
-            renderValue: (item: BookEntity) => `${item.numberOfPages} / ${item.pageType?.name}`,
+            renderValue: (item: BookEntity) => `${item.numberOfPages} / ${item.pageType?.name} / ${item.coverType?.name}`,
             type: 'text'
         },
         {
             title: 'Мова',
             sortValue: 'language',
             renderValue: (item: BookEntity) => item.language?.name,
-            type: 'text'
-        },
-        {
-            title: 'Тип обкладинки',
-            sortValue: 'coverType',
-            renderValue: (item: BookEntity) => item.coverType?.name,
             type: 'text'
         },
         {

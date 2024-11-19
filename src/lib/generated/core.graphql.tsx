@@ -801,20 +801,32 @@ export type UpdateCommentInput = {
 
 export type User = {
   basketItems?: Maybe<Array<BasketItem>>;
+  city?: Maybe<Scalars['String']['output']>;
   email: Scalars['String']['output'];
   firstName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   lastName?: Maybe<Scalars['String']['output']>;
   likedBookIds?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  novaPostOffice?: Maybe<Scalars['Int']['output']>;
   password?: Maybe<Scalars['String']['output']>;
+  phoneNumber?: Maybe<Scalars['String']['output']>;
+  postcode?: Maybe<Scalars['Int']['output']>;
+  preferredDelivery?: Maybe<Delivery>;
+  region?: Maybe<Scalars['String']['output']>;
   role?: Maybe<Scalars['String']['output']>;
 };
 
 export type UserCreateInput = {
+  city?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
   firstName?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
+  novaPostOffice?: InputMaybe<Scalars['Int']['input']>;
   password: Scalars['String']['input'];
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  postcode?: InputMaybe<Scalars['Int']['input']>;
+  preferredDelivery?: InputMaybe<Scalars['ID']['input']>;
+  region?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UserToken = {
@@ -824,10 +836,16 @@ export type UserToken = {
 };
 
 export type UserUpdateInput = {
+  city?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
   firstName?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   lastName?: InputMaybe<Scalars['String']['input']>;
+  novaPostOffice?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
+  postcode?: InputMaybe<Scalars['Int']['input']>;
+  preferredDelivery?: InputMaybe<Scalars['ID']['input']>;
+  region?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1243,12 +1261,18 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   basketItems?: Resolver<Maybe<Array<ResolversTypes['BasketItem']>>, ParentType, ContextType>;
+  city?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   likedBookIds?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  novaPostOffice?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  phoneNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  postcode?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  preferredDelivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType>;
+  region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

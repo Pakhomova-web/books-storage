@@ -26,6 +26,7 @@ const StyledBookTypeBox = styled(Box)<BoxProps>(() => ({
     height: '350px',
     maxHeight: '50vh',
     position: 'relative',
+    justifyContent: 'center',
     flexDirection: 'column',
     overflow: 'hidden',
     ...bookTypeBoxStyles,
@@ -38,7 +39,6 @@ const StyledBookTypeBox = styled(Box)<BoxProps>(() => ({
 }));
 
 const imageBoxStyles = {
-    height: '100%',
     width: '100%'
 };
 
@@ -80,31 +80,7 @@ export default function Home() {
 
             <SocialMediaBox></SocialMediaBox>
 
-            <Grid container position="relative" display="flex" justifyContent="center" alignItems="center">
-                <Loading
-                    show={loadingBooksWithDiscounts && (!loadingBookTypes && loadingPublishingHouses || loadingBookTypes && !loadingPublishingHouses)}></Loading>
-
-                {(loadingBooksWithDiscounts && !booksWithDiscounts?.length ||
-                        !loadingBooksWithDiscounts && !!booksWithDiscounts?.length) &&
-                  <Grid item xs={12} py={1} px={2} justifyContent="center"
-                        gap={1}
-                        mb={loadingBooksWithDiscounts ? 1 : 0}
-                        sx={styleVariables.sectionTitle}>
-                    Акційні товари
-
-                      {booksWithDiscounts?.length === rowsPerPageBooksWithDiscount &&
-                        <Button variant="outlined" onClick={() => router.push(`/books?withDiscount=true`)}>
-                          Дивитися усі<ArrowForwardIcon/></Button>}
-                  </Grid>}
-
-                <Grid container display="flex" justifyContent="center">
-                    {!!booksWithDiscounts?.length &&
-                      <BooksList items={booksWithDiscounts}></BooksList>}
-                </Grid>
-            </Grid>
-
-
-            <Grid container position="relative" mb={loadingBookTypes ? 1 : 0}>
+            <Grid container position="relative" mb={loadingBookTypes ? 1 : 0} justifyContent="center">
                 <Loading
                     show={loadingBookTypes && (!loadingPublishingHouses && loadingBooksWithDiscounts || loadingPublishingHouses && !loadingBooksWithDiscounts)}></Loading>
 
@@ -135,6 +111,29 @@ export default function Home() {
                 ))}
             </Grid>
 
+            <Grid container position="relative" display="flex" justifyContent="center" alignItems="center">
+                <Loading
+                    show={loadingBooksWithDiscounts && (!loadingBookTypes && loadingPublishingHouses || loadingBookTypes && !loadingPublishingHouses)}></Loading>
+
+                {(loadingBooksWithDiscounts && !booksWithDiscounts?.length ||
+                        !loadingBooksWithDiscounts && !!booksWithDiscounts?.length) &&
+                  <Grid item xs={12} py={1} px={2} justifyContent="center"
+                        gap={1}
+                        mb={loadingBooksWithDiscounts ? 1 : 0}
+                        sx={styleVariables.sectionTitle}>
+                    Акційні товари
+
+                      {booksWithDiscounts?.length === rowsPerPageBooksWithDiscount &&
+                        <Button variant="outlined" onClick={() => router.push(`/books?withDiscount=true`)}>
+                          Дивитися усі<ArrowForwardIcon/></Button>}
+                  </Grid>}
+
+                <Grid container display="flex" justifyContent="center">
+                    {!!booksWithDiscounts?.length &&
+                      <BooksList items={booksWithDiscounts}></BooksList>}
+                </Grid>
+            </Grid>
+
             <Grid container position="relative">
                 <Loading
                     show={loadingPublishingHouses && (!loadingBookTypes && loadingBooksWithDiscounts || loadingBookTypes && !loadingBooksWithDiscounts)}></Loading>
@@ -157,11 +156,13 @@ export default function Home() {
                     </Grid>)}
 
                 <Grid container position="relative">
+                    <Loading show={loadingDeliveries}></Loading>
+
                     <Grid item xs={12} p={1} justifyContent="center" sx={styleVariables.sectionTitle}>
                         Способи доставки
                     </Grid>
 
-                    {!!deliveries?.length && deliveries.map((delivery, index) =>
+                    {!loadingDeliveries && !!deliveries?.length && deliveries.map((delivery, index) =>
                         <Grid key={index} item xs={12} md={6} display="flex" alignItems="center"
                               justifyContent="center"
                               p={1} gap={1}>

@@ -1,7 +1,7 @@
 import { GraphQLError } from 'graphql/error';
 
 import { UserEntity } from '@/lib/data/types';
-import { getByEmail } from '@/lib/data/base';
+import { getByEmail, getCaseInsensitiveSubstringOption } from '@/lib/data/base';
 import User from '@/lib/data/models/user';
 import { ROLES } from '@/constants/roles';
 import {
@@ -44,13 +44,17 @@ export async function createUser(input: UserEntity) {
     }
 }
 
-export async function login(email: string, password: string): Promise<{ user: UserEntity, token: string, refreshToken: string }> {
+export async function login(email: string, password: string): Promise<{
+    user: UserEntity,
+    token: string,
+    refreshToken: string
+}> {
     if (!email || !password) {
         throw new GraphQLError(`Password and Email are required for logging.`, {
             extensions: { code: 'BAD_DATA' }
         });
     }
-    const item = await getByEmail<UserEntity>(User, email);
+    const item = await User.findOne({ email: getCaseInsensitiveSubstringOption(email) }).populate('preferredDelivery');
 
     if (!item) {
         throw new GraphQLError(`User with email ${email} doesn't exist.`, {
@@ -101,17 +105,17 @@ export async function updateUser(input: UserEntity): Promise<UserEntity> {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
-    await User.findByIdAndUpdate(input.id, input);
+    const item = await User.findByIdAndUpdate(input.id, input).populate('preferredDelivery');
 
-    return input as UserEntity;
+    return item as UserEntity;
 }
 
 export async function getUserById(id: string): Promise<UserEntity> {
-    return User.findById(id);
+    return User.findById(id).populate('preferredDelivery');
 }
 
 export async function likeBook(userId: string, bookId: string) {
-    const user =  await User.findById(userId);
+    const user = await User.findById(userId);
 
     if (user.likedBookIds) {
         user.likedBookIds.push(bookId);
@@ -124,7 +128,7 @@ export async function likeBook(userId: string, bookId: string) {
 }
 
 export async function unlikeBook(userId: string, bookId: string) {
-    const user =  await User.findById(userId);
+    const user = await User.findById(userId);
 
     if (user.likedBookIds) {
         user.likedBookIds = user.likedBookIds.filter(id => id !== bookId);
@@ -137,7 +141,7 @@ export async function unlikeBook(userId: string, bookId: string) {
 }
 
 export async function addBookInBasket(userId: string, bookId: string) {
-    const user =  await User.findById(userId);
+    const user = await User.findById(userId);
 
     if (user.basketItems) {
         user.basketItems.push({ bookId, count: 1 });
@@ -150,7 +154,7 @@ export async function addBookInBasket(userId: string, bookId: string) {
 }
 
 export async function removeBookFromBasket(userId: string, bookId: string) {
-    const user =  await User.findById(userId);
+    const user = await User.findById(userId);
 
     if (user.basketItems) {
         user.basketItems = user.basketItems.filter(item => item.bookId !== bookId);
@@ -163,7 +167,7 @@ export async function removeBookFromBasket(userId: string, bookId: string) {
 }
 
 export async function updateBookCountInBasket(userId: string, bookId: string, count: number) {
-    const user =  await User.findById(userId);
+    const user = await User.findById(userId);
     const item = user.basketItems?.find(i => i.bookId === bookId);
 
     if (!!item) {

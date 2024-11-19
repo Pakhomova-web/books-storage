@@ -228,6 +228,13 @@ export class UserEntity {
     likedBookIds?: string[];
     basketItems?: { bookId: string, count: number }[];
 
+    preferredDelivery?: DeliveryEntity;
+    region?: string;
+    city?: string;
+    postcode?: number;
+    novaPostOffice?: number;
+    phoneNumber?: String;
+
     constructor(data?) {
         if (data) {
             this.id = data.id;
@@ -238,6 +245,12 @@ export class UserEntity {
             this.role = data.role;
             this.likedBookIds = data.likedBookIds ? data.likedBookIds : [];
             this.basketItems = data.basketItems ? data.basketItems : [];
+            this.region = data.region;
+            this.city = data.city;
+            this.postcode = data.postcode;
+            this.novaPostOffice = data.novaPostOffice;
+            this.phoneNumber = data.phoneNumber;
+            this.preferredDelivery = data.preferredDelivery;
         }
     }
 }

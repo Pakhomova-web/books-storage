@@ -12,6 +12,14 @@ const userFragment = gql`
             count
         }
         likedBookIds
+        postcode
+        city
+        region
+        novaPostOffice
+        phoneNumber
+        preferredDelivery {
+            id
+        }
     }
 `;
 

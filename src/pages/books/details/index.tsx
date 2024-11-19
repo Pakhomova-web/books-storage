@@ -57,7 +57,7 @@ const priceStyles = (theme) => ({
     padding: boxPadding,
     border: `1px solid ${primaryLightColor}`
 });
-const numberBooksByAuthor = 5;
+const numberBooksByAuthor = 4;
 
 export default function BookDetails() {
     const router = useRouter();
@@ -429,7 +429,7 @@ export default function BookDetails() {
 
                       <BooksList items={booksByAuthor} pageUrl={router.query.pageUrl as string}></BooksList>
 
-                        {booksByAuthor.length === numberBooksByAuthor && <Grid item xs={12} textAlign="center">
+                        {booksByAuthor.length === numberBooksByAuthor && <Grid item xs={12} textAlign="center" mb={2}>
                           <Button variant="outlined"
                                   onClick={() => router.push(`/books?authors=${book.authors[0].id}`)}>
                             Дивитися усі<ArrowForwardIcon/></Button>

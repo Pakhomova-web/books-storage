@@ -21,7 +21,16 @@ const userSchema = new Schema<UserEntity, Model<UserEntity>>({
     basketItems: [{
         bookId: { type: String, required: true },
         count: { type: Number, required: true }
-    }]
+    }],
+    phoneNumber: String,
+    postcode: Number,
+    novaPostOffice: Number,
+    region: String,
+    city: String,
+    preferredDelivery: {
+        ref: 'delivery',
+        type: Schema.Types.ObjectId
+    }
 });
 
 export default models?.user || model('user', userSchema);

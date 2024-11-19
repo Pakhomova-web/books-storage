@@ -93,6 +93,12 @@ const typeDefs =  /* GraphQL */ `
         role: String
         basketItems: [BasketItem!]
         likedBookIds: [String]
+        postcode: Int
+        city: String
+        region: String
+        novaPostOffice: Int
+        phoneNumber: String
+        preferredDelivery: Delivery
     }
 
     type Address {
@@ -408,14 +414,26 @@ const typeDefs =  /* GraphQL */ `
         email: String!,
         password: String!,
         firstName: String,
-        lastName: String
+        lastName: String,
+        postcode: Int,
+        novaPostOffice: Int,
+        region: String,
+        city: String,
+        phoneNumber: String
+        preferredDelivery: ID
     }
 
     input UserUpdateInput {
         id: ID!,
         email: String!,
         firstName: String,
-        lastName: String
+        lastName: String,
+        postcode: Int,
+        novaPostOffice: Int,
+        region: String,
+        city: String,
+        phoneNumber: String
+        preferredDelivery: ID
     }
 
     #    order

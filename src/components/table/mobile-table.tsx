@@ -63,10 +63,11 @@ export function MobileTable<T>(props: IMobileTableProps<T>) {
 
     return (
         <Box>
-            <Grid container>
+            <Grid container spacing={1}>
                 {props.data.map((item, index) =>
                     <Grid item key={index} sm={6} xs={12}>
-                        <Box sx={mobileBoxStyles} p={1} m={1} onClick={() => props.onRowClick ? onRowClick(item) : {}}>
+                        <Box sx={mobileBoxStyles} p={1} height="100%"
+                             onClick={() => props.onRowClick ? onRowClick(item) : {}}>
                             {props.renderMobileView ? props.renderMobileView(item) : renderItem(item, index)}
                         </Box>
                     </Grid>
