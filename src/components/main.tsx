@@ -2,7 +2,7 @@ import { Box, Toolbar } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react';
-import { fullHeight, styleVariables } from '@/constants/styles-variables';
+import { fullHeight, pageStyles, styleVariables } from '@/constants/styles-variables';
 import CustomToolbar from '@/components/custom-toolbar';
 import { useUser } from '@/lib/graphql/queries/auth/hook';
 import Loading from '@/components/loading';
@@ -46,7 +46,11 @@ export default function Main({ children }) {
             {!loading &&
               <>
                 <Toolbar/>
-                <Box sx={styleVariables.overflowHidden}>{children}</Box>
+                <Box sx={styleVariables.overflowHidden}>
+                    <Box sx={pageStyles} position="relative" padding={{ lg: '0 20%', md: '0 10%', xs: 0 }}>
+                        {children}
+                    </Box>
+                </Box>
               </>}
         </Box>
     );

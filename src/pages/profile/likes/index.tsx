@@ -1,16 +1,13 @@
 import { Box, Grid } from '@mui/material';
-import { useRouter } from 'next/router';
 
 import { styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import BooksList from '@/components/books-list';
 import { useAuth } from '@/components/auth-context';
 import ErrorNotification from '@/components/error-notification';
-import { BookEntity } from '@/lib/data/types';
 import { useBooksByIds } from '@/lib/graphql/queries/book/hook';
 import React, { useEffect } from 'react';
 import ProfileMenu from '@/pages/profile/profile-menu';
-import { getParamsQueryString } from '@/utils/utils';
 import CustomImage from '@/components/custom-image';
 
 const emptyListImageBoxStyles = {
@@ -20,7 +17,6 @@ const emptyListImageBoxStyles = {
 };
 
 export default function Likes() {
-    const router = useRouter();
     const { user } = useAuth();
     const { loading, error, items, refetch } = useBooksByIds(user?.likedBookIds);
 

@@ -13,9 +13,9 @@ import { useRouter } from 'next/router';
 
 const bookBoxStyles = { height: '250px', maxHeight: '50vw' };
 
-const bookPriceStyles = (inStock = true) => ({
+const bookPriceStyles = (theme, inStock = true) => ({
     ...styleVariables.titleFontSize,
-    color: inStock ? 'var(--background)' : 'black',
+    color: inStock ? theme.palette.primary.main : 'black',
     ...(inStock ? styleVariables.boldFont : {})
 });
 
@@ -86,7 +86,7 @@ export default function BooksList({ items, filters = {}, pageUrl = '/' }) {
                     </Box>
 
                     <Box display="flex" alignItems="center" justifyContent="center" gap={1} mb={1}>
-                        <Box sx={bookPriceStyles(!!book.numberInStock)}>
+                        <Box sx={theme => bookPriceStyles(theme, !!book.numberInStock)}>
                             {renderPrice(book.price, book.discount)}
                         </Box>
                         {!!book.discount && <Box sx={styleVariables.hintFontSize}>

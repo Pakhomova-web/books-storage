@@ -1,5 +1,4 @@
-import { Box, Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
@@ -13,7 +12,6 @@ import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 import { useAuth } from '@/components/auth-context';
 import { isAdmin } from '@/utils/utils';
-import { pageStyles, styleVariables } from '@/constants/styles-variables';
 import SettingsMenu from '@/pages/settings/settings-menu';
 
 export default function Authors() {

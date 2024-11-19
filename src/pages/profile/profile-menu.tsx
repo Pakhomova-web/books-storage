@@ -2,7 +2,7 @@ import { Box, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import { pageStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import { primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import CustomImage from '@/components/custom-image';
 
 const menuItems = [
@@ -56,37 +56,35 @@ export default function ProfileMenu({ children, activeUrl }) {
     }
 
     return (
-        <Box sx={pageStyles}>
-            <Grid container>
-                <Grid item xs={12} borderBottom={1}
-                      borderColor={primaryLightColor}
-                      sx={styleVariables.bigTitleFontSize}
-                      p={2}>
-                    Особистий кабінет
-                </Grid>
-
-                <StyledMenuContainer item xs={12} md={3} lg={2}>
-                    <ProfileMenuContainerStyledGrid container>
-                        {menuItems.map((item, index) => (
-                            <ProfileMenuItemStyledGrid item xs={6} md={12} key={index}
-                                                       sx={{ backgroundColor: activeUrl === item.url ? primaryLightColor : 'white' }}
-                                                       onClick={() => navigateTo(item.url)}>
-                                <Box m={2} display="flex" flexWrap="nowrap" alignItems="center" gap={1}>
-                                    <Box sx={imageBoxStyles}>
-                                        <CustomImage
-                                            imageLink={activeUrl === item.url ? item.activeImg : item.img}></CustomImage>
-                                    </Box>
-                                    {item.title}
-                                </Box>
-                            </ProfileMenuItemStyledGrid>
-                        ))}
-                    </ProfileMenuContainerStyledGrid>
-                </StyledMenuContainer>
-
-                <Grid item xs={12} md={9} lg={10}>
-                    <Box p={1}>{children}</Box>
-                </Grid>
+        <Grid container>
+            <Grid item xs={12} borderBottom={1}
+                  borderColor={primaryLightColor}
+                  sx={styleVariables.bigTitleFontSize}
+                  p={2}>
+                Особистий кабінет
             </Grid>
-        </Box>
+
+            <StyledMenuContainer item xs={12} md={3} lg={2}>
+                <ProfileMenuContainerStyledGrid container>
+                    {menuItems.map((item, index) => (
+                        <ProfileMenuItemStyledGrid item xs={6} md={12} key={index}
+                                                   sx={{ backgroundColor: activeUrl === item.url ? primaryLightColor : 'white' }}
+                                                   onClick={() => navigateTo(item.url)}>
+                            <Box m={2} display="flex" flexWrap="nowrap" alignItems="center" gap={1}>
+                                <Box sx={imageBoxStyles}>
+                                    <CustomImage
+                                        imageLink={activeUrl === item.url ? item.activeImg : item.img}></CustomImage>
+                                </Box>
+                                {item.title}
+                            </Box>
+                        </ProfileMenuItemStyledGrid>
+                    ))}
+                </ProfileMenuContainerStyledGrid>
+            </StyledMenuContainer>
+
+            <Grid item xs={12} md={9} lg={10}>
+                <Box p={1}>{children}</Box>
+            </Grid>
+        </Grid>
     );
 }

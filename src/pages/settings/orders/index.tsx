@@ -1,16 +1,14 @@
-import { Box, Button } from '@mui/material';
 import { useAuth } from '@/components/auth-context';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import { IOrderFilter, IPageable, OrderEntity } from '@/lib/data/types';
 import { isAdmin } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
-import { pageStyles, redLightColor, styleVariables } from '@/constants/styles-variables';
+import { redLightColor } from '@/constants/styles-variables';
 import { useDeleteOrder, useOrders } from '@/lib/graphql/queries/order/hook';
 import { ApolloError } from '@apollo/client';
 import Loading from '@/components/loading';
 import CustomTable from '@/components/table/custom-table';
 import ErrorNotification from '@/components/error-notification';
-import AddIcon from '@mui/icons-material/Add';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 import OrderModal from '@/components/modals/order-modal';
 import SettingsMenu from '@/pages/settings/settings-menu';

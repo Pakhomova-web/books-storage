@@ -5,7 +5,7 @@ import { styled } from '@mui/material/styles';
 import AddIcon from '@mui/icons-material/Add';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import { pageStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import { primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import CustomImage from '@/components/custom-image';
 import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -131,61 +131,58 @@ export default function SettingsMenu({ children, activeUrl, onAddClick = null })
     }
 
     return (
-        <Box sx={pageStyles}>
-            <Grid container>
-                <Grid item xs={12} borderBottom={1}
-                      borderColor={primaryLightColor}
-                      sx={styleVariables.bigTitleFontSize}
-                      display="flex" justifyContent="space-between"
-                      p={2}>
-                    <Box display="flex" gap={1} alignItems="center" flexWrap="wrap">
-                        <Box display={{ xs: 'flex', md: 'none' }}>
-                            <IconButton onClick={() => setShowMenu(!showMenu)}>
-                                {showMenu ? <CloseIcon/> : <MenuIcon/>}
-                            </IconButton>
-                        </Box>
-                        Налаштування
+        <Grid container>
+            <Grid item xs={12} borderBottom={1}
+                  borderColor={primaryLightColor}
+                  sx={styleVariables.bigTitleFontSize}
+                  display="flex" justifyContent="space-between"
+                  p={2}>
+                <Box display="flex" gap={1} alignItems="center" flexWrap="wrap">
+                    <Box display={{ xs: 'flex', md: 'none' }}>
+                        <IconButton onClick={() => setShowMenu(!showMenu)}>
+                            {showMenu ? <CloseIcon/> : <MenuIcon/>}
+                        </IconButton>
                     </Box>
-                    {!!onAddClick &&
-                      <Box>
-                        <IconButton onClick={onAddClick}><AddIcon/></IconButton>
-                      </Box>
-                    }
-                </Grid>
-
-                {showMenu && <StyledMenuContainer item xs={12} md={3} lg={2}>
-                  <SettingsMenuContainerStyledGrid container>
-                      {menuItems.map((item, index) => (
-                          <SettingsMenuItemStyledGrid item xs={6} md={12} key={index}
-                                                      sx={{ backgroundColor: activeUrl === item.url ? primaryLightColor : 'white' }}
-                                                      onClick={() => navigateTo(item.url)}>
-                              <Box m={2} display="flex" flexWrap="nowrap" alignItems="center" gap={1}>
-                                  <Box sx={imageBoxStyles}>
-                                      <CustomImage
-                                          imageLink={activeUrl === item.url ? item.activeImg : item.img}></CustomImage>
-                                  </Box>
-                                  {item.title}
-                              </Box>
-                          </SettingsMenuItemStyledGrid>
-                      ))}
-                  </SettingsMenuContainerStyledGrid>
-                </StyledMenuContainer>}
-
-                <Grid item xs={12} md={9} lg={10} position="relative"
-                      sx={theme => ({ [theme.breakpoints.down('md')]: { display: !showMenu ? 'block' : 'none' } })}>
-                    {!showMenu && !!activeMenuItems &&
-                      <Box sx={styleVariables.sectionTitle} gap={1} display="flex" alignItems="center" p={1}
-                           justifyContent="center">
-                        <Box sx={imageBoxStyles}>
-                          <CustomImage imageLink={activeMenuItems.activeImg}></CustomImage>
-                        </Box>
-                          {activeMenuItems.title}
-                      </Box>
-                    }
-
-                    {children}
-                </Grid>
+                    Налаштування
+                </Box>
+                {!!onAddClick &&
+                  <Box>
+                    <IconButton onClick={onAddClick}><AddIcon/></IconButton>
+                  </Box>
+                }
             </Grid>
-        </Box>
+
+            {showMenu && <StyledMenuContainer item xs={12} md={3} lg={2}>
+              <SettingsMenuContainerStyledGrid container>
+                  {menuItems.map((item, index) => (
+                      <SettingsMenuItemStyledGrid item xs={6} md={12} key={index}
+                                                  sx={{ backgroundColor: activeUrl === item.url ? primaryLightColor : 'white' }}
+                                                  onClick={() => navigateTo(item.url)}>
+                          <Box m={2} display="flex" flexWrap="nowrap" alignItems="center" gap={1}>
+                              <Box sx={imageBoxStyles}>
+                                  <CustomImage
+                                      imageLink={activeUrl === item.url ? item.activeImg : item.img}></CustomImage>
+                              </Box>
+                              {item.title}
+                          </Box>
+                      </SettingsMenuItemStyledGrid>
+                  ))}
+              </SettingsMenuContainerStyledGrid>
+            </StyledMenuContainer>}
+
+            <Grid item xs={12} md={9} lg={10} position="relative"
+                  sx={theme => ({ [theme.breakpoints.down('md')]: { display: !showMenu ? 'block' : 'none' } })}>
+                {!showMenu && !!activeMenuItems &&
+                  <Box sx={styleVariables.sectionTitle} gap={1} p={1} justifyContent="center">
+                    <Box sx={imageBoxStyles}>
+                      <CustomImage imageLink={activeMenuItems.activeImg}></CustomImage>
+                    </Box>
+                      {activeMenuItems.title}
+                  </Box>
+                }
+
+                {children}
+            </Grid>
+        </Grid>
     );
 }

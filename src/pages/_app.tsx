@@ -7,6 +7,15 @@ import { apolloClient } from '@/lib/apollo';
 import './global.css';
 import { AuthProvider } from '@/components/auth-context';
 import Main from '@/components/main';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#448AFF'
+        }
+    }
+});
 
 export default function App({ Component, pageProps }: AppProps) {
     return (
@@ -16,9 +25,12 @@ export default function App({ Component, pageProps }: AppProps) {
             </Head>
 
             <AuthProvider>
-                <Main>
-                    <Component {...pageProps} />
-                </Main>
+                <ThemeProvider theme={theme}>
+                    <Main>
+                        <Component {...pageProps} />
+                    </Main>
+                </ThemeProvider>
+
             </AuthProvider>
         </ApolloProvider>
     );

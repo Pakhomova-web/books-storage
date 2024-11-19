@@ -6,12 +6,12 @@ interface ILoadingProps {
     isSmall?: boolean
 }
 
-const backdropStyles = {
+const backdropStyles = (theme) => ({
     backgroundColor: '#ffffff7d',
-    color: 'var(--background)',
-    zIndex: theme => theme.zIndex.drawer + 1,
+    color: theme.palette.primary.main,
+    zIndex: theme.zIndex.drawer + 1,
     position: 'absolute'
-};
+});
 
 export default function Loading({ show, isSmall }: ILoadingProps) {
     return (

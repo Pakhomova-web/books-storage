@@ -1,14 +1,13 @@
 import { Box, Grid, IconButton, Table, TableFooter, TablePagination, TableRow } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { ApolloError } from '@apollo/client';
+import HomeIcon from '@mui/icons-material/Home';
+import { styled } from '@mui/material/styles';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
+
 import { useBooks } from '@/lib/graphql/queries/book/hook';
 import Loading from '@/components/loading';
-import {
-    borderRadius,
-    boxPadding,
-    pageStyles,
-    primaryLightColor,
-    styleVariables, titleFontSize
-} from '@/constants/styles-variables';
+import { borderRadius, primaryLightColor, styleVariables, titleFontSize } from '@/constants/styles-variables';
 import {
     AuthorEntity,
     BookEntity,
@@ -26,13 +25,10 @@ import ErrorNotification from '@/components/error-notification';
 import { getAuthorById } from '@/lib/graphql/queries/author/hook';
 import { getPublishingHouseById } from '@/lib/graphql/queries/publishing-house/hook';
 import { BookFilters } from '@/components/filters/book-filters';
-import { ApolloError } from '@apollo/client';
 import { TableKey } from '@/components/table/table-key';
 import { getLanguageById } from '@/lib/graphql/queries/language/hooks';
 import { getBookSeriesById } from '@/lib/graphql/queries/book-series/hook';
 import BooksList from '@/components/books-list';
-import HomeIcon from '@mui/icons-material/Home';
-import { styled } from '@mui/material/styles';
 
 const backBoxStyles = {
     display: 'flex',
@@ -40,8 +36,7 @@ const backBoxStyles = {
     flexWrap: 'wrap',
     justifyContent: 'center',
     backgroundColor: primaryLightColor,
-    borderRadius: `0 0 ${borderRadius} ${borderRadius}`,
-    padding: boxPadding
+    borderRadius
 };
 
 const StyledAdditionalTopicGrid = styled(Grid)(() => ({
@@ -116,31 +111,26 @@ export default function Books() {
         if (data?.bookSeries) {
             promise = getBookSeriesById(data?.bookSeries as string)
                 .then((item: BookSeriesEntity) => [
-                    { title: 'Видавництво' },
                     {
                         title: item.publishingHouse.name,
                         param: `publishingHouse=${item.publishingHouse.id}`
                     },
-                    { title: 'Серія' },
                     { title: item.name }
                 ]);
         } else if (data?.language) {
             promise = getLanguageById(data?.language as string)
-                .then((item: LanguageEntity) => [{ title: 'Мова видавництва' }, { title: item.name }]);
+                .then((item: LanguageEntity) => [{ title: item.name }]);
         } else if (data?.bookType) {
             promise = getBookTypeById(data?.bookType as string)
-                .then((item: BookTypeEntity) => [{ title: 'Тип книги' }, { title: item.name }]);
+                .then((item: BookTypeEntity) => [{ title: item.name }]);
         } else if (data?.authors?.length) {
             promise = getAuthorById(data?.authors[0])
-                .then((item: AuthorEntity) => [{ title: 'Автор' }, { title: item.name }]);
+                .then((item: AuthorEntity) => [{ title: item.name }]);
         } else if (data?.publishingHouse) {
             promise = getPublishingHouseById(data?.publishingHouse as string)
-                .then((item: PublishingHouseEntity) => [
-                    { title: 'Видавництво' },
-                    { title: item.name }
-                ]);
+                .then((item: PublishingHouseEntity) => [{ title: item.name }]);
         } else if (!!data?.tags?.length) {
-            setOption([{ title: 'Теги' }, { title: data.tags.join(', ') }]);
+            setOption([{ title: data.tags.join(', ') }]);
         } else if (!!data?.withDiscount) {
             setOption([{ title: 'Акційні товари' }]);
         }
@@ -176,11 +166,11 @@ export default function Books() {
 
     function renderBackBox() {
         return (
-            <Box gap={1} sx={backBoxStyles}>
+            <Box display="flex" alignItems="center" my={1}>
                 <IconButton onClick={() => router.push('/')}><HomeIcon/></IconButton>
                 {option.map((item, index) =>
-                    <Box key={index} display="flex" alignItems="center" gap={1}>
-                        <Box>/</Box>
+                    <Box key={index} display="flex" alignItems="center" gap={1} mr={1}>
+                        <KeyboardArrowRightIcon/>
                         {item.param ?
                             <CustomLink onClick={() => router.push(`/books?${item.param}`)}>
                                 {item.title}
@@ -194,65 +184,63 @@ export default function Books() {
     }
 
     return (
-        <Box position="relative">
+        <>
             <Loading show={loading}></Loading>
 
-            <Box sx={pageStyles}>
-                <BookFilters tableKeys={tableKeys}
-                             defaultValues={filters}
-                             onApply={(filters: BookFilter) => setFilters(filters)}
-                             pageSettings={pageSettings}
-                             showAlwaysSorting={true}
-                             onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></BookFilters>
+            <BookFilters tableKeys={tableKeys}
+                         defaultValues={filters}
+                         onApply={(filters: BookFilter) => setFilters(filters)}
+                         pageSettings={pageSettings}
+                         showAlwaysSorting={true}
+                         onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></BookFilters>
 
-                <Grid container mb={1}>
-                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
-                                               onClick={() => router.push('/books?quickSearch=англ')}>
-                        Англійська дітям
-                    </StyledAdditionalTopicGrid>
-                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
-                                               onClick={() => router.push('/books?bookType=66901099d4b33119e2069792')}>
-                        Наліпки для найменших
-                    </StyledAdditionalTopicGrid>
-                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
-                                               onClick={() => router.push('/books?tags=новорічна,різдвяна,зимова')}>
-                        Новорічні книги
-                    </StyledAdditionalTopicGrid>
-                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
-                                               onClick={() => router.push('/books?bookType=671389883908259306710c62')}>
-                        Розмальовки
-                    </StyledAdditionalTopicGrid>
-                </Grid>
+            <Grid container mb={1}>
+                <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
+                                           onClick={() => router.push('/books?quickSearch=англ')}>
+                    Англійська дітям
+                </StyledAdditionalTopicGrid>
+                <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
+                                           onClick={() => router.push('/books?bookType=66901099d4b33119e2069792')}>
+                    Наліпки для найменших
+                </StyledAdditionalTopicGrid>
+                <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
+                                           onClick={() => router.push('/books?tags=новорічна,різдвяна,зимова')}>
+                    Новорічні книги
+                </StyledAdditionalTopicGrid>
+                <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
+                                           onClick={() => router.push('/books?bookType=671389883908259306710c62')}>
+                    Розмальовки
+                </StyledAdditionalTopicGrid>
+            </Grid>
 
-                {!loadingOption && option && renderBackBox()}
+            {!loadingOption && option && renderBackBox()}
 
-                {items.length ?
-                    <>
-                        <Grid container justifyContent="center">
-                            <BooksList items={items} filters={filters} pageUrl="/books"></BooksList>
-                        </Grid>
+            {items.length ?
+                <>
+                    <Grid container justifyContent="center">
+                        <BooksList items={items} filters={filters} pageUrl="/books"></BooksList>
+                    </Grid>
 
-                        <Box sx={{ position: 'sticky', bottom: 0 }}>
-                            <Table>
-                                <TableFooter>
-                                    <TableRow>
-                                        <TablePagination rowsPerPageOptions={[5, 10, 25]}
-                                                         count={totalCount}
-                                                         page={pageSettings.page}
-                                                         sx={styleVariables.paginatorStyles}
-                                                         labelRowsPerPage="Кількість на сторінці"
-                                                         rowsPerPage={pageSettings.rowsPerPage}
-                                                         onPageChange={(_e, val: number) => onPageChange(val)}
-                                                         onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
-                                    </TableRow>
-                                </TableFooter>
-                            </Table>
-                        </Box>
-                    </>
-                    : (!loading && <Box p={1} display="flex" justifyContent="center">Немає книг</Box>)}
+                    <Box sx={{ position: 'sticky', bottom: 0 }}>
+                        <Table>
+                            <TableFooter>
+                                <TableRow>
+                                    <TablePagination rowsPerPageOptions={[5, 10, 25]}
+                                                     count={totalCount}
+                                                     page={pageSettings.page}
+                                                     sx={styleVariables.paginatorStyles}
+                                                     labelRowsPerPage="Кількість на сторінці"
+                                                     rowsPerPage={pageSettings.rowsPerPage}
+                                                     onPageChange={(_e, val: number) => onPageChange(val)}
+                                                     onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
+                                </TableRow>
+                            </TableFooter>
+                        </Table>
+                    </Box>
+                </>
+                : (!loading && <Box p={1} display="flex" justifyContent="center">Немає книг</Box>)}
 
-                {error && <ErrorNotification error={error}></ErrorNotification>}
-            </Box>
-        </Box>
+            {error && <ErrorNotification error={error}></ErrorNotification>}
+        </>
     );
 }

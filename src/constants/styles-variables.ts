@@ -89,7 +89,9 @@ export const styleVariables = {
     sectionTitle: {
         backgroundColor: primaryLightColor,
         borderRadius,
-        fontSize: titleFontSize
+        fontSize: titleFontSize,
+        display: 'flex',
+        alignItems: 'center'
     }
 };
 
@@ -103,5 +105,3 @@ export const customFieldClearBtnStyles = {
 };
 export const fullHeight = { height: '100svh' };
 export const pageStyles = { overflowY: 'auto', height: 'calc(100svh - 64px)' };
-
-export const drawerWidth = 240;
