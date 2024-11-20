@@ -80,7 +80,7 @@ export default function LoginModal({ open }) {
                     <CustomTextField fullWidth name="email" required label="Ел. пошта" type="email"/>
 
                     <CustomPasswordElement fullWidth
-                                           variant="standard"
+                                           variant="outlined"
                                            id="password"
                                            label="Пароль"
                                            name="password"

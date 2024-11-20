@@ -353,7 +353,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                                 options={authorOptions}
                                                 id="authors"
                                                 label="Автори"
-                                                name="authorIds" showCheckbox variant="standard"/>
+                                                name="authorIds" showCheckbox variant="outlined"/>
                             {isAdmin && !!authorIds?.length &&
                               <Box sx={customFieldClearBtnStyles}
                                    onClick={() => formContext.setValue('authorIds', null)}>

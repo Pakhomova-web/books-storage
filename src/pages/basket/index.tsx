@@ -1,4 +1,4 @@
-import { Box, Button, Grid, IconButton } from '@mui/material';
+import { Box, Button, FormControlLabel, Grid, IconButton, Radio, RadioGroup } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
@@ -15,6 +15,9 @@ import { BookEntity } from '@/lib/data/types';
 import { getParamsQueryString, isAdmin, renderPrice } from '@/utils/utils';
 import CustomLink from '@/components/custom-link';
 import { useRouter } from 'next/router';
+import { FormContainer, useForm } from 'react-hook-form-mui';
+import CustomTextField from '@/components/form-fields/custom-text-field';
+import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 
 const StyledImageBox = styled(Box)(() => ({
     width: '150px',
@@ -44,11 +47,25 @@ const emptyBasketImageBoxStyles = {
 export default function Basket() {
     const router = useRouter();
     const { user, setUser, setBookInBasket } = useAuth();
+    const formContext = useForm({
+        defaultValues: {
+            email: user.email,
+            lastName: user.lastName,
+            firstName: user.firstName,
+            phoneNumber: user.phoneNumber,
+            region: user.region,
+            city: user.city,
+            postcode: user.postcode,
+            novaPostOffice: user.novaPostOffice,
+            preferredDeliveryId: user.preferredDeliveryId
+        }
+    });
     const { loading, error, items } = useBooksByIds(user?.basketItems.map(({ bookId }) => bookId));
     const [countFields, setCountFields] = useState<Map<string, number>>(new Map());
     const [finalFullSum, setFinalFullSum] = useState<number>();
     const [finalSumWithDiscounts, setFinalSumWithDiscounts] = useState<number>();
     const { updating, updatingError, update } = useUpdateBookCountInBasket();
+    const { items: deliveries, loading: loadingDeliveries } = useDeliveries();
 
     useEffect(() => {
         if (!!items?.length) {
@@ -112,9 +129,13 @@ export default function Basket() {
         document.body.removeChild(selBox);
     }
 
+    function onSubmit() {
+        // TODO
+    }
+
     return (
         <>
-            <Loading show={loading || updating}/>
+            <Loading show={loading || updating || loadingDeliveries}/>
 
             <TitleBoxStyled pb={1} m={1}>Кошик</TitleBoxStyled>
 
@@ -165,7 +186,8 @@ export default function Basket() {
                                         <Box>{renderPrice(book.price)}</Box>
                                     </Grid>
 
-                                    <Grid item xs={2} display={{ md: 'none', xs: 'flex' }} alignItems="start" justifyContent="center">
+                                    <Grid item xs={2} display={{ md: 'none', xs: 'flex' }} alignItems="start"
+                                          justifyContent="center">
                                         <IconButton onClick={() => onRemoveBook(book)}>
                                             <ClearIcon color={!book.numberInStock ? 'warning' : 'inherit'}/>
                                         </IconButton>
@@ -267,14 +289,98 @@ export default function Basket() {
                 </Grid>
             </Box>
 
-            {error && <ErrorNotification error={error}/>}
-            {updatingError && <ErrorNotification error={updatingError}/>}
-
             {isAdmin(user) && !!items.length &&
               <Box display="flex" mb={3} justifyContent="center">
                 <Button variant="outlined" onClick={onCopyOrderClick}>Скопіювати зміст замовлення</Button>
               </Box>
             }
+
+            {error && <ErrorNotification error={error}/>}
+            {updatingError && <ErrorNotification error={updatingError}/>}
+
+            {!!items.length &&
+              <FormContainer formContext={formContext}>
+                <Grid container spacing={1}>
+                  <Grid item xs={12}>
+                    <Box borderBottom={1} borderColor={primaryLightColor} sx={styleVariables.titleFontSize}
+                         p={1}>
+                      Основна інформація
+                    </Box>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Grid container spacing={1}>
+                      <Grid item xs={12} sm={6}>
+                        <CustomTextField name="firstName" label="Ім'я" fullWidth/>
+                      </Grid>
+
+                      <Grid item xs={12} sm={6}>
+                        <CustomTextField name="lastName" label="Прізвище" fullWidth/>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <CustomTextField name="phoneNumber" label="Номер телефону" fullWidth/>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <CustomTextField name="email" required label="Ел. адреса" fullWidth/>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Box borderBottom={1} borderColor={primaryLightColor} sx={styleVariables.titleFontSize}
+                         p={1}>
+                      Адреса
+                    </Box>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <CustomTextField name="region" label="Область" fullWidth/>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <CustomTextField name="city" label="Місто" fullWidth/>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <CustomTextField name="novaPostOffice"
+                                     label="№ відділення/поштомату"
+                                     type="number"
+                                     fullWidth/>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <CustomTextField name="postcode" type="number" label="Індекс" fullWidth/>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Box borderBottom={1} borderColor={primaryLightColor} sx={styleVariables.titleFontSize}
+                         p={1}>
+                      Спосіб доставки
+                    </Box>
+
+                    <RadioGroup defaultValue={user?.preferredDeliveryId}
+                                onChange={(_, value) => formContext.setValue('preferredDeliveryId', value)}>
+                      <Grid container spacing={2}>
+                          {deliveries.map((delivery, index) => (
+                              <Grid key={index} item xs={12} sm={6} pl={2}>
+                                  <Box p={1}>
+                                      <FormControlLabel value={delivery.id}
+                                                        control={<Radio/>}
+                                                        label={delivery.name}/>
+                                  </Box>
+                              </Grid>
+                          ))}
+                      </Grid>
+                    </RadioGroup>
+                  </Grid>
+
+                  <Grid item xs={12} textAlign="center" mb={2}>
+                    <Button type="submit" variant="contained" onClick={onSubmit}>Підтвердити замовлення</Button>
+                  </Grid>
+                </Grid>
+              </FormContainer>}
         </>
     );
 }

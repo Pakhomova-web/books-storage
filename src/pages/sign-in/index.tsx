@@ -100,14 +100,14 @@ export default function SignIn() {
                                          id="email"/>
 
                         <CustomPasswordElement fullWidth
-                                               variant="standard"
+                                               variant="outlined"
                                                id="password"
                                                label="Пароль"
                                                name="password"
                                                required/>
 
                         <CustomPasswordElement fullWidth
-                                               variant="standard"
+                                               variant="outlined"
                                                id="confirmPassword"
                                                label="Підтвердіть пароль"
                                                name="confirmPassword"

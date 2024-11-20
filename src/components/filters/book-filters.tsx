@@ -188,7 +188,7 @@ export function BookFilters(props: IBookFiltersProps) {
                                                 options={authorOptions}
                                                 id="authors"
                                                 label="Автори"
-                                                name="authors" showCheckbox variant="standard"/>
+                                                name="authors" showCheckbox variant="outlined"/>
                             {!!authors?.length &&
                               <Box sx={customFieldClearBtnStyles} onClick={() => clearValue('authors')}>Очистити</Box>}
                         </Box>
