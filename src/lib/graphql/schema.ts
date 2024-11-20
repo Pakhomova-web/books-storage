@@ -461,6 +461,7 @@ const typeDefs =  /* GraphQL */ `
         userId: ID!
         firstName: String!
         lastName: String!
+        instagramUsername: String
         phoneNumber: String!
         trackingNumber: String
         isPaid: Boolean
@@ -482,6 +483,7 @@ const typeDefs =  /* GraphQL */ `
         userId: ID!
         firstName: String!
         lastName: String!
+        instagramUsername: String
         phoneNumber: String!
         trackingNumber: String
         isPaid: Boolean

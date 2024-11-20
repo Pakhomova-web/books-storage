@@ -545,6 +545,7 @@ export type OrderCreateInput = {
   deliveryId: Scalars['ID']['input'];
   district?: InputMaybe<Scalars['String']['input']>;
   firstName: Scalars['String']['input'];
+  instagramUsername?: InputMaybe<Scalars['String']['input']>;
   isDone?: InputMaybe<Scalars['Boolean']['input']>;
   isPaid?: InputMaybe<Scalars['Boolean']['input']>;
   isPartlyPaid?: InputMaybe<Scalars['Boolean']['input']>;
@@ -571,6 +572,7 @@ export type OrderUpdateInput = {
   district?: InputMaybe<Scalars['String']['input']>;
   firstName: Scalars['String']['input'];
   id: Scalars['ID']['input'];
+  instagramUsername?: InputMaybe<Scalars['String']['input']>;
   isDone?: InputMaybe<Scalars['Boolean']['input']>;
   isPaid?: InputMaybe<Scalars['Boolean']['input']>;
   isPartlyPaid?: InputMaybe<Scalars['Boolean']['input']>;
@@ -841,7 +843,6 @@ export type UserToken = {
 
 export type UserUpdateInput = {
   city?: InputMaybe<Scalars['String']['input']>;
-  email: Scalars['String']['input'];
   firstName?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   instagramUsername?: InputMaybe<Scalars['String']['input']>;
