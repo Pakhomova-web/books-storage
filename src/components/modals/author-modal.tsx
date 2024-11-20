@@ -5,6 +5,7 @@ import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
+import { Box } from '@mui/material';
 
 interface IAuthorModalProps {
     open: boolean,
@@ -48,17 +49,19 @@ export default function AuthorModal({ open, item, onClose, isAdmin }: IAuthorMod
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={isAdmin ? onSubmit : null}>
             <FormContainer formContext={formContext}>
-                <CustomTextField fullWidth
-                                 required
-                                 autoFocus
-                                 id="author-name"
-                                 label="ПІБ"
-                                 name="name"/>
+                <Box display="flex" gap={1} flexDirection="column">
+                    <CustomTextField fullWidth
+                                     required
+                                     autoFocus
+                                     id="author-name"
+                                     label="ПІБ"
+                                     name="name"/>
 
-                <CustomTextField fullWidth
-                                 id="description"
-                                 label="Опис"
-                                 name="description"/>
+                    <CustomTextField fullWidth
+                                     id="description"
+                                     label="Опис"
+                                     name="description"/>
+                </Box>
             </FormContainer>
 
             {(creatingError || updatingError) &&
