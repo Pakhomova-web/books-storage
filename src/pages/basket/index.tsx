@@ -49,15 +49,15 @@ export default function Basket() {
     const { user, setUser, setBookInBasket } = useAuth();
     const formContext = useForm({
         defaultValues: {
-            email: user.email,
-            lastName: user.lastName,
-            firstName: user.firstName,
-            phoneNumber: user.phoneNumber,
-            region: user.region,
-            city: user.city,
-            postcode: user.postcode,
-            novaPostOffice: user.novaPostOffice,
-            preferredDeliveryId: user.preferredDeliveryId
+            email: user?.email,
+            lastName: user?.lastName,
+            firstName: user?.firstName,
+            phoneNumber: user?.phoneNumber,
+            region: user?.region,
+            city: user?.city,
+            postcode: user?.postcode,
+            novaPostOffice: user?.novaPostOffice,
+            preferredDeliveryId: user?.preferredDeliveryId
         }
     });
     const { loading, error, items } = useBooksByIds(user?.basketItems.map(({ bookId }) => bookId));

@@ -76,13 +76,10 @@ export default function Home() {
 
     return (
         <>
-            <Loading show={loadingBookTypes && loadingBooksWithDiscounts && loadingPublishingHouses}></Loading>
-
             <SocialMediaBox></SocialMediaBox>
 
             <Grid container position="relative" mb={loadingBookTypes ? 1 : 0} justifyContent="center">
-                <Loading
-                    show={loadingBookTypes && (!loadingPublishingHouses && loadingBooksWithDiscounts || loadingPublishingHouses && !loadingBooksWithDiscounts)}></Loading>
+                <Loading show={loadingBookTypes}></Loading>
 
                 <Grid item xs={12} p={2} justifyContent="center" sx={styleVariables.sectionTitle}>
                     Типи книг
@@ -112,8 +109,7 @@ export default function Home() {
             </Grid>
 
             <Grid container position="relative" display="flex" justifyContent="center" alignItems="center">
-                <Loading
-                    show={loadingBooksWithDiscounts && (!loadingBookTypes && loadingPublishingHouses || loadingBookTypes && !loadingPublishingHouses)}></Loading>
+                <Loading show={loadingBooksWithDiscounts}></Loading>
 
                 {(loadingBooksWithDiscounts && !booksWithDiscounts?.length ||
                         !loadingBooksWithDiscounts && !!booksWithDiscounts?.length) &&
@@ -135,8 +131,7 @@ export default function Home() {
             </Grid>
 
             <Grid container position="relative">
-                <Loading
-                    show={loadingPublishingHouses && (!loadingBookTypes && loadingBooksWithDiscounts || loadingBookTypes && !loadingBooksWithDiscounts)}></Loading>
+                <Loading show={loadingPublishingHouses}></Loading>
 
                 <Grid item xs={12} p={2} justifyContent="center" sx={styleVariables.sectionTitle}
                       mb={loadingPublishingHouses ? 1 : 0}>
