@@ -217,7 +217,7 @@ export default function CustomToolbar() {
                 </StyledToolbar>
             </AppBar>
 
-            <LoginModal open={openLoginModal} onClose={() => setOpenLoginModal(false)}></LoginModal>
+            <LoginModal open={openLoginModal}></LoginModal>
         </>
     );
 }
