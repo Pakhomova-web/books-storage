@@ -9,6 +9,7 @@ import { useCurrentUser } from '@/lib/graphql/queries/auth/hook';
 import ErrorNotification from '@/components/error-notification';
 import ProfileMenu from '@/pages/profile/profile-menu';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
+import CustomImage from '@/components/custom-image';
 
 export default function PersonalInfo() {
     const { user } = useAuth();
@@ -109,7 +110,10 @@ export default function PersonalInfo() {
                                         <Box p={1}>
                                             <FormControlLabel value={delivery.id}
                                                               control={<Radio/>}
-                                                              label={delivery.name}/>
+                                                              label={<Box sx={{ width: '100px', height: '50px' }}>
+                                                                  <CustomImage
+                                                                      imageId={delivery.imageId}></CustomImage>
+                                                              </Box>}/>
                                         </Box>
                                     </Grid>
                                 ))}

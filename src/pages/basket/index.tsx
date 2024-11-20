@@ -57,7 +57,8 @@ export default function Basket() {
             city: user?.city,
             postcode: user?.postcode,
             novaPostOffice: user?.novaPostOffice,
-            preferredDeliveryId: user?.preferredDeliveryId
+            preferredDeliveryId: user?.preferredDeliveryId,
+            comment: null
         }
     });
     const { preferredDeliveryId } = formContext.watch();
@@ -237,7 +238,7 @@ export default function Basket() {
                     </Box>
                 ))}
 
-                <Grid container display="flex" alignItems="center" spacing={1} mb={2}>
+                <Grid container display="flex" alignItems="center" spacing={1}>
                     {!loading && (!!items?.length ?
                         <>
                             <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end"
@@ -290,23 +291,18 @@ export default function Basket() {
                 </Grid>
             </Box>
 
-            {isAdmin(user) && !!items.length &&
-              <Box display="flex" mb={3} justifyContent="center">
-                <Button variant="outlined" onClick={onCopyOrderClick}>Скопіювати зміст замовлення</Button>
-              </Box>
-            }
-
             {error && <ErrorNotification error={error}/>}
             {updatingError && <ErrorNotification error={updatingError}/>}
 
             {!!items.length &&
               <FormContainer formContext={formContext}>
-                <Grid container spacing={2}>
+                <Grid container spacing={2} px={1}>
                   <Grid item xs={12}>
-                    <Box borderBottom={1} borderColor={primaryLightColor} sx={styleVariables.titleFontSize}
-                         p={1}>
-                      Основна інформація
-                    </Box>
+                    <CustomTextField name="comment" label="Коментар" multiline fullWidth/>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Box sx={styleVariables.sectionTitle} p={1}>Основна інформація</Box>
                   </Grid>
 
                   <Grid item xs={12}>
@@ -330,10 +326,29 @@ export default function Basket() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Box borderBottom={1} borderColor={primaryLightColor} sx={styleVariables.titleFontSize}
-                         p={1}>
-                      Адреса
-                    </Box>
+                    <Box sx={styleVariables.sectionTitle} p={1}>Спосіб доставки</Box>
+
+                    <RadioGroup defaultValue={user?.preferredDeliveryId}
+                                onChange={(_, value) => formContext.setValue('preferredDeliveryId', value)}>
+                      <Grid container spacing={2}>
+                          {deliveries.map((delivery, index) => (
+                              <Grid key={index} item xs={12} sm={6} pl={2}>
+                                  <Box p={1}>
+                                      <FormControlLabel value={delivery.id}
+                                                        control={<Radio/>}
+                                                        label={<Box sx={{ width: '100px', height: '50px' }}>
+                                                            <CustomImage
+                                                                imageId={delivery.imageId}></CustomImage>
+                                                        </Box>}/>
+                                  </Box>
+                              </Grid>
+                          ))}
+                      </Grid>
+                    </RadioGroup>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <Box sx={styleVariables.sectionTitle} p={1}>Адреса</Box>
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
@@ -359,29 +374,10 @@ export default function Basket() {
                                      fullWidth/>
                   </Grid>
 
-                  <Grid item xs={12}>
-                    <Box borderBottom={1} borderColor={primaryLightColor} sx={styleVariables.titleFontSize}
-                         p={1}>
-                      Спосіб доставки
-                    </Box>
-
-                    <RadioGroup defaultValue={user?.preferredDeliveryId}
-                                onChange={(_, value) => formContext.setValue('preferredDeliveryId', value)}>
-                      <Grid container spacing={2}>
-                          {deliveries.map((delivery, index) => (
-                              <Grid key={index} item xs={12} sm={6} pl={2}>
-                                  <Box p={1}>
-                                      <FormControlLabel value={delivery.id}
-                                                        control={<Radio/>}
-                                                        label={delivery.name}/>
-                                  </Box>
-                              </Grid>
-                          ))}
-                      </Grid>
-                    </RadioGroup>
-                  </Grid>
-
-                  <Grid item xs={12} textAlign="center" mb={2}>
+                  <Grid item xs={12} mb={2} display="flex"
+                        gap={1} justifyContent="center" alignItems="center">
+                      {isAdmin(user) && !!items.length &&
+                        <Button variant="outlined" onClick={onCopyOrderClick}>Скопіювати зміст замовлення</Button>}
                     <Button type="submit" variant="contained" onClick={onSubmit}>Підтвердити замовлення</Button>
                   </Grid>
                 </Grid>
