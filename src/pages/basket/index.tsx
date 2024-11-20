@@ -60,6 +60,7 @@ export default function Basket() {
             preferredDeliveryId: user?.preferredDeliveryId
         }
     });
+    const { preferredDeliveryId } = formContext.watch();
     const { loading, error, items } = useBooksByIds(user?.basketItems.map(({ bookId }) => bookId));
     const [countFields, setCountFields] = useState<Map<string, number>>(new Map());
     const [finalFullSum, setFinalFullSum] = useState<number>();
@@ -300,7 +301,7 @@ export default function Basket() {
 
             {!!items.length &&
               <FormContainer formContext={formContext}>
-                <Grid container spacing={1}>
+                <Grid container spacing={2}>
                   <Grid item xs={12}>
                     <Box borderBottom={1} borderColor={primaryLightColor} sx={styleVariables.titleFontSize}
                          p={1}>
@@ -311,17 +312,17 @@ export default function Basket() {
                   <Grid item xs={12}>
                     <Grid container spacing={1}>
                       <Grid item xs={12} sm={6}>
-                        <CustomTextField name="firstName" label="Ім'я" fullWidth/>
+                        <CustomTextField name="firstName" required label="Ім'я" fullWidth/>
                       </Grid>
 
                       <Grid item xs={12} sm={6}>
-                        <CustomTextField name="lastName" label="Прізвище" fullWidth/>
+                        <CustomTextField name="lastName" required label="Прізвище" fullWidth/>
                       </Grid>
                     </Grid>
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
-                    <CustomTextField name="phoneNumber" label="Номер телефону" fullWidth/>
+                    <CustomTextField name="phoneNumber" required label="Номер телефону" fullWidth/>
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
@@ -336,22 +337,26 @@ export default function Basket() {
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
-                    <CustomTextField name="region" label="Область" fullWidth/>
+                    <CustomTextField name="region" required label="Область" fullWidth/>
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
-                    <CustomTextField name="city" label="Місто" fullWidth/>
+                    <CustomTextField name="city" required label="Місто" fullWidth/>
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
                     <CustomTextField name="novaPostOffice"
+                                     required={preferredDeliveryId === '66d5c90e3415a4551a000600'}
                                      label="№ відділення/поштомату"
                                      type="number"
                                      fullWidth/>
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
-                    <CustomTextField name="postcode" type="number" label="Індекс" fullWidth/>
+                    <CustomTextField name="postcode"
+                                     required={preferredDeliveryId === '66d5c9173415a4551a000606'}
+                                     type="number" label="Індекс"
+                                     fullWidth/>
                   </Grid>
 
                   <Grid item xs={12}>

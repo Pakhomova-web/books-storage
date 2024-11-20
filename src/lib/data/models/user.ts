@@ -27,10 +27,7 @@ const userSchema = new Schema<UserEntity, Model<UserEntity>>({
     novaPostOffice: Number,
     region: String,
     city: String,
-    preferredDeliveryId: {
-        ref: 'delivery',
-        type: Schema.Types.ObjectId
-    }
+    preferredDeliveryId: String
 });
 
 export default models?.user || model('user', userSchema);
