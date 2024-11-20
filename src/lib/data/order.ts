@@ -2,6 +2,8 @@ import { IOrderFilter, IPageable, OrderEntity } from '@/lib/data/types';
 import Order from '@/lib/data/models/order';
 import { GraphQLError } from 'graphql/error';
 import { getValidFilters } from '@/lib/data/base';
+import OrderNumber from '@/lib/data/models/orderNumber';
+import User from '@/lib/data/models/user';
 
 export async function getOrders(pageSettings?: IPageable, filters?: IOrderFilter) {
     const { quickSearch, andFilters } = getValidFilters(filters);
@@ -29,7 +31,8 @@ export async function getOrders(pageSettings?: IPageable, filters?: IOrderFilter
 
     await query.exec().then((items: OrderEntity[]) => {
         if (quickSearch) {
-            items = items.filter(({ customerFirstName, customerLastName }) => quickSearch.test(customerFirstName));
+            items = items
+                .filter(({ firstName, lastName }) => quickSearch.test(firstName) || quickSearch.test(lastName));
         }
         const totalCount = items.length;
 
@@ -46,11 +49,20 @@ export async function getOrders(pageSettings?: IPageable, filters?: IOrderFilter
 }
 
 export async function createOrder(input: OrderEntity) {
-    const item = new Order(_getOrderData(input));
+    let orderNumber = await OrderNumber.findOne();
+
+    if (orderNumber) {
+        orderNumber.value = orderNumber.value + 1;
+        await orderNumber.save();
+    } else {
+        orderNumber = await OrderNumber.create({ value: 1 });
+    }
+    const item = new Order(_getOrderData(input, orderNumber.value));
 
     await item.save();
+    await User.findByIdAndUpdate(input.userId, { basketItems: [] });
 
-    return { ...input, id: item.id } as OrderEntity;
+    return item as OrderEntity;
 }
 
 export async function updateOrder(input: OrderEntity) {
@@ -60,7 +72,7 @@ export async function updateOrder(input: OrderEntity) {
         });
     }
 
-    await Order.findByIdAndUpdate(input.id, _getOrderData(input));
+    await Order.findByIdAndUpdate(input.id, _getOrderData(input, input.orderNumber));
 
     return input as OrderEntity;
 }
@@ -76,9 +88,10 @@ export async function deleteOrder(id: string) {
     return { id } as OrderEntity;
 }
 
-function _getOrderData(input: OrderEntity) {
+function _getOrderData(input: OrderEntity, orderNumber: number) {
     return {
         ...input,
+        orderNumber,
         delivery: input.deliveryId
     };
 }

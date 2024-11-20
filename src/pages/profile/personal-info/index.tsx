@@ -10,9 +10,10 @@ import ErrorNotification from '@/components/error-notification';
 import ProfileMenu from '@/pages/profile/profile-menu';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 import CustomImage from '@/components/custom-image';
+import { UserEntity } from '@/lib/data/types';
 
 export default function PersonalInfo() {
-    const { user } = useAuth();
+    const { user, setUser } = useAuth();
     const formContext = useForm({
         defaultValues: {
             id: user?.id,
@@ -21,6 +22,7 @@ export default function PersonalInfo() {
             lastName: user?.lastName,
             phoneNumber: user?.phoneNumber,
             region: user?.region,
+            district: user?.district,
             city: user?.city,
             novaPostOffice: user?.novaPostOffice,
             postcode: user?.postcode,
@@ -31,10 +33,10 @@ export default function PersonalInfo() {
     const { items: deliveries, loading: loadingDeliveries } = useDeliveries();
 
     async function onSubmit() {
-        try {
-            await update(formContext.getValues());
-        } catch (err) {
-        }
+        update(formContext.getValues())
+            .then(user => setUser(new UserEntity(user)))
+            .catch(() => {
+            });
     }
 
     return (
@@ -53,11 +55,11 @@ export default function PersonalInfo() {
                     <Grid item xs={12}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
-                                <CustomTextField name="firstName" label="Ім'я" fullWidth/>
+                                <CustomTextField name="lastName" label="Прізвище" fullWidth/>
                             </Grid>
 
                             <Grid item xs={12} sm={6}>
-                                <CustomTextField name="lastName" label="Прізвище" fullWidth/>
+                                <CustomTextField name="firstName" label="Ім'я" fullWidth/>
                             </Grid>
                         </Grid>
                     </Grid>
@@ -67,7 +69,7 @@ export default function PersonalInfo() {
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <CustomTextField name="email" required label="Ел. адреса" fullWidth/>
+                        <CustomTextField name="email" required label="Ел. адреса" disabled fullWidth/>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -79,6 +81,10 @@ export default function PersonalInfo() {
 
                     <Grid item xs={12} sm={6}>
                         <CustomTextField name="region" label="Область" fullWidth/>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <CustomTextField name="district" label="Район" fullWidth/>
                     </Grid>
 
                     <Grid item xs={12} sm={6}>

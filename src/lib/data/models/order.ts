@@ -2,19 +2,23 @@ import { Model, model, models, Schema } from 'mongoose';
 import { OrderEntity } from '@/lib/data/types';
 
 const orderSchema = new Schema<OrderEntity, Model<OrderEntity>>({
-    customerFirstName: {
+    orderNumber: {
+        type: Number,
+        required: true
+    },
+    firstName: {
         type: String,
         required: true,
     },
-    customerLastName: {
+    lastName: {
         type: String,
         required: true
     },
-    customerPhoneNumber: {
+    phoneNumber: {
         type: String,
         required: true
     },
-    deliveryCompany: {
+    delivery: {
         ref: 'delivery',
         type: Schema.Types.ObjectId
     },
@@ -23,22 +27,18 @@ const orderSchema = new Schema<OrderEntity, Model<OrderEntity>>({
     isSent: Boolean,
     isDone: Boolean,
     trackingNumber: String,
-    description: String,
-    address: {
-        region: {
-            type: String,
-            required: true
-        },
-        district: String,
-        city: {
-            type: String,
-            required: true
-        },
-        postcode: {
-            type: String,
-            required: true
-        }
+    comment: String,
+    region: {
+        type: String,
+        required: true
     },
+    district: String,
+    city: {
+        type: String,
+        required: true
+    },
+    postcode: Number,
+    novaPostOffice: Number,
     books: [
         {
             book: {

@@ -231,6 +231,7 @@ export class UserEntity {
     preferredDeliveryId?: string;
     region?: string;
     city?: string;
+    district?: string;
     postcode?: number;
     novaPostOffice?: number;
     phoneNumber?: String;
@@ -246,6 +247,7 @@ export class UserEntity {
             this.likedBookIds = data.likedBookIds ? data.likedBookIds : [];
             this.basketItems = data.basketItems ? data.basketItems : [];
             this.region = data.region;
+            this.district = data.district;
             this.city = data.city;
             this.postcode = data.postcode;
             this.novaPostOffice = data.novaPostOffice;
@@ -269,36 +271,70 @@ export class DeliveryEntity {
     }
 }
 
-export class Address {
-    region: string;
-    district?: string;
-    city: string;
-    postcode: string;
-}
-
 export class OrderBook {
     bookId: string;
     book: BookEntity;
     count: number;
     discount?: number;
     price: number;
+
+    constructor(data?) {
+        if (data) {
+            this.book = data.book ? new BookEntity(data.book) : null;
+            this.bookId = data.bookId;
+            this.count = data.count;
+            this.discount = data.discount;
+            this.price = data.price;
+        }
+    }
 }
 
 export class OrderEntity {
     id: string;
-    customerFirstName: string;
-    customerLastName: string;
-    customerPhoneNumber: string;
+    orderNumber: number;
+    userId: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
     trackingNumber: string;
     deliveryId?: string;
     delivery?: DeliveryEntity;
-    address: Address;
+    region: string;
+    district?: string;
+    city: string;
+    postcode: number;
+    novaPostOffice: number;
     isPaid: boolean;
     isPartlyPaid: boolean;
     isSent: boolean;
     isDone: boolean;
     books: OrderBook[];
-    description?: string;
+    comment?: string;
+
+    constructor(data?) {
+        if (data) {
+            this.id = data.id;
+            this.userId = data.userId;
+            this.orderNumber = data.orderNumber;
+            this.firstName = data.firstName;
+            this.lastName = data.lastName;
+            this.phoneNumber = data.phoneNumber;
+            this.trackingNumber = data.trackingNumber;
+            this.deliveryId = data.deliveryId;
+            this.delivery = data.delivery;
+            this.region = data.region;
+            this.district = data.district;
+            this.city = data.city;
+            this.postcode = data.postcode;
+            this.novaPostOffice = data.novaPostOffice;
+            this.comment = data.comment;
+            this.books = data.books.map(b => new OrderBook(b));
+        }
+    }
+}
+
+export interface OrderNumberEntity {
+    value: number;
 }
 
 export interface IOrderFilter {

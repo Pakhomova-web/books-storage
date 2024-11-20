@@ -12,12 +12,13 @@ import { useAuth } from '@/components/auth-context';
 import { styled } from '@mui/material/styles';
 import CustomImage from '@/components/custom-image';
 import { BookEntity } from '@/lib/data/types';
-import { getParamsQueryString, isAdmin, renderPrice } from '@/utils/utils';
+import { getParamsQueryString, isAdmin, renderOrderNumber, renderPrice } from '@/utils/utils';
 import CustomLink from '@/components/custom-link';
 import { useRouter } from 'next/router';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
+import { useCreateOrder } from '@/lib/graphql/queries/order/hook';
 
 const StyledImageBox = styled(Box)(() => ({
     width: '150px',
@@ -49,25 +50,110 @@ export default function Basket() {
     const { user, setUser, setBookInBasket } = useAuth();
     const formContext = useForm({
         defaultValues: {
+            userId: user?.id,
             email: user?.email,
             lastName: user?.lastName,
             firstName: user?.firstName,
             phoneNumber: user?.phoneNumber,
             region: user?.region,
             city: user?.city,
+            district: user?.district,
             postcode: user?.postcode,
             novaPostOffice: user?.novaPostOffice,
-            preferredDeliveryId: user?.preferredDeliveryId,
+            deliveryId: user?.preferredDeliveryId,
             comment: null
         }
     });
-    const { preferredDeliveryId } = formContext.watch();
+    const {
+        deliveryId,
+        phoneNumber,
+        firstName,
+        lastName,
+        region,
+        city,
+        postcode,
+        novaPostOffice
+    } = formContext.watch();
     const { loading, error, items } = useBooksByIds(user?.basketItems.map(({ bookId }) => bookId));
     const [countFields, setCountFields] = useState<Map<string, number>>(new Map());
     const [finalFullSum, setFinalFullSum] = useState<number>();
     const [finalSumWithDiscounts, setFinalSumWithDiscounts] = useState<number>();
     const { updating, updatingError, update } = useUpdateBookCountInBasket();
     const { items: deliveries, loading: loadingDeliveries } = useDeliveries();
+    const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
+    const [orderNumber, setOrderNumber] = useState<string>();
+    const { create, creating, creatingError } = useCreateOrder();
+
+    useEffect(() => {
+        let invalid = false;
+
+        if (!phoneNumber) {
+            formContext.setError('phoneNumber', { message: 'Номер телефону обов\'язковий' });
+            setSubmitDisabled(true);
+            invalid = true;
+        } else {
+            formContext.clearErrors('phoneNumber');
+        }
+
+        if (!region) {
+            formContext.setError('region', { message: 'Область обов\'язкова' });
+            setSubmitDisabled(true);
+            invalid = true;
+        } else {
+            formContext.clearErrors('region');
+        }
+
+        if (!city) {
+            formContext.setError('city', { message: 'Місто обов\'язкове' });
+            setSubmitDisabled(true);
+            invalid = true;
+        } else {
+            formContext.clearErrors('city');
+        }
+
+        if (!firstName) {
+            formContext.setError('firstName', { message: 'Ім\'я обов\'язкове' });
+            setSubmitDisabled(true);
+            invalid = true;
+        } else {
+            formContext.clearErrors('firstName');
+        }
+
+        if (!lastName) {
+            formContext.setError('lastName', { message: 'Прізвище обов\'язкове' });
+            setSubmitDisabled(true);
+            invalid = true;
+        } else {
+            formContext.clearErrors('lastName');
+        }
+
+        if (isNovaPostSelected() && !novaPostOffice) {
+            formContext.setError('novaPostOffice', { message: '№ відділення/поштомата обов\'язкове' });
+            formContext.clearErrors('postcode');
+            setSubmitDisabled(true);
+            invalid = true;
+        } else if (isUrkPoshtaSelected() && !postcode) {
+            formContext.setError('postcode', { message: 'Індекс обов\'язковий' });
+            formContext.clearErrors('novaPostOffice');
+            setSubmitDisabled(true);
+            invalid = true;
+        } else {
+            formContext.clearErrors('novaPostOffice');
+            formContext.clearErrors('postcode');
+        }
+
+        if (!invalid) {
+            setSubmitDisabled(false);
+        }
+    }, [deliveryId, phoneNumber, firstName, lastName, region, city, postcode, novaPostOffice]);
+
+    function isNovaPostSelected() {
+        return deliveryId === '66d5c90e3415a4551a000600';
+    }
+
+    function isUrkPoshtaSelected() {
+        return deliveryId === '66d5c9173415a4551a000606';
+    }
 
     useEffect(() => {
         if (!!items?.length) {
@@ -132,12 +218,28 @@ export default function Basket() {
     }
 
     function onSubmit() {
-        // TODO
+        if (!submitDisabled) {
+            create({
+                ...formContext.getValues(),
+                books: items.map(book => ({
+                    bookId: book.id,
+                    count: countFields.get(book.id),
+                    price: book.price,
+                    discount: book.discount
+                }))
+            })
+                .then(order => {
+                    setOrderNumber(renderOrderNumber(order.orderNumber));
+                    setUser({ ...user, basketItems: [] });
+                })
+                .catch(() => {
+                });
+        }
     }
 
     return (
         <>
-            <Loading show={loading || updating || loadingDeliveries}/>
+            <Loading show={loading || updating || loadingDeliveries || creating}/>
 
             <TitleBoxStyled pb={1} m={1}>Кошик</TitleBoxStyled>
 
@@ -277,42 +379,54 @@ export default function Basket() {
                             <Grid item xs={12}>
                                 <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
                             </Grid>
-                        </> :
-                        <Grid item display="flex" width="100%" alignItems="center" flexDirection="column"
-                              gap={2} mt={3}>
-                            <Box sx={emptyBasketImageBoxStyles}>
-                                <CustomImage imageLink="/empty_basket.png"></CustomImage>
-                            </Box>
-                            <Box sx={styleVariables.titleFontSize}>Кошик пустий</Box>
-                            <Button variant="outlined" onClick={() => router.push('/')}>
-                                До вибору книг
-                            </Button>
-                        </Grid>)}
+                        </> : <Grid item xs={12} display="flex" alignItems="center" flexDirection="column"
+                                    gap={2} mt={3}>
+                            {orderNumber ?
+                                <>
+                                    <Box sx={styleVariables.titleFontSize}>Дякуємо!</Box>
+                                    <Box display="flex">
+                                        Ваше замовлення
+                                        <Box mx={1} sx={styleVariables.orderNumberStyles}>№{orderNumber}</Box>
+                                        оформлене!
+                                    </Box>
+                                    <Box>Чекайте повідомлення від менеджера.</Box>
+
+                                    <Button variant="outlined" onClick={() => router.push('/')}>
+                                        На головну сторінку
+                                    </Button>
+                                </> :
+                                <>
+                                    <Box sx={emptyBasketImageBoxStyles}>
+                                        <CustomImage imageLink="/empty_basket.png"></CustomImage>
+                                    </Box>
+                                    <Box sx={styleVariables.titleFontSize}>Кошик пустий</Box>
+                                    <Button variant="outlined" onClick={() => router.push('/')}>
+                                        До вибору книг
+                                    </Button>
+                                </>}
+                        </Grid>)
+                    }
                 </Grid>
             </Box>
 
             {error && <ErrorNotification error={error}/>}
             {updatingError && <ErrorNotification error={updatingError}/>}
 
-            {!!items.length &&
+            {!!items.length && <>
               <FormContainer formContext={formContext}>
-                <Grid container spacing={2} px={1}>
-                  <Grid item xs={12}>
-                    <CustomTextField name="comment" label="Коментар" multiline fullWidth/>
-                  </Grid>
-
+                <Grid container spacing={2} px={1} mt={1}>
                   <Grid item xs={12}>
                     <Box sx={styleVariables.sectionTitle} p={1}>Основна інформація</Box>
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Grid container spacing={1}>
+                    <Grid container spacing={2}>
                       <Grid item xs={12} sm={6}>
-                        <CustomTextField name="firstName" required label="Ім'я" fullWidth/>
+                        <CustomTextField name="lastName" required label="Прізвище" fullWidth/>
                       </Grid>
 
                       <Grid item xs={12} sm={6}>
-                        <CustomTextField name="lastName" required label="Прізвище" fullWidth/>
+                        <CustomTextField name="firstName" required label="Ім'я" fullWidth/>
                       </Grid>
                     </Grid>
                   </Grid>
@@ -322,14 +436,14 @@ export default function Basket() {
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
-                    <CustomTextField name="email" required label="Ел. адреса" fullWidth/>
+                    <CustomTextField name="email" required label="Ел. адреса" disabled fullWidth/>
                   </Grid>
 
                   <Grid item xs={12}>
                     <Box sx={styleVariables.sectionTitle} p={1}>Спосіб доставки</Box>
 
                     <RadioGroup defaultValue={user?.preferredDeliveryId}
-                                onChange={(_, value) => formContext.setValue('preferredDeliveryId', value)}>
+                                onChange={(_, value) => formContext.setValue('deliveryId', value)}>
                       <Grid container spacing={2}>
                           {deliveries.map((delivery, index) => (
                               <Grid key={index} item xs={12} sm={6} pl={2}>
@@ -356,12 +470,16 @@ export default function Basket() {
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
+                    <CustomTextField name="district" label="Район" fullWidth/>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
                     <CustomTextField name="city" required label="Місто" fullWidth/>
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
                     <CustomTextField name="novaPostOffice"
-                                     required={preferredDeliveryId === '66d5c90e3415a4551a000600'}
+                                     required={isNovaPostSelected()}
                                      label="№ відділення/поштомату"
                                      type="number"
                                      fullWidth/>
@@ -369,19 +487,31 @@ export default function Basket() {
 
                   <Grid item xs={12} sm={6}>
                     <CustomTextField name="postcode"
-                                     required={preferredDeliveryId === '66d5c9173415a4551a000606'}
+                                     required={isUrkPoshtaSelected()}
                                      type="number" label="Індекс"
                                      fullWidth/>
                   </Grid>
 
-                  <Grid item xs={12} mb={2} display="flex"
-                        gap={1} justifyContent="center" alignItems="center">
-                      {isAdmin(user) && !!items.length &&
-                        <Button variant="outlined" onClick={onCopyOrderClick}>Скопіювати зміст замовлення</Button>}
-                    <Button type="submit" variant="contained" onClick={onSubmit}>Підтвердити замовлення</Button>
+                  <Grid item xs={12}>
+                    <CustomTextField name="comment" label="Коментар" multiline fullWidth/>
                   </Grid>
                 </Grid>
-              </FormContainer>}
+              </FormContainer>
+
+                {creatingError && <ErrorNotification error={creatingError}/>}
+
+              <Grid container spacing={2} mt={1} mb={3} p={1}>
+                <Grid item xs={12} display="flex" flexWrap="wrap"
+                      gap={1} justifyContent={{ xs: 'center', md: 'flex-end' }} alignItems="center">
+                    {isAdmin(user) && !!items.length &&
+                      <Button variant="outlined" onClick={onCopyOrderClick}>Скопіювати зміст замовлення</Button>}
+                  <Button type="submit" variant="contained"
+                          disabled={submitDisabled || items.some(i => !i.numberInStock)} onClick={onSubmit}>
+                    Підтвердити замовлення
+                  </Button>
+                </Grid>
+              </Grid>
+            </>}
         </>
     );
 }

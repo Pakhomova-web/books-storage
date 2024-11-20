@@ -34,6 +34,10 @@ export const styleVariables = {
         display: 'flex',
         alignItems: 'center'
     }),
+    orderNumberStyles: (theme) => ({
+        color: theme.palette.primary.main,
+        fontWeight: 'bold'
+    }),
     discountBoxStyles: discountBox,
     titleFontSize: {
         fontSize: titleFontSize

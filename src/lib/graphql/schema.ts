@@ -101,13 +101,6 @@ const typeDefs =  /* GraphQL */ `
         preferredDeliveryId: ID
     }
 
-    type Address {
-        region: String!
-        district: String
-        city: String!
-        postcode: String
-    }
-
     type OrderBook {
         book: Book!
         count: Int!
@@ -117,18 +110,24 @@ const typeDefs =  /* GraphQL */ `
 
     type Order {
         id: ID
-        customerFirstName: String!
-        customerLastName: String!
-        customerPhoneNumber: String!
-        trackingNumber: String!
+        userId: ID!
+        orderNumber: Int!
+        firstName: String!
+        lastName: String!
+        phoneNumber: String!
+        trackingNumber: String
         isPaid: Boolean
         isPartlyPaid: Boolean
         isSent: Boolean
         isDone: Boolean
         delivery: Delivery
         books: [OrderBook!]!
-        address: Address!
-        description: String
+        region: String!
+        district: String
+        city: String!
+        postcode: Int
+        novaPostOffice: Int
+        comment: String
     }
 
     type Query {
@@ -456,42 +455,45 @@ const typeDefs =  /* GraphQL */ `
         price: Float!
     }
 
-    input AddressInput {
-        region: String!
-        district: String
-        city: String!
-        postcode: String!
-    }
-
     input OrderCreateInput {
-        customerFirstName: String!
-        customerLastName: String!
-        customerPhoneNumber: String!
-        trackingNumber: String!
+        userId: ID!
+        firstName: String!
+        lastName: String!
+        phoneNumber: String!
+        trackingNumber: String
         isPaid: Boolean
         isPartlyPaid: Boolean
         isSent: Boolean
         isDone: Boolean
-        deliveryId: ID
+        deliveryId: ID!
         books: [OrderBookInput!]!
-        address: AddressInput!
-        description: String
+        region: String!
+        district: String
+        city: String!
+        postcode: Int
+        novaPostOffice: Int
+        comment: String
     }
 
     input OrderUpdateInput {
         id: ID!
-        customerFirstName: String!
-        customerLastName: String!
-        customerPhoneNumber: String!
-        trackingNumber: String!
+        userId: ID!
+        firstName: String!
+        lastName: String!
+        phoneNumber: String!
+        trackingNumber: String
         isPaid: Boolean
         isPartlyPaid: Boolean
         isSent: Boolean
         isDone: Boolean
-        deliveryId: ID
+        deliveryId: ID!
         books: [OrderBookInput!]!
-        address: AddressInput!
-        description: String
+        region: String!
+        district: String
+        city: String!
+        postcode: Int
+        novaPostOffice: Int
+        comment: String
     }
 
     type OrderSubList {

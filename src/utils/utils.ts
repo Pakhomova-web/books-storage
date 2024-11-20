@@ -86,6 +86,16 @@ export function renderPrice(price: number, discount = 0): string {
     return `${res} грн`;
 }
 
+export function renderOrderNumber(orderNumber: number): string {
+    let res = `${orderNumber}`;
+
+    while (res.length < 5) {
+        res = `0${res}`;
+    }
+
+    return res;
+}
+
 export function renderAges(ages: number[]) {
     return ages.map(age => ageOptions.find(opt => opt.id === age)?.label).join(', ');
 }

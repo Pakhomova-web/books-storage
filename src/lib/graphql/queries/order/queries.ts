@@ -3,22 +3,23 @@ import { gql } from '@apollo/client';
 const orderFragment = gql`
     fragment Order on Order {
         id
-        customerFirstName
-        customerLastName
-        customerPhoneNumber
+        orderNumber
+        firstName
+        lastName
+        phoneNumber
         trackingNumber
         isSent
         isDone
         isPaid
         isPartlyPaid
-        description
-        address {
-            region
-            district
-            city
-            postcode
-        }
+        comment
+        region
+        district
+        city
+        postcode
+        novaPostOffice
         delivery {
+            id
             name
             imageId
         }
@@ -59,6 +60,7 @@ export const createOrderQuery = gql`
     mutation CreateOrder($input: OrderCreateInput!) {
         item: createOrder(input: $input) {
             id
+            orderNumber
         }
     }
 `;

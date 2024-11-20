@@ -19,20 +19,6 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
-export type Address = {
-  city: Scalars['String']['output'];
-  district?: Maybe<Scalars['String']['output']>;
-  postcode?: Maybe<Scalars['String']['output']>;
-  region: Scalars['String']['output'];
-};
-
-export type AddressInput = {
-  city: Scalars['String']['input'];
-  district?: InputMaybe<Scalars['String']['input']>;
-  postcode: Scalars['String']['input'];
-  region: Scalars['String']['input'];
-};
-
 export type Author = {
   description?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
@@ -517,19 +503,25 @@ export type MutationUpdateUserArgs = {
 };
 
 export type Order = {
-  address: Address;
   books: Array<OrderBook>;
-  customerFirstName: Scalars['String']['output'];
-  customerLastName: Scalars['String']['output'];
-  customerPhoneNumber: Scalars['String']['output'];
+  city: Scalars['String']['output'];
+  comment?: Maybe<Scalars['String']['output']>;
   delivery?: Maybe<Delivery>;
-  description?: Maybe<Scalars['String']['output']>;
+  district?: Maybe<Scalars['String']['output']>;
+  firstName: Scalars['String']['output'];
   id?: Maybe<Scalars['ID']['output']>;
   isDone?: Maybe<Scalars['Boolean']['output']>;
   isPaid?: Maybe<Scalars['Boolean']['output']>;
   isPartlyPaid?: Maybe<Scalars['Boolean']['output']>;
   isSent?: Maybe<Scalars['Boolean']['output']>;
-  trackingNumber: Scalars['String']['output'];
+  lastName: Scalars['String']['output'];
+  novaPostOffice?: Maybe<Scalars['Int']['output']>;
+  orderNumber: Scalars['Int']['output'];
+  phoneNumber: Scalars['String']['output'];
+  postcode?: Maybe<Scalars['Int']['output']>;
+  region: Scalars['String']['output'];
+  trackingNumber?: Maybe<Scalars['String']['output']>;
+  userId: Scalars['ID']['output'];
 };
 
 export type OrderBook = {
@@ -547,18 +539,23 @@ export type OrderBookInput = {
 };
 
 export type OrderCreateInput = {
-  address: AddressInput;
   books: Array<OrderBookInput>;
-  customerFirstName: Scalars['String']['input'];
-  customerLastName: Scalars['String']['input'];
-  customerPhoneNumber: Scalars['String']['input'];
-  deliveryId?: InputMaybe<Scalars['ID']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
+  city: Scalars['String']['input'];
+  comment?: InputMaybe<Scalars['String']['input']>;
+  deliveryId: Scalars['ID']['input'];
+  district?: InputMaybe<Scalars['String']['input']>;
+  firstName: Scalars['String']['input'];
   isDone?: InputMaybe<Scalars['Boolean']['input']>;
   isPaid?: InputMaybe<Scalars['Boolean']['input']>;
   isPartlyPaid?: InputMaybe<Scalars['Boolean']['input']>;
   isSent?: InputMaybe<Scalars['Boolean']['input']>;
-  trackingNumber: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  novaPostOffice?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber: Scalars['String']['input'];
+  postcode?: InputMaybe<Scalars['Int']['input']>;
+  region: Scalars['String']['input'];
+  trackingNumber?: InputMaybe<Scalars['String']['input']>;
+  userId: Scalars['ID']['input'];
 };
 
 export type OrderSubList = {
@@ -567,19 +564,24 @@ export type OrderSubList = {
 };
 
 export type OrderUpdateInput = {
-  address: AddressInput;
   books: Array<OrderBookInput>;
-  customerFirstName: Scalars['String']['input'];
-  customerLastName: Scalars['String']['input'];
-  customerPhoneNumber: Scalars['String']['input'];
-  deliveryId?: InputMaybe<Scalars['ID']['input']>;
-  description?: InputMaybe<Scalars['String']['input']>;
+  city: Scalars['String']['input'];
+  comment?: InputMaybe<Scalars['String']['input']>;
+  deliveryId: Scalars['ID']['input'];
+  district?: InputMaybe<Scalars['String']['input']>;
+  firstName: Scalars['String']['input'];
   id: Scalars['ID']['input'];
   isDone?: InputMaybe<Scalars['Boolean']['input']>;
   isPaid?: InputMaybe<Scalars['Boolean']['input']>;
   isPartlyPaid?: InputMaybe<Scalars['Boolean']['input']>;
   isSent?: InputMaybe<Scalars['Boolean']['input']>;
-  trackingNumber: Scalars['String']['input'];
+  lastName: Scalars['String']['input'];
+  novaPostOffice?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber: Scalars['String']['input'];
+  postcode?: InputMaybe<Scalars['Int']['input']>;
+  region: Scalars['String']['input'];
+  trackingNumber?: InputMaybe<Scalars['String']['input']>;
+  userId: Scalars['ID']['input'];
 };
 
 export type PageType = {
@@ -919,8 +921,6 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-  Address: ResolverTypeWrapper<Address>;
-  AddressInput: AddressInput;
   Author: ResolverTypeWrapper<AuthorEntity>;
   AuthorCreateInput: AuthorCreateInput;
   AuthorUpdateInput: AuthorUpdateInput;
@@ -980,8 +980,6 @@ export type ResolversTypes = {
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-  Address: Address;
-  AddressInput: AddressInput;
   Author: AuthorEntity;
   AuthorCreateInput: AuthorCreateInput;
   AuthorUpdateInput: AuthorUpdateInput;
@@ -1037,14 +1035,6 @@ export type ResolversParentTypes = {
   UserCreateInput: UserCreateInput;
   UserToken: Omit<UserToken, 'user'> & { user: ResolversParentTypes['User'] };
   UserUpdateInput: UserUpdateInput;
-};
-
-export type AddressResolvers<ContextType = any, ParentType extends ResolversParentTypes['Address'] = ResolversParentTypes['Address']> = {
-  city?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  district?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  postcode?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  region?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type AuthorResolvers<ContextType = any, ParentType extends ResolversParentTypes['Author'] = ResolversParentTypes['Author']> = {
@@ -1187,19 +1177,25 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type OrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order']> = {
-  address?: Resolver<ResolversTypes['Address'], ParentType, ContextType>;
   books?: Resolver<Array<ResolversTypes['OrderBook']>, ParentType, ContextType>;
-  customerFirstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  customerLastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  customerPhoneNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  city?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  comment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   delivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  district?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   isDone?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   isPaid?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   isPartlyPaid?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   isSent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  trackingNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  novaPostOffice?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  orderNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  phoneNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  postcode?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  region?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  trackingNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1285,7 +1281,6 @@ export type UserTokenResolvers<ContextType = any, ParentType extends ResolversPa
 };
 
 export type Resolvers<ContextType = any> = {
-  Address?: AddressResolvers<ContextType>;
   Author?: AuthorResolvers<ContextType>;
   BasketItem?: BasketItemResolvers<ContextType>;
   Book?: BookResolvers<ContextType>;

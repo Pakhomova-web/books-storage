@@ -26,6 +26,7 @@ const userSchema = new Schema<UserEntity, Model<UserEntity>>({
     postcode: Number,
     novaPostOffice: Number,
     region: String,
+    district: String,
     city: String,
     preferredDeliveryId: String
 });

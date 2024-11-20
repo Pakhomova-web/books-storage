@@ -1,4 +1,4 @@
-import { IOption, OrderEntity } from '@/lib/data/types';
+import { OrderEntity } from '@/lib/data/types';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { useCreateOrder, useUpdateOrder } from '@/lib/graphql/queries/order/hook';
 import CustomModal from '@/components/modals/custom-modal';
@@ -18,10 +18,10 @@ interface IOrderModalProps {
 }
 
 interface IForm {
-    customerFirstName: string,
-    customerLastName: string,
-    customerPhoneNumber: string,
-    description: string,
+    firstName: string,
+    lastName: string,
+    phoneNumber: string,
+    comment: string,
     isPartlyPaid: boolean,
     isPaid: boolean,
     isSent: boolean,
@@ -29,7 +29,8 @@ interface IForm {
     region: string,
     district: string,
     city: string,
-    postcode: string,
+    postcode: number,
+    novaPostOffice: number,
     trackingNumber: string,
     isDone: boolean
 }
@@ -37,16 +38,17 @@ interface IForm {
 export default function OrderModal({ open, item, onClose, isAdmin }: IOrderModalProps) {
     const formContext = useForm<IForm>({
         defaultValues: {
-            customerFirstName: item?.customerFirstName,
-            customerLastName: item?.customerLastName,
-            customerPhoneNumber: item?.customerPhoneNumber,
-            description: item?.description,
+            firstName: item?.firstName,
+            lastName: item?.lastName,
+            phoneNumber: item?.phoneNumber,
+            comment: item?.comment,
             trackingNumber: item?.trackingNumber,
-            deliveryId: item?.deliveryId,
-            region: item?.address?.region,
-            district: item?.address?.district,
-            city: item?.address?.city,
-            postcode: item?.address?.postcode,
+            deliveryId: item?.delivery?.id,
+            region: item?.region,
+            district: item?.district,
+            city: item?.city,
+            postcode: item?.postcode,
+            novaPostOffice: item?.novaPostOffice,
             isSent: item?.isSent,
             isDone: item?.isDone,
             isPaid: item?.isPaid,
@@ -61,24 +63,22 @@ export default function OrderModal({ open, item, onClose, isAdmin }: IOrderModal
 
     async function onSubmit() {
         const values = formContext.getValues();
-        const address = !!values.deliveryId ? {
+        const data = {
+            trackingNumber: values.trackingNumber,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            phoneNumber: values.phoneNumber,
+            comment: values.comment,
             region: values.region,
             city: values.city,
             district: values.district,
             postcode: values.postcode,
-        } : null;
-        const data = {
-            trackingNumber: values.trackingNumber,
-            customerFirstName: values.customerFirstName,
-            customerLastName: values.customerLastName,
-            customerPhoneNumber: values.customerPhoneNumber,
-            description: values.description,
+            novaPostOffice: values.novaPostOffice,
             isSent: values.isSent,
             isPaid: values.isPaid,
             isPartlyPaid: values.isPartlyPaid,
             isDone: values.isDone,
-            deliveryId: values.deliveryId,
-            address
+            deliveryId: values.deliveryId
         } as OrderEntity;
 
         try {
