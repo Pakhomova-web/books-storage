@@ -2,7 +2,8 @@ import { Resolvers } from '@/lib/generated/core.graphql';
 import { createLanguage, deleteLanguage, getLanguageById, getLanguages, updateLanguage } from '@/lib/data/language';
 import {
     createPublishingHouse,
-    deletePublishingHouse, getPublishingHouseById,
+    deletePublishingHouse,
+    getPublishingHouseById,
     getPublishingHouses,
     updatePublishingHouse
 } from '@/lib/data/publishing-house';
@@ -11,15 +12,16 @@ import { createBookType, deleteBookType, getBookTypeById, getBookTypes, updateBo
 import { createCoverType, deleteCoverType, getCoverTypes, updateCoverType } from '@/lib/data/cover-type';
 import {
     AuthorEntity,
-    BookEntity, BookFilter,
+    BookEntity,
+    BookFilter,
     BookSeriesEntity,
-    BookTypeEntity, CommentEntity,
+    BookTypeEntity,
+    CommentEntity,
     CoverTypeEntity,
     DeliveryEntity,
     IOrderFilter,
     IPageable,
-    LanguageEntity,
-    OrderEntity,
+    LanguageEntity, OrderEntity,
     PageTypeEntity,
     PublishingHouseEntity,
     UserEntity
@@ -27,7 +29,8 @@ import {
 import {
     createBookSeries,
     deleteBookSeries,
-    getBookSeries, getBookSeriesById,
+    getBookSeries,
+    getBookSeriesById,
     getBookSeriesOptions,
     updateBookSeries
 } from '@/lib/data/book-series';
@@ -56,7 +59,8 @@ import {
     likeBook,
     login,
     removeBookFromBasket,
-    unlikeBook, updateBookCountInBasket,
+    unlikeBook,
+    updateBookCountInBasket,
     updateUser
 } from '@/lib/data/user';
 import { createDelivery, deleteDelivery, getDeliveries, updateDelivery } from '@/lib/data/delivery';
@@ -599,10 +603,10 @@ const resolvers: Resolvers = {
             }
         },
         // basket
-        updateOrder: async (_root, { input }: { input: OrderEntity }, { user }) => {
+        updateOrder: async (_root, { input }, { user }) => {
             _checkUser(user);
             try {
-                return updateOrder(input);
+                return updateOrder(input as OrderEntity);
             } catch (error) {
                 parseError(error);
             }
@@ -615,10 +619,10 @@ const resolvers: Resolvers = {
                 parseError(error);
             }
         },
-        createOrder: async (_root, { input }: { input: OrderEntity }, { user }) => {
+        createOrder: async (_root, { input }, { user }) => {
             _checkUser(user);
             try {
-                return createOrder(input);
+                return createOrder(input as OrderEntity);
             } catch (error) {
                 parseError(error);
             }

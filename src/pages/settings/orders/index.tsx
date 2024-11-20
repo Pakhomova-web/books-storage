@@ -28,20 +28,20 @@ export default function Orders() {
     const [mobileKeys] = useState<TableKey<OrderEntity>[]>([
         {
             title: 'Ім\'я замовника',
-            sortValue: 'customerFirstName',
-            renderValue: (item: OrderEntity) => item.customerFirstName,
+            sortValue: 'firstName',
+            renderValue: (item: OrderEntity) => item.firstName,
             type: 'text'
         },
         {
             title: 'Прізвище замовника',
-            sortValue: 'customerLastName',
-            renderValue: (item: OrderEntity) => item.customerLastName,
+            sortValue: 'lastName',
+            renderValue: (item: OrderEntity) => item.lastName,
             type: 'text'
         },
         {
             title: 'Опис',
-            sortValue: 'description',
-            renderValue: (item: OrderEntity) => item.description,
+            sortValue: 'comment',
+            renderValue: (item: OrderEntity) => item.comment,
             type: 'text'
         }
     ]);

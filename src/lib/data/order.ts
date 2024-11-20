@@ -13,12 +13,15 @@ export async function getOrders(pageSettings?: IPageable, filters?: IOrderFilter
             path: 'books',
             populate: {
                 path: 'book',
-                populate: {
-                    path: 'bookSeries',
-                    populate: {
-                        path: 'publishingHouse'
-                    }
-                }
+                populate: [
+                    {
+                        path: 'bookSeries',
+                        populate: {
+                            path: 'publishingHouse'
+                        }
+                    },
+                    { path: 'bookType' }
+                ]
             }
         })
         .populate('delivery')
@@ -92,6 +95,7 @@ function _getOrderData(input: OrderEntity, orderNumber: number) {
     return {
         ...input,
         orderNumber,
-        delivery: input.deliveryId
+        delivery: input.deliveryId,
+        books: input.books.map(b => ({ ...b, book: b.bookId }))
     };
 }

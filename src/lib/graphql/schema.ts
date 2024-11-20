@@ -140,7 +140,7 @@ const typeDefs =  /* GraphQL */ `
         authors(pageSettings: PageableInput, filters: SearchByNameInput): [Author!]
         books(pageSettings: PageableInput, filters: BookSearchInput): BookSubList
         deliveries(pageSettings: PageableInput, filters: SearchByNameInput): [Delivery!]
-        orders(pageSettings: PageableInput, filters: SearchByNameInput): OrderSubList
+        orders(pageSettings: PageableInput, filters: OrderSearchInput): OrderSubList
         bookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
         fullBookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
         bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): [BookType!]
@@ -503,6 +503,11 @@ const typeDefs =  /* GraphQL */ `
     type OrderSubList {
         items: [Order!]!
         totalCount: Int!
+    }
+    
+    input OrderSearchInput {
+        quickSearch: String
+        userId: ID
     }
 `;
 

@@ -559,6 +559,11 @@ export type OrderCreateInput = {
   userId: Scalars['ID']['input'];
 };
 
+export type OrderSearchInput = {
+  quickSearch?: InputMaybe<Scalars['String']['input']>;
+  userId?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type OrderSubList = {
   items: Array<Order>;
   totalCount: Scalars['Int']['output'];
@@ -768,7 +773,7 @@ export type QueryLanguagesArgs = {
 
 
 export type QueryOrdersArgs = {
-  filters?: InputMaybe<SearchByNameInput>;
+  filters?: InputMaybe<OrderSearchInput>;
   pageSettings?: InputMaybe<PageableInput>;
 };
 
@@ -963,6 +968,7 @@ export type ResolversTypes = {
   OrderBook: ResolverTypeWrapper<Omit<OrderBook, 'book'> & { book: ResolversTypes['Book'] }>;
   OrderBookInput: OrderBookInput;
   OrderCreateInput: OrderCreateInput;
+  OrderSearchInput: OrderSearchInput;
   OrderSubList: ResolverTypeWrapper<Omit<OrderSubList, 'items'> & { items: Array<ResolversTypes['Order']> }>;
   OrderUpdateInput: OrderUpdateInput;
   PageType: ResolverTypeWrapper<PageTypeEntity>;
@@ -1022,6 +1028,7 @@ export type ResolversParentTypes = {
   OrderBook: Omit<OrderBook, 'book'> & { book: ResolversParentTypes['Book'] };
   OrderBookInput: OrderBookInput;
   OrderCreateInput: OrderCreateInput;
+  OrderSearchInput: OrderSearchInput;
   OrderSubList: Omit<OrderSubList, 'items'> & { items: Array<ResolversParentTypes['Order']> };
   OrderUpdateInput: OrderUpdateInput;
   PageType: PageTypeEntity;

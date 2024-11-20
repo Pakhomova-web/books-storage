@@ -220,7 +220,7 @@ export class NameFilter {
 
 export class UserEntity {
     id?: string;
-    email: string;
+    email?: string;
     password?: string;
     firstName?: string;
     lastName?: string;
@@ -292,24 +292,25 @@ export class OrderBook {
 }
 
 export class OrderEntity {
-    id: string;
-    orderNumber: number;
-    userId: string;
+    id?: string;
+    orderNumber?: number;
+    userId?: string;
     firstName: string;
     lastName: string;
+    instagramUsername?: string;
     phoneNumber: string;
-    trackingNumber: string;
+    trackingNumber?: string;
     deliveryId?: string;
     delivery?: DeliveryEntity;
     region: string;
     district?: string;
     city: string;
-    postcode: number;
-    novaPostOffice: number;
-    isPaid: boolean;
-    isPartlyPaid: boolean;
-    isSent: boolean;
-    isDone: boolean;
+    postcode?: number;
+    novaPostOffice?: number;
+    isPaid?: boolean;
+    isPartlyPaid?: boolean;
+    isSent?: boolean;
+    isDone?: boolean;
     books: OrderBook[];
     comment?: string;
 
@@ -320,6 +321,7 @@ export class OrderEntity {
             this.orderNumber = data.orderNumber;
             this.firstName = data.firstName;
             this.lastName = data.lastName;
+            this.instagramUsername = data.instagramUsername;
             this.phoneNumber = data.phoneNumber;
             this.trackingNumber = data.trackingNumber;
             this.deliveryId = data.deliveryId;
@@ -340,7 +342,8 @@ export interface OrderNumberEntity {
 }
 
 export interface IOrderFilter {
-    quickSearch?: string
+    quickSearch?: string,
+    userId?: string
 }
 
 export class CommentEntity {

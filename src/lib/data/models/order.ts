@@ -2,6 +2,11 @@ import { Model, model, models, Schema } from 'mongoose';
 import { OrderEntity } from '@/lib/data/types';
 
 const orderSchema = new Schema<OrderEntity, Model<OrderEntity>>({
+    userId: {
+        ref: 'User',
+        type: Schema.Types.ObjectId,
+        required: true
+    },
     orderNumber: {
         type: Number,
         required: true

@@ -45,7 +45,7 @@ const orderFragment = gql`
 `;
 
 export const ordersQuery = gql`
-    query Orders($pageSettings: PageableInput, $filters: SearchByNameInput) {
+    query Orders($pageSettings: PageableInput, $filters: OrderSearchInput) {
         orders(pageSettings: $pageSettings, filters: $filters) {
             items {
                 ...Order

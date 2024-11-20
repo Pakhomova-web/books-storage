@@ -17,6 +17,12 @@ const menuItems = [
         url: 'likes',
         activeImg: '/liked_books_active.png',
         img: '/liked_books.png'
+    },
+    {
+        title: 'Замовлення',
+        url: 'orders',
+        activeImg: '/settings_order_color.png',
+        img: '/settings_order.png'
     }
 ];
 

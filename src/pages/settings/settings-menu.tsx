@@ -117,7 +117,7 @@ export default function SettingsMenu({ children, activeUrl, onAddClick = null })
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
     const [activeMenuItems] = useState(menuItems.find(item => item.url === activeUrl));
-    const [showMenu, setShowMenu] = useState<boolean>(!theme.breakpoints.down('md'));
+    const [showMenu, setShowMenu] = useState<boolean>(!mobileMatches);
 
     useEffect(() => {
         setShowMenu(!mobileMatches);
