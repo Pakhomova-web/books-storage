@@ -18,6 +18,7 @@ const userFragment = gql`
         novaPostOffice
         phoneNumber
         preferredDeliveryId
+        instagramUsername
     }
 `;
 

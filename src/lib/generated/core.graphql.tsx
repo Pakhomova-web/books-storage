@@ -807,6 +807,7 @@ export type User = {
   email: Scalars['String']['output'];
   firstName?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  instagramUsername?: Maybe<Scalars['String']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
   likedBookIds?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   novaPostOffice?: Maybe<Scalars['Int']['output']>;
@@ -822,6 +823,7 @@ export type UserCreateInput = {
   city?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
   firstName?: InputMaybe<Scalars['String']['input']>;
+  instagramUsername?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   novaPostOffice?: InputMaybe<Scalars['Int']['input']>;
   password: Scalars['String']['input'];
@@ -842,6 +844,7 @@ export type UserUpdateInput = {
   email: Scalars['String']['input'];
   firstName?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
+  instagramUsername?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   novaPostOffice?: InputMaybe<Scalars['Int']['input']>;
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
@@ -1261,6 +1264,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  instagramUsername?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   likedBookIds?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   novaPostOffice?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;

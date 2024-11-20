@@ -26,7 +26,8 @@ export default function PersonalInfo() {
             city: user?.city,
             novaPostOffice: user?.novaPostOffice,
             postcode: user?.postcode,
-            preferredDeliveryId: user?.preferredDeliveryId
+            preferredDeliveryId: user?.preferredDeliveryId,
+            instagramUsername: user?.instagramUsername
         }
     });
     const { updating, update, updatingError } = useCurrentUser();
@@ -70,6 +71,10 @@ export default function PersonalInfo() {
 
                     <Grid item xs={12} sm={6}>
                         <CustomTextField name="email" required label="Ел. адреса" disabled fullWidth/>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <CustomTextField name="instagramUsername" label="Нікнейм в інстаграм для зв'язку" fullWidth/>
                     </Grid>
 
                     <Grid item xs={12}>

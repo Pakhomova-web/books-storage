@@ -39,7 +39,7 @@ const priceStyles = (theme) => ({
     border: `1px solid ${primaryLightColor}`
 });
 
-const emptyBasketImageBoxStyles = {
+const basketImageBoxStyles = {
     width: '100px',
     height: '100px',
     opacity: 0.5
@@ -54,6 +54,7 @@ export default function Basket() {
             email: user?.email,
             lastName: user?.lastName,
             firstName: user?.firstName,
+            instagramUsername: user?.instagramUsername,
             phoneNumber: user?.phoneNumber,
             region: user?.region,
             city: user?.city,
@@ -383,6 +384,9 @@ export default function Basket() {
                                     gap={2} mt={3}>
                             {orderNumber ?
                                 <>
+                                    <Box sx={basketImageBoxStyles}>
+                                        <CustomImage imageLink="/completed_order.png"></CustomImage>
+                                    </Box>
                                     <Box sx={styleVariables.titleFontSize}>Дякуємо!</Box>
                                     <Box display="flex">
                                         Ваше замовлення
@@ -396,7 +400,7 @@ export default function Basket() {
                                     </Button>
                                 </> :
                                 <>
-                                    <Box sx={emptyBasketImageBoxStyles}>
+                                    <Box sx={basketImageBoxStyles}>
                                         <CustomImage imageLink="/empty_basket.png"></CustomImage>
                                     </Box>
                                     <Box sx={styleVariables.titleFontSize}>Кошик пустий</Box>
@@ -419,16 +423,12 @@ export default function Basket() {
                     <Box sx={styleVariables.sectionTitle} p={1}>Основна інформація</Box>
                   </Grid>
 
-                  <Grid item xs={12}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sm={6}>
-                        <CustomTextField name="lastName" required label="Прізвище" fullWidth/>
-                      </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <CustomTextField name="lastName" required label="Прізвище" fullWidth/>
+                  </Grid>
 
-                      <Grid item xs={12} sm={6}>
-                        <CustomTextField name="firstName" required label="Ім'я" fullWidth/>
-                      </Grid>
-                    </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <CustomTextField name="firstName" required label="Ім'я" fullWidth/>
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
@@ -437,6 +437,12 @@ export default function Basket() {
 
                   <Grid item xs={12} sm={6}>
                     <CustomTextField name="email" required label="Ел. адреса" disabled fullWidth/>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6}>
+                    <CustomTextField name="instagramUsername"
+                                     label="Нікнейм в інстаграм для зв'язку"
+                                     fullWidth/>
                   </Grid>
 
                   <Grid item xs={12}>

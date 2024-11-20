@@ -28,7 +28,8 @@ const userSchema = new Schema<UserEntity, Model<UserEntity>>({
     region: String,
     district: String,
     city: String,
-    preferredDeliveryId: String
+    preferredDeliveryId: String,
+    instagramUsername: String
 });
 
 export default models?.user || model('user', userSchema);

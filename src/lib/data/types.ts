@@ -235,6 +235,7 @@ export class UserEntity {
     postcode?: number;
     novaPostOffice?: number;
     phoneNumber?: String;
+    instagramUsername?: String;
 
     constructor(data?) {
         if (data) {
@@ -253,6 +254,7 @@ export class UserEntity {
             this.novaPostOffice = data.novaPostOffice;
             this.phoneNumber = data.phoneNumber;
             this.preferredDeliveryId = data.preferredDeliveryId;
+            this.instagramUsername = data.instagramUsername;
         }
     }
 }
