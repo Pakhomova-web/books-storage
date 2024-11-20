@@ -23,7 +23,7 @@ const bookTypeBoxStyles = {
 };
 
 const StyledBookTypeBox = styled(Box)<BoxProps>(() => ({
-    height: '350px',
+    height: '300px',
     maxHeight: '50vh',
     position: 'relative',
     justifyContent: 'center',

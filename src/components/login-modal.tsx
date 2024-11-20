@@ -1,5 +1,4 @@
 import { Box, Button, Grid } from "@mui/material";
-import { styleVariables } from '@/constants/styles-variables';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import { useRouter } from 'next/router';
@@ -14,7 +13,7 @@ import { useAuth } from '@/components/auth-context';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomLink from '@/components/custom-link';
 
-export default function LoginModal({ open, onClose }) {
+export default function LoginModal({ open }) {
     const router = useRouter();
     const formContext = useForm<{ email: string, password: string }>();
     const { loading, error, loginUser } = useLogin();

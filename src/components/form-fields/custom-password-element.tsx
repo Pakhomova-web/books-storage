@@ -7,5 +7,5 @@ const StyledPasswordElement = styled(PasswordElement)<PasswordElementProps>(() =
 }));
 
 export default function CustomPasswordElement(props: PasswordElementProps) {
-    return <StyledPasswordElement {...props} variant="standard" />
+    return <StyledPasswordElement {...props} variant="outlined" />
 }
