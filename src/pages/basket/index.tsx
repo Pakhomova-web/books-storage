@@ -12,7 +12,14 @@ import { useAuth } from '@/components/auth-context';
 import { styled } from '@mui/material/styles';
 import CustomImage from '@/components/custom-image';
 import { BookEntity } from '@/lib/data/types';
-import { getParamsQueryString, isAdmin, renderOrderNumber, renderPrice } from '@/utils/utils';
+import {
+    getParamsQueryString,
+    isAdmin,
+    isNovaPostSelected,
+    isUrkPoshtaSelected,
+    renderOrderNumber,
+    renderPrice
+} from '@/utils/utils';
 import CustomLink from '@/components/custom-link';
 import { useRouter } from 'next/router';
 import { FormContainer, useForm } from 'react-hook-form-mui';
@@ -128,12 +135,12 @@ export default function Basket() {
             formContext.clearErrors('lastName');
         }
 
-        if (isNovaPostSelected() && !novaPostOffice) {
+        if (isNovaPostSelected(deliveryId) && !novaPostOffice) {
             formContext.setError('novaPostOffice', { message: '№ відділення/поштомата обов\'язкове' });
             formContext.clearErrors('postcode');
             setSubmitDisabled(true);
             invalid = true;
-        } else if (isUrkPoshtaSelected() && !postcode) {
+        } else if (isUrkPoshtaSelected(deliveryId) && !postcode) {
             formContext.setError('postcode', { message: 'Індекс обов\'язковий' });
             formContext.clearErrors('novaPostOffice');
             setSubmitDisabled(true);
@@ -147,14 +154,6 @@ export default function Basket() {
             setSubmitDisabled(false);
         }
     }, [deliveryId, phoneNumber, firstName, lastName, region, city, postcode, novaPostOffice]);
-
-    function isNovaPostSelected() {
-        return deliveryId === '66d5c90e3415a4551a000600';
-    }
-
-    function isUrkPoshtaSelected() {
-        return deliveryId === '66d5c9173415a4551a000606';
-    }
 
     useEffect(() => {
         if (!!items?.length) {
@@ -485,7 +484,7 @@ export default function Basket() {
 
                   <Grid item xs={12} sm={6}>
                     <CustomTextField name="novaPostOffice"
-                                     required={isNovaPostSelected()}
+                                     required={isNovaPostSelected(deliveryId)}
                                      label="№ відділення/поштомату"
                                      type="number"
                                      fullWidth/>
@@ -493,7 +492,7 @@ export default function Basket() {
 
                   <Grid item xs={12} sm={6}>
                     <CustomTextField name="postcode"
-                                     required={isUrkPoshtaSelected()}
+                                     required={isUrkPoshtaSelected(deliveryId)}
                                      type="number" label="Індекс"
                                      fullWidth/>
                   </Grid>

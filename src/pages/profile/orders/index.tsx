@@ -8,11 +8,11 @@ import ErrorNotification from '@/components/error-notification';
 import ProfileMenu from '@/pages/profile/profile-menu';
 import CustomImage from '@/components/custom-image';
 import { useOrders } from '@/lib/graphql/queries/order/hook';
-import { BookEntity, IPageable, OrderEntity } from '@/lib/data/types';
-import { renderOrderNumber, renderPrice } from '@/utils/utils';
+import { IPageable, OrderEntity } from '@/lib/data/types';
+import { getLinkForTracking, renderOrderNumber, renderPrice } from '@/utils/utils';
 import { styled } from '@mui/material/styles';
 import UserOrderModal from '@/components/modals/user-order-modal';
-import CustomModal from '@/components/modals/custom-modal';
+import CustomLink from '@/components/custom-link';
 
 const emptyListImageBoxStyles = {
     width: '100px',
@@ -52,6 +52,11 @@ export default function Orders() {
         });
     }
 
+    function onTTNClick(e, order: OrderEntity) {
+        e?.preventDefault();
+        window.open(getLinkForTracking(order.delivery.id, order.trackingNumber), "_blank")
+    }
+
     return (
         <ProfileMenu activeUrl="orders">
             <Loading show={loading}></Loading>
@@ -65,14 +70,20 @@ export default function Orders() {
                                   <b>№ {renderOrderNumber(order.orderNumber)}</b>
                               </Box>
                               <Box my={1}>Статус: {order.status}</Box>
-                              {!!order.trackingNumber && <Box>ТТН: {order.trackingNumber}</Box>}
-                              <Box sx={{ width: '80px', height: '40px' }}>
-                                  <CustomImage
-                                      imageId={order.delivery.imageId}></CustomImage>
+                              <Box mb={1} display="flex" alignItems="center" flexWrap="wrap" gap={1}>
+                                  <Box sx={{ width: '50px', height: '25' }} display="flex" justifyContent="center" alignItems="center">
+                                      <CustomImage imageId={order.delivery.imageId}></CustomImage>
+                                  </Box>
+                                  {!!order.trackingNumber &&
+                                    <>ТТН: <CustomLink onClick={e => onTTNClick(e, order)}>
+                                        {order.trackingNumber}
+                                    </CustomLink></>}
                               </Box>
+
                               <Box>Дата: {new Date(order.date).toLocaleDateString()}</Box>
                               <Box>Кількість книжок: {order.books.length}</Box>
-                              <Box>Сума: {renderPrice(order.finalSumWithDiscounts)}</Box>
+
+                              <Box mt={1}>Сума: {renderPrice(order.finalSumWithDiscounts)}</Box>
                           </StyledOrderBox>
                       </Grid>
                   ))}

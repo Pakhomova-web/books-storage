@@ -125,3 +125,19 @@ export function getParamsQueryString(params: any): string {
         return '';
     }
 }
+
+export function isNovaPostSelected(deliveryId: string) {
+    return deliveryId === '66d5c90e3415a4551a000600';
+}
+
+export function isUrkPoshtaSelected(deliveryId: string) {
+    return deliveryId === '66d5c9173415a4551a000606';
+}
+
+export function getLinkForTracking(deliveryId: string, trackingNumber: string) {
+    if (isNovaPostSelected(deliveryId)) {
+        return `https://novaposhtaglobal.ua/track/?Tracking_ID=${trackingNumber}`;
+    } else {
+        return `https://track.ukrposhta.ua/tracking_UA.html?barcode=${trackingNumber}`;
+    }
+}
