@@ -37,8 +37,8 @@ export default function SocialMediaBox() {
                 </Tooltip>
 
                 <Tooltip title="Tik Tok">
-                    <IconButton onClick={onTikTokClick}>
-                        <Box sx={{ width: '19px', height: '19px', marginBottom: '5px' }}>
+                    <IconButton onClick={onTikTokClick} sx={{ fontSize: '18px' }}>
+                        <Box sx={{ width: '18px', height: '18px' }}>
                             <CustomImage imageLink="/tiktok_icon.png"></CustomImage>
                         </Box>
                     </IconButton>

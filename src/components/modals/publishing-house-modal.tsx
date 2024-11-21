@@ -70,34 +70,36 @@ export default function PublishingHouseModal({ open, item, onClose, isAdmin }: I
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={isAdmin ? onSubmit : null}>
             <FormContainer formContext={formContext}>
-                <CustomTextField fullWidth
-                                 required
-                                 autoFocus
-                                 id="publishing-house-name"
-                                 label="Назва"
-                                 name="name"/>
+                <Box display="flex" gap={2} flexDirection="column">
+                    <CustomTextField fullWidth
+                                     required
+                                     autoFocus
+                                     id="publishing-house-name"
+                                     label="Назва"
+                                     name="name"/>
 
-                <CustomTextField fullWidth
-                                 id="publishing-house-tags"
-                                 label="Теги"
-                                 name="tags"/>
+                    <CustomTextField fullWidth
+                                     id="publishing-house-tags"
+                                     label="Теги"
+                                     name="tags"/>
 
-                <CustomTextField fullWidth
-                                 disabled={!isAdmin}
-                                 id="imageLink"
-                                 label="Посилання на фото"
-                                 name="imageLink"/>
-                {!!imageLink &&
-                  <Button fullWidth variant="outlined" onClick={parseImage}>Додати фото</Button>}
+                    <CustomTextField fullWidth
+                                     disabled={!isAdmin}
+                                     id="imageLink"
+                                     label="Посилання на фото"
+                                     name="imageLink"/>
+                    {!!imageLink &&
+                      <Button fullWidth variant="outlined" onClick={parseImage}>Додати фото</Button>}
 
-                <CustomTextField fullWidth
-                                 disabled={!isAdmin}
-                                 id="imageId"
-                                 label="ID фото"
-                                 name="imageId"/>
+                    <CustomTextField fullWidth
+                                     disabled={!isAdmin}
+                                     id="imageId"
+                                     label="ID фото"
+                                     name="imageId"/>
 
-                <Box sx={imageBoxStyles} mb={1}>
-                    <CustomImage isBookType={true} imageId={formContext.getValues('imageId')}></CustomImage>
+                    <Box sx={imageBoxStyles} mb={1}>
+                        <CustomImage isBookType={true} imageId={formContext.getValues('imageId')}></CustomImage>
+                    </Box>
                 </Box>
             </FormContainer>
 

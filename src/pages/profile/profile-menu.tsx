@@ -21,8 +21,8 @@ const menuItems = [
     {
         title: 'Замовлення',
         url: 'orders',
-        activeImg: '/settings_order_color.png',
-        img: '/settings_order.png'
+        activeImg: '/settings_orders_color.png',
+        img: '/settings_orders.png'
     }
 ];
 

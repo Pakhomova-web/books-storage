@@ -49,7 +49,7 @@ export default function AuthorModal({ open, item, onClose, isAdmin }: IAuthorMod
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={isAdmin ? onSubmit : null}>
             <FormContainer formContext={formContext}>
-                <Box display="flex" gap={1} flexDirection="column">
+                <Box display="flex" gap={2} flexDirection="column">
                     <CustomTextField fullWidth
                                      required
                                      autoFocus
