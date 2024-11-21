@@ -34,7 +34,7 @@ const StyledOrderBox = styled(Box)(() => ({
 export default function Orders() {
     const { user } = useAuth();
     const [pageSettings, setPageSettings] = useState<IPageable>({ page: 0, rowsPerPage: 6 });
-    const { loading, gettingError, items, totalCount } = useOrders(pageSettings, { userId: user?.id });
+    const { loading, gettingError, items, totalCount } = useOrders(pageSettings, { user: user?.id });
     const [selectedOrder, setSelectedOrder] = useState<OrderEntity>();
 
     function onPageChange(val: number) {

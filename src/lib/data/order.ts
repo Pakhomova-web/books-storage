@@ -9,22 +9,24 @@ export async function getOrders(pageSettings?: IPageable, filters?: IOrderFilter
     const { quickSearch, andFilters } = getValidFilters(filters);
 
     const query = Order.find()
-        .populate({
-            path: 'books',
-            populate: {
-                path: 'book',
-                populate: [
-                    {
-                        path: 'bookSeries',
-                        populate: {
-                            path: 'publishingHouse'
-                        }
-                    },
-                    { path: 'bookType' },
-                    { path: 'language' }
-                ]
-            }
-        })
+        .populate([
+            { path: 'user' },
+            {
+                path: 'books',
+                populate: {
+                    path: 'book',
+                    populate: [
+                        {
+                            path: 'bookSeries',
+                            populate: {
+                                path: 'publishingHouse'
+                            }
+                        },
+                        { path: 'bookType' },
+                        { path: 'language' }
+                    ]
+                }
+            }])
         .populate('delivery')
         .sort({ [pageSettings.orderBy || 'name']: pageSettings.order });
 
@@ -97,6 +99,7 @@ function _getOrderData(input: OrderEntity, orderNumber: number) {
     return {
         ...input,
         orderNumber,
+        user: input.userId,
         delivery: input.deliveryId,
         books: input.books.map(b => ({ ...b, book: b.bookId }))
     };

@@ -111,7 +111,7 @@ const typeDefs =  /* GraphQL */ `
 
     type Order {
         id: ID
-        userId: ID!
+        user: User!
         orderNumber: Int!
         firstName: String!
         lastName: String!
@@ -514,7 +514,7 @@ const typeDefs =  /* GraphQL */ `
     
     input OrderSearchInput {
         quickSearch: String
-        userId: ID
+        user: ID
     }
 `;
 

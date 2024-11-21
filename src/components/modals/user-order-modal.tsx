@@ -1,11 +1,13 @@
 import CustomModal from '@/components/modals/custom-modal';
 import { OrderEntity } from '@/lib/data/types';
-import { renderOrderNumber, renderPrice } from '@/utils/utils';
+import { isNovaPostSelected, isUrkPoshtaSelected, renderOrderNumber, renderPrice } from '@/utils/utils';
 import { Box, Grid } from '@mui/material';
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import React from 'react';
 import BasketBook from '@/components/basket-book';
 import OrderDeliveryTrackingBox from '@/components/order-delivery-tracking-box';
+import CustomTextField from '@/components/form-fields/custom-text-field';
+import { FormContainer } from 'react-hook-form-mui';
 
 interface IProps {
     order: OrderEntity;
@@ -18,13 +20,70 @@ export default function UserOrderModal({ order, onClose }: IProps) {
                      title={'Замовлення № ' + renderOrderNumber(order?.orderNumber)}
                      onClose={onClose}>
             {!!order && <>
-              <Grid container spacing={2} mb={3}>
+              <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>Статус: {order.status}</Grid>
 
                 <Grid item xs={12} md={6}>
                   <OrderDeliveryTrackingBox order={order}/>
                 </Grid>
               </Grid>
+
+              <FormContainer
+                defaultValues={{ ...order, email: order.user.email, instagramUsername: order.user.instagramUsername }}>
+                <Grid container my={2}>
+                  <Grid item xs={12}>
+                    <CustomTextField name="comment" disabled label="Коментар" fullWidth/>
+                  </Grid>
+                </Grid>
+
+                <Box sx={styleVariables.sectionTitle} p={1} my={2}>Особиста інформація</Box>
+
+                <Grid container spacing={2} mb={2}>
+                  <Grid item xs={12} md={6} lg={3}>
+                    <CustomTextField name="firstName" disabled label="Ім'я" fullWidth/>
+                  </Grid>
+
+                  <Grid item xs={12} md={6} lg={3}>
+                    <CustomTextField name="lastName" disabled label="Прізвище" fullWidth/>
+                  </Grid>
+
+                  <Grid item xs={12} md={6} lg={3}>
+                    <CustomTextField name="phoneNumber" disabled label="Номер телефону" fullWidth/>
+                  </Grid>
+
+                  <Grid item xs={12} md={6} lg={3}>
+                    <CustomTextField name="email" disabled label="Ел. адреса" fullWidth/>
+                  </Grid>
+
+                  <Grid item xs={12} md={6} lg={3}>
+                    <CustomTextField name="instagramUsername" disabled label="Нікнейм в інстаграм для зв'язку"
+                                     fullWidth/>
+                  </Grid>
+                </Grid>
+
+                <Box sx={styleVariables.sectionTitle} p={1} my={2}>Адреса</Box>
+                <Grid container spacing={2} mb={2}>
+                  <Grid item xs={12} md={6} lg={3}>
+                    <CustomTextField name="region" disabled label="Область" fullWidth/>
+                  </Grid>
+
+                  <Grid item xs={12} md={6} lg={3}>
+                    <CustomTextField name="district" disabled label="Район" fullWidth/>
+                  </Grid>
+
+                  <Grid item xs={12} md={6} lg={3}>
+                    <CustomTextField name="city" disabled label="Місто" fullWidth/>
+                  </Grid>
+
+                    {isUrkPoshtaSelected(order.delivery.id) && <Grid item xs={12} md={6} lg={3}>
+                      <CustomTextField name="postcode" disabled label="Індекс" fullWidth/>
+                    </Grid>}
+
+                    {isNovaPostSelected(order.delivery.id) && <Grid item xs={12} md={6} lg={3}>
+                      <CustomTextField name="novaPostOffice" disabled label="№ відділення / поштомату" fullWidth/>
+                    </Grid>}
+                </Grid>
+              </FormContainer>
 
                 {order.books.map((book, index) => (
                     <Box key={index}>

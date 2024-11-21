@@ -523,7 +523,7 @@ export type Order = {
   postcode?: Maybe<Scalars['Int']['output']>;
   region: Scalars['String']['output'];
   trackingNumber?: Maybe<Scalars['String']['output']>;
-  userId: Scalars['ID']['output'];
+  user: User;
 };
 
 export type OrderBook = {
@@ -563,7 +563,7 @@ export type OrderCreateInput = {
 
 export type OrderSearchInput = {
   quickSearch?: InputMaybe<Scalars['String']['input']>;
-  userId?: InputMaybe<Scalars['ID']['input']>;
+  user?: InputMaybe<Scalars['ID']['input']>;
 };
 
 export type OrderSubList = {
@@ -1215,7 +1215,7 @@ export type OrderResolvers<ContextType = any, ParentType extends ResolversParent
   postcode?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   region?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   trackingNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  userId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

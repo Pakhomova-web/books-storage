@@ -295,6 +295,7 @@ export class OrderEntity {
     id?: string;
     orderNumber?: number;
     userId?: string;
+    user?: UserEntity;
     firstName: string;
     lastName: string;
     instagramUsername?: string;
@@ -322,6 +323,7 @@ export class OrderEntity {
         if (data) {
             this.id = data.id;
             this.userId = data.userId;
+            this.user = data.user;
             this.orderNumber = data.orderNumber;
             this.firstName = data.firstName;
             this.lastName = data.lastName;
@@ -381,7 +383,7 @@ export interface OrderNumberEntity {
 
 export interface IOrderFilter {
     quickSearch?: string,
-    userId?: string
+    user?: string
 }
 
 export class CommentEntity {

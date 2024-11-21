@@ -3,6 +3,10 @@ import { gql } from '@apollo/client';
 const orderFragment = gql`
     fragment Order on Order {
         id
+        user {
+            email
+            instagramUsername
+        }
         orderNumber
         firstName
         lastName
