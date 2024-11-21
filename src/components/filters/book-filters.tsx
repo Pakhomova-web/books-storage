@@ -14,7 +14,7 @@ import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
 import { usePublishingHouseOptions } from '@/lib/graphql/queries/publishing-house/hook';
 import { TableKey } from '@/components/table/table-key';
 import { useBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
-import { customFieldClearBtnStyles, styleVariables } from '@/constants/styles-variables';
+import { customFieldClearBtnStyles } from '@/constants/styles-variables';
 import Ages from '@/components/ages';
 
 interface IBookFiltersProps {
