@@ -229,7 +229,7 @@ export default function Books() {
                                                      count={totalCount}
                                                      page={pageSettings.page}
                                                      sx={styleVariables.paginatorStyles}
-                                                     labelRowsPerPage="Кількість на сторінці"
+                                                     labelRowsPerPage="Кільк. на сторінці"
                                                      rowsPerPage={pageSettings.rowsPerPage}
                                                      onPageChange={(_e, val: number) => onPageChange(val)}
                                                      onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
