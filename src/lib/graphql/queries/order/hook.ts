@@ -3,7 +3,9 @@ import { _useCreateItem, _useDeleteItemById, _usePageableItems, _useUpdateItem }
 import { createOrderQuery, deleteOrderQuery, ordersQuery, updateOrderQuery } from '@/lib/graphql/queries/order/queries';
 
 export function useOrders(pageSettings?: IPageable, filters?: IOrderFilter) {
-    return _usePageableItems<OrderEntity>(ordersQuery, 'orders', pageSettings, filters);
+    const data = _usePageableItems<OrderEntity>(ordersQuery, 'orders', pageSettings, filters);
+
+    return { ...data, items: data.items.map(item => new OrderEntity(item)) };
 }
 
 export function useUpdateOrder() {

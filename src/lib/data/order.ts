@@ -61,6 +61,7 @@ export async function createOrder(input: OrderEntity) {
         orderNumber = await OrderNumber.create({ value: 1 });
     }
     const item = new Order(_getOrderData(input, orderNumber.value));
+    item.date = new Date().toISOString();
 
     await item.save();
     await User.findByIdAndUpdate(input.userId, { basketItems: [] });

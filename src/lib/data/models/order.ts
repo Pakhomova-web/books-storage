@@ -29,6 +29,7 @@ const orderSchema = new Schema<OrderEntity, Model<OrderEntity>>({
     },
     isPaid: Boolean,
     isPartlyPaid: Boolean,
+    isConfirmed: Boolean,
     isSent: Boolean,
     isDone: Boolean,
     trackingNumber: String,
@@ -60,7 +61,8 @@ const orderSchema = new Schema<OrderEntity, Model<OrderEntity>>({
                 required: true
             }
         }
-    ]
+    ],
+    date: String
 });
 
 export default models.order || model('order', orderSchema);

@@ -121,6 +121,7 @@ const typeDefs =  /* GraphQL */ `
         isPartlyPaid: Boolean
         isSent: Boolean
         isDone: Boolean
+        isConfirmed: Boolean
         delivery: Delivery
         books: [OrderBook!]!
         region: String!
@@ -129,6 +130,7 @@ const typeDefs =  /* GraphQL */ `
         postcode: Int
         novaPostOffice: Int
         comment: String
+        date: String
     }
 
     type Query {
@@ -430,6 +432,11 @@ const typeDefs =  /* GraphQL */ `
         lastName: String,
         postcode: Int,
         novaPostOffice: Int,
+        isPaid: Boolean
+        isPartlyPaid: Boolean
+        isConfirmed: Boolean
+        isSent: Boolean
+        isDone: Boolean
         region: String,
         city: String,
         phoneNumber: String

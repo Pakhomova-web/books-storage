@@ -41,6 +41,7 @@ const orderFragment = gql`
             discount
             price
         }
+        date
     }
 `;
 

@@ -307,12 +307,16 @@ export class OrderEntity {
     city: string;
     postcode?: number;
     novaPostOffice?: number;
+    isConfirmed?: boolean;
     isPaid?: boolean;
     isPartlyPaid?: boolean;
     isSent?: boolean;
     isDone?: boolean;
     books: OrderBook[];
     comment?: string;
+    date?: string;
+    finalSum?: number;
+    finalSumWithDiscounts?: number;
 
     constructor(data?) {
         if (data) {
@@ -331,8 +335,42 @@ export class OrderEntity {
             this.city = data.city;
             this.postcode = data.postcode;
             this.novaPostOffice = data.novaPostOffice;
+            this.isConfirmed = data.isConfirmed;
+            this.isPaid = data.isPaid;
+            this.isPartlyPaid = data.isPartlyPaid;
+            this.isDone = data.isDone;
+            this.isSent = data.isSent;
             this.comment = data.comment;
-            this.books = data.books.map(b => new OrderBook(b));
+            this.finalSum = 0;
+            this.finalSumWithDiscounts = 0;
+            this.books = data.books.map(b => {
+                this.finalSum = +b.price;
+                this.finalSumWithDiscounts = +(b.discount ? (b.price * (100 - b.discount) / 100) : b.price);
+                return new OrderBook(b);
+            });
+            this.date = data.date;
+        }
+    }
+
+    get status(): string {
+        if (!this.isConfirmed) {
+            return 'Чекає на підтвердження';
+        } else if (this.isConfirmed) {
+            if (!this.isPaid && !this.isPartlyPaid) {
+                return 'Чекає на оплату';
+            } else if (this.isPaid && !this.trackingNumber) {
+                return 'Оплачений, чекає на відправку';
+            } else if (this.isPartlyPaid && !this.trackingNumber) {
+                return 'Зроблена передплата, чекає на відправку';
+            } else if (!!this.trackingNumber && !this.isSent) {
+                return 'Створено ТТН, чекає на відправку';
+            } else if (this.isSent) {
+                if (this.isDone) {
+                    return 'Завершено';
+                } else {
+                    return 'Відправлено';
+                }
+            }
         }
     }
 }
