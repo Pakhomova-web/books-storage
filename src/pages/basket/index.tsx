@@ -1,50 +1,26 @@
-import { Box, Button, FormControlLabel, Grid, IconButton, Radio, RadioGroup } from '@mui/material';
+import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import ClearIcon from '@mui/icons-material/Clear';
-import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 import { useBooksByIds, useUpdateBookCountInBasket } from '@/lib/graphql/queries/book/hook';
-import { borderRadius, boxPadding, primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
 import { styled } from '@mui/material/styles';
 import CustomImage from '@/components/custom-image';
-import { BookEntity } from '@/lib/data/types';
-import {
-    getParamsQueryString,
-    isAdmin,
-    isNovaPostSelected,
-    isUrkPoshtaSelected,
-    renderOrderNumber,
-    renderPrice
-} from '@/utils/utils';
-import CustomLink from '@/components/custom-link';
+import { isAdmin, isNovaPostSelected, isUrkPoshtaSelected, renderOrderNumber, renderPrice } from '@/utils/utils';
 import { useRouter } from 'next/router';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 import { useCreateOrder } from '@/lib/graphql/queries/order/hook';
-
-const StyledImageBox = styled(Box)(() => ({
-    width: '150px',
-    height: '150px'
-}));
+import BasketBook from '@/components/basket-book';
 
 const TitleBoxStyled = styled(Box)(({ theme }) => ({
     ...styleVariables.bigTitleFontSize(theme),
     borderBottom: `1px solid ${primaryLightColor}`,
     textAlign: 'center'
 }));
-
-const priceStyles = (theme) => ({
-    color: theme.palette.primary.main,
-    fontSize: styleVariables.bigTitleFontSize(theme),
-    borderRadius,
-    padding: boxPadding,
-    border: `1px solid ${primaryLightColor}`
-});
 
 const basketImageBoxStyles = {
     width: '100px',
@@ -54,7 +30,7 @@ const basketImageBoxStyles = {
 
 export default function Basket() {
     const router = useRouter();
-    const { user, setUser, setBookInBasket } = useAuth();
+    const { user, setUser } = useAuth();
     const formContext = useForm({
         defaultValues: {
             userId: user?.id,
@@ -174,10 +150,6 @@ export default function Basket() {
         }
     }, [items, user]);
 
-    function onRemoveBook(book: BookEntity) {
-        setBookInBasket(book.id);
-    }
-
     function onChangeCountInBasket(bookId: string, count: number) {
         const newCount = countFields.get(bookId) + count;
 
@@ -185,10 +157,6 @@ export default function Basket() {
             .then(items => setUser({ ...user, basketItems: items }))
             .catch(() => {
             });
-    }
-
-    function onBookClick(book: BookEntity) {
-        router.push(`/books/details?${getParamsQueryString({ id: book.id, pageUrl: '/basket' })}`);
     }
 
     function onCopyOrderClick() {
@@ -246,97 +214,8 @@ export default function Basket() {
             <Box display="flex" flexDirection="column" gap={1} px={{ xs: 1 }}>
                 {items.map((book, index) => (
                     <Box key={index}>
-                        <Grid container spacing={1} position="relative">
-                            {!book.numberInStock &&
-                              <Box sx={styleVariables.fixedInStockBox(false)} ml={2}>
-                                Немає в наявності
-                              </Box>}
-
-                            <Grid item sm={4} md={2} lg={1}
-                                  display={{ xs: 'none', md: 'flex' }}
-                                  alignItems="center"
-                                  justifyContent="center">
-                                <IconButton onClick={() => onRemoveBook(book)}>
-                                    <ClearIcon color={!book.numberInStock ? 'warning' : 'inherit'}/>
-                                </IconButton>
-                            </Grid>
-
-                            <Grid item xs={3} md={2} display="flex" alignItems="center"
-                                  justifyContent="center">
-                                <StyledImageBox>
-                                    <CustomImage imageId={book.imageIds[0]} isBookDetails={true}></CustomImage>
-                                </StyledImageBox>
-                            </Grid>
-
-                            <Grid item xs={9} md={4} lg={5}>
-                                <Grid container spacing={1}>
-                                    <Grid item xs={10} mt={{ xs: 2, sm: 0 }}
-                                          display="flex" flexDirection="column" gap={1}
-                                          position="relative" alignItems={{ xs: 'center', sm: 'flex-start' }}>
-                                        <Box sx={styleVariables.hintFontSize}>
-                                            {book.bookSeries.publishingHouse.name}. {book.bookSeries.name}
-                                        </Box>
-                                        <Box sx={styleVariables.titleFontSize} textAlign="center">
-                                            <CustomLink
-                                                onClick={() => onBookClick(book)}><b>{book.name}</b></CustomLink>
-                                        </Box>
-                                        <Box>{book.language.name}</Box>
-
-                                        {!!book.discount &&
-                                          <Box display="flex"><Box sx={styleVariables.discountBoxStyles}>
-                                            Знижка: {book.discount}%
-                                          </Box></Box>}
-
-                                        <Box>{renderPrice(book.price)}</Box>
-                                    </Grid>
-
-                                    <Grid item xs={2} display={{ md: 'none', xs: 'flex' }} alignItems="start"
-                                          justifyContent="center">
-                                        <IconButton onClick={() => onRemoveBook(book)}>
-                                            <ClearIcon color={!book.numberInStock ? 'warning' : 'inherit'}/>
-                                        </IconButton>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-
-                            <Grid item xs={6} md={2} mt={{ xs: 2, sm: 0 }} display="flex"
-                                  flexDirection="column" gap={1}
-                                  alignItems="center">
-                                Кількість
-                                <Grid container spacing={1} display="flex" flexWrap="nowrap" alignItems="center"
-                                      justifyContent="center">
-                                    <Grid item>
-                                        <IconButton
-                                            disabled={!book.numberInStock || countFields.get(book.id) === 1}
-                                            onClick={() => onChangeCountInBasket(book.id, -1)}>
-                                            <RemoveCircleOutlineIcon fontSize="large"/>
-                                        </IconButton>
-                                    </Grid>
-                                    <Grid item
-                                          sx={styleVariables.titleFontSize}>{countFields.get(book.id)}</Grid>
-                                    <Grid item>
-                                        <IconButton
-                                            disabled={!book.numberInStock || countFields.get(book.id) === book.numberInStock}
-                                            onClick={() => onChangeCountInBasket(book.id, 1)}>
-                                            <AddCircleOutlineIcon fontSize="large"/>
-                                        </IconButton>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-
-                            <Grid item xs={6} md={2} mt={{ xs: 2, sm: 0 }} display="flex"
-                                  flexDirection="column" gap={1}
-                                  alignItems="center">
-                                Кінцева ціна
-                                <Box sx={priceStyles} textAlign="center">
-                                    {renderPrice(countFields.get(book.id) * book.price, book.discount)}
-                                </Box>
-                            </Grid>
-                        </Grid>
-
-                        <Grid item xs={12} mt={1}>
-                            <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
-                        </Grid>
+                        <BasketBook book={book} editable={true} count={countFields.get(book.id)}
+                                    onCountChange={(count: number) => onChangeCountInBasket(book.id, count)}/>
                     </Box>
                 ))}
 

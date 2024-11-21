@@ -26,6 +26,10 @@ const orderFragment = gql`
         books {
             book {
                 name
+                imageIds
+                language {
+                    name
+                }
                 bookSeries {
                     name
                     publishingHouse {

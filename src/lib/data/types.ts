@@ -273,7 +273,7 @@ export class DeliveryEntity {
     }
 }
 
-export class OrderBook {
+export class OrderBookEntity {
     bookId: string;
     book: BookEntity;
     count: number;
@@ -312,7 +312,7 @@ export class OrderEntity {
     isPartlyPaid?: boolean;
     isSent?: boolean;
     isDone?: boolean;
-    books: OrderBook[];
+    books: OrderBookEntity[];
     comment?: string;
     date?: string;
     finalSum?: number;
@@ -346,7 +346,7 @@ export class OrderEntity {
             this.books = data.books.map(b => {
                 this.finalSum = +b.price;
                 this.finalSumWithDiscounts = +(b.discount ? (b.price * (100 - b.discount) / 100) : b.price);
-                return new OrderBook(b);
+                return new OrderBookEntity(b);
             });
             this.date = data.date;
         }

@@ -506,10 +506,12 @@ export type Order = {
   books: Array<OrderBook>;
   city: Scalars['String']['output'];
   comment?: Maybe<Scalars['String']['output']>;
+  date?: Maybe<Scalars['String']['output']>;
   delivery?: Maybe<Delivery>;
   district?: Maybe<Scalars['String']['output']>;
   firstName: Scalars['String']['output'];
   id?: Maybe<Scalars['ID']['output']>;
+  isConfirmed?: Maybe<Scalars['Boolean']['output']>;
   isDone?: Maybe<Scalars['Boolean']['output']>;
   isPaid?: Maybe<Scalars['Boolean']['output']>;
   isPartlyPaid?: Maybe<Scalars['Boolean']['output']>;
@@ -851,6 +853,11 @@ export type UserUpdateInput = {
   firstName?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   instagramUsername?: InputMaybe<Scalars['String']['input']>;
+  isConfirmed?: InputMaybe<Scalars['Boolean']['input']>;
+  isDone?: InputMaybe<Scalars['Boolean']['input']>;
+  isPaid?: InputMaybe<Scalars['Boolean']['input']>;
+  isPartlyPaid?: InputMaybe<Scalars['Boolean']['input']>;
+  isSent?: InputMaybe<Scalars['Boolean']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
   novaPostOffice?: InputMaybe<Scalars['Int']['input']>;
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
@@ -1191,10 +1198,12 @@ export type OrderResolvers<ContextType = any, ParentType extends ResolversParent
   books?: Resolver<Array<ResolversTypes['OrderBook']>, ParentType, ContextType>;
   city?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   comment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  date?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   delivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType>;
   district?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  isConfirmed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   isDone?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   isPaid?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   isPartlyPaid?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;

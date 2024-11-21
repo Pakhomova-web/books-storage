@@ -9,7 +9,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
-import { borderRadius, boxPadding, primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import { getBookComments, getBooksByAuthors, getBooksFromSeries, useBook } from '@/lib/graphql/queries/book/hook';
 import ErrorNotification from '@/components/error-notification';
@@ -50,13 +50,6 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
     alignItems: 'center'
 }));
 
-const priceStyles = (theme) => ({
-    color: theme.palette.primary.main,
-    fontSize: styleVariables.bigTitleFontSize(theme),
-    borderRadius,
-    padding: boxPadding,
-    border: `1px solid ${primaryLightColor}`
-});
 const numberBooksByAuthor = 4;
 
 export default function BookDetails() {
