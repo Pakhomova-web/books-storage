@@ -74,7 +74,7 @@ export function BookFilters(props: IBookFiltersProps) {
     }
 
     function clearValue(controlName: keyof BookFilter) {
-        formContext.setValue(controlName, []);
+        formContext.setValue(controlName, null);
     }
 
     function onAgeClick(opt: number) {
