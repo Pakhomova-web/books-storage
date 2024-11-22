@@ -44,7 +44,8 @@ export default function OrderModal({ open, order, onClose }: IProps) {
         region,
         city,
         postcode,
-        novaPostOffice
+        novaPostOffice,
+        trackingNumber
     } = formContext.watch();
 
     useEffect(() => {
@@ -174,9 +175,11 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                         <CustomTextField name="date" label="Дата" disabled fullWidth/>
                     </Grid>
 
-                    {!!orderItem && <>
+                    {!!delivery && <>
                       <Grid item xs={12} md={6}>
-                        <OrderDeliveryTrackingBox order={orderItem} editable={isAdmin(user)}/>
+                        <OrderDeliveryTrackingBox delivery={delivery}
+                                                  trackingNumber={trackingNumber}
+                                                  editable={isAdmin(user)}/>
                       </Grid>
 
                         {isAdmin(user) && <Grid item xs={12}>

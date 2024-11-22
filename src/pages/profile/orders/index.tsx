@@ -77,7 +77,7 @@ export default function Orders() {
 
                               <OrderStatus status={order.status}/>
 
-                              <OrderDeliveryTrackingBox order={order}/>
+                              <OrderDeliveryTrackingBox delivery={order.delivery} trackingNumber={order.trackingNumber}/>
 
                               <Box>Дата: {new Date(order.date).toLocaleDateString()}</Box>
                               <Box>Кількість книжок: {order.booksCount}</Box>
