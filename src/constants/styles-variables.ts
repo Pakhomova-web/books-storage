@@ -96,7 +96,9 @@ export const styleVariables = {
         borderRadius,
         fontSize: titleFontSize,
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
+        width: '100%',
+        p: 1
     }
 };
 

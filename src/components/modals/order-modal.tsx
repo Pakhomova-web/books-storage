@@ -41,7 +41,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
             ...orderItem,
             date: new Date(orderItem?.date).toLocaleDateString(),
             email: orderItem?.user.email,
-            instagramUsername: orderItem?.user.instagramUsername
+            instagramUsername: order?.instagramUsername || orderItem?.user.instagramUsername
         }
     });
     const {
@@ -198,55 +198,25 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                      isSubmitDisabled={submitDisabled}
                      onSubmit={isAdmin(user) ? onSubmit : null}
                      loading={!orderItem || updating || loadingDeliveries}>
-            <OrderStatus status={orderItem.status}/>
-
-            {isAdmin(user) && <Grid container spacing={2}>
-              <Grid item xs={12} sm={6} md={3} lg={2}>
-                <Button variant="outlined" fullWidth disabled={orderItem.isConfirmed} onClick={onConfirm}>
-                  Підтвердити замовлення
-                </Button>
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={3} lg={2}>
-                <Button variant="outlined" fullWidth disabled={!orderItem.isConfirmed || orderItem.isPaid}
-                        onClick={onPay}>
-                  Замолення оплачене
-                </Button>
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={3} lg={2}>
-                <Button variant="outlined" fullWidth disabled={!orderItem.isConfirmed || orderItem.isPartlyPaid}
-                        onClick={onPartlyPaid}>
-                  Зроблена передпалата</Button>
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={3} lg={2}>
-                <Button variant="outlined" fullWidth disabled={!orderItem.isConfirmed || orderItem.isSent}
-                        onClick={onSent}>
-                  Замовлення {isSelfPickup(delivery.id) ? 'вручене' : 'відправлене'}
-                </Button>
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={3} lg={2}>
-                <Button variant="contained" fullWidth
-                        disabled={!orderItem.isConfirmed || orderItem.isDone || !orderItem.isSent}
-                        onClick={onDoneClick}>
-                  Завершити замовлення
-                </Button>
-              </Grid>
-
-              <Grid item xs={12} sm={6} md={3} lg={2}>
-                <Button variant="outlined" fullWidth onClick={onCancel} color="warning">
-                  Відмінити замовлення
-                </Button>
-              </Grid>
-            </Grid>}
-
             <FormContainer formContext={formContext}>
-                <Grid container alignItems="center" spacing={2} mt={1}>
-                    <Grid item xs={12} md={6} lg={2}>
+                <Grid container alignItems="center" display="flex" spacing={2} justifyContent="space-between" mb={2}>
+                    <Grid item xs={12} sm={6} md={8} lg={10} display="flex" justifyContent={{ xs: 'center', sm: 'flex-start' }}>
+                        <OrderStatus status={orderItem.status}/>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} md={4} lg={2}>
                         <CustomTextField name="date" label="Дата" disabled fullWidth/>
                     </Grid>
+                </Grid>
+
+                <Grid container alignItems="center" display="flex" spacing={2}>
+                    <Grid item xs={12}>
+                        <CustomTextField name="comment" disabled={!isAdmin(user)} label="Коментар" fullWidth/>
+                    </Grid>
+
+                    {isAdmin(user) && <Grid item xs={12}>
+                      <CustomTextField name="adminComment" label="Коментар адміністратора" fullWidth/>
+                    </Grid>}
 
                     {!!delivery && <>
                       <Grid item xs={12} md={6}>
@@ -255,39 +225,37 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                                                   editable={isAdmin(user)}/>
                       </Grid>
 
-                        {isAdmin(user) && <Grid item xs={12}>
-                          <RadioGroup defaultValue={delivery.id}
-                                      onChange={(_, value) => onDeliveryChange(value)}>
-                            <Grid container spacing={2}>
-                                {deliveries.map((opt, index) => (
-                                    <Grid key={index} item xs={12} sm={3} pl={2}>
-                                        <Box p={1}>
-                                            <FormControlLabel value={opt.id}
-                                                              control={<Radio/>}
-                                                              label={opt.imageId ?
-                                                                  <Box sx={{ width: '100px', height: '50px' }}>
-                                                                      <CustomImage imageId={opt.imageId}></CustomImage>
-                                                                  </Box> : opt.name}/>
-                                        </Box>
-                                    </Grid>
-                                ))}
-                            </Grid>
-                          </RadioGroup>
-                        </Grid>}
+                      <Grid item xs={12}>
+                        <Box sx={styleVariables.sectionTitle}>Спосіб доставки</Box>
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <RadioGroup defaultValue={delivery.id}
+                                    onChange={(_, value) => onDeliveryChange(value)}>
+                          <Grid container spacing={2}>
+                              {deliveries.map((opt, index) => (
+                                  <Grid key={index} item xs={12} sm={4} md={3} pl={2}>
+                                      <Box p={1}>
+                                          <FormControlLabel value={opt.id}
+                                                            disabled={!isAdmin(user)}
+                                                            control={<Radio/>}
+                                                            label={opt.imageId ?
+                                                                <Box sx={{ width: '100px', height: '50px' }}>
+                                                                    <CustomImage
+                                                                        imageId={opt.imageId}></CustomImage>
+                                                                </Box> : opt.name}/>
+                                      </Box>
+                                  </Grid>
+                              ))}
+                          </Grid>
+                        </RadioGroup>
+                      </Grid>
                     </>}
 
                     <Grid item xs={12}>
-                        <CustomTextField name="comment" disabled={!isAdmin(user)} label="Коментар" fullWidth/>
+                        <Box sx={styleVariables.sectionTitle}>Особиста інформація</Box>
                     </Grid>
 
-                    {isAdmin(user) && <Grid item xs={12}>
-                      <CustomTextField name="adminComment" label="Коментар адміністратора" fullWidth/>
-                    </Grid>}
-                </Grid>
-
-                <Box sx={styleVariables.sectionTitle} p={1} my={2}>Особиста інформація</Box>
-
-                <Grid container spacing={2} mb={2}>
                     <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="firstName" required disabled={!isAdmin(user)} label="Ім'я" fullWidth/>
                     </Grid>
@@ -306,14 +274,15 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                     </Grid>
 
                     <Grid item xs={12} md={6} lg={3}>
-                        <CustomTextField name="instagramUsername" disabled
+                        <CustomTextField name="instagramUsername"
                                          label="Нікнейм в інстаграм для зв'язку"
                                          fullWidth/>
                     </Grid>
-                </Grid>
 
-                <Box sx={styleVariables.sectionTitle} p={1} my={2}>Адреса</Box>
-                <Grid container spacing={2} mb={2}>
+                    <Grid item xs={12}>
+                        <Box sx={styleVariables.sectionTitle}>Адреса</Box>
+                    </Grid>
+
                     <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="region" required disabled={!isAdmin(user)} label="Область" fullWidth/>
                     </Grid>
@@ -326,26 +295,28 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                         <CustomTextField name="city" required disabled={!isAdmin(user)} label="Місто" fullWidth/>
                     </Grid>
 
-                    {isUkrPoshtaSelected(delivery.id) && <Grid item xs={12} md={6} lg={3}>
-                      <CustomTextField name="postcode"
-                                       disabled={!isAdmin(user)}
-                                       label="Індекс"
-                                       required={isUkrPoshtaSelected(orderItem.delivery.id)}
-                                       fullWidth/>
-                    </Grid>}
+                    {isUkrPoshtaSelected(delivery.id) &&
+                      <Grid item xs={12} md={6} lg={3}>
+                        <CustomTextField name="postcode"
+                                         disabled={!isAdmin(user)}
+                                         label="Індекс"
+                                         required={isUkrPoshtaSelected(orderItem.delivery.id)}
+                                         fullWidth/>
+                      </Grid>}
 
-                    {isNovaPostSelected(delivery.id) && <Grid item xs={12} md={6} lg={3}>
-                      <CustomTextField name="novaPostOffice"
-                                       disabled={!isAdmin(user)}
-                                       required={isNovaPostSelected(orderItem.delivery.id)}
-                                       label="№ відділення / поштомату"
-                                       fullWidth/>
-                    </Grid>}
+                    {isNovaPostSelected(delivery.id) &&
+                      <Grid item xs={12} md={6} lg={3}>
+                        <CustomTextField name="novaPostOffice"
+                                         disabled={!isAdmin(user)}
+                                         required={isNovaPostSelected(orderItem.delivery.id)}
+                                         label="№ відділення / поштомату"
+                                         fullWidth/>
+                      </Grid>}
                 </Grid>
             </FormContainer>
 
             {orderItem?.books.map(({ book, count, price, discount }, index) => (
-                <Box key={index}>
+                <Box key={index} display="flex">
                     <BasketItem book={book}
                                 count={count}
                                 price={price}
@@ -356,11 +327,12 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                 </Box>
             ))}
 
-            <Grid container spacing={1} alignItems="center" mt={1}>
+            <Grid container alignItems="center" mt={1} display="flex" spacing={2}>
                 <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end"
                       textAlign="end">
                     Сума замовлення без знижки:
                 </Grid>
+
                 <Grid item xs={5} sm={4} md={3} textAlign="center">
                     {renderPrice(orderItem?.finalSum)}
                 </Grid>
@@ -393,6 +365,48 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                 <Grid item xs={12}>
                     <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
                 </Grid>
+
+                {isAdmin(user) && <>
+                  <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button variant="outlined" fullWidth disabled={orderItem.isConfirmed} onClick={onConfirm}>
+                      Підтвердити замовлення
+                    </Button>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button variant="outlined" fullWidth disabled={!orderItem.isConfirmed || orderItem.isPaid}
+                            onClick={onPay}>
+                      Замолення оплачене
+                    </Button>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button variant="outlined" fullWidth disabled={!orderItem.isConfirmed || orderItem.isPartlyPaid}
+                            onClick={onPartlyPaid}>
+                      Зроблена передпалата</Button>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button variant="outlined" fullWidth disabled={!orderItem.isConfirmed || orderItem.isSent}
+                            onClick={onSent}>
+                      Замовлення {isSelfPickup(delivery.id) ? 'вручене' : 'відправлене'}
+                    </Button>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button variant="contained" fullWidth
+                            disabled={!orderItem.isConfirmed || orderItem.isDone || !orderItem.isSent}
+                            onClick={onDoneClick}>
+                      Завершити замовлення
+                    </Button>
+                  </Grid>
+
+                  <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Button variant="outlined" fullWidth onClick={onCancel} color="warning">
+                      Відмінити замовлення
+                    </Button>
+                  </Grid>
+                </>}
             </Grid>
 
             {!!updatingError && <ErrorNotification error={updatingError}/>}

@@ -298,7 +298,7 @@ export default function Basket() {
               <FormContainer formContext={formContext}>
                 <Grid container spacing={2} px={1} mt={1}>
                   <Grid item xs={12}>
-                    <Box sx={styleVariables.sectionTitle} p={1}>Основна інформація</Box>
+                    <Box sx={styleVariables.sectionTitle}>Основна інформація</Box>
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
@@ -324,7 +324,7 @@ export default function Basket() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Box sx={styleVariables.sectionTitle} p={1}>Спосіб доставки</Box>
+                    <Box sx={styleVariables.sectionTitle}>Спосіб доставки</Box>
 
                     <RadioGroup defaultValue={user?.preferredDeliveryId}
                                 onChange={(_, value) => formContext.setValue('deliveryId', value)}>
@@ -347,7 +347,7 @@ export default function Basket() {
                   </Grid>
 
                   <Grid item xs={12}>
-                    <Box sx={styleVariables.sectionTitle} p={1}>Адреса</Box>
+                    <Box sx={styleVariables.sectionTitle}>Адреса</Box>
                   </Grid>
 
                   <Grid item xs={12} sm={6}>

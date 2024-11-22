@@ -27,6 +27,7 @@ const orderSchema = new Schema<OrderEntity, Model<OrderEntity>>({
         ref: 'delivery',
         type: Schema.Types.ObjectId
     },
+    instagramUsername: String,
     isPaid: Boolean,
     isPartlyPaid: Boolean,
     isConfirmed: Boolean,

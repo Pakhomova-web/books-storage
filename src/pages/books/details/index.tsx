@@ -260,7 +260,7 @@ export default function BookDetails() {
                     </Grid>
 
                     <Grid item xs={12} md={6}>
-                      <Box sx={styleVariables.sectionTitle} p={1}>
+                      <Box sx={styleVariables.sectionTitle}>
                         Видавництво
                       </Box>
 
@@ -289,7 +289,7 @@ export default function BookDetails() {
                       </Box>}
 
 
-                  <Box sx={styleVariables.sectionTitle} p={1} mb={1}>Характеристики</Box>
+                  <Box sx={styleVariables.sectionTitle} mb={1}>Характеристики</Box>
 
                     {mainDetailsKeys.map((key, index) =>
                         <Grid key={index} container borderBottom={1} borderColor={primaryLightColor}>
@@ -304,7 +304,7 @@ export default function BookDetails() {
                 </Grid>
 
                 <Grid item xs={12} p={1}>
-                  <Box sx={styleVariables.sectionTitle} p={1} mb={1}>Додаткові деталі</Box>
+                  <Box sx={styleVariables.sectionTitle} mb={1}>Додаткові деталі</Box>
 
                   <Grid container columnSpacing={1}>
                       {keys.map((key, index) =>
@@ -325,7 +325,7 @@ export default function BookDetails() {
 
                   {(!!book.description || !!book.bookSeries.description) &&
                     <Grid item xs={12} p={1}>
-                      <Box sx={styleVariables.sectionTitle} p={1}>Опис</Box>
+                      <Box sx={styleVariables.sectionTitle}>Опис</Box>
                     </Grid>}
 
                   {!!book.bookSeries.description &&
@@ -339,7 +339,7 @@ export default function BookDetails() {
                     </Grid>}
 
                 <Grid item xs={12} p={1}>
-                  <Box sx={styleVariables.sectionTitle} p={1} mb={1}>
+                  <Box sx={styleVariables.sectionTitle} mb={1}>
                     Відгуки покупців
                   </Box>
 
@@ -393,7 +393,7 @@ export default function BookDetails() {
                 </Grid>
 
                   {!book.bookSeries.default && <Grid item xs={12} px={1}>
-                    <Box sx={styleVariables.sectionTitle} p={1} mb={2}>
+                    <Box sx={styleVariables.sectionTitle} mb={2}>
                       Інші книги із цієї серії
                     </Box>
 
@@ -410,7 +410,7 @@ export default function BookDetails() {
                   </Grid>}
 
                   {book.authors.length === 1 && !!booksByAuthor?.length && <Grid item xs={12} px={1}>
-                    <Box sx={styleVariables.sectionTitle} p={1} mb={2}>
+                    <Box sx={styleVariables.sectionTitle} mb={2}>
                       Інші книги цього автора
                     </Box>
 

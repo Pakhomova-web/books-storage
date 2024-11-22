@@ -33,7 +33,8 @@ const innerContainer = (withActions = true) => ({
 const childrenContainer = {
     overflow: 'auto',
     position: 'relative',
-    maxHeight: 'calc(100svh - 200px)'
+    maxHeight: 'calc(100svh - 200px)',
+    overflowX: 'hidden'
 };
 
 const buttonsContainerStyles = {

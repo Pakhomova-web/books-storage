@@ -23,21 +23,19 @@ export default function OrderDeliveryTrackingBox({ delivery, trackingNumber, edi
 
     return (
         editable ?
-            <Grid container display="flex" width="100%" alignItems="center" flexWrap="nowrap"
-                  spacing={2}>
-                {!isSelfPickup(delivery.id) &&
-                  <Grid item xs={9} md={6}><CustomTextField name="trackingNumber" label="ТТН" fullWidth/></Grid>}
+            (!isSelfPickup(delivery.id) &&
+              <Grid container spacing={2}>
+                <Grid item xs={10} md={6}><CustomTextField name="trackingNumber" label="ТТН" fullWidth/></Grid>
 
-                <Grid item xs={3} md={6} display="flex" alignItems="center" gap={2}>
-                    {!isSelfPickup(delivery.id) && renderDeliveryName()}
-
-                    {!isSelfPickup(delivery.id) && <Tooltip title="Перевірити пересування посилки">
-                      <IconButton onClick={e => onTTNClick(e)}>
-                        <FmdGoodIcon/>
-                      </IconButton>
-                    </Tooltip>}
+                <Grid item xs={2} md={6} display="flex" alignItems="center"
+                      justifyContent={{ md: 'flex-start', xs: 'center' }}>
+                  <Tooltip title="Перевірити пересування посилки">
+                    <IconButton onClick={e => onTTNClick(e)}>
+                      <FmdGoodIcon/>
+                    </IconButton>
+                  </Tooltip>
                 </Grid>
-            </Grid> :
+              </Grid>) :
             <Box mb={1} display="flex" alignItems="center" flexWrap="wrap" gap={1} width="100%">
                 {renderDeliveryName()}
 
