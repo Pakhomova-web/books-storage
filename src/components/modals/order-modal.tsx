@@ -320,6 +320,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                     <BasketItem book={book}
                                 count={count}
                                 price={price}
+                                pageUrl="/profile/orders"
                                 discount={discount}
                                 editable={isAdmin(user)}
                                 onRemove={() => onRemove(book.id)}

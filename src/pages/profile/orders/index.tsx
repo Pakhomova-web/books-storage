@@ -77,12 +77,19 @@ export default function Orders() {
 
                               <OrderStatus status={order.status}/>
 
-                              <OrderDeliveryTrackingBox delivery={order.delivery} trackingNumber={order.trackingNumber}/>
+                              <OrderDeliveryTrackingBox delivery={order.delivery}
+                                                        trackingNumber={order.trackingNumber}/>
 
-                              <Box>Дата: {new Date(order.date).toLocaleDateString()}</Box>
-                              <Box>Кількість книжок: {order.booksCount}</Box>
+                              <Grid container spacing={1}>
+                                  <Grid item xs={6}>Дата</Grid>
+                                  <Grid item xs={6}>{new Date(order.date).toLocaleDateString()}</Grid>
 
-                              <Box mt={1}>Сума: {renderPrice(order.finalSumWithDiscounts)}</Box>
+                                  <Grid item xs={6}>Кількість книжок</Grid>
+                                  <Grid item xs={6}>{order.booksCount}</Grid>
+
+                                  <Grid item xs={6}>Сума</Grid>
+                                  <Grid item xs={6}>{renderPrice(order.finalSumWithDiscounts)}</Grid>
+                              </Grid>
                           </StyledOrderBox>
                       </Grid>
                   ))}

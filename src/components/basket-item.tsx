@@ -24,16 +24,17 @@ interface IProps {
     discount?: number,
     editable?: boolean,
     count: number,
+    pageUrl?: string,
     onRemove?: Function,
     onCountChange?: (count: number) => void
 }
 
-export default function BasketItem({ book, editable, price, discount, count, onCountChange, onRemove }: IProps) {
+export default function BasketItem({ book, editable, price, discount, count, pageUrl, onCountChange, onRemove }: IProps) {
     const router = useRouter();
     const { setBookInBasket } = useAuth();
 
     function onBookClick(book: BookEntity) {
-        router.push(`/books/details?${getParamsQueryString({ id: book.id, pageUrl: '/basket' })}`);
+        router.push(`/books/details?${getParamsQueryString({ id: book.id, pageUrl: pageUrl || '/basket' })}`);
     }
 
     function onRemoveBook(book: BookEntity) {
