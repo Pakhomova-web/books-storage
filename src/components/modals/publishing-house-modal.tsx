@@ -98,7 +98,7 @@ export default function PublishingHouseModal({ open, item, onClose, isAdmin }: I
                                      name="imageId"/>
 
                     <Box sx={imageBoxStyles} mb={1}>
-                        <CustomImage isBookType={true} imageId={formContext.getValues('imageId')}></CustomImage>
+                        <CustomImage imageId={formContext.getValues('imageId')}></CustomImage>
                     </Box>
                 </Box>
             </FormContainer>

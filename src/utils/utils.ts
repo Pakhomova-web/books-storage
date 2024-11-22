@@ -130,14 +130,18 @@ export function isNovaPostSelected(deliveryId: string) {
     return deliveryId === '66d5c90e3415a4551a000600';
 }
 
-export function isUrkPoshtaSelected(deliveryId: string) {
+export function isUkrPoshtaSelected(deliveryId: string) {
     return deliveryId === '66d5c9173415a4551a000606';
+}
+
+export function isSelfPickup(deliveryId: string) {
+    return deliveryId === '67406cec5f3c198cb08c3ffb';
 }
 
 export function getLinkForTracking(deliveryId: string, trackingNumber: string) {
     if (isNovaPostSelected(deliveryId)) {
         return `https://novaposhtaglobal.ua/track/?Tracking_ID=${trackingNumber}`;
-    } else {
+    } else if (isUkrPoshtaSelected(deliveryId)) {
         return `https://track.ukrposhta.ua/tracking_UA.html?barcode=${trackingNumber}`;
     }
 }

@@ -12,6 +12,8 @@ const orderFragment = gql`
         lastName
         phoneNumber
         trackingNumber
+        isConfirmed
+        isCanceled
         isSent
         isDone
         isPaid

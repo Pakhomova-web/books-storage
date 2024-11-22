@@ -121,6 +121,7 @@ const typeDefs =  /* GraphQL */ `
         isPartlyPaid: Boolean
         isSent: Boolean
         isDone: Boolean
+        isCanceled: Boolean
         isConfirmed: Boolean
         delivery: Delivery
         books: [OrderBook!]!
@@ -435,6 +436,7 @@ const typeDefs =  /* GraphQL */ `
         isPaid: Boolean
         isPartlyPaid: Boolean
         isConfirmed: Boolean
+        isCanceled: Boolean
         isSent: Boolean
         isDone: Boolean
         region: String,

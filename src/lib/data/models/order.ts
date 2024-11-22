@@ -30,6 +30,7 @@ const orderSchema = new Schema<OrderEntity, Model<OrderEntity>>({
     isPaid: Boolean,
     isPartlyPaid: Boolean,
     isConfirmed: Boolean,
+    isCanceled: Boolean,
     isSent: Boolean,
     isDone: Boolean,
     trackingNumber: String,

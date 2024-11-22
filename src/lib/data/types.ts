@@ -1,3 +1,5 @@
+import { isSelfPickup } from '@/utils/utils';
+
 export interface AuthorEntity {
     id: string,
     name: string,
@@ -308,6 +310,7 @@ export class OrderEntity {
     city: string;
     postcode?: number;
     novaPostOffice?: number;
+    isCanceled?: boolean;
     isConfirmed?: boolean;
     isPaid?: boolean;
     isPartlyPaid?: boolean;
@@ -337,6 +340,7 @@ export class OrderEntity {
             this.city = data.city;
             this.postcode = data.postcode;
             this.novaPostOffice = data.novaPostOffice;
+            this.isCanceled = data.isCanceled;
             this.isConfirmed = data.isConfirmed;
             this.isPaid = data.isPaid;
             this.isPartlyPaid = data.isPartlyPaid;
@@ -346,35 +350,67 @@ export class OrderEntity {
             this.finalSum = 0;
             this.finalSumWithDiscounts = 0;
             this.books = data.books.map(b => {
-                this.finalSum = +b.price;
-                this.finalSumWithDiscounts = +(b.discount ? (b.price * (100 - b.discount) / 100) : b.price);
+                this.finalSum += b.price;
+                this.finalSumWithDiscounts += b.discount ? (b.price * (100 - b.discount) / 100) : b.price;
                 return new OrderBookEntity(b);
             });
             this.date = data.date;
         }
     }
 
-    get status(): string {
-        if (!this.isConfirmed) {
-            return 'Чекає на підтвердження';
+    get status(): IOrderStatus {
+        if (this.isCanceled) {
+            return {
+                value: 'Відхилений', index: 0
+            };
+        } else if (!this.isConfirmed) {
+            return {
+                value: 'Чекає на підтвердження', index: 1
+            };
         } else if (this.isConfirmed) {
+
             if (!this.isPaid && !this.isPartlyPaid) {
-                return 'Чекає на оплату';
-            } else if (this.isPaid && !this.trackingNumber) {
-                return 'Оплачений, чекає на відправку';
-            } else if (this.isPartlyPaid && !this.trackingNumber) {
-                return 'Зроблена передплата, чекає на відправку';
+                return !isSelfPickup(this.delivery.id) ?
+                    {
+                        value: 'Чекає на оплату',
+                        index: 1
+                    } :
+                    {
+                        value: 'Готовий до видачі',
+                        index: 2
+                    };
+            } else if (this.isPaid && (!this.trackingNumber || isSelfPickup(this.delivery.id))) {
+                return {
+                    value: `Оплачений, чекає на ${isSelfPickup(this.delivery.id) ? 'видачу' : 'відправку'}`,
+                    index: 2
+                };
+            } else if (this.isPartlyPaid && (!this.trackingNumber || isSelfPickup(this.delivery.id))) {
+                return {
+                    value: `Зроблена передплата, чекає на ${isSelfPickup(this.delivery.id) ? 'видачу' : 'відправку'}`,
+                    index: 2
+                };
             } else if (!!this.trackingNumber && !this.isSent) {
-                return 'Створено ТТН, чекає на відправку';
+                return {
+                    value: 'Створено ТТН, чекає на відправку', index: 3
+                };
             } else if (this.isSent) {
                 if (this.isDone) {
-                    return 'Завершено';
+                    return {
+                        value: 'Завершено', index: 5
+                    };
                 } else {
-                    return 'Відправлено';
+                    return {
+                        value: 'Відправлено', index: 4
+                    };
                 }
             }
         }
     }
+}
+
+export interface IOrderStatus {
+    value: string,
+    index: number
 }
 
 export interface OrderNumberEntity {

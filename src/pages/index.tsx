@@ -143,8 +143,7 @@ export default function Home() {
                           onClick={() => router.push(`/books?publishingHouse=${publishingHouse.id}`)}>
                         <Box sx={bookTypeBoxStyles} gap={1} p={1}>
                             <Box sx={mobileImageBoxStyles}>
-                                <CustomImage imageId={publishingHouse.imageId}
-                                             isBookType={true}></CustomImage>
+                                <CustomImage imageId={publishingHouse.imageId}></CustomImage>
                             </Box>
                             {publishingHouse.name}
                         </Box>

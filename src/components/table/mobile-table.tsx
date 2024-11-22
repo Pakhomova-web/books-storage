@@ -45,7 +45,7 @@ export function MobileTable<T>(props: IMobileTableProps<T>) {
                           sx={key.mobileStyleClasses}>
                         {key.type === 'text' && key.renderValue(item)}
                         {key.type === 'image' && <Box sx={{ width: '80px', height: '80px' }}>
-                          <CustomImage imageId={key.renderValue(item) as string} isBookType={true}></CustomImage>
+                          <CustomImage imageId={key.renderValue(item) as string}></CustomImage>
                         </Box>}
                     </Grid>
                 </Grid>

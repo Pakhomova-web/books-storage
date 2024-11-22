@@ -61,29 +61,31 @@ export default function DeliveryModal({ open, item, onClose, isAdmin }: IDeliver
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={isAdmin ? onSubmit : null}>
             <FormContainer formContext={formContext}>
-                <CustomTextField fullWidth
-                                 required
-                                 autoFocus
-                                 id="delivery-name"
-                                 label="Назва"
-                                 name="name"/>
+                <Box display="flex" gap={2} flexDirection="column">
+                    <CustomTextField fullWidth
+                                     required
+                                     autoFocus
+                                     id="delivery-name"
+                                     label="Назва"
+                                     name="name"/>
 
-                <CustomTextField fullWidth
-                                 disabled={!isAdmin}
-                                 id="imageLink"
-                                 label="Посилання на фото"
-                                 name="imageLink"/>
-                {!!imageLink &&
-                  <Box mt={2}><Button fullWidth variant="outlined" onClick={parseImage}>Додати фото</Button></Box>}
+                    <CustomTextField fullWidth
+                                     disabled={!isAdmin}
+                                     id="imageLink"
+                                     label="Посилання на фото"
+                                     name="imageLink"/>
+                    {!!imageLink &&
+                      <Box mt={2}><Button fullWidth variant="outlined" onClick={parseImage}>Додати фото</Button></Box>}
 
-                <CustomTextField fullWidth
-                                 disabled={!isAdmin}
-                                 id="imageId"
-                                 label="ID фото"
-                                 name="imageId"/>
+                    <CustomTextField fullWidth
+                                     disabled={!isAdmin}
+                                     id="imageId"
+                                     label="ID фото"
+                                     name="imageId"/>
 
-                <Box sx={imageBoxStyles} my={1}>
-                    <CustomImage isBookType={true} imageId={formContext.getValues('imageId')}></CustomImage>
+                    <Box sx={imageBoxStyles} my={1}>
+                        <CustomImage imageId={formContext.getValues('imageId')}></CustomImage>
+                    </Box>
                 </Box>
             </FormContainer>
 

@@ -121,10 +121,11 @@ export default function PersonalInfo() {
                                         <Box p={1}>
                                             <FormControlLabel value={delivery.id}
                                                               control={<Radio/>}
-                                                              label={<Box sx={{ width: '100px', height: '50px' }}>
-                                                                  <CustomImage
-                                                                      imageId={delivery.imageId}></CustomImage>
-                                                              </Box>}/>
+                                                              label={delivery.imageId ?
+                                                                  <Box sx={{ width: '100px', height: '50px' }}>
+                                                                      <CustomImage
+                                                                          imageId={delivery.imageId}></CustomImage>
+                                                                  </Box> : delivery.name}/>
                                         </Box>
                                     </Grid>
                                 ))}

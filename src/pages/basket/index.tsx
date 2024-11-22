@@ -8,7 +8,7 @@ import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
 import { styled } from '@mui/material/styles';
 import CustomImage from '@/components/custom-image';
-import { isAdmin, isNovaPostSelected, isUrkPoshtaSelected, renderOrderNumber, renderPrice } from '@/utils/utils';
+import { isAdmin, isNovaPostSelected, isUkrPoshtaSelected, renderOrderNumber, renderPrice } from '@/utils/utils';
 import { useRouter } from 'next/router';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
@@ -116,7 +116,7 @@ export default function Basket() {
             formContext.clearErrors('postcode');
             setSubmitDisabled(true);
             invalid = true;
-        } else if (isUrkPoshtaSelected(deliveryId) && !postcode) {
+        } else if (isUkrPoshtaSelected(deliveryId) && !postcode) {
             formContext.setError('postcode', { message: 'Індекс обов\'язковий' });
             formContext.clearErrors('novaPostOffice');
             setSubmitDisabled(true);
@@ -334,10 +334,11 @@ export default function Basket() {
                                   <Box p={1}>
                                       <FormControlLabel value={delivery.id}
                                                         control={<Radio/>}
-                                                        label={<Box sx={{ width: '100px', height: '50px' }}>
-                                                            <CustomImage
-                                                                imageId={delivery.imageId}></CustomImage>
-                                                        </Box>}/>
+                                                        label={delivery.imageId ?
+                                                            <Box sx={{ width: '100px', height: '50px' }}>
+                                                                <CustomImage
+                                                                    imageId={delivery.imageId}></CustomImage>
+                                                            </Box> : delivery.name}/>
                                   </Box>
                               </Grid>
                           ))}
@@ -371,7 +372,7 @@ export default function Basket() {
 
                   <Grid item xs={12} sm={6}>
                     <CustomTextField name="postcode"
-                                     required={isUrkPoshtaSelected(deliveryId)}
+                                     required={isUkrPoshtaSelected(deliveryId)}
                                      type="number" label="Індекс"
                                      fullWidth/>
                   </Grid>

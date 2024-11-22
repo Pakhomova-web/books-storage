@@ -12,7 +12,8 @@ import { useOrders } from '@/lib/graphql/queries/order/hook';
 import { IPageable, OrderEntity } from '@/lib/data/types';
 import { renderOrderNumber, renderPrice } from '@/utils/utils';
 import UserOrderModal from '@/components/modals/user-order-modal';
-import OrderDeliveryTrackingBox from '@/components/order-delivery-tracking-box';
+import OrderDeliveryTrackingBox from '@/components/orders/order-delivery-tracking-box';
+import OrderStatus from '@/components/orders/order-status';
 
 const emptyListImageBoxStyles = {
     width: '100px',
@@ -65,7 +66,7 @@ export default function Orders() {
                                   <b>№ {renderOrderNumber(order.orderNumber)}</b>
                               </Box>
 
-                              <Box my={1}>Статус: {order.status}</Box>
+                              <OrderStatus status={order.status}/>
 
                               <OrderDeliveryTrackingBox order={order}/>
 
