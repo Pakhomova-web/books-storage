@@ -22,6 +22,8 @@ import CustomTextField from '@/components/form-fields/custom-text-field';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 import { useCreateOrder } from '@/lib/graphql/queries/order/hook';
 import BasketItem from '@/components/basket-item';
+import Delivery from '@/lib/data/models/delivery';
+import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
 
 const TitleBoxStyled = styled(Box)(({ theme }) => ({
     ...styleVariables.bigTitleFontSize(theme),
@@ -313,13 +315,7 @@ export default function Basket() {
                           {deliveries.map((delivery, index) => (
                               <Grid key={index} item xs={12} sm={6} pl={2}>
                                   <Box p={1}>
-                                      <FormControlLabel value={delivery.id}
-                                                        control={<Radio/>}
-                                                        label={delivery.imageId ?
-                                                            <Box sx={{ width: '100px', height: '50px' }}>
-                                                                <CustomImage
-                                                                    imageId={delivery.imageId}></CustomImage>
-                                                            </Box> : delivery.name}/>
+                                      <DeliveryRadioOption option={delivery}/>
                                   </Box>
                               </Grid>
                           ))}

@@ -22,6 +22,7 @@ import { useUpdateOrder } from '@/lib/graphql/queries/order/hook';
 import ErrorNotification from '@/components/error-notification';
 import CustomImage from '@/components/custom-image';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
+import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
 
 interface IProps {
     order: OrderEntity;
@@ -237,14 +238,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                               {deliveries.map((opt, index) => (
                                   <Grid key={index} item xs={12} sm={4} md={3} pl={2}>
                                       <Box p={1}>
-                                          <FormControlLabel value={opt.id}
-                                                            disabled={!isAdmin(user)}
-                                                            control={<Radio/>}
-                                                            label={opt.imageId ?
-                                                                <Box sx={{ width: '100px', height: '50px' }}>
-                                                                    <CustomImage
-                                                                        imageId={opt.imageId}></CustomImage>
-                                                                </Box> : opt.name}/>
+                                          <DeliveryRadioOption disabled={!isAdmin(user)} option={opt}/>
                                       </Box>
                                   </Grid>
                               ))}

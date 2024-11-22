@@ -1,7 +1,7 @@
 import { useAuth } from '@/components/auth-context';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
-import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
+import { Box, Button, Grid, RadioGroup } from '@mui/material';
 import { primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import React from 'react';
@@ -9,8 +9,8 @@ import { useCurrentUser } from '@/lib/graphql/queries/auth/hook';
 import ErrorNotification from '@/components/error-notification';
 import ProfileMenu from '@/pages/profile/profile-menu';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
-import CustomImage from '@/components/custom-image';
 import { UserEntity } from '@/lib/data/types';
+import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
 
 export default function PersonalInfo() {
     const { user, setUser } = useAuth();
@@ -119,13 +119,7 @@ export default function PersonalInfo() {
                                 {deliveries.map((delivery, index) => (
                                     <Grid key={index} item xs={12} sm={6} pl={2}>
                                         <Box p={1}>
-                                            <FormControlLabel value={delivery.id}
-                                                              control={<Radio/>}
-                                                              label={delivery.imageId ?
-                                                                  <Box sx={{ width: '100px', height: '50px' }}>
-                                                                      <CustomImage
-                                                                          imageId={delivery.imageId}></CustomImage>
-                                                                  </Box> : delivery.name}/>
+                                            <DeliveryRadioOption option={delivery}/>
                                         </Box>
                                     </Grid>
                                 ))}
