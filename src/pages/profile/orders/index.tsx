@@ -1,8 +1,7 @@
 import { Box, Button, Grid, Table, TableFooter, TablePagination, TableRow } from '@mui/material';
 import React, { useState } from 'react';
-import { styled } from '@mui/material/styles';
 
-import { borderRadius, primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import { styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import { useAuth } from '@/components/auth-context';
 import ErrorNotification from '@/components/error-notification';
@@ -10,28 +9,15 @@ import ProfileMenu from '@/pages/profile/profile-menu';
 import CustomImage from '@/components/custom-image';
 import { useOrders } from '@/lib/graphql/queries/order/hook';
 import { IPageable, OrderEntity } from '@/lib/data/types';
-import { renderOrderNumber, renderPrice } from '@/utils/utils';
 import OrderModal from '@/components/modals/order-modal';
-import OrderDeliveryTrackingBox from '@/components/orders/order-delivery-tracking-box';
-import OrderStatus from '@/components/orders/order-status';
 import { useRouter } from 'next/router';
+import OrdersList from '@/components/orders/order-box';
 
 const emptyListImageBoxStyles = {
     width: '100px',
     height: '100px',
     opacity: 0.2
 };
-
-const StyledOrderBox = styled(Box)(() => ({
-    borderRadius,
-    border: `1px solid ${primaryLightColor}`,
-    display: 'flex',
-    flexDirection: 'column',
-    cursor: 'pointer',
-    ':hover': {
-        backgroundColor: primaryLightColor
-    }
-}));
 
 export default function Orders() {
     const { user } = useAuth();
@@ -67,33 +53,7 @@ export default function Orders() {
             <Loading show={loading}></Loading>
 
             {!!items?.length && <Box>
-              <Grid container mb={1}>
-                  {items?.map((order, index) => (
-                      <Grid key={index} item xs={12} md={4} onClick={() => setSelectedOrder(order)}>
-                          <StyledOrderBox gap={1} p={1} m={1}>
-                              <Box sx={styleVariables.titleFontSize}>
-                                  <b>№ {renderOrderNumber(order.orderNumber)}</b>
-                              </Box>
-
-                              <OrderStatus status={order.status}/>
-
-                              <OrderDeliveryTrackingBox delivery={order.delivery}
-                                                        trackingNumber={order.trackingNumber}/>
-
-                              <Grid container spacing={1}>
-                                  <Grid item xs={6}>Дата</Grid>
-                                  <Grid item xs={6}>{new Date(order.date).toLocaleDateString()}</Grid>
-
-                                  <Grid item xs={6}>Кількість книжок</Grid>
-                                  <Grid item xs={6}>{order.booksCount}</Grid>
-
-                                  <Grid item xs={6}>Сума</Grid>
-                                  <Grid item xs={6}>{renderPrice(order.finalSumWithDiscounts)}</Grid>
-                              </Grid>
-                          </StyledOrderBox>
-                      </Grid>
-                  ))}
-              </Grid>
+              <OrdersList orders={items} onClick={order => setSelectedOrder(order)}/>
 
               <Box sx={{ position: 'sticky', bottom: 0 }}>
                 <Table>

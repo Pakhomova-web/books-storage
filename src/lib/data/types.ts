@@ -424,7 +424,13 @@ export interface OrderNumberEntity {
 
 export interface IOrderFilter {
     quickSearch?: string,
-    user?: string
+    user?: string,
+    orderNumber?: number,
+    firstName?: string,
+    lastName?: string,
+    phoneNumber?: string,
+    instagramUsername?: string,
+    email?: string
 }
 
 export class CommentEntity {

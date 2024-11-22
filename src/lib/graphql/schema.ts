@@ -519,6 +519,11 @@ const typeDefs =  /* GraphQL */ `
     input OrderSearchInput {
         quickSearch: String
         user: ID
+        firstName: String
+        lastName: String
+        instagramUsername: String
+        phoneNumber: String
+        orderNumber: Int
     }
 `;
 
