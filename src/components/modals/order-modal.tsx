@@ -228,7 +228,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
               </Grid>
 
               <Grid item xs={12} sm={6} md={3} lg={2}>
-                <Button variant="outlined" fullWidth
+                <Button variant="contained" fullWidth
                         disabled={!orderItem.isConfirmed || orderItem.isDone || !orderItem.isSent}
                         onClick={onDoneClick}>
                   Завершити замовлення
@@ -236,7 +236,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
               </Grid>
 
               <Grid item xs={12} sm={6} md={3} lg={2}>
-                <Button variant="outlined" fullWidth onClick={onCancel}>
+                <Button variant="outlined" fullWidth onClick={onCancel} color="warning">
                   Відмінити замовлення
                 </Button>
               </Grid>
