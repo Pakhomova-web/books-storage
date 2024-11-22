@@ -1,8 +1,15 @@
-import { Box, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
+import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 
-import { isAdmin, isNovaPostSelected, isUkrPoshtaSelected, renderOrderNumber, renderPrice } from '@/utils/utils';
+import {
+    isAdmin,
+    isNovaPostSelected,
+    isSelfPickup,
+    isUkrPoshtaSelected,
+    renderOrderNumber,
+    renderPrice
+} from '@/utils/utils';
 import CustomModal from '@/components/modals/custom-modal';
 import { DeliveryEntity, OrderEntity } from '@/lib/data/types';
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
@@ -160,6 +167,30 @@ export default function OrderModal({ open, order, onClose }: IProps) {
         setDelivery(deliveries.find(d => d.id === id));
     }
 
+    function onConfirm() {
+        // TODO
+    }
+
+    function onPay() {
+        // TODO
+    }
+
+    function onPartlyPaid() {
+        // todo
+    }
+
+    function onDoneClick() {
+        // todo
+    }
+
+    function onSent() {
+        // todo
+    }
+
+    function onCancel() {
+        // todo
+    }
+
     return (
         <CustomModal open={open} big={true}
                      title={'Замовлення № ' + renderOrderNumber(orderItem?.orderNumber)}
@@ -168,6 +199,48 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                      onSubmit={isAdmin(user) ? onSubmit : null}
                      loading={!orderItem || updating || loadingDeliveries}>
             <OrderStatus status={orderItem.status}/>
+
+            {isAdmin(user) && <Grid container spacing={2}>
+              <Grid item xs={12} sm={6} md={3} lg={2}>
+                <Button variant="outlined" fullWidth disabled={orderItem.isConfirmed} onClick={onConfirm}>
+                  Підтвердити замовлення
+                </Button>
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={3} lg={2}>
+                <Button variant="outlined" fullWidth disabled={!orderItem.isConfirmed || orderItem.isPaid}
+                        onClick={onPay}>
+                  Замолення оплачене
+                </Button>
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={3} lg={2}>
+                <Button variant="outlined" fullWidth disabled={!orderItem.isConfirmed || orderItem.isPartlyPaid}
+                        onClick={onPartlyPaid}>
+                  Зроблена передпалата</Button>
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={3} lg={2}>
+                <Button variant="outlined" fullWidth disabled={!orderItem.isConfirmed || orderItem.isSent}
+                        onClick={onSent}>
+                  Замовлення {isSelfPickup(delivery.id) ? 'вручене' : 'відправлене'}
+                </Button>
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={3} lg={2}>
+                <Button variant="outlined" fullWidth
+                        disabled={!orderItem.isConfirmed || orderItem.isDone || !orderItem.isSent}
+                        onClick={onDoneClick}>
+                  Завершити замовлення
+                </Button>
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={3} lg={2}>
+                <Button variant="outlined" fullWidth onClick={onCancel}>
+                  Відмінити замовлення
+                </Button>
+              </Grid>
+            </Grid>}
 
             <FormContainer formContext={formContext}>
                 <Grid container alignItems="center" spacing={2} mt={1}>
