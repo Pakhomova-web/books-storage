@@ -8,7 +8,14 @@ import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
 import { styled } from '@mui/material/styles';
 import CustomImage from '@/components/custom-image';
-import { isAdmin, isNovaPostSelected, isUkrPoshtaSelected, renderOrderNumber, renderPrice } from '@/utils/utils';
+import {
+    isAdmin,
+    isNovaPostSelected,
+    isUkrPoshtaSelected,
+    onCopyOrderClick,
+    renderOrderNumber,
+    renderPrice
+} from '@/utils/utils';
 import { useRouter } from 'next/router';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
@@ -157,32 +164,6 @@ export default function Basket() {
             .then(items => setUser({ ...user, basketItems: items }))
             .catch(() => {
             });
-    }
-
-    function onCopyOrderClick() {
-        let value = items
-            .map((item, i) =>
-                `${!item.bookSeries.default ?
-                    `${!i || item.bookSeries.id !== items[i - 1].bookSeries.id ? `${item.bookSeries.name} (${item.bookSeries.publishingHouse.name})\n\t` : '\t'}` : ''
-                }${item.name} (${countFields.get(item.id)} шт по ${renderPrice(item.price)})`)
-            .join('\n');
-        const selBox = document.createElement('textarea');
-
-        value = `${value}\n\nСума замовлення: ${renderPrice(finalFullSum)}`;
-        if (finalSumWithDiscounts) {
-            value = `${value}\nЗнижка: ${renderPrice(finalFullSum - finalSumWithDiscounts)}`;
-            value = `${value}\nКінцева сума замовлення зі знижкою: ${renderPrice(finalSumWithDiscounts)}`;
-        }
-        selBox.style.position = 'fixed';
-        selBox.style.left = '0';
-        selBox.style.top = '0';
-        selBox.style.opacity = '0';
-        selBox.value = value;
-        document.body.appendChild(selBox);
-        selBox.focus();
-        selBox.select();
-        document.execCommand('copy');
-        document.body.removeChild(selBox);
     }
 
     function onSubmit() {
@@ -389,7 +370,13 @@ export default function Basket() {
                 <Grid item xs={12} display="flex" flexWrap="wrap"
                       gap={1} justifyContent={{ xs: 'center', md: 'flex-end' }} alignItems="center">
                     {isAdmin(user) && !!items.length &&
-                      <Button variant="outlined" onClick={onCopyOrderClick}>Скопіювати зміст замовлення</Button>}
+                      <Button variant="outlined" onClick={() => onCopyOrderClick(items.map(book => ({
+                          book,
+                          price: book.price,
+                          count: countFields.get(book.id)
+                      })), finalFullSum, finalSumWithDiscounts)}>
+                        Скопіювати зміст замовлення
+                      </Button>}
                   <Button type="submit" variant="contained"
                           disabled={submitDisabled || items.some(i => !i.numberInStock)} onClick={onSubmit}>
                     Підтвердити замовлення

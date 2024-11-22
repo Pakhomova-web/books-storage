@@ -6,7 +6,7 @@ import {
     isAdmin,
     isNovaPostSelected,
     isSelfPickup,
-    isUkrPoshtaSelected,
+    isUkrPoshtaSelected, onCopyOrderClick,
     renderOrderNumber,
     renderPrice
 } from '@/utils/utils';
@@ -200,7 +200,8 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                      loading={!orderItem || updating || loadingDeliveries}>
             <FormContainer formContext={formContext}>
                 <Grid container alignItems="center" display="flex" spacing={2} justifyContent="space-between" mb={2}>
-                    <Grid item xs={12} sm={6} md={8} lg={10} display="flex" justifyContent={{ xs: 'center', sm: 'flex-start' }}>
+                    <Grid item xs={12} sm={6} md={8} lg={10} display="flex"
+                          justifyContent={{ xs: 'center', sm: 'flex-start' }}>
                         <OrderStatus status={orderItem.status}/>
                     </Grid>
 
@@ -368,6 +369,13 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                 </Grid>
 
                 {isAdmin(user) && <>
+                  <Grid item xs={12} display="flex" justifyContent="center">
+                    <Button variant="outlined"
+                            onClick={() => onCopyOrderClick(orderItem.books, order.finalSum, order.finalSumWithDiscounts)}>
+                      Скопіювати зміст замовлення
+                    </Button>
+                  </Grid>
+
                   <Grid item xs={12} sm={6} md={3} lg={2}>
                     <Button variant="outlined" fullWidth disabled={orderItem.isConfirmed} onClick={onConfirm}>
                       Підтвердити замовлення
