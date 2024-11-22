@@ -166,17 +166,15 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                      isSubmitDisabled={submitDisabled}
                      onSubmit={isAdmin(user) ? onSubmit : null}
                      loading={!orderItem || updating || loadingDeliveries}>
+            <OrderStatus status={orderItem.status}/>
+
             <FormContainer formContext={formContext}>
-                <Grid container alignItems="center" spacing={2}>
+                <Grid container alignItems="center" spacing={2} mt={1}>
                     <Grid item xs={12} md={6} lg={2}>
                         <CustomTextField name="date" label="Дата" disabled fullWidth/>
                     </Grid>
 
                     {!!orderItem && <>
-                      <Grid item xs={12} md={6} lg={3}>
-                        <OrderStatus status={orderItem.status}/>
-                      </Grid>
-
                       <Grid item xs={12} md={6}>
                         <OrderDeliveryTrackingBox order={orderItem} editable={isAdmin(user)}/>
                       </Grid>
