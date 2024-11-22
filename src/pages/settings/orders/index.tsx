@@ -138,8 +138,7 @@ export default function Orders() {
 
                   {openNewModal &&
                     <OrderModal open={openNewModal}
-                                item={selectedItem}
-                                isAdmin={isAdmin(user)}
+                                order={selectedItem}
                                 onClose={(updated = false) => refreshData(updated)}></OrderModal>}
               </>
             }

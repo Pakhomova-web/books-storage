@@ -1,193 +1,327 @@
-import { OrderEntity } from '@/lib/data/types';
+import { Box, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import { useCreateOrder, useUpdateOrder } from '@/lib/graphql/queries/order/hook';
+
+import { isAdmin, isNovaPostSelected, isUkrPoshtaSelected, renderOrderNumber, renderPrice } from '@/utils/utils';
 import CustomModal from '@/components/modals/custom-modal';
+import { DeliveryEntity, OrderEntity } from '@/lib/data/types';
+import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import BasketItem from '@/components/basket-item';
+import OrderDeliveryTrackingBox from '@/components/orders/order-delivery-tracking-box';
 import CustomTextField from '@/components/form-fields/custom-text-field';
-import ErrorNotification from '@/components/error-notification';
+import OrderStatus from '@/components/orders/order-status';
 import { useAuth } from '@/components/auth-context';
-import { useDeliveryOptions } from '@/lib/graphql/queries/delivery/hook';
-import CustomSelectField from '@/components/form-fields/custom-select-field';
-import CustomCheckbox from '@/components/form-fields/custom-checkbox';
+import { useUpdateOrder } from '@/lib/graphql/queries/order/hook';
+import ErrorNotification from '@/components/error-notification';
+import CustomImage from '@/components/custom-image';
+import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 
-interface IOrderModalProps {
-    open: boolean,
-    item?: OrderEntity,
-    isSubmitDisabled?: boolean,
-    isAdmin?: boolean,
-    onClose: (updated?: boolean) => void
+interface IProps {
+    order: OrderEntity;
+    open: boolean;
+    onClose: (updated?: boolean) => void;
 }
 
-interface IForm {
-    firstName: string,
-    lastName: string,
-    phoneNumber: string,
-    comment: string,
-    isPartlyPaid: boolean,
-    isPaid: boolean,
-    isSent: boolean,
-    deliveryId: string,
-    region: string,
-    district: string,
-    city: string,
-    postcode: number,
-    novaPostOffice: number,
-    trackingNumber: string,
-    isDone: boolean
-}
-
-export default function OrderModal({ open, item, onClose, isAdmin }: IOrderModalProps) {
-    const formContext = useForm<IForm>({
+export default function OrderModal({ open, order, onClose }: IProps) {
+    const { user } = useAuth();
+    const [orderItem, setOrderItem] = useState<OrderEntity>(order);
+    const [delivery, setDelivery] = useState<DeliveryEntity>(order.delivery);
+    const { update, updating, updatingError } = useUpdateOrder();
+    const { items: deliveries, loading: loadingDeliveries } = useDeliveries();
+    const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
+    const formContext = useForm({
         defaultValues: {
-            firstName: item?.firstName,
-            lastName: item?.lastName,
-            phoneNumber: item?.phoneNumber,
-            comment: item?.comment,
-            trackingNumber: item?.trackingNumber,
-            deliveryId: item?.delivery?.id,
-            region: item?.region,
-            district: item?.district,
-            city: item?.city,
-            postcode: item?.postcode,
-            novaPostOffice: item?.novaPostOffice,
-            isSent: item?.isSent,
-            isDone: item?.isDone,
-            isPaid: item?.isPaid,
-            isPartlyPaid: item?.isPartlyPaid,
+            ...orderItem,
+            date: new Date(orderItem?.date).toLocaleDateString(),
+            email: orderItem?.user.email,
+            instagramUsername: orderItem?.user.instagramUsername
         }
     });
-    const { update, updating, updatingError } = useUpdateOrder();
-    const { create, creating, creatingError } = useCreateOrder();
-    const { items: deliveryOptions, loading: loadingDeliveryOptions } = useDeliveryOptions();
-    const { checkAuth } = useAuth();
-    const { deliveryId } = formContext.watch();
+    const {
+        phoneNumber,
+        firstName,
+        lastName,
+        region,
+        city,
+        postcode,
+        novaPostOffice
+    } = formContext.watch();
 
-    async function onSubmit() {
+    useEffect(() => {
+        let invalid = false;
+
+        if (!phoneNumber) {
+            formContext.setError('phoneNumber', { message: 'Номер телефону обов\'язковий' });
+            setSubmitDisabled(true);
+            invalid = true;
+        } else {
+            formContext.clearErrors('phoneNumber');
+        }
+
+        if (!region) {
+            formContext.setError('region', { message: 'Область обов\'язкова' });
+            setSubmitDisabled(true);
+            invalid = true;
+        } else {
+            formContext.clearErrors('region');
+        }
+
+        if (!city) {
+            formContext.setError('city', { message: 'Місто обов\'язкове' });
+            setSubmitDisabled(true);
+            invalid = true;
+        } else {
+            formContext.clearErrors('city');
+        }
+
+        if (!firstName) {
+            formContext.setError('firstName', { message: 'Ім\'я обов\'язкове' });
+            setSubmitDisabled(true);
+            invalid = true;
+        } else {
+            formContext.clearErrors('firstName');
+        }
+
+        if (!lastName) {
+            formContext.setError('lastName', { message: 'Прізвище обов\'язкове' });
+            setSubmitDisabled(true);
+            invalid = true;
+        } else {
+            formContext.clearErrors('lastName');
+        }
+
+        if (isNovaPostSelected(delivery.id) && !novaPostOffice) {
+            formContext.setError('novaPostOffice', { message: '№ відділення/поштомата обов\'язкове' });
+            formContext.clearErrors('postcode');
+            setSubmitDisabled(true);
+            invalid = true;
+        } else if (isUkrPoshtaSelected(delivery.id) && !postcode) {
+            formContext.setError('postcode', { message: 'Індекс обов\'язковий' });
+            formContext.clearErrors('novaPostOffice');
+            setSubmitDisabled(true);
+            invalid = true;
+        } else {
+            formContext.clearErrors('novaPostOffice');
+            formContext.clearErrors('postcode');
+        }
+
+        if (!invalid) {
+            setSubmitDisabled(false);
+        }
+    }, [delivery, phoneNumber, firstName, lastName, region, city, postcode, novaPostOffice]);
+
+    function onChangeBookCount(bookId: string, count: number) {
+        setOrderItem(new OrderEntity({
+            ...orderItem,
+            books: orderItem.books.map(bookOrder => ({
+                ...bookOrder,
+                count: bookOrder.book.id === bookId ? bookOrder.count + count : bookOrder.count
+            }))
+        }));
+    }
+
+    function onRemove(bookId: string) {
+        setOrderItem(new OrderEntity({
+            ...orderItem,
+            books: orderItem.books.filter(({ book }) => book.id !== bookId)
+        }));
+    }
+
+    function onSubmit() {
         const values = formContext.getValues();
-        const data = {
-            trackingNumber: values.trackingNumber,
-            firstName: values.firstName,
-            lastName: values.lastName,
-            phoneNumber: values.phoneNumber,
+
+        update({
+            id: orderItem.id,
             comment: values.comment,
+            adminComment: values.adminComment,
             region: values.region,
-            city: values.city,
             district: values.district,
+            city: values.city,
+            phoneNumber: values.phoneNumber,
             postcode: values.postcode,
             novaPostOffice: values.novaPostOffice,
-            isSent: values.isSent,
-            isPaid: values.isPaid,
-            isPartlyPaid: values.isPartlyPaid,
-            isDone: values.isDone,
-            deliveryId: values.deliveryId
-        } as OrderEntity;
+            firstName: values.firstName,
+            lastName: values.lastName,
+            deliveryId: delivery.id,
+            books: orderItem.books.map(bookOrder => ({
+                bookId: bookOrder.book.id,
+                count: bookOrder.count,
+                price: bookOrder.price,
+                discount: bookOrder.discount
+            }))
+        })
+            .then(() => onClose(true))
+            .catch(() => {
+            });
+    }
 
-        try {
-            if (item) {
-                await update({ id: item.id, ...data });
-            } else {
-                await create(data);
-            }
-
-            onClose(true);
-        } catch (err) {
-            checkAuth(err);
-        }
+    function onDeliveryChange(id: string) {
+        setDelivery(deliveries.find(d => d.id === id));
     }
 
     return (
-        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' замовлення'}
-                     open={open}
-                     disableBackdropClick={true}
-                     onClose={() => onClose()}
-                     loading={updating || creating}
-                     isSubmitDisabled={!formContext.formState.isValid}
-                     onSubmit={isAdmin ? onSubmit : null}>
+        <CustomModal open={open} big={true}
+                     title={'Замовлення № ' + renderOrderNumber(orderItem?.orderNumber)}
+                     onClose={onClose}
+                     isSubmitDisabled={submitDisabled}
+                     onSubmit={isAdmin(user) ? onSubmit : null}
+                     loading={!orderItem || updating || loadingDeliveries}>
             <FormContainer formContext={formContext}>
-                <CustomTextField fullWidth
-                                 required
-                                 autoFocus
-                                 id="customer-first-name"
-                                 label="Ім'я замовника"
-                                 name="customerFirstName"/>
+                <Grid container alignItems="center" spacing={2}>
+                    <Grid item xs={12} md={6} lg={2}>
+                        <CustomTextField name="date" label="Дата" disabled fullWidth/>
+                    </Grid>
 
-                <CustomTextField fullWidth
-                                 required
-                                 id="customer-last-name"
-                                 label="Прізвище замовника"
-                                 name="customerLastName"/>
+                    {!!orderItem && <>
+                      <Grid item xs={12} md={6} lg={3}>
+                        <OrderStatus status={orderItem.status}/>
+                      </Grid>
 
-                <CustomTextField fullWidth
-                                 required
-                                 id="customer-phone-number"
-                                 label="Телефон замовника"
-                                 name="customerPhoneNumber"/>
+                      <Grid item xs={12} md={6}>
+                        <OrderDeliveryTrackingBox order={orderItem} editable={isAdmin(user)}/>
+                      </Grid>
 
-                <CustomTextField fullWidth
-                                 id="description"
-                                 label="Опис"
-                                 name="description"/>
+                        {isAdmin(user) && <Grid item xs={12}>
+                          <RadioGroup defaultValue={delivery.id}
+                                      onChange={(_, value) => onDeliveryChange(value)}>
+                            <Grid container spacing={2}>
+                                {deliveries.map((opt, index) => (
+                                    <Grid key={index} item xs={12} sm={3} pl={2}>
+                                        <Box p={1}>
+                                            <FormControlLabel value={opt.id}
+                                                              control={<Radio/>}
+                                                              label={opt.imageId ?
+                                                                  <Box sx={{ width: '100px', height: '50px' }}>
+                                                                      <CustomImage imageId={opt.imageId}></CustomImage>
+                                                                  </Box> : opt.name}/>
+                                        </Box>
+                                    </Grid>
+                                ))}
+                            </Grid>
+                          </RadioGroup>
+                        </Grid>}
+                    </>}
 
-                <b>books</b> button add
+                    <Grid item xs={12}>
+                        <CustomTextField name="comment" disabled={!isAdmin(user)} label="Коментар" fullWidth/>
+                    </Grid>
 
-                <div>
-                    <div>book selection</div>
-                    <div>count</div>
-                    <div>discount</div>
-                    <div>price</div>
-                </div>
+                    {isAdmin(user) && <Grid item xs={12}>
+                      <CustomTextField name="adminComment" label="Коментар адміністратора" fullWidth/>
+                    </Grid>}
+                </Grid>
 
-                <b>Сума замовлення:</b>
+                <Box sx={styleVariables.sectionTitle} p={1} my={2}>Особиста інформація</Box>
 
-                <CustomCheckbox label="Повністю оплачене" name="isPaid"></CustomCheckbox>
+                <Grid container spacing={2} mb={2}>
+                    <Grid item xs={12} md={6} lg={3}>
+                        <CustomTextField name="firstName" required disabled={!isAdmin(user)} label="Ім'я" fullWidth/>
+                    </Grid>
 
-                <CustomCheckbox label="Передплата" name="isPartlyPaid"></CustomCheckbox>
+                    <Grid item xs={12} md={6} lg={3}>
+                        <CustomTextField name="lastName" required disabled={!isAdmin(user)} label="Прізвище" fullWidth/>
+                    </Grid>
 
-                <CustomSelectField fullWidth
-                                   options={deliveryOptions}
-                                   loading={loadingDeliveryOptions}
-                                   showClear={!!deliveryId}
-                                   onClear={() => formContext.setValue('deliveryId', null)}
-                                   id="delivery-id"
-                                   label="Спосіб доставки"
-                                   name="deliveryId"/>
+                    <Grid item xs={12} md={6} lg={3}>
+                        <CustomTextField name="phoneNumber" required disabled={!isAdmin(user)} label="Номер телефону"
+                                         fullWidth/>
+                    </Grid>
 
-                <CustomTextField fullWidth
-                                 required={!!deliveryId}
-                                 id="region"
-                                 label="Область"
-                                 name="region"/>
+                    <Grid item xs={12} md={6} lg={3}>
+                        <CustomTextField name="email" disabled required label="Ел. адреса" fullWidth/>
+                    </Grid>
 
-                <CustomTextField fullWidth
-                                 id="district"
-                                 label="Район"
-                                 name="district"/>
+                    <Grid item xs={12} md={6} lg={3}>
+                        <CustomTextField name="instagramUsername" disabled
+                                         label="Нікнейм в інстаграм для зв'язку"
+                                         fullWidth/>
+                    </Grid>
+                </Grid>
 
-                <CustomTextField fullWidth
-                                 required={!!deliveryId}
-                                 id="city"
-                                 label="Місто"
-                                 name="city"/>
+                <Box sx={styleVariables.sectionTitle} p={1} my={2}>Адреса</Box>
+                <Grid container spacing={2} mb={2}>
+                    <Grid item xs={12} md={6} lg={3}>
+                        <CustomTextField name="region" required disabled={!isAdmin(user)} label="Область" fullWidth/>
+                    </Grid>
 
-                <CustomTextField fullWidth
-                                 required={!!deliveryId}
-                                 id="postcode"
-                                 label="Індекс/№ відділення/поштомата"
-                                 name="postcode"/>
+                    <Grid item xs={12} md={6} lg={3}>
+                        <CustomTextField name="district" disabled={!isAdmin(user)} label="Район" fullWidth/>
+                    </Grid>
 
-                <CustomTextField fullWidth
-                                 id="trackingNumber"
-                                 label="ТТН"
-                                 name="trackingNumber"/>
+                    <Grid item xs={12} md={6} lg={3}>
+                        <CustomTextField name="city" required disabled={!isAdmin(user)} label="Місто" fullWidth/>
+                    </Grid>
 
-                <CustomCheckbox label="Відправлене" name="isSent"></CustomCheckbox>
+                    {isUkrPoshtaSelected(delivery.id) && <Grid item xs={12} md={6} lg={3}>
+                      <CustomTextField name="postcode"
+                                       disabled={!isAdmin(user)}
+                                       label="Індекс"
+                                       required={isUkrPoshtaSelected(orderItem.delivery.id)}
+                                       fullWidth/>
+                    </Grid>}
 
-                <CustomCheckbox label="Виконане" name="isDone"></CustomCheckbox>
-
+                    {isNovaPostSelected(delivery.id) && <Grid item xs={12} md={6} lg={3}>
+                      <CustomTextField name="novaPostOffice"
+                                       disabled={!isAdmin(user)}
+                                       required={isNovaPostSelected(orderItem.delivery.id)}
+                                       label="№ відділення / поштомату"
+                                       fullWidth/>
+                    </Grid>}
+                </Grid>
             </FormContainer>
 
-            {(creatingError || updatingError) &&
-              <ErrorNotification error={creatingError || updatingError}></ErrorNotification>
-            }
+            {orderItem?.books.map(({ book, count, price, discount }, index) => (
+                <Box key={index}>
+                    <BasketItem book={book}
+                                count={count}
+                                price={price}
+                                discount={discount}
+                                editable={isAdmin(user)}
+                                onRemove={() => onRemove(book.id)}
+                                onCountChange={(count: number) => onChangeBookCount(book.id, count)}/>
+                </Box>
+            ))}
+
+            <Grid container spacing={1} alignItems="center" mt={1}>
+                <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end"
+                      textAlign="end">
+                    Сума замовлення без знижки:
+                </Grid>
+                <Grid item xs={5} sm={4} md={3} textAlign="center">
+                    {renderPrice(orderItem?.finalSum)}
+                </Grid>
+
+                <Grid item xs={12}>
+                    <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
+                </Grid>
+
+                <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end"
+                      textAlign="end">
+                    Знижка:
+                </Grid>
+                <Grid item xs={5} sm={4} md={3} textAlign="center">
+                    {renderPrice(orderItem?.finalSum - orderItem?.finalSumWithDiscounts)}
+                </Grid>
+
+                <Grid item xs={12}>
+                    <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
+                </Grid>
+
+                <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end"
+                      sx={styleVariables.titleFontSize} textAlign="end">
+                    <b>Кінцева сума замовлення:</b>
+                </Grid>
+                <Grid item xs={5} sm={4} md={3} display="flex" justifyContent="center">
+                    <Box sx={priceStyles}
+                         textAlign="center">{renderPrice(orderItem?.finalSumWithDiscounts)}</Box>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
+                </Grid>
+            </Grid>
+
+            {!!updatingError && <ErrorNotification error={updatingError}/>}
         </CustomModal>
     );
 }

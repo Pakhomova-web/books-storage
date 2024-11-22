@@ -19,6 +19,7 @@ const orderFragment = gql`
         isPaid
         isPartlyPaid
         comment
+        adminComment
         region
         district
         city
@@ -31,8 +32,10 @@ const orderFragment = gql`
         }
         books {
             book {
+                id
                 name
                 imageIds
+                numberInStock
                 language {
                     name
                 }

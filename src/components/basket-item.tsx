@@ -24,10 +24,11 @@ interface IProps {
     discount?: number,
     editable?: boolean,
     count: number,
-    onCountChange?: Function
+    onRemove?: Function,
+    onCountChange?: (count: number) => void
 }
 
-export default function BasketBook({ book, editable, price, discount, count, onCountChange }: IProps) {
+export default function BasketItem({ book, editable, price, discount, count, onCountChange, onRemove }: IProps) {
     const router = useRouter();
     const { setBookInBasket } = useAuth();
 
@@ -36,7 +37,11 @@ export default function BasketBook({ book, editable, price, discount, count, onC
     }
 
     function onRemoveBook(book: BookEntity) {
-        setBookInBasket(book.id);
+        if (!onRemove) {
+            setBookInBasket(book.id);
+        } else {
+            onRemove();
+        }
     }
 
     return (
@@ -102,16 +107,17 @@ export default function BasketBook({ book, editable, price, discount, count, onC
                     {editable && <Grid item>
                       <IconButton
                         disabled={!book.numberInStock || count === 1}
-                        onClick={() => onCountChange(book.id, -1)}>
+                        onClick={() => onCountChange(-1)}>
                         <RemoveCircleOutlineIcon fontSize="large"/>
                       </IconButton>
                     </Grid>}
-                    <Grid item
-                          sx={styleVariables.titleFontSize}>{count}</Grid>
+
+                    <Grid item sx={styleVariables.titleFontSize}>{count}</Grid>
+
                     {editable && <Grid item>
                       <IconButton
                         disabled={!book.numberInStock || count === book.numberInStock}
-                        onClick={() => onCountChange(book.id, 1)}>
+                        onClick={() => onCountChange(1)}>
                         <AddCircleOutlineIcon fontSize="large"/>
                       </IconButton>
                     </Grid>}

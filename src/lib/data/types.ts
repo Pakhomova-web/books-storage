@@ -318,9 +318,11 @@ export class OrderEntity {
     isDone?: boolean;
     books: OrderBookEntity[];
     comment?: string;
+    adminComment?: string;
     date?: string;
     finalSum?: number;
     finalSumWithDiscounts?: number;
+    booksCount?: number;
 
     constructor(data?) {
         if (data) {
@@ -347,11 +349,14 @@ export class OrderEntity {
             this.isDone = data.isDone;
             this.isSent = data.isSent;
             this.comment = data.comment;
+            this.adminComment = data.adminComment;
             this.finalSum = 0;
             this.finalSumWithDiscounts = 0;
+            this.booksCount = 0;
             this.books = data.books.map(b => {
-                this.finalSum += b.price;
-                this.finalSumWithDiscounts += b.discount ? (b.price * (100 - b.discount) / 100) : b.price;
+                this.booksCount += b.count;
+                this.finalSum += b.price * b.count;
+                this.finalSumWithDiscounts += (b.discount ? (b.price * (100 - b.discount) / 100) : b.price) * b.count;
                 return new OrderBookEntity(b);
             });
             this.date = data.date;

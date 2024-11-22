@@ -131,6 +131,7 @@ const typeDefs =  /* GraphQL */ `
         postcode: Int
         novaPostOffice: Int
         comment: String
+        adminComment: String
         date: String
     }
 
@@ -485,11 +486,11 @@ const typeDefs =  /* GraphQL */ `
         postcode: Int
         novaPostOffice: Int
         comment: String
+        adminComment: String
     }
 
     input OrderUpdateInput {
         id: ID!
-        userId: ID!
         firstName: String!
         lastName: String!
         instagramUsername: String
@@ -507,6 +508,7 @@ const typeDefs =  /* GraphQL */ `
         postcode: Int
         novaPostOffice: Int
         comment: String
+        adminComment: String
     }
 
     type OrderSubList {

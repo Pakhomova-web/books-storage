@@ -503,6 +503,7 @@ export type MutationUpdateUserArgs = {
 };
 
 export type Order = {
+  adminComment?: Maybe<Scalars['String']['output']>;
   books: Array<OrderBook>;
   city: Scalars['String']['output'];
   comment?: Maybe<Scalars['String']['output']>;
@@ -542,6 +543,7 @@ export type OrderBookInput = {
 };
 
 export type OrderCreateInput = {
+  adminComment?: InputMaybe<Scalars['String']['input']>;
   books: Array<OrderBookInput>;
   city: Scalars['String']['input'];
   comment?: InputMaybe<Scalars['String']['input']>;
@@ -573,6 +575,7 @@ export type OrderSubList = {
 };
 
 export type OrderUpdateInput = {
+  adminComment?: InputMaybe<Scalars['String']['input']>;
   books: Array<OrderBookInput>;
   city: Scalars['String']['input'];
   comment?: InputMaybe<Scalars['String']['input']>;
@@ -591,7 +594,6 @@ export type OrderUpdateInput = {
   postcode?: InputMaybe<Scalars['Int']['input']>;
   region: Scalars['String']['input'];
   trackingNumber?: InputMaybe<Scalars['String']['input']>;
-  userId: Scalars['ID']['input'];
 };
 
 export type PageType = {
@@ -1197,6 +1199,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type OrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order']> = {
+  adminComment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   books?: Resolver<Array<ResolversTypes['OrderBook']>, ParentType, ContextType>;
   city?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   comment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

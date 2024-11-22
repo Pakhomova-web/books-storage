@@ -1,4 +1,4 @@
-import { Box, Grid, Table, TableFooter, TablePagination, TableRow } from '@mui/material';
+import { Box, Button, Grid, Table, TableFooter, TablePagination, TableRow } from '@mui/material';
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 
@@ -11,9 +11,10 @@ import CustomImage from '@/components/custom-image';
 import { useOrders } from '@/lib/graphql/queries/order/hook';
 import { IPageable, OrderEntity } from '@/lib/data/types';
 import { renderOrderNumber, renderPrice } from '@/utils/utils';
-import UserOrderModal from '@/components/modals/user-order-modal';
+import OrderModal from '@/components/modals/order-modal';
 import OrderDeliveryTrackingBox from '@/components/orders/order-delivery-tracking-box';
 import OrderStatus from '@/components/orders/order-status';
+import { useRouter } from 'next/router';
 
 const emptyListImageBoxStyles = {
     width: '100px',
@@ -34,8 +35,9 @@ const StyledOrderBox = styled(Box)(() => ({
 
 export default function Orders() {
     const { user } = useAuth();
+    const router = useRouter();
     const [pageSettings, setPageSettings] = useState<IPageable>({ page: 0, rowsPerPage: 6 });
-    const { loading, gettingError, items, totalCount } = useOrders(pageSettings, { user: user?.id });
+    const { loading, gettingError, items, totalCount, refetch } = useOrders(pageSettings, { user: user?.id });
     const [selectedOrder, setSelectedOrder] = useState<OrderEntity>();
 
     function onPageChange(val: number) {
@@ -51,6 +53,13 @@ export default function Orders() {
             page: 0,
             rowsPerPage: val
         });
+    }
+
+    function closeOrderModal(updated: boolean) {
+        setSelectedOrder(null);
+        if (updated) {
+            refetch();
+        }
     }
 
     return (
@@ -71,7 +80,7 @@ export default function Orders() {
                               <OrderDeliveryTrackingBox order={order}/>
 
                               <Box>Дата: {new Date(order.date).toLocaleDateString()}</Box>
-                              <Box>Кількість книжок: {order.books.length}</Box>
+                              <Box>Кількість книжок: {order.booksCount}</Box>
 
                               <Box mt={1}>Сума: {renderPrice(order.finalSumWithDiscounts)}</Box>
                           </StyledOrderBox>
@@ -98,16 +107,19 @@ export default function Orders() {
             </Box>}
 
             {!loading && !items?.length &&
-              <Grid item display="flex" width="100%" alignItems="center" flexDirection="column">
-                <Box sx={emptyListImageBoxStyles} mb={2}>
+              <Grid item display="flex" width="100%" alignItems="center" flexDirection="column" gap={2}>
+                <Box sx={emptyListImageBoxStyles}>
                   <CustomImage imageLink="/no_orders.png"></CustomImage>
                 </Box>
                 <Box sx={styleVariables.titleFontSize}>Тут ще немає замовлень</Box>
+
+                <Button variant="outlined" onClick={() => router.push('/')}>До вибору книг</Button>
               </Grid>}
 
             {gettingError && <ErrorNotification error={gettingError}></ErrorNotification>}
 
-            <UserOrderModal order={selectedOrder} onClose={() => setSelectedOrder(null)}></UserOrderModal>
+            {selectedOrder &&
+              <OrderModal open={true} order={selectedOrder} onClose={updated => closeOrderModal(updated)}></OrderModal>}
         </ProfileMenu>
     );
 }

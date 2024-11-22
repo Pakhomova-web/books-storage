@@ -35,6 +35,7 @@ const orderSchema = new Schema<OrderEntity, Model<OrderEntity>>({
     isDone: Boolean,
     trackingNumber: String,
     comment: String,
+    adminComment: String,
     region: {
         type: String,
         required: true

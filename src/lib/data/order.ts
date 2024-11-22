@@ -28,7 +28,7 @@ export async function getOrders(pageSettings?: IPageable, filters?: IOrderFilter
                 }
             }])
         .populate('delivery')
-        .sort({ [pageSettings.orderBy || 'name']: pageSettings.order });
+        .sort({ [pageSettings.orderBy || 'date']: pageSettings.order || 'desc' });
 
     if (andFilters?.length) {
         query.and(andFilters);
@@ -78,8 +78,11 @@ export async function updateOrder(input: OrderEntity) {
             extensions: { code: 'NOT_FOUND' }
         });
     }
+    const data = _getOrderData(input);
+    delete data.orderNumber;
+    delete data.user;
 
-    await Order.findByIdAndUpdate(input.id, _getOrderData(input, input.orderNumber));
+    await Order.findByIdAndUpdate(input.id, data);
 
     return input as OrderEntity;
 }
@@ -95,7 +98,7 @@ export async function deleteOrder(id: string) {
     return { id } as OrderEntity;
 }
 
-function _getOrderData(input: OrderEntity, orderNumber: number) {
+function _getOrderData(input: OrderEntity, orderNumber?: number) {
     return {
         ...input,
         orderNumber,

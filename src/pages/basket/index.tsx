@@ -14,7 +14,7 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 import { useCreateOrder } from '@/lib/graphql/queries/order/hook';
-import BasketBook from '@/components/basket-book';
+import BasketItem from '@/components/basket-item';
 
 const TitleBoxStyled = styled(Box)(({ theme }) => ({
     ...styleVariables.bigTitleFontSize(theme),
@@ -214,7 +214,7 @@ export default function Basket() {
             <Box display="flex" flexDirection="column" gap={1} px={{ xs: 1 }}>
                 {items.map((book, index) => (
                     <Box key={index}>
-                        <BasketBook book={book} editable={true} count={countFields.get(book.id)}
+                        <BasketItem book={book} editable={true} count={countFields.get(book.id)}
                                     onCountChange={(count: number) => onChangeCountInBasket(book.id, count)}/>
                     </Box>
                 ))}
