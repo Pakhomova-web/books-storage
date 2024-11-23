@@ -57,7 +57,7 @@ const mobileImageBoxStyles = {
     overflow: 'hidden'
 };
 
-const rowsPerPageBooksWithDiscount = 4;
+const rowsPerPageBooksWithDiscount = 3;
 
 export default function Home() {
     const { loading: loadingBookTypes, items: bookTypes } = useBookTypes({ orderBy: 'name', order: 'asc' });
