@@ -148,23 +148,23 @@ export default function Home() {
                             {publishingHouse.name}
                         </Box>
                     </Grid>)}
+            </Grid>
 
-                <Grid container position="relative">
-                    <Loading show={loadingDeliveries}></Loading>
+            <Grid container position="relative">
+                <Loading show={loadingDeliveries}></Loading>
 
-                    <Grid item xs={12} p={1} justifyContent="center" sx={styleVariables.sectionTitle}>
-                        Способи доставки
-                    </Grid>
-
-                    {!loadingDeliveries && !!deliveries?.length && deliveries.map((delivery, index) =>
-                        <Grid key={index} item xs={12} sm={4} display="flex" alignItems="center"
-                              justifyContent="center"
-                              p={1} gap={1}>
-                            {delivery.imageId ? <Box sx={{ width: '100px', height: '50px' }}><CustomImage
-                                imageId={delivery.imageId}></CustomImage></Box> : delivery.name}
-                        </Grid>
-                    )}
+                <Grid item xs={12} p={1} justifyContent="center" sx={styleVariables.sectionTitle}>
+                    Способи доставки
                 </Grid>
+
+                {!loadingDeliveries && !!deliveries?.length && deliveries.map((delivery, index) =>
+                    <Grid key={index} item xs={12} sm={4} display="flex" alignItems="center"
+                          justifyContent="center"
+                          p={1} gap={1}>
+                        {delivery.imageId ? <Box sx={{ width: '100px', height: '50px' }}><CustomImage
+                            imageId={delivery.imageId}></CustomImage></Box> : delivery.name}
+                    </Grid>
+                )}
             </Grid>
         </>
     );

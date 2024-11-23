@@ -1,4 +1,6 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react';
 
 import { styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
@@ -6,7 +8,6 @@ import BooksList from '@/components/books-list';
 import { useAuth } from '@/components/auth-context';
 import ErrorNotification from '@/components/error-notification';
 import { useBooksByIds } from '@/lib/graphql/queries/book/hook';
-import React, { useEffect } from 'react';
 import ProfileMenu from '@/pages/profile/profile-menu';
 import CustomImage from '@/components/custom-image';
 
@@ -18,6 +19,7 @@ const emptyListImageBoxStyles = {
 
 export default function Likes() {
     const { user } = useAuth();
+    const router = useRouter();
     const { loading, error, items, refetch } = useBooksByIds(user?.likedBookIds);
 
     useEffect(() => {
@@ -37,7 +39,10 @@ export default function Likes() {
                 <Box sx={emptyListImageBoxStyles} mb={2}>
                   <CustomImage imageLink="/liked_books.png"></CustomImage>
                 </Box>
-                <Box sx={styleVariables.titleFontSize}>Список вподобаних книг поки пустий</Box>
+                <Box sx={styleVariables.titleFontSize} mb={2}>Список вподобаних книг поки пустий</Box>
+                <Button variant="outlined" onClick={() => router.push('/')}>
+                  До вибору книг
+                </Button>
               </Grid>}
 
             {error && <ErrorNotification error={error}></ErrorNotification>}

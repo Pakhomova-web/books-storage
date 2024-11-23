@@ -21,7 +21,7 @@ const StyledOrderBox = styled(Box)(() => ({
 
 export default function OrdersList({ orders, onClick }) {
     return (
-        <Grid container mb={1}>
+        <Grid container pb={1} mb={1}>
             {orders?.map((order, index) => (
                 <Grid key={index} item xs={12} md={4} onClick={() => onClick(order)}>
                     <StyledOrderBox gap={1} p={1} m={1}>

@@ -1,4 +1,4 @@
-import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
+import { Box, Button, Grid, RadioGroup } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 
 import { useBooksByIds, useUpdateBookCountInBasket } from '@/lib/graphql/queries/book/hook';
@@ -22,7 +22,6 @@ import CustomTextField from '@/components/form-fields/custom-text-field';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 import { useCreateOrder } from '@/lib/graphql/queries/order/hook';
 import BasketItem from '@/components/basket-item';
-import Delivery from '@/lib/data/models/delivery';
 import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
 
 const TitleBoxStyled = styled(Box)(({ theme }) => ({
@@ -120,24 +119,22 @@ export default function Basket() {
             formContext.clearErrors('lastName');
         }
 
-        if (isNovaPostSelected(deliveryId) && !novaPostOffice) {
+        if (!deliveryId) {
+            invalid = true;
+        } else if (isNovaPostSelected(deliveryId) && !novaPostOffice) {
             formContext.setError('novaPostOffice', { message: '№ відділення/поштомата обов\'язкове' });
             formContext.clearErrors('postcode');
-            setSubmitDisabled(true);
             invalid = true;
         } else if (isUkrPoshtaSelected(deliveryId) && !postcode) {
             formContext.setError('postcode', { message: 'Індекс обов\'язковий' });
             formContext.clearErrors('novaPostOffice');
-            setSubmitDisabled(true);
             invalid = true;
         } else {
             formContext.clearErrors('novaPostOffice');
             formContext.clearErrors('postcode');
         }
 
-        if (!invalid) {
-            setSubmitDisabled(false);
-        }
+        setSubmitDisabled(invalid);
     }, [deliveryId, phoneNumber, firstName, lastName, region, city, postcode, novaPostOffice]);
 
     useEffect(() => {

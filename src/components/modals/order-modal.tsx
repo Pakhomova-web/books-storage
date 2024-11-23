@@ -61,7 +61,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
     useEffect(() => {
         let invalid = false;
 
-        if (orderItem.isDone || order.isCanceled) {
+        if (!isAdmin(user) || orderItem.isDone || order.isCanceled) {
             setSubmitDisabled(false);
             return;
         }
@@ -322,7 +322,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                       </Grid>}
 
                     {orderItem?.books.map(({ book, count, price, discount }, index) => (
-                        <Box key={index} display="flex" width="100%">
+                        <Grid item xs={12} key={index}>
                             <BasketItem book={book}
                                         count={count}
                                         price={price}
@@ -331,7 +331,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                                         editable={isAdmin(user) && !orderItem.isDone && !order.isCanceled}
                                         onRemove={() => onRemove(book.id)}
                                         onCountChange={(count: number) => onChangeBookCount(book.id, count)}/>
-                        </Box>
+                        </Grid>
                     ))}
 
                     <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end"
@@ -359,7 +359,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                         <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
                     </Grid>
 
-                    <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end"
+                    <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end" alignItems="center"
                           sx={styleVariables.titleFontSize} textAlign="end">
                         <b>Кінцева сума замовлення:</b>
                     </Grid>
@@ -372,58 +372,61 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                         <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
                     </Grid>
 
-                    <Grid item xs={12} md={6}>
+                    {isAdmin(user) && <>
+                      <Grid item xs={12} md={6}>
                         <CustomCheckbox
-                            disabled={orderItem.isPaid || orderItem.isPartlyPaid || orderItem.isSent || orderItem.isDone || orderItem.isCanceled}
-                            label="Замовлення підтверджене" name="isConfirmed"/>
-                    </Grid>
+                          disabled={orderItem.isPaid || orderItem.isPartlyPaid || orderItem.isSent || orderItem.isDone || orderItem.isCanceled}
+                          label="Замовлення підтверджене" name="isConfirmed"/>
+                      </Grid>
 
-                    <Grid item xs={12} md={6}>
+                      <Grid item xs={12} md={6}>
                         <CustomCheckbox
-                            disabled={!orderItem.isConfirmed || orderItem.isSent || orderItem.isDone || orderItem.isCanceled}
-                            label="Замовлення оплачене"
-                            name="isPaid"/>
-                    </Grid>
+                          disabled={!orderItem.isConfirmed || orderItem.isSent || orderItem.isDone || orderItem.isCanceled}
+                          label="Замовлення оплачене"
+                          name="isPaid"/>
+                      </Grid>
 
-                    <Grid item xs={12} md={6}>
+                      <Grid item xs={12} md={6}>
                         <CustomCheckbox
-                            disabled={!orderItem.isConfirmed || orderItem.isSent || orderItem.isDone || orderItem.isCanceled}
-                            label="Зроблена передпалата"
-                            name="isPartlyPaid"/>
-                    </Grid>
+                          disabled={!orderItem.isConfirmed || orderItem.isSent || orderItem.isDone || orderItem.isCanceled}
+                          label="Зроблена передпалата"
+                          name="isPartlyPaid"/>
+                      </Grid>
 
-                    <Grid item xs={12} md={6}>
+                      <Grid item xs={12} md={6}>
                         <CustomCheckbox
-                            disabled={(!isSelfPickup(delivery.id) && !trackingNumber) || !orderItem.isConfirmed || orderItem.isDone || orderItem.isCanceled}
-                            label={'Замовлення ' + (isSelfPickup(delivery.id) ? 'вручене' : 'відправлене')}
-                            name="isSent"/>
-                    </Grid>
+                          disabled={(!isSelfPickup(delivery.id) && !trackingNumber) || !orderItem.isConfirmed || orderItem.isDone || orderItem.isCanceled}
+                          label={'Замовлення ' + (isSelfPickup(delivery.id) ? 'вручене' : 'відправлене')}
+                          name="isSent"/>
+                      </Grid>
 
-                    <Grid item xs={12} md={6}>
+                      <Grid item xs={12} md={6}>
                         <CustomCheckbox
-                            disabled={!orderItem.isSent || orderItem.isDone || orderItem.isCanceled}
-                            label="Завершити замовлення"
-                            name="isDone"/>
-                    </Grid>
+                          disabled={!orderItem.isSent || orderItem.isDone || orderItem.isCanceled}
+                          label="Завершити замовлення"
+                          name="isDone"/>
+                      </Grid>
+                    </>}
                 </Grid>
             </FormContainer>
 
-            <Grid container spacing={2} mt={1} display="flex" alignItems="center" justifyContent="space-between">
-                {isAdmin(user) &&
-                  <Grid item xs={12} md={6} lg={4} display="flex" justifyContent="center">
-                    <Button variant="outlined" fullWidth
-                            onClick={() => onCopyOrderClick(orderItem.books, orderItem.finalSum, orderItem.finalSumWithDiscounts)}>
-                      Скопіювати зміст замовлення
-                    </Button>
-                  </Grid>}
+            {isAdmin(user) &&
+              <Grid container spacing={2} mt={1} display="flex" alignItems="center" justifyContent="space-between">
+                <Grid item xs={12} md={6} lg={4} display="flex" justifyContent="center">
+                  <Button variant="outlined" fullWidth
+                          onClick={() => onCopyOrderClick(orderItem.books, orderItem.finalSum, orderItem.finalSumWithDiscounts)}>
+                    Скопіювати зміст замовлення
+                  </Button>
+                </Grid>
 
                 <Grid item xs={12} md={6} lg={4}>
-                    <Button variant="outlined" fullWidth onClick={onCancel} color="warning"
-                            disabled={orderItem.isDone || order.isCanceled}>
-                        Відмінити замовлення
-                    </Button>
+                  <Button variant="outlined" fullWidth onClick={onCancel} color="warning"
+                          disabled={orderItem.isDone || order.isCanceled}>
+                    Відмінити замовлення
+                  </Button>
                 </Grid>
-            </Grid>
+              </Grid>
+            }
 
             {!!updatingError && <ErrorNotification error={updatingError}/>}
             {!!cancelingError && <ErrorNotification error={cancelingError}/>}
