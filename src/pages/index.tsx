@@ -12,7 +12,7 @@ import SocialMediaBox from '@/components/social-media-box';
 import BooksList from '@/components/books-list';
 import { useBooksWithDiscount } from '@/lib/graphql/queries/book/hook';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
+import DeliveriesBox from '@/components/deliveries-box';
 
 const bookTypeBoxStyles = {
     borderRadius,
@@ -61,7 +61,6 @@ const rowsPerPageBooksWithDiscount = 4;
 
 export default function Home() {
     const { loading: loadingBookTypes, items: bookTypes } = useBookTypes({ orderBy: 'name', order: 'asc' });
-    const { loading: loadingDeliveries, items: deliveries } = useDeliveries({ orderBy: 'name', order: 'asc' });
     const {
         loading: loadingBooksWithDiscounts,
         items: booksWithDiscounts
@@ -150,22 +149,7 @@ export default function Home() {
                     </Grid>)}
             </Grid>
 
-            <Grid container position="relative">
-                <Loading show={loadingDeliveries}></Loading>
-
-                <Grid item xs={12} p={1} justifyContent="center" sx={styleVariables.sectionTitle}>
-                    Способи доставки
-                </Grid>
-
-                {!loadingDeliveries && !!deliveries?.length && deliveries.map((delivery, index) =>
-                    <Grid key={index} item xs={12} sm={4} display="flex" alignItems="center"
-                          justifyContent="center"
-                          p={1} gap={1}>
-                        {delivery.imageId ? <Box sx={{ width: '100px', height: '50px' }}><CustomImage
-                            imageId={delivery.imageId}></CustomImage></Box> : delivery.name}
-                    </Grid>
-                )}
-            </Grid>
+            <DeliveriesBox/>
         </>
     );
 }

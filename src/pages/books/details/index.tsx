@@ -25,6 +25,7 @@ import CommentForm from '@/components/comment-form';
 import SocialMediaBox from '@/components/social-media-box';
 import { useAuth } from '@/components/auth-context';
 import BooksList from '@/components/books-list';
+import DeliveriesBox from '@/components/deliveries-box';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
     height: '40px',
@@ -435,7 +436,9 @@ export default function BookDetails() {
 
             {error && <ErrorNotification error={error}></ErrorNotification>}
 
-            <SocialMediaBox></SocialMediaBox>
+            <DeliveriesBox/>
+
+            <SocialMediaBox/>
         </>
     );
 }
