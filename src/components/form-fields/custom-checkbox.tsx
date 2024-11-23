@@ -6,15 +6,16 @@ import Loading from '@/components/loading';
 
 interface ICustomCheckbox {
     loading?: boolean;
+    disabled?: boolean;
     label: string;
     name: string;
 }
 
-export default function CustomCheckbox({ loading, label, name }: ICustomCheckbox) {
+export default function CustomCheckbox({ loading, label, name, disabled = false }: ICustomCheckbox) {
     return (
         <Box position="relative">
             <Loading show={!!loading} isSmall={true}/>
-            <CheckboxElement label={label} name={name} sx={{ marginLeft: 1 }}/>
+            <CheckboxElement label={label} disabled={disabled} name={name} sx={{ marginLeft: 1 }}/>
         </Box>
     );
 }

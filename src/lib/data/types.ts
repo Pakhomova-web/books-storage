@@ -366,7 +366,7 @@ export class OrderEntity {
     get status(): IOrderStatus {
         if (this.isCanceled) {
             return {
-                value: 'Відхилений', index: 0
+                value: 'Відмінено', index: 0
             };
         } else if (!this.isConfirmed) {
             return {
@@ -386,7 +386,7 @@ export class OrderEntity {
                     };
             } else if (this.isPaid && (!this.trackingNumber || isSelfPickup(this.delivery.id))) {
                 return {
-                    value: `Оплачений, чекає на ${isSelfPickup(this.delivery.id) ? 'видачу' : 'відправку'}`,
+                    value: `Оплачене, чекає на ${isSelfPickup(this.delivery.id) ? 'видачу' : 'відправку'}`,
                     index: 2
                 };
             } else if (this.isPartlyPaid && (!this.trackingNumber || isSelfPickup(this.delivery.id))) {

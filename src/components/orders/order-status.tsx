@@ -27,6 +27,11 @@ const colors = [
         color: '#35591d',
         borderColor: '#c7f6a7'
     },
+    { // sent
+        backgroundColor: '#ebffe9',
+        color: '#1d591e',
+        borderColor: '#b2f6a7'
+    },
     { // done
         backgroundColor: 'white',
         color: primaryColor,

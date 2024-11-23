@@ -148,26 +148,29 @@ export function getLinkForTracking(deliveryId: string, trackingNumber: string) {
 
 export function onCopyOrderClick(items: OrderBookEntity[], finalFullSum: number, finalSumWithDiscounts: number) {
     let value = items
-        .map(({ book, count , price }, i) =>
+        .map(({ book, count, price }, i) =>
             `${!book.bookSeries.default ?
                 `${!i || book.bookSeries.id !== items[i - 1].book.bookSeries.id ? `${book.bookSeries.name} (${book.bookSeries.publishingHouse.name})\n\t` : '\t'}` : ''
             }${book.name} (${count} шт по ${renderPrice(price)})`)
         .join('\n');
-    const selBox = document.createElement('textarea');
 
     value = `${value}\n\nСума замовлення: ${renderPrice(finalFullSum)}`;
     if (finalSumWithDiscounts) {
         value = `${value}\nЗнижка: ${renderPrice(finalFullSum - finalSumWithDiscounts)}`;
         value = `${value}\nКінцева сума замовлення зі знижкою: ${renderPrice(finalSumWithDiscounts)}`;
     }
-    selBox.style.position = 'fixed';
-    selBox.style.left = '0';
-    selBox.style.top = '0';
-    selBox.style.opacity = '0';
-    selBox.value = value;
-    document.body.appendChild(selBox);
-    selBox.focus();
-    selBox.select();
-    document.execCommand('copy');
-    document.body.removeChild(selBox);
+    navigator.clipboard.writeText(value)
+
+    // const selBox = document.createElement('textarea');
+
+    // selBox.style.position = 'fixed';
+    // selBox.style.left = '0';
+    // selBox.style.top = '0';
+    // selBox.style.opacity = '0';
+    // selBox.value = value;
+    // document.body.appendChild(selBox);
+    // selBox.focus();
+    // selBox.select();
+    // document.execCommand('copy');
+    // document.body.removeChild(selBox);
 }

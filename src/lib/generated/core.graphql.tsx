@@ -252,6 +252,7 @@ export type Mutation = {
   addBookComment: Book;
   addBookInBasket?: Maybe<Array<BasketItem>>;
   approveComment: Book;
+  cancelOrder?: Maybe<Order>;
   createAuthor?: Maybe<Author>;
   createBook?: Maybe<Book>;
   createBookSeries?: Maybe<BookSeries>;
@@ -269,7 +270,6 @@ export type Mutation = {
   deleteCoverType?: Maybe<CoverType>;
   deleteDelivery?: Maybe<Delivery>;
   deleteLanguage?: Maybe<Language>;
-  deleteOrder?: Maybe<Order>;
   deletePageType?: Maybe<PageType>;
   deletePublishingHouse?: Maybe<PublishingHouse>;
   likeBook?: Maybe<Array<Scalars['ID']['output']>>;
@@ -307,6 +307,11 @@ export type MutationAddBookInBasketArgs = {
 
 export type MutationApproveCommentArgs = {
   input: UpdateCommentInput;
+};
+
+
+export type MutationCancelOrderArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -391,11 +396,6 @@ export type MutationDeleteDeliveryArgs = {
 
 
 export type MutationDeleteLanguageArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type MutationDeleteOrderArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -565,6 +565,11 @@ export type OrderCreateInput = {
 };
 
 export type OrderSearchInput = {
+  firstName?: InputMaybe<Scalars['String']['input']>;
+  instagramUsername?: InputMaybe<Scalars['String']['input']>;
+  lastName?: InputMaybe<Scalars['String']['input']>;
+  orderNumber?: InputMaybe<Scalars['Int']['input']>;
+  phoneNumber?: InputMaybe<Scalars['String']['input']>;
   quickSearch?: InputMaybe<Scalars['String']['input']>;
   user?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -584,6 +589,8 @@ export type OrderUpdateInput = {
   firstName: Scalars['String']['input'];
   id: Scalars['ID']['input'];
   instagramUsername?: InputMaybe<Scalars['String']['input']>;
+  isCanceled?: InputMaybe<Scalars['Boolean']['input']>;
+  isConfirmed?: InputMaybe<Scalars['Boolean']['input']>;
   isDone?: InputMaybe<Scalars['Boolean']['input']>;
   isPaid?: InputMaybe<Scalars['Boolean']['input']>;
   isPartlyPaid?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1157,6 +1164,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addBookComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationAddBookCommentArgs, 'id' | 'input'>>;
   addBookInBasket?: Resolver<Maybe<Array<ResolversTypes['BasketItem']>>, ParentType, ContextType, RequireFields<MutationAddBookInBasketArgs, 'id'>>;
   approveComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationApproveCommentArgs, 'input'>>;
+  cancelOrder?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationCancelOrderArgs, 'id'>>;
   createAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationCreateAuthorArgs, 'input'>>;
   createBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationCreateBookArgs, 'input'>>;
   createBookSeries?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType, RequireFields<MutationCreateBookSeriesArgs, 'input'>>;
@@ -1174,7 +1182,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteCoverType?: Resolver<Maybe<ResolversTypes['CoverType']>, ParentType, ContextType, RequireFields<MutationDeleteCoverTypeArgs, 'id'>>;
   deleteDelivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType, RequireFields<MutationDeleteDeliveryArgs, 'id'>>;
   deleteLanguage?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<MutationDeleteLanguageArgs, 'id'>>;
-  deleteOrder?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationDeleteOrderArgs, 'id'>>;
   deletePageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationDeletePageTypeArgs, 'id'>>;
   deletePublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationDeletePublishingHouseArgs, 'id'>>;
   likeBook?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType, RequireFields<MutationLikeBookArgs, 'id'>>;

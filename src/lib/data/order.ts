@@ -91,9 +91,8 @@ export async function getOrderById(id: string) {
     return Order.findById(id);
 }
 
-export async function deleteOrder(id: string) {
-    // TODO recalculate count of books in Books table for each basket details after deleting
-    await Order.findByIdAndDelete(id);
+export async function cancelOrder(id: string) {
+    await Order.findByIdAndUpdate(id, { isCanceled: true });
 
     return { id } as OrderEntity;
 }

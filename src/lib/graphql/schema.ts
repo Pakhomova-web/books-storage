@@ -215,8 +215,8 @@ const typeDefs =  /* GraphQL */ `
         deleteDelivery(id: ID!): Delivery
 
         updateOrder(input: OrderUpdateInput!): Order
+        cancelOrder(id: ID!): Order
         createOrder(input: OrderCreateInput!): Order
-        deleteOrder(id: ID!): Order
     }
 
     type UserToken {
@@ -496,6 +496,8 @@ const typeDefs =  /* GraphQL */ `
         instagramUsername: String
         phoneNumber: String!
         trackingNumber: String
+        isCanceled: Boolean
+        isConfirmed: Boolean
         isPaid: Boolean
         isPartlyPaid: Boolean
         isSent: Boolean

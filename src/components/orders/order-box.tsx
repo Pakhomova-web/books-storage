@@ -11,7 +11,9 @@ const StyledOrderBox = styled(Box)(() => ({
     border: `1px solid ${primaryLightColor}`,
     display: 'flex',
     flexDirection: 'column',
+    justifyContent: 'space-between',
     cursor: 'pointer',
+    height: '100%',
     ':hover': {
         backgroundColor: primaryLightColor
     }
@@ -23,11 +25,13 @@ export default function OrdersList({ orders, onClick }) {
             {orders?.map((order, index) => (
                 <Grid key={index} item xs={12} md={4} onClick={() => onClick(order)}>
                     <StyledOrderBox gap={1} p={1} m={1}>
-                        <Box sx={styleVariables.titleFontSize}>
-                            <b>№ {renderOrderNumber(order.orderNumber)}</b>
-                        </Box>
+                        <Box>
+                            <Box sx={styleVariables.titleFontSize}>
+                                <b>№ {renderOrderNumber(order.orderNumber)}</b>
+                            </Box>
 
-                        <OrderStatus status={order.status}/>
+                            <OrderStatus status={order.status}/>
+                        </Box>
 
                         <OrderDeliveryTrackingBox delivery={order.delivery}
                                                   trackingNumber={order.trackingNumber}/>

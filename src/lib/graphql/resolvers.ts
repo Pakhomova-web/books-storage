@@ -21,7 +21,8 @@ import {
     DeliveryEntity,
     IOrderFilter,
     IPageable,
-    LanguageEntity, OrderEntity,
+    LanguageEntity,
+    OrderEntity,
     PageTypeEntity,
     PublishingHouseEntity,
     UserEntity
@@ -64,7 +65,7 @@ import {
     updateUser
 } from '@/lib/data/user';
 import { createDelivery, deleteDelivery, getDeliveries, updateDelivery } from '@/lib/data/delivery';
-import { createOrder, deleteOrder, getOrders, updateOrder } from '@/lib/data/order';
+import { cancelOrder, createOrder, getOrders, updateOrder } from '@/lib/data/order';
 
 function parseError(error) {
     switch (error.extensions?.code) {
@@ -611,10 +612,10 @@ const resolvers: Resolvers = {
                 parseError(error);
             }
         },
-        deleteOrder: async (_root, { id }: { id: string }, { user }) => {
+        cancelOrder: async (_root, { id }: { id: string }, { user }) => {
             _checkUser(user);
             try {
-                return deleteOrder(id);
+                return cancelOrder(id);
             } catch (error) {
                 parseError(error);
             }

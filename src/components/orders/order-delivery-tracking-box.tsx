@@ -7,9 +7,10 @@ import CustomLink from '@/components/custom-link';
 import { getLinkForTracking, isSelfPickup } from '@/utils/utils';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 
-export default function OrderDeliveryTrackingBox({ delivery, trackingNumber, editable = false }) {
+export default function OrderDeliveryTrackingBox({ delivery, trackingNumber, editable = false, disabled = false }) {
     function onTTNClick(e) {
         e?.preventDefault();
+        e?.stopPropagation();
         window.open(getLinkForTracking(delivery.id, trackingNumber), "_blank")
     }
 
@@ -25,7 +26,9 @@ export default function OrderDeliveryTrackingBox({ delivery, trackingNumber, edi
         editable ?
             (!isSelfPickup(delivery.id) &&
               <Grid container spacing={2}>
-                <Grid item xs={10} md={6}><CustomTextField name="trackingNumber" label="ТТН" fullWidth/></Grid>
+                <Grid item xs={10} md={6}>
+                  <CustomTextField name="trackingNumber" disabled={disabled} label="ТТН" fullWidth/>
+                </Grid>
 
                 <Grid item xs={2} md={6} display="flex" alignItems="center"
                       justifyContent={{ md: 'flex-start', xs: 'center' }}>

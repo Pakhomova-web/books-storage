@@ -157,12 +157,11 @@ export default function Home() {
                     </Grid>
 
                     {!loadingDeliveries && !!deliveries?.length && deliveries.map((delivery, index) =>
-                        <Grid key={index} item xs={12} md={6} display="flex" alignItems="center"
+                        <Grid key={index} item xs={12} sm={4} display="flex" alignItems="center"
                               justifyContent="center"
                               p={1} gap={1}>
-                            {delivery.name}
-                            <Box sx={{ width: '100px', height: '50px' }}><CustomImage
-                                imageId={delivery.imageId}></CustomImage></Box>
+                            {delivery.imageId ? <Box sx={{ width: '100px', height: '50px' }}><CustomImage
+                                imageId={delivery.imageId}></CustomImage></Box> : delivery.name}
                         </Grid>
                     )}
                 </Grid>

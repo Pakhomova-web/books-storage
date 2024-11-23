@@ -87,9 +87,9 @@ export const updateOrderQuery = gql`
     }
 `;
 
-export const deleteOrderQuery = gql`
-    mutation DeleteOrder($id: ID!) {
-        item: deleteOrder(id: $id) {
+export const cancelOrderQuery = gql`
+    mutation CancelOrder($input: ID!) {
+        item: cancelOrder(id: $input) {
             id
         }
     }
