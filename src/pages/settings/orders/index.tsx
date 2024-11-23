@@ -42,7 +42,7 @@ export default function Orders() {
     ]);
     const [selectedItem, setSelectedItem] = useState<OrderEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({
-        order: 'asc', orderBy: '', page: 0, rowsPerPage: 6
+        order: 'desc', orderBy: '', page: 0, rowsPerPage: 6
     });
     const [filters, setFilters] = useState<IOrderFilter>();
     const { items, totalCount, gettingError, loading, refetch } = useOrders(pageSettings, filters);

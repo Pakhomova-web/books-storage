@@ -329,7 +329,8 @@ const resolvers: Resolvers = {
         },
         user: async (_root, {}, { user }) => {
             _checkUser(user);
-            return user.catch(error => parseError(error));
+
+            return user;
         },
         updateUser: async (_root, { input }: { input: UserEntity }, { user }) => {
             _checkUser(user);

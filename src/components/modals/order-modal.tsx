@@ -153,8 +153,8 @@ export default function OrderModal({ open, order, onClose }: IProps) {
             district: values.district,
             city: values.city,
             phoneNumber: values.phoneNumber,
-            postcode: values.postcode,
-            novaPostOffice: values.novaPostOffice,
+            postcode: values.postcode ? +values.postcode : null,
+            novaPostOffice: values.novaPostOffice ? +values.novaPostOffice : null,
             firstName: values.firstName,
             lastName: values.lastName,
             deliveryId: delivery.id,
@@ -306,6 +306,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                     {isUkrPoshtaSelected(delivery.id) &&
                       <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="postcode"
+                                         type="number"
                                          disabled={!isAdmin(user) || orderItem.isDone || order.isCanceled}
                                          label="Індекс"
                                          required={isUkrPoshtaSelected(orderItem.delivery.id)}
@@ -315,6 +316,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                     {isNovaPostSelected(delivery.id) &&
                       <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="novaPostOffice"
+                                         type="number"
                                          disabled={!isAdmin(user) || orderItem.isDone || order.isCanceled}
                                          required={isNovaPostSelected(orderItem.delivery.id)}
                                          label="№ відділення / поштомату"

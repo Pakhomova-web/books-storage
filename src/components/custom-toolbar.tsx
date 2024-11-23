@@ -135,7 +135,7 @@ export default function CustomToolbar() {
                               <IconButton color="primary"
                                           className={selectedMenuItem === MainMenuItem.settings ? 'selectedToolbarMenuItem' : ''}
                                           aria-label="settings"
-                                          onClick={() => goToPage('/settings/books')}>
+                                          onClick={() => goToPage('/settings/orders')}>
                                 <SettingsIcon/>
                               </IconButton>}
                         </Box>

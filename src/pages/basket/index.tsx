@@ -347,7 +347,8 @@ export default function Basket() {
                   <Grid item xs={12} sm={6}>
                     <CustomTextField name="postcode"
                                      required={isUkrPoshtaSelected(deliveryId)}
-                                     type="number" label="Індекс"
+                                     type="number"
+                                     label="Індекс"
                                      fullWidth/>
                   </Grid>
 
