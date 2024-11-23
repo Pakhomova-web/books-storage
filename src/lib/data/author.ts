@@ -29,14 +29,14 @@ export async function createAuthor(input: AuthorEntity)  {
 
 export async function updateAuthor(input: AuthorEntity) {
     if (!input.id) {
-        throw new GraphQLError(`No Author found with id ${input.id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
     const itemByName = await getByName<AuthorEntity>(Author, input.name);
 
     if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
-        throw new GraphQLError(`Author with name '${input.name}' already exists.`, {
+        throw new GraphQLError(`Автор з іменем '${input.name}' вже є.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
@@ -47,7 +47,7 @@ export async function updateAuthor(input: AuthorEntity) {
 
 export async function getAuthorById(id: string) {
     if (!id) {
-        throw new GraphQLError(`No Author found with id ${id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }

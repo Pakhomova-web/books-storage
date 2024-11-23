@@ -16,7 +16,7 @@ export async function getPublishingHouses(pageSettings?: IPageable, filters?: Pu
 
 export async function getPublishingHouseById(id: string) {
     if (!id) {
-        throw new GraphQLError(`No Publishing House found with id ${id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
@@ -49,14 +49,14 @@ export async function createPublishingHouse(input: PublishingHouseEntity) {
 
 export async function updatePublishingHouse(input: PublishingHouseEntity) {
     if (!input.id) {
-        throw new GraphQLError(`No Publishing House found with id ${input.id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
     const itemByName = await getByName<PublishingHouseEntity>(PublishingHouse, input.name);
 
     if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
-        throw new GraphQLError(`Publishing House with name '${input.name}' already exists.`, {
+        throw new GraphQLError(`Видавництво з назвою '${input.name}' вже є.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }

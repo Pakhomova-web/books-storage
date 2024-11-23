@@ -67,14 +67,14 @@ import {
 import { createDelivery, deleteDelivery, getDeliveries, updateDelivery } from '@/lib/data/delivery';
 import { cancelOrder, createOrder, getOrders, updateOrder } from '@/lib/data/order';
 
-function parseError(error) {
+function parseError<T>(error): T {
     switch (error.extensions?.code) {
         case 'BAD_USER_INPUT':
         case 'GRAPHQL_PARSE_FAILED':
             throw new GraphQLError(error, {
                 extensions: {
                     code: error.extensions?.code,
-                    message: 'Something wrong with data.'
+                    message: 'Щось невірно із даними.'
                 }
             });
         case 'USAGE_ERROR':
@@ -89,7 +89,7 @@ function parseError(error) {
             throw new GraphQLError(error, {
                 extensions: {
                     code: 'SOMETHING_BAD_HAPPENED',
-                    message: 'Data is invalid.'
+                    message: 'Щось не так із даними.'
                 }
             });
         }
@@ -97,7 +97,7 @@ function parseError(error) {
             throw new GraphQLError(error, {
                 extensions: {
                     code: 'SOMETHING_BAD_HAPPENED',
-                    message: 'Something went wrong.'
+                    message: 'Щось пішло не так.'
                 }
             });
         }
@@ -107,526 +107,259 @@ function parseError(error) {
 const resolvers: Resolvers = {
     Query: {
         languages: async (_root, { pageSettings, filters }) => {
-            try {
-                return getLanguages(<IPageable>pageSettings, <LanguageEntity>filters);
-            } catch (error) {
-                parseError(error);
-            }
+            return getLanguages(<IPageable>pageSettings, <LanguageEntity>filters).catch(error => parseError(error));
         },
         publishingHouses: async (_root, { pageSettings, filters }) => {
-            try {
-                return getPublishingHouses(<IPageable>pageSettings, <PublishingHouseEntity>filters);
-            } catch (error) {
-                parseError(error);
-            }
+            return getPublishingHouses(<IPageable>pageSettings, <PublishingHouseEntity>filters).catch(error => parseError(error))
         },
         pageTypes: async (_root, { pageSettings, filters }) => {
-            try {
-                return getPageTypes(<IPageable>pageSettings, <PageTypeEntity>filters);
-            } catch (error) {
-                parseError(error);
-            }
+            return getPageTypes(<IPageable>pageSettings, <PageTypeEntity>filters).catch(error => parseError(error))
         },
         bookTypes: async (_root, { pageSettings, filters }) => {
-            try {
-                return getBookTypes(<IPageable>pageSettings, <BookTypeEntity>filters);
-            } catch (error) {
-                parseError(error);
-            }
+            return getBookTypes(<IPageable>pageSettings, <BookTypeEntity>filters).catch(error => parseError(error));
         },
         coverTypes: async (_root, { pageSettings, filters }) => {
-            try {
-                return getCoverTypes(<IPageable>pageSettings, <CoverTypeEntity>filters);
-            } catch (error) {
-                parseError(error);
-            }
+            return getCoverTypes(<IPageable>pageSettings, <CoverTypeEntity>filters).catch(error => parseError(error));
         },
         authors: async (_root, { pageSettings, filters }) => {
-            try {
-                return getAuthors(<IPageable>pageSettings, <AuthorEntity>filters);
-            } catch (error) {
-                parseError(error);
-            }
+            return getAuthors(<IPageable>pageSettings, <AuthorEntity>filters).catch(error => parseError(error));
         },
         bookSeries: async (_root, { pageSettings, filters }) => {
-            try {
-                return getBookSeries(<IPageable>pageSettings, filters);
-            } catch (error) {
-                parseError(error);
-            }
+            return getBookSeries(<IPageable>pageSettings, filters).catch(error => parseError(error));
         },
         bookSeriesOptions: async (_root, { filters }) => {
-            try {
-                return getBookSeriesOptions(filters);
-            } catch (error) {
-                parseError(error);
-            }
+            return getBookSeriesOptions(filters).catch(error => parseError(error));
         },
         fullBookSeriesOptions: async (_root, { filters }) => {
-            try {
-                return getBookSeriesOptions(filters, true);
-            } catch (error) {
-                parseError(error);
-            }
+            return getBookSeriesOptions(filters, true).catch(error => parseError(error));
         },
         books: async (_root, { pageSettings, filters }) => {
-            try {
-                return getBooks(<IPageable>pageSettings, new BookFilter(filters));
-            } catch (error) {
-                parseError(error);
-            }
+            return getBooks(<IPageable>pageSettings, new BookFilter(filters)).catch(error => parseError(error));
         },
         bookById: async (_root, { id }) => {
-            try {
-                return getBookById(id);
-            } catch (error) {
-                parseError(error);
-            }
+            return getBookById(id).catch(error => parseError(error));
         },
         bookTypeById: async (_root, { id }) => {
-            try {
-                return getBookTypeById(id);
-            } catch (error) {
-                parseError(error);
-            }
+            return getBookTypeById(id).catch(error => parseError(error));
         },
         authorById: async (_root, { id }) => {
-            try {
-                return getAuthorById(id);
-            } catch (error) {
-                parseError(error);
-            }
+            return getAuthorById(id).catch(error => parseError(error));
         },
         publishingHouseById: async (_root, { id }) => {
-            try {
-                return getPublishingHouseById(id);
-            } catch (error) {
-                parseError(error);
-            }
+            return getPublishingHouseById(id).catch(error => parseError(error));
         },
         languageById: async (_root, { id }) => {
-            try {
-                return getLanguageById(id);
-            } catch (error) {
-                parseError(error);
-            }
+            return getLanguageById(id).catch(error => parseError(error));
         },
         bookSeriesByIdQuery: async (_root, { id }) => {
-            try {
-                return getBookSeriesById(id);
-            } catch (error) {
-                parseError(error);
-            }
+            return getBookSeriesById(id).catch(error => parseError(error));
         },
         refreshToken: async (_root, { refreshToken }) => {
-            try {
-                return getNewToken(refreshToken);
-            } catch (error) {
-                parseError(error);
-            }
+            return getNewToken(refreshToken).catch(error => parseError(error));
         },
         deliveries: async (_root, { pageSettings, filters }) => {
-            try {
-                return getDeliveries(<IPageable>pageSettings, <DeliveryEntity>filters);
-            } catch (error) {
-                parseError(error);
-            }
+            return getDeliveries(<IPageable>pageSettings, <DeliveryEntity>filters).catch(error => parseError(error));
         },
         orders: async (_root, { pageSettings, filters }) => {
-            try {
-                return getOrders(<IPageable>pageSettings, <IOrderFilter>filters);
-            } catch (error) {
-                parseError(error);
-            }
+            return getOrders(<IPageable>pageSettings, <IOrderFilter>filters).catch(error => parseError(error));
         },
         bookComments: async (_root, { id, page, rowsPerPage }) => {
-            try {
-                return getBookComments(id, page, rowsPerPage);
-            } catch (error) {
-                parseError(error);
-            }
+            return getBookComments(id, page, rowsPerPage).catch(error => parseError(error));
         },
         booksFromSeries: async (_root, { bookSeriesId }) => {
-            try {
-                return getBooksFromSeries(bookSeriesId);
-            } catch (error) {
-                parseError(error);
-            }
+            return getBooksFromSeries(bookSeriesId).catch(error => parseError(error));
         },
         booksByAuthor: async (_root, { authorId, rowsPerPage, excludeBookSeriesId }) => {
-            try {
-                return getBooksByAuthor(authorId, rowsPerPage, excludeBookSeriesId);
-            } catch (error) {
-                parseError(error);
-            }
+            return getBooksByAuthor(authorId, rowsPerPage, excludeBookSeriesId).catch(error => parseError(error));
         },
         booksByIds: async (_root, { ids }) => {
-            try {
-                return getBooksByIds(ids);
-            } catch (error) {
-                parseError(error);
-            }
+            return getBooksByIds(ids).catch(error => parseError(error));
         },
         booksWithDiscount: async (_root, { rowsPerPage }) => {
-            try {
-                return getBooksWithDiscount(rowsPerPage);
-            } catch (error) {
-                parseError(error);
-            }
+            return getBooksWithDiscount(rowsPerPage).catch(error => parseError(error));
         },
         booksWithNotApprovedComments: async (_root, { pageSettings }) => {
-            try {
-                return getBooksWithNotApprovedComments(<IPageable>pageSettings);
-            } catch (error) {
-                parseError(error);
-            }
+            return getBooksWithNotApprovedComments(<IPageable>pageSettings).catch(error => parseError(error));
         }
     },
     Mutation: {
         updateLanguage: async (_root, { input }: { input: LanguageEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return updateLanguage(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return updateLanguage(input).catch(error => parseError(error));
         },
         deleteLanguage: async (_root, { id }: { id: string }, { user }) => {
             _checkUser(user);
-            try {
-                return deleteLanguage(id);
-            } catch (error) {
-                parseError(error);
-            }
+            return deleteLanguage(id).catch(error => parseError(error));
         },
         createLanguage: async (_root, { input }: { input: LanguageEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return createLanguage(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return createLanguage(input).catch(error => parseError(error));
         },
         // publishing house
         updatePublishingHouse: async (_root, { input }: { input: PublishingHouseEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return updatePublishingHouse(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return updatePublishingHouse(input).catch(error => parseError(error));
         },
         createPublishingHouse: async (_root, { input }: { input: PublishingHouseEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return createPublishingHouse(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return createPublishingHouse(input).catch(error => parseError(error));
         },
         deletePublishingHouse: async (_root, { id }: { id: string }, { user }) => {
             _checkUser(user);
-            try {
-                return deletePublishingHouse(id);
-            } catch (error) {
-                parseError(error);
-            }
+            return deletePublishingHouse(id).catch(error => parseError(error));
         },
         // page type
         updatePageType: async (_root, { input }: { input: PageTypeEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return updatePageType(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return updatePageType(input).catch(error => parseError(error));
         },
         createPageType: async (_root, { input }: { input: PageTypeEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return createPageType(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return createPageType(input).catch(error => parseError(error));
         },
         deletePageType: async (_root, { id }: { id: string }, { user }) => {
             _checkUser(user);
-            try {
-                return deletePageType(id);
-            } catch (error) {
-                parseError(error);
-            }
+            return deletePageType(id).catch(error => parseError(error));
         },
         // details type
         updateBookType: async (_root, { input }: { input: BookTypeEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return updateBookType(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return updateBookType(input).catch(error => parseError(error));
         },
         createBookType: async (_root, { input }: { input: BookTypeEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return createBookType(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return createBookType(input).catch(error => parseError(error));
         },
         deleteBookType: async (_root, { id }: { id: string }, { user }) => {
             _checkUser(user);
-            try {
-                return deleteBookType(id);
-            } catch (error) {
-                parseError(error);
-            }
+            return deleteBookType(id).catch(error => parseError(error));
         },
         // cover type
         updateCoverType: (_root, { input }: { input: CoverTypeEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return updateCoverType(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return updateCoverType(input).catch(error => parseError(error));
         },
         createCoverType: async (_root, { input }: { input: CoverTypeEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return createCoverType(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return createCoverType(input).catch(error => parseError(error));
         },
         deleteCoverType: async (_root, { id }: { id: string }, { user }) => {
             _checkUser(user);
-            try {
-                return deleteCoverType(id);
-            } catch (error) {
-                parseError(error);
-            }
+            return deleteCoverType(id).catch(error => parseError(error));
         },
         // details series
         updateBookSeries: async (_root, { input }: { input: BookSeriesEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return updateBookSeries(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return updateBookSeries(input).catch(error => parseError(error));
         },
         createBookSeries: async (_root, { input }: { input: BookSeriesEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return createBookSeries(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return createBookSeries(input).catch(error => parseError(error));
         },
         deleteBookSeries: async (_root, { id }: { id: string }, { user }) => {
             _checkUser(user);
-            try {
-                return deleteBookSeries(id);
-            } catch (error) {
-                parseError(error);
-            }
+            return deleteBookSeries(id).catch(error => parseError(error));
         },
         // author
         updateAuthor: async (_root, { input }: { input: AuthorEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return updateAuthor(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return updateAuthor(input).catch(error => parseError(error));
         },
         createAuthor: async (_root, { input }: { input: AuthorEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return createAuthor(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return createAuthor(input).catch(error => parseError(error));
         },
         deleteAuthor: async (_root, { id }: { id: string }, { user }) => {
             _checkUser(user);
-            try {
-                return deleteAuthor(id);
-            } catch (error) {
-                parseError(error);
-            }
+            return deleteAuthor(id).catch(error => parseError(error));
         },
         // details
         createBook: async (_root, { input }: { input: BookEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return createBook(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return createBook(input).catch(error => parseError(error));
         },
         updateBook: async (_root, { input, updateAllBooksInSeries }, { user }) => {
             _checkUser(user);
-            try {
-                return updateBook(<BookEntity>input, updateAllBooksInSeries);
-            } catch (error) {
-                parseError(error);
-            }
+            return updateBook(<BookEntity>input, updateAllBooksInSeries).catch(error => parseError(error));
         },
         updateBookNumberInStock: async (_root, { input }: {
             input: { id: string, numberInStock: number }
         }, { user }) => {
             _checkUser(user);
-            try {
-                return updateBookNumberInStock(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return updateBookNumberInStock(input).catch(error => parseError(error));
         },
         approveComment: async (_root, { input }: { input: { bookId: string, commentId: string } }, { user }) => {
             _checkUser(user);
-            try {
-                return approveComment(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return approveComment(input).catch(error => parseError(error));
         },
         removeComment: async (_root, { input }: { input: { bookId: string, commentId: string } }, { user }) => {
             _checkUser(user);
-            try {
-                return removeComment(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return removeComment(input).catch(error => parseError(error));
         },
         addBookComment: async (_root, { id, input }: { id: string, input: CommentEntity }) => {
-            try {
-                return addComment(id, input);
-            } catch (error) {
-                parseError(error);
-            }
+            return addComment(id, input).catch(error => parseError(error));
         },
         createUser: async (_root, { input }: { input: UserEntity }) => {
-            try {
-                return createUser(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return createUser(input).catch(error => parseError(error));
         },
         likeBook: async (_root, { id }, { user }) => {
             _checkUser(user);
-            try {
-                return likeBook(user.id, id);
-            } catch (error) {
-                parseError(error);
-            }
+            return likeBook(user.id, id).catch(error => parseError(error));
         },
         unlikeBook: async (_root, { id }, { user }) => {
             _checkUser(user);
-            try {
-                return unlikeBook(user.id, id);
-            } catch (error) {
-                parseError(error);
-            }
+            return unlikeBook(user.id, id).catch(error => parseError(error));
         },
         addBookInBasket: async (_root, { id }, { user }) => {
             _checkUser(user);
-            try {
-                return addBookInBasket(user.id, id);
-            } catch (error) {
-                parseError(error);
-            }
+            return addBookInBasket(user.id, id).catch(error => parseError(error));
         },
         removeBookInBasket: async (_root, { id }, { user }) => {
             _checkUser(user);
-            try {
-                return removeBookFromBasket(user.id, id);
-            } catch (error) {
-                parseError(error);
-            }
+            return removeBookFromBasket(user.id, id).catch(error => parseError(error));
         },
         updateBookCountInBasket: async (_root, { id, count }, { user }) => {
             _checkUser(user);
-            try {
-                return updateBookCountInBasket(user.id, id, count);
-            } catch (error) {
-                parseError(error);
-            }
+
+            return updateBookCountInBasket(user.id, id, count).catch(error => parseError(error));
         },
         // auth
         login: async (_root, { email, password }) => {
-            try {
-                return login(email, password);
-            } catch (error) {
-                parseError(error);
-            }
+            return login(email, password).catch(error => parseError(error));
         },
         user: async (_root, {}, { user }) => {
             _checkUser(user);
-            try {
-                return user;
-            } catch (error) {
-                parseError(error);
-            }
+            return user.catch(error => parseError(error));
         },
         updateUser: async (_root, { input }: { input: UserEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return updateUser(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return updateUser(input).catch(error => parseError(error));
         },
         // delivery
         updateDelivery: async (_root, { input }: { input: DeliveryEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return updateDelivery(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return updateDelivery(input).catch(error => parseError(error));
         },
         deleteDelivery: async (_root, { id }: { id: string }, { user }) => {
             _checkUser(user);
-            try {
-                return deleteDelivery(id);
-            } catch (error) {
-                parseError(error);
-            }
+            return deleteDelivery(id).catch(error => parseError(error));
         },
         createDelivery: async (_root, { input }: { input: DeliveryEntity }, { user }) => {
             _checkUser(user);
-            try {
-                return createDelivery(input);
-            } catch (error) {
-                parseError(error);
-            }
+            return createDelivery(input).catch(error => parseError(error));
         },
         // basket
         updateOrder: async (_root, { input }, { user }) => {
             _checkUser(user);
-            try {
-                return updateOrder(input as OrderEntity);
-            } catch (error) {
-                parseError(error);
-            }
+            return updateOrder(input as OrderEntity).catch(error => parseError(error));
         },
         cancelOrder: async (_root, { id }: { id: string }, { user }) => {
             _checkUser(user);
-            try {
-                return cancelOrder(id);
-            } catch (error) {
-                parseError(error);
-            }
+            return cancelOrder(id).catch(error => parseError(error));
         },
         createOrder: async (_root, { input }, { user }) => {
             _checkUser(user);
-            try {
-                return createOrder(input as OrderEntity);
-            } catch (error) {
-                parseError(error);
-            }
+            return createOrder(input as OrderEntity).catch(error => parseError(error));
         }
     }
 };

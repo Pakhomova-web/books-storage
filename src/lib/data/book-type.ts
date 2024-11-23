@@ -29,14 +29,14 @@ export async function createBookType(input: BookTypeEntity) {
 
 export async function updateBookType(input: BookTypeEntity) {
     if (!input.id) {
-        throw new GraphQLError(`No Book Type found with id ${input.id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
     const itemByName = await getByName<BookTypeEntity>(BookType, input.name);
 
     if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
-        throw new GraphQLError(`Book Type with name '${input.name}' already exists.`, {
+        throw new GraphQLError(`Тип книги з назвою '${input.name}' вже є.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
@@ -47,7 +47,7 @@ export async function updateBookType(input: BookTypeEntity) {
 
 export async function getBookTypeById(id: string) {
     if (!id) {
-        throw new GraphQLError(`No Book Type found with id ${id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }

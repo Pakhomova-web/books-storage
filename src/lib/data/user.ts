@@ -27,7 +27,7 @@ export async function createUser(input: UserEntity) {
     const item = await getByEmail(User, input.email);
 
     if (item) {
-        throw new GraphQLError(`User with email ${input.email} already exists.`, {
+        throw new GraphQLError(`Користувач з ел. адресою '${input.email}' вже зареєстрований.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     } else {
@@ -57,7 +57,7 @@ export async function login(email: string, password: string): Promise<{
     const item = await getByEmail<UserEntity>(User, email);
 
     if (!item) {
-        throw new GraphQLError(`User with email ${email} doesn't exist.`, {
+        throw new GraphQLError(`Користувача не знайдено.`, {
             extensions: { code: 'NOT_AUTHORIZED' }
         });
     } else {
@@ -94,7 +94,7 @@ export async function getNewToken(refreshToken: string) {
 
 export async function updateUser(input: UserEntity): Promise<UserEntity> {
     if (!input.id) {
-        throw new GraphQLError(`No User found with id ${input.id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
@@ -174,7 +174,7 @@ export async function updateBookCountInBasket(userId: string, bookId: string, co
         item.count = count;
         await user.save();
     } else {
-        throw new GraphQLError(`No such book in a basket.`, {
+        throw new GraphQLError(`Немає такої книги в кошику.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }

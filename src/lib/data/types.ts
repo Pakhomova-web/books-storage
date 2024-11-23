@@ -6,6 +6,11 @@ export interface AuthorEntity {
     description?: string
 }
 
+export interface IAuthorFilter {
+    name?: string,
+    quickSearch?: string
+}
+
 export interface LanguageEntity {
     id: string,
     name: string

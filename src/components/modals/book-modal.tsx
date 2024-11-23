@@ -244,7 +244,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                      onSubmit={isAdmin ? () => onSubmit(false) : null}>
             <FormContainer formContext={formContext}>
                 <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Grid item xs={12} sm={6} lg={4}>
                         <CustomTextField fullWidth
                                          required
                                          disabled={!isAdmin}

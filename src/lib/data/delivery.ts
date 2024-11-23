@@ -29,14 +29,14 @@ export async function createDelivery(input: DeliveryEntity) {
 
 export async function updateDelivery(input: DeliveryEntity) {
     if (!input.id) {
-        throw new GraphQLError(`No Delivery found with id ${input.id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
     const itemByName = await getByName<DeliveryEntity>(Delivery, input.name);
 
     if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
-        throw new GraphQLError(`Delivery with name '${input.name}' already exists.`, {
+        throw new GraphQLError(`Спосіб доставки з назвою '${input.name}' вже є.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }

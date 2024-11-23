@@ -3,20 +3,20 @@ import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useAuthors, useDeleteAuthor } from '@/lib/graphql/queries/author/hook';
-import { AuthorEntity, IPageable } from '@/lib/data/types';
+import { AuthorEntity, IAuthorFilter, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
 import AuthorModal from '@/components/modals/author-modal';
 import ErrorNotification from '@/components/error-notification';
-import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 import { useAuth } from '@/components/auth-context';
 import { isAdmin } from '@/utils/utils';
 import SettingsMenu from '@/pages/settings/settings-menu';
+import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 
 export default function Authors() {
     const { user, checkAuth } = useAuth();
-    const [tableActions] = useState<TableKey<AuthorEntity>>({
+    const [tableActions] = useState<TableKey<IAuthorFilter>>({
         renderMobileLabel: (item: AuthorEntity) => <Box><b>{item.name}</b></Box>,
         type: 'actions',
         actions: isAdmin(user) ? [
@@ -30,12 +30,12 @@ export default function Authors() {
         { title: 'Опис', renderValue: (item: AuthorEntity) => item.description, type: 'text' }
     ]);
     const [tableKeys] = useState<TableKey<AuthorEntity>[]>([
-        { title: 'Назва', sortValue: 'name', renderValue: (item: AuthorEntity) => item.name, type: 'text' },
+        { title: 'ПІБ', sortValue: 'name', renderValue: (item: AuthorEntity) => item.name, type: 'text' },
         ...mobileKeys
     ]);
     const [selectedItem, setSelectedItem] = useState<AuthorEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
-    const [filters, setFilters] = useState<AuthorEntity>();
+    const [filters, setFilters] = useState<IAuthorFilter>();
     const { items, gettingError, loading, refetch } = useAuthors(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeleteAuthor();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);

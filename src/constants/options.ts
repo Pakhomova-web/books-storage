@@ -9,5 +9,5 @@ export const ageOptions: IOption<number>[] = [
     { label: '6 - 7', id: 6 },
     { label: '7 - 8', id: 7 },
     { label: '8 - 9', id: 8 },
-    { label: '10 - 9', id: 10 }
+    { label: '9 - 10', id: 10 }
 ];

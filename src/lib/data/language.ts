@@ -29,14 +29,14 @@ export async function createLanguage(input: LanguageEntity) {
 
 export async function updateLanguage(input: LanguageEntity) {
     if (!input.id) {
-        throw new GraphQLError(`No Language found with id ${input.id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
     const itemByName = await getByName<LanguageEntity>(Language, input.name);
 
     if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
-        throw new GraphQLError(`Language with name '${input.name}' already exists.`, {
+        throw new GraphQLError(`Мова '${input.name}' вже є.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
@@ -47,7 +47,7 @@ export async function updateLanguage(input: LanguageEntity) {
 
 export async function getLanguageById(id: string) {
     if (!id) {
-        throw new GraphQLError(`No Language found with id ${id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }

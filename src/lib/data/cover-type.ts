@@ -28,14 +28,14 @@ export async function createCoverType(input: CoverTypeEntity)  {
 
 export async function updateCoverType(input: CoverTypeEntity) {
     if (!input.id) {
-        throw new GraphQLError(`No Cover Type found with id ${input.id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
     const itemByName = await getByName<CoverTypeEntity>(CoverType, input.name);
 
     if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
-        throw new GraphQLError(`Cover Type with name '${input.name}' already exists.`, {
+        throw new GraphQLError(`Обкладинка з назвою '${input.name}' вже є.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }

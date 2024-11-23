@@ -248,11 +248,11 @@ export default function BookDetails() {
                             <Button variant="outlined" fullWidth disabled={true}>В кошику</Button> :
                             <Button variant="outlined" fullWidth
                                     onClick={() => setBookInBasket(book.id)}
-                                    disabled={!book.numberInStock}>
-                                {!!book.numberInStock ? 'Купити' : 'Очікується'}
+                                    disabled={!book.numberInStock || book.archived}>
+                                {book.archived ? 'Відсутня' : (!!book.numberInStock ? 'Купити' : 'Очікується')}
                             </Button>}
 
-                      <Button onClick={() => setLikedBook(book.id)} color="warning" fullWidth>
+                      <Button onClick={() => setLikedBook(book.id)} color="warning" fullWidth disabled={book.archived}>
                         <Box gap={1} display="flex" alignItems="center">{isLiked(book) ?
                             <><FavoriteIcon/>В обраному</> :
                             <><FavoriteBorderIcon/>Додати в обране</>}
@@ -340,18 +340,6 @@ export default function BookDetails() {
                       <Box px={1} dangerouslySetInnerHTML={{ __html: book.description }}></Box>
                     </Grid>}
 
-                  {book.authors.filter(a => !!a.description).map((author, index) => (
-                      <>
-                          {!index && <Grid item xs={12} p={1}>
-                            <Box sx={styleVariables.sectionTitle}>Про автора</Box>
-                          </Grid>}
-
-                          <Grid item xs={12} p={1}>
-                              <Box px={1} dangerouslySetInnerHTML={{ __html: author.description }}></Box>
-                          </Grid>
-                      </>
-                  ))}
-
                 <Grid item xs={12} p={1}>
                   <Box sx={styleVariables.sectionTitle} mb={1}>
                     Відгуки покупців
@@ -422,6 +410,18 @@ export default function BookDetails() {
                           </Grid>}
                     </Grid>
                   </Grid>}
+
+                  {book.authors.filter(a => !!a.description).map((author, index) => (
+                      <>
+                          {!index && <Grid item xs={12} p={1}>
+                            <Box sx={styleVariables.sectionTitle}>Про автора</Box>
+                          </Grid>}
+
+                          <Grid item xs={12} p={1}>
+                              <Box px={1} dangerouslySetInnerHTML={{ __html: author.description }}></Box>
+                          </Grid>
+                      </>
+                  ))}
 
                   {book.authors.length === 1 && !!booksByAuthor?.length && <Grid item xs={12} px={1}>
                     <Box sx={styleVariables.sectionTitle} mb={2}>

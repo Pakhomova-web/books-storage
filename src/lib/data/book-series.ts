@@ -38,7 +38,7 @@ export async function getBookSeriesOptions(filters?: BookSeriesFilter, fully = f
 
 export async function getBookSeriesById(id: string) {
     if (!id) {
-        throw new GraphQLError(`No Book Series found with id ${id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
@@ -58,7 +58,7 @@ export async function createBookSeries(input: BookSeriesEntity) {
         });
 
         if (itemsByPublishingHouseId.length) {
-            throw new GraphQLError(`Book Series with name '${input.name}' already exists for selected Publishing House.`, {
+            throw new GraphQLError(`Серія з назвою '${input.name}' вже є для обраного видавництва.`, {
                 extensions: { code: 'DUPLICATE_ERROR' }
             });
         }
@@ -72,14 +72,14 @@ export async function createBookSeries(input: BookSeriesEntity) {
 
 export async function updateBookSeries(input: BookSeriesEntity, updateAllBooksInSeries = false) {
     if (!input.id) {
-        throw new GraphQLError(`No Book Series found with id ${input.id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
     const itemByName = await getByName<BookSeriesEntity>(BookSeries, input.name);
 
     if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id && input.publishingHouseId === itemByName.publishingHouse.id) {
-        throw new GraphQLError(`Book Series with name '${input.name}' already exists.`, {
+        throw new GraphQLError(`Серія з назвою '${input.name}' вже є.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }

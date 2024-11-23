@@ -84,7 +84,7 @@ export async function getBookById(id: string) {
         .populate('coverType');
 
     if (!item) {
-        throw new GraphQLError(`No Book found with id ${id}`, {
+        throw new GraphQLError(`Не знайдено такої книги.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
@@ -108,14 +108,14 @@ export async function createBook(input: BookEntity) {
 
 export async function updateBook(input: BookEntity, updateAllBooksInSeries = false) {
     if (!input.id) {
-        throw new GraphQLError(`No Book found with id ${input.id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
     const itemByName = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeId, input.pageTypeId, input.coverTypeId, input.languageId);
 
     if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
-        throw new GraphQLError(`Book with name '${input.name}' already exists.`, {
+        throw new GraphQLError(`Книга з назвою '${input.name}' вже є.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
@@ -137,7 +137,7 @@ export async function updateBook(input: BookEntity, updateAllBooksInSeries = fal
 
 export async function updateBookNumberInStock(input: { id: string, numberInStock: number }) {
     if (!input.id) {
-        throw new GraphQLError(`No Book found with id ${input.id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
@@ -148,7 +148,7 @@ export async function updateBookNumberInStock(input: { id: string, numberInStock
 
 export async function approveComment(input: { bookId: string, commentId: string }) {
     if (!input.bookId) {
-        throw new GraphQLError(`No Book found with id ${input.bookId}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
@@ -162,14 +162,14 @@ export async function approveComment(input: { bookId: string, commentId: string 
 
 export async function removeComment(input: { bookId: string, commentId: string }) {
     if (!input.bookId) {
-        throw new GraphQLError(`No Book found with id ${input.bookId}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
     const book = await Book.findById(input.bookId);
 
     if (!book) {
-        throw new GraphQLError(`No Book found with id ${input.bookId}`, {
+        throw new GraphQLError(`Не знайдено такої книги.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
@@ -182,7 +182,7 @@ export async function removeComment(input: { bookId: string, commentId: string }
 
 export async function addComment(id: string, input: CommentEntity) {
     if (!id) {
-        throw new GraphQLError(`No Book found with id ${id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.}`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
@@ -207,7 +207,7 @@ function _getBookByUnique(name: string, bookSeries: string, bookType: string, pa
 
 export async function getBookComments(id: string, page: number, rowsPerPage: number) {
     if (!id) {
-        throw new GraphQLError(`No Book found with id ${id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
@@ -215,7 +215,7 @@ export async function getBookComments(id: string, page: number, rowsPerPage: num
     const book = await Book.findById(id);
 
     if (!book) {
-        throw new GraphQLError(`No Book found with id ${id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
@@ -225,7 +225,7 @@ export async function getBookComments(id: string, page: number, rowsPerPage: num
 
 export async function getBooksFromSeries(bookSeriesId: string) {
     if (!bookSeriesId) {
-        throw new GraphQLError(`No Books found`, {
+        throw new GraphQLError(`Не вказан ідентифікатор серії.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
@@ -248,7 +248,7 @@ export async function getBooksFromSeries(bookSeriesId: string) {
 
 export async function getBooksByAuthor(authorId: string, rowsPerPage: number, excludeBookSeriesId?: string) {
     if (!authorId) {
-        throw new GraphQLError(`No Books found`, {
+        throw new GraphQLError(`Не вказан ідентифікатор автора.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }

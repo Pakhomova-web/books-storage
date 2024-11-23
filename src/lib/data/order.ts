@@ -74,7 +74,7 @@ export async function createOrder(input: OrderEntity) {
 
 export async function updateOrder(input: OrderEntity) {
     if (!input.id) {
-        throw new GraphQLError(`No Order found with id ${input.id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }

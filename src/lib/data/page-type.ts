@@ -30,14 +30,14 @@ export async function createPageType(input: PageTypeEntity) {
 
 export async function updatePageType(input: PageTypeEntity) {
     if (!input.id) {
-        throw new GraphQLError(`No Page Type found with id ${input.id}`, {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
     const itemByName = await getByName<PageTypeEntity>(PageType, input.name);
 
     if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
-        throw new GraphQLError(`Page Type with name '${input.name}' already exists.`, {
+        throw new GraphQLError(`Тип сторінок з назвою '${input.name}' вже є.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
