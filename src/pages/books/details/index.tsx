@@ -293,14 +293,15 @@ export default function BookDetails() {
                   <Box sx={styleVariables.sectionTitle} mb={1}>Характеристики</Box>
 
                     {mainDetailsKeys.map((key, index) =>
-                        <Grid key={index} container borderBottom={1} borderColor={primaryLightColor}>
-                            <Grid item pr={1} xs={6} my={1} px={1}>{key.title}</Grid>
-                            <Grid item xs={6} my={1} px={1}>
-                                {key.onValueClick ?
-                                    <CustomLink onClick={key.onValueClick}>{key.renderValue(book)}</CustomLink> :
-                                    key.renderValue(book)}
-                            </Grid>
+                        !!key.renderValue(book) &&
+                      <Grid key={index} container borderBottom={1} borderColor={primaryLightColor}>
+                        <Grid item pr={1} xs={6} my={1} px={1}>{key.title}</Grid>
+                        <Grid item xs={6} my={1} px={1}>
+                            {key.onValueClick ?
+                                <CustomLink onClick={key.onValueClick}>{key.renderValue(book)}</CustomLink> :
+                                key.renderValue(book)}
                         </Grid>
+                      </Grid>
                     )}
                 </Grid>
 
@@ -338,6 +339,18 @@ export default function BookDetails() {
                     <Grid item xs={12} p={1}>
                       <Box px={1} dangerouslySetInnerHTML={{ __html: book.description }}></Box>
                     </Grid>}
+
+                  {book.authors.filter(a => !!a.description).map((author, index) => (
+                      <>
+                          {!index && <Grid item xs={12} p={1}>
+                            <Box sx={styleVariables.sectionTitle}>Про автора</Box>
+                          </Grid>}
+
+                          <Grid item xs={12} p={1}>
+                              <Box px={1} dangerouslySetInnerHTML={{ __html: author.description }}></Box>
+                          </Grid>
+                      </>
+                  ))}
 
                 <Grid item xs={12} p={1}>
                   <Box sx={styleVariables.sectionTitle} mb={1}>
@@ -431,14 +444,19 @@ export default function BookDetails() {
               </Grid>
             }
 
-            {!!imageIds?.length &&
-              <ImagesModal open={true} imageIds={imageIds} onClose={() => setImageIds(null)}></ImagesModal>}
+            {
+                !!imageIds?.length &&
+              <ImagesModal open={true} imageIds={imageIds} onClose={() => setImageIds(null)}></ImagesModal>
+            }
 
-            {error && <ErrorNotification error={error}></ErrorNotification>}
+            {
+                error && <ErrorNotification error={error}></ErrorNotification>
+            }
 
             <DeliveriesBox/>
 
             <SocialMediaBox/>
         </>
-    );
+    )
+        ;
 }

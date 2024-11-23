@@ -5,7 +5,8 @@ import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
-import { Box } from '@mui/material';
+import { Box, Grid } from '@mui/material';
+import React from 'react';
 
 interface IAuthorModalProps {
     open: boolean,
@@ -25,6 +26,7 @@ export default function AuthorModal({ open, item, onClose, isAdmin }: IAuthorMod
     const { update, updating, updatingError } = useUpdateAuthor();
     const { create, creating, creatingError } = useCreateAuthor();
     const { checkAuth } = useAuth();
+    const { description } = formContext.watch();
 
     async function onSubmit() {
         try {
@@ -44,6 +46,7 @@ export default function AuthorModal({ open, item, onClose, isAdmin }: IAuthorMod
         <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' автора'}
                      open={open}
                      disableBackdropClick={true}
+                     big={true}
                      onClose={() => onClose()}
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
@@ -58,9 +61,15 @@ export default function AuthorModal({ open, item, onClose, isAdmin }: IAuthorMod
                                      name="name"/>
 
                     <CustomTextField fullWidth
+                                     multiline
                                      id="description"
                                      label="Опис"
                                      name="description"/>
+
+                    {description && <Grid item xs={12}>
+                      <Box mb={1}><b>Попередній огляд опису:</b></Box>
+                      <Box dangerouslySetInnerHTML={{ __html: description }}></Box>
+                    </Grid>}
                 </Box>
             </FormContainer>
 

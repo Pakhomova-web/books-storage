@@ -5,8 +5,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CopyIcon from '@mui/icons-material/ContentCopy';
 import AddIcon from '@mui/icons-material/Add';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import WebIcon from '@mui/icons-material/Web';
+
 import { IMenuAnchorEl } from '@/components/table/mobile-table';
 import CustomImage from '@/components/custom-image';
+
 
 const tableCellActionsStyles = {
     display: 'flex',
@@ -89,6 +92,9 @@ export function getActionItem(action: ITableAction, item, disabled = false) {
             break;
         case TableActionEnum.add:
             icon = <AddIcon color={disabled ? 'inherit' : 'primary'}/>;
+            break;
+        case TableActionEnum.navigation:
+            icon = <WebIcon color={disabled ? 'inherit' : 'primary'}/>;
     }
 
     return <Box gap={1} sx={styles}>{icon}{action.label ? action.label(item) : ''}</Box>;

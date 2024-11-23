@@ -21,5 +21,6 @@ export interface ITableAction {
 export enum TableActionEnum {
     delete,
     copy,
-    add
+    add,
+    navigation
 }

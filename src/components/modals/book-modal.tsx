@@ -400,13 +400,11 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                          label="Ціна зі знижкою, грн"
                                          name="finalPrice"/>
                     </Grid>
-                </Grid>
 
-                <Grid item xs={12}>
-                    <Ages selected={ages} onOptionClick={isAdmin ? onAgeClick : null}></Ages>
-                </Grid>
+                    <Grid item xs={12}>
+                        <Ages selected={ages} onOptionClick={isAdmin ? onAgeClick : null}></Ages>
+                    </Grid>
 
-                <Grid container spacing={2} alignItems="center">
                     <Grid item xs={12}>
                         <CustomTextField fullWidth
                                          disabled={!isAdmin}
@@ -421,7 +419,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                       <Box dangerouslySetInnerHTML={{ __html: description }}></Box>
                     </Grid>}
 
-                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
                         <CustomTextField fullWidth
                                          disabled={!isAdmin}
                                          id="tag"
@@ -431,7 +429,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                          name="tag"></CustomTextField>
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Grid item xs={12} sm={6} md={4} lg={3}>
                         <Button fullWidth disabled={!tag} variant="outlined" onClick={() => addTag()}>
                             Додати тег
                         </Button>
@@ -447,7 +445,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                         </Grid>}
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Grid item xs={12} sm={8} md={6} lg={4}>
                         <CustomTextField fullWidth
                                          disabled={!isAdmin || imageIds?.length === 5}
                                          id="imageLinks"
@@ -456,7 +454,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                          name="imageLinks"/>
                     </Grid>
 
-                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <Grid item xs={12} sm={4} md={3} lg={2}>
                         <Button fullWidth variant="outlined" disabled={!imageLinks} onClick={parseImage}>
                             Додати фото
                         </Button>

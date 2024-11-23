@@ -17,6 +17,7 @@ import CustomImage from '@/components/custom-image';
 import HdrStrongIcon from '@mui/icons-material/HdrStrong';
 import HdrWeakIcon from '@mui/icons-material/HdrWeak';
 import { ApolloError } from '@apollo/client';
+import { useRouter } from 'next/router';
 
 const subTitleStyles = {
     ...styleVariables.hintFontSize,
@@ -26,6 +27,7 @@ const subTitleStyles = {
 export default function Books() {
     const { user } = useAuth();
     const { update, updating, updatingError } = useUpdateBook();
+    const router = useRouter();
     const tableActions: TableKey<BookEntity> = {
         renderMobileLabel: (item: BookEntity) => (
             <>
@@ -45,8 +47,8 @@ export default function Books() {
                             <HdrStrongIcon fontSize="small" style={{ color: "green" }}/>
                             В наявності ({item.numberInStock})
                         </> :
-                        <><HdrWeakIcon fontSize="small" style={{ color: styleVariables.warnColor }}/>Немає в
-                            наявності</>
+                        <><HdrWeakIcon fontSize="small" style={{ color: styleVariables.warnColor }}/>
+                            Немає в наявності</>
                     }
                 </Box>
             </>
@@ -70,6 +72,11 @@ export default function Books() {
 
                     onAdd(data);
                 }
+            },
+            {
+                label: () => 'Деталі',
+                type: TableActionEnum.navigation,
+                onClick: (item: BookEntity) => router.push(`/books/details?id=${item.id}`)
             },
             {
                 label: (item: BookEntity) => item.archived ? 'Разархівувати' : 'Заархівувати',
