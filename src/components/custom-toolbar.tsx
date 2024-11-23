@@ -200,19 +200,15 @@ export default function CustomToolbar() {
                                 </> :
                                 !!user ?
                                     <>
-                                        <Toolbar title="Увійти">
-                                            <IconButton color="primary"
-                                                        onClick={() => goToProfilePage()}
-                                                        className={selectedMenuItem === MainMenuItem.profile ? 'selectedToolbarMenuItem' : ''}>
-                                                <ProfileIcon/>
-                                            </IconButton>
-                                        </Toolbar>
+                                        <IconButton color="primary"
+                                                    onClick={() => goToProfilePage()}
+                                                    className={selectedMenuItem === MainMenuItem.profile ? 'selectedToolbarMenuItem' : ''}>
+                                            <ProfileIcon/>
+                                        </IconButton>
 
-                                        <Toolbar title="Вийти">
-                                            <IconButton color="primary" onClick={() => onLogoutClick()}>
-                                                <LogoutIcon/>
-                                            </IconButton>
-                                        </Toolbar>
+                                        <IconButton color="primary" onClick={() => onLogoutClick()}>
+                                            <LogoutIcon/>
+                                        </IconButton>
                                     </> :
                                     <IconButton color="primary" onClick={() => onLoginClick()}>
                                         <LoginIcon/>

@@ -8,6 +8,7 @@ import { useUser } from '@/lib/graphql/queries/auth/hook';
 import Loading from '@/components/loading';
 import { useAuth } from '@/components/auth-context';
 import { UserEntity } from '@/lib/data/types';
+import { isAdmin } from '@/utils/utils';
 
 const authUrls = ['/sign-in'];
 const commonUrls = ['/books', '/books/details'];
@@ -15,7 +16,7 @@ const commonUrls = ['/books', '/books/details'];
 export default function Main({ children }) {
     const [loading, setLoading] = useState<boolean>(false);
     const { fetchUser } = useUser();
-    const { logout, setUser } = useAuth();
+    const { user, logout, setUser } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
 
@@ -25,7 +26,7 @@ export default function Main({ children }) {
             .then((user: UserEntity) => {
                 setUser(user);
                 setLoading(false);
-                if (authUrls.some(url => url === pathname)) {
+                if (!isAdmin(user) && isSettings() || authUrls.some(url => url === pathname)) {
                     router.push('/');
                 }
             })
@@ -38,18 +39,22 @@ export default function Main({ children }) {
             });
     }, []);
 
+    function isSettings() {
+        return pathname.includes('/settings');
+    }
+
     return (
         <Box sx={fullHeight} position="relative">
             <Loading show={loading}></Loading>
 
             <CustomToolbar/>
-            {!loading &&
+            {!loading && (!isSettings() || !!user && isAdmin(user)) &&
               <>
                 <Toolbar/>
                 <Box sx={styleVariables.overflowHidden}>
-                    <Box sx={pageStyles} position="relative" padding={{ lg: '0 15%', md: '0 10%', xs: 0 }}>
-                        {children}
-                    </Box>
+                  <Box sx={pageStyles} position="relative" padding={{ lg: '0 15%', md: '0 10%', xs: 0 }}>
+                      {children}
+                  </Box>
                 </Box>
               </>}
         </Box>
