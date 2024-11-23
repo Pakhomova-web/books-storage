@@ -127,7 +127,8 @@ export default function CustomToolbar() {
         <>
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <StyledToolbar>
-                    <Box padding={{ lg: '0 15%', md: '0 10%', xs: 0 }} margin="0 auto" width="100%" display="flex" alignItems="center"
+                    <Box padding={{ lg: '0 15%', md: '0 10%', xs: 0 }} margin="0 auto" width="100%" display="flex"
+                         alignItems="center"
                          justifyContent="space-between">
                         <Box>
                             {isAdmin(user) &&
@@ -199,14 +200,19 @@ export default function CustomToolbar() {
                                 </> :
                                 !!user ?
                                     <>
-                                        <IconButton color="primary"
-                                                    onClick={() => goToProfilePage()}
-                                                    className={selectedMenuItem === MainMenuItem.profile ? 'selectedToolbarMenuItem' : ''}>
-                                            <ProfileIcon/>
-                                        </IconButton>
-                                        <IconButton color="primary" onClick={() => onLogoutClick()}>
-                                            <LogoutIcon/>
-                                        </IconButton>
+                                        <Toolbar title="Увійти">
+                                            <IconButton color="primary"
+                                                        onClick={() => goToProfilePage()}
+                                                        className={selectedMenuItem === MainMenuItem.profile ? 'selectedToolbarMenuItem' : ''}>
+                                                <ProfileIcon/>
+                                            </IconButton>
+                                        </Toolbar>
+
+                                        <Toolbar title="Вийти">
+                                            <IconButton color="primary" onClick={() => onLogoutClick()}>
+                                                <LogoutIcon/>
+                                            </IconButton>
+                                        </Toolbar>
                                     </> :
                                     <IconButton color="primary" onClick={() => onLoginClick()}>
                                         <LoginIcon/>
