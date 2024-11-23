@@ -41,9 +41,7 @@ export default function Orders() {
         }
     ]);
     const [selectedItem, setSelectedItem] = useState<OrderEntity>();
-    const [pageSettings, setPageSettings] = useState<IPageable>({
-        order: 'desc', orderBy: '', page: 0, rowsPerPage: 6
-    });
+    const [pageSettings, setPageSettings] = useState<IPageable>({ page: 0, rowsPerPage: 6 });
     const [filters, setFilters] = useState<IOrderFilter>();
     const { items, totalCount, gettingError, loading, refetch } = useOrders(pageSettings, filters);
     const [error, setError] = useState<ApolloError>();

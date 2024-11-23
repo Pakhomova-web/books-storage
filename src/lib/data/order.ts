@@ -28,7 +28,7 @@ export async function getOrders(pageSettings?: IPageable, filters?: IOrderFilter
                 }
             }])
         .populate('delivery')
-        .sort({ [pageSettings.orderBy || 'orderNumber']: pageSettings.order || 'asc' });
+        .sort({ [pageSettings.orderBy || 'orderNumber']: pageSettings.order || 'desc' });
 
     if (andFilters?.length) {
         query.and(andFilters);
