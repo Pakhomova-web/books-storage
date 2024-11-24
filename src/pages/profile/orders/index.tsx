@@ -11,7 +11,7 @@ import { useOrders } from '@/lib/graphql/queries/order/hook';
 import { IPageable, OrderEntity } from '@/lib/data/types';
 import OrderModal from '@/components/modals/order-modal';
 import { useRouter } from 'next/router';
-import OrdersList from '@/components/orders/order-box';
+import OrdersList from '@/components/orders/orders-list';
 
 const emptyListImageBoxStyles = {
     width: '100px',

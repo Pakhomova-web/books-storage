@@ -9,7 +9,7 @@ import Loading from '@/components/loading';
 import ErrorNotification from '@/components/error-notification';
 import OrderModal from '@/components/modals/order-modal';
 import SettingsMenu from '@/pages/settings/settings-menu';
-import OrdersList from '@/components/orders/order-box';
+import OrdersList from '@/components/orders/orders-list';
 import { Box, Table, TableFooter, TablePagination, TableRow } from '@mui/material';
 import { TableKey } from '@/components/table/table-key';
 import SortFiltersContainer from '@/components/filters/sort-filters-container';

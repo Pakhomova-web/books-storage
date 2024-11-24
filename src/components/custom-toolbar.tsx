@@ -16,7 +16,7 @@ import Badge from '@mui/material/Badge';
 
 import { useAuth } from '@/components/auth-context';
 import { isAdmin } from '@/utils/utils';
-import LoginModal from '@/components/login-modal';
+import LoginModal from '@/components/modals/login-modal';
 import CustomModal from '@/components/modals/custom-modal';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
@@ -150,7 +150,7 @@ export default function CustomToolbar() {
                                                handleSubmit={() => onQuickSearchClick(quickSearch)}>
                                     <CustomTextField name="quickSearch" placeholder="Пошук" fullWidth required={true}/>
 
-                                    <Box display="flex" alignItems="center" flexWrap="wrap" gap={1} mt={1}
+                                    <Box display="flex" alignItems="center" flexWrap="wrap" gap={1} mt={2}
                                          justifyContent="center">
                                         <Button variant="outlined" onClick={() => setOpenSearchModal(false)}>
                                             Закрити
