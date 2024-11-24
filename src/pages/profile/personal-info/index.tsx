@@ -47,10 +47,7 @@ export default function PersonalInfo() {
             <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <Box borderBottom={1} borderColor={primaryLightColor} sx={styleVariables.titleFontSize}
-                             p={1}>
-                            Основна інформація
-                        </Box>
+                        <Box sx={styleVariables.sectionTitle}>Основна інформація</Box>
                     </Grid>
 
                     <Grid item xs={12}>
@@ -78,10 +75,7 @@ export default function PersonalInfo() {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Box borderBottom={1} borderColor={primaryLightColor} sx={styleVariables.titleFontSize}
-                             p={1}>
-                            Адреса
-                        </Box>
+                        <Box sx={styleVariables.sectionTitle}>Адреса</Box>
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
@@ -108,10 +102,7 @@ export default function PersonalInfo() {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Box borderBottom={1} borderColor={primaryLightColor} sx={styleVariables.titleFontSize}
-                             p={1}>
-                            Спосіб доставки
-                        </Box>
+                        <Box sx={styleVariables.sectionTitle}>Спосіб доставки</Box>
 
                         <RadioGroup defaultValue={user?.preferredDeliveryId}
                                     onChange={(_, value) => formContext.setValue('preferredDeliveryId', value)}>
