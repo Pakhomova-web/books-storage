@@ -99,6 +99,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         authorIds,
         discount
     } = formContext.watch();
+    const [bookSeries, setBookSeries] = useState<BookSeriesEntity>(item?.bookSeries);
     const { update, updating, updatingError } = useUpdateBook();
     const { create, creating, creatingError } = useCreateBook();
     const { items: pageTypeOptions, loading: loadingPageTypes } = usePageTypeOptions();
@@ -128,6 +129,10 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 });
         }
     }, [publishingHouseId]);
+
+    useEffect(() => {
+        setBookSeries(bookSeriesId ? bookSeriesOptions.find(bS => bS.id === bookSeriesId) : null);
+    }, [bookSeriesId]);
 
     useEffect(() => {
         formContext.setValue('finalPrice', +(formContext.getValues().price * (100 - discount) / 100).toFixed(2));
@@ -404,6 +409,12 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                     <Grid item xs={12}>
                         <Ages selected={ages} onOptionClick={isAdmin ? onAgeClick : null}></Ages>
                     </Grid>
+
+                    {!!bookSeries?.description &&
+                      <Grid item xs={12}>
+                        <Box mb={1}><b>Опис серії:</b></Box>
+                        <Box dangerouslySetInnerHTML={{ __html: bookSeries.description }}></Box>
+                      </Grid>}
 
                     <Grid item xs={12}>
                         <CustomTextField fullWidth

@@ -41,6 +41,7 @@ export const bookSeriesOptionsQuery = gql`
         items: bookSeriesOptions(filters: $filters) {
             id
             label: name
+            description
         }
     }
 `;
