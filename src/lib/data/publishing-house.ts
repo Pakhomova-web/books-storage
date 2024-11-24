@@ -11,7 +11,7 @@ export async function getPublishingHouses(pageSettings?: IPageable, filters?: Pu
         PublishingHouse.find(),
         andFilters,
         pageSettings
-    );
+    ).sort({ name: 'asc' });
 }
 
 export async function getPublishingHouseById(id: string) {
@@ -22,10 +22,6 @@ export async function getPublishingHouseById(id: string) {
     }
 
     return PublishingHouse.findById(id);
-}
-
-export async function getPublishingHousesByIds(ids: string[]) {
-    return PublishingHouse.find({ id: ids });
 }
 
 export async function createPublishingHouse(input: PublishingHouseEntity) {
