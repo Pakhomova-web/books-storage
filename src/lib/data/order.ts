@@ -4,6 +4,7 @@ import { GraphQLError } from 'graphql/error';
 import { getValidFilters } from '@/lib/data/base';
 import OrderNumber from '@/lib/data/models/orderNumber';
 import User from '@/lib/data/models/user';
+import Book from '@/lib/data/models/book';
 
 export async function getOrders(pageSettings?: IPageable, filters?: IOrderFilter) {
     const { quickSearch, andFilters } = getValidFilters(filters);
@@ -82,17 +83,47 @@ export async function updateOrder(input: OrderEntity) {
     delete data.orderNumber;
     delete data.user;
 
+    const order = await Order.findById(input.id);
+
+    if (!order.isConfirmed && input.isConfirmed) {
+        const books = await Book.find({ _id: { $in: input.books.map(b => b.bookId) } });
+
+        await Promise.all(books.map(book => {
+            book.numberInStock = book.numberInStock - input.books.find(b => b.bookId === book.id).count;
+
+            return book.save();
+        }));
+    } else if (order.isConfirmed && !input.isConfirmed) {
+        const books = await Book.find({ _id: { $in: input.books.map(b => b.bookId) } });
+
+        await Promise.all(books.map(book => {
+            book.numberInStock = book.numberInStock + input.books.find(b => b.bookId === book.id).count;
+
+            return book.save();
+        }));
+    }
     await Order.findByIdAndUpdate(input.id, data);
 
     return input as OrderEntity;
 }
 
-export async function getOrderById(id: string) {
-    return Order.findById(id);
-}
-
 export async function cancelOrder(id: string) {
-    await Order.findByIdAndUpdate(id, { isCanceled: true });
+    const order = await Order.findById(id);
+
+    if (order.isConfirmed) {
+        const books = await Book.find({ _id: { $in: order.books.map(b => b.bookId) } });
+
+        await Promise.all(books.map(book => {
+            book.numberInStock = book.numberInStock + order.books.find(b => b.bookId === book.id).count;
+
+            return book.save();
+        }));
+    }
+
+    order.isCanceled = true;
+    order.isConfirmed = false;
+    order.trackingNumber = null;
+    await order.save();
 
     return { id } as OrderEntity;
 }

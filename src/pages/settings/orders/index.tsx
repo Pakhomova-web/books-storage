@@ -88,7 +88,7 @@ export default function Orders() {
             <Loading show={loading}></Loading>
 
             {isAdmin(user) &&
-              <>
+              <Box px={1}>
                 <SortFiltersContainer tableKeys={tableKeys}
                                       onApply={() => onApply()}
                                       onClear={() => onClearFilter()}
@@ -137,7 +137,7 @@ export default function Orders() {
                   {selectedItem && <OrderModal open={true}
                                                order={selectedItem}
                                                onClose={(updated = false) => refreshData(updated)}></OrderModal>}
-              </>
+              </Box>
             }
         </SettingsMenu>
     );
