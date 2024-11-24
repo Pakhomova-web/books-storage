@@ -11,6 +11,7 @@ import ProfileMenu from '@/pages/profile/profile-menu';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 import { UserEntity } from '@/lib/data/types';
 import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
+import Head from 'next/head';
 
 export default function PersonalInfo() {
     const { user, setUser } = useAuth();
@@ -42,6 +43,10 @@ export default function PersonalInfo() {
 
     return (
         <ProfileMenu activeUrl="personal-info">
+            <Head>
+                <title>Профіль - Персональні дані</title>
+            </Head>
+
             <Loading show={updating || loadingDeliveries}></Loading>
 
             <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>

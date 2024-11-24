@@ -26,6 +26,8 @@ import SocialMediaBox from '@/components/social-media-box';
 import { useAuth } from '@/components/auth-context';
 import BooksList from '@/components/books-list';
 import DeliveriesBox from '@/components/deliveries-box';
+import Head from 'next/head';
+import { MAIN_NAME } from '@/constants/main-name';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
     height: '40px',
@@ -183,6 +185,10 @@ export default function BookDetails() {
 
     return (
         <>
+            <Head>
+                <title>{ book ? `${book.name} - ${book.bookSeries.name}` : MAIN_NAME }</title>
+            </Head>
+
             <Loading show={loading}></Loading>
 
             <Grid container>

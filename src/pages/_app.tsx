@@ -20,10 +20,6 @@ const theme = createTheme({
 export default function App({ Component, pageProps }: AppProps) {
     return (
         <ApolloProvider client={apolloClient}>
-            <Head>
-                <title>Books Storage</title>
-            </Head>
-
             <AuthProvider>
                 <ThemeProvider theme={theme}>
                     <Main>

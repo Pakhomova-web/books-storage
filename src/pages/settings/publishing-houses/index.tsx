@@ -1,5 +1,4 @@
-import { Box, Button } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Box } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
@@ -13,8 +12,8 @@ import ErrorNotification from '@/components/error-notification';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
 import { isAdmin } from '@/utils/utils';
 import { useAuth } from '@/components/auth-context';
-import { styleVariables } from '@/constants/styles-variables';
 import SettingsMenu from '@/pages/settings/settings-menu';
+import Head from 'next/head';
 
 export default function PublishingHouses() {
     const { user, checkAuth } = useAuth();
@@ -86,6 +85,10 @@ export default function PublishingHouses() {
 
     return (
         <SettingsMenu activeUrl="publishing-houses" onAddClick={onAdd}>
+            <Head>
+                <title>Налаштування - Видавництва</title>
+            </Head>
+
             <Loading show={loading || deleting}></Loading>
 
             {isAdmin(user) &&

@@ -7,11 +7,13 @@ import { borderRadius, primaryLightColor } from '@/constants/styles-variables';
 import ErrorNotification from '@/components/error-notification';
 import Loading from '@/components/loading';
 import { useSignIn } from '@/lib/graphql/queries/auth/hook';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
 import { emailValidatorExp, passwordValidatorExp } from '@/constants/validators-exp';
 import { useAuth } from '@/components/auth-context';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
+import { MAIN_NAME } from '@/constants/main-name';
 
 const containerStyles = {
     width: '400px',
@@ -88,6 +90,10 @@ export default function SignIn() {
 
     return (
         <Box position="relative" display="flex" justifyContent="center">
+            <Head>
+                <title>Реєстрація {MAIN_NAME}</title>
+            </Head>
+
             <Loading show={loading}></Loading>
 
             <Box p={2} m={2} border={1} borderColor={primaryLightColor} borderRadius={borderRadius}

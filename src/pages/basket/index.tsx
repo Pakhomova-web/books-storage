@@ -23,6 +23,7 @@ import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 import { useCreateOrder } from '@/lib/graphql/queries/order/hook';
 import BasketItem from '@/components/basket-item';
 import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
+import Head from 'next/head';
 
 const TitleBoxStyled = styled(Box)(({ theme }) => ({
     ...styleVariables.bigTitleFontSize(theme),
@@ -187,6 +188,10 @@ export default function Basket() {
 
     return (
         <>
+            <Head>
+                <title>Кошик ({user?.basketItems?.length ? user.basketItems.length : 'пустий'})</title>
+            </Head>
+
             <Loading show={loading || updating || loadingDeliveries || creating}/>
 
             <TitleBoxStyled pb={1} m={1}>Кошик</TitleBoxStyled>

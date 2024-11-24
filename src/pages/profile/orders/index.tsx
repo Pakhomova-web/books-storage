@@ -12,6 +12,7 @@ import { IPageable, OrderEntity } from '@/lib/data/types';
 import OrderModal from '@/components/modals/order-modal';
 import { useRouter } from 'next/router';
 import OrdersList from '@/components/orders/orders-list';
+import Head from 'next/head';
 
 const emptyListImageBoxStyles = {
     width: '100px',
@@ -50,6 +51,10 @@ export default function Orders() {
 
     return (
         <ProfileMenu activeUrl="orders">
+            <Head>
+                <title>Профіль - Замовлення</title>
+            </Head>
+
             <Loading show={loading}></Loading>
 
             {!!items?.length && <Box>

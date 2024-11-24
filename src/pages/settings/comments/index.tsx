@@ -11,6 +11,7 @@ import Loading from '@/components/loading';
 import ErrorNotification from '@/components/error-notification';
 import CustomModal from '@/components/modals/custom-modal';
 import SettingsMenu from '@/pages/settings/settings-menu';
+import Head from 'next/head';
 
 const CommentStyledGrid = styled(Grid)(() => ({
     display: 'flex',
@@ -80,6 +81,10 @@ export default function Comments() {
 
     return (
         <SettingsMenu activeUrl="comments">
+            <Head>
+                <title>Налаштування - Коментарі</title>
+            </Head>
+
             <Loading show={loading}></Loading>
 
             {!!items?.length && items.map((item, index) => (

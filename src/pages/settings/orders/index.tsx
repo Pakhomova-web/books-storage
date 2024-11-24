@@ -15,6 +15,7 @@ import { TableKey } from '@/components/table/table-key';
 import SortFiltersContainer from '@/components/filters/sort-filters-container';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
+import Head from 'next/head';
 
 export default function Orders() {
     const { user } = useAuth();
@@ -85,6 +86,10 @@ export default function Orders() {
 
     return (
         <SettingsMenu activeUrl="orders">
+            <Head>
+                <title>Налаштування - Замовлення</title>
+            </Head>
+
             <Loading show={loading}></Loading>
 
             {isAdmin(user) &&

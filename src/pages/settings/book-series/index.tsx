@@ -13,6 +13,7 @@ import { BookSeriesFilters } from '@/components/filters/book-series-filters';
 import { isAdmin } from '@/utils/utils';
 import { useAuth } from '@/components/auth-context';
 import SettingsMenu from '@/pages/settings/settings-menu';
+import Head from 'next/head';
 
 export default function BookSeries() {
     const { user, checkAuth } = useAuth();
@@ -94,6 +95,10 @@ export default function BookSeries() {
 
     return (
         <SettingsMenu activeUrl="book-series" onAddClick={onAdd}>
+            <Head>
+                <title>Налаштування - Серії</title>
+            </Head>
+
             <Loading show={loading || deleting}></Loading>
 
             {isAdmin(user) &&

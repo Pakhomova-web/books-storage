@@ -29,6 +29,8 @@ import { TableKey } from '@/components/table/table-key';
 import { getLanguageById } from '@/lib/graphql/queries/language/hooks';
 import { getBookSeriesById } from '@/lib/graphql/queries/book-series/hook';
 import BooksList from '@/components/books-list';
+import Head from 'next/head';
+import { MAIN_NAME } from '@/constants/main-name';
 
 const backBoxStyles = {
     display: 'flex',
@@ -185,6 +187,10 @@ export default function Books() {
 
     return (
         <>
+            <Head>
+                <title>{MAIN_NAME} - Пошук</title>
+            </Head>
+
             <Loading show={loading}></Loading>
 
             <BookFilters tableKeys={tableKeys}

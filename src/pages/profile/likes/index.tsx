@@ -10,6 +10,7 @@ import ErrorNotification from '@/components/error-notification';
 import { useBooksByIds } from '@/lib/graphql/queries/book/hook';
 import ProfileMenu from '@/pages/profile/profile-menu';
 import CustomImage from '@/components/custom-image';
+import Head from 'next/head';
 
 const emptyListImageBoxStyles = {
     width: '100px',
@@ -28,6 +29,10 @@ export default function Likes() {
 
     return (
         <ProfileMenu activeUrl="likes">
+            <Head>
+                <title>Профіль - Обрані книжки</title>
+            </Head>
+
             <Loading show={loading}></Loading>
 
             <Grid container spacing={2} p={1}>

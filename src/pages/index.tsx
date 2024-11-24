@@ -1,9 +1,12 @@
 import { Box, BoxProps, Button, Grid, useTheme } from '@mui/material';
 import React from 'react';
-import Loading from '@/components/loading';
-import { borderRadius, styleVariables } from '@/constants/styles-variables';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import Head from 'next/head';
+
+import Loading from '@/components/loading';
+import { borderRadius, styleVariables } from '@/constants/styles-variables';
 import { useBookTypes } from '@/lib/graphql/queries/book-type/hook';
 import CustomImage from '@/components/custom-image';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -11,8 +14,8 @@ import { usePublishingHouses } from '@/lib/graphql/queries/publishing-house/hook
 import SocialMediaBox from '@/components/social-media-box';
 import BooksList from '@/components/books-list';
 import { useBooksWithDiscount } from '@/lib/graphql/queries/book/hook';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import DeliveriesBox from '@/components/deliveries-box';
+import { MAIN_NAME } from '@/constants/main-name';
 
 const bookTypeBoxStyles = {
     borderRadius,
@@ -75,6 +78,10 @@ export default function Home() {
 
     return (
         <>
+            <Head>
+                <title>Головна {MAIN_NAME}</title>
+            </Head>
+
             <SocialMediaBox></SocialMediaBox>
 
             <Grid container position="relative" mb={loadingBookTypes ? 1 : 0} justifyContent="center">

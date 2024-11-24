@@ -18,6 +18,7 @@ import HdrStrongIcon from '@mui/icons-material/HdrStrong';
 import HdrWeakIcon from '@mui/icons-material/HdrWeak';
 import { ApolloError } from '@apollo/client';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 const subTitleStyles = {
     ...styleVariables.hintFontSize,
@@ -225,6 +226,10 @@ export default function Books() {
 
     return (
         <SettingsMenu activeUrl="books" onAddClick={onAdd}>
+            <Head>
+                <title>Налаштування - Книги</title>
+            </Head>
+
             <Loading show={loading || downloadingCsv || updating}></Loading>
 
             {isAdmin(user) &&

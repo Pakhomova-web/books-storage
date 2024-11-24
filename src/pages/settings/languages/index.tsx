@@ -14,6 +14,7 @@ import { styleVariables } from '@/constants/styles-variables';
 import { isAdmin } from '@/utils/utils';
 import { useAuth } from '@/components/auth-context';
 import SettingsMenu from '@/pages/settings/settings-menu';
+import Head from 'next/head';
 
 export default function Languages() {
     const { user, checkAuth } = useAuth();
@@ -86,6 +87,10 @@ export default function Languages() {
 
     return (
         <SettingsMenu activeUrl="languages" onAddClick={onAdd}>
+            <Head>
+                <title>Налаштування - Мови</title>
+            </Head>
+
             <Loading show={loading || deleting}></Loading>
 
             {isAdmin(user) &&

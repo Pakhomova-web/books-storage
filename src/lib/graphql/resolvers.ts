@@ -13,7 +13,6 @@ import { createCoverType, deleteCoverType, getCoverTypes, updateCoverType } from
 import {
     AuthorEntity,
     BookEntity,
-    BookFilter,
     BookSeriesEntity,
     BookTypeEntity,
     CommentEntity,

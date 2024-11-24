@@ -13,6 +13,7 @@ import { useAuth } from '@/components/auth-context';
 import { isAdmin } from '@/utils/utils';
 import SettingsMenu from '@/pages/settings/settings-menu';
 import { NameFiltersPanel } from '@/components/filters/name-filters-panel';
+import Head from 'next/head';
 
 export default function Authors() {
     const { user, checkAuth } = useAuth();
@@ -83,6 +84,10 @@ export default function Authors() {
 
     return (
         <SettingsMenu activeUrl="authors" onAddClick={onAdd}>
+            <Head>
+                <title>Налаштування - Автора</title>
+            </Head>
+
             <Loading show={loading || deleting}></Loading>
 
             {isAdmin(user) &&
