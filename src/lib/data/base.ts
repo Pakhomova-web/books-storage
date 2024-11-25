@@ -53,7 +53,9 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
                 } else if (key === 'isInStock') {
                     andFilters.push({ numberInStock: { $gt: 0 } });
                 } else if (key === 'withDiscount') {
-                    andFilters.push({ discount: { $gt: 0 } });
+                    if (!!filters[key]) {
+                        andFilters.push({ discount: { $gt: 0 } });
+                    }
                 } else if (key === 'archived') {
                     andFilters.push({ archived: !!filters[key] ? true : { $in: [null, false] } });
                 } else if (key === 'ages') {

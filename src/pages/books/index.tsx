@@ -80,7 +80,7 @@ export default function Books() {
         if (toRefreshData) {
             const url = new URL(window.location.href);
 
-            Object.keys(filters).forEach(key => {
+            Object.keys(filters || {}).forEach(key => {
                 if (filters[key] !== null && filters[key] !== undefined) {
                     url.searchParams.set(key, filters[key]);
                 }
