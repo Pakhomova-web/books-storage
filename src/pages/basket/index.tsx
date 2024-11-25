@@ -125,10 +125,12 @@ export default function Basket() {
         } else if (isNovaPostSelected(deliveryId) && !novaPostOffice) {
             formContext.setError('novaPostOffice', { message: '№ відділення/поштомата обов\'язкове' });
             formContext.clearErrors('postcode');
+            formContext.setValue('postcode', null);
             invalid = true;
         } else if (isUkrPoshtaSelected(deliveryId) && !postcode) {
             formContext.setError('postcode', { message: 'Індекс обов\'язковий' });
             formContext.clearErrors('novaPostOffice');
+            formContext.setValue('novaPostOffice', null);
             invalid = true;
         } else {
             formContext.clearErrors('novaPostOffice');
