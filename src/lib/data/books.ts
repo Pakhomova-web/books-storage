@@ -232,7 +232,6 @@ export async function getBooksFromSeries(bookId: string, rowsPerPage: number) {
 
     const book = await Book.findById(bookId);
 
-    console.log(book);
     return Book
         .find({ _id: { $ne: bookId }, bookSeries: book.bookSeries, archived: { $in: [false, null] } })
         .limit(rowsPerPage)

@@ -402,7 +402,8 @@ export default function BookDetails() {
                         Інші книги із цієї серії
 
                           {booksFromSeries?.length === rowsPerPageBooksFromSeries &&
-                            <Button variant="outlined" onClick={() => router.push(`/books?withDiscount=true`)}>
+                            <Button variant="outlined"
+                                    onClick={() => router.push(`/books?bookSeries=${book.bookSeries.id}`)}>
                               Дивитися усі<ArrowForwardIcon/></Button>}
                       </Box>
                     </Grid>
