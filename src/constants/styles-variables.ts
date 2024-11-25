@@ -92,13 +92,15 @@ export const styleVariables = {
         background: 'white'
     },
     sectionTitle: {
+        justifyContent: 'center',
         backgroundColor: primaryLightColor,
         borderRadius,
         fontSize: titleFontSize,
         display: 'flex',
         alignItems: 'center',
         width: '100%',
-        p: 1
+        p: 1,
+        gap: 2
     }
 };
 

@@ -20,12 +20,8 @@ export default function DiscountBooks() {
         <Grid container position="relative" display="flex" justifyContent="center" alignItems="center">
             <Loading show={loadingBooksWithDiscounts}></Loading>
 
-            {(loadingBooksWithDiscounts && !booksWithDiscounts?.length ||
-                    !loadingBooksWithDiscounts && !!booksWithDiscounts?.length) &&
-              <Grid item xs={12} py={1} px={2} justifyContent="center"
-                    gap={1}
-                    mb={loadingBooksWithDiscounts ? 1 : 0}
-                    sx={styleVariables.sectionTitle}>
+            {!loadingBooksWithDiscounts && !!booksWithDiscounts?.length &&
+              <Grid item xs={12} mb={loadingBooksWithDiscounts ? 1 : 0} sx={styleVariables.sectionTitle}>
                 Акційні товари
 
                   {booksWithDiscounts?.length === rowsPerPageBooksWithDiscount &&

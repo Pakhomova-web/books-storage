@@ -223,15 +223,19 @@ export async function getBookComments(id: string, page: number, rowsPerPage: num
     return book.comments.splice(rowsPerPage * page, rowsPerPage);
 }
 
-export async function getBooksFromSeries(bookSeriesId: string) {
-    if (!bookSeriesId) {
-        throw new GraphQLError(`Не вказан ідентифікатор серії.`, {
+export async function getBooksFromSeries(bookId: string, rowsPerPage: number) {
+    if (!bookId) {
+        throw new GraphQLError(`Не вказан ідентифікатор книги.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
 
+    const book = await Book.findById(bookId);
+
+    console.log(book);
     return Book
-        .find({ bookSeries: bookSeriesId, archived: { $in: [false, null] } })
+        .find({ _id: { $ne: bookId }, bookSeries: book.bookSeries, archived: { $in: [false, null] } })
+        .limit(rowsPerPage)
         .populate({
             path: 'bookSeries',
             populate: {

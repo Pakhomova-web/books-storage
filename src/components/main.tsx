@@ -52,7 +52,7 @@ export default function Main({ children }) {
               <>
                 <Toolbar/>
                 <Box sx={styleVariables.overflowHidden}>
-                  <Box sx={pageStyles} position="relative" padding={{ lg: '0 15%', md: '0 5%', xs: 0 }}>
+                  <Box sx={pageStyles} position="relative" px={{ lg: '15%', md: '5%', xs: 1 }} pt={1}>
                       {children}
                   </Box>
                 </Box>

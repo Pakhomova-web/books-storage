@@ -165,8 +165,8 @@ const resolvers: Resolvers = {
         bookComments: async (_root, { id, page, rowsPerPage }) => {
             return getBookComments(id, page, rowsPerPage).catch(error => parseError(error));
         },
-        booksFromSeries: async (_root, { bookSeriesId }) => {
-            return getBooksFromSeries(bookSeriesId).catch(error => parseError(error));
+        booksFromSeries: async (_root, { bookId, rowsPerPage }) => {
+            return getBooksFromSeries(bookId, rowsPerPage).catch(error => parseError(error));
         },
         booksByAuthor: async (_root, { authorId, rowsPerPage, excludeBookSeriesId }) => {
             return getBooksByAuthor(authorId, rowsPerPage, excludeBookSeriesId).catch(error => parseError(error));

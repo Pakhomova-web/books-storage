@@ -226,8 +226,8 @@ export const bookCommentsQuery = gql`
 `;
 
 export const booksFromSeries = gql`
-    query BooksFromSeries($bookSeriesId: ID!) {
-        items: booksFromSeries(bookSeriesId: $bookSeriesId) {
+    query BooksFromSeries($bookId: ID!, $rowsPerPage: Int!) {
+        items: booksFromSeries(bookId: $bookId, rowsPerPage: $rowsPerPage) {
             ...Book
         }
     }

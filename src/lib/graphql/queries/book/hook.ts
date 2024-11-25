@@ -51,11 +51,11 @@ export async function getBookComments(id: string, page: number, rowsPerPage: num
     return items;
 }
 
-export async function getBooksFromSeries(bookSeriesId: string) {
+export async function getBooksFromSeries(bookId: string, rowsPerPage: number) {
     const { data: { items } } = await apolloClient.query({
         query: booksFromSeries,
         fetchPolicy: 'no-cache',
-        variables: { bookSeriesId }
+        variables: { bookId, rowsPerPage }
     });
 
     return items;

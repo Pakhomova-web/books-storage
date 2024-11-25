@@ -13,7 +13,7 @@ export default function DeliveriesBox() {
         <Grid container position="relative">
             <Loading show={loadingDeliveries}></Loading>
 
-            <Grid item xs={12} p={1} justifyContent="center" sx={styleVariables.sectionTitle}>
+            <Grid item xs={12} sx={styleVariables.sectionTitle}>
                 Способи доставки
             </Grid>
 

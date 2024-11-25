@@ -155,7 +155,7 @@ const typeDefs =  /* GraphQL */ `
         languageById(id: ID!): Language
         bookSeriesByIdQuery(id: ID!): BookSeries
         bookComments(id: ID!, page: Int!, rowsPerPage: Int!): [Comment!]
-        booksFromSeries(bookSeriesId: ID!): [Book!]
+        booksFromSeries(bookId: ID!, rowsPerPage: Int!): [Book!]
         booksByAuthor(authorId: ID!, rowsPerPage: Int!, excludeBookSeriesId: ID): [Book!]
         booksWithDiscount(rowsPerPage: Int!): [Book!]
         booksWithNotApprovedComments(pageSettings: PageableInput): BookSubList

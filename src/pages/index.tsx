@@ -78,9 +78,7 @@ export default function Home() {
             <Grid container position="relative" mb={loadingBookTypes ? 1 : 0} justifyContent="center">
                 <Loading show={loadingBookTypes}></Loading>
 
-                <Grid item xs={12} p={2} justifyContent="center" sx={styleVariables.sectionTitle}>
-                    Типи книг
-                </Grid>
+                <Grid item xs={12} sx={styleVariables.sectionTitle}>Типи книг</Grid>
 
                 {!!bookTypes?.length && bookTypes?.map((type, index) => (
                     mobileMatches ?
@@ -108,8 +106,7 @@ export default function Home() {
             <Grid container position="relative">
                 <Loading show={loadingPublishingHouses}></Loading>
 
-                <Grid item xs={12} p={2} justifyContent="center" sx={styleVariables.sectionTitle}
-                      mb={loadingPublishingHouses ? 1 : 0}>
+                <Grid item xs={12} sx={styleVariables.sectionTitle} mb={loadingPublishingHouses ? 1 : 0}>
                     Видавництва
                 </Grid>
 
