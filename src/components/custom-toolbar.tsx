@@ -127,7 +127,7 @@ export default function CustomToolbar() {
         <>
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <StyledToolbar>
-                    <Box padding={{ lg: '0 15%', xs: 0 }} margin="0 auto" width="100%" display="flex"
+                    <Box padding={{ lg: '0 15%', md: '0 5%', xs: 0 }} margin="0 auto" width="100%" display="flex"
                          alignItems="center"
                          justifyContent="space-between">
                         <Box>

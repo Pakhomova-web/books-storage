@@ -28,6 +28,7 @@ import BooksList from '@/components/books-list';
 import DeliveriesBox from '@/components/deliveries-box';
 import Head from 'next/head';
 import { MAIN_NAME } from '@/constants/main-name';
+import DiscountBooks from '@/components/discount-books';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
     height: '40px',
@@ -186,7 +187,7 @@ export default function BookDetails() {
     return (
         <>
             <Head>
-                <title>{ book ? `${book.name} - ${book.bookSeries.name}` : MAIN_NAME }</title>
+                <title>{book ? `${book.name} - ${book.bookSeries.name}` : MAIN_NAME}</title>
             </Head>
 
             <Loading show={loading}></Loading>
@@ -416,6 +417,8 @@ export default function BookDetails() {
                           </Grid>}
                     </Grid>
                   </Grid>}
+
+                <DiscountBooks/>
 
                   {book.authors.filter(a => !!a.description).map((author, index) => (
                       <>

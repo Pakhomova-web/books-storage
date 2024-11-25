@@ -1,8 +1,7 @@
-import { Box, BoxProps, Button, Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Head from 'next/head';
 
 import Loading from '@/components/loading';
@@ -12,10 +11,9 @@ import CustomImage from '@/components/custom-image';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { usePublishingHouses } from '@/lib/graphql/queries/publishing-house/hook';
 import SocialMediaBox from '@/components/social-media-box';
-import BooksList from '@/components/books-list';
-import { useBooksWithDiscount } from '@/lib/graphql/queries/book/hook';
 import DeliveriesBox from '@/components/deliveries-box';
 import { MAIN_NAME } from '@/constants/main-name';
+import DiscountBooks from '@/components/discount-books';
 
 const bookTypeBoxStyles = {
     borderRadius,
@@ -25,20 +23,17 @@ const bookTypeBoxStyles = {
     backgroundColor: styleVariables.gray
 };
 
-const StyledBookTypeBox = styled(Box)<BoxProps>(() => ({
-    height: '300px',
+const StyledBookTypeBox = styled(Box)(({ theme }) => ({
+    [theme.breakpoints.up('lg')]: {
+        height: '300px'
+    },
+    height: '250px',
     maxHeight: '50vh',
     position: 'relative',
     justifyContent: 'center',
     flexDirection: 'column',
     overflow: 'hidden',
-    ...bookTypeBoxStyles,
-    ':hover .bookTypeBox': {
-        height: '100%',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
+    ...bookTypeBoxStyles
 }));
 
 const imageBoxStyles = {
@@ -60,14 +55,8 @@ const mobileImageBoxStyles = {
     overflow: 'hidden'
 };
 
-const rowsPerPageBooksWithDiscount = 3;
-
 export default function Home() {
     const { loading: loadingBookTypes, items: bookTypes } = useBookTypes({ orderBy: 'name', order: 'asc' });
-    const {
-        loading: loadingBooksWithDiscounts,
-        items: booksWithDiscounts
-    } = useBooksWithDiscount(rowsPerPageBooksWithDiscount);
     const { loading: loadingPublishingHouses, items: publishingHouses } = usePublishingHouses({
         orderBy: 'name',
         order: 'asc'
@@ -83,6 +72,8 @@ export default function Home() {
             </Head>
 
             <SocialMediaBox></SocialMediaBox>
+
+            <DiscountBooks/>
 
             <Grid container position="relative" mb={loadingBookTypes ? 1 : 0} justifyContent="center">
                 <Loading show={loadingBookTypes}></Loading>
@@ -102,38 +93,16 @@ export default function Home() {
                                 {type.name}
                             </Box>
                         </Grid> :
-                        <Grid key={index} item p={1} md={3} lg={2}
+                        <Grid key={index} item p={1} md={4} lg={3} xl={2}
                               onClick={() => router.push(`/books?bookType=${type.id}`)}>
                             <StyledBookTypeBox>
                                 <Box sx={imageBoxStyles}>
                                     <CustomImage imageId={type.imageId} isBookType={true}></CustomImage>
                                 </Box>
-                                <Box sx={bookTypeNameStyles} p={2} className="bookTypeBox">{type.name}</Box>
+                                <Box sx={bookTypeNameStyles} p={2}>{type.name}</Box>
                             </StyledBookTypeBox>
                         </Grid>
                 ))}
-            </Grid>
-
-            <Grid container position="relative" display="flex" justifyContent="center" alignItems="center">
-                <Loading show={loadingBooksWithDiscounts}></Loading>
-
-                {(loadingBooksWithDiscounts && !booksWithDiscounts?.length ||
-                        !loadingBooksWithDiscounts && !!booksWithDiscounts?.length) &&
-                  <Grid item xs={12} py={1} px={2} justifyContent="center"
-                        gap={1}
-                        mb={loadingBooksWithDiscounts ? 1 : 0}
-                        sx={styleVariables.sectionTitle}>
-                    Акційні товари
-
-                      {booksWithDiscounts?.length === rowsPerPageBooksWithDiscount &&
-                        <Button variant="outlined" onClick={() => router.push(`/books?withDiscount=true`)}>
-                          Дивитися усі<ArrowForwardIcon/></Button>}
-                  </Grid>}
-
-                <Grid container display="flex" justifyContent="center">
-                    {!!booksWithDiscounts?.length &&
-                      <BooksList items={booksWithDiscounts}></BooksList>}
-                </Grid>
             </Grid>
 
             <Grid container position="relative">
