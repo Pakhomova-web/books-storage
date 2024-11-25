@@ -1,4 +1,4 @@
-import { Box, Toolbar } from '@mui/material';
+import { Box, Toolbar, Tooltip } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react';
@@ -9,9 +9,29 @@ import Loading from '@/components/loading';
 import { useAuth } from '@/components/auth-context';
 import { UserEntity } from '@/lib/data/types';
 import { isAdmin } from '@/utils/utils';
+import CustomImage from '@/components/custom-image';
+import { styled } from '@mui/material/styles';
 
 const authUrls = ['/sign-in'];
 const commonUrls = ['/books', '/books/details'];
+
+const StyledDiscountBox = styled(Box)(({ theme }) => ({
+    position: 'fixed',
+    bottom: '15px',
+    borderRadius: '50%',
+    color: 'white',
+    cursor: 'pointer',
+    textAlign: 'center',
+    [theme.breakpoints.up('lg')]: {
+        height: '90px'
+    },
+    [theme.breakpoints.down('lg')]: {
+        height: '75px'
+    },
+    [theme.breakpoints.down('md')]: {
+        height: '60px'
+    }
+}));
 
 export default function Main({ children }) {
     const [loading, setLoading] = useState<boolean>(false);
@@ -54,6 +74,14 @@ export default function Main({ children }) {
                 <Box sx={styleVariables.overflowHidden}>
                   <Box sx={pageStyles} position="relative" px={{ lg: '15%', md: '5%', xs: 1 }} pt={1}>
                       {children}
+
+                      {!isSettings() && <Tooltip title="Знижки від 30%">
+                        <StyledDiscountBox left={{ lg: '10%', xs: '10px' }}
+                                           height={{ lg: '90px', md: '75px', xs: '60px' }}
+                                           onClick={() => router.push('/books?withDiscount=true')}>
+                          <CustomImage imageLink="discount_icon.png"/>
+                        </StyledDiscountBox>
+                      </Tooltip>}
                   </Box>
                 </Box>
               </>}

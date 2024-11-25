@@ -66,7 +66,8 @@ export default function Books() {
         { title: 'Тип обкладинки', sortValue: 'coverType', type: 'text' },
         { title: 'Автор', sortValue: 'author', type: 'text' },
         { title: 'Ціна', sortValue: 'price', type: 'text' },
-        { title: 'Наявність', sortValue: 'numberInStock', type: 'text' }
+        { title: 'Наявність', sortValue: 'numberInStock', type: 'text' },
+        { title: 'Знижка', sortValue: 'discount', type: 'text' }
     ]);
     const [filters, setFilters] = useState<BookFilter>(new BookFilter(router.query));
     const [option, setOption] = useState<{ title: string, param?: string, imageId?: string }[]>();

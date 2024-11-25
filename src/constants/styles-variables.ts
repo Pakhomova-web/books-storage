@@ -1,5 +1,6 @@
 const gray = 'rgb(244, 244, 244)';
 export const warnColor = '#d00';
+export const lightWarnColor = '#f34747';
 export const primaryColor = '#448AFF';
 export const primaryLightColor = 'rgba(68, 138, 255, 0.2)';
 export const redLightColor = 'rgba(171, 51, 44, 0.2)';
