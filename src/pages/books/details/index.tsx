@@ -134,6 +134,14 @@ export default function BookDetails() {
                         router.push(`/books?authors=${author.id}`);
                     }
                 } as TableKey<BookEntity>)),
+                ...(book.illustrators || []).map((illustrator, i) => ({
+                    title: i === 0 ? 'Іллюстратор' : '',
+                    type: 'text',
+                    renderValue: () => illustrator.name,
+                    onValueClick: () => {
+                        router.push(`/books?illustrators=${illustrator.id}`);
+                    }
+                } as TableKey<BookEntity>)),
                 { title: 'Кількість сторінок', type: 'text', renderValue: (book: BookEntity) => book.numberOfPages }
             ]);
         }

@@ -39,7 +39,8 @@ export function BookFilters(props: IBookFiltersProps) {
         publishingHouse,
         bookSeries,
         ages,
-        authors
+        authors,
+        illustrators
     } = formContext.watch();
     const { items: bookTypeOptions } = useBookTypeOptions();
     const { items: pageTypeOptions } = usePageTypeOptions();
@@ -191,6 +192,18 @@ export function BookFilters(props: IBookFiltersProps) {
                                                 name="authors" showCheckbox variant="outlined"/>
                             {!!authors?.length &&
                               <Box sx={customFieldClearBtnStyles} onClick={() => clearValue('authors')}>Очистити</Box>}
+                        </Box>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Box position="relative">
+                            <MultiSelectElement fullWidth
+                                                options={authorOptions}
+                                                id="illustrators"
+                                                label="Іллюстратор"
+                                                name="illustrators" showCheckbox variant="outlined"/>
+                            {!!illustrators?.length &&
+                              <Box sx={customFieldClearBtnStyles} onClick={() => clearValue('illustrators')}>Очистити</Box>}
                         </Box>
                     </Grid>
 

@@ -53,6 +53,7 @@ export type Book = {
   discount?: Maybe<Scalars['Float']['output']>;
   format?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
+  illustrators?: Maybe<Array<Maybe<Author>>>;
   imageIds?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   isbn?: Maybe<Scalars['String']['output']>;
   language: Language;
@@ -74,6 +75,7 @@ export type BookCreateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   discount?: InputMaybe<Scalars['Float']['input']>;
   format?: InputMaybe<Scalars['String']['input']>;
+  illustratorIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   imageIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   isbn?: InputMaybe<Scalars['String']['input']>;
   languageId: Scalars['ID']['input'];
@@ -94,6 +96,7 @@ export type BookSearchInput = {
   coverType?: InputMaybe<Scalars['ID']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['ID']['input']>;
+  illustrators?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   isInStock?: InputMaybe<Scalars['Boolean']['input']>;
   isbn?: InputMaybe<Scalars['String']['input']>;
   language?: InputMaybe<Scalars['ID']['input']>;
@@ -171,6 +174,7 @@ export type BookUpdateInput = {
   discount?: InputMaybe<Scalars['Float']['input']>;
   format?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
+  illustratorIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   imageIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   isbn?: InputMaybe<Scalars['String']['input']>;
   languageId: Scalars['ID']['input'];
@@ -1092,6 +1096,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
   discount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   format?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  illustrators?: Resolver<Maybe<Array<Maybe<ResolversTypes['Author']>>>, ParentType, ContextType>;
   imageIds?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   isbn?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   language?: Resolver<ResolversTypes['Language'], ParentType, ContextType>;

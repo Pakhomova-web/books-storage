@@ -42,6 +42,10 @@ const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
         ref: 'author',
         type: Schema.Types.ObjectId
     }],
+    illustrators: [{
+        ref: 'author',
+        type: Schema.Types.ObjectId
+    }],
     tags: [String],
     archived: Boolean,
     ages: [Number],

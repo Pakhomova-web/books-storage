@@ -46,6 +46,11 @@ const bookFragment = gql`
             name
             description
         }
+        illustrators {
+            id
+            name
+            description
+        }
         tags
         discount
         archived
@@ -228,28 +233,79 @@ export const bookCommentsQuery = gql`
 export const booksFromSeries = gql`
     query BooksFromSeries($bookId: ID!, $rowsPerPage: Int!) {
         items: booksFromSeries(bookId: $bookId, rowsPerPage: $rowsPerPage) {
-            ...Book
+            id
+            name
+            price
+            numberInStock
+            archived
+            imageIds
+            language {
+                id
+                name
+            }
+            bookSeries {
+                id
+                name
+                publishingHouse {
+                    id
+                    name
+                }
+            }
+            discount
         }
     }
-    ${bookFragment}
 `;
 
 export const booksByAuthorQuery = gql`
     query BooksByAuthor($authorId: ID!, $rowsPerPage: Int!, $excludeBookSeriesId: ID) {
         items: booksByAuthor(authorId: $authorId, rowsPerPage: $rowsPerPage, excludeBookSeriesId: $excludeBookSeriesId) {
-            ...Book
+            id
+            name
+            price
+            numberInStock
+            archived
+            imageIds
+            language {
+                id
+                name
+            }
+            bookSeries {
+                id
+                name
+                publishingHouse {
+                    id
+                    name
+                }
+            }
+            discount
         }
     }
-    ${bookFragment}
 `;
 
 export const booksWithDiscountQuery = gql`
     query BooksWithDiscount($rowsPerPage: Int!) {
         items: booksWithDiscount(rowsPerPage: $rowsPerPage) {
-            ...Book
+            id
+            name
+            price
+            numberInStock
+            archived
+            imageIds
+            language {
+                id
+                name
+            }
+            bookSeries {
+                id
+                name
+                publishingHouse {
+                    id
+                    name
+                }
+            }
+            discount
         }
     }
-    ${bookFragment}
 `;
 
 

@@ -129,6 +129,9 @@ export default function Books() {
         } else if (data?.authors?.length) {
             promise = getAuthorById(data?.authors[0])
                 .then((item: AuthorEntity) => [{ title: item.name }]);
+        } else if (data?.illustrators?.length) {
+            promise = getAuthorById(data?.illustrators[0])
+                .then((item: AuthorEntity) => [{ title: item.name }]);
         } else if (data?.publishingHouse) {
             promise = getPublishingHouseById(data?.publishingHouse as string)
                 .then((item: PublishingHouseEntity) => [{ title: item.name }]);

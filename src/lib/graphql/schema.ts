@@ -62,6 +62,7 @@ const typeDefs =  /* GraphQL */ `
         isbn: String
         language: Language!
         authors: [Author]
+        illustrators: [Author]
         format: String
         imageIds: [String]
         tags: [String]
@@ -330,6 +331,7 @@ const typeDefs =  /* GraphQL */ `
         isbn: String
         languageId: ID!
         authorIds: [ID]
+        illustratorIds: [ID]
         format: String
         imageIds: [String],
         tags: [String]
@@ -352,6 +354,7 @@ const typeDefs =  /* GraphQL */ `
         isbn: String
         languageId: ID!
         authorIds: [ID]
+        illustratorIds: [ID]
         format: String
         imageIds: [String]
         tags: [String]
@@ -371,6 +374,7 @@ const typeDefs =  /* GraphQL */ `
         isbn: String
         language: ID
         authors: [ID]
+        illustrators: [ID]
         publishingHouse: ID
         isInStock: Boolean
         withDiscount: Boolean

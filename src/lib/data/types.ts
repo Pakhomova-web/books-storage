@@ -90,6 +90,8 @@ export class BookEntity {
     language?: LanguageEntity;
     authorIds: string[];
     authors?: AuthorEntity[];
+    illustratorIds: string[];
+    illustrators?: AuthorEntity[];
     imageIds?: string[];
     tags?: string[];
     ages: number[];
@@ -119,6 +121,8 @@ export class BookEntity {
         this.tags = data.tags;
         this.authorIds = data.authorIds;
         this.authors = data.authors;
+        this.illustratorIds = data.illustratorIds;
+        this.illustrators = data.illustrators;
         this.archived = data.archived;
         this.ages = (data.ages || []).sort();
         this.discount = data.discount;
@@ -173,6 +177,7 @@ export class BookFilter {
     isbn?: string;
     language?: string;
     authors?: string[];
+    illustrators?: string[];
     publishingHouse?: string;
     isInStock?: boolean;
     withDiscount?: boolean;
@@ -193,6 +198,7 @@ export class BookFilter {
             this.isbn = data.isbn;
             this.language = data.language;
             this.authors = data.authors && typeof data.authors === 'string' ? data.authors.split(',') : data.authors;
+            this.illustrators = data.illustrators && typeof data.illustrators === 'string' ? data.illustrators.split(',') : data.illustrators;
             this.isInStock = data.isInStock ? data.isInStock.toString() === 'true' : null;
             this.withDiscount = data.withDiscount ? data.withDiscount.toString() === 'true' : null;
             this.publishingHouse = data.publishingHouse;

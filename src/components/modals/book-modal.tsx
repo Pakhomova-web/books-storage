@@ -48,6 +48,7 @@ interface IForm {
     numberInStock: number,
     price: number,
     authorIds: string[],
+    illustratorIds: string[],
     coverTypeId: string,
     languageId: string,
     pageTypeId: string,
@@ -71,6 +72,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             numberInStock: item?.numberInStock,
             price: item?.price,
             authorIds: item?.authors?.map(({ id }) => id),
+            illustratorIds: item?.illustrators?.map(({ id }) => id),
             languageId: item?.language?.id,
             coverTypeId: item?.coverType?.id,
             pageTypeId: item?.pageType?.id,
@@ -97,6 +99,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         description,
         ages,
         authorIds,
+        illustratorIds,
         discount
     } = formContext.watch();
     const [bookSeries, setBookSeries] = useState<BookSeriesEntity>(item?.bookSeries);
@@ -362,6 +365,22 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                             {isAdmin && !!authorIds?.length &&
                               <Box sx={customFieldClearBtnStyles}
                                    onClick={() => formContext.setValue('authorIds', null)}>
+                                Очистити
+                              </Box>}
+                        </Box>
+                    </Grid>
+
+                    <Grid item xs={12} md={6} lg={4}>
+                        <Box position="relative" mb={1}>
+                            <Loading isSmall={true} show={loadingAuthors}></Loading>
+                            <MultiSelectElement fullWidth
+                                                options={authorOptions}
+                                                id="illustrators"
+                                                label="Іллюстратори"
+                                                name="illustratorIds" showCheckbox variant="outlined"/>
+                            {isAdmin && !!illustratorIds?.length &&
+                              <Box sx={customFieldClearBtnStyles}
+                                   onClick={() => formContext.setValue('illustratorIds', null)}>
                                 Очистити
                               </Box>}
                         </Box>
