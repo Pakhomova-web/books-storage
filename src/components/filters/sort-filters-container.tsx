@@ -8,14 +8,6 @@ import { FiltersButton } from '@/components/filters/filters-button';
 import SortButton from '@/components/filters/sort-button';
 import { ISortKey } from '@/components/types';
 
-const filtersPanelContainer = {
-    width: '100%',
-    position: 'sticky',
-    top: 0,
-    zIndex: 3,
-    background: 'white'
-};
-
 interface ISortFiltersContainerProps<T> {
     onClear: () => void;
     onApply: () => void;
@@ -37,7 +29,7 @@ export default function SortFiltersContainer<T>(props: ISortFiltersContainerProp
     }
 
     return <>
-        <Grid container sx={filtersPanelContainer}>
+        <Grid container>
             {(mobileMatches || props.showAlwaysSorting) && sortKeys?.length ?
                 <>
                     <Grid item xs={6}>{renderFiltersButton(props.children)}</Grid>

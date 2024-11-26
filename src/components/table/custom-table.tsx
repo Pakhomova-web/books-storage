@@ -39,12 +39,6 @@ interface CustomTableProps<K> {
     children?: ReactNode
 }
 
-const stickyFooter = {
-    position: 'sticky',
-    bottom: 0,
-    background: 'white'
-};
-
 export default function CustomTable<T>(props: CustomTableProps<T>) {
     const [page, setPage] = useState<number>(props.pageSettings?.page || 0);
     const [rowsPerPage, setRowsPerPage] = useState<number>(props.pageSettings?.rowsPerPage || 25);
@@ -161,9 +155,7 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
                          onRowClick={props.onRowClick}
                          renderMobileView={props.renderMobileView}>
             </MobileTable>}
-            <Box sx={{ position: 'sticky', bottom: 0 }}>
-                {props.usePagination && <Table>{renderPaginator()}</Table>}
-                {props.children}
-            </Box>
+        {props.usePagination && <Table>{renderPaginator()}</Table>}
+        {props.children}
     </>);
 }
