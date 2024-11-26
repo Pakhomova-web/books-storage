@@ -31,15 +31,9 @@ import { getBookSeriesById } from '@/lib/graphql/queries/book-series/hook';
 import BooksList from '@/components/books-list';
 import Head from 'next/head';
 import { MAIN_NAME } from '@/constants/main-name';
-
-const backBoxStyles = {
-    display: 'flex',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    backgroundColor: primaryLightColor,
-    borderRadius
-};
+import IconWithText from '@/components/icon-with-text';
+import SocialMediaBox from '@/components/social-media-box';
+import DeliveriesBox from '@/components/deliveries-box';
 
 const StyledAdditionalTopicGrid = styled(Grid)(() => ({
     display: 'flex',
@@ -59,12 +53,10 @@ const StyledAdditionalTopicGrid = styled(Grid)(() => ({
 export default function Books() {
     const router = useRouter();
     const [pageSettings, setPageSettings] = useState<IPageable>({
-        order: 'asc', orderBy: '', page: 0, rowsPerPage: 25
+        order: 'asc', orderBy: '', page: 0, rowsPerPage: 24
     });
     const [tableKeys] = useState<TableKey<BookEntity>[]>([
         { title: 'Назва', sortValue: 'name', type: 'text' },
-        { title: 'Тип обкладинки', sortValue: 'coverType', type: 'text' },
-        { title: 'Автор', sortValue: 'author', type: 'text' },
         { title: 'Ціна', sortValue: 'price', type: 'text' },
         { title: 'Наявність', sortValue: 'numberInStock', type: 'text' },
         { title: 'Знижка', sortValue: 'discount', type: 'text' }
@@ -231,26 +223,28 @@ export default function Books() {
                         <BooksList items={items} filters={filters} pageUrl="/books"></BooksList>
                     </Grid>
 
-                    <Box sx={{ position: 'sticky', bottom: 0 }}>
-                        <Table>
-                            <TableFooter>
-                                <TableRow>
-                                    <TablePagination rowsPerPageOptions={[5, 10, 25]}
-                                                     count={totalCount}
-                                                     page={pageSettings.page}
-                                                     sx={styleVariables.paginatorStyles}
-                                                     labelRowsPerPage="Кільк. на сторінці"
-                                                     rowsPerPage={pageSettings.rowsPerPage}
-                                                     onPageChange={(_e, val: number) => onPageChange(val)}
-                                                     onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
-                                </TableRow>
-                            </TableFooter>
-                        </Table>
-                    </Box>
+                    <Table>
+                        <TableFooter>
+                            <TableRow>
+                                <TablePagination rowsPerPageOptions={[6, 12, 24]}
+                                                 count={totalCount}
+                                                 page={pageSettings.page}
+                                                 sx={styleVariables.paginatorStyles}
+                                                 labelRowsPerPage="Кільк. на сторінці"
+                                                 rowsPerPage={pageSettings.rowsPerPage}
+                                                 onPageChange={(_e, val: number) => onPageChange(val)}
+                                                 onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
+                            </TableRow>
+                        </TableFooter>
+                    </Table>
                 </>
-                : (!loading && <Box p={1} display="flex" justifyContent="center">Немає книг</Box>)}
+                : (!loading &&
+                <IconWithText imageLink="/no_results.png" text="На жаль пошук не дав результатів. Cпробуйте ще раз"/>)}
 
             {error && <ErrorNotification error={error}></ErrorNotification>}
+
+            <DeliveriesBox/>
+            <SocialMediaBox/>
         </>
     );
 }

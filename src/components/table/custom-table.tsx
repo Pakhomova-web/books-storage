@@ -92,14 +92,13 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
         }
     }
 
-    function renderPaginator(sticky = false, colSpan = 1) {
+    function renderPaginator() {
         return (
-            <TableFooter sx={sticky ? stickyFooter : {}}>
+            <TableFooter>
                 <TableRow>
-                    <TablePagination rowsPerPageOptions={[5, 10, 25]}
+                    <TablePagination rowsPerPageOptions={[6, 12, 24]}
                                      count={props.totalCount}
                                      page={page}
-                                     colSpan={colSpan}
                                      labelRowsPerPage="Кільк. на сторінці"
                                      sx={styleVariables.paginatorStyles}
                                      rowsPerPage={rowsPerPage}

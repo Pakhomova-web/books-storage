@@ -122,22 +122,20 @@ export default function Orders() {
                   {error && <ErrorNotification error={error}></ErrorNotification>}
                   {gettingError && <ErrorNotification error={gettingError}></ErrorNotification>}
 
-                <Box sx={{ position: 'sticky', bottom: 0 }}>
-                  <Table>
-                    <TableFooter>
-                      <TableRow>
-                        <TablePagination rowsPerPageOptions={[6, 12]}
-                                         count={totalCount}
-                                         page={pageSettings.page}
-                                         sx={styleVariables.paginatorStyles}
-                                         labelRowsPerPage="Кільк. на сторінці"
-                                         rowsPerPage={pageSettings.rowsPerPage}
-                                         onPageChange={(_e, val: number) => onPageChange(val)}
-                                         onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
-                      </TableRow>
-                    </TableFooter>
-                  </Table>
-                </Box>
+                <Table>
+                  <TableFooter>
+                    <TableRow>
+                      <TablePagination rowsPerPageOptions={[6, 12]}
+                                       count={totalCount}
+                                       page={pageSettings.page}
+                                       sx={styleVariables.paginatorStyles}
+                                       labelRowsPerPage="Кільк. на сторінці"
+                                       rowsPerPage={pageSettings.rowsPerPage}
+                                       onPageChange={(_e, val: number) => onPageChange(val)}
+                                       onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
+                    </TableRow>
+                  </TableFooter>
+                </Table>
 
                   {selectedItem && <OrderModal open={true}
                                                order={selectedItem}

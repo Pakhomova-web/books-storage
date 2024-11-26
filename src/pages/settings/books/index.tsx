@@ -149,7 +149,7 @@ export default function Books() {
     ]);
     const [selectedItem, setSelectedItem] = useState<BookEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({
-        order: 'asc', orderBy: '', page: 0, rowsPerPage: 5
+        order: 'asc', orderBy: '', page: 0, rowsPerPage: 6
     });
     const [filters, setFilters] = useState<BookFilter>({ archived: null });
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);

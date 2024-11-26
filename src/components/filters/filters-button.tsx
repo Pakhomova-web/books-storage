@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useState } from 'react';
 import TuneIcon from '@mui/icons-material/Tune';
 
@@ -27,7 +27,9 @@ export function FiltersButton({ onApply, onClear, children }) {
 
     return (
         <>
-            <Button fullWidth onClick={openFilters}><TuneIcon/> Фільтри</Button>
+            <Button fullWidth onClick={openFilters}>
+                <Box my={1} display="flex" alignItems="center"><TuneIcon/>Фільтри</Box>
+            </Button>
 
             <CustomModal open={openFiltersModal}
                          onClose={() => setOpenFiltersModal(false)}

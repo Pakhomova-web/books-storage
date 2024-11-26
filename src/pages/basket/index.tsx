@@ -24,18 +24,13 @@ import { useCreateOrder } from '@/lib/graphql/queries/order/hook';
 import BasketItem from '@/components/basket-item';
 import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
 import Head from 'next/head';
+import IconWithText from '@/components/icon-with-text';
 
 const TitleBoxStyled = styled(Box)(({ theme }) => ({
     ...styleVariables.bigTitleFontSize(theme),
     borderBottom: `1px solid ${primaryLightColor}`,
     textAlign: 'center'
 }));
-
-const basketImageBoxStyles = {
-    width: '100px',
-    height: '100px',
-    opacity: 0.5
-};
 
 export default function Basket() {
     const router = useRouter();
@@ -245,30 +240,24 @@ export default function Basket() {
                             <Grid item xs={12}>
                                 <Box borderTop={1} borderColor={primaryLightColor} width="100%"></Box>
                             </Grid>
-                        </> : <Grid item xs={12} display="flex" alignItems="center" flexDirection="column"
-                                    gap={2} mt={3}>
+                        </> : <Grid item xs={12} display="flex" alignItems="center" flexDirection="column">
                             {orderNumber ?
                                 <>
-                                    <Box sx={basketImageBoxStyles}>
-                                        <CustomImage imageLink="/completed_order.png"></CustomImage>
-                                    </Box>
-                                    <Box sx={styleVariables.titleFontSize}>Дякуємо!</Box>
+                                    <IconWithText imageLink="/completed_order.png" text="Дякуємо!" />)
                                     <Box display="flex">
                                         Ваше замовлення
                                         <Box mx={1} sx={styleVariables.orderNumberStyles}>№{orderNumber}</Box>
                                         оформлене!
                                     </Box>
-                                    <Box>Чекайте повідомлення від менеджера.</Box>
+
+                                    <Box my={2}>Чекайте повідомлення від менеджера.</Box>
 
                                     <Button variant="outlined" onClick={() => router.push('/')}>
                                         На головну сторінку
                                     </Button>
                                 </> :
                                 <>
-                                    <Box sx={basketImageBoxStyles}>
-                                        <CustomImage imageLink="/empty_basket.png"></CustomImage>
-                                    </Box>
-                                    <Box sx={styleVariables.titleFontSize}>Кошик пустий</Box>
+                                    <IconWithText imageLink="/empty_basket.png" text="Кошик пустий!" />
                                     <Button variant="outlined" onClick={() => router.push('/')}>
                                         До вибору книг
                                     </Button>

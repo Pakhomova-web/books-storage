@@ -11,12 +11,7 @@ import { useBooksByIds } from '@/lib/graphql/queries/book/hook';
 import ProfileMenu from '@/pages/profile/profile-menu';
 import CustomImage from '@/components/custom-image';
 import Head from 'next/head';
-
-const emptyListImageBoxStyles = {
-    width: '100px',
-    height: '100px',
-    opacity: 0.2
-};
+import IconWithText from '@/components/icon-with-text';
 
 export default function Likes() {
     const { user } = useAuth();
@@ -41,10 +36,7 @@ export default function Likes() {
 
             {!loading && !items?.length &&
               <Grid item display="flex" width="100%" alignItems="center" flexDirection="column">
-                <Box sx={emptyListImageBoxStyles} mb={2}>
-                  <CustomImage imageLink="/liked_books.png"></CustomImage>
-                </Box>
-                <Box sx={styleVariables.titleFontSize} mb={2}>Список вподобаних книг поки пустий</Box>
+                <IconWithText imageLink="/liked_books.png" text="Список вподобаних книг поки пустий"/>
                 <Button variant="outlined" onClick={() => router.push('/')}>
                   До вибору книг
                 </Button>
