@@ -13,9 +13,7 @@ export default function DeliveriesBox() {
         <Grid container position="relative">
             <Loading show={loadingDeliveries} isSmall={true}></Loading>
 
-            <Grid item xs={12} sx={styleVariables.sectionTitle}>
-                Способи доставки
-            </Grid>
+            <Grid item xs={12} sx={styleVariables.sectionTitle}>Способи доставки</Grid>
 
             {!loadingDeliveries && !!deliveries?.length && deliveries.map((delivery, index) =>
                 <Grid key={index} item xs={12} sm={4} display="flex" alignItems="center"

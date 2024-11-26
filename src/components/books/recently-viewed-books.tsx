@@ -7,16 +7,18 @@ import { useAuth } from '@/components/auth-context';
 
 export default function RecentlyViewedBooks() {
     const { user } = useAuth();
-    const { items } = useBooksByIds(user?.recentlyViewedBookIds || []);
+    const { items, loading } = useBooksByIds(user?.recentlyViewedBookIds || []);
 
     return (
         <Grid container position="relative" display="flex" justifyContent="center" alignItems="center">
-            <Grid item xs={12} sx={styleVariables.sectionTitle}>Нещодавно переглядали</Grid>
+            {!loading && <>
+              <Grid item xs={12} sx={styleVariables.sectionTitle}>Нещодавно переглядали</Grid>
 
-            <Grid container display="flex" justifyContent="center">
-                {!!items?.length &&
-                  <BooksList items={items}></BooksList>}
-            </Grid>
+              <Grid container display="flex" justifyContent="center">
+                  {!!items?.length &&
+                    <BooksList items={items}></BooksList>}
+              </Grid>
+            </>}
         </Grid>
     );
 }
