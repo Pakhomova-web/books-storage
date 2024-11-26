@@ -2,7 +2,7 @@ import Loading from '@/components/loading';
 import { Button, Grid } from '@mui/material';
 import { styleVariables } from '@/constants/styles-variables';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import BooksList from '@/components/books-list';
+import BooksList from './books-list';
 import React from 'react';
 import { useBooksWithDiscount } from '@/lib/graphql/queries/book/hook';
 import { useRouter } from 'next/router';

@@ -1,3 +1,5 @@
+import { changeRecentlyViewedBooks } from '@/lib/graphql/queries/book/hook';
+
 const typeDefs =  /* GraphQL */ `
     type Language {
         id: ID
@@ -94,6 +96,7 @@ const typeDefs =  /* GraphQL */ `
         role: String
         basketItems: [BasketItem!]
         likedBookIds: [String]
+        recentlyViewedBookIds: [String]
         postcode: Int
         city: String
         region: String
@@ -199,6 +202,7 @@ const typeDefs =  /* GraphQL */ `
         createBook(input: BookCreateInput!): Book
         likeBook(id: ID!): [ID!]
         unlikeBook(id: ID!): [ID!]
+        changeRecentlyViewedBooks(id: ID!): [ID!]
         addBookInBasket(id: ID!): [BasketItem!]
         removeBookInBasket(id: ID!): [BasketItem!]
         updateBookCountInBasket(id: ID!, count: Int!): [BasketItem!]

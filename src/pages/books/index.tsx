@@ -28,12 +28,13 @@ import { BookFilters } from '@/components/filters/book-filters';
 import { TableKey } from '@/components/table/table-key';
 import { getLanguageById } from '@/lib/graphql/queries/language/hooks';
 import { getBookSeriesById } from '@/lib/graphql/queries/book-series/hook';
-import BooksList from '@/components/books-list';
+import BooksList from '@/components/books/books-list';
 import Head from 'next/head';
 import { MAIN_NAME } from '@/constants/main-name';
 import IconWithText from '@/components/icon-with-text';
 import SocialMediaBox from '@/components/social-media-box';
 import DeliveriesBox from '@/components/deliveries-box';
+import RecentlyViewedBooks from '@/components/books/recently-viewed-books';
 
 const StyledAdditionalTopicGrid = styled(Grid)(() => ({
     display: 'flex',
@@ -242,6 +243,9 @@ export default function Books() {
                 <IconWithText imageLink="/no_results.png" text="На жаль пошук не дав результатів. Cпробуйте ще раз"/>)}
 
             {error && <ErrorNotification error={error}></ErrorNotification>}
+
+            <RecentlyViewedBooks/>
+
 
             <DeliveriesBox/>
             <SocialMediaBox/>

@@ -21,14 +21,15 @@ import Tag from '@/components/tag';
 import CustomLink from '@/components/custom-link';
 import Ages from '@/components/ages';
 import ImagesModal from '@/components/modals/images-modal';
-import CommentForm from '@/components/comment-form';
+import CommentForm from '@/components/form-fields/comment-form';
 import SocialMediaBox from '@/components/social-media-box';
 import { useAuth } from '@/components/auth-context';
-import BooksList from '@/components/books-list';
+import BooksList from '@/components/books/books-list';
 import DeliveriesBox from '@/components/deliveries-box';
 import Head from 'next/head';
 import { MAIN_NAME } from '@/constants/main-name';
-import DiscountBooks from '@/components/discount-books';
+import DiscountBooks from '@/components/books/discount-books';
+import RecentlyViewedBooks from '@/components/books/recently-viewed-books';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
     height: '40px',
@@ -61,7 +62,7 @@ export default function BookDetails() {
     const router = useRouter();
     const { loading, error, item: book } = useBook(router.query.id as string);
     const [commentsPage, setCommentsPage] = useState<number>(0);
-    const { user, setLikedBook, setBookInBasket } = useAuth();
+    const { user, setLikedBook, setBookInBasket, setRecentlyViewedBooks } = useAuth();
     const [commentsRowsPerPage] = useState<number>(3);
     const [keys, setKeys] = useState<TableKey<BookEntity>[]>([]);
     const [mainDetailsKeys, setMainDetailsKeys] = useState<TableKey<BookEntity>[]>([]);
@@ -76,6 +77,7 @@ export default function BookDetails() {
 
     useEffect(() => {
         if (book) {
+            setRecentlyViewedBooks(book.id);
             refetchComments(true);
             setBooksByAuthor([]);
             if (book.authors.length === 1) {
@@ -462,6 +464,8 @@ export default function BookDetails() {
               <ImagesModal open={true} imageIds={imageIds} onClose={() => setImageIds(null)}></ImagesModal>}
 
             {error && <ErrorNotification error={error}></ErrorNotification>}
+
+            <RecentlyViewedBooks/>
 
             <DeliveriesBox/>
 

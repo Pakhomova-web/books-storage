@@ -17,7 +17,7 @@ import {
     booksFromSeries,
     booksQuery,
     booksWithDiscountQuery,
-    booksWithNotApprovedCommentsQuery,
+    booksWithNotApprovedCommentsQuery, changeRecentlyViewedBooksQuery,
     createBookQuery,
     likeBookQuery,
     removeBookFromBasketQuery,
@@ -155,6 +155,12 @@ export async function likeBook(id: string): Promise<string[]> {
 
 export async function unlikeBook(id: string): Promise<string[]> {
     const { data: { ids } } = await apolloClient.mutate({ mutation: unlikeBookQuery, variables: { id } });
+
+    return ids;
+}
+
+export async function changeRecentlyViewedBooks(id: string): Promise<string[]> {
+    const { data: { ids } } = await apolloClient.mutate({ mutation: changeRecentlyViewedBooksQuery, variables: { id } });
 
     return ids;
 }

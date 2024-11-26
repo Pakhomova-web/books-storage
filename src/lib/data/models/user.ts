@@ -18,6 +18,7 @@ const userSchema = new Schema<UserEntity, Model<UserEntity>>({
         required: true
     },
     likedBookIds: [String],
+    recentlyViewedBookIds: [String],
     basketItems: [{
         bookId: { type: String, required: true },
         count: { type: Number, required: true }

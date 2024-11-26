@@ -140,6 +140,20 @@ export async function unlikeBook(userId: string, bookId: string) {
     return user.likedBookIds;
 }
 
+export async function changeRecentlyViewedBooks(userId: string, bookId: string) {
+    const user = await User.findById(userId);
+
+    if (user.recentlyViewedBookIds) {
+        user.recentlyViewedBookIds = user.recentlyViewedBookIds.filter((id, index) => id !== bookId && index < 2);
+        user.recentlyViewedBookIds = [bookId, ...user.recentlyViewedBookIds];
+    } else {
+        user.recentlyViewedBookIds = [bookId];
+    }
+    await user.save();
+
+    return user.recentlyViewedBookIds;
+}
+
 export async function addBookInBasket(userId: string, bookId: string) {
     const user = await User.findById(userId);
 

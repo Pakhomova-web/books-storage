@@ -1,5 +1,5 @@
 import { TableKey } from '@/components/table/table-key';
-import { BookEntity, OrderBookEntity, UserEntity } from '@/lib/data/types';
+import { OrderBookEntity, UserEntity } from '@/lib/data/types';
 import { ROLES } from '@/constants/roles';
 import { ageOptions } from '@/constants/options';
 
@@ -140,6 +140,7 @@ export function isSelfPickup(deliveryId: string) {
 
 export function getLinkForTracking(deliveryId: string, trackingNumber: string) {
     if (isNovaPostSelected(deliveryId)) {
+        navigator.clipboard.writeText(trackingNumber);
         return `https://tracking.novaposhta.ua/#/uk`;
     } else if (isUkrPoshtaSelected(deliveryId)) {
         return `https://track.ukrposhta.ua/tracking_UA.html?barcode=${trackingNumber}`;
@@ -159,18 +160,5 @@ export function onCopyOrderClick(items: OrderBookEntity[], finalFullSum: number,
         value = `${value}\nЗнижка: ${renderPrice(finalFullSum - finalSumWithDiscounts)}`;
         value = `${value}\nКінцева сума замовлення зі знижкою: ${renderPrice(finalSumWithDiscounts)}`;
     }
-    navigator.clipboard.writeText(value)
-
-    // const selBox = document.createElement('textarea');
-
-    // selBox.style.position = 'fixed';
-    // selBox.style.left = '0';
-    // selBox.style.top = '0';
-    // selBox.style.opacity = '0';
-    // selBox.value = value;
-    // document.body.appendChild(selBox);
-    // selBox.focus();
-    // selBox.select();
-    // document.execCommand('copy');
-    // document.body.removeChild(selBox);
+    navigator.clipboard.writeText(value);
 }

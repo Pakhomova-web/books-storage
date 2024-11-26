@@ -13,7 +13,7 @@ import { usePublishingHouses } from '@/lib/graphql/queries/publishing-house/hook
 import SocialMediaBox from '@/components/social-media-box';
 import DeliveriesBox from '@/components/deliveries-box';
 import { MAIN_NAME } from '@/constants/main-name';
-import DiscountBooks from '@/components/discount-books';
+import DiscountBooks from '@/components/books/discount-books';
 
 const bookTypeBoxStyles = {
     borderRadius,

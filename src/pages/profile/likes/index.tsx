@@ -1,15 +1,12 @@
-import { Box, Button, Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
-
-import { styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
-import BooksList from '@/components/books-list';
+import BooksList from '@/components/books/books-list';
 import { useAuth } from '@/components/auth-context';
 import ErrorNotification from '@/components/error-notification';
 import { useBooksByIds } from '@/lib/graphql/queries/book/hook';
 import ProfileMenu from '@/pages/profile/profile-menu';
-import CustomImage from '@/components/custom-image';
 import Head from 'next/head';
 import IconWithText from '@/components/icon-with-text';
 

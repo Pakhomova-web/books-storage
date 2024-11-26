@@ -53,7 +53,7 @@ import {
 import { createAuthor, deleteAuthor, getAuthorById, getAuthors, updateAuthor } from '@/lib/data/author';
 import { GraphQLError } from 'graphql/error';
 import {
-    addBookInBasket,
+    addBookInBasket, changeRecentlyViewedBooks,
     createUser,
     getNewToken,
     likeBook,
@@ -308,6 +308,10 @@ const resolvers: Resolvers = {
         unlikeBook: async (_root, { id }, { user }) => {
             _checkUser(user);
             return unlikeBook(user.id, id).catch(error => parseError(error));
+        },
+        changeRecentlyViewedBooks: async (_root, { id }, { user }) => {
+            _checkUser(user);
+            return changeRecentlyViewedBooks(user.id, id).catch(error => parseError(error));
         },
         addBookInBasket: async (_root, { id }, { user }) => {
             _checkUser(user);

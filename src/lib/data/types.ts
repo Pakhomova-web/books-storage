@@ -239,6 +239,7 @@ export class UserEntity {
     lastName?: string;
     role?: string;
     likedBookIds?: string[];
+    recentlyViewedBookIds?: string[];
     basketItems?: { bookId: string, count: number }[];
 
     preferredDeliveryId?: string;
@@ -259,6 +260,7 @@ export class UserEntity {
             this.lastName = data.lastName;
             this.role = data.role;
             this.likedBookIds = data.likedBookIds ? data.likedBookIds : [];
+            this.recentlyViewedBookIds = data.recentlyViewedBookIds ? data.recentlyViewedBookIds : [];
             this.basketItems = data.basketItems ? data.basketItems : [];
             this.region = data.region;
             this.district = data.district;

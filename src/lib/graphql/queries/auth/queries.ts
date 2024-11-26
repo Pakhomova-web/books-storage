@@ -12,6 +12,7 @@ const userFragment = gql`
             count
         }
         likedBookIds
+        recentlyViewedBookIds
         postcode
         city
         region

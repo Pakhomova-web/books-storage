@@ -282,6 +282,7 @@ export type Mutation = {
   addBookInBasket?: Maybe<Array<BasketItem>>;
   approveComment: Book;
   cancelOrder?: Maybe<Order>;
+  changeRecentlyViewedBooks?: Maybe<Array<Scalars['ID']['output']>>;
   createAuthor?: Maybe<Author>;
   createBook?: Maybe<Book>;
   createBookSeries?: Maybe<BookSeries>;
@@ -340,6 +341,11 @@ export type MutationApproveCommentArgs = {
 
 
 export type MutationCancelOrderArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationChangeRecentlyViewedBooksArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -875,6 +881,7 @@ export type User = {
   phoneNumber?: Maybe<Scalars['String']['output']>;
   postcode?: Maybe<Scalars['Int']['output']>;
   preferredDeliveryId?: Maybe<Scalars['ID']['output']>;
+  recentlyViewedBookIds?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   region?: Maybe<Scalars['String']['output']>;
   role?: Maybe<Scalars['String']['output']>;
 };
@@ -1251,6 +1258,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addBookInBasket?: Resolver<Maybe<Array<ResolversTypes['BasketItem']>>, ParentType, ContextType, RequireFields<MutationAddBookInBasketArgs, 'id'>>;
   approveComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationApproveCommentArgs, 'input'>>;
   cancelOrder?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationCancelOrderArgs, 'id'>>;
+  changeRecentlyViewedBooks?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType, RequireFields<MutationChangeRecentlyViewedBooksArgs, 'id'>>;
   createAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationCreateAuthorArgs, 'input'>>;
   createBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationCreateBookArgs, 'input'>>;
   createBookSeries?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType, RequireFields<MutationCreateBookSeriesArgs, 'input'>>;
@@ -1401,6 +1409,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   phoneNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   postcode?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   preferredDeliveryId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  recentlyViewedBookIds?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

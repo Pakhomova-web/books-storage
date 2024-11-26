@@ -214,6 +214,12 @@ export const unlikeBookQuery = gql`
     }
 `;
 
+export const changeRecentlyViewedBooksQuery = gql`
+    mutation ChangeRecentlyViewedBooks($id: ID!) {
+        ids: changeRecentlyViewedBooks(id: $id)
+    }
+`;
+
 export const addBookInBasketQuery = gql`
     mutation AddBookInBasket($id: ID!) {
         items: addBookInBasket(id: $id) {

@@ -4,7 +4,13 @@ import { removeTokenFromLocalStorage, saveTokenToLocalStorage } from '@/utils/ut
 import { useRouter } from 'next/router';
 import { ApolloError } from '@apollo/client';
 import { GraphQLError } from 'graphql/error';
-import { addBookInBasket, likeBook, removeBookFromBasket, unlikeBook } from '@/lib/graphql/queries/book/hook';
+import {
+    addBookInBasket,
+    changeRecentlyViewedBooks,
+    likeBook,
+    removeBookFromBasket,
+    unlikeBook
+} from '@/lib/graphql/queries/book/hook';
 import { usePathname } from 'next/navigation';
 
 type authContextType = {
@@ -17,6 +23,7 @@ type authContextType = {
     checkAuth: (error: ApolloError) => void;
     setLikedBook: (bookId: string) => void;
     setBookInBasket: (bookId: string) => void;
+    setRecentlyViewedBooks: (bookId: string) => void;
 };
 
 const authContextDefaultValues: authContextType = {
@@ -33,6 +40,8 @@ const authContextDefaultValues: authContextType = {
     setLikedBook: (_bookId: string) => {
     },
     setBookInBasket: (_bookId: string) => {
+    },
+    setRecentlyViewedBooks: (_bookId: string) => {
     },
     setOpenLoginModal: (_open: boolean) => {
     }
@@ -91,6 +100,15 @@ export function AuthProvider({ children }) {
                 .catch(e => {
                     console.log(e);
                 });
+        },
+        setRecentlyViewedBooks: (bookId: string) => {
+            if (user) {
+                changeRecentlyViewedBooks(bookId)
+                    .then(bookIds => setUser({ ...user, recentlyViewedBookIds: bookIds }))
+                    .catch(e => {
+                        console.log(e);
+                    });
+            }
         },
         setBookInBasket: (bookId: string) => {
             if (!user) {
