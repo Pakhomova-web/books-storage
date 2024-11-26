@@ -1,13 +1,12 @@
 import { IPageable, PageTypeEntity } from '@/lib/data/types';
 import { GraphQLError } from 'graphql/error';
 import PageType from '@/lib/data/models/page-type';
-import { checkUsageInBook, getByName, getValidFilters, setFiltersAndPageSettingsToQuery } from '@/lib/data/base';
+import { checkUsageInBook, getByName, getValidFilters, getDataByFiltersAndPageSettings } from '@/lib/data/base';
 import Language from '@/lib/data/models/language';
 
 export async function getPageTypes(pageSettings?: IPageable, filters?: PageTypeEntity) {
     const { andFilters } = getValidFilters(filters);
-
-    return setFiltersAndPageSettingsToQuery(
+    return getDataByFiltersAndPageSettings(
         PageType.find(),
         andFilters,
         pageSettings

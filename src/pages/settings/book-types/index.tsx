@@ -46,9 +46,9 @@ export default function BookTypes() {
         { type: 'image', title: 'Фото', renderValue: (item: DeliveryEntity) => item.imageId }
     ]);
     const [selectedItem, setSelectedItem] = useState<BookTypeEntity>();
-    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
+    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '', rowsPerPage: 12, page: 0 });
     const [filters, setFilters] = useState<BookTypeEntity>();
-    const { items, gettingError, loading, refetch } = useBookTypes(pageSettings, filters);
+    const { items, totalCount, gettingError, loading, refetch } = useBookTypes(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteBookType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -101,12 +101,13 @@ export default function BookTypes() {
 
                 <CustomTable data={items}
                              keys={tableKeys}
+                             totalCount={totalCount}
                              mobileKeys={[]}
                              actions={tableActions}
                              renderKey={(item: BookTypeEntity) => item.id}
                              onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                              pageSettings={pageSettings}
-                             withFilters={true}
+                             usePagination={true}
                              onRowClick={(item: BookTypeEntity) => onEdit(item)}>
                     {error && <ErrorNotification error={error}></ErrorNotification>}
                 </CustomTable>

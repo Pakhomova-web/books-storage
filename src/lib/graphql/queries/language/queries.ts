@@ -9,8 +9,11 @@ const languageFragment = gql`
 
 export const languagesQuery = gql`
     query Languages($pageSettings: PageableInput, $filters: SearchByNameInput) {
-        items: languages(pageSettings: $pageSettings, filters: $filters) {
-            ...Language
+        languages(pageSettings: $pageSettings, filters: $filters) {
+            items {
+                ...Language
+            }
+            totalCount
         }
     }
     ${languageFragment}
@@ -18,9 +21,11 @@ export const languagesQuery = gql`
 
 export const languageOptionsQuery = gql`
     query Languages($pageSettings: PageableInput, $filters: SearchByNameInput) {
-        items: languages(pageSettings: $pageSettings, filters: $filters) {
-            id
-            label: name
+        languages(pageSettings: $pageSettings, filters: $filters) {
+            items {
+                id
+                label: name
+            }
         }
     }
 `;

@@ -17,7 +17,7 @@ export function _useItems<T, K>(query: DocumentNode, pageSettings?: IPageable, f
     return { items: data?.items || [], totalCount: data?.totalCount, gettingError: error, loading, refetch };
 }
 
-export function _usePageableItems<T>(query: DocumentNode, key: string, pageSettings: IPageable, filters?): {
+export function _usePageableItems<T>(query: DocumentNode, key: string, pageSettings?: IPageable, filters?): {
     items: T[],
     totalCount: number,
     loading: boolean,

@@ -38,9 +38,9 @@ export default function CoverTypes() {
         }
     ]);
     const [selectedItem, setSelectedItem] = useState<CoverTypeEntity>();
-    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
+    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '', rowsPerPage: 12, page: 0 });
     const [filters, setFilters] = useState<CoverTypeEntity>();
-    const { items, gettingError, loading, refetch } = useCoverTypes(pageSettings, filters);
+    const { items, totalCount, gettingError, loading, refetch } = useCoverTypes(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteCoverType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -107,7 +107,8 @@ export default function CoverTypes() {
                              renderKey={(item: CoverTypeEntity) => item.id}
                              onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                              pageSettings={pageSettings}
-                             withFilters={true}
+                             usePagination={true}
+                             totalCount={totalCount}
                              onRowClick={(item: CoverTypeEntity) => onEdit(item)}>
                     {error && <ErrorNotification error={error}></ErrorNotification>}
                 </CustomTable>

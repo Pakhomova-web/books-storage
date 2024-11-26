@@ -34,7 +34,6 @@ interface CustomTableProps<K> {
     rowStyleClass?: (item: K) => any,
     onChange?: (pageSettings: IPageable) => void,
     pageSettings?: IPageable,
-    withFilters?: boolean,
     renderMobileView?: (item: K) => ReactNode,
     children?: ReactNode
 }
@@ -151,7 +150,6 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
             <MobileTable data={props.data}
                          keys={props.mobileKeys || props.keys}
                          actions={props.actions}
-                         withFilters={props.withFilters}
                          onRowClick={props.onRowClick}
                          renderMobileView={props.renderMobileView}>
             </MobileTable>}

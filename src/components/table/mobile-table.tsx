@@ -14,7 +14,6 @@ interface IMobileTableProps<T> {
     data: T[],
     keys: TableKey<T>[],
     actions?: TableKey<T>,
-    withFilters?: boolean,
     onRowClick?: (item: T) => void,
     renderMobileView?: (item: T) => ReactNode,
     children?: ReactNode

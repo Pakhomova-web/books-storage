@@ -46,7 +46,12 @@ export default function BookSeries() {
         ...mobileKeys
     ]);
     const [selectedItem, setSelectedItem] = useState<BookSeriesEntity>();
-    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
+    const [pageSettings, setPageSettings] = useState<IPageable>({
+        order: 'asc',
+        orderBy: '',
+        rowsPerPage: 12,
+        page: 0
+    });
     const [filters, setFilters] = useState<BookSeriesFilter>();
     const { items, totalCount, gettingError, loading, refetch } = useBookSeries(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteBookSeries();
@@ -115,7 +120,6 @@ export default function BookSeries() {
                              renderKey={(item: BookSeriesEntity) => item.id}
                              onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                              pageSettings={pageSettings}
-                             withFilters={true}
                              usePagination={true}
                              totalCount={totalCount}
                              onRowClick={(item: BookSeriesEntity) => onEdit(item)}>

@@ -10,8 +10,11 @@ const authorFragment = gql`
 
 export const authorsQuery = gql`
     query Authors($pageSettings: PageableInput, $filters: SearchByNameInput) {
-        items: authors(pageSettings: $pageSettings, filters: $filters) {
-            ...Author
+        authors(pageSettings: $pageSettings, filters: $filters) {
+            items {
+                ...Author
+            }
+            totalCount
         }
     }
     ${authorFragment}

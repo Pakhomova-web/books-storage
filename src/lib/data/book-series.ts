@@ -1,25 +1,20 @@
 import { BookSeriesEntity, BookSeriesFilter, IPageable } from '@/lib/data/types';
 import BookSeries from '@/lib/data/models/book-series';
 import { GraphQLError } from 'graphql/error';
-import { getByName, getValidFilters, setFiltersAndPageSettingsToQuery } from '@/lib/data/base';
+import { getByName, getValidFilters, getDataByFiltersAndPageSettings } from '@/lib/data/base';
 
 export async function getBookSeries(pageSettings?: IPageable, filters?: BookSeriesFilter): Promise<{
     items: BookSeriesEntity[],
     totalCount: number
 }> {
     const { andFilters } = getValidFilters(filters);
-    const query = setFiltersAndPageSettingsToQuery(
+    return getDataByFiltersAndPageSettings(
         BookSeries
             .find({ default: { $ne: true }})
             .populate('publishingHouse'),
         andFilters,
         pageSettings
     );
-
-    const items = await query;
-    const totalCount = await query.countDocuments();
-
-    return { items, totalCount };
 }
 
 export async function getBookSeriesOptions(filters?: BookSeriesFilter, fully = false): Promise<BookSeriesEntity[]> {

@@ -7,14 +7,21 @@ import {
     languagesQuery,
     updateLanguageQuery
 } from '@/lib/graphql/queries/language/queries';
-import { _useCreateItem, _useDeleteItemById, _useItems, _useUpdateItem, getItemById } from '@/lib/graphql/base-hooks';
+import {
+    _useCreateItem,
+    _useDeleteItemById,
+    _useItems,
+    _usePageableItems,
+    _useUpdateItem,
+    getItemById
+} from '@/lib/graphql/base-hooks';
 
 export function useLanguages(pageSettings?: IPageable, filters?: LanguageEntity) {
-    return _useItems<LanguageEntity, NameFilter>(languagesQuery, pageSettings, filters);
+    return _usePageableItems<LanguageEntity>(languagesQuery, 'languages', pageSettings, filters);
 }
 
 export function useLanguageOptions() {
-    return _useItems<IOption<string>, NameFilter>(languageOptionsQuery);
+    return _usePageableItems<IOption<string>>(languageOptionsQuery, 'languages');
 }
 
 export function useUpdateLanguage() {

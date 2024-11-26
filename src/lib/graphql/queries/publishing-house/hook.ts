@@ -1,5 +1,12 @@
 import { AuthorEntity, IOption, IPageable, NameFilter, PublishingHouseEntity } from '@/lib/data/types';
-import { _useCreateItem, _useDeleteItemById, _useItems, _useUpdateItem, getItemById } from '@/lib/graphql/base-hooks';
+import {
+    _useCreateItem,
+    _useDeleteItemById,
+    _useItems,
+    _usePageableItems,
+    _useUpdateItem,
+    getItemById
+} from '@/lib/graphql/base-hooks';
 import {
     createPublishingHouseQuery,
     deletePublishingHouseQuery,
@@ -10,7 +17,7 @@ import {
 } from '@/lib/graphql/queries/publishing-house/queries';
 
 export function usePublishingHouses(pageSettings?: IPageable, filters?: PublishingHouseEntity) {
-    return _useItems<PublishingHouseEntity, NameFilter>(publishingHousesQuery, pageSettings, filters);
+    return _usePageableItems<PublishingHouseEntity>(publishingHousesQuery, 'publishingHouses', pageSettings, filters);
 }
 
 export function getPublishingHouseById(id: string): Promise<AuthorEntity> {
@@ -18,7 +25,7 @@ export function getPublishingHouseById(id: string): Promise<AuthorEntity> {
 }
 
 export function usePublishingHouseOptions() {
-    return _useItems<IOption<string>, NameFilter>(publishingHouseOptionsQuery);
+    return _usePageableItems<IOption<string>>(publishingHouseOptionsQuery, 'publishingHouses');
 }
 
 export function useDeletePublishingHouse() {

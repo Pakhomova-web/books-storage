@@ -17,9 +17,9 @@ import Head from 'next/head';
 
 export default function PublishingHouses() {
     const { user, checkAuth } = useAuth();
-    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
+    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '', rowsPerPage: 12, page: 0 });
     const [filters, setFilters] = useState<PublishingHouseEntity>();
-    const { items, loading, gettingError, refetch } = usePublishingHouses(pageSettings, filters);
+    const { items, totalCount, loading, gettingError, refetch } = usePublishingHouses(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeletePublishingHouse();
     const [selectedItem, setSelectedItem] = useState<PublishingHouseEntity>();
     const [tableActions] = useState<TableKey<PublishingHouseEntity>>({
@@ -100,12 +100,13 @@ export default function PublishingHouses() {
 
                 <CustomTable data={items}
                              keys={tableKeys}
+                             totalCount={totalCount}
                              mobileKeys={mobileKeys}
                              actions={tableActions}
                              renderKey={(item: PublishingHouseEntity) => item.id}
                              onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                              pageSettings={pageSettings}
-                             withFilters={true}
+                             usePagination={true}
                              onRowClick={(item: PublishingHouseEntity) => onEdit(item)}>
                     {error && <ErrorNotification error={error}></ErrorNotification>}
                 </CustomTable>

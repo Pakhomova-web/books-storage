@@ -39,9 +39,9 @@ export default function Deliveries() {
         { type: 'image', title: 'Фото', renderValue: (item: DeliveryEntity) => item.imageId }
     ]);
     const [selectedItem, setSelectedItem] = useState<DeliveryEntity>();
-    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
+    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '', rowsPerPage: 12, page: 0 });
     const [filters, setFilters] = useState<DeliveryEntity>();
-    const { items, gettingError, loading, refetch } = useDeliveries(pageSettings, filters);
+    const { items, totalCount, gettingError, loading, refetch } = useDeliveries(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteDelivery();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -104,11 +104,12 @@ export default function Deliveries() {
                 <CustomTable data={items}
                              keys={tableKeys}
                              mobileKeys={[]}
+                             totalCount={totalCount}
                              actions={tableActions}
                              renderKey={(item: DeliveryEntity) => item.id}
                              onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                              pageSettings={pageSettings}
-                             withFilters={true}
+                             usePagination={true}
                              onRowClick={item => onEdit(item)}>
                     {error && <ErrorNotification error={error}></ErrorNotification>}
                 </CustomTable>

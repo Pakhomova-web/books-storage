@@ -18,17 +18,16 @@ const commonUrls = ['/books', '/books/details'];
 const StyledDiscountBox = styled(Box)(({ theme }) => ({
     position: 'fixed',
     bottom: '15px',
+    right: '15px',
     borderRadius: '50%',
     color: 'white',
     cursor: 'pointer',
     textAlign: 'center',
     [theme.breakpoints.up('lg')]: {
-        height: '90px',
-        right: '10%'
+        height: '90px'
     },
     [theme.breakpoints.down('lg')]: {
-        height: '75px',
-        right: '10px'
+        height: '75px'
     },
     [theme.breakpoints.down('md')]: {
         height: '60px'

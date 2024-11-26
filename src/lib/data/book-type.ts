@@ -1,12 +1,12 @@
 import { BookTypeEntity, IPageable } from '@/lib/data/types';
 import { GraphQLError } from 'graphql/error';
 import BookType from '@/lib/data/models/book-type';
-import { checkUsageInBook, getByName, getValidFilters, setFiltersAndPageSettingsToQuery } from '@/lib/data/base';
+import { checkUsageInBook, getByName, getValidFilters, getDataByFiltersAndPageSettings } from '@/lib/data/base';
+import Author from '@/lib/data/models/author';
 
 export async function getBookTypes(pageSettings?: IPageable, filters?: BookTypeEntity) {
     const { andFilters } = getValidFilters(filters);
-
-    return setFiltersAndPageSettingsToQuery(
+    return getDataByFiltersAndPageSettings(
         BookType.find(),
         andFilters,
         pageSettings

@@ -1,12 +1,11 @@
 import { DeliveryEntity, IPageable } from '@/lib/data/types';
 import Delivery from '@/lib/data/models/delivery';
 import { GraphQLError } from 'graphql/error';
-import { getByName, getValidFilters, setFiltersAndPageSettingsToQuery } from '@/lib/data/base';
+import { getByName, getValidFilters, getDataByFiltersAndPageSettings } from '@/lib/data/base';
 
 export async function getDeliveries(pageSettings?: IPageable, filters?: DeliveryEntity) {
     const { andFilters } = getValidFilters(filters);
-
-    return setFiltersAndPageSettingsToQuery(
+    return getDataByFiltersAndPageSettings(
         Delivery.find(),
         andFilters,
         pageSettings

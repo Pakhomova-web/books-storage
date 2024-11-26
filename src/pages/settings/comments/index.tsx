@@ -32,7 +32,7 @@ const StyledBookBox = styled(Box)(() => ({
 }));
 
 export default function Comments() {
-    const [pageSettings, setPageSettings] = useState<IPageable>({ page: 0, rowsPerPage: 10 });
+    const [pageSettings, setPageSettings] = useState<IPageable>({ page: 0, rowsPerPage: 12 });
     const { items, totalCount, loading, gettingError, refetch } = useBooksComments(pageSettings);
     const [selectedItem, setSelectedItem] = useState<BookEntity>();
     const { update: approveComment, updating: approving, updatingError: errorApproving } = useApproveComment();

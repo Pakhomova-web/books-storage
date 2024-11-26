@@ -9,8 +9,11 @@ const pageTypeFragment = gql`
 
 export const pageTypesQuery = gql`
     query PageTypes($pageSettings: PageableInput, $filters: SearchByNameInput) {
-        items: pageTypes(pageSettings: $pageSettings, filters: $filters) {
-            ...PageType
+        pageTypes(pageSettings: $pageSettings, filters: $filters) {
+            items {
+                ...PageType
+            }
+            totalCount
         }
     }
     ${pageTypeFragment}
@@ -18,9 +21,11 @@ export const pageTypesQuery = gql`
 
 export const pageTypeOptionsQuery = gql`
     query PageTypes($pageSettings: PageableInput, $filters: SearchByNameInput) {
-        items: pageTypes(pageSettings: $pageSettings, filters: $filters) {
-            id
-            label: name
+        pageTypes(pageSettings: $pageSettings, filters: $filters) {
+            items {
+                id
+                label: name
+            }
         }
     }
 `;

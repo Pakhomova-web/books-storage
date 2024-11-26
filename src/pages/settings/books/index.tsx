@@ -247,7 +247,6 @@ export default function Books() {
                              onChange={(settings: IPageable) => onChangePageSettings(settings)}
                              pageSettings={pageSettings}
                              usePagination={true}
-                             withFilters={true}
                              rowStyleClass={(item: BookEntity) => highlightInRed(item.numberInStock)}
                              totalCount={totalCount}
                              onRowClick={(item: BookEntity) => onEdit(item)}>

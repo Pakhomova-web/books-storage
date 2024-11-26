@@ -1,5 +1,12 @@
 import { AuthorEntity, IAuthorFilter, IOption, IPageable, NameFilter } from '@/lib/data/types';
-import { _useCreateItem, _useDeleteItemById, _useItems, _useUpdateItem, getItemById } from '@/lib/graphql/base-hooks';
+import {
+    _useCreateItem,
+    _useDeleteItemById,
+    _useItems,
+    _usePageableItems,
+    _useUpdateItem,
+    getItemById
+} from '@/lib/graphql/base-hooks';
 import {
     authorByIdQuery,
     authorOptionsQuery,
@@ -10,7 +17,7 @@ import {
 } from '@/lib/graphql/queries/author/queries';
 
 export function useAuthors(pageSettings?: IPageable, filters?: IAuthorFilter) {
-    return _useItems(authorsQuery, pageSettings, filters);
+    return _usePageableItems(authorsQuery, 'authors', pageSettings, filters);
 }
 
 export function useAuthorOptions() {

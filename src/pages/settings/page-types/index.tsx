@@ -38,9 +38,9 @@ export default function PageTypes() {
         }
     ]);
     const [selectedItem, setSelectedItem] = useState<PageTypeEntity>();
-    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
+    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '', rowsPerPage: 12, page: 0 });
     const [filters, setFilters] = useState<PageTypeEntity>();
-    const { items, gettingError, loading, refetch } = usePageTypes(pageSettings, filters);
+    const { items, totalCount, gettingError, loading, refetch } = usePageTypes(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeletePageType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -102,12 +102,13 @@ export default function PageTypes() {
 
                 <CustomTable data={items}
                              keys={tableKeys}
+                             totalCount={totalCount}
                              mobileKeys={[]}
                              actions={tableActions}
                              renderKey={(item: PageTypeEntity) => item.id}
                              onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                              pageSettings={pageSettings}
-                             withFilters={true}
+                             usePagination={true}
                              onRowClick={(item: PageTypeEntity) => onEdit(item)}>
                     {error && <ErrorNotification error={error}></ErrorNotification>}
                 </CustomTable>

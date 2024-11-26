@@ -35,9 +35,9 @@ export default function Authors() {
         ...mobileKeys
     ]);
     const [selectedItem, setSelectedItem] = useState<AuthorEntity>();
-    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '' });
+    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '', rowsPerPage: 12, page: 0 });
     const [filters, setFilters] = useState<IAuthorFilter>();
-    const { items, gettingError, loading, refetch } = useAuthors(pageSettings, filters);
+    const { items, totalCount, gettingError, loading, refetch } = useAuthors(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeleteAuthor();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -100,11 +100,12 @@ export default function Authors() {
                 <CustomTable data={items}
                              keys={tableKeys}
                              mobileKeys={mobileKeys}
+                             totalCount={totalCount}
                              actions={tableActions}
                              renderKey={(item: AuthorEntity) => item.id}
                              onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                              pageSettings={pageSettings}
-                             withFilters={true}
+                             usePagination={true}
                              onRowClick={(item: AuthorEntity) => onEdit(item)}>
                     {error && <ErrorNotification error={error}></ErrorNotification>}
                 </CustomTable>

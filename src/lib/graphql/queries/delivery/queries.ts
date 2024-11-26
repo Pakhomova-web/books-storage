@@ -2,19 +2,13 @@ import { gql } from '@apollo/client';
 
 export const deliveriesQuery = gql`
     query Languages($pageSettings: PageableInput, $filters: SearchByNameInput) {
-        items: deliveries(pageSettings: $pageSettings, filters: $filters) {
-            id
-            name
-            imageId
-        }
-    }
-`;
-
-export const deliveryOptionsQuery = gql`
-    query Deliveries($pageSettings: PageableInput, $filters: SearchByNameInput) {
-        items: deliveries(pageSettings: $pageSettings, filters: $filters) {
-            id
-            label: name
+        deliveries(pageSettings: $pageSettings, filters: $filters) {
+            items {
+                id
+                name
+                imageId
+            }
+            totalCount
         }
     }
 `;

@@ -11,8 +11,11 @@ const publishingHouseFragment = gql`
 
 export const publishingHousesQuery = gql`
     query PublishingHouses($pageSettings: PageableInput, $filters: SearchByNameInput) {
-        items: publishingHouses(pageSettings: $pageSettings, filters: $filters) {
-            ...PublishingHouse
+        publishingHouses(pageSettings: $pageSettings, filters: $filters) {
+            items {
+                ...PublishingHouse
+            }
+            totalCount
         }
     }
     ${publishingHouseFragment}
@@ -29,9 +32,11 @@ export const publishingHouseByIdQuery = gql`
 
 export const publishingHouseOptionsQuery = gql`
     query PublishingHouses($pageSettings: PageableInput, $filters: SearchByNameInput) {
-        items: publishingHouses(pageSettings: $pageSettings, filters: $filters) {
-            id
-            label: name
+        publishingHouses(pageSettings: $pageSettings, filters: $filters) {
+            items {
+                id
+                label: name
+            }
         }
     }
 `;

@@ -2,7 +2,7 @@ import { Model } from 'mongoose';
 import {
     AuthorEntity, BookEntity,
     BookSeriesEntity,
-    BookTypeEntity, CoverTypeEntity,
+    BookTypeEntity, CoverTypeEntity, IPageable,
     LanguageEntity, PageTypeEntity,
     PublishingHouseEntity, UserEntity
 } from '@/lib/data/types';
@@ -81,10 +81,12 @@ export function getCaseInsensitiveSubstringOption(value: string): RegExp {
     return new RegExp(`${value}`, 'i');
 }
 
-export function setFiltersAndPageSettingsToQuery(query, andFilters, pageSettings) {
+export async function getDataByFiltersAndPageSettings(query, andFilters, pageSettings: IPageable) {
     if (andFilters?.length) {
         query.and(andFilters);
     }
+    const totalCount = await query.countDocuments();
+
     if (pageSettings) {
         if (pageSettings.rowsPerPage && pageSettings.page !== undefined) {
             query
@@ -94,6 +96,7 @@ export function setFiltersAndPageSettingsToQuery(query, andFilters, pageSettings
 
         query.sort({ [pageSettings.orderBy || 'name']: pageSettings.order || 'asc' })
     }
+    const items = await query.find();
 
-    return query;
+    return { items, totalCount };
 }

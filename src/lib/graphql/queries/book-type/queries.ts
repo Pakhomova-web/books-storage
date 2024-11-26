@@ -10,8 +10,11 @@ const bookTypeFragment = gql`
 
 export const bookTypesQuery = gql`
     query BookTypes($pageSettings: PageableInput, $filters: SearchByNameInput) {
-        items: bookTypes(pageSettings: $pageSettings, filters: $filters) {
-            ...BookType
+        bookTypes(pageSettings: $pageSettings, filters: $filters) {
+            items {
+                ...BookType
+            }
+            totalCount
         }
     }
     ${bookTypeFragment}
@@ -28,9 +31,11 @@ export const bookTypeByIdQuery = gql`
 
 export const bookTypeOptionsQuery = gql`
     query BookTypes($pageSettings: PageableInput, $filters: SearchByNameInput) {
-        items: bookTypes(pageSettings: $pageSettings, filters: $filters) {
-            id
-            label: name
+        bookTypes(pageSettings: $pageSettings, filters: $filters) {
+            items {
+                id
+                label: name
+            }
         }
     }
 `;

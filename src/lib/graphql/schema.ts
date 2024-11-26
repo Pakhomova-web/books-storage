@@ -138,18 +138,18 @@ const typeDefs =  /* GraphQL */ `
     }
 
     type Query {
-        languages(pageSettings: PageableInput, filters: SearchByNameInput): [Language!]
-        publishingHouses(pageSettings: PageableInput, filters: SearchByNameInput): [PublishingHouse!]
-        pageTypes(pageSettings: PageableInput, filters: SearchByNameInput): [PageType!]
-        coverTypes(pageSettings: PageableInput, filters: SearchByNameInput): [CoverType!]
+        languages(pageSettings: PageableInput, filters: SearchByNameInput): LanguageSubList
+        publishingHouses(pageSettings: PageableInput, filters: SearchByNameInput): PublishingHouseSubList
+        pageTypes(pageSettings: PageableInput, filters: SearchByNameInput): PageTypeSubList
+        coverTypes(pageSettings: PageableInput, filters: SearchByNameInput): CoverTypeSubList
         bookSeries(pageSettings: PageableInput, filters: BookSeriesSearchInput): BookSeriesSubList
-        authors(pageSettings: PageableInput, filters: SearchByNameInput): [Author!]
+        authors(pageSettings: PageableInput, filters: SearchByNameInput): AuthorSubList
         books(pageSettings: PageableInput, filters: BookSearchInput): BookSubList
-        deliveries(pageSettings: PageableInput, filters: SearchByNameInput): [Delivery!]
+        deliveries(pageSettings: PageableInput, filters: SearchByNameInput): DeliverySubList
+        bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): BookTypeSubList
         orders(pageSettings: PageableInput, filters: OrderSearchInput): OrderSubList
         bookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
         fullBookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
-        bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): [BookType!]
         bookById(id: ID!): Book
         bookTypeById(id: ID!): BookType
         authorById(id: ID!): Author
@@ -414,6 +414,41 @@ const typeDefs =  /* GraphQL */ `
 
     type BookSeriesSubList {
         items: [BookSeries!]!
+        totalCount: Int!
+    }
+
+    type CoverTypeSubList {
+        items: [CoverType!]!
+        totalCount: Int!
+    }
+
+    type BookTypeSubList {
+        items: [BookType!]!
+        totalCount: Int!
+    }
+
+    type LanguageSubList {
+        items: [Language!]!
+        totalCount: Int!
+    }
+
+    type PublishingHouseSubList {
+        items: [PublishingHouse!]!
+        totalCount: Int!
+    }
+
+    type PageTypeSubList {
+        items: [PageType!]!
+        totalCount: Int!
+    }
+
+    type AuthorSubList {
+        items: [Author!]!
+        totalCount: Int!
+    }
+
+    type DeliverySubList {
+        items: [Delivery!]!
         totalCount: Int!
     }
 

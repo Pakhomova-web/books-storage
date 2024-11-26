@@ -1,11 +1,11 @@
 import { CoverTypeEntity, IPageable } from '@/lib/data/types';
 import { GraphQLError } from 'graphql/error';
 import CoverType from '@/lib/data/models/cover-type';
-import { checkUsageInBook, getByName, getValidFilters, setFiltersAndPageSettingsToQuery } from '@/lib/data/base';
+import { checkUsageInBook, getByName, getValidFilters, getDataByFiltersAndPageSettings } from '@/lib/data/base';
 
 export async function getCoverTypes(pageSettings?: IPageable, filters?: CoverTypeEntity) {
     const { andFilters } = getValidFilters(filters);
-    return setFiltersAndPageSettingsToQuery(
+    return getDataByFiltersAndPageSettings(
         CoverType.find(),
         andFilters,
         pageSettings

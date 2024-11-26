@@ -30,6 +30,11 @@ export type AuthorCreateInput = {
   name: Scalars['String']['input'];
 };
 
+export type AuthorSubList = {
+  items: Array<Author>;
+  totalCount: Scalars['Int']['output'];
+};
+
 export type AuthorUpdateInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
@@ -157,6 +162,11 @@ export type BookTypeCreateInput = {
   name: Scalars['String']['input'];
 };
 
+export type BookTypeSubList = {
+  items: Array<BookType>;
+  totalCount: Scalars['Int']['output'];
+};
+
 export type BookTypeUpdateInput = {
   id: Scalars['ID']['input'];
   imageId?: InputMaybe<Scalars['String']['input']>;
@@ -216,6 +226,11 @@ export type CoverTypeCreateInput = {
   name: Scalars['String']['input'];
 };
 
+export type CoverTypeSubList = {
+  items: Array<CoverType>;
+  totalCount: Scalars['Int']['output'];
+};
+
 export type CoverTypeUpdateInput = {
   id: Scalars['ID']['input'];
   name: Scalars['String']['input'];
@@ -232,6 +247,11 @@ export type DeliveryCreateInput = {
   name: Scalars['String']['input'];
 };
 
+export type DeliverySubList = {
+  items: Array<Delivery>;
+  totalCount: Scalars['Int']['output'];
+};
+
 export type DeliveryUpdateInput = {
   id: Scalars['ID']['input'];
   imageId?: InputMaybe<Scalars['String']['input']>;
@@ -245,6 +265,11 @@ export type Language = {
 
 export type LanguageCreateInput = {
   name: Scalars['String']['input'];
+};
+
+export type LanguageSubList = {
+  items: Array<Language>;
+  totalCount: Scalars['Int']['output'];
 };
 
 export type LanguageUpdateInput = {
@@ -617,6 +642,11 @@ export type PageTypeCreateInput = {
   name: Scalars['String']['input'];
 };
 
+export type PageTypeSubList = {
+  items: Array<PageType>;
+  totalCount: Scalars['Int']['output'];
+};
+
 export type PageTypeUpdateInput = {
   id: Scalars['ID']['input'];
   name: Scalars['String']['input'];
@@ -642,6 +672,11 @@ export type PublishingHouseCreateInput = {
   tags?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type PublishingHouseSubList = {
+  items: Array<PublishingHouse>;
+  totalCount: Scalars['Int']['output'];
+};
+
 export type PublishingHouseUpdateInput = {
   id: Scalars['ID']['input'];
   imageId?: InputMaybe<Scalars['String']['input']>;
@@ -651,29 +686,29 @@ export type PublishingHouseUpdateInput = {
 
 export type Query = {
   authorById?: Maybe<Author>;
-  authors?: Maybe<Array<Author>>;
+  authors?: Maybe<AuthorSubList>;
   bookById?: Maybe<Book>;
   bookComments?: Maybe<Array<Comment>>;
   bookSeries?: Maybe<BookSeriesSubList>;
   bookSeriesByIdQuery?: Maybe<BookSeries>;
   bookSeriesOptions?: Maybe<Array<BookSeries>>;
   bookTypeById?: Maybe<BookType>;
-  bookTypes?: Maybe<Array<BookType>>;
+  bookTypes?: Maybe<BookTypeSubList>;
   books?: Maybe<BookSubList>;
   booksByAuthor?: Maybe<Array<Book>>;
   booksByIds?: Maybe<Array<Book>>;
   booksFromSeries?: Maybe<Array<Book>>;
   booksWithDiscount?: Maybe<Array<Book>>;
   booksWithNotApprovedComments?: Maybe<BookSubList>;
-  coverTypes?: Maybe<Array<CoverType>>;
-  deliveries?: Maybe<Array<Delivery>>;
+  coverTypes?: Maybe<CoverTypeSubList>;
+  deliveries?: Maybe<DeliverySubList>;
   fullBookSeriesOptions?: Maybe<Array<BookSeries>>;
   languageById?: Maybe<Language>;
-  languages?: Maybe<Array<Language>>;
+  languages?: Maybe<LanguageSubList>;
   orders?: Maybe<OrderSubList>;
-  pageTypes?: Maybe<Array<PageType>>;
+  pageTypes?: Maybe<PageTypeSubList>;
   publishingHouseById?: Maybe<PublishingHouse>;
-  publishingHouses?: Maybe<Array<PublishingHouse>>;
+  publishingHouses?: Maybe<PublishingHouseSubList>;
   refreshToken: UserToken;
 };
 
@@ -956,6 +991,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Author: ResolverTypeWrapper<AuthorEntity>;
   AuthorCreateInput: AuthorCreateInput;
+  AuthorSubList: ResolverTypeWrapper<Omit<AuthorSubList, 'items'> & { items: Array<ResolversTypes['Author']> }>;
   AuthorUpdateInput: AuthorUpdateInput;
   BasketItem: ResolverTypeWrapper<BasketItem>;
   Book: ResolverTypeWrapper<BookEntity>;
@@ -969,6 +1005,7 @@ export type ResolversTypes = {
   BookSubList: ResolverTypeWrapper<Omit<BookSubList, 'items'> & { items: Array<ResolversTypes['Book']> }>;
   BookType: ResolverTypeWrapper<BookTypeEntity>;
   BookTypeCreateInput: BookTypeCreateInput;
+  BookTypeSubList: ResolverTypeWrapper<Omit<BookTypeSubList, 'items'> & { items: Array<ResolversTypes['BookType']> }>;
   BookTypeUpdateInput: BookTypeUpdateInput;
   BookUpdateInput: BookUpdateInput;
   BookUpdateNumberInStockUpdateInput: BookUpdateNumberInStockUpdateInput;
@@ -977,15 +1014,18 @@ export type ResolversTypes = {
   CommentInput: CommentInput;
   CoverType: ResolverTypeWrapper<CoverTypeEntity>;
   CoverTypeCreateInput: CoverTypeCreateInput;
+  CoverTypeSubList: ResolverTypeWrapper<Omit<CoverTypeSubList, 'items'> & { items: Array<ResolversTypes['CoverType']> }>;
   CoverTypeUpdateInput: CoverTypeUpdateInput;
   Delivery: ResolverTypeWrapper<DeliveryEntity>;
   DeliveryCreateInput: DeliveryCreateInput;
+  DeliverySubList: ResolverTypeWrapper<Omit<DeliverySubList, 'items'> & { items: Array<ResolversTypes['Delivery']> }>;
   DeliveryUpdateInput: DeliveryUpdateInput;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Language: ResolverTypeWrapper<LanguageEntity>;
   LanguageCreateInput: LanguageCreateInput;
+  LanguageSubList: ResolverTypeWrapper<Omit<LanguageSubList, 'items'> & { items: Array<ResolversTypes['Language']> }>;
   LanguageUpdateInput: LanguageUpdateInput;
   Mutation: ResolverTypeWrapper<{}>;
   Order: ResolverTypeWrapper<OrderEntity>;
@@ -997,10 +1037,12 @@ export type ResolversTypes = {
   OrderUpdateInput: OrderUpdateInput;
   PageType: ResolverTypeWrapper<PageTypeEntity>;
   PageTypeCreateInput: PageTypeCreateInput;
+  PageTypeSubList: ResolverTypeWrapper<Omit<PageTypeSubList, 'items'> & { items: Array<ResolversTypes['PageType']> }>;
   PageTypeUpdateInput: PageTypeUpdateInput;
   PageableInput: PageableInput;
   PublishingHouse: ResolverTypeWrapper<PublishingHouseEntity>;
   PublishingHouseCreateInput: PublishingHouseCreateInput;
+  PublishingHouseSubList: ResolverTypeWrapper<Omit<PublishingHouseSubList, 'items'> & { items: Array<ResolversTypes['PublishingHouse']> }>;
   PublishingHouseUpdateInput: PublishingHouseUpdateInput;
   Query: ResolverTypeWrapper<{}>;
   SearchByNameInput: SearchByNameInput;
@@ -1016,6 +1058,7 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Author: AuthorEntity;
   AuthorCreateInput: AuthorCreateInput;
+  AuthorSubList: Omit<AuthorSubList, 'items'> & { items: Array<ResolversParentTypes['Author']> };
   AuthorUpdateInput: AuthorUpdateInput;
   BasketItem: BasketItem;
   Book: BookEntity;
@@ -1029,6 +1072,7 @@ export type ResolversParentTypes = {
   BookSubList: Omit<BookSubList, 'items'> & { items: Array<ResolversParentTypes['Book']> };
   BookType: BookTypeEntity;
   BookTypeCreateInput: BookTypeCreateInput;
+  BookTypeSubList: Omit<BookTypeSubList, 'items'> & { items: Array<ResolversParentTypes['BookType']> };
   BookTypeUpdateInput: BookTypeUpdateInput;
   BookUpdateInput: BookUpdateInput;
   BookUpdateNumberInStockUpdateInput: BookUpdateNumberInStockUpdateInput;
@@ -1037,15 +1081,18 @@ export type ResolversParentTypes = {
   CommentInput: CommentInput;
   CoverType: CoverTypeEntity;
   CoverTypeCreateInput: CoverTypeCreateInput;
+  CoverTypeSubList: Omit<CoverTypeSubList, 'items'> & { items: Array<ResolversParentTypes['CoverType']> };
   CoverTypeUpdateInput: CoverTypeUpdateInput;
   Delivery: DeliveryEntity;
   DeliveryCreateInput: DeliveryCreateInput;
+  DeliverySubList: Omit<DeliverySubList, 'items'> & { items: Array<ResolversParentTypes['Delivery']> };
   DeliveryUpdateInput: DeliveryUpdateInput;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
   Language: LanguageEntity;
   LanguageCreateInput: LanguageCreateInput;
+  LanguageSubList: Omit<LanguageSubList, 'items'> & { items: Array<ResolversParentTypes['Language']> };
   LanguageUpdateInput: LanguageUpdateInput;
   Mutation: {};
   Order: OrderEntity;
@@ -1057,10 +1104,12 @@ export type ResolversParentTypes = {
   OrderUpdateInput: OrderUpdateInput;
   PageType: PageTypeEntity;
   PageTypeCreateInput: PageTypeCreateInput;
+  PageTypeSubList: Omit<PageTypeSubList, 'items'> & { items: Array<ResolversParentTypes['PageType']> };
   PageTypeUpdateInput: PageTypeUpdateInput;
   PageableInput: PageableInput;
   PublishingHouse: PublishingHouseEntity;
   PublishingHouseCreateInput: PublishingHouseCreateInput;
+  PublishingHouseSubList: Omit<PublishingHouseSubList, 'items'> & { items: Array<ResolversParentTypes['PublishingHouse']> };
   PublishingHouseUpdateInput: PublishingHouseUpdateInput;
   Query: {};
   SearchByNameInput: SearchByNameInput;
@@ -1076,6 +1125,12 @@ export type AuthorResolvers<ContextType = any, ParentType extends ResolversParen
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type AuthorSubListResolvers<ContextType = any, ParentType extends ResolversParentTypes['AuthorSubList'] = ResolversParentTypes['AuthorSubList']> = {
+  items?: Resolver<Array<ResolversTypes['Author']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1138,6 +1193,12 @@ export type BookTypeResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type BookTypeSubListResolvers<ContextType = any, ParentType extends ResolversParentTypes['BookTypeSubList'] = ResolversParentTypes['BookTypeSubList']> = {
+  items?: Resolver<Array<ResolversTypes['BookType']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type CommentResolvers<ContextType = any, ParentType extends ResolversParentTypes['Comment'] = ResolversParentTypes['Comment']> = {
   approved?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   date?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -1154,6 +1215,12 @@ export type CoverTypeResolvers<ContextType = any, ParentType extends ResolversPa
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CoverTypeSubListResolvers<ContextType = any, ParentType extends ResolversParentTypes['CoverTypeSubList'] = ResolversParentTypes['CoverTypeSubList']> = {
+  items?: Resolver<Array<ResolversTypes['CoverType']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type DeliveryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Delivery'] = ResolversParentTypes['Delivery']> = {
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   imageId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1161,9 +1228,21 @@ export type DeliveryResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type DeliverySubListResolvers<ContextType = any, ParentType extends ResolversParentTypes['DeliverySubList'] = ResolversParentTypes['DeliverySubList']> = {
+  items?: Resolver<Array<ResolversTypes['Delivery']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type LanguageResolvers<ContextType = any, ParentType extends ResolversParentTypes['Language'] = ResolversParentTypes['Language']> = {
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type LanguageSubListResolvers<ContextType = any, ParentType extends ResolversParentTypes['LanguageSubList'] = ResolversParentTypes['LanguageSubList']> = {
+  items?: Resolver<Array<ResolversTypes['Language']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1260,6 +1339,12 @@ export type PageTypeResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PageTypeSubListResolvers<ContextType = any, ParentType extends ResolversParentTypes['PageTypeSubList'] = ResolversParentTypes['PageTypeSubList']> = {
+  items?: Resolver<Array<ResolversTypes['PageType']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type PublishingHouseResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublishingHouse'] = ResolversParentTypes['PublishingHouse']> = {
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   imageId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1268,31 +1353,37 @@ export type PublishingHouseResolvers<ContextType = any, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type PublishingHouseSubListResolvers<ContextType = any, ParentType extends ResolversParentTypes['PublishingHouseSubList'] = ResolversParentTypes['PublishingHouseSubList']> = {
+  items?: Resolver<Array<ResolversTypes['PublishingHouse']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   authorById?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<QueryAuthorByIdArgs, 'id'>>;
-  authors?: Resolver<Maybe<Array<ResolversTypes['Author']>>, ParentType, ContextType, Partial<QueryAuthorsArgs>>;
+  authors?: Resolver<Maybe<ResolversTypes['AuthorSubList']>, ParentType, ContextType, Partial<QueryAuthorsArgs>>;
   bookById?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QueryBookByIdArgs, 'id'>>;
   bookComments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType, RequireFields<QueryBookCommentsArgs, 'id' | 'page' | 'rowsPerPage'>>;
   bookSeries?: Resolver<Maybe<ResolversTypes['BookSeriesSubList']>, ParentType, ContextType, Partial<QueryBookSeriesArgs>>;
   bookSeriesByIdQuery?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType, RequireFields<QueryBookSeriesByIdQueryArgs, 'id'>>;
   bookSeriesOptions?: Resolver<Maybe<Array<ResolversTypes['BookSeries']>>, ParentType, ContextType, Partial<QueryBookSeriesOptionsArgs>>;
   bookTypeById?: Resolver<Maybe<ResolversTypes['BookType']>, ParentType, ContextType, RequireFields<QueryBookTypeByIdArgs, 'id'>>;
-  bookTypes?: Resolver<Maybe<Array<ResolversTypes['BookType']>>, ParentType, ContextType, Partial<QueryBookTypesArgs>>;
+  bookTypes?: Resolver<Maybe<ResolversTypes['BookTypeSubList']>, ParentType, ContextType, Partial<QueryBookTypesArgs>>;
   books?: Resolver<Maybe<ResolversTypes['BookSubList']>, ParentType, ContextType, Partial<QueryBooksArgs>>;
   booksByAuthor?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryBooksByAuthorArgs, 'authorId' | 'rowsPerPage'>>;
   booksByIds?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, Partial<QueryBooksByIdsArgs>>;
   booksFromSeries?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryBooksFromSeriesArgs, 'bookId' | 'rowsPerPage'>>;
   booksWithDiscount?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryBooksWithDiscountArgs, 'rowsPerPage'>>;
   booksWithNotApprovedComments?: Resolver<Maybe<ResolversTypes['BookSubList']>, ParentType, ContextType, Partial<QueryBooksWithNotApprovedCommentsArgs>>;
-  coverTypes?: Resolver<Maybe<Array<ResolversTypes['CoverType']>>, ParentType, ContextType, Partial<QueryCoverTypesArgs>>;
-  deliveries?: Resolver<Maybe<Array<ResolversTypes['Delivery']>>, ParentType, ContextType, Partial<QueryDeliveriesArgs>>;
+  coverTypes?: Resolver<Maybe<ResolversTypes['CoverTypeSubList']>, ParentType, ContextType, Partial<QueryCoverTypesArgs>>;
+  deliveries?: Resolver<Maybe<ResolversTypes['DeliverySubList']>, ParentType, ContextType, Partial<QueryDeliveriesArgs>>;
   fullBookSeriesOptions?: Resolver<Maybe<Array<ResolversTypes['BookSeries']>>, ParentType, ContextType, Partial<QueryFullBookSeriesOptionsArgs>>;
   languageById?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<QueryLanguageByIdArgs, 'id'>>;
-  languages?: Resolver<Maybe<Array<ResolversTypes['Language']>>, ParentType, ContextType, Partial<QueryLanguagesArgs>>;
+  languages?: Resolver<Maybe<ResolversTypes['LanguageSubList']>, ParentType, ContextType, Partial<QueryLanguagesArgs>>;
   orders?: Resolver<Maybe<ResolversTypes['OrderSubList']>, ParentType, ContextType, Partial<QueryOrdersArgs>>;
-  pageTypes?: Resolver<Maybe<Array<ResolversTypes['PageType']>>, ParentType, ContextType, Partial<QueryPageTypesArgs>>;
+  pageTypes?: Resolver<Maybe<ResolversTypes['PageTypeSubList']>, ParentType, ContextType, Partial<QueryPageTypesArgs>>;
   publishingHouseById?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<QueryPublishingHouseByIdArgs, 'id'>>;
-  publishingHouses?: Resolver<Maybe<Array<ResolversTypes['PublishingHouse']>>, ParentType, ContextType, Partial<QueryPublishingHousesArgs>>;
+  publishingHouses?: Resolver<Maybe<ResolversTypes['PublishingHouseSubList']>, ParentType, ContextType, Partial<QueryPublishingHousesArgs>>;
   refreshToken?: Resolver<ResolversTypes['UserToken'], ParentType, ContextType, RequireFields<QueryRefreshTokenArgs, 'refreshToken'>>;
 };
 
@@ -1324,22 +1415,29 @@ export type UserTokenResolvers<ContextType = any, ParentType extends ResolversPa
 
 export type Resolvers<ContextType = any> = {
   Author?: AuthorResolvers<ContextType>;
+  AuthorSubList?: AuthorSubListResolvers<ContextType>;
   BasketItem?: BasketItemResolvers<ContextType>;
   Book?: BookResolvers<ContextType>;
   BookSeries?: BookSeriesResolvers<ContextType>;
   BookSeriesSubList?: BookSeriesSubListResolvers<ContextType>;
   BookSubList?: BookSubListResolvers<ContextType>;
   BookType?: BookTypeResolvers<ContextType>;
+  BookTypeSubList?: BookTypeSubListResolvers<ContextType>;
   Comment?: CommentResolvers<ContextType>;
   CoverType?: CoverTypeResolvers<ContextType>;
+  CoverTypeSubList?: CoverTypeSubListResolvers<ContextType>;
   Delivery?: DeliveryResolvers<ContextType>;
+  DeliverySubList?: DeliverySubListResolvers<ContextType>;
   Language?: LanguageResolvers<ContextType>;
+  LanguageSubList?: LanguageSubListResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Order?: OrderResolvers<ContextType>;
   OrderBook?: OrderBookResolvers<ContextType>;
   OrderSubList?: OrderSubListResolvers<ContextType>;
   PageType?: PageTypeResolvers<ContextType>;
+  PageTypeSubList?: PageTypeSubListResolvers<ContextType>;
   PublishingHouse?: PublishingHouseResolvers<ContextType>;
+  PublishingHouseSubList?: PublishingHouseSubListResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
   UserToken?: UserTokenResolvers<ContextType>;

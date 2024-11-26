@@ -1,19 +1,19 @@
-import { IOption, IPageable, NameFilter, PageTypeEntity } from '@/lib/data/types';
-import { _useCreateItem, _useDeleteItemById, _useItems, _useUpdateItem } from '@/lib/graphql/base-hooks';
+import { IPageable, PageTypeEntity } from '@/lib/data/types';
+import { _useCreateItem, _useDeleteItemById, _usePageableItems, _useUpdateItem } from '@/lib/graphql/base-hooks';
 import {
-    createPageTypeQuery, deletePageTypeQuery,
-    pageTypeOptionsQuery,
+    createPageTypeQuery,
+    deletePageTypeQuery, pageTypeOptionsQuery,
     pageTypesQuery,
     updatePageTypeQuery
 } from '@/lib/graphql/queries/page-type/queries';
 
 
 export function usePageTypes(pageSettings?: IPageable, filters?: PageTypeEntity) {
-    return _useItems(pageTypesQuery, pageSettings, filters);
+    return _usePageableItems(pageTypesQuery, 'pageTypes', pageSettings, filters);
 }
 
 export function usePageTypeOptions() {
-    return _useItems<IOption<string>, NameFilter>(pageTypeOptionsQuery);
+    return _usePageableItems(pageTypeOptionsQuery, 'pageTypes');
 }
 
 export function useCreatePageType() {

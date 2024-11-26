@@ -9,8 +9,11 @@ const coverTypeFragment = gql`
 
 export const coverTypesQuery = gql`
     query CoverTypes($pageSettings: PageableInput, $filters: SearchByNameInput) {
-        items: coverTypes(pageSettings: $pageSettings, filters: $filters) {
-            ...CoverType
+        coverTypes(pageSettings: $pageSettings, filters: $filters) {
+            items {
+                ...CoverType
+            }
+            totalCount
         }
     }
     ${coverTypeFragment}
