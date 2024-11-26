@@ -11,12 +11,11 @@ export default function RecentlyViewedBooks() {
 
     return (
         <Grid container position="relative" display="flex" justifyContent="center" alignItems="center">
-            {!loading && <>
+            {!loading && !!items?.length && <>
               <Grid item xs={12} sx={styleVariables.sectionTitle}>Нещодавно переглядали</Grid>
 
               <Grid container display="flex" justifyContent="center">
-                  {!!items?.length &&
-                    <BooksList items={items}></BooksList>}
+                <BooksList items={items}></BooksList>
               </Grid>
             </>}
         </Grid>
