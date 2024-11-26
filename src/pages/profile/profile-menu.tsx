@@ -89,7 +89,7 @@ export default function ProfileMenu({ children, activeUrl }) {
             </StyledMenuContainer>
 
             <Grid item xs={12} md={9} lg={10}>
-                <Box p={1}>{children}</Box>
+                <Box p={1} position="relative">{children}</Box>
             </Grid>
         </Grid>
     );

@@ -10,7 +10,8 @@ const backdropStyles = (theme) => ({
     backgroundColor: '#ffffff7d',
     color: theme.palette.primary.main,
     zIndex: theme.zIndex.drawer + 1,
-    position: 'absolute'
+    position: 'absolute',
+    height: '100%'
 });
 
 export default function Loading({ show, isSmall }: ILoadingProps) {

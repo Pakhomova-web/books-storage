@@ -2,7 +2,7 @@ import { useAuth } from '@/components/auth-context';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import { Box, Button, Grid, RadioGroup } from '@mui/material';
-import { primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import { styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import React from 'react';
 import { useCurrentUser } from '@/lib/graphql/queries/auth/hook';
@@ -76,7 +76,8 @@ export default function PersonalInfo() {
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <CustomTextField name="instagramUsername" label="Нікнейм в інстаграм для зв'язку" fullWidth/>
+                        <CustomTextField name="instagramUsername" label="Нікнейм в інстаграм для зв'язку"
+                                         fullWidth/>
                     </Grid>
 
                     <Grid item xs={12}>
