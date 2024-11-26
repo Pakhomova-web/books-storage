@@ -1,4 +1,4 @@
-import { Box, Button, Grid, RadioGroup, Tooltip } from '@mui/material';
+import { Box, Button, Grid, RadioGroup } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 
@@ -44,7 +44,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
             ...orderItem,
             date: new Date(orderItem?.date).toLocaleDateString(),
             email: orderItem?.user.email,
-            instagramUsername: order?.instagramUsername || orderItem?.user.instagramUsername
+            instagramUsername: orderItem?.instagramUsername || orderItem?.user.instagramUsername
         }
     });
     const {
@@ -61,7 +61,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
     useEffect(() => {
         let invalid = false;
 
-        if (!isAdmin(user) || orderItem.isDone || order.isCanceled) {
+        if (!isAdmin(user) || orderItem.isDone || orderItem.isCanceled) {
             setSubmitDisabled(false);
             return;
         }
@@ -165,6 +165,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
             isPartlyPaid: values.isPartlyPaid,
             isSent: values.isSent,
             trackingNumber: values.trackingNumber,
+            instagramUsername: values.instagramUsername !== user?.instagramUsername ? values.instagramUsername : null,
             books: orderItem.books.map(bookOrder => ({
                 bookId: bookOrder.book.id,
                 count: bookOrder.count,
@@ -236,7 +237,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                                   <Grid key={index} item xs={12} sm={4} md={3} pl={2}>
                                       <Box p={1}>
                                           <DeliveryRadioOption
-                                              disabled={!isAdmin(user) || orderItem.isDone || order.isCanceled}
+                                              disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
                                               option={opt}/>
                                       </Box>
                                   </Grid>
@@ -252,19 +253,19 @@ export default function OrderModal({ open, order, onClose }: IProps) {
 
                     <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="firstName" required
-                                         disabled={!isAdmin(user) || orderItem.isDone || order.isCanceled}
+                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
                                          label="Ім'я" fullWidth/>
                     </Grid>
 
                     <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="lastName" required
-                                         disabled={!isAdmin(user) || orderItem.isDone || order.isCanceled}
+                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
                                          label="Прізвище" fullWidth/>
                     </Grid>
 
                     <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="phoneNumber" required
-                                         disabled={!isAdmin(user) || orderItem.isDone || order.isCanceled}
+                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
                                          label="Номер телефону"
                                          fullWidth/>
                     </Grid>
@@ -275,7 +276,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
 
                     <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="instagramUsername"
-                                         disabled={orderItem.isDone || order.isCanceled}
+                                         disabled={orderItem.isDone || orderItem.isCanceled}
                                          label="Нікнейм в інстаграм для зв'язку"
                                          fullWidth/>
                     </Grid>
@@ -286,20 +287,20 @@ export default function OrderModal({ open, order, onClose }: IProps) {
 
                     <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="region" required
-                                         disabled={!isAdmin(user) || orderItem.isDone || order.isCanceled}
+                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
                                          label="Область" fullWidth/>
                     </Grid>
 
                     <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="district"
-                                         disabled={!isAdmin(user) || orderItem.isDone || order.isCanceled}
+                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
                                          label="Район"
                                          fullWidth/>
                     </Grid>
 
                     <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="city" required
-                                         disabled={!isAdmin(user) || orderItem.isDone || order.isCanceled}
+                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
                                          label="Місто" fullWidth/>
                     </Grid>
 
@@ -307,7 +308,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                       <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="postcode"
                                          type="number"
-                                         disabled={!isAdmin(user) || orderItem.isDone || order.isCanceled}
+                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
                                          label="Індекс"
                                          required={isUkrPoshtaSelected(orderItem.delivery.id)}
                                          fullWidth/>
@@ -317,7 +318,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                       <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="novaPostOffice"
                                          type="number"
-                                         disabled={!isAdmin(user) || orderItem.isDone || order.isCanceled}
+                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
                                          required={isNovaPostSelected(orderItem.delivery.id)}
                                          label="№ відділення / поштомату"
                                          fullWidth/>
@@ -330,7 +331,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                                         price={price}
                                         pageUrl="/profile/orders"
                                         discount={discount}
-                                        editable={isAdmin(user) && !orderItem.isDone && !order.isCanceled}
+                                        editable={isAdmin(user) && !orderItem.isDone && !orderItem.isCanceled}
                                         onRemove={() => onRemove(book.id)}
                                         onCountChange={(count: number) => onChangeBookCount(book.id, count)}/>
                         </Grid>
@@ -423,7 +424,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
 
                 <Grid item xs={12} md={6} lg={4}>
                   <Button variant="outlined" fullWidth onClick={onCancel} color="warning"
-                          disabled={orderItem.isDone || order.isCanceled}>
+                          disabled={orderItem.isDone || orderItem.isCanceled}>
                     Відмінити замовлення
                   </Button>
                 </Grid>

@@ -140,7 +140,7 @@ export function isSelfPickup(deliveryId: string) {
 
 export function getLinkForTracking(deliveryId: string, trackingNumber: string) {
     if (isNovaPostSelected(deliveryId)) {
-        return `https://novaposhtaglobal.ua/track/?Tracking_ID=${trackingNumber}`;
+        return `https://tracking.novaposhta.ua/#/uk`;
     } else if (isUkrPoshtaSelected(deliveryId)) {
         return `https://track.ukrposhta.ua/tracking_UA.html?barcode=${trackingNumber}`;
     }

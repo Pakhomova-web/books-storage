@@ -57,6 +57,29 @@ const bookFragment = gql`
     }
 `;
 
+const bookListFragment = gql`
+    fragment BookList on Book {
+        id
+        name
+        price
+        numberInStock
+        archived
+        imageIds
+        language {
+            id
+            name
+        }
+        bookSeries {
+            id
+            name
+            publishingHouse {
+                id
+                name
+            }
+        }
+        discount
+    }`;
+
 export const booksQuery = gql`
     query Books($pageSettings: PageableInput, $filters: BookSearchInput) {
         books(pageSettings: $pageSettings, filters: $filters) {
@@ -72,10 +95,10 @@ export const booksQuery = gql`
 export const booksByIdsQuery = gql`
     query BooksByIds($ids: [ID!]) {
         items: booksByIds(ids: $ids) {
-            ...Book
+            ...BookList
         }
     }
-    ${bookFragment}
+    ${bookListFragment}
 `;
 
 export const booksWithNotApprovedCommentsQuery = gql`
@@ -233,79 +256,28 @@ export const bookCommentsQuery = gql`
 export const booksFromSeries = gql`
     query BooksFromSeries($bookId: ID!, $rowsPerPage: Int!) {
         items: booksFromSeries(bookId: $bookId, rowsPerPage: $rowsPerPage) {
-            id
-            name
-            price
-            numberInStock
-            archived
-            imageIds
-            language {
-                id
-                name
-            }
-            bookSeries {
-                id
-                name
-                publishingHouse {
-                    id
-                    name
-                }
-            }
-            discount
+            ...BookList
         }
     }
+    ${bookListFragment}
 `;
 
 export const booksByAuthorQuery = gql`
     query BooksByAuthor($authorId: ID!, $rowsPerPage: Int!, $excludeBookSeriesId: ID) {
         items: booksByAuthor(authorId: $authorId, rowsPerPage: $rowsPerPage, excludeBookSeriesId: $excludeBookSeriesId) {
-            id
-            name
-            price
-            numberInStock
-            archived
-            imageIds
-            language {
-                id
-                name
-            }
-            bookSeries {
-                id
-                name
-                publishingHouse {
-                    id
-                    name
-                }
-            }
-            discount
+            ...BookList
         }
     }
+    ${bookListFragment}
 `;
 
 export const booksWithDiscountQuery = gql`
     query BooksWithDiscount($rowsPerPage: Int!) {
         items: booksWithDiscount(rowsPerPage: $rowsPerPage) {
-            id
-            name
-            price
-            numberInStock
-            archived
-            imageIds
-            language {
-                id
-                name
-            }
-            bookSeries {
-                id
-                name
-                publishingHouse {
-                    id
-                    name
-                }
-            }
-            discount
+            ...BookList
         }
     }
+    ${bookListFragment}
 `;
 
 

@@ -516,6 +516,7 @@ export type Order = {
   district?: Maybe<Scalars['String']['output']>;
   firstName: Scalars['String']['output'];
   id?: Maybe<Scalars['ID']['output']>;
+  instagramUsername?: Maybe<Scalars['String']['output']>;
   isCanceled?: Maybe<Scalars['Boolean']['output']>;
   isConfirmed?: Maybe<Scalars['Boolean']['output']>;
   isDone?: Maybe<Scalars['Boolean']['output']>;
@@ -1221,6 +1222,7 @@ export type OrderResolvers<ContextType = any, ParentType extends ResolversParent
   district?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  instagramUsername?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   isCanceled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   isConfirmed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   isDone?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;

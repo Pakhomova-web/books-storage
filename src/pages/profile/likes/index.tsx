@@ -36,7 +36,7 @@ export default function Likes() {
             <Loading show={loading}></Loading>
 
             <Grid container spacing={2} p={1}>
-                <BooksList items={items} pageUrl="/profile/likes"></BooksList>
+                <BooksList items={items || []} pageUrl="/profile/likes"></BooksList>
             </Grid>
 
             {!loading && !items?.length &&

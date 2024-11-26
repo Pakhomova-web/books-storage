@@ -96,6 +96,7 @@ export const styleVariables = {
         justifyContent: 'center',
         backgroundColor: primaryLightColor,
         borderRadius,
+        flexWrap: 'wrap',
         fontSize: titleFontSize,
         display: 'flex',
         alignItems: 'center',

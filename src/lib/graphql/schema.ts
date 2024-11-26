@@ -117,6 +117,7 @@ const typeDefs =  /* GraphQL */ `
         firstName: String!
         lastName: String!
         phoneNumber: String!
+        instagramUsername: String
         trackingNumber: String
         isPaid: Boolean
         isPartlyPaid: Boolean
