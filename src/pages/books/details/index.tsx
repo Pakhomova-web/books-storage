@@ -402,7 +402,7 @@ export default function BookDetails() {
               </Grid>
 
                 {!book.bookSeries.default &&
-                  <Grid container position="relative" display="flex" justifyContent="center" alignItems="center">
+                  <Grid container position="relative" display="flex" justifyContent="center" alignItems="center" spacing={2}>
                     <Loading show={loadingBooksFromSeries} isSmall={true}></Loading>
 
                     <Grid item xs={12}>
@@ -412,11 +412,13 @@ export default function BookDetails() {
                           {booksFromSeries?.length === rowsPerPageBooksFromSeries &&
                             <Button variant="outlined"
                                     onClick={() => router.push(`/books?bookSeries=${book.bookSeries.id}`)}>
-                              Дивитися усі<ArrowForwardIcon/></Button>}
+                              Дивитися усі<ArrowForwardIcon/>
+                            </Button>}
                       </Box>
                     </Grid>
 
                     <BooksList items={booksFromSeries} pageUrl={router.query.pageUrl as string}></BooksList>
+
                       {!booksFromSeries?.length &&
                         <Grid item xs={12} mb={2} display="flex" justifyContent="center">
                           В цій серії більше немає книг

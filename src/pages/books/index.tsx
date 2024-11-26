@@ -219,7 +219,7 @@ export default function Books() {
             {!loadingOption && option && renderBackBox()}
 
             {items.length ?
-                <>
+                <Box mb={2}>
                     <Grid container justifyContent="center">
                         <BooksList items={items} filters={filters} pageUrl="/books"></BooksList>
                     </Grid>
@@ -238,7 +238,7 @@ export default function Books() {
                             </TableRow>
                         </TableFooter>
                     </Table>
-                </>
+                </Box>
                 : (!loading &&
                 <IconWithText imageLink="/no_results.png" text="На жаль пошук не дав результатів. Cпробуйте ще раз"/>)}
 
@@ -246,8 +246,8 @@ export default function Books() {
 
             <RecentlyViewedBooks/>
 
-
             <DeliveriesBox/>
+
             <SocialMediaBox/>
         </>
     );
