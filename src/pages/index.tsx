@@ -71,12 +71,12 @@ export default function Home() {
                 <title>Головна {MAIN_NAME}</title>
             </Head>
 
-            <SocialMediaBox></SocialMediaBox>
+            <SocialMediaBox/>
 
             <DiscountBooks/>
 
             <Grid container position="relative" mb={loadingBookTypes ? 1 : 0} justifyContent="center">
-                <Loading show={loadingBookTypes}></Loading>
+                <Loading show={loadingBookTypes} isSmall={true}></Loading>
 
                 <Grid item xs={12} sx={styleVariables.sectionTitle}>Типи книг</Grid>
 
@@ -104,7 +104,7 @@ export default function Home() {
             </Grid>
 
             <Grid container position="relative">
-                <Loading show={loadingPublishingHouses}></Loading>
+                <Loading show={loadingPublishingHouses} isSmall={true}></Loading>
 
                 <Grid item xs={12} sx={styleVariables.sectionTitle} mb={loadingPublishingHouses ? 1 : 0}>
                     Видавництва

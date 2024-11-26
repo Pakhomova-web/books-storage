@@ -12,7 +12,7 @@ export default function RecentlyViewedBooks() {
 
     return (
         <Grid container position="relative" display="flex" justifyContent="center" alignItems="center">
-            <Loading show={loading}></Loading>
+            <Loading show={loading} isSmall={true}></Loading>
 
             {!loading && !!items?.length &&
               <Grid item xs={12} mb={loading ? 1 : 0} sx={styleVariables.sectionTitle}>

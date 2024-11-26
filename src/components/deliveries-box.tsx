@@ -11,7 +11,7 @@ export default function DeliveriesBox() {
 
     return (
         <Grid container position="relative">
-            <Loading show={loadingDeliveries}></Loading>
+            <Loading show={loadingDeliveries} isSmall={true}></Loading>
 
             <Grid item xs={12} sx={styleVariables.sectionTitle}>
                 Способи доставки

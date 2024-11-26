@@ -354,7 +354,7 @@ export default function BookDetails() {
 
                 {/*comment*/}
               <Grid container spacing={2} position="relative">
-                <Loading show={!loading && loadingComments}></Loading>
+                <Loading show={!loading && loadingComments} isSmall={true}></Loading>
 
                 <Grid item xs={12}>
                   <Box sx={styleVariables.sectionTitle} my={1} mb={loadingComments ? 1 : 0}>Відгуки покупців</Box>
@@ -405,7 +405,7 @@ export default function BookDetails() {
 
                 {!book.bookSeries.default &&
                   <Grid container position="relative" display="flex" justifyContent="center" alignItems="center">
-                    <Loading show={loadingBooksFromSeries}></Loading>
+                    <Loading show={loadingBooksFromSeries} isSmall={true}></Loading>
 
                     <Grid item xs={12}>
                       <Box sx={styleVariables.sectionTitle}>
@@ -452,7 +452,7 @@ export default function BookDetails() {
 
                     <Grid container spacing={2} position="relative" px={1} display="flex"
                           justifyContent="center">
-                      <Loading show={loadingBooksByAuthor}></Loading>
+                      <Loading show={loadingBooksByAuthor} isSmall={true}></Loading>
 
                       <BooksList items={booksByAuthor} pageUrl={router.query.pageUrl as string}></BooksList>
                     </Grid>

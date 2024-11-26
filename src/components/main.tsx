@@ -19,10 +19,7 @@ const StyledDiscountBox = styled(Box)(({ theme }) => ({
     position: 'fixed',
     bottom: '15px',
     right: '15px',
-    borderRadius: '50%',
-    color: 'white',
     cursor: 'pointer',
-    textAlign: 'center',
     [theme.breakpoints.up('lg')]: {
         height: '90px'
     },

@@ -10,28 +10,24 @@ import { useRouter } from 'next/router';
 const rowsPerPageBooksWithDiscount = 3;
 
 export default function DiscountBooks() {
-    const {
-        loading: loadingBooksWithDiscounts,
-        items: booksWithDiscounts
-    } = useBooksWithDiscount(rowsPerPageBooksWithDiscount);
+    const { loading, items } = useBooksWithDiscount(rowsPerPageBooksWithDiscount);
     const router = useRouter();
 
     return (
         <Grid container position="relative" display="flex" justifyContent="center" alignItems="center">
-            <Loading show={loadingBooksWithDiscounts}></Loading>
+            <Loading show={loading} isSmall={true}></Loading>
 
-            {!loadingBooksWithDiscounts && !!booksWithDiscounts?.length &&
-              <Grid item xs={12} mb={loadingBooksWithDiscounts ? 1 : 0} sx={styleVariables.sectionTitle}>
+            {!loading && !!items?.length &&
+              <Grid item xs={12} mb={loading ? 1 : 0} sx={styleVariables.sectionTitle}>
                 Акційні товари
 
-                  {booksWithDiscounts?.length === rowsPerPageBooksWithDiscount &&
+                  {items?.length === rowsPerPageBooksWithDiscount &&
                     <Button variant="outlined" onClick={() => router.push(`/books?withDiscount=true`)}>
                       Дивитися усі<ArrowForwardIcon/></Button>}
               </Grid>}
 
             <Grid container display="flex" justifyContent="center">
-                {!!booksWithDiscounts?.length &&
-                  <BooksList items={booksWithDiscounts}></BooksList>}
+                {!!items?.length && <BooksList items={items}></BooksList>}
             </Grid>
         </Grid>
     );
