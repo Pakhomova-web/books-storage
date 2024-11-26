@@ -30,6 +30,7 @@ import Head from 'next/head';
 import { MAIN_NAME } from '@/constants/main-name';
 import DiscountBooks from '@/components/books/discount-books';
 import RecentlyViewedBooks from '@/components/books/recently-viewed-books';
+import IconWithText from '@/components/icon-with-text';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
     height: '40px',
@@ -386,10 +387,7 @@ export default function BookDetails() {
                             </Box>
                         </Box> :
                         <Box display="flex" alignItems="center" flexDirection="column" gap={1}>
-                            <Box width="100px">
-                                <CustomImage isNoComments={true}></CustomImage>
-                            </Box>
-                            <Box>На даний момент список відгуків порожній</Box>
+                            <IconWithText imageLink="/no_comments.svg" text="На даний момент список відгуків порожній"/>
                             <Box sx={styleVariables.hintFontSize}>Додайте свій відгук про товар</Box>
                         </Box>}
                 </Grid>

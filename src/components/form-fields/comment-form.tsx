@@ -73,8 +73,8 @@ export default function CommentForm({ bookId }: ICommentFormProps) {
             <Grid container spacing={2} sx={commentFormStyles} pr={2} pb={2}>
                 <Loading show={addingComment} isSmall={true}></Loading>
 
-                <Grid item xs={12} textAlign="center" sx={styleVariables.titleFontSize}><b>Залишити
-                    відгук</b></Grid>
+                <Grid item xs={12} textAlign="center" sx={styleVariables.titleFontSize}>
+                    <b>Залишити відгук</b></Grid>
 
                 <Grid item xs={12}>
                     <CustomTextField fullWidth required name="email" label="Ел. адреса"></CustomTextField>

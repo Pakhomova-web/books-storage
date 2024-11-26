@@ -4,24 +4,20 @@ interface ICustomImageProps {
     imageId?: string,
     imageLink?: string,
     isBookDetails?: boolean,
-    isBookType?: boolean,
-    isNoComments?: boolean
+    isBookType?: boolean
 }
 
 export default function CustomImage({
                                         imageId,
                                         imageLink,
                                         isBookDetails,
-                                        isBookType,
-                                        isNoComments
+                                        isBookType
                                     }: ICustomImageProps) {
     function getEmptySrcImage() {
         if (isBookDetails) {
             return '/book_details_empty.png';
         } else if (isBookType) {
             return '/book_type_empty.png';
-        } else if (isNoComments) {
-            return '/no_comments.svg';
         }
     }
 
