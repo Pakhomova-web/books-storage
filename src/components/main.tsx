@@ -23,10 +23,12 @@ const StyledDiscountBox = styled(Box)(({ theme }) => ({
     cursor: 'pointer',
     textAlign: 'center',
     [theme.breakpoints.up('lg')]: {
-        height: '90px'
+        height: '90px',
+        right: '10%'
     },
     [theme.breakpoints.down('lg')]: {
-        height: '75px'
+        height: '75px',
+        right: '10px'
     },
     [theme.breakpoints.down('md')]: {
         height: '60px'
@@ -76,9 +78,7 @@ export default function Main({ children }) {
                       {children}
 
                       {!isSettings() && <Tooltip title="Знижки від 30%">
-                        <StyledDiscountBox left={{ lg: '10%', xs: '10px' }}
-                                           height={{ lg: '90px', md: '75px', xs: '60px' }}
-                                           onClick={() => router.push('/books?withDiscount=true')}>
+                        <StyledDiscountBox onClick={() => router.push('/books?withDiscount=true')}>
                           <CustomImage imageLink="discount_icon.png"/>
                         </StyledDiscountBox>
                       </Tooltip>}
