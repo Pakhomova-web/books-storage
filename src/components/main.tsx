@@ -9,7 +9,6 @@ import Loading from '@/components/loading';
 import { useAuth } from '@/components/auth-context';
 import { UserEntity } from '@/lib/data/types';
 import { isAdmin } from '@/utils/utils';
-import CustomImage from '@/components/custom-image';
 import { styled } from '@mui/material/styles';
 
 const authUrls = ['/sign-in'];
@@ -27,7 +26,7 @@ const StyledDiscountBox = styled(Box)(({ theme }) => ({
         height: '75px'
     },
     [theme.breakpoints.down('md')]: {
-        height: '60px'
+        height: '55px'
     }
 }));
 
@@ -72,15 +71,16 @@ export default function Main({ children }) {
                 <Box sx={styleVariables.overflowHidden}>
                   <Box sx={pageStyles} position="relative" px={{ lg: '15%', md: '5%', xs: 1 }} pt={1}>
                       {children}
-
-                      {!isSettings() && <Tooltip title="Знижки від 30%">
-                        <StyledDiscountBox onClick={() => router.push('/books?withDiscount=true')}>
-                          <CustomImage imageLink="discount_icon.png"/>
-                        </StyledDiscountBox>
-                      </Tooltip>}
                   </Box>
                 </Box>
               </>}
+
+            {!isSettings() &&
+              <StyledDiscountBox onClick={() => router.push('/books?withDiscount=true')}>
+                <Tooltip title="Знижки від 30%">
+                  <img alt="Image" height="100%" style={{ objectFit: 'contain' }} src="/discount_icon.png"/>
+                </Tooltip>
+              </StyledDiscountBox>}
         </Box>
     );
 }
