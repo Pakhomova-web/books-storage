@@ -398,12 +398,12 @@ export class OrderEntity {
                         value: 'Готовий до видачі',
                         index: 2
                     };
-            } else if (this.isPaid && (!this.trackingNumber || isSelfPickup(this.delivery.id))) {
+            } else if (this.isPaid && !this.isSent && (!this.trackingNumber || isSelfPickup(this.delivery.id))) {
                 return {
                     value: `Оплачене, чекає на ${isSelfPickup(this.delivery.id) ? 'видачу' : 'відправку'}`,
                     index: 2
                 };
-            } else if (this.isPartlyPaid && (!this.trackingNumber || isSelfPickup(this.delivery.id))) {
+            } else if (this.isPartlyPaid && !this.isSent && (!this.trackingNumber || isSelfPickup(this.delivery.id))) {
                 return {
                     value: `Зроблена передплата, чекає на ${isSelfPickup(this.delivery.id) ? 'видачу' : 'відправку'}`,
                     index: 2

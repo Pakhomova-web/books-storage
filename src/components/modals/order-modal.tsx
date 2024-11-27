@@ -194,7 +194,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                      title={'Замовлення № ' + renderOrderNumber(orderItem?.orderNumber)}
                      onClose={onClose}
                      isSubmitDisabled={submitDisabled}
-                     onSubmit={isAdmin(user) ? onSubmit : null}
+                     onSubmit={isAdmin(user) && !orderItem.isDone && !orderItem.isCanceled ? onSubmit : null}
                      loading={!orderItem || updating || loadingDeliveries || canceling}>
             <FormContainer formContext={formContext}>
                 <Grid container alignItems="center" display="flex" spacing={2} justifyContent="space-between" mb={2}>
@@ -210,11 +210,14 @@ export default function OrderModal({ open, order, onClose }: IProps) {
 
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <CustomTextField name="comment" disabled={!isAdmin(user)} label="Коментар" fullWidth/>
+                        <CustomTextField name="comment"
+                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
+                                         label="Коментар" fullWidth/>
                     </Grid>
 
                     {isAdmin(user) && <Grid item xs={12}>
-                      <CustomTextField name="adminComment" label="Коментар адміністратора" fullWidth/>
+                      <CustomTextField name="adminComment" disabled={orderItem.isDone || orderItem.isCanceled}
+                                       label="Коментар адміністратора" fullWidth/>
                     </Grid>}
 
                     {!!delivery && <>
