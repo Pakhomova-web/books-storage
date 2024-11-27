@@ -93,9 +93,12 @@ export const booksQuery = gql`
 `;
 
 export const booksByIdsQuery = gql`
-    query BooksByIds($ids: [ID!]) {
-        items: booksByIds(ids: $ids) {
-            ...BookList
+    query BooksByIds($ids: [ID!], $pageSettings: PageableInput) {
+        booksByIds(ids: $ids, pageSettings: $pageSettings) {
+            items {
+                ...BookList
+            }
+            totalCount
         }
     }
     ${bookListFragment}

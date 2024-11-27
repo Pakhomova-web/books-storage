@@ -4,7 +4,6 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ProfileIcon from '@mui/icons-material/AccountCircle';
-import LoginIcon from '@mui/icons-material/Login';
 import React, { useEffect, useState } from 'react'
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import SearchIcon from '@mui/icons-material/Search';
@@ -13,6 +12,7 @@ import { useRouter } from 'next/router';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { usePathname } from 'next/navigation';
 import Badge from '@mui/material/Badge';
+import { styled } from '@mui/material/styles';
 
 import { useAuth } from '@/components/auth-context';
 import { isAdmin } from '@/utils/utils';
@@ -20,7 +20,6 @@ import LoginModal from '@/components/modals/login-modal';
 import CustomModal from '@/components/modals/custom-modal';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
-import { styled } from '@mui/material/styles';
 
 enum MainMenuItem {
     home,
@@ -198,21 +197,18 @@ export default function CustomToolbar() {
                                             <MenuItem key={i} onClick={item.onClick}>{item.title}</MenuItem>)}
                                     </Menu>
                                 </> :
-                                !!user ?
-                                    <>
-                                        <IconButton color="primary"
-                                                    onClick={() => goToProfilePage()}
-                                                    className={selectedMenuItem === MainMenuItem.profile ? 'selectedToolbarMenuItem' : ''}>
-                                            <ProfileIcon/>
-                                        </IconButton>
-
-                                        <IconButton color="primary" onClick={() => onLogoutClick()}>
-                                            <LogoutIcon/>
-                                        </IconButton>
-                                    </> :
-                                    <IconButton color="primary" onClick={() => onLoginClick()}>
-                                        <LoginIcon/>
+                                <>
+                                    <IconButton color="primary"
+                                                onClick={() => !!user ? goToProfilePage() : onLoginClick()}
+                                                className={selectedMenuItem === MainMenuItem.profile ? 'selectedToolbarMenuItem' : ''}>
+                                        <ProfileIcon/>
                                     </IconButton>
+
+                                    {!!user &&
+                                      <IconButton color="primary" onClick={() => onLogoutClick()}>
+                                        <LogoutIcon/>
+                                      </IconButton>}
+                                </>
                             }
                         </Box>
                     </Box>

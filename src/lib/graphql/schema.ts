@@ -164,7 +164,7 @@ const typeDefs =  /* GraphQL */ `
         booksByAuthor(authorId: ID!, rowsPerPage: Int!, excludeBookSeriesId: ID): [Book!]
         booksWithDiscount(rowsPerPage: Int!): [Book!]
         booksWithNotApprovedComments(pageSettings: PageableInput): BookSubList
-        booksByIds(ids: [ID!]): [Book!]
+        booksByIds(ids: [ID!], pageSettings: PageableInput): BookSubList
 
         refreshToken(refreshToken: String!): UserToken!
     }

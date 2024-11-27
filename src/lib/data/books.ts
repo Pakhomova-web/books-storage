@@ -62,7 +62,7 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
                 } else {
                     return pageSettings.order === 'asc' ? -1 : 1;
                 }
-            } );
+            });
         }
         const totalCount = items.length;
 
@@ -281,12 +281,12 @@ export async function getBooksByAuthor(authorId: string, rowsPerPage: number, ex
         .populate('language');
 }
 
-export async function getBooksByIds(ids: string[]) {
+export async function getBooksByIds(ids: string[], pageSettings: IPageable) {
     if (!ids?.length) {
-        return [];
+        return { items: [], totalCount: 0 };
     }
 
-    return Book
+    const query = Book
         .find({ _id: ids, archived: { $in: [false, null] } })
         .populate({
             path: 'bookSeries',
@@ -295,8 +295,19 @@ export async function getBooksByIds(ids: string[]) {
             }
         })
         .populate('bookType')
-        .populate('language')
-        .sort({ bookSeries: 'desc', numberInStock: 'desc' });
+        .populate('language');
+
+    if (pageSettings && pageSettings.rowsPerPage && pageSettings.page !== undefined) {
+        query
+            .skip(pageSettings.rowsPerPage * pageSettings.page)
+            .limit(pageSettings.rowsPerPage);
+    }
+    query.sort({ bookSeries: 'desc', numberInStock: 'desc' });
+
+    const totalCount = await query.countDocuments();
+    const items = await query.find();
+
+    return { items, totalCount };
 }
 
 export async function getBooksWithDiscount(rowsPerPage: number) {

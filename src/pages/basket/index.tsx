@@ -7,7 +7,6 @@ import Loading from '@/components/loading';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
 import { styled } from '@mui/material/styles';
-import CustomImage from '@/components/custom-image';
 import {
     isAdmin,
     isNovaPostSelected,

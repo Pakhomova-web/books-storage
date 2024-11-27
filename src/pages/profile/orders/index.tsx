@@ -57,24 +57,22 @@ export default function Orders() {
 
             <Loading show={loading}></Loading>
 
-            {!!items?.length && <Box>
-              <OrdersList orders={items} onClick={order => setSelectedOrder(order)}/>
+            <OrdersList orders={items} onClick={order => setSelectedOrder(order)}/>
 
-              <Table>
+            <Table>
                 <TableFooter>
-                  <TableRow>
-                    <TablePagination rowsPerPageOptions={[6, 12]}
-                                     count={totalCount}
-                                     page={pageSettings.page}
-                                     sx={styleVariables.paginatorStyles}
-                                     labelRowsPerPage="Кільк. на сторінці"
-                                     rowsPerPage={pageSettings.rowsPerPage}
-                                     onPageChange={(_e, val: number) => onPageChange(val)}
-                                     onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
-                  </TableRow>
+                    <TableRow>
+                        <TablePagination rowsPerPageOptions={[6, 12]}
+                                         count={totalCount}
+                                         page={pageSettings.page}
+                                         sx={styleVariables.paginatorStyles}
+                                         labelRowsPerPage="Кільк. на сторінці"
+                                         rowsPerPage={pageSettings.rowsPerPage}
+                                         onPageChange={(_e, val: number) => onPageChange(val)}
+                                         onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
+                    </TableRow>
                 </TableFooter>
-              </Table>
-            </Box>}
+            </Table>
 
             {!loading && !items?.length &&
               <Grid item display="flex" width="100%" alignItems="center" flexDirection="column" gap={2}>

@@ -171,8 +171,8 @@ const resolvers: Resolvers = {
         booksByAuthor: async (_root, { authorId, rowsPerPage, excludeBookSeriesId }) => {
             return getBooksByAuthor(authorId, rowsPerPage, excludeBookSeriesId).catch(error => parseError(error));
         },
-        booksByIds: async (_root, { ids }) => {
-            return getBooksByIds(ids).catch(error => parseError(error));
+        booksByIds: async (_root, { ids, pageSettings }) => {
+            return getBooksByIds(ids, <IPageable>pageSettings).catch(error => parseError(error));
         },
         booksWithDiscount: async (_root, { rowsPerPage }) => {
             return getBooksWithDiscount(rowsPerPage).catch(error => parseError(error));

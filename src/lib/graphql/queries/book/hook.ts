@@ -84,13 +84,19 @@ export function getAllBooks(pageSettings?: IPageable, filters?: BookFilter) {
     return _useAllItems<BookEntity>(booksQuery, 'books', pageSettings, filters);
 }
 
-export function useBooksByIds(ids: string[]) {
+export function useBooksByIds(ids: string[], pageSettings?: IPageable) {
     const { data, loading, error, refetch } = useQuery(booksByIdsQuery, {
         fetchPolicy: 'no-cache',
-        variables: { ids }
+        variables: { ids, pageSettings: pageSettings ? pageSettings : { page: 0, rowsPerPage: ids.length } }
     });
 
-    return { items: data ? data.items : [], loading, error, refetch };
+    return {
+        items: data ? data.booksByIds.items : [],
+        totalCount: data ? data.booksByIds.totalCount : 0,
+        loading,
+        error,
+        refetch
+    };
 }
 
 export function useBooksComments(pageSettings?: IPageable) {
@@ -160,7 +166,10 @@ export async function unlikeBook(id: string): Promise<string[]> {
 }
 
 export async function changeRecentlyViewedBooks(id: string): Promise<string[]> {
-    const { data: { ids } } = await apolloClient.mutate({ mutation: changeRecentlyViewedBooksQuery, variables: { id } });
+    const { data: { ids } } = await apolloClient.mutate({
+        mutation: changeRecentlyViewedBooksQuery,
+        variables: { id }
+    });
 
     return ids;
 }
