@@ -92,8 +92,7 @@ export default function Authors() {
 
             {isAdmin(user) &&
               <>
-                <NameFiltersPanel tableKeys={tableKeys}
-                                  onApply={(filters: AuthorEntity) => setFilters(filters)}
+                <NameFiltersPanel onApply={(filters: AuthorEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
                                   onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
 

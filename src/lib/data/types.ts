@@ -1,4 +1,5 @@
 import { isSelfPickup } from '@/utils/utils';
+import { SortDirection } from '@mui/material';
 
 export interface AuthorEntity {
     id: string,
@@ -160,7 +161,7 @@ export interface IOption<T> {
 
 export interface IPageable {
     orderBy?: string,
-    order?: 'asc' | 'desc',
+    order?: SortDirection,
     page?: number,
     rowsPerPage?: number
 }

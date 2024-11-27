@@ -121,8 +121,8 @@ export default function Books() {
         },
         {
             title: 'Ціна',
-            sortValue: 'price',
-            renderValue: (item: BookEntity) => renderPrice(item.price),
+            sortValue: 'priceWithDiscount',
+            renderValue: (item: BookEntity) => renderPrice(item.price, 0, false),
             type: 'text'
         },
         { title: 'Знижка', renderValue: (item: BookEntity) => item.discount, type: 'text' }
@@ -234,8 +234,7 @@ export default function Books() {
 
             {isAdmin(user) &&
               <>
-                <BookFilters tableKeys={tableKeys}
-                             onApply={(filters: BookFilter) => onChangeFilters(filters)}
+                <BookFilters onApply={(filters: BookFilter) => onChangeFilters(filters)}
                              pageSettings={pageSettings}
                              onSort={(pageSettings: IPageable) => onChangePageSettings(pageSettings)}></BookFilters>
 

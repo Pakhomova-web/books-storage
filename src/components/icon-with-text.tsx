@@ -16,7 +16,7 @@ export default function IconWithText({ text, imageLink }) {
                 <CustomImage imageLink={imageLink}></CustomImage>
             </Box>
 
-            <Box sx={styleVariables.titleFontSize}>{text}</Box>
+            <Box sx={styleVariables.titleFontSize} textAlign="center" mb={1}>{text}</Box>
         </Box>
     );
 }

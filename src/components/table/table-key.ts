@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { IPageable } from '@/lib/data/types';
 
 export interface TableKey<K> {
     type: 'actions' | 'text' | 'image',

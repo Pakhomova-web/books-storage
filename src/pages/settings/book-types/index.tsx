@@ -94,8 +94,7 @@ export default function BookTypes() {
 
             {isAdmin(user) &&
               <>
-                <NameFiltersPanel tableKeys={tableKeys}
-                                  onApply={(filters: BookTypeEntity) => setFilters(filters)}
+                <NameFiltersPanel onApply={(filters: BookTypeEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
                                   onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
 

@@ -1,15 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { Grid } from '@mui/material';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import SortFiltersContainer from '@/components/filters/sort-filters-container';
+import { ISortKey } from '@/components/types';
 
 interface INameForm {
     name: string
 }
 
-export function NameFiltersPanel({ tableKeys, pageSettings, onSort, onApply }) {
+export function NameFiltersPanel({ pageSettings, onSort, onApply }) {
     const formContext = useForm<INameForm>({});
+    const [sortKeys] = useState<ISortKey[]>([
+        {
+            title: 'Назва в алфавітному порядку',
+            orderBy: 'name',
+            order: 'asc'
+        },
+        {
+            title: 'Назва в оборотному порядку',
+            orderBy: 'name',
+            order: 'asc'
+        }
+    ]);
 
     function onClearClick() {
         formContext.reset();
@@ -21,7 +34,7 @@ export function NameFiltersPanel({ tableKeys, pageSettings, onSort, onApply }) {
     }
 
     return (
-        <SortFiltersContainer tableKeys={tableKeys}
+        <SortFiltersContainer sortKeys={sortKeys}
                               pageSettings={pageSettings}
                               onApply={() => onApply(formContext.getValues())}
                               onClear={() => onClearClick()}

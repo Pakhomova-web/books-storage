@@ -1,8 +1,6 @@
-import { TableKey } from '@/components/table/table-key';
 import { Grid, useTheme } from '@mui/material';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { styleVariables } from '@/constants/styles-variables';
 import { IPageable } from '@/lib/data/types';
 import { FiltersButton } from '@/components/filters/filters-button';
 import SortButton from '@/components/filters/sort-button';
@@ -12,7 +10,7 @@ interface ISortFiltersContainerProps<T> {
     onClear: () => void;
     onApply: () => void;
     pageSettings: IPageable;
-    tableKeys?: TableKey<T>[];
+    sortKeys: ISortKey[];
     children?: ReactNode;
     onSort?: (_: IPageable) => void;
     showAlwaysSorting?: boolean;
@@ -21,22 +19,20 @@ interface ISortFiltersContainerProps<T> {
 export default function SortFiltersContainer<T>(props: ISortFiltersContainerProps<T>) {
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
-    const [sortKeys] = useState<ISortKey[]>(props.tableKeys ? props.tableKeys.filter(({ sortValue }) => !!sortValue)
-        .map(({ title, sortValue }) => ({ title, orderBy: sortValue })) : []);
 
     function renderFiltersButton(children: ReactNode) {
         return <FiltersButton onApply={props.onApply} onClear={props.onClear}>{children}</FiltersButton>;
     }
 
     return <>
-        <Grid container>
-            {(mobileMatches || props.showAlwaysSorting) && sortKeys?.length ?
+        <Grid container display="flex" alignItems="center">
+            {(mobileMatches || props.showAlwaysSorting) && props.sortKeys?.length ?
                 <>
-                    <Grid item xs={6}>{renderFiltersButton(props.children)}</Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={4}>{renderFiltersButton(props.children)}</Grid>
+                    <Grid item xs={8}>
                         <SortButton onSort={props.onSort}
                                     pageSettings={props.pageSettings}
-                                    sortKeys={sortKeys}></SortButton>
+                                    sortKeys={props.sortKeys}></SortButton>
                     </Grid>
                 </>
                 : renderFiltersButton(props.children)}

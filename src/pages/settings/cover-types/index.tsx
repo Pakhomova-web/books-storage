@@ -95,8 +95,7 @@ export default function CoverTypes() {
 
             {isAdmin(user) &&
               <>
-                <NameFiltersPanel tableKeys={tableKeys}
-                                  onApply={(filters: CoverTypeEntity) => setFilters(filters)}
+                <NameFiltersPanel onApply={(filters: CoverTypeEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
                                   onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
 

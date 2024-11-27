@@ -95,8 +95,7 @@ export default function Languages() {
 
             {isAdmin(user) &&
               <>
-                <NameFiltersPanel tableKeys={tableKeys}
-                                  onApply={(filters: LanguageEntity) => setFilters(filters)}
+                <NameFiltersPanel onApply={(filters: LanguageEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
                                   onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
 

@@ -73,7 +73,7 @@ export function isAdmin(user?: UserEntity): boolean {
     return user?.role === ROLES.admin;
 }
 
-export function renderPrice(price: number, discount = 0): string {
+export function renderPrice(price: number, discount = 0, displayCurrency = true): string {
     let res = (price * (100 - discount) / 100).toFixed(2);
 
     if (res.split('.').length === 1) {
@@ -83,7 +83,7 @@ export function renderPrice(price: number, discount = 0): string {
         res = `${res}0`;
     }
 
-    return `${res} грн`;
+    return displayCurrency ? `${res} грн` : res;
 }
 
 export function renderOrderNumber(orderNumber: number): string {

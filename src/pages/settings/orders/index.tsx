@@ -11,34 +11,24 @@ import OrderModal from '@/components/modals/order-modal';
 import SettingsMenu from '@/pages/settings/settings-menu';
 import OrdersList from '@/components/orders/orders-list';
 import { Box, Table, TableFooter, TablePagination, TableRow } from '@mui/material';
-import { TableKey } from '@/components/table/table-key';
 import SortFiltersContainer from '@/components/filters/sort-filters-container';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import Head from 'next/head';
+import { ISortKey } from '@/components/types';
 
 export default function Orders() {
     const { user } = useAuth();
-    const [tableKeys] = useState<TableKey<OrderEntity>[]>([
+    const [sortKeys] = useState<ISortKey[]>([
         {
-            title: '№ замовлення',
-            sortValue: 'orderNumber',
-            type: 'text'
+            title: 'Не підтвердженні спочатку',
+            orderBy: 'isConfirmed',
+            order: 'asc'
         },
         {
-            title: 'Ім\'я замовника',
-            sortValue: 'firstName',
-            type: 'text'
-        },
-        {
-            title: 'Прізвище замовника',
-            sortValue: 'lastName',
-            type: 'text'
-        },
-        {
-            title: 'Номер телефону',
-            sortValue: 'phoneNumber',
-            type: 'text'
+            title: 'Не відправлені спочатку',
+            orderBy: 'isSent',
+            order: 'asc'
         }
     ]);
     const [selectedItem, setSelectedItem] = useState<OrderEntity>();
@@ -94,7 +84,7 @@ export default function Orders() {
 
             {isAdmin(user) &&
               <Box px={1}>
-                <SortFiltersContainer tableKeys={tableKeys}
+                <SortFiltersContainer sortKeys={sortKeys}
                                       onApply={() => onApply()}
                                       onClear={() => onClearFilter()}
                                       onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}

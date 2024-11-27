@@ -28,7 +28,7 @@ export function FiltersButton({ onApply, onClear, children }) {
     return (
         <>
             <Button fullWidth onClick={openFilters}>
-                <Box my={1} display="flex" alignItems="center"><TuneIcon/>Фільтри</Box>
+                <Box my={1} display="flex" gap={1} alignItems="center"><TuneIcon/>Фільтри</Box>
             </Button>
 
             <CustomModal open={openFiltersModal}

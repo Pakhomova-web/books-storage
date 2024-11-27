@@ -10,7 +10,6 @@ import Loading from '@/components/loading';
 import { borderRadius, primaryLightColor, styleVariables, titleFontSize } from '@/constants/styles-variables';
 import {
     AuthorEntity,
-    BookEntity,
     BookFilter,
     BookSeriesEntity,
     BookTypeEntity,
@@ -25,7 +24,6 @@ import ErrorNotification from '@/components/error-notification';
 import { getAuthorById } from '@/lib/graphql/queries/author/hook';
 import { getPublishingHouseById } from '@/lib/graphql/queries/publishing-house/hook';
 import { BookFilters } from '@/components/filters/book-filters';
-import { TableKey } from '@/components/table/table-key';
 import { getLanguageById } from '@/lib/graphql/queries/language/hooks';
 import { getBookSeriesById } from '@/lib/graphql/queries/book-series/hook';
 import BooksList from '@/components/books/books-list';
@@ -56,12 +54,6 @@ export default function Books() {
     const [pageSettings, setPageSettings] = useState<IPageable>({
         order: 'asc', orderBy: '', page: 0, rowsPerPage: 24
     });
-    const [tableKeys] = useState<TableKey<BookEntity>[]>([
-        { title: 'Назва', sortValue: 'name', type: 'text' },
-        { title: 'Ціна', sortValue: 'price', type: 'text' },
-        { title: 'Наявність', sortValue: 'numberInStock', type: 'text' },
-        { title: 'Знижка', sortValue: 'discount', type: 'text' }
-    ]);
     const [filters, setFilters] = useState<BookFilter>(new BookFilter(router.query));
     const [option, setOption] = useState<{ title: string, param?: string, imageId?: string }[]>();
     const [toRefreshData, setToRefreshData] = useState<boolean>(false);
@@ -190,8 +182,7 @@ export default function Books() {
 
             <Loading show={loading}></Loading>
 
-            <BookFilters tableKeys={tableKeys}
-                         defaultValues={filters}
+            <BookFilters defaultValues={filters}
                          onApply={(filters: BookFilter) => setFilters(filters)}
                          pageSettings={pageSettings}
                          showAlwaysSorting={true}

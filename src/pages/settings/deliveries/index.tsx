@@ -96,8 +96,7 @@ export default function Deliveries() {
 
             {isAdmin(user) &&
               <>
-                <NameFiltersPanel tableKeys={tableKeys}
-                                  onApply={(filters: DeliveryEntity) => setFilters(filters)}
+                <NameFiltersPanel onApply={(filters: DeliveryEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
                                   onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
 

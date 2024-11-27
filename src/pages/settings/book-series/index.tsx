@@ -108,8 +108,7 @@ export default function BookSeries() {
 
             {isAdmin(user) &&
               <>
-                <BookSeriesFilters tableKeys={tableKeys}
-                                   onApply={(filters: BookSeriesFilter) => setFilters(filters)}
+                <BookSeriesFilters onApply={(filters: BookSeriesFilter) => setFilters(filters)}
                                    pageSettings={pageSettings}
                                    onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></BookSeriesFilters>
 

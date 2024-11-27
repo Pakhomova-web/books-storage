@@ -93,8 +93,7 @@ export default function PublishingHouses() {
 
             {isAdmin(user) &&
               <>
-                <NameFiltersPanel tableKeys={tableKeys}
-                                  onApply={(filters: PublishingHouseEntity) => setFilters(filters)}
+                <NameFiltersPanel onApply={(filters: PublishingHouseEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
                                   onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
 

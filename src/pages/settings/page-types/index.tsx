@@ -95,8 +95,7 @@ export default function PageTypes() {
 
             {isAdmin(user) &&
               <>
-                <NameFiltersPanel tableKeys={tableKeys}
-                                  onApply={(filters: PageTypeEntity) => setFilters(filters)}
+                <NameFiltersPanel onApply={(filters: PageTypeEntity) => setFilters(filters)}
                                   pageSettings={pageSettings}
                                   onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
 

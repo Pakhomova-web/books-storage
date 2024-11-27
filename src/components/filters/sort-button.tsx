@@ -1,11 +1,10 @@
-import { Box, Button, Grid } from '@mui/material';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import CustomModal from '@/components/modals/custom-modal';
-import React, { useState } from 'react';
+import { Box, IconButton, Menu, MenuItem } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import SortIcon from '@mui/icons-material/Sort';
-import { ISortKey } from '@/components/types';
+
 import { IPageable } from '@/lib/data/types';
+import { styleVariables } from '@/constants/styles-variables';
+import { ISortKey } from '@/components/types';
 
 interface ISortButtonProps {
     pageSettings: IPageable;
@@ -14,44 +13,49 @@ interface ISortButtonProps {
 }
 
 export default function SortButton(props: ISortButtonProps) {
-    const [openSortModal, setOpenSortModal] = useState(false);
+    const [anchorMenuEl, setAnchorMenuEl] = useState<HTMLElement>();
+    const [selectedItem, setSelectedItem] = useState<ISortKey>(props.sortKeys.find(item => isSelectedItem(item)));
 
-    function onSortClick() {
-        setOpenSortModal(true);
+    useEffect(() => {
+        setSelectedItem(props.sortKeys.find(item => isSelectedItem(item)));
+    }, [props.pageSettings]);
+
+    function onSortClick(event: React.MouseEvent<HTMLElement>) {
+        setAnchorMenuEl(event.currentTarget);
     }
 
     function onSortByField(key: ISortKey) {
-        setOpenSortModal(false);
-        const order = (props.pageSettings?.orderBy === key.orderBy ? props.pageSettings : key).order === 'desc' ? 'asc' : 'desc';
-
+        setAnchorMenuEl(null);
         props.onSort({
             ...props.pageSettings,
+            orderBy: key.orderBy,
+            order: key.order,
             page: 0,
-            order,
-            orderBy: key.orderBy
         });
     }
 
-    return (
-        <>
-            <Button fullWidth onClick={onSortClick}>
-                <Box my={1} display="flex" alignItems="center"><SortIcon/>Сортування</Box>
-            </Button>
+    function isSelectedItem(item: ISortKey) {
+        return props.pageSettings.order === item.order && props.pageSettings.orderBy === item.orderBy;
+    }
 
-            <CustomModal open={openSortModal} onClose={() => setOpenSortModal(false)}>
-                <Grid container>{props.sortKeys?.map(key => (
-                    <Grid item key={key.orderBy} xs={6}>
-                        <Button onClick={() => onSortByField(key)}>
-                            <Box marginRight={1}>{key.title}</Box>
-                            {props.pageSettings?.orderBy === key.orderBy &&
-                                (props.pageSettings.order === 'desc' ?
-                                    <ArrowDownwardIcon></ArrowDownwardIcon> :
-                                    <ArrowUpwardIcon></ArrowUpwardIcon>)
-                            }
-                        </Button>
-                    </Grid>
-                ))}</Grid>
-            </CustomModal>
-        </>
+    return (
+        <Box width="100%" display="flex" alignItems="center" justifyContent="flex-end" gap={1}>
+            <Box display="flex" gap={1} flexWrap="wrap" justifyContent="center">
+                Сортувати:<Box>{selectedItem?.title}</Box>
+            </Box>
+
+            <IconButton onClick={onSortClick} aria-haspopup="true" color="primary"><SortIcon/></IconButton>
+
+            <Menu anchorEl={anchorMenuEl}
+                  open={!!anchorMenuEl}
+                  onClose={() => setAnchorMenuEl(null)}
+                  MenuListProps={{ 'aria-labelledby': 'basic-button' }}>
+                {props.sortKeys.map((item, i) =>
+                    <MenuItem key={i} onClick={() => onSortByField(item)}
+                              sx={isSelectedItem(item) ? styleVariables.boldFont : {}}>
+                        {item.title}
+                    </MenuItem>)}
+            </Menu>
+        </Box>
     );
 }

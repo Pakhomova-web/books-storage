@@ -39,7 +39,6 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
         .populate('language')
         .populate('authors')
         .populate('illustrators')
-        .sort({ numberInStock: 'desc' })
         .sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
 
     let res = { items: [], totalCount: 0 };
@@ -53,9 +52,17 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
                 quickSearch.test(bookType.name) ||
                 quickSearch.test(bookSeries.name) ||
                 quickSearch.test(bookSeries.publishingHouse.name) ||
-                quickSearch.test(language?.name) ||
                 tags?.some(tag => quickSearch.test(tag))
             );
+        }
+        if (pageSettings?.orderBy === 'priceWithDiscount') {
+            items.sort((a, b) => {
+                if (a.price * (100 - (a.discount || 0)) > b.price * (100 - (b.discount || 0))) {
+                    return pageSettings.order === 'asc' ? 1 : -1;
+                } else {
+                    return pageSettings.order === 'asc' ? -1 : 1;
+                }
+            } );
         }
         const totalCount = items.length;
 

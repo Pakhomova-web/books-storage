@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormContainer, MultiSelectElement, useForm } from 'react-hook-form-mui';
-import { BookEntity, BookFilter, BookSeriesFilter, IPageable } from '@/lib/data/types';
+import { BookFilter, BookSeriesFilter, IPageable } from '@/lib/data/types';
 import { useLanguageOptions } from '@/lib/graphql/queries/language/hooks';
 import { Box, Grid } from '@mui/material';
 import CustomSelectField from '@/components/form-fields/custom-select-field';
@@ -12,14 +12,13 @@ import { usePageTypeOptions } from '@/lib/graphql/queries/page-type/hook';
 import { useAuthorOptions } from '@/lib/graphql/queries/author/hook';
 import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
 import { usePublishingHouseOptions } from '@/lib/graphql/queries/publishing-house/hook';
-import { TableKey } from '@/components/table/table-key';
 import { useBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 import { customFieldClearBtnStyles } from '@/constants/styles-variables';
 import Ages from '@/components/ages';
+import { ISortKey } from '@/components/types';
 
 interface IBookFiltersProps {
     defaultValues?: BookFilter,
-    tableKeys: TableKey<BookEntity>[],
     onApply: (values?: BookFilter) => void,
     pageSettings: IPageable,
     showAlwaysSorting?: boolean,
@@ -28,6 +27,24 @@ interface IBookFiltersProps {
 
 export function BookFilters(props: IBookFiltersProps) {
     const formContext = useForm<BookFilter>({ defaultValues: props.defaultValues });
+    const [sortKeys] = useState<ISortKey[]>([
+        {
+            title: 'Спочатку найдорожчі',
+            orderBy: 'priceWithDiscount', order: 'desc'
+        },
+        {
+            title: 'Спочатку найдешевші',
+            orderBy: 'priceWithDiscount', order: 'asc'
+        },
+        {
+            title: 'За наявністю',
+            orderBy: 'numberInStock', order: 'desc'
+        },
+        {
+            title: 'Спочатку акційні',
+            orderBy: 'discount', order: 'desc'
+        }
+    ]);
     const {
         quickSearch,
         bookType,
@@ -87,7 +104,7 @@ export function BookFilters(props: IBookFiltersProps) {
     }
 
     return (
-        <SortFiltersContainer tableKeys={props.tableKeys}
+        <SortFiltersContainer sortKeys={sortKeys}
                               showAlwaysSorting={props.showAlwaysSorting}
                               pageSettings={props.pageSettings}
                               onApply={() => props.onApply(formContext.getValues())}
@@ -203,7 +220,8 @@ export function BookFilters(props: IBookFiltersProps) {
                                                 label="Іллюстратор"
                                                 name="illustrators" showCheckbox variant="outlined"/>
                             {!!illustrators?.length &&
-                              <Box sx={customFieldClearBtnStyles} onClick={() => clearValue('illustrators')}>Очистити</Box>}
+                              <Box sx={customFieldClearBtnStyles}
+                                   onClick={() => clearValue('illustrators')}>Очистити</Box>}
                         </Box>
                     </Grid>
 
