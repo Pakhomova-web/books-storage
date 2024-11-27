@@ -61,7 +61,7 @@ export default function Basket() {
         postcode,
         novaPostOffice
     } = formContext.watch();
-    const { loading, error, items } = useBooksByIds(user?.basketItems.map(({ bookId }) => bookId));
+    const { loading, error, items } = useBooksByIds(user?.basketItems?.map(({ bookId }) => bookId));
     const [countFields, setCountFields] = useState<Map<string, number>>(new Map());
     const [finalFullSum, setFinalFullSum] = useState<number>();
     const [finalSumWithDiscounts, setFinalSumWithDiscounts] = useState<number>();
@@ -269,7 +269,7 @@ export default function Basket() {
             {error && <ErrorNotification error={error}/>}
             {updatingError && <ErrorNotification error={updatingError}/>}
 
-            {!!items.length && <>
+            {!!items?.length && <>
               <FormContainer formContext={formContext}>
                 <Grid container spacing={2} px={1} mt={1}>
                   <Grid item xs={12}>
@@ -358,7 +358,7 @@ export default function Basket() {
               <Grid container spacing={2} mt={1} mb={3} p={1}>
                 <Grid item xs={12} display="flex" flexWrap="wrap"
                       gap={1} justifyContent={{ xs: 'center', md: 'flex-end' }} alignItems="center">
-                    {isAdmin(user) && !!items.length &&
+                    {isAdmin(user) && !!items?.length &&
                       <Button variant="outlined" onClick={() => onCopyOrderClick(items.map(book => ({
                           book,
                           price: book.price,

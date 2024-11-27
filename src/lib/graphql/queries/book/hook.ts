@@ -87,7 +87,7 @@ export function getAllBooks(pageSettings?: IPageable, filters?: BookFilter) {
 export function useBooksByIds(ids: string[], pageSettings?: IPageable) {
     const { data, loading, error, refetch } = useQuery(booksByIdsQuery, {
         fetchPolicy: 'no-cache',
-        variables: { ids, pageSettings: pageSettings ? pageSettings : { page: 0, rowsPerPage: ids.length } }
+        variables: { ids, pageSettings: pageSettings ? pageSettings : { page: 0, rowsPerPage: (ids || []).length } }
     });
 
     return {
