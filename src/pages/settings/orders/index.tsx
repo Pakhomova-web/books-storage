@@ -2,7 +2,6 @@ import { useAuth } from '@/components/auth-context';
 import { IOrderFilter, IPageable, OrderEntity } from '@/lib/data/types';
 import { isAdmin } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
-import { styleVariables } from '@/constants/styles-variables';
 import { useOrders } from '@/lib/graphql/queries/order/hook';
 import { ApolloError } from '@apollo/client';
 import Loading from '@/components/loading';
@@ -10,12 +9,13 @@ import ErrorNotification from '@/components/error-notification';
 import OrderModal from '@/components/modals/order-modal';
 import SettingsMenu from '@/pages/settings/settings-menu';
 import OrdersList from '@/components/orders/orders-list';
-import { Box, Table, TableFooter, TablePagination, TableRow } from '@mui/material';
+import { Box } from '@mui/material';
 import SortFiltersContainer from '@/components/filters/sort-filters-container';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import Head from 'next/head';
 import { ISortKey } from '@/components/types';
+import Pagination from '@/components/pagination';
 
 export default function Orders() {
     const { user } = useAuth();
@@ -112,20 +112,9 @@ export default function Orders() {
                   {error && <ErrorNotification error={error}></ErrorNotification>}
                   {gettingError && <ErrorNotification error={gettingError}></ErrorNotification>}
 
-                <Table>
-                  <TableFooter>
-                    <TableRow>
-                      <TablePagination rowsPerPageOptions={[6, 12]}
-                                       count={totalCount}
-                                       page={pageSettings.page}
-                                       sx={styleVariables.paginatorStyles}
-                                       labelRowsPerPage="Кільк. на сторінці"
-                                       rowsPerPage={pageSettings.rowsPerPage}
-                                       onPageChange={(_e, val: number) => onPageChange(val)}
-                                       onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
-                    </TableRow>
-                  </TableFooter>
-                </Table>
+                <Pagination rowsPerPage={pageSettings.rowsPerPage} count={totalCount}
+                            page={pageSettings.page} onRowsPerPageChange={onRowsPerPageChange}
+                            onPageChange={onPageChange}/>
 
                   {selectedItem && <OrderModal open={true}
                                                order={selectedItem}

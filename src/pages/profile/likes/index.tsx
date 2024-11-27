@@ -1,4 +1,4 @@
-import { Button, Grid, Table, TableFooter, TablePagination, TableRow } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import Loading from '@/components/loading';
@@ -9,8 +9,8 @@ import { useBooksByIds } from '@/lib/graphql/queries/book/hook';
 import ProfileMenu from '@/pages/profile/profile-menu';
 import Head from 'next/head';
 import IconWithText from '@/components/icon-with-text';
-import { styleVariables } from '@/constants/styles-variables';
 import { IPageable } from '@/lib/data/types';
+import Pagination from '@/components/pagination';
 
 export default function Likes() {
     const { user } = useAuth();
@@ -49,20 +49,11 @@ export default function Likes() {
                 <BooksList items={items || []} pageUrl="/profile/likes"></BooksList>
             </Grid>
 
-            {(loading || !!items.length) && <Table>
-              <TableFooter>
-                <TableRow>
-                  <TablePagination rowsPerPageOptions={[6, 12]}
-                                   count={totalCount}
-                                   page={pageSettings.page}
-                                   sx={styleVariables.paginatorStyles}
-                                   labelRowsPerPage="Кільк. на сторінці"
-                                   rowsPerPage={pageSettings.rowsPerPage}
-                                   onPageChange={(_e, val: number) => onPageChange(val)}
-                                   onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
-                </TableRow>
-              </TableFooter>
-            </Table>}
+            {(loading || !!items.length) &&
+              <Pagination rowsPerPage={pageSettings.rowsPerPage} count={totalCount}
+                          page={pageSettings.page} onRowsPerPageChange={onRowsPerPageChange}
+                          onPageChange={onPageChange}/>
+            }
 
             {!loading && !items?.length &&
               <Grid item display="flex" width="100%" alignItems="center" flexDirection="column">

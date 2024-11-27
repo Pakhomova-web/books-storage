@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton, Table, TableFooter, TablePagination, TableRow } from '@mui/material';
+import { Box, Grid, IconButton } from '@mui/material';
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
@@ -6,12 +6,13 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 
 import { primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import { BookEntity, IPageable } from '@/lib/data/types';
-import { useApproveComment, useRemoveComment, useBooksComments } from '@/lib/graphql/queries/book/hook';
+import { useApproveComment, useBooksComments, useRemoveComment } from '@/lib/graphql/queries/book/hook';
 import Loading from '@/components/loading';
 import ErrorNotification from '@/components/error-notification';
 import CustomModal from '@/components/modals/custom-modal';
 import SettingsMenu from '@/pages/settings/settings-menu';
 import Head from 'next/head';
+import Pagination from '@/components/pagination';
 
 const CommentStyledGrid = styled(Grid)(() => ({
     display: 'flex',
@@ -99,20 +100,9 @@ export default function Comments() {
 
             {!!gettingError && <ErrorNotification error={gettingError}></ErrorNotification>}
 
-            <Table>
-                <TableFooter>
-                    <TableRow>
-                        <TablePagination rowsPerPageOptions={[6, 12, 24]}
-                                         count={totalCount}
-                                         page={pageSettings.page}
-                                         sx={styleVariables.paginatorStyles}
-                                         labelRowsPerPage="Кільк. на сторінці"
-                                         rowsPerPage={pageSettings.rowsPerPage}
-                                         onPageChange={(_e, val: number) => onPageChange(val)}
-                                         onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
-                    </TableRow>
-                </TableFooter>
-            </Table>
+            <Pagination rowsPerPage={pageSettings.rowsPerPage} count={totalCount}
+                        page={pageSettings.page} onRowsPerPageChange={onRowsPerPageChange}
+                        onPageChange={onPageChange}/>
 
             {!!selectedItem &&
               <CustomModal open={true}

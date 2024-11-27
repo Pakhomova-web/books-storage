@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton, Table, TableFooter, TablePagination, TableRow } from '@mui/material';
+import { Box, Grid, IconButton } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 import HomeIcon from '@mui/icons-material/Home';
@@ -7,7 +7,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 
 import { useBooks } from '@/lib/graphql/queries/book/hook';
 import Loading from '@/components/loading';
-import { borderRadius, primaryLightColor, styleVariables, titleFontSize } from '@/constants/styles-variables';
+import { borderRadius, primaryLightColor, titleFontSize } from '@/constants/styles-variables';
 import {
     AuthorEntity,
     BookFilter,
@@ -33,6 +33,7 @@ import IconWithText from '@/components/icon-with-text';
 import SocialMediaBox from '@/components/social-media-box';
 import DeliveriesBox from '@/components/deliveries-box';
 import RecentlyViewedBooks from '@/components/books/recently-viewed-books';
+import Pagination from '@/components/pagination';
 
 const StyledAdditionalTopicGrid = styled(Grid)(() => ({
     display: 'flex',
@@ -71,11 +72,12 @@ export default function Books() {
                 }
             });
             updateOption(filters, false);
+            setPageSettings({ ...pageSettings, page: 0 });
             window.history.pushState(null, '', url.toString());
         } else {
             setToRefreshData(true);
         }
-    }, [filters, pageSettings]);
+    }, [filters]);
 
     useEffect(() => {
         if (gettingError) {
@@ -215,20 +217,9 @@ export default function Books() {
                         <BooksList items={items} filters={filters} pageUrl="/books"></BooksList>
                     </Grid>
 
-                    <Table>
-                        <TableFooter>
-                            <TableRow>
-                                <TablePagination rowsPerPageOptions={[6, 12, 24]}
-                                                 count={totalCount}
-                                                 page={pageSettings.page}
-                                                 sx={styleVariables.paginatorStyles}
-                                                 labelRowsPerPage="Кільк. на сторінці"
-                                                 rowsPerPage={pageSettings.rowsPerPage}
-                                                 onPageChange={(_e, val: number) => onPageChange(val)}
-                                                 onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
-                            </TableRow>
-                        </TableFooter>
-                    </Table>
+                    <Pagination rowsPerPage={pageSettings.rowsPerPage} count={totalCount}
+                                page={pageSettings.page} onRowsPerPageChange={onRowsPerPageChange}
+                                onPageChange={onPageChange}/>
                 </Box>
                 : (!loading &&
                 <IconWithText imageLink="/no_results.png" text="На жаль пошук не дав результатів. Cпробуйте ще раз"/>)}

@@ -4,9 +4,7 @@ import {
     TableBody,
     TableCell,
     TableContainer,
-    TableFooter,
     TableHead,
-    TablePagination,
     TableRow,
     TableSortLabel,
     useTheme
@@ -19,8 +17,8 @@ import CustomTableRow from '@/components/table/custom-table-row';
 import { visuallyHidden } from '@mui/utils';
 import { IPageable } from '@/lib/data/types';
 import { IMenuAnchorEl, MobileTable } from '@/components/table/mobile-table';
-import { styleVariables } from '@/constants/styles-variables';
 import { renderTableActions, renderTableCell } from '@/components/table/table-cell-render';
+import Pagination from '@/components/pagination';
 
 interface CustomTableProps<K> {
     keys: TableKey<K>[],
@@ -87,18 +85,9 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
 
     function renderPaginator() {
         return (
-            <TableFooter>
-                <TableRow>
-                    <TablePagination rowsPerPageOptions={[6, 12, 24]}
-                                     count={props.totalCount}
-                                     page={page}
-                                     labelRowsPerPage="Кільк. на сторінці"
-                                     sx={styleVariables.paginatorStyles}
-                                     rowsPerPage={rowsPerPage}
-                                     onPageChange={(_e, val: number) => onPageChange(val)}
-                                     onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
-                </TableRow>
-            </TableFooter>
+            <Pagination rowsPerPage={rowsPerPage} count={props.totalCount}
+                        page={page} onRowsPerPageChange={onRowsPerPageChange}
+                        onPageChange={onPageChange}/>
         );
     }
 

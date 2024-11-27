@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Table, TableFooter, TablePagination, TableRow } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import React, { useState } from 'react';
 
 import { styleVariables } from '@/constants/styles-variables';
@@ -13,6 +13,7 @@ import OrderModal from '@/components/modals/order-modal';
 import { useRouter } from 'next/router';
 import OrdersList from '@/components/orders/orders-list';
 import Head from 'next/head';
+import Pagination from '@/components/pagination';
 
 const emptyListImageBoxStyles = {
     width: '100px',
@@ -59,20 +60,9 @@ export default function Orders() {
 
             <OrdersList orders={items} onClick={order => setSelectedOrder(order)}/>
 
-            <Table>
-                <TableFooter>
-                    <TableRow>
-                        <TablePagination rowsPerPageOptions={[6, 12]}
-                                         count={totalCount}
-                                         page={pageSettings.page}
-                                         sx={styleVariables.paginatorStyles}
-                                         labelRowsPerPage="Кільк. на сторінці"
-                                         rowsPerPage={pageSettings.rowsPerPage}
-                                         onPageChange={(_e, val: number) => onPageChange(val)}
-                                         onRowsPerPageChange={({ target }) => onRowsPerPageChange(Number(target.value))}/>
-                    </TableRow>
-                </TableFooter>
-            </Table>
+            <Pagination rowsPerPage={pageSettings.rowsPerPage} count={totalCount}
+                        page={pageSettings.page} onRowsPerPageChange={onRowsPerPageChange}
+                        onPageChange={onPageChange}/>
 
             {!loading && !items?.length &&
               <Grid item display="flex" width="100%" alignItems="center" flexDirection="column" gap={2}>

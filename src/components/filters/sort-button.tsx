@@ -39,7 +39,7 @@ export default function SortButton(props: ISortButtonProps) {
     }
 
     return (
-        <Box width="100%" display="flex" alignItems="center" justifyContent="flex-end" gap={1}>
+        <Box width="100%" display="flex" alignItems="center" justifyContent="flex-end" gap={1} pr={1}>
             <Box display="flex" gap={1} flexWrap="wrap" justifyContent="center">
                 Сортувати:<Box>{selectedItem?.title}</Box>
             </Box>
