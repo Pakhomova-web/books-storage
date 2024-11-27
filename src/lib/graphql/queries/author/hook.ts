@@ -21,7 +21,7 @@ export function useAuthors(pageSettings?: IPageable, filters?: IAuthorFilter) {
 }
 
 export function useAuthorOptions() {
-    return _useItems<IOption<string>, NameFilter>(authorOptionsQuery);
+    return _usePageableItems<IOption<string>>(authorOptionsQuery, 'authors');
 }
 
 export function useCreateAuthor() {

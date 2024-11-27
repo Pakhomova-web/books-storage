@@ -31,9 +31,11 @@ export const authorByIdQuery = gql`
 
 export const authorOptionsQuery = gql`
     query Authors($pageSettings: PageableInput, $filters: SearchByNameInput) {
-        items: authors(pageSettings: $pageSettings, filters: $filters) {
-            id
-            label: name
+        authors(pageSettings: $pageSettings, filters: $filters) {
+            items {
+                id
+                label: name
+            }
         }
     }
 `;

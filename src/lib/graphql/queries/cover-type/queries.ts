@@ -21,9 +21,11 @@ export const coverTypesQuery = gql`
 
 export const coverTypeOptionsQuery = gql`
     query CoverTypes($pageSettings: PageableInput, $filters: SearchByNameInput) {
-        items: coverTypes(pageSettings: $pageSettings, filters: $filters) {
-            id
-            label: name
+        coverTypes(pageSettings: $pageSettings, filters: $filters) {
+            items {
+                id
+                label: name
+            }
         }
     }
 `;
