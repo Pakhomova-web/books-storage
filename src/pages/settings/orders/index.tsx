@@ -91,7 +91,8 @@ export default function Orders() {
                                       onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                                       pageSettings={pageSettings}>
                   <Box display="flex" flexDirection="column" gap={2}>
-                    <CustomTextField label="Швидкий пошук" name="quickSearch" fullWidth></CustomTextField>
+                    <CustomTextField label="Швидкий пошук" name="quickSearch" fullWidth
+                                     autoFocus={true}></CustomTextField>
 
                     <CustomTextField label="№ замовлення" name="orderNumber" fullWidth
                                      type="number"></CustomTextField>

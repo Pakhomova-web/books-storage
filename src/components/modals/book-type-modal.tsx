@@ -74,7 +74,7 @@ export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTyp
                      onSubmit={isAdmin ? onSubmit : null}>
             <CustomTextField fullWidth
                              required
-                             autoFocus
+                             autoFocus={true}
                              id="book-type-name"
                              label="Назва"
                              name="name"/>

@@ -272,7 +272,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                     <CustomTextField fullWidth
                                      required
                                      disabled={!isAdmin}
-                                     autoFocus
+                                     autoFocus={true}
                                      id="book-name"
                                      label="Назва"
                                      name="name"/>

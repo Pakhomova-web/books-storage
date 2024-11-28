@@ -45,7 +45,7 @@ export default function CoverTypeModal({ open, item, onClose, isAdmin }: ICoverT
                      onSubmit={isAdmin ? onSubmit : null}>
             <CustomTextField fullWidth
                              required
-                             autoFocus
+                             autoFocus={true}
                              id="cover-type-name"
                              label="Назва"
                              name="name"/>

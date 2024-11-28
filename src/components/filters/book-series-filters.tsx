@@ -37,31 +37,31 @@ export function BookSeriesFilters({ pageSettings, onApply, onSort }) {
     return (
         <SortFiltersContainer sortKeys={sortKeys}
                               pageSettings={pageSettings}
+                              formContext={formContext}
                               onApply={() => onApply(formContext.getValues())}
                               onClear={() => onClearClick()}
                               onSort={onSort}>
-            <FormContainer formContext={formContext}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <CustomTextField fullWidth
-                                         id="book-name"
-                                         label="Назва"
-                                         name="name"
-                                         showClear={!!name}
-                                         onClear={() => clearValue('name')}/>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <CustomSelectField fullWidth
-                                           options={publishingHouseOptions}
-                                           id="publishing-house-id"
-                                           label="Видавництво"
-                                           name="publishingHouse"
-                                           showClear={!!publishingHouse}
-                                           onClear={() => clearValue('publishingHouse')}/>
-                    </Grid>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <CustomTextField fullWidth
+                                     id="book-name"
+                                     label="Назва"
+                                     name="name"
+                                     autoFocus={true}
+                                     showClear={!!name}
+                                     onClear={() => clearValue('name')}/>
                 </Grid>
-            </FormContainer>
+
+                <Grid item xs={12}>
+                    <CustomSelectField fullWidth
+                                       options={publishingHouseOptions}
+                                       id="publishing-house-id"
+                                       label="Видавництво"
+                                       name="publishingHouse"
+                                       showClear={!!publishingHouse}
+                                       onClear={() => clearValue('publishingHouse')}/>
+                </Grid>
+            </Grid>
         </SortFiltersContainer>
     );
 }

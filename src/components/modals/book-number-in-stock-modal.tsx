@@ -52,7 +52,7 @@ export function BookNumberInStockModal({ item, open, onClose }: IProps) {
 
                 <CustomTextField fullWidth
                                  required
-                                 autoFocus
+                                 autoFocus={true}
                                  type="number"
                                  id="number-in-stock"
                                  label="Отримана кількість книг"

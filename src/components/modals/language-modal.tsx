@@ -45,7 +45,7 @@ export default function LanguageModal({ open, item, onClose, isAdmin }: ILanguag
             <FormContainer formContext={formContext}>
                 <CustomTextField fullWidth
                                  required
-                                 autoFocus
+                                 autoFocus={true}
                                  id="language-name"
                                  label="Назва"
                                  name="name"/>

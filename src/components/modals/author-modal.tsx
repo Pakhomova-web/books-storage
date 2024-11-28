@@ -55,7 +55,7 @@ export default function AuthorModal({ open, item, onClose, isAdmin }: IAuthorMod
             <Box display="flex" gap={2} flexDirection="column">
                 <CustomTextField fullWidth
                                  required
-                                 autoFocus
+                                 autoFocus={true}
                                  id="author-name"
                                  label="ПІБ"
                                  name="name"/>

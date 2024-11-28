@@ -64,7 +64,7 @@ export default function DeliveryModal({ open, item, onClose, isAdmin }: IDeliver
             <Box display="flex" gap={2} flexDirection="column">
                 <CustomTextField fullWidth
                                  required
-                                 autoFocus
+                                 autoFocus={true}
                                  id="delivery-name"
                                  label="Назва"
                                  name="name"/>

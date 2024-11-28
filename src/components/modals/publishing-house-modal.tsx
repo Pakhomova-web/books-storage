@@ -73,7 +73,7 @@ export default function PublishingHouseModal({ open, item, onClose, isAdmin }: I
             <Box display="flex" gap={2} flexDirection="column">
                 <CustomTextField fullWidth
                                  required
-                                 autoFocus
+                                 autoFocus={true}
                                  id="publishing-house-name"
                                  label="Назва"
                                  name="name"/>

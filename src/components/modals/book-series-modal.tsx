@@ -63,7 +63,7 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
                     <Grid item xs={12} sm={6} md={3}>
                         <CustomTextField fullWidth
                                          required
-                                         autoFocus
+                                         autoFocus={true}
                                          disabled={item?.default}
                                          id="book-series-name"
                                          label="Назва"

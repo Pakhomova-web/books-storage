@@ -45,7 +45,7 @@ export default function PageTypeModal({ open, item, onClose, isAdmin }: IPageTyp
                      onSubmit={isAdmin ? onSubmit : null}>
             <CustomTextField fullWidth
                              required
-                             autoFocus
+                             autoFocus={true}
                              id="page-type-name"
                              label="Назва"
                              name="name"/>
