@@ -1,5 +1,3 @@
-import { changeRecentlyViewedBooks } from '@/lib/graphql/queries/book/hook';
-
 const typeDefs =  /* GraphQL */ `
     type Language {
         id: ID
@@ -140,6 +138,11 @@ const typeDefs =  /* GraphQL */ `
         adminComment: String
         date: String
     }
+    
+    type BookHint {
+        id: ID!
+        name: String!
+    }
 
     type Query {
         languages(pageSettings: PageableInput, filters: SearchByNameInput): LanguageSubList
@@ -162,6 +165,7 @@ const typeDefs =  /* GraphQL */ `
         bookSeriesByIdQuery(id: ID!): BookSeries
         bookComments(id: ID!, page: Int!, rowsPerPage: Int!): [Comment!]
         booksFromSeries(bookId: ID!, rowsPerPage: Int!): [Book!]
+        booksNameByQuickSearch(quickSearch: String!): [BookHint!]
         booksByAuthor(authorId: ID!, rowsPerPage: Int!, excludeBookSeriesId: ID): [Book!]
         booksWithDiscount(rowsPerPage: Int!): [Book!]
         booksWithNotApprovedComments(pageSettings: PageableInput): BookSubList

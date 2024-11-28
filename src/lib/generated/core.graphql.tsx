@@ -282,7 +282,7 @@ export type Mutation = {
   addBookInBasket?: Maybe<Array<BasketItem>>;
   approveComment: Book;
   cancelOrder?: Maybe<Order>;
-  changeRecentlyViewedBooks?: Maybe<Array<Scalars['ID']['output']>>;
+  changeRecentlyViewedBooks?: Maybe<Array<Book>>;
   createAuthor?: Maybe<Author>;
   createBook?: Maybe<Book>;
   createBookSeries?: Maybe<BookSeries>;
@@ -704,6 +704,7 @@ export type Query = {
   booksByAuthor?: Maybe<Array<Book>>;
   booksByIds?: Maybe<BookSubList>;
   booksFromSeries?: Maybe<Array<Book>>;
+  booksNameByQuickSearch?: Maybe<Array<Scalars['String']['output']>>;
   booksWithDiscount?: Maybe<Array<Book>>;
   booksWithNotApprovedComments?: Maybe<BookSubList>;
   coverTypes?: Maybe<CoverTypeSubList>;
@@ -791,6 +792,11 @@ export type QueryBooksByIdsArgs = {
 export type QueryBooksFromSeriesArgs = {
   bookId: Scalars['ID']['input'];
   rowsPerPage: Scalars['Int']['input'];
+};
+
+
+export type QueryBooksNameByQuickSearchArgs = {
+  quickSearch: Scalars['String']['input'];
 };
 
 
@@ -1260,7 +1266,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addBookInBasket?: Resolver<Maybe<Array<ResolversTypes['BasketItem']>>, ParentType, ContextType, RequireFields<MutationAddBookInBasketArgs, 'id'>>;
   approveComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationApproveCommentArgs, 'input'>>;
   cancelOrder?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationCancelOrderArgs, 'id'>>;
-  changeRecentlyViewedBooks?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType, RequireFields<MutationChangeRecentlyViewedBooksArgs, 'id'>>;
+  changeRecentlyViewedBooks?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<MutationChangeRecentlyViewedBooksArgs, 'id'>>;
   createAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationCreateAuthorArgs, 'input'>>;
   createBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationCreateBookArgs, 'input'>>;
   createBookSeries?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType, RequireFields<MutationCreateBookSeriesArgs, 'input'>>;
@@ -1383,6 +1389,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   booksByAuthor?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryBooksByAuthorArgs, 'authorId' | 'rowsPerPage'>>;
   booksByIds?: Resolver<Maybe<ResolversTypes['BookSubList']>, ParentType, ContextType, Partial<QueryBooksByIdsArgs>>;
   booksFromSeries?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryBooksFromSeriesArgs, 'bookId' | 'rowsPerPage'>>;
+  booksNameByQuickSearch?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType, RequireFields<QueryBooksNameByQuickSearchArgs, 'quickSearch'>>;
   booksWithDiscount?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryBooksWithDiscountArgs, 'rowsPerPage'>>;
   booksWithNotApprovedComments?: Resolver<Maybe<ResolversTypes['BookSubList']>, ParentType, ContextType, Partial<QueryBooksWithNotApprovedCommentsArgs>>;
   coverTypes?: Resolver<Maybe<ResolversTypes['CoverTypeSubList']>, ParentType, ContextType, Partial<QueryCoverTypesArgs>>;

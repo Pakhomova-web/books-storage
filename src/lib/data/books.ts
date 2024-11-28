@@ -1,7 +1,7 @@
 import { BookEntity, BookFilter, CommentEntity, IPageable } from '@/lib/data/types';
 import Book from '@/lib/data/models/book';
 import { GraphQLError } from 'graphql/error';
-import { getValidFilters } from '@/lib/data/base';
+import { getCaseInsensitiveSubstringOption, getValidFilters } from '@/lib/data/base';
 import BookSeries from '@/lib/data/models/book-series';
 
 export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): Promise<{
@@ -231,6 +231,10 @@ export async function getBookComments(id: string, page: number, rowsPerPage: num
     }
 
     return book.comments.splice(rowsPerPage * page, rowsPerPage);
+}
+
+export async function getBooksNameByQuickSearch(quickSearch: string) {
+    return Book.find({ name: getCaseInsensitiveSubstringOption(quickSearch) }).limit(5);
 }
 
 export async function getBooksFromSeries(bookId: string, rowsPerPage: number) {

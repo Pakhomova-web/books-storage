@@ -273,6 +273,15 @@ export const booksFromSeries = gql`
     ${bookListFragment}
 `;
 
+export const booksNameByQuickSearchQuery = gql`
+    query BooksNameByQuickSearch($quickSearch: String!) {
+        items: booksNameByQuickSearch(quickSearch: $quickSearch) {
+            id
+            label: name
+        }
+    }
+`;
+
 export const booksByAuthorQuery = gql`
     query BooksByAuthor($authorId: ID!, $rowsPerPage: Int!, $excludeBookSeriesId: ID) {
         items: booksByAuthor(authorId: $authorId, rowsPerPage: $rowsPerPage, excludeBookSeriesId: $excludeBookSeriesId) {

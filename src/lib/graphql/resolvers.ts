@@ -43,7 +43,7 @@ import {
     getBooks,
     getBooksByAuthor,
     getBooksByIds,
-    getBooksFromSeries,
+    getBooksFromSeries, getBooksNameByQuickSearch,
     getBooksWithDiscount,
     getBooksWithNotApprovedComments,
     removeComment,
@@ -167,6 +167,9 @@ const resolvers: Resolvers = {
         },
         booksFromSeries: async (_root, { bookId, rowsPerPage }) => {
             return getBooksFromSeries(bookId, rowsPerPage).catch(error => parseError(error));
+        },
+        booksNameByQuickSearch: async (_root, { quickSearch }) => {
+            return getBooksNameByQuickSearch(quickSearch).catch(error => parseError(error));
         },
         booksByAuthor: async (_root, { authorId, rowsPerPage, excludeBookSeriesId }) => {
             return getBooksByAuthor(authorId, rowsPerPage, excludeBookSeriesId).catch(error => parseError(error));

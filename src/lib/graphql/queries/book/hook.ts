@@ -14,7 +14,7 @@ import {
     bookCommentsQuery,
     booksByAuthorQuery,
     booksByIdsQuery,
-    booksFromSeries,
+    booksFromSeries, booksNameByQuickSearchQuery,
     booksQuery,
     booksWithDiscountQuery,
     booksWithNotApprovedCommentsQuery, changeRecentlyViewedBooksQuery,
@@ -46,6 +46,16 @@ export async function getBookComments(id: string, page: number, rowsPerPage: num
         query: bookCommentsQuery,
         fetchPolicy: 'no-cache',
         variables: { id, page, rowsPerPage }
+    });
+
+    return items;
+}
+
+export async function getBookNamesByQuickSearch(quickSearch: string) {
+    const { data: { items } } = await apolloClient.query({
+        query: booksNameByQuickSearchQuery,
+        fetchPolicy: 'no-cache',
+        variables: { quickSearch }
     });
 
     return items;
