@@ -1,4 +1,4 @@
-import { Box, Button, Grid } from '@mui/material';
+import { Box, Button, Grid, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -31,6 +31,7 @@ import { MAIN_NAME } from '@/constants/main-name';
 import DiscountBooks from '@/components/books/discount-books';
 import RecentlyViewedBooks from '@/components/books/recently-viewed-books';
 import IconWithText from '@/components/icon-with-text';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
     height: '40px',
@@ -56,11 +57,10 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
     alignItems: 'center'
 }));
 
-const numberBooksByAuthor = 3;
-const rowsPerPageBooksFromSeries = 3;
-
 export default function BookDetails() {
     const router = useRouter();
+    const theme = useTheme();
+    const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
     const { loading, error, item: book } = useBook(router.query.id as string);
     const [commentsPage, setCommentsPage] = useState<number>(0);
     const { user, setLikedBook, setBookInBasket, setRecentlyViewedBooks } = useAuth();
@@ -83,7 +83,7 @@ export default function BookDetails() {
             setBooksByAuthor([]);
             if (book.authors.length === 1) {
                 setLoadingBooksByAuthor(true);
-                getBooksByAuthors(book.authors[0].id, numberBooksByAuthor, !book.bookSeries.default ? book.bookSeries.id : null)
+                getBooksByAuthors(book.authors[0].id, mobileMatches ? 2 : 5, !book.bookSeries.default ? book.bookSeries.id : null)
                     .then(books => {
                         setLoadingBooksByAuthor(false);
                         setBooksByAuthor(books.filter(b => b.id !== book.id));
@@ -92,7 +92,7 @@ export default function BookDetails() {
             setBooksFromSeries([]);
             if (!book.bookSeries.default) {
                 setLoadingBooksFromSeries(true);
-                getBooksFromSeries(book.id, rowsPerPageBooksFromSeries).then(books => {
+                getBooksFromSeries(book.id, mobileMatches ? 2 : 5).then(books => {
                     setLoadingBooksFromSeries(false);
                     setBooksFromSeries(books);
                 });
@@ -213,7 +213,7 @@ export default function BookDetails() {
             </Grid>
 
             {book && <>
-              <Grid container spacing={2}>
+              <Grid container spacing={2} mb={1}>
                 <Grid item sm={6} xs={12}>
                   <Grid container>
                     <Grid item
@@ -409,7 +409,7 @@ export default function BookDetails() {
                       <Box sx={styleVariables.sectionTitle}>
                         Інші книги із цієї серії
 
-                          {booksFromSeries?.length === rowsPerPageBooksFromSeries &&
+                          {booksFromSeries?.length === (mobileMatches ? 2 : 5) &&
                             <Button variant="outlined"
                                     onClick={() => router.push(`/books?bookSeries=${book.bookSeries.id}`)}>
                               Дивитися усі<ArrowForwardIcon/>
@@ -444,7 +444,7 @@ export default function BookDetails() {
                     <Box sx={styleVariables.sectionTitle} mb={2}>
                       Інші книги цього автора
 
-                        {booksByAuthor?.length === numberBooksByAuthor &&
+                        {booksByAuthor?.length === (mobileMatches ? 2 : 5) &&
                           <Button variant="outlined"
                                   onClick={() => router.push(`/books?authors=${book.authors[0].id}`)}>
                             Дивитися усі<ArrowForwardIcon/></Button>}
