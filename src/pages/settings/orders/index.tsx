@@ -11,7 +11,7 @@ import SettingsMenu from '@/pages/settings/settings-menu';
 import OrdersList from '@/components/orders/orders-list';
 import { Box } from '@mui/material';
 import SortFiltersContainer from '@/components/filters/sort-filters-container';
-import { FormContainer, useForm } from 'react-hook-form-mui';
+import { useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import Head from 'next/head';
 import { ISortKey } from '@/components/types';
