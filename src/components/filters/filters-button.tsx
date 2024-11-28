@@ -33,6 +33,7 @@ export function FiltersButton({ onApply, onClear, children, formContext }) {
 
             <CustomModal open={openFiltersModal}
                          formContext={formContext}
+                         hideSubmit={!!formContext}
                          onSubmit={onApplyClick}
                          onClose={() => setOpenFiltersModal(false)}
                          actions={actions}>

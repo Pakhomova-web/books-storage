@@ -71,7 +71,7 @@ export default function CustomModal(props: ICustomModalProps) {
     }
 
     function isWithActions(): boolean {
-        return !!props.onClose || !!props.onSubmit || !!props.actions?.length;
+        return !!props.onClose || (!props.hideSubmit && !!props.onSubmit) || !!props.actions?.length;
     }
 
     return (
@@ -97,7 +97,7 @@ export default function CustomModal(props: ICustomModalProps) {
 
                     {isWithActions() && <Box sx={buttonsContainerStyles} gap={2}>
                         {props.onClose && <Button variant="outlined" onClick={props.onClose}>Закрити</Button>}
-                        {props.onSubmit ?
+                        {!props.hideSubmit && props.onSubmit ?
                             <Button onClick={props.onSubmit} variant="contained" disabled={props.isSubmitDisabled}>
                                 Зберегти
                             </Button>

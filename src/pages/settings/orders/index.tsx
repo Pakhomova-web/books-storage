@@ -85,26 +85,25 @@ export default function Orders() {
             {isAdmin(user) &&
               <Box px={1}>
                 <SortFiltersContainer sortKeys={sortKeys}
+                                      formContext={formContext}
                                       onApply={() => onApply()}
                                       onClear={() => onClearFilter()}
                                       onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}
                                       pageSettings={pageSettings}>
-                  <FormContainer formContext={formContext}>
-                    <Box display="flex" flexDirection="column" gap={2}>
-                      <CustomTextField label="Швидкий пошук" name="quickSearch" fullWidth></CustomTextField>
+                  <Box display="flex" flexDirection="column" gap={2}>
+                    <CustomTextField label="Швидкий пошук" name="quickSearch" fullWidth></CustomTextField>
 
-                      <CustomTextField label="№ замовлення" name="orderNumber" fullWidth
-                                       type="number"></CustomTextField>
+                    <CustomTextField label="№ замовлення" name="orderNumber" fullWidth
+                                     type="number"></CustomTextField>
 
-                      <CustomTextField label="Ім'я" name="firstName" fullWidth></CustomTextField>
+                    <CustomTextField label="Ім'я" name="firstName" fullWidth></CustomTextField>
 
-                      <CustomTextField label="Прізвище" name="lastName" fullWidth></CustomTextField>
+                    <CustomTextField label="Прізвище" name="lastName" fullWidth></CustomTextField>
 
-                      <CustomTextField label="Номер телефону" name="phoneNumber" fullWidth></CustomTextField>
+                    <CustomTextField label="Номер телефону" name="phoneNumber" fullWidth></CustomTextField>
 
-                      <CustomTextField label="Нікнейм в інстаграм" name="instagramUsername" fullWidth></CustomTextField>
-                    </Box>
-                  </FormContainer>
+                    <CustomTextField label="Нікнейм в інстаграм" name="instagramUsername" fullWidth></CustomTextField>
+                  </Box>
                 </SortFiltersContainer>
 
                 <OrdersList orders={items} onClick={order => setSelectedItem(order)}/>
