@@ -883,6 +883,7 @@ export type User = {
   postcode?: Maybe<Scalars['Int']['output']>;
   preferredDeliveryId?: Maybe<Scalars['ID']['output']>;
   recentlyViewedBookIds?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
+  recentlyViewedBooks?: Maybe<Array<Book>>;
   region?: Maybe<Scalars['String']['output']>;
   role?: Maybe<Scalars['String']['output']>;
 };
@@ -1411,6 +1412,7 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
   postcode?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   preferredDeliveryId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   recentlyViewedBookIds?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  recentlyViewedBooks?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType>;
   region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   role?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

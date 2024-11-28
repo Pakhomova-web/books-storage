@@ -56,8 +56,7 @@ const bookFragment = gql`
         archived
     }
 `;
-
-const bookListFragment = gql`
+export const bookListFragment = gql`
     fragment BookList on Book {
         id
         name
@@ -219,8 +218,11 @@ export const unlikeBookQuery = gql`
 
 export const changeRecentlyViewedBooksQuery = gql`
     mutation ChangeRecentlyViewedBooks($id: ID!) {
-        ids: changeRecentlyViewedBooks(id: $id)
+        books: changeRecentlyViewedBooks(id: $id) {
+            ...BookList
+        }
     }
+    ${bookListFragment}
 `;
 
 export const addBookInBasketQuery = gql`

@@ -97,6 +97,7 @@ const typeDefs =  /* GraphQL */ `
         basketItems: [BasketItem!]
         likedBookIds: [String]
         recentlyViewedBookIds: [String]
+        recentlyViewedBooks: [Book!]
         postcode: Int
         city: String
         region: String
@@ -202,7 +203,7 @@ const typeDefs =  /* GraphQL */ `
         createBook(input: BookCreateInput!): Book
         likeBook(id: ID!): [ID!]
         unlikeBook(id: ID!): [ID!]
-        changeRecentlyViewedBooks(id: ID!): [ID!]
+        changeRecentlyViewedBooks(id: ID!): [Book!]
         addBookInBasket(id: ID!): [BasketItem!]
         removeBookInBasket(id: ID!): [BasketItem!]
         updateBookCountInBasket(id: ID!, count: Int!): [BasketItem!]

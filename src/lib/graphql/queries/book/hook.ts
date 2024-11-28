@@ -165,13 +165,13 @@ export async function unlikeBook(id: string): Promise<string[]> {
     return ids;
 }
 
-export async function changeRecentlyViewedBooks(id: string): Promise<string[]> {
-    const { data: { ids } } = await apolloClient.mutate({
+export async function changeRecentlyViewedBooks(id: string): Promise<BookEntity[]> {
+    const { data: { books } } = await apolloClient.mutate({
         mutation: changeRecentlyViewedBooksQuery,
         variables: { id }
     });
 
-    return ids;
+    return books;
 }
 
 export async function addBookInBasket(id: string): Promise<string[]> {

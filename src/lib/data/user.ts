@@ -13,6 +13,7 @@ import {
     SECRET_JWT_KEY
 } from '@/lib/data/auth-utils';
 import { verify } from 'jsonwebtoken';
+import { getBooksByIds } from '@/lib/data/books';
 
 const ADMIN_EMAILS: string[] = [
     'pakhomov.business@gmail.com'
@@ -67,6 +68,8 @@ export async function login(email: string, password: string): Promise<{
             const token = createToken(item.id);
             const refreshToken = createRefreshToken(item.id);
 
+            await setRecentlyViewedBooks(item);
+
             delete item.password;
             return { user: item, token, refreshToken };
         } else {
@@ -88,6 +91,8 @@ export async function getNewToken(refreshToken: string) {
     const userId = getUserIdFromToken(refreshToken);
     const user = await getUserById(userId);
 
+    await setRecentlyViewedBooks(user);
+
     delete user.password;
     return { user, token: createToken(userId), refreshToken: createRefreshToken(userId) };
 }
@@ -107,11 +112,16 @@ export async function updateUser(input: UserEntity): Promise<UserEntity> {
     }
     const item = await User.findByIdAndUpdate(input.id, input);
 
+    await setRecentlyViewedBooks(item);
+
     return item as UserEntity;
 }
 
 export async function getUserById(id: string): Promise<UserEntity> {
-    return User.findById(id);
+    const user = await User.findById(id);
+
+    await setRecentlyViewedBooks(user);
+    return user;
 }
 
 export async function likeBook(userId: string, bookId: string) {
@@ -151,7 +161,9 @@ export async function changeRecentlyViewedBooks(userId: string, bookId: string) 
     }
     await user.save();
 
-    return user.recentlyViewedBookIds;
+    const { items } = await getBooksByIds(user.recentlyViewedBookIds, { page: 0, rowsPerPage: user.recentlyViewedBookIds.length });
+
+    return items;
 }
 
 export async function addBookInBasket(userId: string, bookId: string) {
@@ -194,4 +206,15 @@ export async function updateBookCountInBasket(userId: string, bookId: string, co
     }
 
     return user.basketItems;
+}
+
+async function setRecentlyViewedBooks(item) {
+    if (item.recentlyViewedBookIds?.length) {
+        const { items } = await getBooksByIds(item.recentlyViewedBookIds, {
+            page: 0,
+            rowsPerPage: item.recentlyViewedBookIds.length
+        });
+
+        item.recentlyViewedBooks = items;
+    }
 }

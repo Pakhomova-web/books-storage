@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { bookListFragment } from '@/lib/graphql/queries/book/queries';
 
 const userFragment = gql`
     fragment User on User {
@@ -13,6 +14,9 @@ const userFragment = gql`
         }
         likedBookIds
         recentlyViewedBookIds
+        recentlyViewedBooks {
+            ...BookList
+        }
         postcode
         city
         region
@@ -21,6 +25,7 @@ const userFragment = gql`
         preferredDeliveryId
         instagramUsername
     }
+    ${bookListFragment}
 `;
 
 export const signInQuery = gql`

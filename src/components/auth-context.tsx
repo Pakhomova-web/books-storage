@@ -103,11 +103,17 @@ export function AuthProvider({ children }) {
         },
         setRecentlyViewedBooks: (bookId: string) => {
             if (user) {
-                changeRecentlyViewedBooks(bookId)
-                    .then(bookIds => setUser({ ...user, recentlyViewedBookIds: bookIds }))
-                    .catch(e => {
-                        console.log(e);
-                    });
+                if (bookId !== user.recentlyViewedBookIds[0]) {
+                    changeRecentlyViewedBooks(bookId)
+                        .then(books => setUser({
+                            ...user,
+                            recentlyViewedBookIds: books.map(({ id }) => id),
+                            recentlyViewedBooks: books
+                        }))
+                        .catch(e => {
+                            console.log(e);
+                        });
+                }
             }
         },
         setBookInBasket: (bookId: string) => {
