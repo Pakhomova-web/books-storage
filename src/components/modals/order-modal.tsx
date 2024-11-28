@@ -158,12 +158,18 @@ export default function OrderModal({ open, order, onClose }: IProps) {
             firstName: values.firstName,
             lastName: values.lastName,
             deliveryId: delivery.id,
-            isCanceled: values.isCanceled,
-            isConfirmed: values.isConfirmed,
-            isPaid: values.isPaid,
+            ...(values.isDone ? {
+                isConfirmed: true,
+                isPaid: orderItem.isPaid,
+                isPartlyPaid: orderItem.isPartlyPaid,
+                isSent: true
+            } : {
+                isConfirmed: values.isConfirmed,
+                isPaid: values.isPaid,
+                isPartlyPaid: values.isPartlyPaid,
+                isSent: values.isSent
+            }),
             isDone: values.isDone,
-            isPartlyPaid: values.isPartlyPaid,
-            isSent: values.isSent,
             trackingNumber: values.trackingNumber,
             instagramUsername: values.instagramUsername !== user?.instagramUsername ? values.instagramUsername : null,
             books: orderItem.books.map(bookOrder => ({

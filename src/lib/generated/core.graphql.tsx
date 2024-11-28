@@ -92,6 +92,11 @@ export type BookCreateInput = {
   tags?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
+export type BookHint = {
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+};
+
 export type BookSearchInput = {
   ages?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   archived?: InputMaybe<Scalars['Boolean']['input']>;
@@ -625,7 +630,6 @@ export type OrderUpdateInput = {
   firstName: Scalars['String']['input'];
   id: Scalars['ID']['input'];
   instagramUsername?: InputMaybe<Scalars['String']['input']>;
-  isCanceled?: InputMaybe<Scalars['Boolean']['input']>;
   isConfirmed?: InputMaybe<Scalars['Boolean']['input']>;
   isDone?: InputMaybe<Scalars['Boolean']['input']>;
   isPaid?: InputMaybe<Scalars['Boolean']['input']>;
@@ -704,7 +708,7 @@ export type Query = {
   booksByAuthor?: Maybe<Array<Book>>;
   booksByIds?: Maybe<BookSubList>;
   booksFromSeries?: Maybe<Array<Book>>;
-  booksNameByQuickSearch?: Maybe<Array<Scalars['String']['output']>>;
+  booksNameByQuickSearch?: Maybe<Array<BookHint>>;
   booksWithDiscount?: Maybe<Array<Book>>;
   booksWithNotApprovedComments?: Maybe<BookSubList>;
   coverTypes?: Maybe<CoverTypeSubList>;
@@ -919,7 +923,6 @@ export type UserUpdateInput = {
   firstName?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   instagramUsername?: InputMaybe<Scalars['String']['input']>;
-  isCanceled?: InputMaybe<Scalars['Boolean']['input']>;
   isConfirmed?: InputMaybe<Scalars['Boolean']['input']>;
   isDone?: InputMaybe<Scalars['Boolean']['input']>;
   isPaid?: InputMaybe<Scalars['Boolean']['input']>;
@@ -1011,6 +1014,7 @@ export type ResolversTypes = {
   BasketItem: ResolverTypeWrapper<BasketItem>;
   Book: ResolverTypeWrapper<BookEntity>;
   BookCreateInput: BookCreateInput;
+  BookHint: ResolverTypeWrapper<BookHint>;
   BookSearchInput: BookSearchInput;
   BookSeries: ResolverTypeWrapper<BookSeriesEntity>;
   BookSeriesCreateInput: BookSeriesCreateInput;
@@ -1078,6 +1082,7 @@ export type ResolversParentTypes = {
   BasketItem: BasketItem;
   Book: BookEntity;
   BookCreateInput: BookCreateInput;
+  BookHint: BookHint;
   BookSearchInput: BookSearchInput;
   BookSeries: BookSeriesEntity;
   BookSeriesCreateInput: BookSeriesCreateInput;
@@ -1177,6 +1182,12 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
   pageType?: Resolver<ResolversTypes['PageType'], ParentType, ContextType>;
   price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   tags?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type BookHintResolvers<ContextType = any, ParentType extends ResolversParentTypes['BookHint'] = ResolversParentTypes['BookHint']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1389,7 +1400,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   booksByAuthor?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryBooksByAuthorArgs, 'authorId' | 'rowsPerPage'>>;
   booksByIds?: Resolver<Maybe<ResolversTypes['BookSubList']>, ParentType, ContextType, Partial<QueryBooksByIdsArgs>>;
   booksFromSeries?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryBooksFromSeriesArgs, 'bookId' | 'rowsPerPage'>>;
-  booksNameByQuickSearch?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType, RequireFields<QueryBooksNameByQuickSearchArgs, 'quickSearch'>>;
+  booksNameByQuickSearch?: Resolver<Maybe<Array<ResolversTypes['BookHint']>>, ParentType, ContextType, RequireFields<QueryBooksNameByQuickSearchArgs, 'quickSearch'>>;
   booksWithDiscount?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryBooksWithDiscountArgs, 'rowsPerPage'>>;
   booksWithNotApprovedComments?: Resolver<Maybe<ResolversTypes['BookSubList']>, ParentType, ContextType, Partial<QueryBooksWithNotApprovedCommentsArgs>>;
   coverTypes?: Resolver<Maybe<ResolversTypes['CoverTypeSubList']>, ParentType, ContextType, Partial<QueryCoverTypesArgs>>;
@@ -1437,6 +1448,7 @@ export type Resolvers<ContextType = any> = {
   AuthorSubList?: AuthorSubListResolvers<ContextType>;
   BasketItem?: BasketItemResolvers<ContextType>;
   Book?: BookResolvers<ContextType>;
+  BookHint?: BookHintResolvers<ContextType>;
   BookSeries?: BookSeriesResolvers<ContextType>;
   BookSeriesSubList?: BookSeriesSubListResolvers<ContextType>;
   BookSubList?: BookSubListResolvers<ContextType>;

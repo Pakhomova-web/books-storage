@@ -77,6 +77,7 @@ export class BookEntity {
     format: string;
     numberOfPages: number;
     numberInStock: number;
+    numberSold: number;
     price: number;
     archived: boolean;
     bookSeriesId: string;
@@ -107,6 +108,7 @@ export class BookEntity {
         this.format = data.format;
         this.numberOfPages = data.numberOfPages;
         this.numberInStock = data.numberInStock;
+        this.numberSold = data.numberSold;
         this.price = data.price;
         this.bookSeriesId = data.bookSeriesId;
         this.bookSeries = data.bookSeries;

@@ -242,7 +242,7 @@ export default function Basket() {
                         </> : <Grid item xs={12} display="flex" alignItems="center" flexDirection="column">
                             {orderNumber ?
                                 <>
-                                    <IconWithText imageLink="/completed_order.png" text="Дякуємо!" />)
+                                    <IconWithText imageLink="/completed_order.png" text="Дякуємо!" />
                                     <Box display="flex">
                                         Ваше замовлення
                                         <Box mx={1} sx={styleVariables.orderNumberStyles}>№{orderNumber}</Box>

@@ -486,7 +486,6 @@ const typeDefs =  /* GraphQL */ `
         isPaid: Boolean
         isPartlyPaid: Boolean
         isConfirmed: Boolean
-        isCanceled: Boolean
         isSent: Boolean
         isDone: Boolean
         region: String,
@@ -545,7 +544,6 @@ const typeDefs =  /* GraphQL */ `
         instagramUsername: String
         phoneNumber: String!
         trackingNumber: String
-        isCanceled: Boolean
         isConfirmed: Boolean
         isPaid: Boolean
         isPartlyPaid: Boolean

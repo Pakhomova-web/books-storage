@@ -11,6 +11,7 @@ const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
     format: String,
     numberOfPages: Number,
     numberInStock: Number,
+    numberSold: Number,
     price: Number,
     imageIds: [String],
     bookSeries: {

@@ -90,14 +90,16 @@ export async function updateOrder(input: OrderEntity) {
 
         await Promise.all(books.map(book => {
             book.numberInStock = book.numberInStock - input.books.find(b => b.bookId === book.id).count;
+            book.numberSold = (book.numberSold || 0) + input.books.find(b => b.bookId === book.id).count;
 
             return book.save();
         }));
-    } else if (order.isConfirmed && !input.isConfirmed) {
+    } else if (!order.isDone && !order.isSent && !order.isPaid && !order.isPartlyPaid && order.isConfirmed && !input.isConfirmed) {
         const books = await Book.find({ _id: { $in: input.books.map(b => b.bookId) } });
 
         await Promise.all(books.map(book => {
             book.numberInStock = book.numberInStock + input.books.find(b => b.bookId === book.id).count;
+            book.numberSold = (book.numberSold || 0) - input.books.find(b => b.bookId === book.id).count;
 
             return book.save();
         }));
