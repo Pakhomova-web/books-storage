@@ -1,5 +1,5 @@
 import { PageTypeEntity } from '@/lib/data/types';
-import { FormContainer, useForm } from 'react-hook-form-mui';
+import { useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import CustomModal from '@/components/modals/custom-modal';
 import { useCreatePageType, useUpdatePageType } from '@/lib/graphql/queries/page-type/hook';
@@ -39,17 +39,16 @@ export default function PageTypeModal({ open, item, onClose, isAdmin }: IPageTyp
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
+                     formContext={formContext}
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={isAdmin ? onSubmit : null}>
-            <FormContainer formContext={formContext}>
-                <CustomTextField fullWidth
-                                 required
-                                 autoFocus
-                                 id="page-type-name"
-                                 label="Назва"
-                                 name="name"/>
-            </FormContainer>
+            <CustomTextField fullWidth
+                             required
+                             autoFocus
+                             id="page-type-name"
+                             label="Назва"
+                             name="name"/>
 
             {(creatingError || updatingError) &&
               <ErrorNotification error={creatingError || updatingError}></ErrorNotification>

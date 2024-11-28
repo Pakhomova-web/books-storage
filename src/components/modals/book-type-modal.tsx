@@ -1,5 +1,5 @@
 import { BookTypeEntity } from '@/lib/data/types';
-import { FormContainer, useForm } from 'react-hook-form-mui';
+import { useForm } from 'react-hook-form-mui';
 import { useCreateBookType, useUpdateBookType } from '@/lib/graphql/queries/book-type/hook';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
@@ -68,35 +68,34 @@ export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTyp
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
+                     formContext={formContext}
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={isAdmin ? onSubmit : null}>
-            <FormContainer formContext={formContext}>
-                <CustomTextField fullWidth
-                                 required
-                                 autoFocus
-                                 id="book-type-name"
-                                 label="Назва"
-                                 name="name"/>
+            <CustomTextField fullWidth
+                             required
+                             autoFocus
+                             id="book-type-name"
+                             label="Назва"
+                             name="name"/>
 
-                <CustomTextField fullWidth
-                                 disabled={!isAdmin}
-                                 id="imageLink"
-                                 label="Посилання на фото"
-                                 name="imageLink"/>
-                {!!imageLink &&
-                  <Box mt={2}><Button fullWidth variant="outlined" onClick={parseImage}>Додати фото</Button></Box>}
+            <CustomTextField fullWidth
+                             disabled={!isAdmin}
+                             id="imageLink"
+                             label="Посилання на фото"
+                             name="imageLink"/>
+            {!!imageLink &&
+              <Box mt={2}><Button fullWidth variant="outlined" onClick={parseImage}>Додати фото</Button></Box>}
 
-                <CustomTextField fullWidth
-                                 disabled={!isAdmin}
-                                 id="imageId"
-                                 label="ID фото"
-                                 name="imageId"/>
+            <CustomTextField fullWidth
+                             disabled={!isAdmin}
+                             id="imageId"
+                             label="ID фото"
+                             name="imageId"/>
 
-                <Box sx={imageBoxStyles} my={1}>
-                    <CustomImage isBookType={true} imageId={formContext.getValues('imageId')}></CustomImage>
-                </Box>
-            </FormContainer>
+            <Box sx={imageBoxStyles} my={1}>
+                <CustomImage isBookType={true} imageId={formContext.getValues('imageId')}></CustomImage>
+            </Box>
 
             {(creatingError || updatingError) &&
               <ErrorNotification error={creatingError || updatingError}></ErrorNotification>

@@ -1,8 +1,9 @@
 import { Box, Button } from '@mui/material';
 import Modal from '@mui/material/Modal';
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { borderRadius, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
+import { FormContainer } from 'react-hook-form-mui';
 
 const modalContainerStyle = {
     display: 'flex',
@@ -55,6 +56,7 @@ interface ICustomModalProps {
     isSubmitDisabled?: boolean,
     onClose?: () => void,
     hideSubmit?: boolean,
+    formContext?: any,
     onSubmit?: () => void,
     actions?: { title: string, onClick: () => void }[],
     big?: boolean
@@ -81,7 +83,16 @@ export default function CustomModal(props: ICustomModalProps) {
                     {!!props.title && <Box sx={titleStyles} pb={2}>{props.title}</Box>}
 
                     <Box sx={childrenContainer} pt={1}>
-                        {props.children}
+                        {!!props.formContext ?
+                            <FormContainer formContext={props.formContext}
+                                           handleSubmit={props.formContext.handleSubmit(props.onSubmit)}>
+                                {props.children}
+
+                                <Box display="none">
+                                    <Button type="submit">Зберегти</Button>
+                                </Box>
+                            </FormContainer> :
+                            props.children}
                     </Box>
 
                     {isWithActions() && <Box sx={buttonsContainerStyles} gap={2}>

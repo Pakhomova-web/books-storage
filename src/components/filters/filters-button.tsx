@@ -4,7 +4,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 
 import CustomModal from '@/components/modals/custom-modal';
 
-export function FiltersButton({ onApply, onClear, children }) {
+export function FiltersButton({ onApply, onClear, children, formContext }) {
     const [openFiltersModal, setOpenFiltersModal] = useState<boolean>(false);
     const [actions] = useState([
         { title: 'Очистити', onClick: () => onClearClick() },
@@ -32,6 +32,8 @@ export function FiltersButton({ onApply, onClear, children }) {
             </Button>
 
             <CustomModal open={openFiltersModal}
+                         formContext={formContext}
+                         onSubmit={onApplyClick}
                          onClose={() => setOpenFiltersModal(false)}
                          actions={actions}>
                 {children}

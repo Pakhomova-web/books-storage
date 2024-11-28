@@ -1,5 +1,5 @@
 import { AuthorEntity } from '@/lib/data/types';
-import { FormContainer, useForm } from 'react-hook-form-mui';
+import { useForm } from 'react-hook-form-mui';
 import { useCreateAuthor, useUpdateAuthor } from '@/lib/graphql/queries/author/hook';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
@@ -50,28 +50,27 @@ export default function AuthorModal({ open, item, onClose, isAdmin }: IAuthorMod
                      onClose={() => onClose()}
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
+                     formContext={formContext}
                      onSubmit={isAdmin ? onSubmit : null}>
-            <FormContainer formContext={formContext}>
-                <Box display="flex" gap={2} flexDirection="column">
-                    <CustomTextField fullWidth
-                                     required
-                                     autoFocus
-                                     id="author-name"
-                                     label="ПІБ"
-                                     name="name"/>
+            <Box display="flex" gap={2} flexDirection="column">
+                <CustomTextField fullWidth
+                                 required
+                                 autoFocus
+                                 id="author-name"
+                                 label="ПІБ"
+                                 name="name"/>
 
-                    <CustomTextField fullWidth
-                                     multiline
-                                     id="description"
-                                     label="Опис"
-                                     name="description"/>
+                <CustomTextField fullWidth
+                                 multiline
+                                 id="description"
+                                 label="Опис"
+                                 name="description"/>
 
-                    {description && <Grid item xs={12}>
-                      <Box mb={1}><b>Попередній огляд опису:</b></Box>
-                      <Box dangerouslySetInnerHTML={{ __html: description }}></Box>
-                    </Grid>}
-                </Box>
-            </FormContainer>
+                {description && <Grid item xs={12}>
+                  <Box mb={1}><b>Попередній огляд опису:</b></Box>
+                  <Box dangerouslySetInnerHTML={{ __html: description }}></Box>
+                </Grid>}
+            </Box>
 
             {(creatingError || updatingError) &&
               <ErrorNotification error={creatingError || updatingError}></ErrorNotification>

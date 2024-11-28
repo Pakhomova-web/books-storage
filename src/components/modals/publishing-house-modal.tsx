@@ -1,4 +1,4 @@
-import { FormContainer, useForm } from 'react-hook-form-mui';
+import { useForm } from 'react-hook-form-mui';
 
 import { PublishingHouseEntity } from '@/lib/data/types';
 import { useCreatePublishingHouse, useUpdatePublishingHouse } from '@/lib/graphql/queries/publishing-house/hook';
@@ -66,42 +66,41 @@ export default function PublishingHouseModal({ open, item, onClose, isAdmin }: I
                      open={open}
                      disableBackdropClick={true}
                      onClose={() => onClose()}
+                     formContext={formContext}
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={isAdmin ? onSubmit : null}>
-            <FormContainer formContext={formContext}>
-                <Box display="flex" gap={2} flexDirection="column">
-                    <CustomTextField fullWidth
-                                     required
-                                     autoFocus
-                                     id="publishing-house-name"
-                                     label="Назва"
-                                     name="name"/>
+            <Box display="flex" gap={2} flexDirection="column">
+                <CustomTextField fullWidth
+                                 required
+                                 autoFocus
+                                 id="publishing-house-name"
+                                 label="Назва"
+                                 name="name"/>
 
-                    <CustomTextField fullWidth
-                                     id="publishing-house-tags"
-                                     label="Теги"
-                                     name="tags"/>
+                <CustomTextField fullWidth
+                                 id="publishing-house-tags"
+                                 label="Теги"
+                                 name="tags"/>
 
-                    <CustomTextField fullWidth
-                                     disabled={!isAdmin}
-                                     id="imageLink"
-                                     label="Посилання на фото"
-                                     name="imageLink"/>
-                    {!!imageLink &&
-                      <Button fullWidth variant="outlined" onClick={parseImage}>Додати фото</Button>}
+                <CustomTextField fullWidth
+                                 disabled={!isAdmin}
+                                 id="imageLink"
+                                 label="Посилання на фото"
+                                 name="imageLink"/>
+                {!!imageLink &&
+                  <Button fullWidth variant="outlined" onClick={parseImage}>Додати фото</Button>}
 
-                    <CustomTextField fullWidth
-                                     disabled={!isAdmin}
-                                     id="imageId"
-                                     label="ID фото"
-                                     name="imageId"/>
+                <CustomTextField fullWidth
+                                 disabled={!isAdmin}
+                                 id="imageId"
+                                 label="ID фото"
+                                 name="imageId"/>
 
-                    <Box sx={imageBoxStyles} mb={1}>
-                        <CustomImage imageId={formContext.getValues('imageId')}></CustomImage>
-                    </Box>
+                <Box sx={imageBoxStyles} mb={1}>
+                    <CustomImage imageId={formContext.getValues('imageId')}></CustomImage>
                 </Box>
-            </FormContainer>
+            </Box>
 
             {(creatingError || updatingError) &&
               <ErrorNotification error={creatingError || updatingError}></ErrorNotification>

@@ -1,5 +1,5 @@
 import { CoverTypeEntity } from '@/lib/data/types';
-import { FormContainer, useForm } from 'react-hook-form-mui';
+import { useForm } from 'react-hook-form-mui';
 import { useCreateCoverType, useUpdateCoverType } from '@/lib/graphql/queries/cover-type/hook';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
@@ -40,16 +40,15 @@ export default function CoverTypeModal({ open, item, onClose, isAdmin }: ICoverT
                      disableBackdropClick={true}
                      onClose={() => onClose()}
                      loading={updating || creating}
+                     formContext={formContext}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={isAdmin ? onSubmit : null}>
-            <FormContainer formContext={formContext}>
-                <CustomTextField fullWidth
-                                 required
-                                 autoFocus
-                                 id="cover-type-name"
-                                 label="Назва"
-                                 name="name"/>
-            </FormContainer>
+            <CustomTextField fullWidth
+                             required
+                             autoFocus
+                             id="cover-type-name"
+                             label="Назва"
+                             name="name"/>
 
             {(creatingError || updatingError) &&
               <ErrorNotification error={creatingError || updatingError}></ErrorNotification>

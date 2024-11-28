@@ -144,7 +144,7 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
                          onRowClick={props.onRowClick}
                          renderMobileView={props.renderMobileView}>
             </MobileTable>}
-        {props.usePagination && <Table>{renderPaginator()}</Table>}
+        {props.usePagination && renderPaginator()}
         {props.children}
     </>);
 }

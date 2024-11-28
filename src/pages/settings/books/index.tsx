@@ -249,18 +249,18 @@ export default function Books() {
                              rowStyleClass={(item: BookEntity) => highlightInRed(item.numberInStock)}
                              totalCount={totalCount}
                              onRowClick={(item: BookEntity) => onEdit(item)}>
-                    {error && <ErrorNotification error={error}></ErrorNotification>}
-
-                    {isAdmin(user) &&
-                      <Box sx={styleVariables.buttonsContainer} gap={2}>
-                          {!!items?.length &&
-                            <Button variant="outlined" onClick={() => onDownloadCSV()}>
-                              Скачати CSV
-                            </Button>
-                          }
-                      </Box>
-                    }
                 </CustomTable>
+
+                  {error && <ErrorNotification error={error}></ErrorNotification>}
+
+                  {isAdmin(user) &&
+                    <Box sx={styleVariables.buttonsContainer} gap={2}>
+                        {!!items?.length &&
+                          <Button variant="outlined" onClick={() => onDownloadCSV()}>
+                            Скачати CSV
+                          </Button>
+                        }
+                    </Box>}
 
                   {openNewModal &&
                     <BookModal open={openNewModal}

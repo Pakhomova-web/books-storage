@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { FormContainer, MultiSelectElement, useForm } from 'react-hook-form-mui';
+import { MultiSelectElement, useForm } from 'react-hook-form-mui';
+import { Box, Grid } from '@mui/material';
+
 import { BookFilter, BookSeriesFilter, IPageable } from '@/lib/data/types';
 import { useLanguageOptions } from '@/lib/graphql/queries/language/hooks';
-import { Box, Grid } from '@mui/material';
 import CustomSelectField from '@/components/form-fields/custom-select-field';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import CustomCheckbox from '@/components/form-fields/custom-checkbox';
@@ -109,135 +110,135 @@ export function BookFilters(props: IBookFiltersProps) {
                               pageSettings={props.pageSettings}
                               onApply={() => props.onApply(formContext.getValues())}
                               onClear={() => onClearClick()}
+                              formContext={formContext}
                               onSort={props.onSort}>
-            <FormContainer formContext={formContext}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12}>
-                        <CustomTextField fullWidth
-                                         id="quickSearch"
-                                         label="Швидкий пошук"
-                                         name="quickSearch"
-                                         showClear={!!quickSearch}
-                                         onClear={() => clearValue('quickSearch')}/>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <CustomTextField fullWidth
-                                         id="tags"
-                                         label="Теги"
-                                         name="tags"
-                                         showClear={!!tags?.length}
-                                         onClear={() => clearValue('tags')}/>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <CustomSelectField fullWidth
-                                           options={publishingHouses}
-                                           id="publishing-house-id"
-                                           label="Видавництво"
-                                           name="publishingHouse"
-                                           showClear={!!publishingHouse}
-                                           onClear={() => clearValue('publishingHouse')}/>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <CustomSelectField fullWidth
-                                           options={bookSeriesOptions}
-                                           id="book-series-id"
-                                           loading={loadingBookSeries}
-                                           label="Серія"
-                                           name="bookSeries"
-                                           showClear={!!bookSeries}
-                                           onClear={() => clearValue('bookSeries')}/>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <CustomSelectField fullWidth
-                                           options={bookTypeOptions}
-                                           id="book-type-id"
-                                           label="Тип книги"
-                                           name="bookType"
-                                           showClear={!!bookType}
-                                           onClear={() => clearValue('bookType')}/>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <CustomTextField fullWidth
-                                         id="book-name"
-                                         label="Назва"
-                                         name="name"
-                                         showClear={!!name}
-                                         onClear={() => clearValue('name')}/>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <CustomSelectField fullWidth
-                                           options={languageOptions}
-                                           id="language-id"
-                                           label="Мова"
-                                           name="language"
-                                           showClear={!!language}
-                                           onClear={() => clearValue('language')}/>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <CustomSelectField fullWidth
-                                           options={pageTypeOptions}
-                                           id="page-type-id"
-                                           label="Тип сторінок"
-                                           name="pageType"
-                                           showClear={!!pageType}
-                                           onClear={() => clearValue('pageType')}/>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <CustomSelectField fullWidth
-                                           options={coverTypeOptions}
-                                           id="cover-type-id"
-                                           label="Тип обкладинки"
-                                           name="coverType"
-                                           showClear={!!coverType}
-                                           onClear={() => clearValue('coverType')}/>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <Box position="relative">
-                            <MultiSelectElement fullWidth
-                                                options={authorOptions}
-                                                id="authors"
-                                                label="Автори"
-                                                name="authors" showCheckbox variant="outlined"/>
-                            {!!authors?.length &&
-                              <Box sx={customFieldClearBtnStyles} onClick={() => clearValue('authors')}>Очистити</Box>}
-                        </Box>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <Box position="relative">
-                            <MultiSelectElement fullWidth
-                                                options={authorOptions}
-                                                id="illustrators"
-                                                label="Іллюстратор"
-                                                name="illustrators" showCheckbox variant="outlined"/>
-                            {!!illustrators?.length &&
-                              <Box sx={customFieldClearBtnStyles}
-                                   onClick={() => clearValue('illustrators')}>Очистити</Box>}
-                        </Box>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <Ages selected={ages} onOptionClick={onAgeClick}></Ages>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <CustomCheckbox label="В наявності" name="isInStock"/>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <CustomCheckbox label="Акційні" name="withDiscount"/>
-                    </Grid>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <CustomTextField fullWidth
+                                     id="quickSearch"
+                                     label="Швидкий пошук"
+                                     name="quickSearch"
+                                     autoFocus={true}
+                                     showClear={!!quickSearch}
+                                     onClear={() => clearValue('quickSearch')}/>
                 </Grid>
-            </FormContainer>
+
+                <Grid item xs={12}>
+                    <CustomTextField fullWidth
+                                     id="tags"
+                                     label="Теги"
+                                     name="tags"
+                                     showClear={!!tags?.length}
+                                     onClear={() => clearValue('tags')}/>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <CustomSelectField fullWidth
+                                       options={publishingHouses}
+                                       id="publishing-house-id"
+                                       label="Видавництво"
+                                       name="publishingHouse"
+                                       showClear={!!publishingHouse}
+                                       onClear={() => clearValue('publishingHouse')}/>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <CustomSelectField fullWidth
+                                       options={bookSeriesOptions}
+                                       id="book-series-id"
+                                       loading={loadingBookSeries}
+                                       label="Серія"
+                                       name="bookSeries"
+                                       showClear={!!bookSeries}
+                                       onClear={() => clearValue('bookSeries')}/>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <CustomSelectField fullWidth
+                                       options={bookTypeOptions}
+                                       id="book-type-id"
+                                       label="Тип книги"
+                                       name="bookType"
+                                       showClear={!!bookType}
+                                       onClear={() => clearValue('bookType')}/>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <CustomTextField fullWidth
+                                     id="book-name"
+                                     label="Назва"
+                                     name="name"
+                                     showClear={!!name}
+                                     onClear={() => clearValue('name')}/>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <CustomSelectField fullWidth
+                                       options={languageOptions}
+                                       id="language-id"
+                                       label="Мова"
+                                       name="language"
+                                       showClear={!!language}
+                                       onClear={() => clearValue('language')}/>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <CustomSelectField fullWidth
+                                       options={pageTypeOptions}
+                                       id="page-type-id"
+                                       label="Тип сторінок"
+                                       name="pageType"
+                                       showClear={!!pageType}
+                                       onClear={() => clearValue('pageType')}/>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <CustomSelectField fullWidth
+                                       options={coverTypeOptions}
+                                       id="cover-type-id"
+                                       label="Тип обкладинки"
+                                       name="coverType"
+                                       showClear={!!coverType}
+                                       onClear={() => clearValue('coverType')}/>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <Box position="relative">
+                        <MultiSelectElement fullWidth
+                                            options={authorOptions}
+                                            id="authors"
+                                            label="Автори"
+                                            name="authors" showCheckbox variant="outlined"/>
+                        {!!authors?.length &&
+                          <Box sx={customFieldClearBtnStyles} onClick={() => clearValue('authors')}>Очистити</Box>}
+                    </Box>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <Box position="relative">
+                        <MultiSelectElement fullWidth
+                                            options={authorOptions}
+                                            id="illustrators"
+                                            label="Іллюстратор"
+                                            name="illustrators" showCheckbox variant="outlined"/>
+                        {!!illustrators?.length &&
+                          <Box sx={customFieldClearBtnStyles}
+                               onClick={() => clearValue('illustrators')}>Очистити</Box>}
+                    </Box>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <Ages selected={ages} onOptionClick={onAgeClick}></Ages>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <CustomCheckbox label="В наявності" name="isInStock"/>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <CustomCheckbox label="Акційні" name="withDiscount"/>
+                </Grid>
+            </Grid>
         </SortFiltersContainer>
     );
 }
