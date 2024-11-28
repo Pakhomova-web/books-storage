@@ -45,7 +45,7 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
 
     await query.exec().then((items: BookEntity[]) => {
         if (quickSearch) {
-            items = items.filter(({ authors, name, bookSeries, bookType, tags, language, illustrators }) =>
+            items = items.filter(({ authors, name, bookSeries, bookType, tags, illustrators }) =>
                 quickSearch.test(name) ||
                 (authors?.length && authors.some(author => quickSearch.test(author.name))) ||
                 (illustrators?.length && illustrators.some(illustrator => quickSearch.test(illustrator.name))) ||

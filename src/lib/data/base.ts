@@ -78,7 +78,7 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
 }
 
 export function getCaseInsensitiveSubstringOption(value: string): RegExp {
-    return new RegExp(`${value}`, 'i');
+    return new RegExp(`${value.trim()}`, 'i');
 }
 
 export async function getDataByFiltersAndPageSettings(query, andFilters, pageSettings: IPageable) {
