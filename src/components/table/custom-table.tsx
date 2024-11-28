@@ -85,8 +85,10 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
 
     function renderPaginator() {
         return (
-            <Pagination rowsPerPage={rowsPerPage} count={props.totalCount}
-                        page={page} onRowsPerPageChange={onRowsPerPageChange}
+            <Pagination rowsPerPage={rowsPerPage}
+                        count={props.totalCount}
+                        page={page}
+                        onRowsPerPageChange={onRowsPerPageChange}
                         onPageChange={onPageChange}/>
         );
     }

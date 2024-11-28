@@ -7,15 +7,13 @@ import Loading from '@/components/loading';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 
 export default function DeliveriesBox() {
-    const { loading: loadingDeliveries, items: deliveries } = useDeliveries({ orderBy: 'name', order: 'asc' });
+    const { loading, items } = useDeliveries({ orderBy: 'name', order: 'asc' });
 
     return (
-        <Grid container position="relative">
-            <Loading show={loadingDeliveries} isSmall={true}></Loading>
-
+        !loading && <Grid container position="relative">
             <Grid item xs={12} sx={styleVariables.sectionTitle}>Способи доставки</Grid>
 
-            {!loadingDeliveries && !!deliveries?.length && deliveries.map((delivery, index) =>
+            {!!items?.length && items.map((delivery, index) =>
                 <Grid key={index} item xs={12} sm={4} display="flex" alignItems="center"
                       justifyContent="center"
                       p={1} gap={1}>

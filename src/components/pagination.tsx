@@ -1,5 +1,5 @@
 import { Box, Grid } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 
 import { borderRadius, boxPadding, primaryLightColor, styleVariables } from '@/constants/styles-variables';
@@ -34,7 +34,11 @@ const CircleClickableBox = styled(Box)(() => ({
 }));
 
 export default function Pagination({ rowsPerPage, onRowsPerPageChange, page, count, onPageChange }) {
-    const [countPages] = useState<number>(Math.floor(count / rowsPerPage) + 1);
+    const [countPages, setCountPages] = useState<number>(1);
+
+    useEffect(() => {
+        setCountPages(Math.floor(count / rowsPerPage) + 1);
+    }, [count, rowsPerPage]);
 
     function isLastPage() {
         return page === countPages - 1;
@@ -77,7 +81,7 @@ export default function Pagination({ rowsPerPage, onRowsPerPageChange, page, cou
     }
 
     return (
-        <Grid container display="flex" alignItems="center" rowGap={2} mt={2}>
+        <Grid container display="flex" alignItems="center" rowGap={2} mt={2} px={1}>
             <Grid item xs={12} md={8} display="flex" alignItems="center"
                   justifyContent={{ xs: 'center', md: 'flex-start' }} gap={1}>
                 <CircleClickableBox className={isFirstPage() ? 'selected' : ''}

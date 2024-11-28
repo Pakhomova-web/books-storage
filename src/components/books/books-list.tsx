@@ -85,7 +85,7 @@ export default function BooksList({ items, filters = {}, pageUrl = '/' }) {
                         {book.language.name}
                     </Box>
 
-                    <Box display="flex" alignItems="center" justifyContent="center" gap={1} mb={1}>
+                    <Box display="flex" alignItems="center" justifyContent="center" gap={1} mb={1} flexWrap="wrap">
                         <Box sx={theme => bookPriceStyles(theme, !!book.numberInStock)}>
                             {renderPrice(book.price, book.discount)}
                         </Box>
