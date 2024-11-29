@@ -175,27 +175,32 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         }
     }
 
-    function parseImage() {
-        if (imageLinks) {
-            imageLinks.replaceAll(' ', '').split(',').forEach(imageLink => {
-                const id = parseImageFromLink(imageLink);
+    function parseImage(e?) {
+        if (!e || e.key === 'Enter') {
+            e?.preventDefault()
+            e?.stopPropagation();
 
-                if (id) {
-                    const imageIds = formContext.getValues().imageIds || [];
+            if (imageLinks) {
+                imageLinks.replaceAll(' ', '').split(',').forEach(imageLink => {
+                    const id = parseImageFromLink(imageLink);
 
-                    if (!imageIds.some(imageId => id === imageId)) {
-                        formContext.setValue('imageIds', [...imageIds, id]);
+                    if (id) {
+                        const imageIds = formContext.getValues().imageIds || [];
+
+                        if (!imageIds.some(imageId => id === imageId)) {
+                            formContext.setValue('imageIds', [...imageIds, id]);
+                        }
+                        formContext.setValue('imageLinks', null);
                     }
-                    formContext.setValue('imageLinks', null);
-                }
-            });
+                });
+            }
         }
     }
 
     function addTag(e?) {
         if (!e || e.key === 'Enter') {
-            e.preventDefault()
-            e.stopPropagation();
+            e?.preventDefault()
+            e?.stopPropagation();
             const value = tag?.trim();
 
             if (value?.length >= 3) {
@@ -496,12 +501,13 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                      disabled={!isAdmin || imageIds?.length === 5}
                                      id="imageLinks"
                                      label="Посилання на фото"
+                                     onKeyDown={parseImage}
                                      helperText="Макс. 5 фото, розділені через кому"
                                      name="imageLinks"/>
                 </Grid>
 
                 <Grid item xs={12} sm={4} md={3} lg={2}>
-                    <Button fullWidth variant="outlined" disabled={!imageLinks} onClick={parseImage}>
+                    <Button fullWidth variant="outlined" disabled={!imageLinks} onClick={() => parseImage()}>
                         Додати фото
                     </Button>
                 </Grid>

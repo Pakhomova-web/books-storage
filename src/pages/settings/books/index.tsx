@@ -153,6 +153,7 @@ export default function Books() {
     });
     const [filters, setFilters] = useState<BookFilter>({ archived: null });
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
+    const [loadingItems, setLoadingItems] = useState<boolean>(false);
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [openNumberInStockModal, setOpenNumberInStockModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -177,7 +178,8 @@ export default function Books() {
             setFilters(new BookFilter({ archived: null, bookSeries }));
         }
         if (updated) {
-            refetch();
+            setLoadingItems(true);
+            refetch().then(() => setLoadingItems(false));
         }
         setError(null);
         setOpenNumberInStockModal(false);
@@ -230,7 +232,7 @@ export default function Books() {
                 <title>Налаштування - Книги</title>
             </Head>
 
-            <Loading show={loading || downloadingCsv || updating}></Loading>
+            <Loading show={loading || downloadingCsv || updating || loadingItems}></Loading>
 
             {isAdmin(user) &&
               <>
