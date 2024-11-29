@@ -81,6 +81,7 @@ export default function Orders() {
             {isAdmin(user) &&
               <Box px={1}>
                 <SortFiltersContainer sortKeys={sortKeys}
+                                      totalCount={totalCount}
                                       formContext={formContext}
                                       onApply={() => onApply()}
                                       onClear={() => onClearFilter()}

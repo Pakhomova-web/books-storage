@@ -104,10 +104,11 @@ export default function BookSeries() {
 
             {isAdmin(user) &&
               <>
-                <BookSeriesFilters onApply={(filters: BookSeriesFilter) => {
-                    setPageSettings(prev => ({ ...prev, page: 0 }));
-                    setFilters(filters)
-                }}
+                <BookSeriesFilters totalCount={totalCount}
+                                   onApply={(filters: BookSeriesFilter) => {
+                                       setPageSettings(prev => ({ ...prev, page: 0 }));
+                                       setFilters(filters)
+                                   }}
                                    pageSettings={pageSettings}
                                    onSort={(settings: IPageable) => setPageSettings(settings)}></BookSeriesFilters>
 

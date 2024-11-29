@@ -9,7 +9,7 @@ interface INameForm {
     name: string
 }
 
-export function NameFiltersPanel({ pageSettings, onSort, onApply }) {
+export function NameFiltersPanel({ pageSettings, onSort, totalCount, onApply }) {
     const formContext = useForm<INameForm>({});
     const [sortKeys] = useState<ISortKey[]>([
         {
@@ -37,6 +37,7 @@ export function NameFiltersPanel({ pageSettings, onSort, onApply }) {
         <SortFiltersContainer sortKeys={sortKeys}
                               pageSettings={pageSettings}
                               formContext={formContext}
+                              totalCount={totalCount}
                               onApply={() => onApply(formContext.getValues())}
                               onClear={() => onClearClick()}
                               onSort={onSort}>

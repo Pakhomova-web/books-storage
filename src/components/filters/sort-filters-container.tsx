@@ -15,6 +15,7 @@ interface ISortFiltersContainerProps<T> {
     children?: ReactNode;
     onSort?: (_: IPageable) => void;
     showAlwaysSorting?: boolean;
+    totalCount: number;
 }
 
 export default function SortFiltersContainer<T>(props: ISortFiltersContainerProps<T>) {
@@ -22,7 +23,8 @@ export default function SortFiltersContainer<T>(props: ISortFiltersContainerProp
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
 
     function renderFiltersButton(children: ReactNode) {
-        return <FiltersButton onApply={props.onApply} onClear={props.onClear} formContext={props.formContext}>
+        return <FiltersButton onApply={props.onApply} totalCount={props.totalCount} onClear={props.onClear}
+                              formContext={props.formContext}>
             {children}
         </FiltersButton>;
     }

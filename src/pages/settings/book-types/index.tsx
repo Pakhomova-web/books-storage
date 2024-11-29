@@ -46,7 +46,12 @@ export default function BookTypes() {
         { type: 'image', title: 'Фото', renderValue: (item: DeliveryEntity) => item.imageId }
     ]);
     const [selectedItem, setSelectedItem] = useState<BookTypeEntity>();
-    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '', rowsPerPage: 12, page: 0 });
+    const [pageSettings, setPageSettings] = useState<IPageable>({
+        order: 'asc',
+        orderBy: '',
+        rowsPerPage: 12,
+        page: 0
+    });
     const [filters, setFilters] = useState<BookTypeEntity>();
     const { items, totalCount, gettingError, loading } = useBookTypes(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteBookType();
@@ -90,10 +95,11 @@ export default function BookTypes() {
 
             {isAdmin(user) &&
               <>
-                <NameFiltersPanel onApply={(filters: BookTypeEntity) => {
-                    setPageSettings(prev => ({ ...prev, page: 0 }));
-                    setFilters(filters)
-                }}
+                <NameFiltersPanel totalCount={totalCount}
+                                  onApply={(filters: BookTypeEntity) => {
+                                      setPageSettings(prev => ({ ...prev, page: 0 }));
+                                      setFilters(filters)
+                                  }}
                                   pageSettings={pageSettings}
                                   onSort={(settings: IPageable) => setPageSettings(settings)}></NameFiltersPanel>
 

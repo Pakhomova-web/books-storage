@@ -38,7 +38,12 @@ export default function PageTypes() {
         }
     ]);
     const [selectedItem, setSelectedItem] = useState<PageTypeEntity>();
-    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '', rowsPerPage: 12, page: 0 });
+    const [pageSettings, setPageSettings] = useState<IPageable>({
+        order: 'asc',
+        orderBy: '',
+        rowsPerPage: 12,
+        page: 0
+    });
     const [filters, setFilters] = useState<PageTypeEntity>();
     const { items, totalCount, gettingError, loading } = usePageTypes(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeletePageType();
@@ -91,10 +96,11 @@ export default function PageTypes() {
 
             {isAdmin(user) &&
               <>
-                <NameFiltersPanel onApply={(filters: PageTypeEntity) => {
-                    setPageSettings(prev => ({ ...prev, page: 0 }));
-                    setFilters(filters)
-                }}
+                <NameFiltersPanel totalCount={totalCount}
+                                  onApply={(filters: PageTypeEntity) => {
+                                      setPageSettings(prev => ({ ...prev, page: 0 }));
+                                      setFilters(filters)
+                                  }}
                                   pageSettings={pageSettings}
                                   onSort={(settings: IPageable) => setPageSettings(settings)}></NameFiltersPanel>
 

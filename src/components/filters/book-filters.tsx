@@ -24,7 +24,8 @@ interface IBookFiltersProps {
     onApply: (values?: BookFilter) => void,
     pageSettings: IPageable,
     showAlwaysSorting?: boolean,
-    onSort: (pageSettings: IPageable) => void
+    onSort: (pageSettings: IPageable) => void,
+    totalCount: number
 }
 
 export function BookFilters(props: IBookFiltersProps) {
@@ -103,6 +104,7 @@ export function BookFilters(props: IBookFiltersProps) {
 
     return (
         <SortFiltersContainer sortKeys={sortKeys}
+                              totalCount={props.totalCount}
                               showAlwaysSorting={props.showAlwaysSorting}
                               pageSettings={props.pageSettings}
                               onApply={() => props.onApply(formContext.getValues())}

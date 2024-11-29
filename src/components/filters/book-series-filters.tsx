@@ -8,7 +8,7 @@ import CustomTextField from '@/components/form-fields/custom-text-field';
 import SortFiltersContainer from '@/components/filters/sort-filters-container';
 import { ISortKey } from '@/components/types';
 
-export function BookSeriesFilters({ pageSettings, onApply, onSort }) {
+export function BookSeriesFilters({ pageSettings, onApply, totalCount, onSort }) {
     const formContext = useForm<BookSeriesFilter>({});
     const { items: publishingHouseOptions } = usePublishingHouseOptions();
     const { name, publishingHouse } = formContext.watch();
@@ -36,6 +36,7 @@ export function BookSeriesFilters({ pageSettings, onApply, onSort }) {
 
     return (
         <SortFiltersContainer sortKeys={sortKeys}
+                              totalCount={totalCount}
                               pageSettings={pageSettings}
                               formContext={formContext}
                               onApply={() => onApply(formContext.getValues())}

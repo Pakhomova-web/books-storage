@@ -184,7 +184,8 @@ export default function Books() {
 
             <Loading show={loading}></Loading>
 
-            <BookFilters defaultValues={filters}
+            <BookFilters totalCount={totalCount}
+                         defaultValues={filters}
                          onApply={(filters: BookFilter) => {
                              setPageSettings(prev => ({ ...prev, page: 0 }));
                              setFilters(filters)
