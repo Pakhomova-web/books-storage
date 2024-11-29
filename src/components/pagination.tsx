@@ -1,4 +1,4 @@
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Tooltip } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 
@@ -37,7 +37,10 @@ export default function Pagination({ rowsPerPage, onRowsPerPageChange, page, cou
     const [countPages, setCountPages] = useState<number>(1);
 
     useEffect(() => {
-        setCountPages(Math.floor(count / rowsPerPage) + 1);
+        const notRounded = count / rowsPerPage;
+        const rounded = Math.floor(notRounded);
+
+        setCountPages(notRounded === rounded ? rounded : rounded + 1);
     }, [count, rowsPerPage]);
 
     function isLastPage() {
@@ -80,61 +83,41 @@ export default function Pagination({ rowsPerPage, onRowsPerPageChange, page, cou
         return page === 2;
     }
 
+    function renderPageOption(title: number, value: number, isSelected = false) {
+        return (
+            <CircleClickableBox className={isSelected ? 'selected' : ''}
+                                onClick={() => onPageChange(value)}>
+                <Tooltip title="Сторінка">
+                    <Box>{title}</Box>
+                </Tooltip>
+            </CircleClickableBox>
+        );
+    }
+
     return (
         <Grid container display="flex" alignItems="center" rowGap={2} mt={2} px={1}>
             <Grid item xs={12} md={8} display="flex" alignItems="center"
                   justifyContent={{ xs: 'center', md: 'flex-start' }} gap={1}>
-                <CircleClickableBox className={isFirstPage() ? 'selected' : ''}
-                                    onClick={() => onPageChange(0)}>1</CircleClickableBox>
+                {renderPageOption(1, 0, isFirstPage())}
 
                 {isMoreThan5Pages() && isSelectedFromFirst3() &&
                   <>
-                    <CircleClickableBox className={isSecondPage() ? 'selected' : ''}
-                                        onClick={() => onPageChange(1)}>
-                        {2}
-                    </CircleClickableBox>
-
-                    <CircleClickableBox className={isThirdPage() ? 'selected' : ''}
-                                        onClick={() => onPageChange(2)}>
-                        {3}
-                    </CircleClickableBox>
-
-                    {!isFirstPage() && !isSecondPage() &&
-                        <CircleClickableBox onClick={() => onPageChange(3)}>
-                        {4}
-                    </CircleClickableBox>}
-
+                      {renderPageOption(2, 1, isSecondPage())}
+                      {renderPageOption(3, 2, isThirdPage())}
+                      {!isFirstPage() && !isSecondPage() && renderPageOption(4, 3)}
                     <b>...</b>
                   </>}
 
-                {(countPages === 3 || countPages === 4 || countPages === 5) &&
-                  <CircleClickableBox className={isSecondPage() ? 'selected' : ''}
-                                      onClick={() => onPageChange(1)}>
-                      {2}
-                  </CircleClickableBox>}
-
-                {(countPages === 4 || countPages === 5) &&
-                  <CircleClickableBox className={isThirdPage() ? 'selected' : ''}
-                                      onClick={() => onPageChange(2)}>
-                      {3}
-                  </CircleClickableBox>}
-
-                {countPages === 5 &&
-                  <CircleClickableBox className={isSecondFromTheEnd() ? 'selected' : ''}
-                                      onClick={() => onPageChange(3)}>
-                      {4}
-                  </CircleClickableBox>}
+                {(countPages === 3 || countPages === 4 || countPages === 5) && renderPageOption(2, 1, isSecondPage())}
+                {(countPages === 4 || countPages === 5) && renderPageOption(3, 2, isThirdPage())}
+                {(countPages === 5) && renderPageOption(4, 3, isSecondFromTheEnd())}
 
                 {isMoreThan5Pages() && (!isSelectedFromFirst3() && !isSelectedFromLast3()) &&
                   <>
                     <b>...</b>
-
-                    <CircleClickableBox onClick={() => onPageChange(page - 1)}>{page}</CircleClickableBox>
-
-                    <CircleClickableBox className="selected">{page + 1}</CircleClickableBox>
-
-                    <CircleClickableBox onClick={() => onPageChange(page + 1)}>{page + 2}</CircleClickableBox>
-
+                      {renderPageOption(page, page - 1)}
+                      {renderPageOption(page + 1, page, true)}
+                      {renderPageOption(page + 2, page + 1)}
                     <b>...</b>
                   </>}
 
@@ -142,34 +125,22 @@ export default function Pagination({ rowsPerPage, onRowsPerPageChange, page, cou
                   <>
                     <b>...</b>
 
-                      {!isLastPage() && !isSecondFromTheEnd() &&
-                        <CircleClickableBox onClick={() => onPageChange(countPages - 4)}>
-                            {countPages - 3}
-                        </CircleClickableBox>}
-
-                    <CircleClickableBox className={isThirdFromTheEnd() ? 'selected' : ''}
-                                        onClick={() => onPageChange(countPages - 3)}>
-                        {countPages - 2}
-                    </CircleClickableBox>
-
-                    <CircleClickableBox className={isSecondFromTheEnd() ? 'selected' : ''}
-                                        onClick={() => onPageChange(countPages - 2)}>
-                        {countPages - 1}
-                    </CircleClickableBox>
+                      {!isLastPage() && !isSecondFromTheEnd() && renderPageOption(countPages - 3, countPages - 4, true)}
+                      {renderPageOption(countPages - 2, countPages - 3, isThirdFromTheEnd())}
+                      {renderPageOption(countPages - 1, countPages - 2, isSecondFromTheEnd())}
                   </>}
 
-                {isMoreThan1Page() &&
-                  <CircleClickableBox className={isLastPage() ? 'selected' : ''}
-                                      onClick={() => onPageChange(countPages - 1)}>
-                      {countPages}
-                  </CircleClickableBox>}
+                {isMoreThan1Page() && renderPageOption(countPages, countPages - 1, isLastPage())}
             </Grid>
+
             <Grid item xs={12} md={4} display="flex" gap={1} justifyContent={{ xs: 'center', md: 'flex-end' }}>
                 {rowsPerPageOptions.map((opt, i) => (
                     <StyledRowsPerPageBox key={i}
                                           className={rowsPerPage === opt ? 'selected' : ''}
                                           onClick={() => onRowsPerPageChange(opt)}>
-                        {opt}
+                        <Tooltip title="Кількість на сторінці">
+                            <Box>{opt}</Box>
+                        </Tooltip>
                     </StyledRowsPerPageBox>
                 ))}
             </Grid>
