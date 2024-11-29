@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 
 import { borderRadius, boxPadding, primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import { isAdmin } from '@/utils/utils';
+import { useAuth } from '@/components/auth-context';
 
 const rowsPerPageOptions = [6, 12, 24, 36];
 const boxStyles = {
@@ -35,6 +37,7 @@ const CircleClickableBox = styled(Box)(() => ({
 
 export default function Pagination({ rowsPerPage, onRowsPerPageChange, page, count, onPageChange }) {
     const [countPages, setCountPages] = useState<number>(1);
+    const { user } = useAuth();
 
     useEffect(() => {
         const notRounded = count / rowsPerPage;
@@ -131,6 +134,7 @@ export default function Pagination({ rowsPerPage, onRowsPerPageChange, page, cou
                   </>}
 
                 {isMoreThan1Page() && renderPageOption(countPages, countPages - 1, isLastPage())}
+                {isAdmin(user) && count}
             </Grid>
 
             <Grid item xs={12} md={4} display="flex" gap={1} justifyContent={{ xs: 'center', md: 'flex-end' }}>
