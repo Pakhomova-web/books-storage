@@ -75,7 +75,7 @@ export type BookCreateInput = {
   archived?: InputMaybe<Scalars['Boolean']['input']>;
   authorIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   bookSeriesId: Scalars['ID']['input'];
-  bookTypeId: Scalars['ID']['input'];
+  bookTypeIds: Array<Scalars['ID']['input']>;
   coverTypeId: Scalars['ID']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   discount?: InputMaybe<Scalars['Float']['input']>;

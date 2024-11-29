@@ -31,14 +31,15 @@ export function FiltersButton({ onApply, onClear, children, formContext }) {
                 <Box my={1} display="flex" gap={1} alignItems="center"><TuneIcon/>Фільтри</Box>
             </Button>
 
-            <CustomModal open={openFiltersModal}
-                         formContext={formContext}
-                         hideSubmit={!!formContext}
-                         onSubmit={onApplyClick}
-                         onClose={() => setOpenFiltersModal(false)}
-                         actions={actions}>
-                {children}
-            </CustomModal>
+            {openFiltersModal &&
+              <CustomModal open={true}
+                           formContext={formContext}
+                           hideSubmit={!!formContext}
+                           onSubmit={onApplyClick}
+                           onClose={() => setOpenFiltersModal(false)}
+                           actions={actions}>
+                  {children}
+              </CustomModal>}
         </>
     );
 }

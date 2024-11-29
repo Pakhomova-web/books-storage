@@ -170,17 +170,17 @@ export default function Books() {
         } : {};
     }
 
-    function refreshData(updated = true, bookSeries?: string) {
-        if (bookSeries) {
-            setFilters(new BookFilter({ archived: null, bookSeries }));
-        }
-        if (updated) {
-            setFilters(new BookFilter(filters));
-        }
+    function refreshData(updated = true, bookSeriesId?: string) {
         setError(null);
         setOpenNumberInStockModal(false);
         setOpenNewModal(false);
         setSelectedItem(undefined);
+        if (bookSeriesId) {
+            setFilters(new BookFilter({ archived: null, bookSeries: bookSeriesId }));
+        }
+        if (updated) {
+            setFilters(new BookFilter(filters));
+        }
     }
 
     function onAdd(parentItem?: BookEntity) {
@@ -218,10 +218,11 @@ export default function Books() {
 
             {isAdmin(user) &&
               <>
-                <BookFilters onApply={(filters: BookFilter) => {
-                    setPageSettings(prev => ({ ...prev, page: 0 }));
-                    setFilters(filters)
-                }}
+                <BookFilters defaultValues={filters}
+                             onApply={(filters: BookFilter) => {
+                                 setPageSettings(prev => ({ ...prev, page: 0 }));
+                                 setFilters(filters)
+                             }}
                              pageSettings={pageSettings}
                              onSort={(settings: IPageable) => setPageSettings(settings)}></BookFilters>
 
@@ -254,7 +255,7 @@ export default function Books() {
                     <BookModal open={openNewModal}
                                item={selectedItem}
                                isAdmin={isAdmin(user)}
-                               onClose={(updated = false, bookSeries?) => refreshData(updated, bookSeries)}></BookModal>}
+                               onClose={(updated = false, bookSeries?: string) => refreshData(updated, bookSeries)}></BookModal>}
 
                   {openNumberInStockModal && selectedItem &&
                     <BookNumberInStockModal open={openNumberInStockModal}
