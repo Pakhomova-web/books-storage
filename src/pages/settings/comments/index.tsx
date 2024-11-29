@@ -61,7 +61,7 @@ export default function Comments() {
     function onApproveComment(bookId: string, commentId: string) {
         approveComment({ bookId, commentId }).then(({ comments }) => {
             if (comments.length === 0) {
-                setFilters({ ...filters });
+                setPageSettings({ ...pageSettings });
                 setSelectedItem(null);
             } else {
                 selectedItem.comments = comments;
@@ -73,7 +73,7 @@ export default function Comments() {
         removeComment({ bookId, commentId }).then(({ comments }) => {
             if (comments.length === 0) {
                 setSelectedItem(null);
-                setFilters({ ...filters });
+                setPageSettings({ ...pageSettings });
             } else {
                 selectedItem.comments = comments;
             }
