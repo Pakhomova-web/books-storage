@@ -35,9 +35,14 @@ export default function Authors() {
         ...mobileKeys
     ]);
     const [selectedItem, setSelectedItem] = useState<AuthorEntity>();
-    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '', rowsPerPage: 12, page: 0 });
+    const [pageSettings, setPageSettings] = useState<IPageable>({
+        order: 'asc',
+        orderBy: '',
+        rowsPerPage: 12,
+        page: 0
+    });
     const [filters, setFilters] = useState<IAuthorFilter>();
-    const { items, totalCount, gettingError, loading, refetch } = useAuthors(pageSettings, filters);
+    const { items, totalCount, gettingError, loading } = useAuthors(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeleteAuthor();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -50,10 +55,6 @@ export default function Authors() {
         }
     }, [gettingError, deletingError]);
 
-    useEffect(() => {
-        refreshData();
-    }, [filters, pageSettings]);
-
     async function deleteHandler(item: AuthorEntity) {
         try {
             await deleteItem(item.id);
@@ -65,7 +66,7 @@ export default function Authors() {
 
     function refreshData(updated = true) {
         if (updated) {
-            refetch();
+            setFilters({ ...filters });
         }
         setError(null);
         setOpenNewModal(false);
@@ -92,9 +93,12 @@ export default function Authors() {
 
             {isAdmin(user) &&
               <>
-                <NameFiltersPanel onApply={(filters: AuthorEntity) => setFilters(filters)}
+                <NameFiltersPanel onApply={(filters: AuthorEntity) => {
+                    setPageSettings(prev => ({ ...prev, page: 0 }));
+                    setFilters(filters)
+                }}
                                   pageSettings={pageSettings}
-                                  onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
+                                  onSort={(settings: IPageable) => setPageSettings(settings)}></NameFiltersPanel>
 
                 <CustomTable data={items}
                              keys={tableKeys}
@@ -102,7 +106,7 @@ export default function Authors() {
                              totalCount={totalCount}
                              actions={tableActions}
                              renderKey={(item: AuthorEntity) => item.id}
-                             onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
+                             onChange={(settings: IPageable) => setPageSettings(settings)}
                              pageSettings={pageSettings}
                              usePagination={true}
                              onRowClick={(item: AuthorEntity) => onEdit(item)}>

@@ -95,7 +95,7 @@ export default function Pagination({ rowsPerPage, onRowsPerPageChange, page, cou
     }
 
     return (
-        <Grid container display="flex" alignItems="center" rowGap={2} mt={2} px={1}>
+        <Grid container display="flex" alignItems="center" rowGap={2} my={2} px={1}>
             <Grid item xs={12} md={8} display="flex" alignItems="center"
                   justifyContent={{ xs: 'center', md: 'flex-start' }} gap={1}>
                 {renderPageOption(1, 0, isFirstPage())}

@@ -41,7 +41,7 @@ export default function Deliveries() {
     const [selectedItem, setSelectedItem] = useState<DeliveryEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '', rowsPerPage: 12, page: 0 });
     const [filters, setFilters] = useState<DeliveryEntity>();
-    const { items, totalCount, gettingError, loading, refetch } = useDeliveries(pageSettings, filters);
+    const { items, totalCount, gettingError, loading } = useDeliveries(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteDelivery();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -54,10 +54,6 @@ export default function Deliveries() {
         }
     }, [gettingError, deletingError]);
 
-    useEffect(() => {
-        refreshData();
-    }, [filters, pageSettings]);
-
     async function deleteHandler(item: DeliveryEntity) {
         try {
             await deleteItem(item.id);
@@ -69,7 +65,7 @@ export default function Deliveries() {
 
     function refreshData(updated = true) {
         if (updated) {
-            refetch();
+            setFilters({ ...filters });
         }
         setError(null);
         setOpenNewModal(false);
@@ -96,9 +92,12 @@ export default function Deliveries() {
 
             {isAdmin(user) &&
               <>
-                <NameFiltersPanel onApply={(filters: DeliveryEntity) => setFilters(filters)}
+                <NameFiltersPanel onApply={(filters: DeliveryEntity) => {
+                    setPageSettings(prev => ({ ...prev, page: 0 }));
+                    setFilters(filters)
+                }}
                                   pageSettings={pageSettings}
-                                  onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
+                                  onSort={(settings: IPageable) => setPageSettings(settings)}></NameFiltersPanel>
 
                 <CustomTable data={items}
                              keys={tableKeys}
@@ -106,7 +105,7 @@ export default function Deliveries() {
                              totalCount={totalCount}
                              actions={tableActions}
                              renderKey={(item: DeliveryEntity) => item.id}
-                             onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
+                             onChange={(settings: IPageable) => setPageSettings(settings)}
                              pageSettings={pageSettings}
                              usePagination={true}
                              onRowClick={item => onEdit(item)}>

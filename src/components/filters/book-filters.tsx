@@ -69,14 +69,10 @@ export function BookFilters(props: IBookFiltersProps) {
     const { items: publishingHouses } = usePublishingHouseOptions();
     const {
         items: bookSeriesOptions,
-        loading: loadingBookSeries,
-        refetch: refetchBookSeries
+        loading: loadingBookSeries
     } = useBookSeriesOptions(publishingHouse ? new BookSeriesFilter({ publishingHouse }) : null, !publishingHouse);
 
     useEffect(() => {
-        if (publishingHouses) {
-            refetchBookSeries({ publishingHouse }, false);
-        }
         formContext.setValue('bookSeries', null);
     }, [publishingHouse]);
 

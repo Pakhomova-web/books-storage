@@ -150,8 +150,7 @@ export default function Books() {
         order: 'asc', orderBy: '', page: 0, rowsPerPage: 6
     });
     const [filters, setFilters] = useState<BookFilter>({ archived: null });
-    const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
-    const [loadingItems, setLoadingItems] = useState<boolean>(false);
+    const { items, totalCount, gettingError, loading } = useBooks(pageSettings, filters);
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [openNumberInStockModal, setOpenNumberInStockModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -176,8 +175,7 @@ export default function Books() {
             setFilters(new BookFilter({ archived: null, bookSeries }));
         }
         if (updated) {
-            setLoadingItems(true);
-            refetch().then(() => setLoadingItems(false));
+            setFilters(new BookFilter(filters));
         }
         setError(null);
         setOpenNumberInStockModal(false);
@@ -210,40 +208,29 @@ export default function Books() {
             });
     }
 
-    function onChangeFilters(filters: BookFilter) {
-        setPageSettings({
-            ...pageSettings,
-            page: 0
-        });
-        setFilters(filters);
-        refreshData();
-    }
-
-    function onChangePageSettings(pageSettings: IPageable) {
-        setPageSettings(pageSettings);
-        refreshData();
-    }
-
     return (
         <SettingsMenu activeUrl="books" onAddClick={onAdd}>
             <Head>
                 <title>Налаштування - Книги</title>
             </Head>
 
-            <Loading show={loading || downloadingCsv || updating || loadingItems}></Loading>
+            <Loading show={loading || downloadingCsv || updating}></Loading>
 
             {isAdmin(user) &&
               <>
-                <BookFilters onApply={(filters: BookFilter) => onChangeFilters(filters)}
+                <BookFilters onApply={(filters: BookFilter) => {
+                    setPageSettings(prev => ({ ...prev, page: 0 }));
+                    setFilters(filters)
+                }}
                              pageSettings={pageSettings}
-                             onSort={(pageSettings: IPageable) => onChangePageSettings(pageSettings)}></BookFilters>
+                             onSort={(settings: IPageable) => setPageSettings(settings)}></BookFilters>
 
                 <CustomTable data={items}
                              keys={tableKeys}
                              mobileKeys={mobileKeys}
                              actions={tableActions}
                              renderKey={(item: BookEntity) => item.id}
-                             onChange={(settings: IPageable) => onChangePageSettings(settings)}
+                             onChange={(settings: IPageable) => setPageSettings(settings)}
                              pageSettings={pageSettings}
                              usePagination={true}
                              rowStyleClass={(item: BookEntity) => highlightInRed(item.numberInStock)}
@@ -251,7 +238,8 @@ export default function Books() {
                              onRowClick={(item: BookEntity) => onEdit(item)}>
                 </CustomTable>
 
-                  {error && <ErrorNotification error={error}></ErrorNotification>}
+                  {!loading && !updating && !downloadingCsv && error &&
+                    <ErrorNotification error={error}></ErrorNotification>}
 
                   {isAdmin(user) &&
                     <Box sx={styleVariables.buttonsContainer} gap={2}>

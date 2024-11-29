@@ -38,9 +38,14 @@ export default function CoverTypes() {
         }
     ]);
     const [selectedItem, setSelectedItem] = useState<CoverTypeEntity>();
-    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '', rowsPerPage: 12, page: 0 });
+    const [pageSettings, setPageSettings] = useState<IPageable>({
+        order: 'asc',
+        orderBy: '',
+        rowsPerPage: 12,
+        page: 0
+    });
     const [filters, setFilters] = useState<CoverTypeEntity>();
-    const { items, totalCount, gettingError, loading, refetch } = useCoverTypes(pageSettings, filters);
+    const { items, totalCount, gettingError, loading } = useCoverTypes(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteCoverType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -53,10 +58,6 @@ export default function CoverTypes() {
         }
     }, [gettingError, deletingError]);
 
-    useEffect(() => {
-        refreshData();
-    }, [filters, pageSettings]);
-
     async function deleteHandler(item: CoverTypeEntity) {
         try {
             await deleteItem(item.id);
@@ -68,7 +69,7 @@ export default function CoverTypes() {
 
     function refreshData(updated = true) {
         if (updated) {
-            refetch();
+            setFilters({ ...filters });
         }
         setError(null);
         setOpenNewModal(false);
@@ -95,16 +96,19 @@ export default function CoverTypes() {
 
             {isAdmin(user) &&
               <>
-                <NameFiltersPanel onApply={(filters: CoverTypeEntity) => setFilters(filters)}
+                <NameFiltersPanel onApply={(filters: CoverTypeEntity) => {
+                    setPageSettings(prev => ({ ...prev, page: 0 }));
+                    setFilters(filters)
+                }}
                                   pageSettings={pageSettings}
-                                  onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
+                                  onSort={(settings: IPageable) => setPageSettings(settings)}></NameFiltersPanel>
 
                 <CustomTable data={items}
                              keys={tableKeys}
                              mobileKeys={[]}
                              actions={tableActions}
                              renderKey={(item: CoverTypeEntity) => item.id}
-                             onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
+                             onChange={(settings: IPageable) => setPageSettings(settings)}
                              pageSettings={pageSettings}
                              usePagination={true}
                              totalCount={totalCount}

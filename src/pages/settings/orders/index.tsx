@@ -34,17 +34,13 @@ export default function Orders() {
     const [selectedItem, setSelectedItem] = useState<OrderEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ page: 0, rowsPerPage: 6 });
     const [filters, setFilters] = useState<IOrderFilter>();
-    const { items, totalCount, gettingError, loading, refetch } = useOrders(pageSettings, filters);
+    const { items, totalCount, gettingError, loading } = useOrders(pageSettings, filters);
     const [error, setError] = useState<ApolloError>();
     const formContext = useForm();
 
-    useEffect(() => {
-        refreshData();
-    }, [filters, pageSettings]);
-
     function refreshData(updated = true) {
         if (updated) {
-            refetch();
+            setFilters({ ...filters });
         }
         setError(null);
         setSelectedItem(undefined);
@@ -88,7 +84,7 @@ export default function Orders() {
                                       formContext={formContext}
                                       onApply={() => onApply()}
                                       onClear={() => onClearFilter()}
-                                      onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}
+                                      onSort={(settings: IPageable) => setPageSettings(settings)}
                                       pageSettings={pageSettings}>
                   <Box display="flex" flexDirection="column" gap={2}>
                     <CustomTextField label="Швидкий пошук" name="quickSearch" fullWidth

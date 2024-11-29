@@ -53,7 +53,7 @@ export default function BookSeries() {
         page: 0
     });
     const [filters, setFilters] = useState<BookSeriesFilter>();
-    const { items, totalCount, gettingError, loading, refetch } = useBookSeries(pageSettings, filters);
+    const { items, totalCount, gettingError, loading } = useBookSeries(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteBookSeries();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -66,10 +66,6 @@ export default function BookSeries() {
         }
     }, [gettingError, deletingError]);
 
-    useEffect(() => {
-        refreshData();
-    }, [filters, pageSettings]);
-
     async function deleteHandler(item: BookSeriesEntity) {
         try {
             await deleteItem(item.id);
@@ -81,7 +77,7 @@ export default function BookSeries() {
 
     function refreshData(updated = true) {
         if (updated) {
-            refetch();
+            setFilters({ ...filters });
         }
         setError(null);
         setOpenNewModal(false);
@@ -108,16 +104,19 @@ export default function BookSeries() {
 
             {isAdmin(user) &&
               <>
-                <BookSeriesFilters onApply={(filters: BookSeriesFilter) => setFilters(filters)}
+                <BookSeriesFilters onApply={(filters: BookSeriesFilter) => {
+                    setPageSettings(prev => ({ ...prev, page: 0 }));
+                    setFilters(filters)
+                }}
                                    pageSettings={pageSettings}
-                                   onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></BookSeriesFilters>
+                                   onSort={(settings: IPageable) => setPageSettings(settings)}></BookSeriesFilters>
 
                 <CustomTable data={items}
                              keys={tableKeys}
                              mobileKeys={mobileKeys}
                              actions={tableActions}
                              renderKey={(item: BookSeriesEntity) => item.id}
-                             onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
+                             onChange={(settings: IPageable) => setPageSettings(settings)}
                              pageSettings={pageSettings}
                              usePagination={true}
                              totalCount={totalCount}

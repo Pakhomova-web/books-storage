@@ -40,7 +40,7 @@ export default function PageTypes() {
     const [selectedItem, setSelectedItem] = useState<PageTypeEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '', rowsPerPage: 12, page: 0 });
     const [filters, setFilters] = useState<PageTypeEntity>();
-    const { items, totalCount, gettingError, loading, refetch } = usePageTypes(pageSettings, filters);
+    const { items, totalCount, gettingError, loading } = usePageTypes(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeletePageType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -53,10 +53,6 @@ export default function PageTypes() {
         }
     }, [gettingError, deletingError]);
 
-    useEffect(() => {
-        refreshData();
-    }, [filters, pageSettings]);
-
     async function deleteHandler(item: PageTypeEntity) {
         try {
             await deleteItem(item.id);
@@ -68,7 +64,7 @@ export default function PageTypes() {
 
     function refreshData(updated = true) {
         if (updated) {
-            refetch();
+            setFilters({ ...filters });
         }
         setError(null);
         setOpenNewModal(false);
@@ -95,9 +91,12 @@ export default function PageTypes() {
 
             {isAdmin(user) &&
               <>
-                <NameFiltersPanel onApply={(filters: PageTypeEntity) => setFilters(filters)}
+                <NameFiltersPanel onApply={(filters: PageTypeEntity) => {
+                    setPageSettings(prev => ({ ...prev, page: 0 }));
+                    setFilters(filters)
+                }}
                                   pageSettings={pageSettings}
-                                  onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
+                                  onSort={(settings: IPageable) => setPageSettings(settings)}></NameFiltersPanel>
 
                 <CustomTable data={items}
                              keys={tableKeys}
@@ -105,7 +104,7 @@ export default function PageTypes() {
                              mobileKeys={[]}
                              actions={tableActions}
                              renderKey={(item: PageTypeEntity) => item.id}
-                             onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
+                             onChange={(settings: IPageable) => setPageSettings(settings)}
                              pageSettings={pageSettings}
                              usePagination={true}
                              onRowClick={(item: PageTypeEntity) => onEdit(item)}>

@@ -48,7 +48,7 @@ export default function BookTypes() {
     const [selectedItem, setSelectedItem] = useState<BookTypeEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '', rowsPerPage: 12, page: 0 });
     const [filters, setFilters] = useState<BookTypeEntity>();
-    const { items, totalCount, gettingError, loading, refetch } = useBookTypes(pageSettings, filters);
+    const { items, totalCount, gettingError, loading } = useBookTypes(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteBookType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -61,13 +61,9 @@ export default function BookTypes() {
         }
     }, [gettingError, deletingError]);
 
-    useEffect(() => {
-        refreshData();
-    }, [filters, pageSettings]);
-
     function refreshData(updated = true) {
         if (updated) {
-            refetch();
+            setFilters({ ...filters });
         }
         setError(null);
         setOpenNewModal(false);
@@ -94,9 +90,12 @@ export default function BookTypes() {
 
             {isAdmin(user) &&
               <>
-                <NameFiltersPanel onApply={(filters: BookTypeEntity) => setFilters(filters)}
+                <NameFiltersPanel onApply={(filters: BookTypeEntity) => {
+                    setPageSettings(prev => ({ ...prev, page: 0 }));
+                    setFilters(filters)
+                }}
                                   pageSettings={pageSettings}
-                                  onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
+                                  onSort={(settings: IPageable) => setPageSettings(settings)}></NameFiltersPanel>
 
                 <CustomTable data={items}
                              keys={tableKeys}
@@ -104,7 +103,7 @@ export default function BookTypes() {
                              mobileKeys={[]}
                              actions={tableActions}
                              renderKey={(item: BookTypeEntity) => item.id}
-                             onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
+                             onChange={(settings: IPageable) => setPageSettings(settings)}
                              pageSettings={pageSettings}
                              usePagination={true}
                              onRowClick={(item: BookTypeEntity) => onEdit(item)}>

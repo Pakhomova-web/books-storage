@@ -16,11 +16,7 @@ export default function Likes() {
     const { user } = useAuth();
     const router = useRouter();
     const [pageSettings, setPageSettings] = useState<IPageable>({ page: 0, rowsPerPage: 12 });
-    const { loading, error, items, totalCount, refetch } = useBooksByIds(user?.likedBookIds, pageSettings);
-
-    useEffect(() => {
-        refetch();
-    }, [user]);
+    const { loading, error, items, totalCount } = useBooksByIds(user?.likedBookIds, pageSettings);
 
     function onPageChange(val: number) {
         setPageSettings({

@@ -185,10 +185,13 @@ export default function Books() {
             <Loading show={loading}></Loading>
 
             <BookFilters defaultValues={filters}
-                         onApply={(filters: BookFilter) => setFilters(filters)}
+                         onApply={(filters: BookFilter) => {
+                             setPageSettings(prev => ({ ...prev, page: 0 }));
+                             setFilters(filters)
+                         }}
                          pageSettings={pageSettings}
                          showAlwaysSorting={true}
-                         onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></BookFilters>
+                         onSort={(settings: IPageable) => setPageSettings(settings)}></BookFilters>
 
             <Grid container mb={1}>
                 <StyledAdditionalTopicGrid item xs={6} md={3} p={1}

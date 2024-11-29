@@ -17,9 +17,14 @@ import Head from 'next/head';
 
 export default function PublishingHouses() {
     const { user, checkAuth } = useAuth();
-    const [pageSettings, setPageSettings] = useState<IPageable>({ order: 'asc', orderBy: '', rowsPerPage: 12, page: 0 });
+    const [pageSettings, setPageSettings] = useState<IPageable>({
+        order: 'asc',
+        orderBy: '',
+        rowsPerPage: 12,
+        page: 0
+    });
     const [filters, setFilters] = useState<PublishingHouseEntity>();
-    const { items, totalCount, loading, gettingError, refetch } = usePublishingHouses(pageSettings, filters);
+    const { items, totalCount, loading, gettingError } = usePublishingHouses(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeletePublishingHouse();
     const [selectedItem, setSelectedItem] = useState<PublishingHouseEntity>();
     const [tableActions] = useState<TableKey<PublishingHouseEntity>>({
@@ -51,10 +56,6 @@ export default function PublishingHouses() {
         }
     }, [gettingError, deletingError]);
 
-    useEffect(() => {
-        refreshData();
-    }, [filters, pageSettings]);
-
     async function deleteHandler(item: PublishingHouseEntity) {
         try {
             await deleteItem(item.id);
@@ -66,7 +67,7 @@ export default function PublishingHouses() {
 
     function refreshData(updated = true) {
         if (updated) {
-            refetch();
+            setFilters({ ...filters });
         }
         setError(null);
         setOpenNewModal(false);
@@ -93,9 +94,12 @@ export default function PublishingHouses() {
 
             {isAdmin(user) &&
               <>
-                <NameFiltersPanel onApply={(filters: PublishingHouseEntity) => setFilters(filters)}
+                <NameFiltersPanel onApply={(filters: PublishingHouseEntity) => {
+                    setPageSettings(prev => ({ ...prev, page: 0 }));
+                    setFilters(filters)
+                }}
                                   pageSettings={pageSettings}
-                                  onSort={(pageSettings: IPageable) => setPageSettings(pageSettings)}></NameFiltersPanel>
+                                  onSort={(settings: IPageable) => setPageSettings(settings)}></NameFiltersPanel>
 
                 <CustomTable data={items}
                              keys={tableKeys}
@@ -103,7 +107,7 @@ export default function PublishingHouses() {
                              mobileKeys={mobileKeys}
                              actions={tableActions}
                              renderKey={(item: PublishingHouseEntity) => item.id}
-                             onChange={(pageSettings: IPageable) => setPageSettings(pageSettings)}
+                             onChange={(settings: IPageable) => setPageSettings(settings)}
                              pageSettings={pageSettings}
                              usePagination={true}
                              onRowClick={(item: PublishingHouseEntity) => onEdit(item)}>
