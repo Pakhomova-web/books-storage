@@ -21,7 +21,7 @@ const bookFragment = gql`
             id
             name
         }
-        bookType {
+        bookTypes {
             id
             name
         }
@@ -109,7 +109,7 @@ export const booksWithNotApprovedCommentsQuery = gql`
             items {
                 id
                 name
-                bookType {
+                bookTypes {
                     name
                 }
                 bookSeries {

@@ -55,7 +55,7 @@ const typeDefs =  /* GraphQL */ `
         price: Float!
         numberInStock: Int
         archived: Boolean
-        bookType: BookType!
+        bookTypes: [BookType!]
         bookSeries: BookSeries!
         coverType: CoverType!
         pageType: PageType!
@@ -357,7 +357,7 @@ const typeDefs =  /* GraphQL */ `
         numberOfPages: Int!
         price: Float
         numberInStock: Int
-        bookTypeId: ID!
+        bookTypeIds: [ID!]!
         bookSeriesId: ID!
         coverTypeId: ID!
         pageTypeId: ID!
@@ -377,7 +377,7 @@ const typeDefs =  /* GraphQL */ `
         id: ID
         name: String
         description: String
-        bookType: ID
+        bookTypes: [ID]
         coverType: ID
         bookSeries: ID
         pageType: ID

@@ -47,7 +47,7 @@ const orderFragment = gql`
                     }
                     description
                 }
-                bookType {
+                bookTypes {
                     name
                 }
             }

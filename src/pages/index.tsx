@@ -83,7 +83,7 @@ export default function Home() {
                 {!!bookTypes?.length && bookTypes?.map((type, index) => (
                     mobileMatches ?
                         <Grid xs={12} sm={6} key={index} item p={1}
-                              onClick={() => router.push(`/books?bookType=${type.id}`)}>
+                              onClick={() => router.push(`/books?bookTypes=${type.id}`)}>
                             <Box sx={bookTypeBoxStyles} gap={1} p={1}>
                                 <Box sx={mobileImageBoxStyles}>
                                     <CustomImage imageId={type.imageId} isBookType={true}></CustomImage>
@@ -92,7 +92,7 @@ export default function Home() {
                             </Box>
                         </Grid> :
                         <Grid key={index} item p={1} md={4} lg={3} xl={2}
-                              onClick={() => router.push(`/books?bookType=${type.id}`)}>
+                              onClick={() => router.push(`/books?bookTypes=${type.id}`)}>
                             <StyledBookTypeBox>
                                 <Box sx={imageBoxStyles}>
                                     <CustomImage imageId={type.imageId} isBookType={true}></CustomImage>

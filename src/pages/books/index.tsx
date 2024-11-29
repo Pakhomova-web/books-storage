@@ -110,8 +110,8 @@ export default function Books() {
         } else if (data?.language) {
             promise = getLanguageById(data?.language as string)
                 .then((item: LanguageEntity) => [{ title: item.name }]);
-        } else if (data?.bookType) {
-            promise = getBookTypeById(data?.bookType as string)
+        } else if (data?.bookTypes) {
+            promise = getBookTypeById(data?.bookTypes[0])
                 .then((item: BookTypeEntity) => [{ title: item.name }]);
         } else if (data?.authors?.length) {
             promise = getAuthorById(data?.authors[0])
@@ -196,7 +196,7 @@ export default function Books() {
                     Англійська дітям
                 </StyledAdditionalTopicGrid>
                 <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
-                                           onClick={() => router.push('/books?bookType=66901099d4b33119e2069792')}>
+                                           onClick={() => router.push('/books?bookTypes=66901099d4b33119e2069792')}>
                     Наліпки для найменших
                 </StyledAdditionalTopicGrid>
                 <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
@@ -204,7 +204,7 @@ export default function Books() {
                     Новорічні книги
                 </StyledAdditionalTopicGrid>
                 <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
-                                           onClick={() => router.push('/books?bookType=671389883908259306710c62')}>
+                                           onClick={() => router.push('/books?bookTypes=671389883908259306710c62')}>
                     Розмальовки
                 </StyledAdditionalTopicGrid>
             </Grid>

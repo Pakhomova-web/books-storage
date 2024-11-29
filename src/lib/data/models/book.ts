@@ -24,11 +24,11 @@ const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
         type: Schema.Types.ObjectId,
         required: true
     },
-    bookType: {
+    bookTypes: [{
         ref: 'bookType',
         type: Schema.Types.ObjectId,
         required: true
-    },
+    }],
     pageType: {
         ref: 'pageType',
         type: Schema.Types.ObjectId,
@@ -72,6 +72,6 @@ const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
     }]
 });
 
-bookSchema.index({ name: 1, bookSeries: 1, bookType: 1, pageType: 1, coverType: 1, language: 1 }, { unique: true });
+bookSchema.index({ name: 1, bookSeries: 1, bookTypes: 1, pageType: 1, coverType: 1, language: 1 }, { unique: true });
 
 export default models?.book || model('book', bookSchema);

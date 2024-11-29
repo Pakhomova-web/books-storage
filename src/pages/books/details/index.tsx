@@ -106,14 +106,14 @@ export default function BookDetails() {
                         router.push(`/books?language=${book.language.id}`);
                     }
                 },
-                {
-                    title: 'Тип',
+                ...(book.bookTypes || []).map((bookType, i) => ({
+                    title: i === 0 ? 'Тип' : '',
                     type: 'text',
-                    renderValue: (book: BookEntity) => book.bookType.name,
+                    renderValue: () => bookType.name,
                     onValueClick: () => {
-                        router.push(`/books?bookType=${book.bookType.id}`);
+                        router.push(`/books?bookTypes=${bookType.id}`);
                     }
-                },
+                } as TableKey<BookEntity>)),
                 { title: 'Тип сторінок', type: 'text', renderValue: (book: BookEntity) => book.pageType?.name },
                 { title: 'Тип обкладинки', type: 'text', renderValue: (book: BookEntity) => book.coverType?.name },
                 { title: 'ISBN', type: 'text', renderValue: (book: BookEntity) => book.isbn },

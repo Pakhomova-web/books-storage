@@ -56,7 +56,7 @@ export async function getBookTypeById(id: string) {
 }
 
 export async function deleteBookType(id: string) {
-    await checkUsageInBook('bookType', [id], 'Book Type');
+    await checkUsageInBook('bookTypes', [id], 'Book Type');
     await BookType.findByIdAndDelete(id);
 
     return { id } as BookTypeEntity;

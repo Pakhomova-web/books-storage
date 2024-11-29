@@ -92,7 +92,7 @@ export default function Comments() {
                 <StyledBookBox key={index} onClick={() => onBookClick(item)} p={1}>
                     <Box sx={styleVariables.titleFontSize} mb={1}><b>{item.name}</b></Box>
                     <Box mb={1} sx={styleVariables.hintFontSize}>
-                        {item.bookType.name} / {item.bookSeries.publishingHouse.name} / {item.bookSeries.name}
+                        {item.bookSeries.publishingHouse.name} / {item.bookSeries.name}
                     </Box>
                     <Box width="100%">Кількість коментарів для погодження: {item.comments.length}.</Box>
                 </StyledBookBox>

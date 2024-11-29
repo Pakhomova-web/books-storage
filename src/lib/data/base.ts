@@ -64,6 +64,8 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
                     if (!!filters[key]?.length) {
                         andFilters.push({ [key]: { $in: filters[key].map(i => getCaseInsensitiveSubstringOption(i)) } });
                     }
+                } else if (key === 'bookTypes') {
+                    andFilters.push({ bookTypes: { $in: filters[key] } });
                 } else {
                     andFilters.push({ [key]: filters[key] });
                 }

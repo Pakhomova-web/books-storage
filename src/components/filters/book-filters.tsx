@@ -17,6 +17,7 @@ import { useBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 import { customFieldClearBtnStyles } from '@/constants/styles-variables';
 import Ages from '@/components/ages';
 import { ISortKey } from '@/components/types';
+import Loading from '@/components/loading';
 
 interface IBookFiltersProps {
     defaultValues?: BookFilter,
@@ -48,7 +49,7 @@ export function BookFilters(props: IBookFiltersProps) {
     ]);
     const {
         quickSearch,
-        bookType,
+        bookTypes,
         coverType,
         pageType,
         name,
@@ -60,7 +61,7 @@ export function BookFilters(props: IBookFiltersProps) {
         authors,
         illustrators
     } = formContext.watch();
-    const { items: bookTypeOptions } = useBookTypeOptions();
+    const { items: bookTypeOptions, loading: loadingBookTypes } = useBookTypeOptions();
     const { items: pageTypeOptions } = usePageTypeOptions();
     const { items: authorOptions } = useAuthorOptions();
     const { items: languageOptions } = useLanguageOptions();
@@ -154,13 +155,19 @@ export function BookFilters(props: IBookFiltersProps) {
                 </Grid>
 
                 <Grid item xs={12}>
-                    <CustomSelectField fullWidth
-                                       options={bookTypeOptions}
-                                       id="book-type-id"
-                                       label="Тип книги"
-                                       name="bookType"
-                                       showClear={!!bookType}
-                                       onClear={() => clearValue('bookType')}/>
+                    <Box position="relative" mb={1}>
+                        <Loading isSmall={true} show={loadingBookTypes}></Loading>
+                        <MultiSelectElement fullWidth
+                                            options={bookTypeOptions}
+                                            id="bookTypes"
+                                            label="Типи"
+                                            name="bookTypes" showCheckbox variant="outlined"/>
+                        {!!bookTypes?.length &&
+                          <Box sx={customFieldClearBtnStyles}
+                               onClick={() => clearValue('bookTypes')}>
+                            Очистити
+                          </Box>}
+                    </Box>
                 </Grid>
 
                 <Grid item xs={12}>

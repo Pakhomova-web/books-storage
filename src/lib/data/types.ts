@@ -84,8 +84,8 @@ export class BookEntity {
     bookSeries?: BookSeriesEntity;
     coverTypeId: string;
     coverType?: CoverTypeEntity;
-    bookTypeId: string;
-    bookType?: BookTypeEntity;
+    bookTypeIds: string[];
+    bookTypes?: BookTypeEntity[];
     pageTypeId: string;
     pageType?: PageTypeEntity;
     languageId: string;
@@ -114,8 +114,8 @@ export class BookEntity {
         this.bookSeries = data.bookSeries;
         this.coverTypeId = data.coverTypeId;
         this.coverType = data.coverType;
-        this.bookTypeId = data.bookTypeId;
-        this.bookType = data.bookType;
+        this.bookTypeIds = data.bookTypeIds;
+        this.bookTypes = data.bookTypes;
         this.pageTypeId = data.pageTypeId;
         this.pageType = data.pageType;
         this.languageId = data.languageId;
@@ -142,7 +142,7 @@ export class BookEntity {
             numberInStock: this.numberInStock,
             price: this.price,
             archived: this.archived,
-            bookTypeId: this.bookTypeId || this.bookType?.id,
+            bookTypeIds: this.bookTypeIds || this.bookTypes.map(bT => bT.id),
             bookSeriesId: this.bookSeriesId || this.bookSeries?.id,
             coverTypeId: this.coverTypeId || this.coverType?.id,
             pageTypeId: this.pageTypeId || this.pageType?.id,
@@ -174,7 +174,7 @@ export class BookFilter {
     name?: string;
     bookSeries?: string;
     description?: string;
-    bookType?: string;
+    bookTypes?: string[];
     coverType?: string;
     pageType?: string;
     isbn?: string;
@@ -195,7 +195,7 @@ export class BookFilter {
             this.name = data.name;
             this.bookSeries = data.bookSeries;
             this.description = data.description;
-            this.bookType = data.bookType;
+            this.bookTypes = data.bookTypes && typeof data.bookTypes === 'string' ? data.bookTypes.split(',') : data.bookTypes;
             this.coverType = data.coverType;
             this.pageType = data.pageType;
             this.isbn = data.isbn;

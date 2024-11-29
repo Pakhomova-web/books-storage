@@ -12,7 +12,6 @@ import { createBookType, deleteBookType, getBookTypeById, getBookTypes, updateBo
 import { createCoverType, deleteCoverType, getCoverTypes, updateCoverType } from '@/lib/data/cover-type';
 import {
     AuthorEntity,
-    BookEntity,
     BookSeriesEntity,
     BookTypeEntity,
     CommentEntity,
@@ -43,7 +42,8 @@ import {
     getBooks,
     getBooksByAuthor,
     getBooksByIds,
-    getBooksFromSeries, getBooksNameByQuickSearch,
+    getBooksFromSeries,
+    getBooksNameByQuickSearch,
     getBooksWithDiscount,
     getBooksWithNotApprovedComments,
     removeComment,
@@ -53,7 +53,8 @@ import {
 import { createAuthor, deleteAuthor, getAuthorById, getAuthors, updateAuthor } from '@/lib/data/author';
 import { GraphQLError } from 'graphql/error';
 import {
-    addBookInBasket, changeRecentlyViewedBooks,
+    addBookInBasket,
+    changeRecentlyViewedBooks,
     createUser,
     getNewToken,
     likeBook,
@@ -276,13 +277,13 @@ const resolvers: Resolvers = {
             return deleteAuthor(id).catch(error => parseError(error));
         },
         // details
-        createBook: async (_root, { input }: { input: BookEntity }, { user }) => {
+        createBook: async (_root, { input }, { user }) => {
             _checkUser(user);
             return createBook(input).catch(error => parseError(error));
         },
         updateBook: async (_root, { input, updateAllBooksInSeries }, { user }) => {
             _checkUser(user);
-            return updateBook(<BookEntity>input, updateAllBooksInSeries).catch(error => parseError(error));
+            return updateBook(input, updateAllBooksInSeries).catch(error => parseError(error));
         },
         updateBookNumberInStock: async (_root, { input }: {
             input: { id: string, numberInStock: number }

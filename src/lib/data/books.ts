@@ -33,7 +33,7 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
                 path: 'publishingHouse'
             }
         })
-        .populate('bookType')
+        .populate('bookTypes')
         .populate('pageType')
         .populate('coverType')
         .populate('language')
@@ -45,11 +45,11 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
 
     await query.exec().then((items: BookEntity[]) => {
         if (quickSearch) {
-            items = items.filter(({ authors, name, bookSeries, bookType, tags, illustrators }) =>
+            items = items.filter(({ authors, name, bookSeries, bookTypes, tags, illustrators }) =>
                 quickSearch.test(name) ||
                 (authors?.length && authors.some(author => quickSearch.test(author.name))) ||
                 (illustrators?.length && illustrators.some(illustrator => quickSearch.test(illustrator.name))) ||
-                quickSearch.test(bookType.name) ||
+                (bookTypes?.length && bookTypes.some(bookType => quickSearch.test(bookType.name))) ||
                 quickSearch.test(bookSeries.name) ||
                 quickSearch.test(bookSeries.publishingHouse.name) ||
                 tags?.some(tag => quickSearch.test(tag))
@@ -81,7 +81,7 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
 export async function getBookById(id: string) {
     const item = await Book.findById(id)
         .populate('language')
-        .populate('bookType')
+        .populate('bookTypes')
         .populate('authors')
         .populate('illustrators')
         .populate({
@@ -102,8 +102,8 @@ export async function getBookById(id: string) {
     return item;
 }
 
-export async function createBook(input: BookEntity) {
-    const item = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeId, input.pageTypeId, input.coverTypeId, input.languageId);
+export async function createBook(input: Partial<BookEntity>) {
+    const item = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeIds, input.pageTypeId, input.coverTypeId, input.languageId);
 
     if (item) {
         return null;
@@ -116,13 +116,13 @@ export async function createBook(input: BookEntity) {
     }
 }
 
-export async function updateBook(input: BookEntity, updateAllBooksInSeries = false) {
+export async function updateBook(input: Partial<BookEntity>, updateAllBooksInSeries = false) {
     if (!input.id) {
         throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const itemByName = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeId, input.pageTypeId, input.coverTypeId, input.languageId);
+    const itemByName = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeIds, input.pageTypeId, input.coverTypeId, input.languageId);
 
     if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Книга з назвою '${input.name}' вже є.`, {
@@ -204,11 +204,11 @@ export async function addComment(id: string, input: CommentEntity) {
     return book as BookEntity;
 }
 
-function _getBookByUnique(name: string, bookSeries: string, bookType: string, pageType: string, coverType: string, language: string) {
+function _getBookByUnique(name: string, bookSeries: string, bookTypes: string[], pageType: string, coverType: string, language: string) {
     return Book.findOne({
         name: new RegExp(`^${name}$`, "i"),
         bookSeries,
-        bookType,
+        bookTypes,
         pageType,
         coverType,
         language
@@ -255,7 +255,7 @@ export async function getBooksFromSeries(bookId: string, rowsPerPage: number) {
                 path: 'publishingHouse'
             }
         })
-        .populate('bookType')
+        .populate('bookTypes')
         .populate('language')
         .sort({ numberInStock: 'desc' });
 }
@@ -281,7 +281,7 @@ export async function getBooksByAuthor(authorId: string, rowsPerPage: number, ex
                 path: 'publishingHouse'
             }
         })
-        .populate('bookType')
+        .populate('bookTypes')
         .populate('language');
 }
 
@@ -298,7 +298,7 @@ export async function getBooksByIds(ids: string[], pageSettings: IPageable) {
                 path: 'publishingHouse'
             }
         })
-        .populate('bookType')
+        .populate('bookTypes')
         .populate('language');
 
     if (pageSettings && pageSettings.rowsPerPage && pageSettings.page !== undefined) {
@@ -323,7 +323,7 @@ export async function getBooksWithDiscount(rowsPerPage: number) {
                 path: 'publishingHouse'
             }
         })
-        .populate('bookType')
+        .populate('bookTypes')
         .populate('language')
         .sort({ numberInStock: 'desc' })
         .limit(rowsPerPage);
@@ -332,7 +332,7 @@ export async function getBooksWithDiscount(rowsPerPage: number) {
 export async function getBooksWithNotApprovedComments(pageSettings?: IPageable) {
     const query = Book
         .find()
-        .populate('bookType')
+        .populate('bookTypes')
         .populate({
             path: 'bookSeries',
             populate: {
@@ -356,7 +356,7 @@ export async function getBooksWithNotApprovedComments(pageSettings?: IPageable) 
     return res;
 }
 
-function _getBookData(input: BookEntity) {
+function _getBookData(input: Partial<BookEntity>) {
     return {
         ...input,
         authors: input.authorIds,
@@ -365,6 +365,6 @@ function _getBookData(input: BookEntity) {
         bookSeries: input.bookSeriesId,
         coverType: input.coverTypeId,
         pageType: input.pageTypeId,
-        bookType: input.bookTypeId
+        bookTypes: input.bookTypeIds
     };
 }

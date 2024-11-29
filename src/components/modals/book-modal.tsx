@@ -52,7 +52,7 @@ interface IForm {
     coverTypeId: string,
     languageId: string,
     pageTypeId: string,
-    bookTypeId: string,
+    bookTypeIds: string[],
     bookSeriesId: string,
     publishingHouseId?: string,
     imageIds: string[],
@@ -76,7 +76,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             languageId: item?.language?.id,
             coverTypeId: item?.coverType?.id,
             pageTypeId: item?.pageType?.id,
-            bookTypeId: item?.bookType?.id,
+            bookTypeIds: item?.bookTypes?.map(({ id }) => id),
             bookSeriesId: item?.bookSeries?.id,
             isbn: item?.id ? item?.isbn : null,
             format: item?.format,
@@ -99,6 +99,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         description,
         ages,
         authorIds,
+        bookTypeIds,
         illustratorIds,
         discount
     } = formContext.watch();
@@ -253,13 +254,13 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             name,
             pageTypeId,
             coverTypeId,
-            bookTypeId,
+            bookTypeIds,
             price,
             numberOfPages,
             languageId
         } = formContext.getValues();
 
-        return !!name && !!numberOfPages && !!bookTypeId && !!bookSeriesId && !!price && !!pageTypeId && !!coverTypeId && languageId;
+        return !!name && !!numberOfPages && !!bookTypeIds?.length && !!bookSeriesId && !!price && !!pageTypeId && !!coverTypeId && languageId;
     }
 
     return (
@@ -284,14 +285,19 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={3} lg={2}>
-                    <CustomSelectField fullWidth
-                                       required
-                                       disabled={!isAdmin}
-                                       options={bookTypeOptions}
-                                       loading={loadingBookTypes}
-                                       id="book-type-id"
-                                       label="Тип"
-                                       name="bookTypeId"/>
+                    <Box position="relative" mb={1}>
+                        <Loading isSmall={true} show={loadingBookTypes}></Loading>
+                        <MultiSelectElement fullWidth
+                                            options={bookTypeOptions}
+                                            id="bookTypes"
+                                            label="Типи"
+                                            name="bookTypeIds" showCheckbox variant="outlined"/>
+                        {isAdmin && !!bookTypeIds?.length &&
+                          <Box sx={customFieldClearBtnStyles}
+                               onClick={() => formContext.setValue('bookTypeIds', null)}>
+                            Очистити
+                          </Box>}
+                    </Box>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={3} lg={2}>

@@ -36,7 +36,6 @@ export default function Books() {
                     <Box height={75} width={100} mr={1}>
                         <CustomImage imageId={item.imageIds[0]} isBookDetails={true}></CustomImage></Box>
                     <Box display="flex" flexDirection="column" gap={1}>
-                        <Box>{item.bookType.name}</Box>
                         <Box>{item.bookSeries.publishingHouse.name}</Box>
                         <Box>{item.bookSeries.name}</Box>
                     </Box>
@@ -134,9 +133,8 @@ export default function Books() {
             renderValue: (item: BookEntity) => item.imageIds?.length ? item.imageIds[0] : null
         },
         {
-            title: 'Тип/Видавництво/Серія',
-            sortValue: 'bookType',
-            renderValue: (item: BookEntity) => `${item.bookType?.name}/${item.bookSeries?.publishingHouse?.name}/${item.bookSeries?.name}`,
+            title: 'Видавництво/Серія',
+            renderValue: (item: BookEntity) => `${item.bookSeries?.publishingHouse?.name}/${item.bookSeries?.name}`,
             type: 'text'
         },
         ...mobileKeys,
