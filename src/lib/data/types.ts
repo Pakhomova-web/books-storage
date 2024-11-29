@@ -101,34 +101,36 @@ export class BookEntity {
     discount?: number;
 
     constructor(data?) {
-        this.id = data.id;
-        this.name = data.name;
-        this.description = data.description;
-        this.isbn = data.isbn;
-        this.format = data.format;
-        this.numberOfPages = data.numberOfPages;
-        this.numberInStock = data.numberInStock;
-        this.numberSold = data.numberSold;
-        this.price = data.price;
-        this.bookSeriesId = data.bookSeriesId;
-        this.bookSeries = data.bookSeries;
-        this.coverTypeId = data.coverTypeId;
-        this.coverType = data.coverType;
-        this.bookTypeIds = data.bookTypeIds;
-        this.bookTypes = data.bookTypes;
-        this.pageTypeId = data.pageTypeId;
-        this.pageType = data.pageType;
-        this.languageId = data.languageId;
-        this.language = data.language;
-        this.imageIds = data.imageIds;
-        this.tags = data.tags;
-        this.authorIds = data.authorIds;
-        this.authors = data.authors;
-        this.illustratorIds = data.illustratorIds;
-        this.illustrators = data.illustrators;
-        this.archived = data.archived;
-        this.ages = (data.ages || []).sort();
-        this.discount = data.discount;
+        if (data) {
+            this.id = data.id;
+            this.name = data.name;
+            this.description = data.description;
+            this.isbn = data.isbn;
+            this.format = data.format;
+            this.numberOfPages = data.numberOfPages;
+            this.numberInStock = data.numberInStock;
+            this.numberSold = data.numberSold;
+            this.price = data.price;
+            this.bookSeriesId = data.bookSeriesId;
+            this.bookSeries = data.bookSeries;
+            this.coverTypeId = data.coverTypeId;
+            this.coverType = data.coverType;
+            this.bookTypeIds = data.bookTypeIds;
+            this.bookTypes = data.bookTypes;
+            this.pageTypeId = data.pageTypeId;
+            this.pageType = data.pageType;
+            this.languageId = data.languageId;
+            this.language = data.language;
+            this.imageIds = data.imageIds;
+            this.tags = data.tags;
+            this.authorIds = data.authorIds;
+            this.authors = data.authors;
+            this.illustratorIds = data.illustratorIds;
+            this.illustrators = data.illustrators;
+            this.archived = data.archived;
+            this.ages = data.ages
+            this.discount = data.discount;
+        }
     }
 
     get dataToUpdate(): Partial<BookEntity> {

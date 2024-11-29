@@ -106,14 +106,6 @@ export default function BookDetails() {
                         router.push(`/books?language=${book.language.id}`);
                     }
                 },
-                ...(book.bookTypes || []).map((bookType, i) => ({
-                    title: i === 0 ? 'Тип' : '',
-                    type: 'text',
-                    renderValue: () => bookType.name,
-                    onValueClick: () => {
-                        router.push(`/books?bookTypes=${bookType.id}`);
-                    }
-                } as TableKey<BookEntity>)),
                 { title: 'Тип сторінок', type: 'text', renderValue: (book: BookEntity) => book.pageType?.name },
                 { title: 'Тип обкладинки', type: 'text', renderValue: (book: BookEntity) => book.coverType?.name },
                 { title: 'ISBN', type: 'text', renderValue: (book: BookEntity) => book.isbn },
@@ -143,6 +135,14 @@ export default function BookDetails() {
                     renderValue: () => illustrator.name,
                     onValueClick: () => {
                         router.push(`/books?illustrators=${illustrator.id}`);
+                    }
+                } as TableKey<BookEntity>)),
+                ...(book.bookTypes || []).map((bookType, i) => ({
+                    title: i === 0 ? 'Тип' : '',
+                    type: 'text',
+                    renderValue: () => bookType.name,
+                    onValueClick: () => {
+                        router.push(`/books?bookTypes=${bookType.id}`);
                     }
                 } as TableKey<BookEntity>)),
                 { title: 'Кількість сторінок', type: 'text', renderValue: (book: BookEntity) => book.numberOfPages }
@@ -323,7 +323,7 @@ export default function BookDetails() {
 
               <Box sx={styleVariables.sectionTitle} mb={1}>Додаткові деталі</Box>
 
-              <Grid container mb={2}>
+              <Grid container mb={2} spacing={1}>
                   {keys.map((key, index) =>
                       <Grid item key={index} xs={12} md={6}>
                           <Grid container borderBottom={1} borderColor={primaryLightColor}>

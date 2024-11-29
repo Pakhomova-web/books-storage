@@ -150,7 +150,7 @@ export default function Books() {
         order: 'asc', orderBy: '', page: 0, rowsPerPage: 6
     });
     const [filters, setFilters] = useState<BookFilter>({ archived: null });
-    const { items, totalCount, gettingError, loading } = useBooks(pageSettings, filters);
+    const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [openNumberInStockModal, setOpenNumberInStockModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -179,7 +179,7 @@ export default function Books() {
             setFilters(new BookFilter({ archived: null, bookSeries: bookSeriesId }));
         }
         if (updated) {
-            setFilters(new BookFilter(filters));
+            refetch();
         }
     }
 
