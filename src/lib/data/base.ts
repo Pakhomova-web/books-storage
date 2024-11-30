@@ -97,6 +97,8 @@ export async function getDataByFiltersAndPageSettings(query, andFilters, pageSet
         }
 
         query.sort({ [pageSettings.orderBy || 'name']: pageSettings.order || 'asc' })
+    } else {
+        query.sort({ name: 'asc' })
     }
     const items = await query.find();
 
