@@ -38,10 +38,15 @@ export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTyp
     const { imageLink } = formContext.watch();
     const { checkAuth } = useAuth();
 
-    function parseImage() {
-        if (!!imageLink) {
-            formContext.setValue('imageId', parseImageFromLink(imageLink));
-            formContext.setValue('imageLink', null);
+    function parseImage(e?) {
+        if (!e || e.key === 'Enter') {
+            e?.preventDefault()
+            e?.stopPropagation();
+
+            if (!!imageLink) {
+                formContext.setValue('imageId', parseImageFromLink(imageLink));
+                formContext.setValue('imageLink', null);
+            }
         }
     }
 
@@ -72,29 +77,33 @@ export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTyp
                      loading={updating || creating}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={isAdmin ? onSubmit : null}>
-            <CustomTextField fullWidth
-                             required
-                             autoFocus={true}
-                             id="book-type-name"
-                             label="Назва"
-                             name="name"/>
+            <Box display="flex" gap={2} flexDirection="column">
+                <CustomTextField fullWidth
+                                 required
+                                 autoFocus={true}
+                                 id="book-type-name"
+                                 label="Назва"
+                                 name="name"/>
 
-            <CustomTextField fullWidth
-                             disabled={!isAdmin}
-                             id="imageLink"
-                             label="Посилання на фото"
-                             name="imageLink"/>
-            {!!imageLink &&
-              <Box mt={2}><Button fullWidth variant="outlined" onClick={parseImage}>Додати фото</Button></Box>}
+                <CustomTextField fullWidth
+                                 disabled={!isAdmin}
+                                 id="imageLink"
+                                 onKeyDown={parseImage}
+                                 label="Посилання на фото"
+                                 name="imageLink"/>
+                {!!imageLink &&
+                  <Box mt={2}><Button fullWidth variant="outlined" onClick={() => parseImage()}>Додати
+                    фото</Button></Box>}
 
-            <CustomTextField fullWidth
-                             disabled={!isAdmin}
-                             id="imageId"
-                             label="ID фото"
-                             name="imageId"/>
+                <CustomTextField fullWidth
+                                 disabled={!isAdmin}
+                                 id="imageId"
+                                 label="ID фото"
+                                 name="imageId"/>
 
-            <Box sx={imageBoxStyles} my={1}>
-                <CustomImage isBookType={true} imageId={formContext.getValues('imageId')}></CustomImage>
+                <Box sx={imageBoxStyles} my={1}>
+                    <CustomImage isBookType={true} imageId={formContext.getValues('imageId')}></CustomImage>
+                </Box>
             </Box>
 
             {(creatingError || updatingError) &&
