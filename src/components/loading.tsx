@@ -10,7 +10,7 @@ const backdropStyles = (theme) => ({
     backgroundColor: '#ffffff7d',
     color: theme.palette.primary.main,
     zIndex: theme.zIndex.drawer + 1,
-    position: 'absolute',
+    position: 'fixed',
     height: '100%'
 });
 

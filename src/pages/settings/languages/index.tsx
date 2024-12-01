@@ -45,10 +45,11 @@ export default function Languages() {
         page: 0
     });
     const [filters, setFilters] = useState<LanguageEntity>();
-    const { items, totalCount, gettingError, loading } = useLanguages(pageSettings, filters);
+    const { items, totalCount, gettingError, loading, refetch } = useLanguages(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteLanguage();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
+    const [loadingItems, setLoadingItems] = useState<boolean>(false);
 
     useEffect(() => {
         if (gettingError) {
@@ -69,7 +70,8 @@ export default function Languages() {
 
     function refreshData(updated = true) {
         if (updated) {
-            setFilters({ ...filters });
+            setLoadingItems(true);
+            refetch(pageSettings, filters).then(() => setLoadingItems(false));
         }
         setError(null);
         setOpenNewModal(false);
@@ -92,7 +94,7 @@ export default function Languages() {
                 <title>Налаштування - Мови</title>
             </Head>
 
-            <Loading show={loading || deleting}></Loading>
+            <Loading show={loading || deleting || loadingItems}></Loading>
 
             {isAdmin(user) &&
               <>

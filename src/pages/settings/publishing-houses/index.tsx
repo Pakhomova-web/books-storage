@@ -24,7 +24,7 @@ export default function PublishingHouses() {
         page: 0
     });
     const [filters, setFilters] = useState<PublishingHouseEntity>();
-    const { items, totalCount, loading, gettingError } = usePublishingHouses(pageSettings, filters);
+    const { items, totalCount, loading, gettingError, refetch } = usePublishingHouses(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeletePublishingHouse();
     const [selectedItem, setSelectedItem] = useState<PublishingHouseEntity>();
     const [tableActions] = useState<TableKey<PublishingHouseEntity>>({
@@ -47,6 +47,7 @@ export default function PublishingHouses() {
     ]);
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
+    const [loadingItems, setLoadingItems] = useState<boolean>(false);
 
     useEffect(() => {
         if (gettingError) {
@@ -67,7 +68,8 @@ export default function PublishingHouses() {
 
     function refreshData(updated = true) {
         if (updated) {
-            setFilters({ ...filters });
+            setLoadingItems(true);
+            refetch(pageSettings, filters).then(() => setLoadingItems(false));
         }
         setError(null);
         setOpenNewModal(false);
@@ -90,7 +92,7 @@ export default function PublishingHouses() {
                 <title>Налаштування - Видавництва</title>
             </Head>
 
-            <Loading show={loading || deleting}></Loading>
+            <Loading show={loading || deleting || loadingItems}></Loading>
 
             {isAdmin(user) &&
               <>

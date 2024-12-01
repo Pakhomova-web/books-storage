@@ -155,6 +155,7 @@ export default function Books() {
     const [openNumberInStockModal, setOpenNumberInStockModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
     const [downloadingCsv, setDownloadingCsv] = useState<boolean>(false);
+    const [loadingItems, setLoadingItems] = useState<boolean>(false);
 
     useEffect(() => {
         if (gettingError) {
@@ -179,7 +180,8 @@ export default function Books() {
             setFilters(new BookFilter({ archived: null, bookSeries: bookSeriesId }));
         }
         if (updated) {
-            refetch();
+            setLoadingItems(true);
+            refetch(pageSettings, filters).then(() => setLoadingItems(false));
         }
     }
 
@@ -214,7 +216,7 @@ export default function Books() {
                 <title>Налаштування - Книги</title>
             </Head>
 
-            <Loading show={loading || downloadingCsv || updating}></Loading>
+            <Loading show={loading || downloadingCsv || updating || loadingItems}></Loading>
 
             {isAdmin(user) &&
               <>
@@ -228,6 +230,7 @@ export default function Books() {
                              onSort={(settings: IPageable) => setPageSettings(settings)}></BookFilters>
 
                 <CustomTable data={items}
+                             loading={loading}
                              keys={tableKeys}
                              mobileKeys={mobileKeys}
                              actions={tableActions}

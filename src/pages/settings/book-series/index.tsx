@@ -53,7 +53,8 @@ export default function BookSeries() {
         page: 0
     });
     const [filters, setFilters] = useState<BookSeriesFilter>();
-    const { items, totalCount, gettingError, loading } = useBookSeries(pageSettings, filters);
+    const { items, totalCount, gettingError, loading, refetch } = useBookSeries(pageSettings, filters);
+    const [loadingItems, setLoadingItems] = useState<boolean>(false);
     const { deleteItem, deleting, deletingError } = useDeleteBookSeries();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
@@ -77,7 +78,8 @@ export default function BookSeries() {
 
     function refreshData(updated = true) {
         if (updated) {
-            setFilters({ ...filters });
+            setLoadingItems(true);
+            refetch(pageSettings, filters).then(() => setLoadingItems(false));
         }
         setError(null);
         setOpenNewModal(false);
@@ -100,7 +102,7 @@ export default function BookSeries() {
                 <title>Налаштування - Серії</title>
             </Head>
 
-            <Loading show={loading || deleting}></Loading>
+            <Loading show={loading || deleting || loadingItems}></Loading>
 
             {isAdmin(user) &&
               <>

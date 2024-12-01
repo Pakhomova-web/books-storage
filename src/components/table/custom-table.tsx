@@ -19,9 +19,11 @@ import { IPageable } from '@/lib/data/types';
 import { IMenuAnchorEl, MobileTable } from '@/components/table/mobile-table';
 import { renderTableActions, renderTableCell } from '@/components/table/table-cell-render';
 import Pagination from '@/components/pagination';
+import IconWithText from '@/components/icon-with-text';
 
 interface CustomTableProps<K> {
     keys: TableKey<K>[],
+    loading?: boolean,
     mobileKeys?: TableKey<K>[],
     actions?: TableKey<K>,
     data: K[],
@@ -102,48 +104,51 @@ export default function CustomTable<T>(props: CustomTableProps<T>) {
     }
 
     return (<>
-        {!mobileMatches ?
-            <TableContainer>
-                <Table stickyHeader>
-                    <TableHead>
-                        <TableRow>
-                            {props.keys.map((key, index) => key.sortValue ?
-                                <TableCell key={index} onClick={() => handleRequestSort(key.sortValue)}>
-                                    <TableSortLabel active={props.pageSettings?.orderBy === key.sortValue}
-                                                    direction={props.pageSettings?.orderBy === key.sortValue ? (props.pageSettings?.order || 'asc') : 'asc'}
-                                                    onClick={() => handleRequestSort(key.sortValue)}>
-                                        {key.title}
-                                        {props.pageSettings?.orderBy === key.sortValue ? (
-                                            <Box component="span" sx={visuallyHidden}>
-                                                {`sorted ${props.pageSettings?.order === 'desc' ? 'descending' : 'ascending'}`}
-                                            </Box>
-                                        ) : null}
-                                    </TableSortLabel>
-                                </TableCell>
-                                : <TableCell key={index}>{key.title}</TableCell>
-                            )}
-                            {!!props.actions?.actions.length && <TableCell></TableCell>}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {props.data.map((item: T, index) => (
-                            <CustomTableRow key={props.renderKey(item)} isClickable={!!props.onRowClick}
-                                            onClick={() => props.onRowClick ? onRowClick(item) : null}>
-                                {props.keys.map((key: TableKey<T>, index) =>
-                                    renderTableCell<T>(key, item, index, props.rowStyleClass))}
-                                {!!props.actions?.actions.length &&
-                                    renderTableActions(index, props.actions, item, anchorMenuEl, (val: IMenuAnchorEl) => setAnchorMenuEl(val), props.rowStyleClass)}
-                            </CustomTableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer> :
-            <MobileTable data={props.data}
-                         keys={props.mobileKeys || props.keys}
-                         actions={props.actions}
-                         onRowClick={props.onRowClick}
-                         renderMobileView={props.renderMobileView}>
-            </MobileTable>}
+        {!!props.data.length ?
+            (!mobileMatches ?
+                <TableContainer>
+                    <Table stickyHeader>
+                        <TableHead>
+                            <TableRow>
+                                {props.keys.map((key, index) => key.sortValue ?
+                                    <TableCell key={index} onClick={() => handleRequestSort(key.sortValue)}>
+                                        <TableSortLabel active={props.pageSettings?.orderBy === key.sortValue}
+                                                        direction={props.pageSettings?.orderBy === key.sortValue ? (props.pageSettings?.order || 'asc') : 'asc'}
+                                                        onClick={() => handleRequestSort(key.sortValue)}>
+                                            {key.title}
+                                            {props.pageSettings?.orderBy === key.sortValue ? (
+                                                <Box component="span" sx={visuallyHidden}>
+                                                    {`sorted ${props.pageSettings?.order === 'desc' ? 'descending' : 'ascending'}`}
+                                                </Box>
+                                            ) : null}
+                                        </TableSortLabel>
+                                    </TableCell>
+                                    : <TableCell key={index}>{key.title}</TableCell>
+                                )}
+                                {!!props.actions?.actions.length && <TableCell></TableCell>}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {props.data.map((item: T, index) => (
+                                <CustomTableRow key={props.renderKey(item)} isClickable={!!props.onRowClick}
+                                                onClick={() => props.onRowClick ? onRowClick(item) : null}>
+                                    {props.keys.map((key: TableKey<T>, index) =>
+                                        renderTableCell<T>(key, item, index, props.rowStyleClass))}
+                                    {!!props.actions?.actions.length &&
+                                        renderTableActions(index, props.actions, item, anchorMenuEl, (val: IMenuAnchorEl) => setAnchorMenuEl(val), props.rowStyleClass)}
+                                </CustomTableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer> :
+                <MobileTable data={props.data}
+                             keys={props.mobileKeys || props.keys}
+                             actions={props.actions}
+                             onRowClick={props.onRowClick}
+                             renderMobileView={props.renderMobileView}>
+                </MobileTable>) :
+            !props.loading && <IconWithText imageLink="/no_results.png"
+                                            text="На жаль пошук не дав результатів. Cпробуйте ще раз"/>}
         {props.usePagination && renderPaginator()}
         {props.children}
     </>);

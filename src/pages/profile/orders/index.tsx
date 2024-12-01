@@ -25,8 +25,9 @@ export default function Orders() {
     const { user } = useAuth();
     const router = useRouter();
     const [pageSettings, setPageSettings] = useState<IPageable>({ page: 0, rowsPerPage: 6 });
-    const { loading, gettingError, items, totalCount } = useOrders(pageSettings, { user: user?.id });
+    const { loading, gettingError, items, totalCount, refetch } = useOrders(pageSettings, { user: user?.id });
     const [selectedOrder, setSelectedOrder] = useState<OrderEntity>();
+    const [loadingItems, setLoadingItems] = useState<boolean>(false);
 
     function onPageChange(val: number) {
         setPageSettings({
@@ -46,7 +47,8 @@ export default function Orders() {
     function closeOrderModal(updated: boolean) {
         setSelectedOrder(null);
         if (updated) {
-            setPageSettings({ ...pageSettings });
+            setLoadingItems(true);
+            refetch(pageSettings).then(() => setLoadingItems(false));
         }
     }
 
@@ -56,7 +58,7 @@ export default function Orders() {
                 <title>Профіль - Замовлення</title>
             </Head>
 
-            <Loading show={loading}></Loading>
+            <Loading show={loading || loadingItems}></Loading>
 
             <OrdersList orders={items} onClick={order => setSelectedOrder(order)}/>
 

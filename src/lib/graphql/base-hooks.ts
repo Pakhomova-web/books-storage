@@ -34,7 +34,7 @@ export function _usePageableItems<T>(query: DocumentNode, key: string, pageSetti
         totalCount: data && data[key] ? data[key].totalCount : 0,
         gettingError: error,
         loading,
-        refetch
+        refetch: (pageSettings?: IPageable, filters?) => refetch({ pageSettings, filters })
     };
 }
 

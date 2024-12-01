@@ -45,14 +45,18 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
 
     await query.exec().then((items: BookEntity[]) => {
         if (quickSearch) {
-            items = items.filter(({ authors, name, bookSeries, bookTypes, tags, illustrators }) =>
-                quickSearch.test(name) ||
-                (authors?.length && authors.some(author => quickSearch.test(author.name))) ||
-                (illustrators?.length && illustrators.some(illustrator => quickSearch.test(illustrator.name))) ||
-                (bookTypes?.length && bookTypes.some(bookType => quickSearch.test(bookType.name))) ||
-                quickSearch.test(bookSeries.name) ||
-                quickSearch.test(bookSeries.publishingHouse.name) ||
-                tags?.some(tag => quickSearch.test(tag))
+            items = items.filter(
+                ({ authors, name, bookSeries, bookTypes, tags, illustrators, language, description }) =>
+                    quickSearch.test(name) ||
+                    (authors?.length && authors.some(author => quickSearch.test(author.name))) ||
+                    (illustrators?.length && illustrators.some(illustrator => quickSearch.test(illustrator.name))) ||
+                    (bookTypes?.length && bookTypes.some(bookType => quickSearch.test(bookType.name))) ||
+                    quickSearch.test(bookSeries.name) ||
+                    quickSearch.test(bookSeries.description) ||
+                    quickSearch.test(language.name) ||
+                    quickSearch.test(description) ||
+                    quickSearch.test(bookSeries.publishingHouse.name) ||
+                    tags?.some(tag => quickSearch.test(tag))
             );
         }
         if (pageSettings?.orderBy === 'priceWithDiscount') {

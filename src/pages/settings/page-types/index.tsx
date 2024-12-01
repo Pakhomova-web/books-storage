@@ -45,10 +45,11 @@ export default function PageTypes() {
         page: 0
     });
     const [filters, setFilters] = useState<PageTypeEntity>();
-    const { items, totalCount, gettingError, loading } = usePageTypes(pageSettings, filters);
+    const { items, totalCount, gettingError, loading, refetch } = usePageTypes(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeletePageType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
+    const [loadingItems, setLoadingItems] = useState<boolean>(false);
 
     useEffect(() => {
         if (gettingError) {
@@ -69,7 +70,8 @@ export default function PageTypes() {
 
     function refreshData(updated = true) {
         if (updated) {
-            setFilters({ ...filters });
+            setLoadingItems(true);
+            refetch(pageSettings, filters).then(() => setLoadingItems(false));
         }
         setError(null);
         setOpenNewModal(false);
@@ -92,7 +94,7 @@ export default function PageTypes() {
                 <title>Налаштування - Типи сторінок</title>
             </Head>
 
-            <Loading show={loading || deleting}></Loading>
+            <Loading show={loading || deleting || loadingItems}></Loading>
 
             {isAdmin(user) &&
               <>

@@ -98,7 +98,7 @@ export default function CustomModal(props: ICustomModalProps) {
                     {isWithActions() && <Box sx={buttonsContainerStyles} gap={2}>
                         {props.onClose && <Button variant="outlined" onClick={props.onClose}>Закрити</Button>}
                         {!props.hideSubmit && props.onSubmit ?
-                            <Button onClick={props.onSubmit} variant="contained" disabled={props.isSubmitDisabled}>
+                            <Button onClick={props.onSubmit} variant="contained" disabled={props.isSubmitDisabled || props.loading}>
                                 Зберегти
                             </Button>
                             : null}

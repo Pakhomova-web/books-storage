@@ -42,9 +42,10 @@ export default function Authors() {
         page: 0
     });
     const [filters, setFilters] = useState<IAuthorFilter>();
-    const { items, totalCount, gettingError, loading } = useAuthors(pageSettings, filters);
+    const { items, totalCount, gettingError, loading, refetch } = useAuthors(pageSettings, filters);
     const { deleting, deleteItem, deletingError } = useDeleteAuthor();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
+    const [loadingItems, setLoadingItems] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
 
     useEffect(() => {
@@ -66,7 +67,8 @@ export default function Authors() {
 
     function refreshData(updated = true) {
         if (updated) {
-            setFilters({ ...filters });
+            setLoadingItems(true);
+            refetch(pageSettings, filters).then(() => setLoadingItems(false));
         }
         setError(null);
         setOpenNewModal(false);
@@ -89,7 +91,7 @@ export default function Authors() {
                 <title>Налаштування - Автора</title>
             </Head>
 
-            <Loading show={loading || deleting}></Loading>
+            <Loading show={loading || deleting || loadingItems}></Loading>
 
             {isAdmin(user) &&
               <>

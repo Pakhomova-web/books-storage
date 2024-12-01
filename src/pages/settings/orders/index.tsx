@@ -1,7 +1,7 @@
 import { useAuth } from '@/components/auth-context';
 import { IOrderFilter, IPageable, OrderEntity } from '@/lib/data/types';
 import { isAdmin } from '@/utils/utils';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useOrders } from '@/lib/graphql/queries/order/hook';
 import { ApolloError } from '@apollo/client';
 import Loading from '@/components/loading';
@@ -34,13 +34,15 @@ export default function Orders() {
     const [selectedItem, setSelectedItem] = useState<OrderEntity>();
     const [pageSettings, setPageSettings] = useState<IPageable>({ page: 0, rowsPerPage: 6 });
     const [filters, setFilters] = useState<IOrderFilter>();
-    const { items, totalCount, gettingError, loading } = useOrders(pageSettings, filters);
+    const { items, totalCount, gettingError, loading, refetch } = useOrders(pageSettings, filters);
+    const [loadingItems, setLoadingItems] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
     const formContext = useForm();
 
     function refreshData(updated = true) {
         if (updated) {
-            setFilters({ ...filters });
+            setLoadingItems(true);
+            refetch(pageSettings, filters).then(() => setLoadingItems(false));
         }
         setError(null);
         setSelectedItem(undefined);
@@ -76,7 +78,7 @@ export default function Orders() {
                 <title>Налаштування - Замовлення</title>
             </Head>
 
-            <Loading show={loading}></Loading>
+            <Loading show={loading || loadingItems}></Loading>
 
             {isAdmin(user) &&
               <Box px={1}>

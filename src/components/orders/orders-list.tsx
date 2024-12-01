@@ -37,6 +37,9 @@ export default function OrdersList({ orders, onClick }) {
                                                   trackingNumber={order.trackingNumber}/>
 
                         <Grid container spacing={1}>
+                            <Grid item xs={6}>ПІБ</Grid>
+                            <Grid item xs={6}>{order.lastName + ' ' + order.firstName}</Grid>
+
                             <Grid item xs={6}>Дата</Grid>
                             <Grid item xs={6}>{new Date(order.date).toLocaleDateString()}</Grid>
 

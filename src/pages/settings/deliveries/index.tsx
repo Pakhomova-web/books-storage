@@ -46,10 +46,11 @@ export default function Deliveries() {
         page: 0
     });
     const [filters, setFilters] = useState<DeliveryEntity>();
-    const { items, totalCount, gettingError, loading } = useDeliveries(pageSettings, filters);
+    const { items, totalCount, gettingError, loading, refetch } = useDeliveries(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteDelivery();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
+    const [loadingItems, setLoadingItems] = useState<boolean>(false);
 
     useEffect(() => {
         if (gettingError) {
@@ -70,7 +71,8 @@ export default function Deliveries() {
 
     function refreshData(updated = true) {
         if (updated) {
-            setFilters({ ...filters });
+            setLoadingItems(true);
+            refetch(pageSettings, filters).then(() => setLoadingItems(false));
         }
         setError(null);
         setOpenNewModal(false);
@@ -93,7 +95,7 @@ export default function Deliveries() {
                 <title>Налаштування - Способи доставки</title>
             </Head>
 
-            <Loading show={loading || deleting}></Loading>
+            <Loading show={loading || deleting || loadingItems}></Loading>
 
             {isAdmin(user) &&
               <>

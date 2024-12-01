@@ -38,15 +38,15 @@ export default function Basket() {
         defaultValues: {
             userId: user?.id,
             email: user?.email,
-            lastName: user?.lastName,
-            firstName: user?.firstName,
-            instagramUsername: user?.instagramUsername,
-            phoneNumber: user?.phoneNumber,
-            region: user?.region,
-            city: user?.city,
-            district: user?.district,
-            postcode: user?.postcode,
-            novaPostOffice: user?.novaPostOffice,
+            lastName: isAdmin(user) ? '' : user?.lastName,
+            firstName: isAdmin(user) ? '' : user?.firstName,
+            instagramUsername: isAdmin(user) ? '' : user?.instagramUsername,
+            phoneNumber: isAdmin(user) ? '' : user?.phoneNumber,
+            region: isAdmin(user) ? '' : user?.region,
+            city: isAdmin(user) ? '' : user?.city,
+            district: isAdmin(user) ? '' : user?.district,
+            postcode: isAdmin(user) ? '' : user?.postcode,
+            novaPostOffice: isAdmin(user) ? '' : user?.novaPostOffice,
             deliveryId: user?.preferredDeliveryId,
             comment: null
         }
@@ -75,40 +75,45 @@ export default function Basket() {
         let invalid = false;
 
         if (!phoneNumber) {
-            formContext.setError('phoneNumber', { message: 'Номер телефону обов\'язковий' });
-            setSubmitDisabled(true);
+            if (formContext.formState.touchedFields.phoneNumber) {
+                formContext.setError('phoneNumber', { message: 'Номер телефону обов\'язковий' });
+            }
             invalid = true;
         } else {
             formContext.clearErrors('phoneNumber');
         }
 
         if (!region) {
-            formContext.setError('region', { message: 'Область обов\'язкова' });
-            setSubmitDisabled(true);
+            if (formContext.formState.touchedFields.region) {
+                formContext.setError('region', { message: 'Область обов\'язкова' });
+            }
             invalid = true;
         } else {
             formContext.clearErrors('region');
         }
 
         if (!city) {
-            formContext.setError('city', { message: 'Місто обов\'язкове' });
-            setSubmitDisabled(true);
+            if (formContext.formState.touchedFields.city) {
+                formContext.setError('city', { message: 'Місто обов\'язкове' });
+            }
             invalid = true;
         } else {
             formContext.clearErrors('city');
         }
 
         if (!firstName) {
-            formContext.setError('firstName', { message: 'Ім\'я обов\'язкове' });
-            setSubmitDisabled(true);
+            if (formContext.formState.touchedFields.firstName) {
+                formContext.setError('firstName', { message: 'Ім\'я обов\'язкове' });
+            }
             invalid = true;
         } else {
             formContext.clearErrors('firstName');
         }
 
         if (!lastName) {
-            formContext.setError('lastName', { message: 'Прізвище обов\'язкове' });
-            setSubmitDisabled(true);
+            if (formContext.formState.touchedFields.lastName) {
+                formContext.setError('lastName', { message: 'Прізвище обов\'язкове' });
+            }
             invalid = true;
         } else {
             formContext.clearErrors('lastName');
@@ -117,12 +122,16 @@ export default function Basket() {
         if (!deliveryId) {
             invalid = true;
         } else if (isNovaPostSelected(deliveryId) && !novaPostOffice) {
-            formContext.setError('novaPostOffice', { message: '№ відділення/поштомата обов\'язкове' });
+            if (formContext.formState.touchedFields.novaPostOffice) {
+                formContext.setError('novaPostOffice', { message: '№ відділення/поштомата обов\'язкове' });
+            }
             formContext.clearErrors('postcode');
             formContext.setValue('postcode', null);
             invalid = true;
         } else if (isUkrPoshtaSelected(deliveryId) && !postcode) {
-            formContext.setError('postcode', { message: 'Індекс обов\'язковий' });
+            if (formContext.formState.touchedFields.postcode) {
+                formContext.setError('postcode', { message: 'Індекс обов\'язковий' });
+            }
             formContext.clearErrors('novaPostOffice');
             formContext.setValue('novaPostOffice', null);
             invalid = true;
@@ -192,6 +201,7 @@ export default function Basket() {
 
             <TitleBoxStyled pb={1} m={1}>Кошик</TitleBoxStyled>
 
+
             <Box display="flex" flexDirection="column" gap={1} px={{ xs: 1 }}>
                 {items.map((book, index) => (
                     <Box key={index}>
@@ -242,7 +252,7 @@ export default function Basket() {
                         </> : <Grid item xs={12} display="flex" alignItems="center" flexDirection="column">
                             {orderNumber ?
                                 <>
-                                    <IconWithText imageLink="/completed_order.png" text="Дякуємо!" />
+                                    <IconWithText imageLink="/completed_order.png" text="Дякуємо!"/>
                                     <Box display="flex">
                                         Ваше замовлення
                                         <Box mx={1} sx={styleVariables.orderNumberStyles}>№{orderNumber}</Box>
@@ -256,7 +266,7 @@ export default function Basket() {
                                     </Button>
                                 </> :
                                 <>
-                                    <IconWithText imageLink="/empty_basket.png" text="Кошик пустий!" />
+                                    <IconWithText imageLink="/empty_basket.png" text="Кошик пустий!"/>
                                     <Button variant="outlined" onClick={() => router.push('/')}>
                                         До вибору книг
                                     </Button>

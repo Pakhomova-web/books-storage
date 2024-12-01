@@ -215,8 +215,7 @@ export default function Books() {
 
             {!loadingOption && option && renderBackBox()}
 
-            {items.length ?
-                <Box mb={2}>
+            {items.length ? <>
                     <Grid container justifyContent="center">
                         <BooksList items={items} filters={filters} pageUrl="/books"></BooksList>
                     </Grid>
@@ -224,9 +223,10 @@ export default function Books() {
                     <Pagination rowsPerPage={pageSettings.rowsPerPage} count={totalCount}
                                 page={pageSettings.page} onRowsPerPageChange={onRowsPerPageChange}
                                 onPageChange={onPageChange}/>
-                </Box>
-                : (!loading &&
-                <IconWithText imageLink="/no_results.png" text="На жаль пошук не дав результатів. Cпробуйте ще раз"/>)}
+                </> :
+                (!loading &&
+                  <IconWithText imageLink="/no_results.png"
+                                text="На жаль пошук не дав результатів. Cпробуйте ще раз"/>)}
 
             {error && <ErrorNotification error={error}></ErrorNotification>}
 

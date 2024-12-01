@@ -53,10 +53,11 @@ export default function BookTypes() {
         page: 0
     });
     const [filters, setFilters] = useState<BookTypeEntity>();
-    const { items, totalCount, gettingError, loading } = useBookTypes(pageSettings, filters);
+    const { items, totalCount, gettingError, loading, refetch } = useBookTypes(pageSettings, filters);
     const { deleteItem, deleting, deletingError } = useDeleteBookType();
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
+    const [loadingItems, setLoadingItems] = useState<boolean>(false);
 
     useEffect(() => {
         if (gettingError) {
@@ -68,7 +69,8 @@ export default function BookTypes() {
 
     function refreshData(updated = true) {
         if (updated) {
-            setFilters({ ...filters });
+            setLoadingItems(true);
+            refetch(pageSettings, filters).then(() => setLoadingItems(false));
         }
         setError(null);
         setOpenNewModal(false);
@@ -91,7 +93,7 @@ export default function BookTypes() {
                 <title>Налаштування - Типи книг</title>
             </Head>
 
-            <Loading show={loading || deleting}></Loading>
+            <Loading show={loading || deleting || loadingItems}></Loading>
 
             {isAdmin(user) &&
               <>
