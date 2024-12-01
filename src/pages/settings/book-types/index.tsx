@@ -107,6 +107,7 @@ export default function BookTypes() {
 
                 <CustomTable data={items}
                              keys={tableKeys}
+                             loading={loading || loadingItems}
                              totalCount={totalCount}
                              mobileKeys={[]}
                              actions={tableActions}

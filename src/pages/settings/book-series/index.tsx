@@ -118,6 +118,7 @@ export default function BookSeries() {
                              keys={tableKeys}
                              mobileKeys={mobileKeys}
                              actions={tableActions}
+                             loading={loading || loadingItems}
                              renderKey={(item: BookSeriesEntity) => item.id}
                              onChange={(settings: IPageable) => setPageSettings(settings)}
                              pageSettings={pageSettings}

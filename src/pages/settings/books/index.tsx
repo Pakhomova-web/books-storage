@@ -230,7 +230,7 @@ export default function Books() {
                              onSort={(settings: IPageable) => setPageSettings(settings)}></BookFilters>
 
                 <CustomTable data={items}
-                             loading={loading}
+                             loading={loading || loadingItems}
                              keys={tableKeys}
                              mobileKeys={mobileKeys}
                              actions={tableActions}

@@ -108,6 +108,7 @@ export default function Languages() {
 
                 <CustomTable data={items}
                              keys={tableKeys}
+                             loading={loading || loadingItems}
                              mobileKeys={[]}
                              totalCount={totalCount}
                              actions={tableActions}

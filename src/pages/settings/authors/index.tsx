@@ -105,6 +105,7 @@ export default function Authors() {
 
                 <CustomTable data={items}
                              keys={tableKeys}
+                             loading={loading || loadingItems}
                              mobileKeys={mobileKeys}
                              totalCount={totalCount}
                              actions={tableActions}

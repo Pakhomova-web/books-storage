@@ -1,10 +1,12 @@
 import { Box, Grid } from '@mui/material';
 import { borderRadius, primaryLightColor, styleVariables } from '@/constants/styles-variables';
-import { renderOrderNumber, renderPrice } from '@/utils/utils';
+import { isAdmin, renderOrderNumber, renderPrice } from '@/utils/utils';
 import OrderStatus from '@/components/orders/order-status';
 import OrderDeliveryTrackingBox from '@/components/orders/order-delivery-tracking-box';
 import React from 'react';
 import { styled } from '@mui/material/styles';
+import { useAuth } from '@/components/auth-context';
+import CustomImage from '@/components/custom-image';
 
 const StyledOrderBox = styled(Box)(() => ({
     borderRadius,
@@ -20,6 +22,8 @@ const StyledOrderBox = styled(Box)(() => ({
 }));
 
 export default function OrdersList({ orders, onClick }) {
+    const { user } = useAuth();
+
     return (
         <Grid container pb={1} mb={1} spacing={2}>
             {orders?.map((order, index) => (
@@ -37,8 +41,10 @@ export default function OrdersList({ orders, onClick }) {
                                                   trackingNumber={order.trackingNumber}/>
 
                         <Grid container spacing={1}>
-                            <Grid item xs={6}>ПІБ</Grid>
-                            <Grid item xs={6}>{order.lastName + ' ' + order.firstName}</Grid>
+                            {isAdmin(user) && <>
+                              <Grid item xs={6}>ПІБ</Grid>
+                              <Grid item xs={6}>{order.lastName + ' ' + order.firstName}</Grid>
+                            </>}
 
                             <Grid item xs={6}>Дата</Grid>
                             <Grid item xs={6}>{new Date(order.date).toLocaleDateString()}</Grid>
@@ -49,8 +55,18 @@ export default function OrdersList({ orders, onClick }) {
                             <Grid item xs={6}>Сума</Grid>
                             <Grid item xs={6}>{renderPrice(order.finalSumWithDiscounts)}</Grid>
                         </Grid>
+
+                        {isAdmin(user) &&
+                          <Box display="flex" gap={1} flexWrap="wrap">
+                              {order.books.map((b, index) => (
+                                  <Box key={index} sx={{ height: '60px', width: '50px' }}>
+                                      <CustomImage imageId={b.book.imageIds[0]}/>
+                                  </Box>
+                              ))}
+                          </Box>}
                     </StyledOrderBox>
                 </Grid>
             ))}
-        </Grid>);
+        </Grid>)
+        ;
 }

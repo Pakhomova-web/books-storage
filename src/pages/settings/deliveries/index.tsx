@@ -109,6 +109,7 @@ export default function Deliveries() {
 
                 <CustomTable data={items}
                              keys={tableKeys}
+                             loading={loading || loadingItems}
                              mobileKeys={[]}
                              totalCount={totalCount}
                              actions={tableActions}

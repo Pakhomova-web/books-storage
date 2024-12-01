@@ -69,8 +69,10 @@ export default function Main({ children }) {
               <>
                 <Toolbar/>
                 <Box sx={styleVariables.overflowHidden}>
-                  <Box sx={pageStyles} position="relative" px={{ lg: '15%', md: '5%', xs: 1 }} pt={1}>
-                      {children}
+                  <Box sx={pageStyles} px={{ lg: '15%', md: '5%', xs: 1 }} pt={1}>
+                    <Box position="relative">
+                        {children}
+                    </Box>
                   </Box>
                 </Box>
               </>}

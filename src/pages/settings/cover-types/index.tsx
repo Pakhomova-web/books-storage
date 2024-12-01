@@ -108,6 +108,7 @@ export default function CoverTypes() {
 
                 <CustomTable data={items}
                              keys={tableKeys}
+                             loading={loading || loadingItems}
                              mobileKeys={[]}
                              actions={tableActions}
                              renderKey={(item: CoverTypeEntity) => item.id}

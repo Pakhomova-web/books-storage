@@ -106,6 +106,7 @@ export default function PublishingHouses() {
 
                 <CustomTable data={items}
                              keys={tableKeys}
+                             loading={loading || loadingItems}
                              totalCount={totalCount}
                              mobileKeys={mobileKeys}
                              actions={tableActions}
