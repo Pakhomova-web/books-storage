@@ -199,7 +199,7 @@ export default function BookDetails() {
     return (
         <>
             <Head>
-                <title>{book ? `${book.name} - ${book.bookSeries.name}` : MAIN_NAME}</title>
+                <title>{book ? `${book.name} - ${book.bookSeries.publishingHouse.name}` : MAIN_NAME}</title>
             </Head>
 
             <Loading show={loading}></Loading>
