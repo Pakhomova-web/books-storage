@@ -5,6 +5,7 @@ import { useUpdateBookNumberInStock } from '@/lib/graphql/queries/book/hook';
 import { BookEntity } from '@/lib/data/types';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
+import { Box } from '@mui/material';
 
 interface IForm {
     name: string,
@@ -41,9 +42,10 @@ export function BookNumberInStockModal({ item, open, onClose }: IProps) {
                      disableBackdropClick={true}
                      onClose={() => onClose()}
                      loading={updating}
+                     formContext={formContext}
                      isSubmitDisabled={!formContext.formState.isValid}
                      onSubmit={onSubmit}>
-            <FormContainer formContext={formContext}>
+            <Box gap={2} display="flex" flexDirection="column">
                 <CustomTextField fullWidth
                                  disabled
                                  id="book-name"
@@ -57,7 +59,7 @@ export function BookNumberInStockModal({ item, open, onClose }: IProps) {
                                  id="number-in-stock"
                                  label="Отримана кількість книг"
                                  name="receivedNumber"/>
-            </FormContainer>
+            </Box>
 
             {updatingError && <ErrorNotification error={updatingError}></ErrorNotification>}
         </CustomModal>
