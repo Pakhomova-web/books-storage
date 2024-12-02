@@ -66,6 +66,7 @@ export default function BookDetails() {
     const { user, setLikedBook, setBookInBasket, setRecentlyViewedBooks } = useAuth();
     const [commentsRowsPerPage] = useState<number>(3);
     const [keys, setKeys] = useState<TableKey<BookEntity>[]>([]);
+    const [authorsKeys, setAuthorsKeys] = useState<TableKey<BookEntity>[]>([]);
     const [mainDetailsKeys, setMainDetailsKeys] = useState<TableKey<BookEntity>[]>([]);
     const [comments, setComments] = useState<CommentEntity[]>([]);
     const [booksFromSeries, setBooksFromSeries] = useState<BookEntity[]>([]);
@@ -112,6 +113,14 @@ export default function BookDetails() {
                 { title: 'Формат, мм', type: 'text', renderValue: (book: BookEntity) => book.format }
             ];
             setKeys((keys as TableKey<BookEntity>[]).filter(key => !!key.renderValue(book)));
+            setAuthorsKeys((book.authors || []).map((author, i) => ({
+                title: i === 0 ? 'Автор' : '',
+                type: 'text',
+                renderValue: () => author.name,
+                onValueClick: () => {
+                    router.push(`/books?authors=${author.id}`);
+                }
+            } as TableKey<BookEntity>)));
             setMainDetailsKeys([
                 {
                     title: 'Серія',
@@ -121,14 +130,6 @@ export default function BookDetails() {
                         router.push(`/books?bookSeries=${book.bookSeries.id}`);
                     }
                 },
-                ...(book.authors || []).map((author, i) => ({
-                    title: i === 0 ? 'Автор' : '',
-                    type: 'text',
-                    renderValue: () => author.name,
-                    onValueClick: () => {
-                        router.push(`/books?authors=${author.id}`);
-                    }
-                } as TableKey<BookEntity>)),
                 ...(book.illustrators || []).map((illustrator, i) => ({
                     title: i === 0 ? 'Іллюстратор' : '',
                     type: 'text',
@@ -194,6 +195,22 @@ export default function BookDetails() {
 
     function isBookInBasket(book: BookEntity) {
         return user?.basketItems?.some(item => item.bookId === book.id);
+    }
+
+    function renderDetailsRow(index: number, key: TableKey<BookEntity>, fullWidth = false) {
+        return (
+            !!key.renderValue(book) &&
+            <Grid item key={index} xs={12} md={fullWidth ? 12 : 6} display="flex" alignItems="center">
+              <Grid container borderBottom={1} borderColor={primaryLightColor}>
+                <Grid item pr={1} xs={6} my={1} px={1}>{key.title}</Grid>
+                <Grid item xs={6} my={1} px={1}>
+                    {key.onValueClick ?
+                        <CustomLink onClick={key.onValueClick}>{key.renderValue(book)}</CustomLink> :
+                        key.renderValue(book)}
+                </Grid>
+              </Grid>
+            </Grid>
+        );
     }
 
     return (
@@ -307,36 +324,20 @@ export default function BookDetails() {
 
                   <Box sx={styleVariables.sectionTitle} mb={1}>Характеристики</Box>
 
-                    {mainDetailsKeys.map((key, index) =>
-                        !!key.renderValue(book) &&
-                      <Grid key={index} container borderBottom={1} borderColor={primaryLightColor}>
-                        <Grid item pr={1} xs={6} my={1} px={1}>{key.title}</Grid>
-                        <Grid item xs={6} my={1} px={1}>
-                            {key.onValueClick ?
-                                <CustomLink onClick={key.onValueClick}>{key.renderValue(book)}</CustomLink> :
-                                key.renderValue(book)}
-                        </Grid>
-                      </Grid>
-                    )}
+                    {[...mainDetailsKeys, ...(authorsKeys.length > 5 ? [] : authorsKeys)]
+                        .map((key, index) => renderDetailsRow(index, key, true))}
                 </Grid>
               </Grid>
 
+                {authorsKeys.length > 5 &&
+                  <Grid container columnSpacing={1} mb={1}>
+                      {authorsKeys.map((key, index) => renderDetailsRow(index, key))}
+                  </Grid>}
+
               <Box sx={styleVariables.sectionTitle} mb={1}>Додаткові деталі</Box>
 
-              <Grid container mb={2} spacing={1}>
-                  {keys.map((key, index) =>
-                      <Grid item key={index} xs={12} md={6}>
-                          <Grid container borderBottom={1} borderColor={primaryLightColor}>
-                              <Grid item xs={6} my={1} px={1}>{key.title}</Grid>
-                              <Grid item xs={6} my={1} px={1}>
-                                  {key.onValueClick ?
-                                      <CustomLink
-                                          onClick={key.onValueClick}>{key.renderValue(book)}</CustomLink> :
-                                      key.renderValue(book)}
-                              </Grid>
-                          </Grid>
-                      </Grid>
-                  )}
+              <Grid container mb={2} columnSpacing={1}>
+                  {keys.map((key, index) => renderDetailsRow(index, key))}
               </Grid>
 
               <Grid container spacing={2}>
@@ -402,7 +403,8 @@ export default function BookDetails() {
               </Grid>
 
                 {!book.bookSeries.default &&
-                  <Grid container position="relative" display="flex" justifyContent="center" alignItems="center" spacing={2}>
+                  <Grid container position="relative" display="flex" justifyContent="center" alignItems="center"
+                        spacing={2}>
                     <Loading show={loadingBooksFromSeries} isSmall={true}></Loading>
 
                     <Grid item xs={12}>
