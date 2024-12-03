@@ -1,4 +1,4 @@
-import { BookEntity, BookSeriesFilter, IOption } from '@/lib/data/types';
+import { AuthorEntity, BookEntity, BookSeriesEntity, BookSeriesFilter, IOption } from '@/lib/data/types';
 import { MultiSelectElement, useForm } from 'react-hook-form-mui';
 import { useCreateBook, useUpdateBook } from '@/lib/graphql/queries/book/hook';
 import React, { useEffect, useState } from 'react';
@@ -30,6 +30,8 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Ages from '@/components/ages';
 import CustomMultipleAutocompleteField from '@/components/form-fields/custom-multiple-autocomplete-field';
 import CustomAutocompleteField from '@/components/form-fields/custom-autocomplete-field';
+import AuthorModal from '@/components/modals/author-modal';
+import BookSeriesModal from '@/components/modals/book-series-modal';
 
 interface IBookModalProps {
     open: boolean,
@@ -113,7 +115,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     const { update, updating, updatingError } = useUpdateBook();
     const { create, creating, creatingError } = useCreateBook();
     const { items: pageTypeOptions, loading: loadingPageTypes } = usePageTypeOptions();
-    const { items: authorOptions, loading: loadingAuthors } = useAuthorOptions();
+    const { items: authorOptions, loading: loadingAuthors, refetch } = useAuthorOptions();
     const { items: languageOptions, loading: loadingLanguages } = useLanguageOptions();
     const [bookSeriesOptions, setBookSeriesOptions] = useState<IOption<string>[]>([]);
     const { items: bookTypeOptions, loading: loadingBookTypes } = useBookTypeOptions();
@@ -123,22 +125,29 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     const [showModalForSeries, setShowModalForSeries] = useState<boolean>();
     const { checkAuth } = useAuth();
     const [activeImage, setActiveImage] = useState<string>();
+    const [authorModalValue, setAuthorModalValue] = useState<AuthorEntity>();
+    const [bookSeriesModalValue, setBookSeriesModalValue] = useState<BookSeriesEntity>();
+    const [loadingAuthorOptions, setLoadingAuthorOptions] = useState<boolean>();
 
     useEffect(() => {
         if (publishingHouseId) {
-            setLoadingBookSeries(true);
-            setBookSeriesOptions([]);
-            getBookSeriesOptions({ publishingHouse: publishingHouseId } as BookSeriesFilter)
-                .then(options => {
-                    setLoadingBookSeries(false);
-                    setBookSeriesOptions(options);
-                    formContext.setValue('bookSeriesId', bookSeriesId ? options.find(({ id }) => id === bookSeriesId)?.id : null);
-                })
-                .catch(() => {
-                    setLoadingBookSeries(false);
-                });
+            fetchBookSeriesOptions();
         }
     }, [publishingHouseId]);
+
+    function fetchBookSeriesOptions() {
+        setLoadingBookSeries(true);
+        setBookSeriesOptions([]);
+        getBookSeriesOptions({ publishingHouse: publishingHouseId } as BookSeriesFilter)
+            .then(options => {
+                setLoadingBookSeries(false);
+                setBookSeriesOptions(options);
+                formContext.setValue('bookSeriesId', bookSeriesId ? options.find(({ id }) => id === bookSeriesId)?.id : null);
+            })
+            .catch(() => {
+                setLoadingBookSeries(false);
+            });
+    }
 
     useEffect(() => {
         setBookSeries(bookSeriesId ? bookSeriesOptions.find(bS => bS.id === bookSeriesId) : null);
@@ -269,6 +278,31 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         return !!name && !!numberOfPages && !!bookTypeIds?.length && !!bookSeriesId && !!price && !!pageTypeId && !!coverTypeId && languageId;
     }
 
+    function onAddBookSeries(value: string) {
+        setBookSeriesModalValue({ name: value, publishingHouse: { id: publishingHouseId } } as BookSeriesEntity);
+    }
+
+    function onAddAuthor(value: string) {
+        setAuthorModalValue({ name: value } as AuthorEntity);
+    }
+
+    function refreshAuthorOptions(updated: boolean) {
+        setAuthorModalValue(null);
+        if (updated) {
+            setLoadingAuthorOptions(true);
+            refetch().then(() => {
+                setLoadingAuthorOptions(false);
+            });
+        }
+    }
+
+    function refreshBookSeriesOptions(updated: boolean) {
+        setBookSeriesModalValue(null);
+        if (updated) {
+            fetchBookSeriesOptions();
+        }
+    }
+
     return (
         <CustomModal title={(!item || !item.id ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' книгу'}
                      open={open}
@@ -315,18 +349,19 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                              onClear={() => formContext.setValue('publishingHouseId', null)}
                                              loading={loadingPublishingHouses}
                                              selected={!loadingPublishingHouses ? publishingHouseId : null}
-                                             onChange={(value: IOption<string>) => formContext.setValue('publishingHouseId', value.id)}/>
+                                             onChange={(value: IOption<string>) => formContext.setValue('publishingHouseId', value?.id)}/>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={3} lg={2}>
                     <CustomAutocompleteField options={bookSeriesOptions}
                                              label="Серія"
                                              required
+                                             onAdd={(value: string) => onAddBookSeries(value)}
                                              disabled={!isAdmin || !publishingHouseId}
                                              onClear={() => formContext.setValue('bookSeriesId', null)}
                                              loading={loadingBookSeries}
                                              selected={!loadingBookSeries ? bookSeriesId : null}
-                                             onChange={(value: IOption<string>) => formContext.setValue('bookSeriesId', value.id)}/>
+                                             onChange={(value: IOption<string>) => formContext.setValue('bookSeriesId', value?.id)}/>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={3} lg={2}>
@@ -391,10 +426,11 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 <Grid item xs={12} md={6} lg={4}>
                     <CustomMultipleAutocompleteField options={authorOptions}
                                                      label="Автори"
+                                                     onAdd={(value: string) => onAddAuthor(value)}
                                                      disabled={!isAdmin}
                                                      showClear={!!authorIds?.length}
                                                      onClear={() => formContext.setValue('authorIds', [])}
-                                                     loading={loadingAuthors}
+                                                     loading={loadingAuthors || loadingAuthorOptions}
                                                      selected={authorIds}
                                                      onChange={(values: IOption<string>[]) => formContext.setValue('authorIds', values.map(v => v.id))}/>
                 </Grid>
@@ -402,10 +438,11 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 <Grid item xs={12} md={6} lg={4}>
                     <CustomMultipleAutocompleteField options={authorOptions}
                                                      label="Іллюстратори"
+                                                     onAdd={(value: string) => onAddAuthor(value)}
                                                      disabled={!isAdmin}
                                                      showClear={!!illustratorIds?.length}
                                                      onClear={() => formContext.setValue('illustratorIds', [])}
-                                                     loading={loadingAuthors}
+                                                     loading={loadingAuthors || loadingAuthorOptions}
                                                      selected={illustratorIds}
                                                      onChange={(values: IOption<string>[]) => formContext.setValue('illustratorIds', values.map(v => v.id))}/>
                 </Grid>
@@ -557,6 +594,14 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                   </Button>
                 </Box>
               </CustomModal>}
+
+            {!!authorModalValue &&
+              <AuthorModal open={true} onClose={(updated = false) => refreshAuthorOptions(updated)}
+                           item={authorModalValue} isAdmin={true}/>}
+
+            {!!bookSeriesModalValue &&
+              <BookSeriesModal open={true} onClose={(updated = false) => refreshBookSeriesOptions(updated)}
+                               item={bookSeriesModalValue} isAdmin={true}/>}
         </CustomModal>
     );
 }

@@ -1,8 +1,9 @@
-import { Autocomplete, Box, TextField } from '@mui/material';
+import { Autocomplete, Box, Button, TextField } from '@mui/material';
 
 import { customFieldClearBtnStyles } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import { IOption } from '@/lib/data/types';
+import { useState } from 'react';
 
 interface IAutocompleteProps {
     loading?: boolean;
@@ -12,19 +13,35 @@ interface IAutocompleteProps {
     onClear?;
     onChange;
     label: string;
+    onAdd?: (_val: string) => void;
     options: IOption<string>[];
     selected: string;
+    error?: string;
 }
 
 export default function CustomAutocompleteField(props: IAutocompleteProps) {
+    const [inputValue, setInputValue] = useState<string>('');
+
+    function renderNoOptionsBox() {
+        return (
+            <Box display="flex" flexDirection="column" gap={1} textAlign="center">
+                Немає такої опції
+                {props.onAdd &&
+                  <Button fullWidth onClick={() => props.onAdd(inputValue)}>Додати</Button>}
+            </Box>
+        );
+    }
+
     return (
         <Box position="relative" mb={1}>
             <Loading show={!!props.loading} isSmall={true}/>
             <Autocomplete disabled={props.disabled}
-                          disableClearable={true}
+                          clearOnBlur={false}
+                          noOptionsText={renderNoOptionsBox()}
+                          onInputChange={(_, value) => setInputValue(value)}
                           onChange={(_event: any, value: IOption<string>) => props.onChange(value)}
                           options={props.options}
-                          getOptionLabel={opt => opt.label}
+                          getOptionLabel={opt => opt?.label || ''}
                           getOptionKey={opt => opt.id}
                           renderOption={(p, option: IOption<string>) =>
                               <Box component="li" {...p} key={p.id}>{option.label}</Box>
@@ -33,8 +50,6 @@ export default function CustomAutocompleteField(props: IAutocompleteProps) {
                           renderInput={(params) => (
                               <TextField {...params} label={props.label} variant="outlined" required={props.required}/>
                           )}/>
-            {!!props.selected && props.onClear && !props.disabled &&
-              <Box sx={customFieldClearBtnStyles} onClick={props.onClear}>Очистити</Box>}
         </Box>
     );
 }

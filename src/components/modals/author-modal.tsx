@@ -30,7 +30,7 @@ export default function AuthorModal({ open, item, onClose, isAdmin }: IAuthorMod
 
     async function onSubmit() {
         try {
-            if (item) {
+            if (!!item?.id) {
                 await update({ id: item.id, ...formContext.getValues() } as AuthorEntity);
             } else {
                 await create({ ...formContext.getValues() } as AuthorEntity);
@@ -42,14 +42,18 @@ export default function AuthorModal({ open, item, onClose, isAdmin }: IAuthorMod
         }
     }
 
+    function isInvalid() {
+        return !formContext.getValues()?.name;
+    }
+
     return (
-        <CustomModal title={(!item ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' автора'}
+        <CustomModal title={(!item || !item.id ? 'Додати' : (!isAdmin ? 'Подивитися' : 'Відредагувати')) + ' автора'}
                      open={open}
                      disableBackdropClick={true}
                      big={true}
                      onClose={() => onClose()}
                      loading={updating || creating}
-                     isSubmitDisabled={!formContext.formState.isValid}
+                     isSubmitDisabled={isInvalid()}
                      formContext={formContext}
                      onSubmit={isAdmin ? onSubmit : null}>
             <Box display="flex" gap={2} flexDirection="column">
