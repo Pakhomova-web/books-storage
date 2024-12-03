@@ -66,13 +66,13 @@ export default function Authors() {
     }
 
     function refreshData(updated = true) {
+        setError(null);
+        setOpenNewModal(false);
+        setSelectedItem(undefined);
         if (updated) {
             setLoadingItems(true);
             refetch(pageSettings, filters).then(() => setLoadingItems(false));
         }
-        setError(null);
-        setOpenNewModal(false);
-        setSelectedItem(undefined);
     }
 
     function onAdd() {
