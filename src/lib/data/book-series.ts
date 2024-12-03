@@ -1,7 +1,12 @@
 import { BookSeriesEntity, BookSeriesFilter, IPageable } from '@/lib/data/types';
 import BookSeries from '@/lib/data/models/book-series';
 import { GraphQLError } from 'graphql/error';
-import { getByName, getValidFilters, getDataByFiltersAndPageSettings } from '@/lib/data/base';
+import {
+    getByName,
+    getCaseInsensitiveSubstringOption,
+    getDataByFiltersAndPageSettings,
+    getValidFilters
+} from '@/lib/data/base';
 
 export async function getBookSeries(pageSettings?: IPageable, filters?: BookSeriesFilter): Promise<{
     items: BookSeriesEntity[],
@@ -10,7 +15,7 @@ export async function getBookSeries(pageSettings?: IPageable, filters?: BookSeri
     const { andFilters } = getValidFilters(filters);
     return getDataByFiltersAndPageSettings(
         BookSeries
-            .find({ default: { $ne: true }})
+            .find({ default: { $ne: true } })
             .populate('publishingHouse'),
         andFilters,
         pageSettings
@@ -65,22 +70,30 @@ export async function createBookSeries(input: BookSeriesEntity) {
     }
 }
 
-export async function updateBookSeries(input: BookSeriesEntity, updateAllBooksInSeries = false) {
+export async function updateBookSeries(input: BookSeriesEntity) {
     if (!input.id) {
         throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const itemByName = await getByName<BookSeriesEntity>(BookSeries, input.name);
+    const itemsByName = await getUnique(input.id, input.name, input.publishingHouseId);
 
-    if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id && input.publishingHouseId === itemByName.publishingHouse.id) {
-        throw new GraphQLError(`Серія з назвою '${input.name}' вже є.`, {
+    if (itemsByName?.length && itemsByName.some(item => item.name.toLowerCase() === input.name.toLowerCase())) {
+        throw new GraphQLError(`Серія з назвою '${input.name}' вже є у видавництві ${itemsByName[0].publishingHouse.name}.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
     await BookSeries.findByIdAndUpdate(input.id, { ...input, publishingHouse: input.publishingHouseId });
 
     return input as BookSeriesEntity;
+}
+
+function getUnique(id: string, name: string, publishingHouseId: string) {
+    return BookSeries.find({
+        _id: { $ne: id },
+        name: getCaseInsensitiveSubstringOption(name),
+        publishingHouse: publishingHouseId
+    }).populate('publishingHouse');
 }
 
 export async function deleteBookSeries(id: string) {
