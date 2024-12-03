@@ -160,7 +160,8 @@ export class BookEntity {
 
 export interface IOption<T> {
     id: T,
-    label: string
+    label: string,
+    description?: string
 }
 
 export interface IPageable {

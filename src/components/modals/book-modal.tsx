@@ -1,4 +1,4 @@
-import { BookEntity, BookSeriesEntity, BookSeriesFilter } from '@/lib/data/types';
+import { BookEntity, BookSeriesFilter, IOption } from '@/lib/data/types';
 import { MultiSelectElement, useForm } from 'react-hook-form-mui';
 import { useCreateBook, useUpdateBook } from '@/lib/graphql/queries/book/hook';
 import React, { useEffect, useState } from 'react';
@@ -28,6 +28,8 @@ import {
 import Loading from '@/components/loading';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Ages from '@/components/ages';
+import CustomMultipleAutocompleteField from '@/components/form-fields/custom-multiple-autocomplete-field';
+import CustomAutocompleteField from '@/components/form-fields/custom-autocomplete-field';
 
 interface IBookModalProps {
     open: boolean,
@@ -103,13 +105,17 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         illustratorIds,
         discount
     } = formContext.watch();
-    const [bookSeries, setBookSeries] = useState<BookSeriesEntity>(item?.bookSeries);
+    const [bookSeries, setBookSeries] = useState<IOption<string>>(item?.bookSeries ? {
+        id: item.bookSeries.id,
+        label: item.bookSeries.name,
+        description: item.bookSeries.description
+    } : null);
     const { update, updating, updatingError } = useUpdateBook();
     const { create, creating, creatingError } = useCreateBook();
     const { items: pageTypeOptions, loading: loadingPageTypes } = usePageTypeOptions();
     const { items: authorOptions, loading: loadingAuthors } = useAuthorOptions();
     const { items: languageOptions, loading: loadingLanguages } = useLanguageOptions();
-    const [bookSeriesOptions, setBookSeriesOptions] = useState<BookSeriesEntity[]>([]);
+    const [bookSeriesOptions, setBookSeriesOptions] = useState<IOption<string>[]>([]);
     const { items: bookTypeOptions, loading: loadingBookTypes } = useBookTypeOptions();
     const { items: publishingHouseOptions, loading: loadingPublishingHouses } = usePublishingHouseOptions();
     const { items: coverTypeOptions, loading: loadingCoverTypes } = useCoverTypeOptions();
@@ -169,7 +175,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             } else {
                 delete data.id;
                 await create(data);
-                onClose(true, bookSeriesOptions.find(bS => bS.id === values.bookSeriesId).default ? null : data.bookSeriesId);
+                onClose(true, data.bookSeriesId);
             }
         } catch (err) {
             checkAuth(err);
@@ -301,25 +307,27 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={3} lg={2}>
-                    <CustomSelectField fullWidth
-                                       required
-                                       disabled={!isAdmin}
-                                       loading={loadingPublishingHouses}
-                                       options={publishingHouseOptions}
-                                       id="publishing-house-id"
-                                       label="Видавництво"
-                                       name="publishingHouseId"/>
+                    <CustomAutocompleteField options={publishingHouseOptions}
+                                             label="Видавництво"
+                                             required
+                                             disabled={!isAdmin}
+                                             showClear={!!publishingHouseId}
+                                             onClear={() => formContext.setValue('publishingHouseId', null)}
+                                             loading={loadingPublishingHouses}
+                                             selected={publishingHouseId}
+                                             onChange={(value: IOption<string>) => formContext.setValue('publishingHouseId', value.id)}/>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={3} lg={2}>
-                    <CustomSelectField fullWidth
-                                       required
-                                       disabled={!isAdmin || !publishingHouseId}
-                                       loading={loadingBookSeries}
-                                       options={bookSeriesOptions}
-                                       id="book-series-id"
-                                       label="Серія"
-                                       name="bookSeriesId"/>
+                    <CustomAutocompleteField options={bookSeriesOptions}
+                                             label="Серія"
+                                             required
+                                             disabled={!isAdmin || !publishingHouseId}
+                                             showClear={!!publishingHouseId}
+                                             onClear={() => formContext.setValue('bookSeriesId', null)}
+                                             loading={loadingBookSeries}
+                                             selected={publishingHouseId}
+                                             onChange={(value: IOption<string>) => formContext.setValue('bookSeriesId', value.id)}/>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={3} lg={2}>
@@ -382,35 +390,25 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 </Grid>
 
                 <Grid item xs={12} md={6} lg={4}>
-                    <Box position="relative" mb={1}>
-                        <Loading isSmall={true} show={loadingAuthors}></Loading>
-                        <MultiSelectElement fullWidth
-                                            options={authorOptions}
-                                            id="authors"
-                                            label="Автори"
-                                            name="authorIds" showCheckbox variant="outlined"/>
-                        {isAdmin && !!authorIds?.length &&
-                          <Box sx={customFieldClearBtnStyles}
-                               onClick={() => formContext.setValue('authorIds', null)}>
-                            Очистити
-                          </Box>}
-                    </Box>
+                    <CustomMultipleAutocompleteField options={authorOptions}
+                                                     label="Автори"
+                                                     disabled={!isAdmin}
+                                                     showClear={!!authorIds?.length}
+                                                     onClear={() => formContext.setValue('authorIds', [])}
+                                                     loading={loadingAuthors}
+                                                     selected={authorIds}
+                                                     onChange={(values: IOption<string>[]) => formContext.setValue('authorIds', values.map(v => v.id))}/>
                 </Grid>
 
                 <Grid item xs={12} md={6} lg={4}>
-                    <Box position="relative" mb={1}>
-                        <Loading isSmall={true} show={loadingAuthors}></Loading>
-                        <MultiSelectElement fullWidth
-                                            options={authorOptions}
-                                            id="illustrators"
-                                            label="Іллюстратори"
-                                            name="illustratorIds" showCheckbox variant="outlined"/>
-                        {isAdmin && !!illustratorIds?.length &&
-                          <Box sx={customFieldClearBtnStyles}
-                               onClick={() => formContext.setValue('illustratorIds', null)}>
-                            Очистити
-                          </Box>}
-                    </Box>
+                    <CustomMultipleAutocompleteField options={authorOptions}
+                                                     label="Іллюстратори"
+                                                     disabled={!isAdmin}
+                                                     showClear={!!illustratorIds?.length}
+                                                     onClear={() => formContext.setValue('illustratorIds', [])}
+                                                     loading={loadingAuthors}
+                                                     selected={illustratorIds}
+                                                     onChange={(values: IOption<string>[]) => formContext.setValue('illustratorIds', values.map(v => v.id))}/>
                 </Grid>
 
                 {isAdmin &&

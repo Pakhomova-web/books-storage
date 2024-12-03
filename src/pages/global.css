@@ -32,3 +32,8 @@ html, body {
     color: white;
     background-color: var(--background);
 }
+
+.MuiAutocomplete-tag {
+    max-width: 27% !important;
+    cursor: default;
+}
