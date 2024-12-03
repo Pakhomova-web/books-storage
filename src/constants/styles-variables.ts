@@ -107,7 +107,8 @@ export const customFieldClearBtnStyles = {
     right: '4px',
     cursor: 'pointer',
     ...styleVariables.hintFontSize,
-    textDecoration: 'underline'
+    textDecoration: 'underline',
+    color: 'rgba(0, 0, 0, 0.6)'
 };
 export const fullHeight = { height: '100svh' };
 export const pageStyles = { overflowY: 'auto', height: 'calc(100svh - 64px)' };

@@ -314,7 +314,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                              showClear={!!publishingHouseId}
                                              onClear={() => formContext.setValue('publishingHouseId', null)}
                                              loading={loadingPublishingHouses}
-                                             selected={publishingHouseId}
+                                             selected={!loadingPublishingHouses ? publishingHouseId : null}
                                              onChange={(value: IOption<string>) => formContext.setValue('publishingHouseId', value.id)}/>
                 </Grid>
 
@@ -323,10 +323,9 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                              label="Серія"
                                              required
                                              disabled={!isAdmin || !publishingHouseId}
-                                             showClear={!!publishingHouseId}
                                              onClear={() => formContext.setValue('bookSeriesId', null)}
                                              loading={loadingBookSeries}
-                                             selected={publishingHouseId}
+                                             selected={!loadingBookSeries ? bookSeriesId : null}
                                              onChange={(value: IOption<string>) => formContext.setValue('bookSeriesId', value.id)}/>
                 </Grid>
 

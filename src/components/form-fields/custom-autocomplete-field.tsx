@@ -1,4 +1,4 @@
-import { Autocomplete, Box, Checkbox, Chip, TextField, Tooltip } from '@mui/material';
+import { Autocomplete, Box, TextField } from '@mui/material';
 
 import { customFieldClearBtnStyles } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
@@ -22,13 +22,18 @@ export default function CustomAutocompleteField(props: IAutocompleteProps) {
             <Loading show={!!props.loading} isSmall={true}/>
             <Autocomplete disabled={props.disabled}
                           disableClearable={true}
-                          onChange={(_event: any, values: IOption<string>) => props.onChange(values)}
+                          onChange={(_event: any, value: IOption<string>) => props.onChange(value)}
                           options={props.options}
-                          value={props.options?.find(opt => props.selected === opt.id)}
+                          getOptionLabel={opt => opt.label}
+                          getOptionKey={opt => opt.id}
+                          renderOption={(p, option: IOption<string>) =>
+                              <Box component="li" {...p} key={p.id}>{option.label}</Box>
+                          }
+                          value={props.selected && !!props.options?.length ? props.options?.find(opt => opt.id === props.selected) : null}
                           renderInput={(params) => (
                               <TextField {...params} label={props.label} variant="outlined" required={props.required}/>
                           )}/>
-            {props.showClear && props.onClear && !props.disabled &&
+            {!!props.selected && props.onClear && !props.disabled &&
               <Box sx={customFieldClearBtnStyles} onClick={props.onClear}>Очистити</Box>}
         </Box>
     );
