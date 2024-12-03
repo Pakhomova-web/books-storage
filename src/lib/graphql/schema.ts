@@ -384,7 +384,6 @@ const typeDefs =  /* GraphQL */ `
         isbn: String
         language: ID
         authors: [ID]
-        illustrators: [ID]
         publishingHouse: ID
         isInStock: Boolean
         withDiscount: Boolean

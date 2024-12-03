@@ -183,7 +183,6 @@ export class BookFilter {
     isbn?: string;
     language?: string;
     authors?: string[];
-    illustrators?: string[];
     publishingHouse?: string;
     isInStock?: boolean;
     withDiscount?: boolean;
@@ -204,7 +203,6 @@ export class BookFilter {
             this.isbn = data.isbn;
             this.language = data.language;
             this.authors = data.authors && typeof data.authors === 'string' ? data.authors.split(',') : data.authors;
-            this.illustrators = data.illustrators && typeof data.illustrators === 'string' ? data.illustrators.split(',') : data.illustrators;
             this.isInStock = data.isInStock ? data.isInStock.toString() === 'true' : null;
             this.withDiscount = data.withDiscount ? data.withDiscount.toString() === 'true' : null;
             this.publishingHouse = data.publishingHouse;

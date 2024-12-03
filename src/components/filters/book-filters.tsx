@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { MultiSelectElement, useForm } from 'react-hook-form-mui';
 import { Box, Grid } from '@mui/material';
 
-import { BookFilter, BookSeriesFilter, IPageable } from '@/lib/data/types';
+import { BookFilter, BookSeriesFilter, IOption, IPageable } from '@/lib/data/types';
 import { useLanguageOptions } from '@/lib/graphql/queries/language/hooks';
 import CustomSelectField from '@/components/form-fields/custom-select-field';
 import CustomTextField from '@/components/form-fields/custom-text-field';
@@ -18,6 +18,8 @@ import { customFieldClearBtnStyles } from '@/constants/styles-variables';
 import Ages from '@/components/ages';
 import { ISortKey } from '@/components/types';
 import Loading from '@/components/loading';
+import CustomAutocompleteField from '@/components/form-fields/custom-autocomplete-field';
+import CustomMultipleAutocompleteField from '@/components/form-fields/custom-multiple-autocomplete-field';
 
 interface IBookFiltersProps {
     defaultValues?: BookFilter,
@@ -59,12 +61,11 @@ export function BookFilters(props: IBookFiltersProps) {
         publishingHouse,
         bookSeries,
         ages,
-        authors,
-        illustrators
+        authors
     } = formContext.watch();
     const { items: bookTypeOptions, loading: loadingBookTypes } = useBookTypeOptions();
     const { items: pageTypeOptions } = usePageTypeOptions();
-    const { items: authorOptions } = useAuthorOptions();
+    const { items: authorOptions, loading: loadingAuthors } = useAuthorOptions();
     const { items: languageOptions } = useLanguageOptions();
     const { items: coverTypeOptions } = useCoverTypeOptions();
     const { items: publishingHouses } = usePublishingHouseOptions();
@@ -132,24 +133,18 @@ export function BookFilters(props: IBookFiltersProps) {
                 </Grid>
 
                 <Grid item xs={12}>
-                    <CustomSelectField fullWidth
-                                       options={publishingHouses}
-                                       id="publishing-house-id"
-                                       label="Видавництво"
-                                       name="publishingHouse"
-                                       showClear={!!publishingHouse}
-                                       onClear={() => clearValue('publishingHouse')}/>
+                    <CustomAutocompleteField options={publishingHouses}
+                                             label="Видавництво"
+                                             selected={publishingHouse}
+                                             onChange={val => formContext.setValue('publishingHouse', val?.id)}/>
                 </Grid>
 
                 <Grid item xs={12}>
-                    <CustomSelectField fullWidth
-                                       options={bookSeriesOptions}
-                                       id="book-series-id"
-                                       loading={loadingBookSeries}
-                                       label="Серія"
-                                       name="bookSeries"
-                                       showClear={!!bookSeries}
-                                       onClear={() => clearValue('bookSeries')}/>
+                    <CustomAutocompleteField options={bookSeriesOptions}
+                                             label="Серія"
+                                             loading={loadingBookSeries}
+                                             selected={bookSeries}
+                                             onChange={val => formContext.setValue('bookSeries', val?.id)}/>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -208,28 +203,13 @@ export function BookFilters(props: IBookFiltersProps) {
                 </Grid>
 
                 <Grid item xs={12}>
-                    <Box position="relative">
-                        <MultiSelectElement fullWidth
-                                            options={authorOptions}
-                                            id="authors"
-                                            label="Автори"
-                                            name="authors" showCheckbox variant="outlined"/>
-                        {!!authors?.length &&
-                          <Box sx={customFieldClearBtnStyles} onClick={() => clearValue('authors')}>Очистити</Box>}
-                    </Box>
-                </Grid>
-
-                <Grid item xs={12}>
-                    <Box position="relative">
-                        <MultiSelectElement fullWidth
-                                            options={authorOptions}
-                                            id="illustrators"
-                                            label="Іллюстратор"
-                                            name="illustrators" showCheckbox variant="outlined"/>
-                        {!!illustrators?.length &&
-                          <Box sx={customFieldClearBtnStyles}
-                               onClick={() => clearValue('illustrators')}>Очистити</Box>}
-                    </Box>
+                    <CustomMultipleAutocompleteField options={authorOptions}
+                                                     label="Автори"
+                                                     showClear={!!authors?.length}
+                                                     onClear={() => formContext.setValue('authors', [])}
+                                                     loading={loadingAuthors}
+                                                     selected={authors}
+                                                     onChange={(values: IOption<string>[]) => formContext.setValue('authors', values.map(v => v.id))}/>
                 </Grid>
 
                 <Grid item xs={12}>

@@ -41,6 +41,7 @@ export async function checkUsageInBook(propKey: keyof BookEntity, ids: string[],
 
 export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilters: any[] } {
     const andFilters = [];
+    const orFilters = [];
 
     if (filters) {
         Object.keys(filters).forEach(key => {
@@ -58,6 +59,11 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
                     }
                 } else if (key === 'archived') {
                     andFilters.push({ archived: !!filters[key] ? true : { $in: [null, false] } });
+                } else if (key === 'authors') {
+                    if (!!filters[key]?.length) {
+                        orFilters.push({ authors: { $in: filters[key] } });
+                        orFilters.push({ illustrators: { $in: filters[key] } });
+                    }
                 } else if (key === 'ages') {
                     andFilters.push({ [key]: { $all: filters[key] } });
                 } else if (key === 'tags') {

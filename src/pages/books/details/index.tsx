@@ -135,7 +135,7 @@ export default function BookDetails() {
                     type: 'text',
                     renderValue: () => illustrator.name,
                     onValueClick: () => {
-                        router.push(`/books?illustrators=${illustrator.id}`);
+                        router.push(`/books?authors=${illustrator.id}`);
                     }
                 } as TableKey<BookEntity>)),
                 ...(book.bookTypes || []).map((bookType, i) => ({

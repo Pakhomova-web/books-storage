@@ -345,8 +345,6 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                              label="Видавництво"
                                              required
                                              disabled={!isAdmin}
-                                             showClear={!!publishingHouseId}
-                                             onClear={() => formContext.setValue('publishingHouseId', null)}
                                              loading={loadingPublishingHouses}
                                              selected={!loadingPublishingHouses ? publishingHouseId : null}
                                              onChange={(value: IOption<string>) => formContext.setValue('publishingHouseId', value?.id)}/>
@@ -358,7 +356,6 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                              required
                                              onAdd={(value: string) => onAddBookSeries(value)}
                                              disabled={!isAdmin || !publishingHouseId}
-                                             onClear={() => formContext.setValue('bookSeriesId', null)}
                                              loading={loadingBookSeries}
                                              selected={!loadingBookSeries ? bookSeriesId : null}
                                              onChange={(value: IOption<string>) => formContext.setValue('bookSeriesId', value?.id)}/>
