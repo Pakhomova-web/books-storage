@@ -349,7 +349,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                                         price={price}
                                         pageUrl="/profile/orders"
                                         discount={discount}
-                                        editable={isAdmin(user) && !orderItem.isDone && !orderItem.isCanceled}
+                                        editable={isAdmin(user) && !orderItem.isDone && !orderItem.isCanceled && !isSent}
                                         onRemove={() => onRemove(book.id)}
                                         onCountChange={(count: number) => onChangeBookCount(book.id, count)}/>
                         </Grid>

@@ -1,7 +1,6 @@
 import { AppProps } from 'next/app';
 import { ApolloProvider } from '@apollo/client';
 import React from 'react';
-import Head from 'next/head';
 
 import { apolloClient } from '@/lib/apollo';
 import './global.css';
@@ -14,6 +13,9 @@ const theme = createTheme({
         primary: {
             main: '#448AFF'
         }
+    },
+    typography: {
+        fontFamily: 'Tomes New Roman'
     }
 });
 
