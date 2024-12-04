@@ -31,6 +31,10 @@ interface IProps {
     onClose: (updated?: boolean) => void;
 }
 
+class Form extends OrderEntity {
+    email: string;
+}
+
 export default function OrderModal({ open, order, onClose }: IProps) {
     const { user } = useAuth();
     const [orderItem, setOrderItem] = useState<OrderEntity>(order);
@@ -39,7 +43,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
     const { update: cancel, updating: canceling, updatingError: cancelingError } = useCancelOrder();
     const { items: deliveries, loading: loadingDeliveries } = useDeliveries();
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
-    const formContext = useForm({
+    const formContext = useForm<Form>({
         defaultValues: {
             ...orderItem,
             date: new Date(orderItem?.date).toLocaleDateString(),
@@ -55,7 +59,12 @@ export default function OrderModal({ open, order, onClose }: IProps) {
         city,
         postcode,
         novaPostOffice,
-        trackingNumber
+        trackingNumber,
+        isConfirmed,
+        isSent,
+        isPaid,
+        isPartlyPaid,
+        isDone
     } = formContext.watch();
 
     useEffect(() => {
@@ -198,7 +207,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
     return (
         <CustomModal open={open} big={true}
                      title={'Замовлення № ' + renderOrderNumber(orderItem?.orderNumber)}
-                     onClose={onClose}
+                     onClose={() => onClose()}
                      isSubmitDisabled={submitDisabled}
                      onSubmit={isAdmin(user) && !orderItem.isDone && !orderItem.isCanceled ? onSubmit : null}
                      loading={!orderItem || updating || loadingDeliveries || canceling}>
@@ -386,37 +395,40 @@ export default function OrderModal({ open, order, onClose }: IProps) {
 
                     {isAdmin(user) && <>
                       <Grid item xs={12} md={6}>
-                        <CustomCheckbox
-                          disabled={orderItem.isPaid || orderItem.isPartlyPaid || orderItem.isSent || orderItem.isDone || orderItem.isCanceled}
-                          label="Замовлення підтверджене" name="isConfirmed"/>
+                        <CustomCheckbox label="Замовлення підтверджене"
+                                        checked={isConfirmed}
+                                        disabled={isPaid || isPartlyPaid || isSent || orderItem.isDone || orderItem.isCanceled}
+                                        name="isConfirmed"/>
                       </Grid>
 
                       <Grid item xs={12} md={6}>
                         <CustomCheckbox
-                          disabled={!orderItem.isConfirmed || orderItem.isSent || orderItem.isDone || orderItem.isCanceled}
+                          checked={isPaid}
+                          disabled={isPartlyPaid || !isConfirmed || isSent || orderItem.isDone || orderItem.isCanceled}
                           label="Замовлення оплачене"
                           name="isPaid"/>
                       </Grid>
 
                       <Grid item xs={12} md={6}>
-                        <CustomCheckbox
-                          disabled={!orderItem.isConfirmed || orderItem.isSent || orderItem.isDone || orderItem.isCanceled}
-                          label="Зроблена передпалата"
-                          name="isPartlyPaid"/>
+                        <CustomCheckbox checked={isPartlyPaid}
+                                        disabled={isPaid || !isConfirmed || isSent || orderItem.isDone || orderItem.isCanceled}
+                                        label="Зроблена передпалата"
+                                        name="isPartlyPaid"/>
                       </Grid>
 
                       <Grid item xs={12} md={6}>
                         <CustomCheckbox
-                          disabled={(!isSelfPickup(delivery.id) && !trackingNumber) || !orderItem.isConfirmed || orderItem.isDone || orderItem.isCanceled}
+                          checked={isSent}
+                          disabled={(!isSelfPickup(delivery.id) && !trackingNumber) || !isConfirmed || orderItem.isDone || orderItem.isCanceled}
                           label={'Замовлення ' + (isSelfPickup(delivery.id) ? 'вручене' : 'відправлене')}
                           name="isSent"/>
                       </Grid>
 
                       <Grid item xs={12} md={6}>
-                        <CustomCheckbox
-                          disabled={!orderItem.isSent || orderItem.isDone || orderItem.isCanceled}
-                          label="Завершити замовлення"
-                          name="isDone"/>
+                        <CustomCheckbox checked={isDone}
+                                        disabled={!isSent || orderItem.isDone || orderItem.isCanceled}
+                                        label="Завершити замовлення"
+                                        name="isDone"/>
                       </Grid>
                     </>}
                 </Grid>

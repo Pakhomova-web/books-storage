@@ -1,8 +1,8 @@
 import { useAuth } from '@/components/auth-context';
 import { IOrderFilter, IPageable, OrderEntity } from '@/lib/data/types';
 import { isAdmin } from '@/utils/utils';
-import React, { useState } from 'react';
-import { useOrders } from '@/lib/graphql/queries/order/hook';
+import React, { useEffect, useState } from 'react';
+import { getBalance, useOrders } from '@/lib/graphql/queries/order/hook';
 import { ApolloError } from '@apollo/client';
 import Loading from '@/components/loading';
 import ErrorNotification from '@/components/error-notification';
@@ -38,6 +38,11 @@ export default function Orders() {
     const [loadingItems, setLoadingItems] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
     const formContext = useForm();
+    const [balance, setBalance] = useState<number>(0);
+
+    useEffect(() => {
+        getBalance().then(value => setBalance(value));
+    }, [items]);
 
     function refreshData(updated = true) {
         if (updated) {
@@ -73,7 +78,7 @@ export default function Orders() {
     }
 
     return (
-        <SettingsMenu activeUrl="orders">
+        <SettingsMenu activeUrl="orders" balance={balance}>
             <Head>
                 <title>Налаштування - Замовлення</title>
             </Head>

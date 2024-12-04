@@ -37,3 +37,7 @@ html, body {
     max-width: 27% !important;
     cursor: default;
 }
+
+.MuiFormControlLabel-root {
+    margin: 0;
+}

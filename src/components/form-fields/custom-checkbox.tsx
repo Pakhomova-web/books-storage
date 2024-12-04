@@ -1,21 +1,25 @@
-import { Box } from '@mui/material';
+import { Box, Checkbox } from '@mui/material';
 import { CheckboxElement } from 'react-hook-form-mui';
-
-import { styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
+import React from 'react';
 
 interface ICustomCheckbox {
     loading?: boolean;
     disabled?: boolean;
+    checked?: boolean; // for disabled values
     label: string;
     name: string;
 }
 
-export default function CustomCheckbox({ loading, label, name, disabled = false }: ICustomCheckbox) {
+export default function CustomCheckbox({ loading, label, name, disabled = false, checked = false }: ICustomCheckbox) {
     return (
         <Box position="relative">
             <Loading show={!!loading} isSmall={true}/>
-            <CheckboxElement label={label} disabled={disabled} name={name} sx={{ marginLeft: 1 }}/>
+            {disabled ?
+                <Box display="flex" alignItems="center">
+                    <Checkbox checked={checked} disabled={true}/>{label}
+                </Box> :
+                <CheckboxElement label={label} name={name}/>}
         </Box>
     );
 }

@@ -2,9 +2,10 @@ import { IOrderFilter, IPageable, OrderEntity } from '@/lib/data/types';
 import Order from '@/lib/data/models/order';
 import { GraphQLError } from 'graphql/error';
 import { getValidFilters } from '@/lib/data/base';
-import OrderNumber from '@/lib/data/models/orderNumber';
+import OrderNumber from '@/lib/data/models/order-number';
 import User from '@/lib/data/models/user';
 import Book from '@/lib/data/models/book';
+import Balance from '@/lib/data/models/balance';
 
 export async function getOrders(pageSettings?: IPageable, filters?: IOrderFilter) {
     const { quickSearch, andFilters } = getValidFilters(filters);
@@ -84,6 +85,7 @@ export async function updateOrder(input: OrderEntity) {
     delete data.user;
 
     const order = await Order.findById(input.id);
+    const balance = await Balance.findOne();
 
     if (!order.isConfirmed && input.isConfirmed) {
         const books = await Book.find({ _id: { $in: input.books.map(b => b.bookId) } });
@@ -94,6 +96,10 @@ export async function updateOrder(input: OrderEntity) {
 
             return book.save();
         }));
+
+        input.books.forEach(({ count, price, discount }) =>
+            balance.value = balance.value + count * price * (100 - discount) / 100);
+        await balance.save();
     } else if (!order.isDone && !order.isSent && !order.isPaid && !order.isPartlyPaid && order.isConfirmed && !input.isConfirmed) {
         const books = await Book.find({ _id: { $in: input.books.map(b => b.bookId) } });
 
@@ -103,16 +109,27 @@ export async function updateOrder(input: OrderEntity) {
 
             return book.save();
         }));
+
+        input.books.forEach(({ count, price, discount }) =>
+            balance.value = balance.value - count * price * (100 - discount) / 100);
+        await balance.save();
     }
     await Order.findByIdAndUpdate(input.id, data);
 
     return input as OrderEntity;
 }
 
+export async function getBalance() {
+    const balance = await Balance.findOne();
+
+    return balance?.value || 0;
+}
+
 export async function cancelOrder(id: string) {
     const order = await Order.findById(id);
 
     if (order.isConfirmed) {
+        const balance = await Balance.findOne();
         const books = await Book.find({ _id: { $in: order.books.map(b => b.bookId) } });
 
         await Promise.all(books.map(book => {
@@ -120,6 +137,9 @@ export async function cancelOrder(id: string) {
 
             return book.save();
         }));
+        order.books.forEach(({ count, price, discount }) =>
+            balance.value = balance.value - count * price * (100 - discount) / 100);
+        await balance.save();
     }
 
     order.isCanceled = true;

@@ -3,6 +3,7 @@ import Book from '@/lib/data/models/book';
 import { GraphQLError } from 'graphql/error';
 import { getCaseInsensitiveSubstringOption, getValidFilters } from '@/lib/data/base';
 import BookSeries from '@/lib/data/models/book-series';
+import Balance from '@/lib/data/models/balance';
 
 export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): Promise<{
     items: BookEntity[],
@@ -113,7 +114,16 @@ export async function createBook(input: Partial<BookEntity>) {
         return null;
     } else {
         const item = new Book(_getBookData(input));
+        const balance = await Balance.findOne();
 
+        if (item.numberInStock) {
+            if (balance) {
+                balance.value = balance.value - item.numberInStock * item.price;
+                await balance.save();
+            } else {
+                await Balance.create({ value: -1 * item.numberInStock * item.price });
+            }
+        }
         await item.save();
 
         return { ...input, id: item.id } as BookEntity;

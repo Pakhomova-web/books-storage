@@ -9,6 +9,7 @@ import { primaryLightColor, styleVariables } from '@/constants/styles-variables'
 import CustomImage from '@/components/custom-image';
 import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import Badge from '@mui/material/Badge';
 
 const menuItems = [
     {
@@ -112,7 +113,7 @@ const StyledMenuContainer = styled(Grid)(({ theme }) => ({
     }
 }));
 
-export default function SettingsMenu({ children, activeUrl, onAddClick = null }) {
+export default function SettingsMenu({ children, activeUrl, balance = null, onAddClick = null }) {
     const router = useRouter();
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
@@ -135,7 +136,7 @@ export default function SettingsMenu({ children, activeUrl, onAddClick = null })
             <Grid item xs={12} borderBottom={1}
                   borderColor={primaryLightColor}
                   sx={styleVariables.bigTitleFontSize}
-                  display="flex" justifyContent="space-between"
+                  display="flex" justifyContent="space-between" alignItems="center"
                   p={2}>
                 <Box display="flex" gap={1} alignItems="center" flexWrap="wrap">
                     <Box display={{ xs: 'flex', md: 'none' }}>
@@ -150,6 +151,9 @@ export default function SettingsMenu({ children, activeUrl, onAddClick = null })
                     <IconButton onClick={onAddClick}><AddIcon/></IconButton>
                   </Box>
                 }
+
+                {!!balance &&
+                  <Box sx={styleVariables.hintFontSize}>Баланс: {balance}</Box>}
             </Grid>
 
             {showMenu && <StyledMenuContainer item xs={12} md={3} lg={2}>

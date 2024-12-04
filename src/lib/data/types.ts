@@ -80,6 +80,7 @@ export class BookEntity {
     numberSold: number;
     price: number;
     archived: boolean;
+    purchasePrice?: number;
     bookSeriesId: string;
     bookSeries?: BookSeriesEntity;
     coverTypeId: string;
@@ -111,6 +112,7 @@ export class BookEntity {
             this.numberInStock = data.numberInStock;
             this.numberSold = data.numberSold;
             this.price = data.price;
+            this.purchasePrice = data.purchasePrice;
             this.bookSeriesId = data.bookSeriesId;
             this.bookSeries = data.bookSeries;
             this.coverTypeId = data.coverTypeId;
@@ -253,8 +255,8 @@ export class UserEntity {
     district?: string;
     postcode?: number;
     novaPostOffice?: number;
-    phoneNumber?: String;
-    instagramUsername?: String;
+    phoneNumber?: string;
+    instagramUsername?: string;
 
     constructor(data?) {
         if (data) {
@@ -345,30 +347,30 @@ export class OrderEntity {
 
     constructor(data?) {
         if (data) {
-            this.id = data.id;
-            this.userId = data.userId;
-            this.user = data.user;
-            this.orderNumber = data.orderNumber;
-            this.firstName = data.firstName;
-            this.lastName = data.lastName;
-            this.instagramUsername = data.instagramUsername;
-            this.phoneNumber = data.phoneNumber;
-            this.trackingNumber = data.trackingNumber;
-            this.deliveryId = data.deliveryId;
-            this.delivery = data.delivery;
-            this.region = data.region;
-            this.district = data.district;
-            this.city = data.city;
-            this.postcode = data.postcode;
-            this.novaPostOffice = data.novaPostOffice;
-            this.isCanceled = data.isCanceled;
-            this.isConfirmed = data.isConfirmed;
-            this.isPaid = data.isPaid;
-            this.isPartlyPaid = data.isPartlyPaid;
-            this.isDone = data.isDone;
-            this.isSent = data.isSent;
-            this.comment = data.comment;
-            this.adminComment = data.adminComment;
+            this.id = data.id || null;
+            this.userId = data.userId || null;
+            this.user = data.user || null;
+            this.orderNumber = data.orderNumber || null;
+            this.firstName = data.firstName || null;
+            this.lastName = data.lastName || null;
+            this.instagramUsername = data.instagramUsername || null;
+            this.phoneNumber = data.phoneNumber || null;
+            this.trackingNumber = data.trackingNumber || null;
+            this.deliveryId = data.deliveryId || null;
+            this.delivery = data.delivery || null;
+            this.region = data.region || null;
+            this.district = data.district || null;
+            this.city = data.city || null;
+            this.postcode = data.postcode || null;
+            this.novaPostOffice = data.novaPostOffice || null;
+            this.isCanceled = !!data.isCanceled;
+            this.isConfirmed = !!data.isConfirmed;
+            this.isPaid = !!data.isPaid;
+            this.isPartlyPaid = !!data.isPartlyPaid;
+            this.isDone = !!data.isDone;
+            this.isSent = !!data.isSent;
+            this.comment = data.comment || null;
+            this.adminComment = data.adminComment || null;
             this.finalSum = 0;
             this.finalSumWithDiscounts = 0;
             this.booksCount = 0;
@@ -424,7 +426,7 @@ export class OrderEntity {
                     };
                 } else {
                     return {
-                        value: 'Відправлено', index: 4
+                        value: this.isPartlyPaid ? 'Відправлено, очікує післяплати' : 'Відправлено', index: 4
                     };
                 }
             }
@@ -438,6 +440,10 @@ export interface IOrderStatus {
 }
 
 export interface OrderNumberEntity {
+    value: number;
+}
+
+export interface BalanceEntity {
     value: number;
 }
 

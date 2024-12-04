@@ -67,6 +67,7 @@ export type Book = {
   numberOfPages: Scalars['Int']['output'];
   pageType: PageType;
   price: Scalars['Float']['output'];
+  purchasePrice?: Maybe<Scalars['Float']['output']>;
   tags?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
 };
 
@@ -88,7 +89,8 @@ export type BookCreateInput = {
   numberInStock?: InputMaybe<Scalars['Int']['input']>;
   numberOfPages: Scalars['Int']['input'];
   pageTypeId: Scalars['ID']['input'];
-  price?: InputMaybe<Scalars['Float']['input']>;
+  price: Scalars['Float']['input'];
+  purchasePrice?: InputMaybe<Scalars['Float']['input']>;
   tags?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
@@ -696,6 +698,7 @@ export type PublishingHouseUpdateInput = {
 export type Query = {
   authorById?: Maybe<Author>;
   authors?: Maybe<AuthorSubList>;
+  balance?: Maybe<Scalars['Float']['output']>;
   bookById?: Maybe<Book>;
   bookComments?: Maybe<Array<Comment>>;
   bookSeries?: Maybe<BookSeriesSubList>;
@@ -1180,6 +1183,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
   numberOfPages?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   pageType?: Resolver<ResolversTypes['PageType'], ParentType, ContextType>;
   price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  purchasePrice?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   tags?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
@@ -1388,6 +1392,7 @@ export type PublishingHouseSubListResolvers<ContextType = any, ParentType extend
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   authorById?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<QueryAuthorByIdArgs, 'id'>>;
   authors?: Resolver<Maybe<ResolversTypes['AuthorSubList']>, ParentType, ContextType, Partial<QueryAuthorsArgs>>;
+  balance?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   bookById?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QueryBookByIdArgs, 'id'>>;
   bookComments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType, RequireFields<QueryBookCommentsArgs, 'id' | 'page' | 'rowsPerPage'>>;
   bookSeries?: Resolver<Maybe<ResolversTypes['BookSeriesSubList']>, ParentType, ContextType, Partial<QueryBookSeriesArgs>>;

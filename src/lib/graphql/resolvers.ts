@@ -65,7 +65,8 @@ import {
     updateUser
 } from '@/lib/data/user';
 import { createDelivery, deleteDelivery, getDeliveries, updateDelivery } from '@/lib/data/delivery';
-import { cancelOrder, createOrder, getOrders, updateOrder } from '@/lib/data/order';
+import { cancelOrder, createOrder, getBalance, getOrders, updateOrder } from '@/lib/data/order';
+import { isAdmin } from '@/utils/utils';
 
 function parseError<T>(error): T {
     switch (error.extensions?.code) {
@@ -106,6 +107,10 @@ function parseError<T>(error): T {
 
 const resolvers: Resolvers = {
     Query: {
+        balance: async (_root, _, { user }) => {
+            _checkUser(user);
+            return isAdmin(user) ? getBalance() : null;
+        },
         languages: async (_root, { pageSettings, filters }) => {
             return getLanguages(<IPageable>pageSettings, <LanguageEntity>filters).catch(error => parseError(error));
         },

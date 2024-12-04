@@ -80,6 +80,12 @@ export const createOrderQuery = gql`
     }
 `;
 
+export const balanceQuery = gql`
+    query Balance {
+        balance
+    }
+`;
+
 export const updateOrderQuery = gql`
     mutation UpdateOrder($input: OrderUpdateInput!) {
         item: updateOrder(input: $input) {

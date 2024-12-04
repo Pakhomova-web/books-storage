@@ -173,8 +173,11 @@ export default function Basket() {
 
     function onSubmit() {
         if (!submitDisabled) {
+            const { novaPostOffice, postcode, ...values } = formContext.getValues();
             create({
-                ...formContext.getValues(),
+                ...values,
+                postcode: postcode || null,
+                novaPostOffice: novaPostOffice || null,
                 books: items.map(book => ({
                     bookId: book.id,
                     count: countFields.get(book.id),

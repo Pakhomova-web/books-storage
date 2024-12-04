@@ -53,6 +53,7 @@ const typeDefs =  /* GraphQL */ `
         description: String
         numberOfPages: Int!
         price: Float!
+        purchasePrice: Float
         numberInStock: Int
         archived: Boolean
         bookTypes: [BookType!]
@@ -170,6 +171,7 @@ const typeDefs =  /* GraphQL */ `
         booksWithDiscount(rowsPerPage: Int!): [Book!]
         booksWithNotApprovedComments(pageSettings: PageableInput): BookSubList
         booksByIds(ids: [ID!], pageSettings: PageableInput): BookSubList
+        balance: Float
 
         refreshToken(refreshToken: String!): UserToken!
     }
@@ -332,7 +334,8 @@ const typeDefs =  /* GraphQL */ `
         name: String!
         description: String
         numberOfPages: Int!
-        price: Float
+        price: Float!
+        purchasePrice: Float
         numberInStock: Int
         bookTypeIds: [ID!]!
         bookSeriesId: ID!
