@@ -128,6 +128,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     const [authorModalValue, setAuthorModalValue] = useState<AuthorEntity>();
     const [bookSeriesModalValue, setBookSeriesModalValue] = useState<BookSeriesEntity>();
     const [loadingAuthorOptions, setLoadingAuthorOptions] = useState<boolean>();
+    const [showModalWithNoNumberInStock, setShowModalWithNoNumberInStock] = useState<boolean>(false);
 
     useEffect(() => {
         if (publishingHouseId) {
@@ -161,6 +162,12 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         if (!submit && !!item?.id && !item?.bookSeries.default) {
             setShowModalForSeries(true);
             return;
+        }
+        if (!submit && !item?.id && !formContext.getValues().numberInStock) {
+            setShowModalWithNoNumberInStock(true);
+            return;
+        } else if (submit) {
+            setShowModalWithNoNumberInStock(false);
         }
 
         setShowModalForSeries(false);
@@ -571,6 +578,12 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             {(creatingError || updatingError) &&
               <ErrorNotification error={creatingError || updatingError}></ErrorNotification>
             }
+
+            {showModalWithNoNumberInStock &&
+              <CustomModal open={true} title="В формі не вказана кількість в наявності. Продовжити?"
+                           onSubmit={() => onSubmit(true)}
+                           onClose={() => setShowModalWithNoNumberInStock(false)}>
+              </CustomModal>}
 
             {showModalForSeries &&
               <CustomModal open={true} title="Відредагувати одну книгу чи всю серію?">
