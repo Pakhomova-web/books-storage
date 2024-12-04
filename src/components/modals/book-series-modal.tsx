@@ -36,7 +36,7 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
 
     async function onSubmit() {
         try {
-            if (item) {
+            if (!!item?.id) {
                 await update(formContext.getValues() as BookSeriesEntity);
             } else {
                 await create(formContext.getValues() as BookSeriesEntity);
