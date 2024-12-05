@@ -49,12 +49,12 @@ export async function _useAllItems<T>(query: DocumentNode, key: string, pageSett
 }
 
 export function _useItemById<T>(query: DocumentNode, key: string, id: string) {
-    const { data, loading, error } = useQuery(query, {
+    const { data, loading, error, refetch } = useQuery(query, {
         fetchPolicy: 'no-cache',
         variables: { id }
     });
 
-    return { loading, error, item: data ? data[key] as T : null };
+    return { loading, error, item: data ? data[key] as T : null, refetch };
 }
 
 export async function getItemById<T>(query: DocumentNode, id: string): Promise<T> {

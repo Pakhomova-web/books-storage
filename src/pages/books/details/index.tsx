@@ -1,4 +1,4 @@
-import { Box, Button, Grid, useTheme } from '@mui/material';
+import { Box, Button, Grid, IconButton, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -8,6 +8,8 @@ import { ApolloError } from '@apollo/client';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import EditIcon from '@mui/icons-material/Edit';
 
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
@@ -31,7 +33,7 @@ import { MAIN_NAME } from '@/constants/main-name';
 import DiscountBooks from '@/components/books/discount-books';
 import RecentlyViewedBooks from '@/components/books/recently-viewed-books';
 import IconWithText from '@/components/icon-with-text';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import BookModal from '@/components/modals/book-modal';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
     height: '40px',
@@ -61,7 +63,7 @@ export default function BookDetails() {
     const router = useRouter();
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
-    const { loading, error, item: book } = useBook(router.query.id as string);
+    const { loading, error, item: book, refetch } = useBook(router.query.id as string);
     const [commentsPage, setCommentsPage] = useState<number>(0);
     const { user, setLikedBook, setBookInBasket, setRecentlyViewedBooks } = useAuth();
     const [commentsRowsPerPage] = useState<number>(3);
@@ -76,6 +78,8 @@ export default function BookDetails() {
     const [loadingComments, setLoadingComments] = useState<boolean>(false);
     const [commentsError, setCommentsError] = useState<ApolloError>();
     const [imageIds, setImageIds] = useState<string[] | null>();
+    const [showEditModal, setShowEditModal] = useState<boolean>(false);
+    const [refetching, setRefetching] = useState<boolean>(false);
 
     useEffect(() => {
         if (book) {
@@ -213,20 +217,32 @@ export default function BookDetails() {
         );
     }
 
+    function onCloseEditModal(updated: boolean) {
+        setShowEditModal(false);
+        if (updated) {
+            setRefetching(true)
+            refetch().then(() => setRefetching(false));
+        }
+    }
+
     return (
         <>
             <Head>
                 <title>{book ? `${book.name} - ${book.bookSeries.publishingHouse.name}` : MAIN_NAME}</title>
             </Head>
 
-            <Loading show={loading}></Loading>
+            <Loading show={loading || refetching}></Loading>
 
             <Grid container>
                 <Grid item sm={6}>
                     <Button variant="outlined" onClick={onBackClick}><ArrowBackIcon/>Назад</Button>
                 </Grid>
 
-                {book && <StyledTitleGrid item sm={6} p={1}>{book.name}</StyledTitleGrid>}
+                {book &&
+                  <StyledTitleGrid item sm={6} p={1} display="flex" gap={1}>
+                      {book.name}
+                      {isAdmin(user) && <IconButton onClick={() => setShowEditModal(true)}><EditIcon/></IconButton>}
+                  </StyledTitleGrid>}
             </Grid>
 
             {book && <>
@@ -472,5 +488,8 @@ export default function BookDetails() {
             <DeliveriesBox/>
 
             <SocialMediaBox/>
+
+            {showEditModal &&
+              <BookModal open={true} isAdmin={true} item={book} onClose={(updated) => onCloseEditModal(updated)}/>}
         </>);
 }
