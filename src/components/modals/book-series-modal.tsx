@@ -9,13 +9,14 @@ import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
 import { Box, Grid } from '@mui/material';
 import React from 'react';
+import { ApolloError } from '@apollo/client';
 
 interface IBookSeriesModalProps {
     open: boolean,
     item?: BookSeriesEntity,
     isSubmitDisabled?: boolean,
     isAdmin?: boolean,
-    onClose: (updated?: boolean) => void
+    onClose: (item?: BookSeriesEntity) => void
 }
 
 export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookSeriesModalProps) {
@@ -35,16 +36,14 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
     const { checkAuth } = useAuth();
 
     async function onSubmit() {
-        try {
-            if (!!item?.id) {
-                await update(formContext.getValues() as BookSeriesEntity);
-            } else {
-                await create(formContext.getValues() as BookSeriesEntity);
-            }
-
-            onClose(true);
-        } catch (err) {
-            checkAuth(err);
+        if (!!item?.id) {
+            update(formContext.getValues() as BookSeriesEntity)
+                .then((val: BookSeriesEntity) => onClose(val))
+                .catch((err: ApolloError) => checkAuth(err));
+        } else {
+            create(formContext.getValues() as BookSeriesEntity)
+                .then((val: BookSeriesEntity) => onClose(val))
+                .catch((err: ApolloError) => checkAuth(err));
         }
     }
 

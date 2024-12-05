@@ -290,9 +290,7 @@ const resolvers: Resolvers = {
             _checkUser(user);
             return updateBook(input, updateAllBooksInSeries).catch(error => parseError(error));
         },
-        updateBookNumberInStock: async (_root, { input }: {
-            input: { id: string, numberInStock: number }
-        }, { user }) => {
+        updateBookNumberInStock: async (_root, { input }, { user }) => {
             _checkUser(user);
             return updateBookNumberInStock(input).catch(error => parseError(error));
         },

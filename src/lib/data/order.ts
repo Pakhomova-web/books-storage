@@ -122,7 +122,7 @@ export async function updateOrder(input: OrderEntity) {
 export async function getBalance() {
     const balance = await Balance.findOne();
 
-    return balance?.value || 0;
+    return Number(balance?.value.toFixed(2)) || 0;
 }
 
 export async function cancelOrder(id: string) {

@@ -1,3 +1,6 @@
+import { styled } from '@mui/material/styles';
+import { Box } from '@mui/material';
+
 const gray = 'rgb(244, 244, 244)';
 export const warnColor = '#d00';
 export const primaryColor = '#448AFF';
@@ -100,6 +103,14 @@ export const styleVariables = {
         gap: 2
     }
 };
+
+export const StyledHintBox = styled(Box)(({ theme }) => ({
+    cursor: 'pointer',
+    opacity: 0.9,
+    ':hover': {
+        color: theme.palette.primary.main
+    }
+}));
 
 export const customFieldClearBtnStyles = {
     position: 'absolute',

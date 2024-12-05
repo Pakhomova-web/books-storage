@@ -8,15 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { getBookNamesByQuickSearch } from '@/lib/graphql/queries/book/hook';
 import { IOption } from '@/lib/data/types';
 import { useRouter } from 'next/router';
-
-
-const StyledHintBox = styled(Box)(({ theme }) => ({
-    cursor: 'pointer',
-    opacity: 0.9,
-    ':hover': {
-        color: theme.palette.primary.main
-    }
-}));
+import { StyledHintBox } from '@/constants/styles-variables';
 
 export default function QuickSearchModal({ open, onClose }) {
     const router = useRouter();

@@ -143,6 +143,7 @@ const typeDefs =  /* GraphQL */ `
     type BookHint {
         id: ID!
         name: String!
+        numberInStock: Int
     }
 
     type Query {
@@ -315,7 +316,8 @@ const typeDefs =  /* GraphQL */ `
 
     input BookUpdateNumberInStockUpdateInput {
         id: ID!
-        numberInStock: Int!
+        receivedNumber: Int!
+        purchasePrice: Float!
     }
 
     input UpdateCommentInput {

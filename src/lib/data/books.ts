@@ -116,15 +116,13 @@ export async function createBook(input: Partial<BookEntity>) {
         const item = new Book(_getBookData(input));
         const balance = await Balance.findOne();
 
-        if (item.numberInStock) {
-            if (balance) {
-                balance.value = balance.value - item.numberInStock * item.price;
-                await balance.save();
-            } else {
-                await Balance.create({ value: -1 * item.numberInStock * item.price });
-            }
+        if (item.numberInStock && item.purchasePrice) {
+            balance.value = balance.value - item.numberInStock * item.purchasePrice;
         }
-        await item.save();
+        await Promise.all([
+            balance.save(),
+            item.save()
+        ]);
 
         return { ...input, id: item.id } as BookEntity;
     }
@@ -159,15 +157,24 @@ export async function updateBook(input: Partial<BookEntity>, updateAllBooksInSer
     return { id: input.id } as BookEntity;
 }
 
-export async function updateBookNumberInStock(input: { id: string, numberInStock: number }) {
+export async function updateBookNumberInStock(input: { id: string, receivedNumber: number, purchasePrice: number }) {
     if (!input.id) {
         throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    await Book.findByIdAndUpdate(input.id, { numberInStock: input.numberInStock });
+    const book = await Book.findById(input.id);
+    const balance = await Balance.findOne();
 
-    return input as BookEntity;
+    book.numberInStock = (book.numberInStock || 0) + input.receivedNumber;
+    balance.value = balance.value - input.purchasePrice * input.receivedNumber;
+
+    await Promise.all([
+        book.save(),
+        balance.save()
+    ]);
+
+    return book as BookEntity;
 }
 
 export async function approveComment(input: { bookId: string, commentId: string }) {
@@ -248,7 +255,10 @@ export async function getBookComments(id: string, page: number, rowsPerPage: num
 }
 
 export async function getBooksNameByQuickSearch(quickSearch: string) {
-    return Book.find({ name: getCaseInsensitiveSubstringOption(quickSearch) }).limit(5);
+    return Book.find({
+        name: getCaseInsensitiveSubstringOption(quickSearch),
+        archive: { $in: [null, false] }
+    }).limit(5);
 }
 
 export async function getBooksFromSeries(bookId: string, rowsPerPage: number) {

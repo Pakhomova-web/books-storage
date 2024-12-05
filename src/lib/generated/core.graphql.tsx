@@ -97,6 +97,7 @@ export type BookCreateInput = {
 export type BookHint = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  numberInStock?: Maybe<Scalars['Int']['output']>;
 };
 
 export type BookSearchInput = {
@@ -204,7 +205,8 @@ export type BookUpdateInput = {
 
 export type BookUpdateNumberInStockUpdateInput = {
   id: Scalars['ID']['input'];
-  numberInStock: Scalars['Int']['input'];
+  purchasePrice: Scalars['Float']['input'];
+  receivedNumber: Scalars['Int']['input'];
 };
 
 export type Comment = {
@@ -1191,6 +1193,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
 export type BookHintResolvers<ContextType = any, ParentType extends ResolversParentTypes['BookHint'] = ResolversParentTypes['BookHint']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  numberInStock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

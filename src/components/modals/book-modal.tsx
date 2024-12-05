@@ -32,6 +32,7 @@ import CustomMultipleAutocompleteField from '@/components/form-fields/custom-mul
 import CustomAutocompleteField from '@/components/form-fields/custom-autocomplete-field';
 import AuthorModal from '@/components/modals/author-modal';
 import BookSeriesModal from '@/components/modals/book-series-modal';
+import { ApolloError } from '@apollo/client';
 
 interface IBookModalProps {
     open: boolean,
@@ -49,6 +50,7 @@ interface IForm {
     isbn: string,
     format: string,
     numberOfPages: number,
+    purchasePrice: number,
     numberInStock: number,
     price: number,
     authorIds: string[],
@@ -105,7 +107,8 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         authorIds,
         bookTypeIds,
         illustratorIds,
-        discount
+        discount,
+        price
     } = formContext.watch();
     const [bookSeries, setBookSeries] = useState<IOption<string>>(item?.bookSeries ? {
         id: item.bookSeries.id,
@@ -155,8 +158,8 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     }, [bookSeriesId]);
 
     useEffect(() => {
-        formContext.setValue('finalPrice', +(formContext.getValues().price * (100 - discount) / 100).toFixed(2));
-    }, [discount]);
+        formContext.setValue('finalPrice', +(price * (100 - (discount || 0)) / 100).toFixed(2));
+    }, [discount, price]);
 
     async function onSubmit(submit = true, updateAllBooksInSeries = false) {
         if (!submit && !!item?.id && !item?.bookSeries.default) {
@@ -181,20 +184,22 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             ...values,
             price: Number(values.price),
             numberOfPages: Number(values.numberOfPages),
-            numberInStock: values.numberInStock ? Number(values.numberInStock) : 0
+            numberInStock: values.numberInStock ? Number(values.numberInStock) : 0,
+            purchasePrice: values.purchasePrice ? Number(values.purchasePrice) : 0
         };
+        if (data.id) {
+            delete data.purchasePrice;
+        }
 
-        try {
-            if (item?.id) {
-                await update(data, updateAllBooksInSeries);
-                onClose(true);
-            } else {
-                delete data.id;
-                await create(data);
-                onClose(true, data.bookSeriesId);
-            }
-        } catch (err) {
-            checkAuth(err);
+        if (item?.id) {
+            update(data, updateAllBooksInSeries)
+                .then(() => onClose(true))
+                .catch((err: ApolloError) => checkAuth(err));
+        } else {
+            delete data.id;
+            create(data)
+                .then(() => onClose(true, data.bookSeriesId))
+                .catch((err: ApolloError) => checkAuth(err));
         }
     }
 
@@ -303,9 +308,10 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         }
     }
 
-    function refreshBookSeriesOptions(updated: boolean) {
+    function refreshBookSeriesOptions(item: BookSeriesEntity) {
         setBookSeriesModalValue(null);
-        if (updated) {
+        if (item) {
+            formContext.setValue('bookSeriesId', item.id);
             fetchBookSeriesOptions();
         }
     }
@@ -427,30 +433,6 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                      name="numberOfPages"/>
                 </Grid>
 
-                <Grid item xs={12} md={6} lg={4}>
-                    <CustomMultipleAutocompleteField options={authorOptions}
-                                                     label="Автори"
-                                                     onAdd={(value: string) => onAddAuthor(value)}
-                                                     disabled={!isAdmin}
-                                                     showClear={!!authorIds?.length}
-                                                     onClear={() => formContext.setValue('authorIds', [])}
-                                                     loading={loadingAuthors || loadingAuthorOptions}
-                                                     selected={authorIds}
-                                                     onChange={(values: IOption<string>[]) => formContext.setValue('authorIds', values.map(v => v.id))}/>
-                </Grid>
-
-                <Grid item xs={12} md={6} lg={4}>
-                    <CustomMultipleAutocompleteField options={authorOptions}
-                                                     label="Іллюстратори"
-                                                     onAdd={(value: string) => onAddAuthor(value)}
-                                                     disabled={!isAdmin}
-                                                     showClear={!!illustratorIds?.length}
-                                                     onClear={() => formContext.setValue('illustratorIds', [])}
-                                                     loading={loadingAuthors || loadingAuthorOptions}
-                                                     selected={illustratorIds}
-                                                     onChange={(values: IOption<string>[]) => formContext.setValue('illustratorIds', values.map(v => v.id))}/>
-                </Grid>
-
                 {isAdmin &&
                   <Grid item xs={12} sm={6} md={3} lg={2}>
                     <CustomTextField fullWidth
@@ -458,6 +440,15 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                      type="number"
                                      label="Кількість в наявності"
                                      name="numberInStock"/>
+                  </Grid>}
+
+                {isAdmin && !item?.id &&
+                  <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <CustomTextField fullWidth
+                                     type="number"
+                                     id="purchase-price"
+                                     label="Ціна закупки"
+                                     name="purchasePrice"/>
                   </Grid>}
 
                 <Grid item xs={12} sm={6} md={3} lg={2}>
@@ -488,6 +479,30 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                      id="finalPrice"
                                      label="Ціна зі знижкою, грн"
                                      name="finalPrice"/>
+                </Grid>
+
+                <Grid item xs={12} md={6} lg={4}>
+                    <CustomMultipleAutocompleteField options={authorOptions}
+                                                     label="Автори"
+                                                     onAdd={(value: string) => onAddAuthor(value)}
+                                                     disabled={!isAdmin}
+                                                     showClear={!!authorIds?.length}
+                                                     onClear={() => formContext.setValue('authorIds', [])}
+                                                     loading={loadingAuthors || loadingAuthorOptions}
+                                                     selected={authorIds}
+                                                     onChange={(values: IOption<string>[]) => formContext.setValue('authorIds', values.map(v => v.id))}/>
+                </Grid>
+
+                <Grid item xs={12} md={6} lg={4}>
+                    <CustomMultipleAutocompleteField options={authorOptions}
+                                                     label="Іллюстратори"
+                                                     onAdd={(value: string) => onAddAuthor(value)}
+                                                     disabled={!isAdmin}
+                                                     showClear={!!illustratorIds?.length}
+                                                     onClear={() => formContext.setValue('illustratorIds', [])}
+                                                     loading={loadingAuthors || loadingAuthorOptions}
+                                                     selected={illustratorIds}
+                                                     onChange={(values: IOption<string>[]) => formContext.setValue('illustratorIds', values.map(v => v.id))}/>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -610,7 +625,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                            item={authorModalValue} isAdmin={true}/>}
 
             {!!bookSeriesModalValue &&
-              <BookSeriesModal open={true} onClose={(updated = false) => refreshBookSeriesOptions(updated)}
+              <BookSeriesModal open={true} onClose={(item?: BookSeriesEntity) => refreshBookSeriesOptions(item)}
                                item={bookSeriesModalValue} isAdmin={true}/>}
         </CustomModal>
     );

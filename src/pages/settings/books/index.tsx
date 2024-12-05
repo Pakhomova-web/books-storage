@@ -56,15 +56,6 @@ export default function Books() {
         type: 'actions',
         actions: isAdmin(user) ? [
             {
-                label: () => 'Додати кількість в наявності',
-                type: TableActionEnum.add,
-                onClick: (item: BookEntity) => {
-                    setError(null);
-                    setSelectedItem(item);
-                    setOpenNumberInStockModal(true);
-                }
-            },
-            {
                 label: () => 'Скопіювати',
                 type: TableActionEnum.copy,
                 onClick: (item: BookEntity) => {
@@ -210,6 +201,11 @@ export default function Books() {
             });
     }
 
+    function onAddNumberInStock() {
+        setError(null);
+        setOpenNumberInStockModal(true);
+    }
+
     return (
         <SettingsMenu activeUrl="books" onAddClick={onAdd}>
             <Head>
@@ -248,11 +244,15 @@ export default function Books() {
 
                   {isAdmin(user) &&
                     <Box sx={styleVariables.buttonsContainer} gap={2}>
-                        {!!items?.length &&
+                        {!!items?.length && <>
+                          <Button variant="outlined" onClick={() => onAddNumberInStock()}>
+                            Поповнити наявність
+                          </Button>
+
                           <Button variant="outlined" onClick={() => onDownloadCSV()}>
                             Скачати CSV
                           </Button>
-                        }
+                        </>}
                     </Box>}
 
                   {openNewModal &&
@@ -261,9 +261,8 @@ export default function Books() {
                                isAdmin={isAdmin(user)}
                                onClose={(updated = false, bookSeries?: string) => refreshData(updated, bookSeries)}></BookModal>}
 
-                  {openNumberInStockModal && selectedItem &&
-                    <BookNumberInStockModal open={openNumberInStockModal}
-                                            item={selectedItem}
+                  {openNumberInStockModal &&
+                    <BookNumberInStockModal open={true}
                                             onClose={(updated = false) => refreshData(updated)}></BookNumberInStockModal>}
               </>
             }
