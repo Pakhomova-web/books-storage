@@ -135,18 +135,18 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
 
     useEffect(() => {
         if (publishingHouseId) {
-            fetchBookSeriesOptions();
+            fetchBookSeriesOptions(bookSeriesId);
         }
     }, [publishingHouseId]);
 
-    function fetchBookSeriesOptions() {
+    function fetchBookSeriesOptions(id: string) {
         setLoadingBookSeries(true);
         setBookSeriesOptions([]);
         getBookSeriesOptions({ publishingHouse: publishingHouseId } as BookSeriesFilter)
             .then(options => {
                 setLoadingBookSeries(false);
                 setBookSeriesOptions(options);
-                formContext.setValue('bookSeriesId', bookSeriesId ? options.find(({ id }) => id === bookSeriesId)?.id : null);
+                formContext.setValue('bookSeriesId', id ? options.find(opt => opt.id === id)?.id : null);
             })
             .catch(() => {
                 setLoadingBookSeries(false);
@@ -311,8 +311,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     function refreshBookSeriesOptions(item: BookSeriesEntity) {
         setBookSeriesModalValue(null);
         if (item) {
-            formContext.setValue('bookSeriesId', item.id);
-            fetchBookSeriesOptions();
+            fetchBookSeriesOptions(item.id);
         }
     }
 
@@ -370,7 +369,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                              onAdd={(value: string) => onAddBookSeries(value)}
                                              disabled={!isAdmin || !publishingHouseId}
                                              loading={loadingBookSeries}
-                                             selected={!loadingBookSeries ? bookSeriesId : null}
+                                             selected={bookSeriesId}
                                              onChange={(value: IOption<string>) => formContext.setValue('bookSeriesId', value?.id)}/>
                 </Grid>
 
