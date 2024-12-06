@@ -1,5 +1,4 @@
 import { AppBar, Box, IconButton, Menu, MenuItem, Toolbar, useTheme } from '@mui/material';
-import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -18,6 +17,7 @@ import { useAuth } from '@/components/auth-context';
 import { isAdmin } from '@/utils/utils';
 import LoginModal from '@/components/modals/login-modal';
 import QuickSearchModal from '@/components/modals/quick-search-modal';
+import CustomImage from '@/components/custom-image';
 
 enum MainMenuItem {
     home,
@@ -27,7 +27,20 @@ enum MainMenuItem {
 }
 
 const StyledToolbar = styled(Toolbar)(() => ({
-    backgroundColor: 'white'
+    backgroundColor: 'white',
+    padding: 0
+}));
+
+const StyledLogoBox = styled(Box)(({ theme }) => ({
+    [theme.breakpoints.down('md')]: {
+        height: '20px'
+    },
+    [theme.breakpoints.up('md')]: {
+        height: '30px'
+    },
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer'
 }));
 
 export default function CustomToolbar() {
@@ -117,10 +130,18 @@ export default function CustomToolbar() {
         <>
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <StyledToolbar>
-                    <Box padding={{ lg: '0 15%', md: '0 5%', xs: 0 }} margin="0 auto" width="100%" display="flex"
+                    <Box padding={{ lg: '0 15%', md: '0 5%', xs: 1 }} margin="0 auto" width="100%" display="flex"
                          alignItems="center"
                          justifyContent="space-between">
-                        <Box>
+                        <StyledLogoBox onClick={() => goToPage('/')}>
+                            <CustomImage imageLink="/logo.png"/>
+                        </StyledLogoBox>
+
+                        <Box display="flex" alignItems="center" flexWrap="nowrap" gap={1}>
+                            <IconButton color="primary" onClick={() => setOpenSearchModal(true)}>
+                                <SearchIcon/>
+                            </IconButton>
+
                             {isAdmin(user) &&
                               <IconButton color="primary"
                                           className={selectedMenuItem === MainMenuItem.settings ? 'selectedToolbarMenuItem' : ''}
@@ -128,21 +149,9 @@ export default function CustomToolbar() {
                                           onClick={() => goToPage('/settings/orders')}>
                                 <SettingsIcon/>
                               </IconButton>}
-                        </Box>
-
-                        <Box display="flex" alignItems="center" flexWrap="nowrap" gap={1}>
-                            <IconButton color="primary" onClick={() => setOpenSearchModal(true)}>
-                                <SearchIcon/>
-                            </IconButton>
 
                             {openSearchModal &&
                               <QuickSearchModal open={true} onClose={() => setOpenSearchModal(false)}/>}
-
-                            <IconButton onClick={() => goToPage('/')}
-                                        color="primary"
-                                        className={selectedMenuItem === MainMenuItem.home ? 'selectedToolbarMenuItem' : ''}>
-                                <HomeIcon/>
-                            </IconButton>
 
                             <Box>
                                 <Badge badgeContent={user?.likedBookIds?.length ? user.likedBookIds.length : null}>
