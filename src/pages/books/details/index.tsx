@@ -225,6 +225,18 @@ export default function BookDetails() {
         }
     }
 
+    function onCopyDetails() {
+        let res = '';
+
+        if (book.format) {
+            res = `${res}\nФормат: ${book.format} мм.`;
+        }
+        res = `${res}\nОбкладинка: ${book.coverType.name}.`;
+        res = `${res}\nСтр: ${book.numberOfPages}. ${book.pageType.name}.`;
+        res = `${res}\nЦіна: ${renderPrice(book.price)}.`;
+        navigator.clipboard.writeText(res);
+    }
+
     return (
         <>
             <Head>
@@ -356,17 +368,31 @@ export default function BookDetails() {
                   {keys.map((key, index) => renderDetailsRow(index, key))}
               </Grid>
 
+                {isAdmin(user) && <Button fullWidth onClick={() => onCopyDetails()}>
+                  Скопіювати додаткові деталі
+                </Button>}
+
               <Grid container spacing={2}>
                 <Grid item xs={12} mb={1}>
                     {(!!book.description || !!book.bookSeries.description) &&
                       <Box sx={styleVariables.sectionTitle} mb={2}>Опис</Box>}
 
-                    {!!book.bookSeries.description &&
+                    {!!book.bookSeries.description && <>
                       <Box px={1} mb={!!book.description ? 1 : 0}
-                           dangerouslySetInnerHTML={{ __html: book.bookSeries.description }}></Box>}
+                           dangerouslySetInnerHTML={{ __html: book.bookSeries.description }}></Box>
+
+                        {isAdmin(user) &&
+                          <Button fullWidth onClick={() => navigator.clipboard.writeText(book.description)}>
+                            Скопіювати опис серії
+                          </Button>}
+                    </>}
 
                     {!!book.description &&
                       <Box px={1} dangerouslySetInnerHTML={{ __html: book.description }}></Box>}
+
+                    {isAdmin(user) && <Button fullWidth onClick={() => navigator.clipboard.writeText(book.description)}>
+                      Скопіювати опис
+                    </Button>}
                 </Grid>
               </Grid>
 
