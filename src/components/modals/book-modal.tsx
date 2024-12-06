@@ -403,7 +403,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                        loading={loadingCoverTypes}
                                        options={coverTypeOptions}
                                        id="cover-type-id"
-                                       label="Тип обкладинки"
+                                       label="Обкладинка"
                                        name="coverTypeId"/>
                 </Grid>
 

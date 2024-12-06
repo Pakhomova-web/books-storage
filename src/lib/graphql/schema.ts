@@ -397,6 +397,8 @@ const typeDefs =  /* GraphQL */ `
         tags: [String]
         archived: Boolean
         ages: [Int]
+        priceMin: Float
+        priceMax: Float
     }
 
     type BookSubList {

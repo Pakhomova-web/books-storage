@@ -183,6 +183,8 @@ export class BookFilter {
     coverType?: string;
     pageType?: string;
     isbn?: string;
+    priceMax?: number;
+    priceMin?: number;
     languages?: string[];
     authors?: string[];
     publishingHouse?: string;
@@ -202,6 +204,8 @@ export class BookFilter {
             this.bookTypes = data.bookTypes && typeof data.bookTypes === 'string' ? data.bookTypes.split(',') : data.bookTypes;
             this.coverType = data.coverType;
             this.pageType = data.pageType;
+            this.priceMax = +data.priceMax || null;
+            this.priceMin = +data.priceMin || null;
             this.isbn = data.isbn;
             this.authors = data.authors && typeof data.authors === 'string' ? data.authors.split(',') : data.authors;
             this.languages = data.languages && typeof data.languages === 'string' ? data.languages.split(',') : data.languages;

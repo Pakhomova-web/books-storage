@@ -56,6 +56,8 @@ export function BookFilters(props: IBookFiltersProps) {
         coverType,
         pageType,
         name,
+        priceMin,
+        priceMax,
         languages,
         tags,
         publishingHouse,
@@ -103,12 +105,22 @@ export function BookFilters(props: IBookFiltersProps) {
         }
     }
 
+    function getValues() {
+        const { priceMin, priceMax, ...values } = formContext.getValues();
+
+        return {
+            ...values,
+            priceMin: +priceMin || null,
+            priceMax: +priceMax || null
+        };
+    }
+
     return (
         <SortFiltersContainer sortKeys={sortKeys}
                               totalCount={props.totalCount}
                               showAlwaysSorting={props.showAlwaysSorting}
                               pageSettings={props.pageSettings}
-                              onApply={() => props.onApply(formContext.getValues())}
+                              onApply={() => props.onApply(getValues())}
                               onClear={() => onClearClick()}
                               formContext={formContext}
                               onSort={props.onSort}>
@@ -148,6 +160,43 @@ export function BookFilters(props: IBookFiltersProps) {
                 </Grid>
 
                 <Grid item xs={12}>
+                    <CustomTextField fullWidth
+                                     id="book-name"
+                                     label="Назва"
+                                     name="name"
+                                     showClear={!!name}
+                                     onClear={() => clearValue('name')}/>
+                </Grid>
+
+                <Grid item xs={6}>
+                    <CustomTextField id="priceMin"
+                                     label="Ціна від, грн"
+                                     name="priceMin"
+                                     showClear={!!priceMin}
+                                     type="number"
+                                     onClear={() => clearValue('priceMin')}/>
+                </Grid>
+
+                <Grid item xs={6}>
+                    <CustomTextField id="priceMax"
+                                     label="Ціна до, грн"
+                                     name="priceMax"
+                                     showClear={!!priceMax}
+                                     type="number"
+                                     onClear={() => clearValue('priceMax')}/>
+                </Grid>
+
+                <Grid item xs={12}>
+                    <CustomSelectField fullWidth
+                                       options={languageOptions}
+                                       id="language-id"
+                                       label="Мова"
+                                       name="languages"
+                                       showClear={!!languages}
+                                       onClear={() => clearValue('languages')}/>
+                </Grid>
+
+                <Grid item xs={12}>
                     <Box position="relative" mb={1}>
                         <Loading isSmall={true} show={loadingBookTypes}></Loading>
                         <MultiSelectElement fullWidth
@@ -164,25 +213,6 @@ export function BookFilters(props: IBookFiltersProps) {
                 </Grid>
 
                 <Grid item xs={12}>
-                    <CustomTextField fullWidth
-                                     id="book-name"
-                                     label="Назва"
-                                     name="name"
-                                     showClear={!!name}
-                                     onClear={() => clearValue('name')}/>
-                </Grid>
-
-                <Grid item xs={12}>
-                    <CustomSelectField fullWidth
-                                       options={languageOptions}
-                                       id="language-id"
-                                       label="Мова"
-                                       name="languages"
-                                       showClear={!!languages}
-                                       onClear={() => clearValue('languages')}/>
-                </Grid>
-
-                <Grid item xs={12}>
                     <CustomSelectField fullWidth
                                        options={pageTypeOptions}
                                        id="page-type-id"
@@ -196,7 +226,7 @@ export function BookFilters(props: IBookFiltersProps) {
                     <CustomSelectField fullWidth
                                        options={coverTypeOptions}
                                        id="cover-type-id"
-                                       label="Тип обкладинки"
+                                       label="Обкладинка"
                                        name="coverType"
                                        showClear={!!coverType}
                                        onClear={() => clearValue('coverType')}/>
@@ -204,7 +234,7 @@ export function BookFilters(props: IBookFiltersProps) {
 
                 <Grid item xs={12}>
                     <CustomMultipleAutocompleteField options={authorOptions}
-                                                     label="Автори"
+                                                     label="Автори, іллюстратори"
                                                      showClear={!!authors?.length}
                                                      onClear={() => formContext.setValue('authors', [])}
                                                      loading={loadingAuthors}

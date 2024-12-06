@@ -112,7 +112,7 @@ export default function BookDetails() {
                     }
                 },
                 { title: 'Тип сторінок', type: 'text', renderValue: (book: BookEntity) => book.pageType?.name },
-                { title: 'Тип обкладинки', type: 'text', renderValue: (book: BookEntity) => book.coverType?.name },
+                { title: 'Обкладинка', type: 'text', renderValue: (book: BookEntity) => book.coverType?.name },
                 { title: 'ISBN', type: 'text', renderValue: (book: BookEntity) => book.isbn },
                 { title: 'Формат, мм', type: 'text', renderValue: (book: BookEntity) => book.format }
             ];

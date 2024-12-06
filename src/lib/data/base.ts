@@ -72,8 +72,12 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
                     }
                 } else if (key === 'bookTypes') {
                     andFilters.push({ [key]: { $in: filters[key] } });
-                }  else if (key === 'languages') {
+                } else if (key === 'languages') {
                     andFilters.push({ language: { $in: filters[key] } });
+                } else if (key === 'priceMin') {
+                    andFilters.push({ price: { $gt: filters[key] } });
+                } else if (key === 'priceMax') {
+                    andFilters.push({ price: { $lte: filters[key] } });
                 } else {
                     andFilters.push({ [key]: filters[key] });
                 }
