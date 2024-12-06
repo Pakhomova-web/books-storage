@@ -1,4 +1,4 @@
-import { IOption, IPageable, LanguageEntity, NameFilter } from '@/lib/data/types';
+import { IOption, IPageable, LanguageEntity } from '@/lib/data/types';
 import {
     createLanguageQuery,
     deleteLanguageQuery,
