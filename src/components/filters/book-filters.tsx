@@ -56,7 +56,7 @@ export function BookFilters(props: IBookFiltersProps) {
         coverType,
         pageType,
         name,
-        language,
+        languages,
         tags,
         publishingHouse,
         bookSeries,
@@ -177,9 +177,9 @@ export function BookFilters(props: IBookFiltersProps) {
                                        options={languageOptions}
                                        id="language-id"
                                        label="Мова"
-                                       name="language"
-                                       showClear={!!language}
-                                       onClear={() => clearValue('language')}/>
+                                       name="languages"
+                                       showClear={!!languages}
+                                       onClear={() => clearValue('languages')}/>
                 </Grid>
 
                 <Grid item xs={12}>
