@@ -255,10 +255,19 @@ export async function getBookComments(id: string, page: number, rowsPerPage: num
 }
 
 export async function getBooksNameByQuickSearch(quickSearch: string) {
-    return Book.find({
+    const books = await Book.find({
         name: getCaseInsensitiveSubstringOption(quickSearch),
         archive: { $in: [null, false] }
-    }).limit(5);
+    })
+        .populate({
+            path: 'bookSeries',
+            populate: {
+                path: 'publishingHouse'
+            }
+        })
+        .limit(5);
+
+    return books.map(b => ({ id: b.id, name: b.name, description: `${b.bookSeries.publishingHouse.name}, ${b.bookSeries.name}` }));
 }
 
 export async function getBooksFromSeries(bookId: string, rowsPerPage: number) {

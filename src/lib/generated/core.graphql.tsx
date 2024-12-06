@@ -95,9 +95,9 @@ export type BookCreateInput = {
 };
 
 export type BookHint = {
+  description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
-  numberInStock?: Maybe<Scalars['Int']['output']>;
 };
 
 export type BookSearchInput = {
@@ -114,6 +114,8 @@ export type BookSearchInput = {
   languages?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   name?: InputMaybe<Scalars['String']['input']>;
   pageType?: InputMaybe<Scalars['ID']['input']>;
+  priceMax?: InputMaybe<Scalars['Float']['input']>;
+  priceMin?: InputMaybe<Scalars['Float']['input']>;
   publishingHouse?: InputMaybe<Scalars['ID']['input']>;
   quickSearch?: InputMaybe<Scalars['String']['input']>;
   tags?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
@@ -1192,9 +1194,9 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
 };
 
 export type BookHintResolvers<ContextType = any, ParentType extends ResolversParentTypes['BookHint'] = ResolversParentTypes['BookHint']> = {
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  numberInStock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 

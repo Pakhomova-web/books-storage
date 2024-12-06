@@ -277,7 +277,8 @@ export const booksNameByQuickSearchQuery = gql`
     query BooksNameByQuickSearch($quickSearch: String!) {
         items: booksNameByQuickSearch(quickSearch: $quickSearch) {
             id
-            label: name
+            label: name,
+            description
         }
     }
 `;

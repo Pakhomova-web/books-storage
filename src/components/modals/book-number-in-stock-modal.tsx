@@ -81,7 +81,7 @@ export function BookNumberInStockModal({ open, onClose }: IProps) {
                                            setBookOpts([]);
                                            formContext.setValue('nameSearch', '');
                                        }}>
-                            {opt.label}
+                            {opt.label} ({opt.description})
                         </StyledHintBox>
                     ))}
                 </Box>

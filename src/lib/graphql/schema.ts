@@ -143,7 +143,7 @@ const typeDefs =  /* GraphQL */ `
     type BookHint {
         id: ID!
         name: String!
-        numberInStock: Int
+        description: String
     }
 
     type Query {
