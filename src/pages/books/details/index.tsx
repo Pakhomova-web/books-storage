@@ -233,7 +233,7 @@ export default function BookDetails() {
 
             <Loading show={loading || refetching}></Loading>
 
-            <Grid container>
+            <Grid container display="flex" alignItems="center">
                 <Grid item sm={6}>
                     <Button variant="outlined" onClick={onBackClick}><ArrowBackIcon/>Назад</Button>
                 </Grid>
