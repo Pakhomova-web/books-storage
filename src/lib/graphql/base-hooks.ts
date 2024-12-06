@@ -38,7 +38,7 @@ export function _usePageableItems<T>(query: DocumentNode, key: string, pageSetti
     };
 }
 
-export async function _useAllItems<T>(query: DocumentNode, key: string, pageSettings: IPageable, filters?) {
+export async function _useAllItems<T>(query: DocumentNode, key: string, pageSettings?: IPageable, filters?) {
     const { data } = await apolloClient.query({
         query,
         fetchPolicy: 'no-cache',
@@ -46,6 +46,15 @@ export async function _useAllItems<T>(query: DocumentNode, key: string, pageSett
     });
 
     return data[key].items;
+}
+
+export async function _useOptions<T>(query: DocumentNode) {
+    const { data } = await apolloClient.query({
+        query,
+        fetchPolicy: 'no-cache'
+    });
+
+    return data.items;
 }
 
 export function _useItemById<T>(query: DocumentNode, key: string, id: string) {

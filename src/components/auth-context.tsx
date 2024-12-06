@@ -1,4 +1,4 @@
-import { UserEntity } from '@/lib/data/types';
+import { DeliveryEntity, UserEntity } from '@/lib/data/types';
 import { createContext, useContext, useState } from 'react';
 import { removeTokenFromLocalStorage, saveTokenToLocalStorage } from '@/utils/utils';
 import { useRouter } from 'next/router';
@@ -15,6 +15,7 @@ import { usePathname } from 'next/navigation';
 
 type authContextType = {
     user: UserEntity;
+    deliveries: DeliveryEntity[],
     openLoginModal: boolean,
     setOpenLoginModal: (open: boolean) => void,
     login: (user: UserEntity, token: string, refreshToken: string) => void;
@@ -24,11 +25,13 @@ type authContextType = {
     setLikedBook: (bookId: string) => void;
     setBookInBasket: (bookId: string) => void;
     setRecentlyViewedBooks: (bookId: string) => void;
+    setDeliveries: (deliveries: DeliveryEntity[]) => void;
 };
 
 const authContextDefaultValues: authContextType = {
     user: null,
     openLoginModal: false,
+    deliveries: [],
     login: (_user: UserEntity, _token: string, _refreshToken: string) => {
     },
     logout: () => {
@@ -44,7 +47,8 @@ const authContextDefaultValues: authContextType = {
     setRecentlyViewedBooks: (_bookId: string) => {
     },
     setOpenLoginModal: (_open: boolean) => {
-    }
+    },
+    setDeliveries: (_opts: DeliveryEntity[]) => {}
 };
 
 const AuthContext = createContext<authContextType>(authContextDefaultValues);
@@ -57,9 +61,11 @@ export function AuthProvider({ children }) {
     const router = useRouter();
     const pathname = usePathname();
     const [user, setUser] = useState<UserEntity>(null);
+    const [deliveries, setDeliveries] = useState<DeliveryEntity[]>(null);
     const [openLoginModal, setOpenLoginModal] = useState<boolean>(false);
     const value = {
         user,
+        deliveries,
         openLoginModal,
         login: (user: UserEntity, token: string, refreshToken: string) => {
             saveTokenToLocalStorage(token, refreshToken);
@@ -138,6 +144,9 @@ export function AuthProvider({ children }) {
         },
         setOpenLoginModal: (open: boolean) => {
             setOpenLoginModal(open);
+        },
+        setDeliveries: (deliveries: DeliveryEntity[]) => {
+            setDeliveries(deliveries);
         }
     };
 

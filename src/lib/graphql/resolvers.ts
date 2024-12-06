@@ -64,7 +64,7 @@ import {
     updateBookCountInBasket,
     updateUser
 } from '@/lib/data/user';
-import { createDelivery, deleteDelivery, getDeliveries, updateDelivery } from '@/lib/data/delivery';
+import { createDelivery, deleteDelivery, getDeliveries, getDeliveryOptions, updateDelivery } from '@/lib/data/delivery';
 import { cancelOrder, createOrder, getBalance, getOrders, updateOrder } from '@/lib/data/order';
 import { isAdmin } from '@/utils/utils';
 
@@ -164,6 +164,9 @@ const resolvers: Resolvers = {
         },
         deliveries: async (_root, { pageSettings, filters }) => {
             return getDeliveries(<IPageable>pageSettings, <DeliveryEntity>filters).catch(error => parseError(error));
+        },
+        deliveryOptions: async () => {
+            return getDeliveryOptions().catch(error => parseError(error));
         },
         orders: async (_root, { pageSettings, filters }) => {
             return getOrders(<IPageable>pageSettings, <IOrderFilter>filters).catch(error => parseError(error));

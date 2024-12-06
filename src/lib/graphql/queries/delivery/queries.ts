@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 
 export const deliveriesQuery = gql`
-    query Languages($pageSettings: PageableInput, $filters: SearchByNameInput) {
+    query Deliveries($pageSettings: PageableInput, $filters: SearchByNameInput) {
         deliveries(pageSettings: $pageSettings, filters: $filters) {
             items {
                 id
@@ -9,6 +9,16 @@ export const deliveriesQuery = gql`
                 imageId
             }
             totalCount
+        }
+    }
+`;
+
+export const deliveryOptionsQuery = gql`
+    query DeliveryOptions {
+        items: deliveryOptions {
+            id
+            name
+            imageId
         }
     }
 `;

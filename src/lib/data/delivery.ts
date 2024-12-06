@@ -12,6 +12,10 @@ export async function getDeliveries(pageSettings?: IPageable, filters?: Delivery
     );
 }
 
+export async function getDeliveryOptions() {
+    return Delivery.find().sort({ name: 'asc'});
+}
+
 export async function createDelivery(input: DeliveryEntity) {
     const item = await getByName<DeliveryEntity>(Delivery, input.name);
 

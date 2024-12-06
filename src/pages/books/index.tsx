@@ -14,7 +14,6 @@ import {
     BookSeriesEntity,
     BookTypeEntity,
     IPageable,
-    LanguageEntity,
     PublishingHouseEntity
 } from '@/lib/data/types';
 import { useRouter } from 'next/router';
@@ -24,7 +23,6 @@ import ErrorNotification from '@/components/error-notification';
 import { getAuthorById } from '@/lib/graphql/queries/author/hook';
 import { getPublishingHouseById } from '@/lib/graphql/queries/publishing-house/hook';
 import { BookFilters } from '@/components/filters/book-filters';
-import { getLanguageById } from '@/lib/graphql/queries/language/hooks';
 import { getBookSeriesById } from '@/lib/graphql/queries/book-series/hook';
 import BooksList from '@/components/books/books-list';
 import Head from 'next/head';
@@ -107,9 +105,6 @@ export default function Books() {
                     },
                     { title: item.name }
                 ]);
-        } else if (data?.language) {
-            promise = getLanguageById(data?.language as string)
-                .then((item: LanguageEntity) => [{ title: item.name }]);
         } else if (data?.bookTypes) {
             promise = getBookTypeById(data?.bookTypes[0])
                 .then((item: BookTypeEntity) => [{ title: item.name }]);
@@ -193,7 +188,7 @@ export default function Books() {
 
             <Grid container mb={1}>
                 <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
-                                           onClick={() => router.push('/books?quickSearch=англ')}>
+                                           onClick={() => router.push('/books?languages=6687b7137b182a0a940db8e4,668bf546ec3efc1d3190cd45')}>
                     Англійська дітям
                 </StyledAdditionalTopicGrid>
                 <StyledAdditionalTopicGrid item xs={6} md={3} p={1}

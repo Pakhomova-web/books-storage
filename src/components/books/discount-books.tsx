@@ -1,11 +1,12 @@
 import { Button, Grid, useTheme } from '@mui/material';
-import { styleVariables } from '@/constants/styles-variables';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import BooksList from './books-list';
-import React from 'react';
-import { useBooksWithDiscount } from '@/lib/graphql/queries/book/hook';
 import { useRouter } from 'next/router';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import React from 'react';
+
+import { styleVariables } from '@/constants/styles-variables';
+import BooksList from './books-list';
+import { useBooksWithDiscount } from '@/lib/graphql/queries/book/hook';
 
 export default function DiscountBooks() {
     const theme = useTheme();

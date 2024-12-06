@@ -155,6 +155,7 @@ const typeDefs =  /* GraphQL */ `
         authors(pageSettings: PageableInput, filters: SearchByNameInput): AuthorSubList
         books(pageSettings: PageableInput, filters: BookSearchInput): BookSubList
         deliveries(pageSettings: PageableInput, filters: SearchByNameInput): DeliverySubList
+        deliveryOptions: [Delivery!]
         bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): BookTypeSubList
         orders(pageSettings: PageableInput, filters: OrderSearchInput): OrderSubList
         bookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
@@ -387,7 +388,7 @@ const typeDefs =  /* GraphQL */ `
         bookSeries: ID
         pageType: ID
         isbn: String
-        language: ID
+        languages: [ID]
         authors: [ID]
         publishingHouse: ID
         isInStock: Boolean

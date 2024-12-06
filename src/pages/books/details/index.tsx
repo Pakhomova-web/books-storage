@@ -391,12 +391,15 @@ export default function BookDetails() {
                           </Button>}
                     </>}
 
-                    {!!book.description &&
-                      <Box px={1} dangerouslySetInnerHTML={{ __html: book.description }}></Box>}
+                    {!!book.description && <>
+                      <Box px={1} dangerouslySetInnerHTML={{ __html: book.description }}></Box>
 
-                    {isAdmin(user) && <Button fullWidth onClick={() => onCopyDescriptionClick(book.description)}>
-                      Скопіювати опис
-                    </Button>}
+                        {isAdmin(user) && <Button fullWidth onClick={() => onCopyDescriptionClick(book.description)}>
+                          Скопіювати опис
+                        </Button>}
+                    </>}
+
+
                 </Grid>
               </Grid>
 
