@@ -1,9 +1,10 @@
 import { BookSeriesEntity, BookSeriesFilter, IOption, IPageable } from '@/lib/data/types';
 import { apolloClient } from '@/lib/apollo';
 import {
+    _useAllItems,
     _useCreateItem,
     _useDeleteItemById,
-    _useItems,
+    _useItems, _useOptions,
     _usePageableItems,
     _useUpdateItem,
     getItemById
@@ -37,8 +38,8 @@ export function useBookSeriesOptions(filters?: BookSeriesFilter) {
     return _useItems<IOption<string>, BookSeriesFilter>(bookSeriesOptionsQuery, null, filters);
 }
 
-export async function getBookSeriesOptions(filters?: BookSeriesFilter) {
-    return _useItems<IOption<string>, BookSeriesFilter>(bookSeriesOptionsQuery, null, filters);
+export async function getBookSeriesOptions(filters?: BookSeriesFilter): Promise<IOption<string>[]> {
+    return _useOptions<IOption<string>>(bookSeriesOptionsQuery, filters);
 }
 
 export async function getBookSeriesById(id: string): Promise<BookSeriesEntity> {

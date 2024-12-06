@@ -48,10 +48,11 @@ export async function _useAllItems<T>(query: DocumentNode, key: string, pageSett
     return data[key].items;
 }
 
-export async function _useOptions<T>(query: DocumentNode) {
+export async function _useOptions<T>(query: DocumentNode, filters?) {
     const { data } = await apolloClient.query({
         query,
-        fetchPolicy: 'no-cache'
+        fetchPolicy: 'no-cache',
+        variables: { filters }
     });
 
     return data.items;
