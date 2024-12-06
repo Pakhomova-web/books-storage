@@ -237,6 +237,10 @@ export default function BookDetails() {
         navigator.clipboard.writeText(res);
     }
 
+    function onCopyDescriptionClick(description: string) {
+        navigator.clipboard.writeText(description.replaceAll('</br>', '').replaceAll('<li>', '').replaceAll('</li>', ''));
+    }
+
     return (
         <>
             <Head>
@@ -382,7 +386,7 @@ export default function BookDetails() {
                            dangerouslySetInnerHTML={{ __html: book.bookSeries.description }}></Box>
 
                         {isAdmin(user) &&
-                          <Button fullWidth onClick={() => navigator.clipboard.writeText(book.description)}>
+                          <Button fullWidth onClick={() => onCopyDescriptionClick(book.bookSeries.description)}>
                             Скопіювати опис серії
                           </Button>}
                     </>}
@@ -390,7 +394,7 @@ export default function BookDetails() {
                     {!!book.description &&
                       <Box px={1} dangerouslySetInnerHTML={{ __html: book.description }}></Box>}
 
-                    {isAdmin(user) && <Button fullWidth onClick={() => navigator.clipboard.writeText(book.description)}>
+                    {isAdmin(user) && <Button fullWidth onClick={() => onCopyDescriptionClick(book.description)}>
                       Скопіювати опис
                     </Button>}
                 </Grid>
