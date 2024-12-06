@@ -267,7 +267,11 @@ export async function getBooksNameByQuickSearch(quickSearch: string): Promise<IO
         })
         .limit(5);
 
-    return books.map(b => ({ id: b.id, label: b.name, description: `${b.bookSeries.publishingHouse.name}, ${b.bookSeries.name}` }));
+    return books.map(b => ({
+        id: b.id,
+        label: b.name,
+        description: `${b.bookSeries.publishingHouse.name}, ${b.bookSeries.name}`
+    }));
 }
 
 export async function getBooksFromSeries(bookId: string, rowsPerPage: number) {
@@ -348,7 +352,7 @@ export async function getBooksByIds(ids: string[], pageSettings: IPageable) {
 }
 
 export async function getBooksWithDiscount(rowsPerPage: number) {
-    return Book
+    const query = Book
         .find({ discount: { $gt: 0 }, archived: { $in: [false, null] } })
         .populate({
             path: 'bookSeries',
@@ -358,8 +362,11 @@ export async function getBooksWithDiscount(rowsPerPage: number) {
         })
         .populate('bookTypes')
         .populate('language')
-        .sort({ numberInStock: 'desc' })
-        .limit(rowsPerPage);
+        .sort({ numberInStock: 'desc' });
+    const totalCount = await query.countDocuments();
+    const random = Math.floor(Math.random() * (totalCount - rowsPerPage + 1));
+
+    return query.find().limit(rowsPerPage).skip(random);
 }
 
 export async function getBooksWithNotApprovedComments(pageSettings?: IPageable) {

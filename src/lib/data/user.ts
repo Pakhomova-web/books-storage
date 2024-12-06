@@ -154,7 +154,7 @@ export async function changeRecentlyViewedBooks(userId: string, bookId: string) 
     const user = await User.findById(userId);
 
     if (user.recentlyViewedBookIds) {
-        user.recentlyViewedBookIds = user.recentlyViewedBookIds.filter((id, index) => id !== bookId && index < 2);
+        user.recentlyViewedBookIds = user.recentlyViewedBookIds.filter((id, index) => id !== bookId && index < 6);
         user.recentlyViewedBookIds = [bookId, ...user.recentlyViewedBookIds];
     } else {
         user.recentlyViewedBookIds = [bookId];
