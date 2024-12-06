@@ -1,5 +1,4 @@
-import { Grid, useTheme } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { Grid } from '@mui/material';
 import React from 'react';
 
 import { styleVariables } from '@/constants/styles-variables';
