@@ -1,6 +1,4 @@
 import { Autocomplete, Box, Button, TextField } from '@mui/material';
-
-import { customFieldClearBtnStyles } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import { IOption } from '@/lib/data/types';
 import { useState } from 'react';
@@ -44,7 +42,9 @@ export default function CustomAutocompleteField(props: IAutocompleteProps) {
                           getOptionLabel={opt => opt?.label || ''}
                           getOptionKey={opt => opt.id}
                           renderOption={(p, option: IOption<string>) =>
-                              <Box component="li" {...p} key={p.id}>{option.label}</Box>
+                              <Box component="li" {...p} key={p.id}>
+                                  {option.label}{option.description ? ` (${option.description})` : ''}
+                              </Box>
                           }
                           value={props.selected && !!props.options?.length ? props.options?.find(opt => opt.id === props.selected) : null}
                           renderInput={(params) => (

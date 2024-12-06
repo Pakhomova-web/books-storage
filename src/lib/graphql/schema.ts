@@ -140,9 +140,9 @@ const typeDefs =  /* GraphQL */ `
         date: String
     }
     
-    type BookHint {
+    type IOption {
         id: ID!
-        name: String!
+        label: String!
         description: String
     }
 
@@ -158,8 +158,7 @@ const typeDefs =  /* GraphQL */ `
         deliveryOptions: [Delivery!]
         bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): BookTypeSubList
         orders(pageSettings: PageableInput, filters: OrderSearchInput): OrderSubList
-        bookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
-        fullBookSeriesOptions(filters: BookSeriesSearchInput): [BookSeries!]
+        bookSeriesOptions(filters: BookSeriesSearchInput): [IOption!]
         bookById(id: ID!): Book
         bookTypeById(id: ID!): BookType
         authorById(id: ID!): Author
@@ -168,7 +167,7 @@ const typeDefs =  /* GraphQL */ `
         bookSeriesByIdQuery(id: ID!): BookSeries
         bookComments(id: ID!, page: Int!, rowsPerPage: Int!): [Comment!]
         booksFromSeries(bookId: ID!, rowsPerPage: Int!): [Book!]
-        booksNameByQuickSearch(quickSearch: String!): [BookHint!]
+        booksNameByQuickSearch(quickSearch: String!): [IOption!]
         booksByAuthor(authorId: ID!, rowsPerPage: Int!, excludeBookSeriesId: ID): [Book!]
         booksWithDiscount(rowsPerPage: Int!): [Book!]
         booksWithNotApprovedComments(pageSettings: PageableInput): BookSubList

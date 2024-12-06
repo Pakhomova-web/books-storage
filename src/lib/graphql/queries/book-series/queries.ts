@@ -27,20 +27,11 @@ export const bookSeriesQuery = gql`
     ${bookSeriesFragment}
 `;
 
-export const fullBookSeriesOptionsQuery = gql`
-    query BookSeries($filters: BookSeriesSearchInput) {
-        items: fullBookSeriesOptions(filters: $filters) {
-            ...BookSeries
-        }
-    }
-    ${bookSeriesFragment}
-`;
-
 export const bookSeriesOptionsQuery = gql`
     query BookSeries($filters: BookSeriesSearchInput) {
         items: bookSeriesOptions(filters: $filters) {
             id
-            label: name
+            label
             description
         }
     }

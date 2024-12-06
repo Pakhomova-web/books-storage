@@ -1,4 +1,4 @@
-import { BookEntity, BookFilter, CommentEntity, IPageable } from '@/lib/data/types';
+import { BookEntity, BookFilter, CommentEntity, IOption, IPageable } from '@/lib/data/types';
 import Book from '@/lib/data/models/book';
 import { GraphQLError } from 'graphql/error';
 import { getCaseInsensitiveSubstringOption, getValidFilters } from '@/lib/data/base';
@@ -254,7 +254,7 @@ export async function getBookComments(id: string, page: number, rowsPerPage: num
     return book.comments.splice(rowsPerPage * page, rowsPerPage);
 }
 
-export async function getBooksNameByQuickSearch(quickSearch: string) {
+export async function getBooksNameByQuickSearch(quickSearch: string): Promise<IOption<string>[]> {
     const books = await Book.find({
         name: getCaseInsensitiveSubstringOption(quickSearch),
         archive: { $in: [null, false] }
@@ -267,7 +267,7 @@ export async function getBooksNameByQuickSearch(quickSearch: string) {
         })
         .limit(5);
 
-    return books.map(b => ({ id: b.id, name: b.name, description: `${b.bookSeries.publishingHouse.name}, ${b.bookSeries.name}` }));
+    return books.map(b => ({ id: b.id, label: b.name, description: `${b.bookSeries.publishingHouse.name}, ${b.bookSeries.name}` }));
 }
 
 export async function getBooksFromSeries(bookId: string, rowsPerPage: number) {

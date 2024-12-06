@@ -25,7 +25,7 @@ export default function CustomMultipleAutocompleteField(props: IAutocompleteProp
         return (
             <Box component="li" {...p} key={option.id}>
                 <Checkbox checked={props.selected?.includes(option.id)} disabled={props.disabled}/>
-                {option.label}
+                {option.label}{option.description ? ` (${option.description})` : ''}
             </Box>
         );
     }

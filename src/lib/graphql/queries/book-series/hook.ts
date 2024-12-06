@@ -1,4 +1,4 @@
-import { BookSeriesEntity, BookSeriesFilter, IPageable } from '@/lib/data/types';
+import { BookSeriesEntity, BookSeriesFilter, IOption, IPageable } from '@/lib/data/types';
 import { apolloClient } from '@/lib/apollo';
 import {
     _useCreateItem,
@@ -14,7 +14,6 @@ import {
     bookSeriesQuery,
     createBookSeriesQuery,
     deleteBookSeriesQuery,
-    fullBookSeriesOptionsQuery,
     updateBookSeriesQuery
 } from '@/lib/graphql/queries/book-series/queries';
 
@@ -34,23 +33,8 @@ export function useDeleteBookSeries() {
     return _useDeleteItemById(deleteBookSeriesQuery);
 }
 
-export function useBookSeriesOptions(filters?: BookSeriesFilter, displayPublishingHouse = true) {
-    const {
-        items,
-        loading,
-        gettingError,
-        refetch
-    } = _useItems<BookSeriesEntity, BookSeriesFilter>(fullBookSeriesOptionsQuery, null, filters);
-
-    return {
-        refetch,
-        items: items.map(item => ({
-            id: item.id,
-            label: `${item.name}${displayPublishingHouse ? ` (${item.publishingHouse?.name})` : ''}`
-        })),
-        loading,
-        gettingError
-    };
+export function useBookSeriesOptions(filters?: BookSeriesFilter) {
+    return _useItems<IOption<string>, BookSeriesFilter>(bookSeriesOptionsQuery, null, filters);
 }
 
 export async function getBookSeriesOptions(filters?: BookSeriesFilter) {

@@ -135,9 +135,6 @@ const resolvers: Resolvers = {
         bookSeriesOptions: async (_root, { filters }) => {
             return getBookSeriesOptions(filters).catch(error => parseError(error));
         },
-        fullBookSeriesOptions: async (_root, { filters }) => {
-            return getBookSeriesOptions(filters, true).catch(error => parseError(error));
-        },
         books: async (_root, { pageSettings, filters }) => {
             return getBooks(<IPageable>pageSettings, filters).catch(error => parseError(error));
         },

@@ -74,7 +74,7 @@ export function BookFilters(props: IBookFiltersProps) {
     const {
         items: bookSeriesOptions,
         loading: loadingBookSeries
-    } = useBookSeriesOptions(publishingHouse ? new BookSeriesFilter({ publishingHouse }) : null, !publishingHouse);
+    } = useBookSeriesOptions(publishingHouse ? new BookSeriesFilter({ publishingHouse }) : null);
 
     useEffect(() => {
         formContext.setValue('bookSeries', null);

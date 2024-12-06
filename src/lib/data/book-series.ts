@@ -1,4 +1,4 @@
-import { BookSeriesEntity, BookSeriesFilter, IPageable } from '@/lib/data/types';
+import { BookSeriesEntity, BookSeriesFilter, IOption, IPageable } from '@/lib/data/types';
 import BookSeries from '@/lib/data/models/book-series';
 import { GraphQLError } from 'graphql/error';
 import {
@@ -22,17 +22,16 @@ export async function getBookSeries(pageSettings?: IPageable, filters?: BookSeri
     );
 }
 
-export async function getBookSeriesOptions(filters?: BookSeriesFilter, fully = false): Promise<BookSeriesEntity[]> {
+export async function getBookSeriesOptions(filters?: BookSeriesFilter): Promise<IOption<string>[]> {
     const { andFilters } = getValidFilters(filters);
-    const query = BookSeries.find();
+    const query = BookSeries.find().populate('publishingHouse');
 
     if (!!andFilters.length) {
         query.and(andFilters);
     }
-    if (fully) {
-        query.populate('publishingHouse')
-    }
-    return query.sort({ name: 'asc' });
+    const items = await query.sort({ name: 'asc' });
+
+    return items.map(item => ({ id: item.id, label: item.name, description: item.publishingHouse.name }));
 }
 
 
