@@ -45,7 +45,7 @@ import {
     getBooksFromSeries,
     getBooksNameByQuickSearch,
     getBooksWithDiscount,
-    getBooksWithNotApprovedComments,
+    getBooksWithNotApprovedComments, getTopOfSoldBooks,
     removeComment,
     updateBook,
     updateBookNumberInStock
@@ -185,6 +185,9 @@ const resolvers: Resolvers = {
         },
         booksWithDiscount: async (_root, { rowsPerPage }) => {
             return getBooksWithDiscount(rowsPerPage).catch(error => parseError(error));
+        },
+        topOfSoldBooks: async (_root, { rowsPerPage }) => {
+            return getTopOfSoldBooks(rowsPerPage).catch(error => parseError(error));
         },
         booksWithNotApprovedComments: async (_root, { pageSettings }) => {
             return getBooksWithNotApprovedComments(<IPageable>pageSettings).catch(error => parseError(error));

@@ -14,14 +14,17 @@ import {
     bookCommentsQuery,
     booksByAuthorQuery,
     booksByIdsQuery,
-    booksFromSeries, booksNameByQuickSearchQuery,
+    booksFromSeries,
+    booksNameByQuickSearchQuery,
     booksQuery,
     booksWithDiscountQuery,
-    booksWithNotApprovedCommentsQuery, changeRecentlyViewedBooksQuery,
+    booksWithNotApprovedCommentsQuery,
+    changeRecentlyViewedBooksQuery,
     createBookQuery,
     likeBookQuery,
     removeBookFromBasketQuery,
     removeComment,
+    topOfSoldBooksQuery,
     unlikeBookQuery,
     updateBookCountInBasketQuery,
     updateBookNumberInStockQuery,
@@ -83,6 +86,15 @@ export async function getBooksByAuthors(authorId: string, rowsPerPage: number, e
 
 export function useBooksWithDiscount(rowsPerPage: number) {
     const { data, loading, error } = useQuery(booksWithDiscountQuery, {
+        fetchPolicy: 'no-cache',
+        variables: { rowsPerPage }
+    });
+
+    return { items: data?.items ? data.items : [], loading, error };
+}
+
+export function useTopOfSoldBooks(rowsPerPage: number) {
+    const { data, loading, error } = useQuery(topOfSoldBooksQuery, {
         fetchPolicy: 'no-cache',
         variables: { rowsPerPage }
     });

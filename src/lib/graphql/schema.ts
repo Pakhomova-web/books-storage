@@ -170,6 +170,7 @@ const typeDefs =  /* GraphQL */ `
         booksNameByQuickSearch(quickSearch: String!): [IOption!]
         booksByAuthor(authorId: ID!, rowsPerPage: Int!, excludeBookSeriesId: ID): [Book!]
         booksWithDiscount(rowsPerPage: Int!): [Book!]
+        topOfSoldBooks(rowsPerPage: Int!): [Book!]
         booksWithNotApprovedComments(pageSettings: PageableInput): BookSubList
         booksByIds(ids: [ID!], pageSettings: PageableInput): BookSubList
         balance: Float

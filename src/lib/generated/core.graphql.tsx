@@ -727,6 +727,7 @@ export type Query = {
   publishingHouseById?: Maybe<PublishingHouse>;
   publishingHouses?: Maybe<PublishingHouseSubList>;
   refreshToken: UserToken;
+  topOfSoldBooks?: Maybe<Array<Book>>;
 };
 
 
@@ -868,6 +869,11 @@ export type QueryPublishingHousesArgs = {
 
 export type QueryRefreshTokenArgs = {
   refreshToken: Scalars['String']['input'];
+};
+
+
+export type QueryTopOfSoldBooksArgs = {
+  rowsPerPage: Scalars['Int']['input'];
 };
 
 export type SearchByNameInput = {
@@ -1417,6 +1423,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   publishingHouseById?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<QueryPublishingHouseByIdArgs, 'id'>>;
   publishingHouses?: Resolver<Maybe<ResolversTypes['PublishingHouseSubList']>, ParentType, ContextType, Partial<QueryPublishingHousesArgs>>;
   refreshToken?: Resolver<ResolversTypes['UserToken'], ParentType, ContextType, RequireFields<QueryRefreshTokenArgs, 'refreshToken'>>;
+  topOfSoldBooks?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryTopOfSoldBooksArgs, 'rowsPerPage'>>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {

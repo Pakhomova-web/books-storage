@@ -353,7 +353,24 @@ export async function getBooksByIds(ids: string[], pageSettings: IPageable) {
 
 export async function getBooksWithDiscount(rowsPerPage: number) {
     const query = Book
-        .find({ discount: { $gt: 0 }, archived: { $in: [false, null] } })
+        .find({ discount: { $gt: 0 }, archived: { $in: [false, null] }, numberInStock: { $gt: 0 } })
+        .populate({
+            path: 'bookSeries',
+            populate: {
+                path: 'publishingHouse'
+            }
+        })
+        .populate('bookTypes')
+        .populate('language');
+    const totalCount = await query.countDocuments();
+    const random = Math.floor(Math.random() * (totalCount - rowsPerPage + 1));
+
+    return query.find().limit(rowsPerPage).skip(random);
+}
+
+export async function getTopOfSoldBooks(rowsPerPage: number) {
+    return Book
+        .find({ archived: { $in: [false, null] }, numberInStock: { $gt: 0 } })
         .populate({
             path: 'bookSeries',
             populate: {
@@ -362,11 +379,7 @@ export async function getBooksWithDiscount(rowsPerPage: number) {
         })
         .populate('bookTypes')
         .populate('language')
-        .sort({ numberInStock: 'desc' });
-    const totalCount = await query.countDocuments();
-    const random = Math.floor(Math.random() * (totalCount - rowsPerPage + 1));
-
-    return query.find().limit(rowsPerPage).skip(random);
+        .sort({ numberSold: 'desc' }).limit(rowsPerPage);
 }
 
 export async function getBooksWithNotApprovedComments(pageSettings?: IPageable) {

@@ -301,4 +301,13 @@ export const booksWithDiscountQuery = gql`
     ${bookListFragment}
 `;
 
+export const topOfSoldBooksQuery = gql`
+    query TopOfSoldBooksQuery($rowsPerPage: Int!) {
+        items: topOfSoldBooks(rowsPerPage: $rowsPerPage) {
+            ...BookList
+        }
+    }
+    ${bookListFragment}
+`;
+
 
