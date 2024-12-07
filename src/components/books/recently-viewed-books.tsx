@@ -29,7 +29,7 @@ export default function RecentlyViewedBooks() {
         } else if (mobileMatches) {
             limit = 2;
         }
-        setItemsToView(user?.recentlyViewedBooks?.slice(0, limit) || null);
+        setItemsToView(user?.recentlyViewedBooks?.slice(0, limit) || []);
     }, [mobileMatches, mediumMatches, extraLargeMatches, largeMatches]);
 
     return (
