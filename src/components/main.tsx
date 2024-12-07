@@ -1,4 +1,4 @@
-import { Box, Toolbar, Tooltip } from '@mui/material';
+import { Box, Toolbar, Tooltip, useTheme } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react';
@@ -10,6 +10,8 @@ import { useAuth } from '@/components/auth-context';
 import { UserEntity } from '@/lib/data/types';
 import { isAdmin } from '@/utils/utils';
 import { styled } from '@mui/material/styles';
+import TopSoldBooks from '@/components/books/top-sold-books';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const authUrls = ['/sign-in'];
 const commonUrls = ['/books', '/books/details'];
@@ -34,6 +36,8 @@ export default function Main({ children }) {
     const [loading, setLoading] = useState<boolean>(false);
     const { fetchUser } = useUser();
     const { user, logout, setUser } = useAuth();
+    const theme = useTheme();
+    const mobileMatches = useMediaQuery(theme.breakpoints.down('lg'));
     const router = useRouter();
     const pathname = usePathname();
 
@@ -63,6 +67,8 @@ export default function Main({ children }) {
     return (
         <Box sx={fullHeight} position="relative">
             <Loading show={loading}></Loading>
+
+            {!mobileMatches && <TopSoldBooks/>}
 
             <CustomToolbar/>
             {!loading && (!isSettings() || !!user && isAdmin(user)) &&

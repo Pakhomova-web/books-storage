@@ -124,10 +124,10 @@ export const customFieldClearBtnStyles = {
 export const fullHeight = { height: '100svh' };
 export const pageStyles = { overflowY: 'auto', height: 'calc(100svh - 64px)' };
 
-export const priceStyles = (theme) => ({
+export const priceStyles = (theme, small = false) => ({
     color: theme.palette.primary.main,
-    fontSize: styleVariables.bigTitleFontSize(theme),
     borderRadius,
     padding: boxPadding,
-    border: `1px solid ${primaryLightColor}`
+    border: `1px solid ${primaryLightColor}`,
+    ...(small ? styleVariables.hintFontSize : { fontSize: styleVariables.bigTitleFontSize(theme) })
 });
