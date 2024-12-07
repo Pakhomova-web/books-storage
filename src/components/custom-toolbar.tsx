@@ -88,8 +88,10 @@ export default function CustomToolbar() {
 
     function onLogoutClick() {
         logout();
-        setSelectedMenuItem(null);
-        goToPage('/');
+        if (pathname.includes('settings')) {
+            goToPage('/');
+            setSelectedMenuItem(null);
+        }
     }
 
     function onLoginClick() {

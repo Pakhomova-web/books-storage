@@ -368,7 +368,7 @@ export default function BookDetails() {
 
               <Box sx={styleVariables.sectionTitle} mb={1}>Додаткові деталі</Box>
 
-              <Grid container mb={2} columnSpacing={1}>
+              <Grid container mb={1} columnSpacing={1}>
                   {keys.map((key, index) => renderDetailsRow(index, key))}
               </Grid>
 
@@ -377,7 +377,7 @@ export default function BookDetails() {
                 </Button>}
 
               <Grid container spacing={2}>
-                <Grid item xs={12} mb={1}>
+                <Grid item xs={12}>
                     {(!!book.description || !!book.bookSeries.description) &&
                       <Box sx={styleVariables.sectionTitle} mb={2}>Опис</Box>}
 
@@ -392,14 +392,12 @@ export default function BookDetails() {
                     </>}
 
                     {!!book.description && <>
-                      <Box px={1} dangerouslySetInnerHTML={{ __html: book.description }}></Box>
+                      <Box px={1} dangerouslySetInnerHTML={{ __html: book.description }} mb={1}></Box>
 
                         {isAdmin(user) && <Button fullWidth onClick={() => onCopyDescriptionClick(book.description)}>
                           Скопіювати опис
                         </Button>}
                     </>}
-
-
                 </Grid>
               </Grid>
 
@@ -408,7 +406,7 @@ export default function BookDetails() {
                 <Loading show={!loading && loadingComments} isSmall={true}></Loading>
 
                 <Grid item xs={12}>
-                  <Box sx={styleVariables.sectionTitle} my={1} mb={loadingComments ? 1 : 0}>Відгуки покупців</Box>
+                  <Box sx={styleVariables.sectionTitle} mb={loadingComments ? 1 : 0}>Відгуки покупців</Box>
                 </Grid>
 
                 <Grid item xs={12} md={7} lg={8} display="flex" alignItems="center" justifyContent="center">
