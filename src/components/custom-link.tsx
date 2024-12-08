@@ -1,14 +1,18 @@
 import { styled } from "@mui/material/styles";
-import { Link } from "@mui/material";
+import { Box, Link, Tooltip } from "@mui/material";
 
 const StyledLink = styled(Link)(() => ({
-  color: 'black',
-  cursor: 'pointer',
-  textDecoration: 'underline',
+    color: 'black',
+    cursor: 'pointer',
+    textDecoration: 'underline',
 }));
 
-export default function CustomLink({ children, onClick }) {
-  return (
-    <StyledLink onClick={onClick}>{children}</StyledLink>
-  );
+export default function CustomLink({ children, tooltip = '', disabled = false, onClick }) {
+    return (
+        !disabled ?
+            <StyledLink onClick={onClick}>{children}</StyledLink> :
+            <Tooltip title={tooltip}>
+                <Box>{children}</Box>
+            </Tooltip>
+    );
 }

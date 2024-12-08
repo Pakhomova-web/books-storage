@@ -50,6 +50,12 @@ export const loginQuery = gql`
     ${userFragment}
 `;
 
+export const sendUpdatePasswordLinkQuery = gql`
+    mutation SendUpdatePasswordLink($email: String!) {
+        sendUpdatePasswordLink(email: $email)
+    }
+`;
+
 export const userQuery = gql`
     mutation User {
         user {
@@ -66,6 +72,18 @@ export const userUpdateQuery = gql`
         }
     }
     ${userFragment}
+`;
+
+export const changePasswordQuery = gql`
+    mutation ChangePassword($userId: String!, $password: String!) {
+        changePassword(userId: $userId, password: $password)
+    }
+`;
+
+export const checkResetPasswordTokenQuery = gql`
+    query CheckResetPasswordToken($userId: String!, $token: String!) {
+        checkResetPasswordToken(userId: $userId, token: $token)
+    }
 `;
 
 export const refreshTokenQuery = gql`

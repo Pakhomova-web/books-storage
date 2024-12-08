@@ -12,9 +12,8 @@ import { isAdmin } from '@/utils/utils';
 import { styled } from '@mui/material/styles';
 import TopSoldBooks from '@/components/books/top-sold-books';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import CustomImage from '@/components/custom-image';
 
-const authUrls = ['/sign-in'];
+const authUrls = ['/sign-in', '/reset-password'];
 const commonUrls = ['/books', '/books/details'];
 
 const StyledDiscountBox = styled(Box)(({ theme }) => ({

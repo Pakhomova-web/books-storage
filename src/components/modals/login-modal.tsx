@@ -2,13 +2,14 @@ import { Box, Button, Grid } from "@mui/material";
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
 import { authStyles } from '@/styles/auth';
 import ErrorNotification from '@/components/error-notification';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
 import { emailValidatorExp, passwordValidatorExp } from '@/constants/validators-exp';
-import { useLogin } from '@/lib/graphql/queries/auth/hook';
+import { useLogin, useSendResetPasswordLink } from '@/lib/graphql/queries/auth/hook';
 import { useAuth } from '@/components/auth-context';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomLink from '@/components/custom-link';
@@ -18,7 +19,13 @@ export default function LoginModal({ open }) {
     const formContext = useForm<{ email: string, password: string }>();
     const { loading, error, loginUser } = useLogin();
     const { login, setOpenLoginModal } = useAuth();
+    const {
+        sendingResetPasswordLink,
+        sendResetPasswordLink,
+        errorSendingResetPasswordLink
+    } = useSendResetPasswordLink();
     const { email, password } = formContext.watch();
+    const [successMsgAfterSendingResetPasswordLink, setSuccessMsgAfterSendingResetPasswordLink] = useState<boolean>(false);
 
     useEffect(() => {
         if (password && !passwordValidatorExp.test(password)) {
@@ -59,7 +66,10 @@ export default function LoginModal({ open }) {
     }
 
     function onForgotPasswordClick() {
-
+        setSuccessMsgAfterSendingResetPasswordLink(true);
+        sendResetPasswordLink(formContext.getValues().email)
+            .catch(() => {
+            });
     }
 
     function goToSignInPage() {
@@ -72,7 +82,7 @@ export default function LoginModal({ open }) {
     }
 
     return (
-        <CustomModal open={open} loading={loading}>
+        <CustomModal open={open} loading={loading || sendingResetPasswordLink}>
             <Box sx={authStyles.title} mb={2}>Вхід</Box>
 
             <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
@@ -86,7 +96,19 @@ export default function LoginModal({ open }) {
                                            name="password"
                                            required/>
 
-                    <CustomLink onClick={onForgotPasswordClick}>Забули пароль?</CustomLink>
+                    {!successMsgAfterSendingResetPasswordLink ?
+                        <CustomLink onClick={onForgotPasswordClick}
+                                    tooltip="Введіть ел. адресу"
+                                    disabled={!email || !!formContext.formState.errors.email}>
+                            Забули пароль?
+                        </CustomLink> :
+                        <CustomModal open={true}
+                                     onClose={() => setSuccessMsgAfterSendingResetPasswordLink(false)}>
+                            <Box textAlign="center"><ThumbUpIcon color="primary"/></Box>
+                            <Box textAlign="center">
+                                Посилання на відновлення паролю було успішно відправлено!
+                            </Box>
+                        </CustomModal>}
                 </Box>
 
                 <Grid container spacing={2} mb={1}>
@@ -115,6 +137,8 @@ export default function LoginModal({ open }) {
             </Box>
 
             {error && <ErrorNotification error={error}></ErrorNotification>}
+            {errorSendingResetPasswordLink &&
+              <ErrorNotification error={errorSendingResetPasswordLink}></ErrorNotification>}
         </CustomModal>
     );
 }

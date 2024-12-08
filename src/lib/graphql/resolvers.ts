@@ -53,7 +53,7 @@ import {
 import { createAuthor, deleteAuthor, getAuthorById, getAuthors, updateAuthor } from '@/lib/data/author';
 import { GraphQLError } from 'graphql/error';
 import {
-    addBookInBasket,
+    addBookInBasket, changePassword,
     changeRecentlyViewedBooks,
     createUser,
     getNewToken,
@@ -67,6 +67,7 @@ import {
 import { createDelivery, deleteDelivery, getDeliveries, getDeliveryOptions, updateDelivery } from '@/lib/data/delivery';
 import { cancelOrder, createOrder, getBalance, getOrders, updateOrder } from '@/lib/data/order';
 import { isAdmin } from '@/utils/utils';
+import { checkResetPasswordToken, sendUpdatePasswordLink } from '@/lib/data/reset-token';
 
 function parseError<T>(error): T {
     switch (error.extensions?.code) {
@@ -79,6 +80,8 @@ function parseError<T>(error): T {
                 }
             });
         case 'USAGE_ERROR':
+        case 'NOT_FOUND':
+        case 'INVALID_TOKEN':
         case 'DUPLICATE_ERROR':
             throw new GraphQLError(error, {
                 extensions: {
@@ -191,6 +194,9 @@ const resolvers: Resolvers = {
         },
         booksWithNotApprovedComments: async (_root, { pageSettings }) => {
             return getBooksWithNotApprovedComments(<IPageable>pageSettings).catch(error => parseError(error));
+        },
+        checkResetPasswordToken: async (_root, { userId, token }) => {
+            return checkResetPasswordToken(userId, token).catch(error => parseError(error));
         }
     },
     Mutation: {
@@ -339,6 +345,12 @@ const resolvers: Resolvers = {
         // auth
         login: async (_root, { email, password }) => {
             return login(email, password).catch(error => parseError(error));
+        },
+        sendUpdatePasswordLink: async (_root, { email }) => {
+            return sendUpdatePasswordLink(email).catch(error => parseError(error));
+        },
+        changePassword: async (_root, { userId, password }) => {
+            return changePassword(userId, password).catch(error => parseError(error));
         },
         user: async (_root, {}, { user }) => {
             _checkUser(user);

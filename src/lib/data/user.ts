@@ -3,6 +3,7 @@ import { GraphQLError } from 'graphql/error';
 import { UserEntity } from '@/lib/data/types';
 import { getByEmail } from '@/lib/data/base';
 import User from '@/lib/data/models/user';
+import ResetToken from '@/lib/data/models/reset-token';
 import { ROLES } from '@/constants/roles';
 import {
     comparePassword,
@@ -115,6 +116,27 @@ export async function updateUser(input: UserEntity): Promise<UserEntity> {
     await setRecentlyViewedBooks(item);
 
     return item as UserEntity;
+}
+
+export async function changePassword(userId: string, password: string): Promise<any> {
+    if (!userId) {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new GraphQLError(`Такий користувач не зареєстрований.`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+
+    user.password = await cryptPassword(password);
+
+    await user.save();
+    await ResetToken.findOneAndRemove({ userId });
+    return 'OK';
 }
 
 export async function getUserById(id: string): Promise<UserEntity> {

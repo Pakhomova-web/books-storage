@@ -175,6 +175,7 @@ const typeDefs =  /* GraphQL */ `
         booksWithNotApprovedComments(pageSettings: PageableInput): BookSubList
         booksByIds(ids: [ID!], pageSettings: PageableInput): BookSubList
         balance: Float
+        checkResetPasswordToken(userId: String!, token: String!): String
 
         refreshToken(refreshToken: String!): UserToken!
     }
@@ -223,6 +224,8 @@ const typeDefs =  /* GraphQL */ `
 
         createUser(input: UserCreateInput!): User
         login(email: String!, password: String!): UserToken!
+        sendUpdatePasswordLink(email: String!): String
+        changePassword(userId: String!, password: String!): String
         user: User
         updateUser(input: UserUpdateInput!): User!
 

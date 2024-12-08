@@ -482,3 +482,11 @@ export class CommentEntity {
         }
     }
 }
+
+export interface ResetTokenEntity {
+    id: string,
+    token: string,
+    userId: string,
+    expiresAt: string,
+    createdAt: string
+}

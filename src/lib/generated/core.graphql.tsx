@@ -293,6 +293,7 @@ export type Mutation = {
   addBookInBasket?: Maybe<Array<BasketItem>>;
   approveComment: Book;
   cancelOrder?: Maybe<Order>;
+  changePassword?: Maybe<Scalars['String']['output']>;
   changeRecentlyViewedBooks?: Maybe<Array<Book>>;
   createAuthor?: Maybe<Author>;
   createBook?: Maybe<Book>;
@@ -317,6 +318,7 @@ export type Mutation = {
   login: UserToken;
   removeBookInBasket?: Maybe<Array<BasketItem>>;
   removeComment: Book;
+  sendUpdatePasswordLink?: Maybe<Scalars['String']['output']>;
   unlikeBook?: Maybe<Array<Scalars['ID']['output']>>;
   updateAuthor?: Maybe<Author>;
   updateBook?: Maybe<Book>;
@@ -353,6 +355,12 @@ export type MutationApproveCommentArgs = {
 
 export type MutationCancelOrderArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationChangePasswordArgs = {
+  password: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
 };
 
 
@@ -474,6 +482,11 @@ export type MutationRemoveBookInBasketArgs = {
 
 export type MutationRemoveCommentArgs = {
   input: UpdateCommentInput;
+};
+
+
+export type MutationSendUpdatePasswordLinkArgs = {
+  email: Scalars['String']['input'];
 };
 
 
@@ -718,6 +731,7 @@ export type Query = {
   booksNameByQuickSearch?: Maybe<Array<IOption>>;
   booksWithDiscount?: Maybe<Array<Book>>;
   booksWithNotApprovedComments?: Maybe<BookSubList>;
+  checkResetPasswordToken?: Maybe<Scalars['String']['output']>;
   coverTypes?: Maybe<CoverTypeSubList>;
   deliveries?: Maybe<DeliverySubList>;
   deliveryOptions?: Maybe<Array<Delivery>>;
@@ -819,6 +833,12 @@ export type QueryBooksWithDiscountArgs = {
 
 export type QueryBooksWithNotApprovedCommentsArgs = {
   pageSettings?: InputMaybe<PageableInput>;
+};
+
+
+export type QueryCheckResetPasswordTokenArgs = {
+  token: Scalars['String']['input'];
+  userId: Scalars['String']['input'];
 };
 
 
@@ -1288,6 +1308,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addBookInBasket?: Resolver<Maybe<Array<ResolversTypes['BasketItem']>>, ParentType, ContextType, RequireFields<MutationAddBookInBasketArgs, 'id'>>;
   approveComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationApproveCommentArgs, 'input'>>;
   cancelOrder?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationCancelOrderArgs, 'id'>>;
+  changePassword?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationChangePasswordArgs, 'password' | 'userId'>>;
   changeRecentlyViewedBooks?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<MutationChangeRecentlyViewedBooksArgs, 'id'>>;
   createAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationCreateAuthorArgs, 'input'>>;
   createBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationCreateBookArgs, 'input'>>;
@@ -1312,6 +1333,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   login?: Resolver<ResolversTypes['UserToken'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   removeBookInBasket?: Resolver<Maybe<Array<ResolversTypes['BasketItem']>>, ParentType, ContextType, RequireFields<MutationRemoveBookInBasketArgs, 'id'>>;
   removeComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationRemoveCommentArgs, 'input'>>;
+  sendUpdatePasswordLink?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSendUpdatePasswordLinkArgs, 'email'>>;
   unlikeBook?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType, RequireFields<MutationUnlikeBookArgs, 'id'>>;
   updateAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationUpdateAuthorArgs, 'input'>>;
   updateBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationUpdateBookArgs, 'input'>>;
@@ -1415,6 +1437,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   booksNameByQuickSearch?: Resolver<Maybe<Array<ResolversTypes['IOption']>>, ParentType, ContextType, RequireFields<QueryBooksNameByQuickSearchArgs, 'quickSearch'>>;
   booksWithDiscount?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryBooksWithDiscountArgs, 'rowsPerPage'>>;
   booksWithNotApprovedComments?: Resolver<Maybe<ResolversTypes['BookSubList']>, ParentType, ContextType, Partial<QueryBooksWithNotApprovedCommentsArgs>>;
+  checkResetPasswordToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<QueryCheckResetPasswordTokenArgs, 'token' | 'userId'>>;
   coverTypes?: Resolver<Maybe<ResolversTypes['CoverTypeSubList']>, ParentType, ContextType, Partial<QueryCoverTypesArgs>>;
   deliveries?: Resolver<Maybe<ResolversTypes['DeliverySubList']>, ParentType, ContextType, Partial<QueryDeliveriesArgs>>;
   deliveryOptions?: Resolver<Maybe<Array<ResolversTypes['Delivery']>>, ParentType, ContextType>;
