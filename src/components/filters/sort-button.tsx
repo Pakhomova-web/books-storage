@@ -1,6 +1,7 @@
 import { Box, IconButton, Menu, MenuItem } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import SortIcon from '@mui/icons-material/Sort';
+import { styled } from '@mui/material/styles';
 
 import { IPageable } from '@/lib/data/types';
 import { styleVariables } from '@/constants/styles-variables';
@@ -11,6 +12,10 @@ interface ISortButtonProps {
     onSort: (_: IPageable) => void;
     sortKeys: ISortKey[];
 }
+
+const StyledSelected = styled(Box)(() => ({
+    cursor: 'pointer'
+}));
 
 export default function SortButton(props: ISortButtonProps) {
     const [anchorMenuEl, setAnchorMenuEl] = useState<HTMLElement>();
@@ -30,7 +35,7 @@ export default function SortButton(props: ISortButtonProps) {
             ...props.pageSettings,
             orderBy: key.orderBy,
             order: key.order,
-            page: 0,
+            page: 0
         });
     }
 
@@ -41,10 +46,10 @@ export default function SortButton(props: ISortButtonProps) {
     return (
         <Box width="100%" display="flex" alignItems="center" justifyContent="flex-end" gap={1} pr={1}>
             <Box display="flex" gap={1} flexWrap="wrap" justifyContent="center">
-                Сортувати:<Box>{selectedItem?.title}</Box>
+                Сортувати:<StyledSelected onClick={onSortClick}>{selectedItem?.title}</StyledSelected>
             </Box>
 
-            <IconButton onClick={onSortClick} aria-haspopup="true" color="primary"><SortIcon/></IconButton>
+            <IconButton aria-haspopup="true" color="primary"><SortIcon/></IconButton>
 
             <Menu anchorEl={anchorMenuEl}
                   open={!!anchorMenuEl}

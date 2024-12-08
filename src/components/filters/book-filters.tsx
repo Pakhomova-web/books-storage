@@ -48,6 +48,10 @@ export function BookFilters(props: IBookFiltersProps) {
         {
             title: 'Спочатку акційні',
             orderBy: 'discount', order: 'desc'
+        },
+        {
+            title: 'За популярністю',
+            orderBy: 'numberSold', order: 'desc'
         }
     ]);
     const {

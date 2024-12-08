@@ -23,7 +23,7 @@ const StyledMobileTopSoldBook = styled(Box)(() => ({
     mxWidth: '65px'
 }));
 
-const StyledMobileTitle = styled(Box)(() => ({
+const StyledTitle = styled(Box)(() => ({
     cursor: 'pointer',
     display: 'flex',
     flexDirection: 'row',
@@ -47,14 +47,18 @@ export default function TopSoldBooks({ mobile = false }) {
         router.push(`/books/details?id=${book.id}`);
     }
 
+    function onTitleClick() {
+        router.push(`/books?orderBy=numberSold&order=desc`);
+    }
+
     return (
         mobile ?
             <Box my={1} display="flex" flexDirection="row" flexWrap="nowrap" alignItems="center"
                  justifyContent="space-between" gap={1}>
-                <StyledMobileTitle gap={1}>
+                <StyledTitle gap={1} onClick={() => onTitleClick()}>
                     <Box height="25px"><CustomImage imageLink="/top_star.png"/></Box>
                     Топ продажів
-                </StyledMobileTitle>
+                </StyledTitle>
 
                 <Box display="flex" flexDirection="row" flexWrap="nowrap" gap={1}>
                     {items.map((book, index) => (
@@ -66,12 +70,12 @@ export default function TopSoldBooks({ mobile = false }) {
             </Box> :
             <StyledTopSoldBook gap={1} py={1}>
                 {!loading && !!items?.length && <Box>
-                  <Box sx={styleVariables.hintFontSize} display="flex" flexDirection="row" flexWrap="nowrap"
-                       alignItems="center" justifyContent="center" gap={1}>
+                  <StyledTitle sx={styleVariables.hintFontSize} justifyContent="center" gap={1}
+                               onClick={() => onTitleClick()}>
                     <Box height="25px"><CustomImage imageLink="/top_star.png"/></Box>
                     Топ продажів
                     <Box height="25px"><CustomImage imageLink="/top_star.png"/></Box>
-                  </Box>
+                  </StyledTitle>
 
 
                     {items.map((book, index) =>

@@ -1,4 +1,4 @@
-import { Box, Grid, IconButton } from '@mui/material';
+import { Box, Grid, IconButton, SortDirection } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 import HomeIcon from '@mui/icons-material/Home';
@@ -51,13 +51,16 @@ const StyledAdditionalTopicGrid = styled(Grid)(() => ({
 export default function Books() {
     const router = useRouter();
     const [pageSettings, setPageSettings] = useState<IPageable>({
-        order: 'asc', orderBy: '', page: 0, rowsPerPage: 24
+        order: router.query.order as SortDirection || 'asc',
+        orderBy: router.query.orderBy as string || '',
+        page: +router.query.page || 0,
+        rowsPerPage: +router.query.rowsPerPage || 24
     });
     const [filters, setFilters] = useState<BookFilter>(new BookFilter(router.query));
     const [option, setOption] = useState<{ title: string, param?: string, imageId?: string }[]>();
     const [toRefreshData, setToRefreshData] = useState<boolean>(false);
     const [loadingOption, setLoadingOption] = useState<boolean>();
-    const { items, totalCount, gettingError, loading } = useBooks(pageSettings, filters);
+    const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
     const [error, setError] = useState<ApolloError>();
 
     useEffect(() => {
@@ -76,6 +79,23 @@ export default function Books() {
             setToRefreshData(true);
         }
     }, [filters]);
+
+
+    useEffect(() => {
+        if (toRefreshData) {
+            const url = new URL(window.location.href);
+
+            Object.keys(pageSettings || {}).forEach(key => {
+                if (pageSettings[key] !== null && pageSettings[key] !== undefined) {
+                    url.searchParams.set(key, pageSettings[key]);
+                }
+            });
+            window.history.pushState(null, '', url.toString());
+            refetch(pageSettings, filters);
+        } else {
+            setToRefreshData(true);
+        }
+    }, [pageSettings]);
 
     useEffect(() => {
         if (gettingError) {
