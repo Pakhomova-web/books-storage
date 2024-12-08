@@ -1,4 +1,4 @@
-import { AppBar, Box, IconButton, Menu, MenuItem, Toolbar, useTheme } from '@mui/material';
+import { AppBar, Box, Grid, IconButton, Menu, MenuItem, Toolbar, useTheme } from '@mui/material';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -38,6 +38,8 @@ const StyledLogoBox = styled(Box)(({ theme }) => ({
     [theme.breakpoints.up('md')]: {
         height: '30px'
     },
+    width: '200px',
+    maxWidth: '85%',
     display: 'flex',
     alignItems: 'center',
     cursor: 'pointer'
@@ -132,14 +134,16 @@ export default function CustomToolbar() {
         <>
             <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
                 <StyledToolbar>
-                    <Box padding={{ lg: '0 15%', md: '0 5%', xs: 1 }} margin="0 auto" width="100%" display="flex"
-                         alignItems="center"
-                         justifyContent="space-between">
-                        <StyledLogoBox onClick={() => goToPage('/')}>
-                            <CustomImage imageLink="/logo.png"/>
-                        </StyledLogoBox>
+                    <Grid container padding={{ lg: '0 15%', md: '0 5%', xs: 1 }} margin="0 auto" width="100%"
+                          display="flex" alignItems="center">
+                        <Grid item xs={5}>
+                            <StyledLogoBox onClick={() => goToPage('/')}>
+                                <CustomImage imageLink="/logo.png"/>
+                            </StyledLogoBox>
+                        </Grid>
 
-                        <Box display="flex" alignItems="center" flexWrap="nowrap" gap={1}>
+                        <Grid item xs={7} display="flex" alignItems="center" flexWrap="nowrap" gap={1}
+                              justifyContent="flex-end">
                             <IconButton color="primary" onClick={() => setOpenSearchModal(true)}>
                                 <SearchIcon/>
                             </IconButton>
@@ -198,8 +202,8 @@ export default function CustomToolbar() {
                                       </IconButton>}
                                 </>
                             }
-                        </Box>
-                    </Box>
+                        </Grid>
+                    </Grid>
                 </StyledToolbar>
             </AppBar>
 
