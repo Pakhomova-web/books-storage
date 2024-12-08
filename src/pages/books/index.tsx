@@ -194,53 +194,55 @@ export default function Books() {
                 <title>{MAIN_NAME} - Пошук</title>
             </Head>
 
-            <Loading show={loading}></Loading>
+            <Box position="relative">
+                <Loading show={loading}></Loading>
 
-            <BookFilters totalCount={totalCount}
-                         defaultValues={filters}
-                         onApply={(filters: BookFilter) => {
-                             setPageSettings(prev => ({ ...prev, page: 0 }));
-                             setFilters(filters)
-                         }}
-                         pageSettings={pageSettings}
-                         showAlwaysSorting={true}
-                         onSort={(settings: IPageable) => setPageSettings(settings)}></BookFilters>
+                <BookFilters totalCount={totalCount}
+                             defaultValues={filters}
+                             onApply={(filters: BookFilter) => {
+                                 setPageSettings(prev => ({ ...prev, page: 0 }));
+                                 setFilters(filters)
+                             }}
+                             pageSettings={pageSettings}
+                             showAlwaysSorting={true}
+                             onSort={(settings: IPageable) => setPageSettings(settings)}></BookFilters>
 
-            <Grid container mb={1}>
-                <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
-                                           onClick={() => router.push('/books?languages=6687b7137b182a0a940db8e4,668bf546ec3efc1d3190cd45')}>
-                    Англійська дітям
-                </StyledAdditionalTopicGrid>
-                <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
-                                           onClick={() => router.push('/books?bookTypes=66901099d4b33119e2069792')}>
-                    Наліпки для найменших
-                </StyledAdditionalTopicGrid>
-                <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
-                                           onClick={() => router.push('/books?tags=новорічна,різдвяна,зимова')}>
-                    Новорічні книги
-                </StyledAdditionalTopicGrid>
-                <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
-                                           onClick={() => router.push('/books?bookTypes=671389883908259306710c62')}>
-                    Розмальовки
-                </StyledAdditionalTopicGrid>
-            </Grid>
+                <Grid container mb={1}>
+                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
+                                               onClick={() => router.push('/books?languages=6687b7137b182a0a940db8e4,668bf546ec3efc1d3190cd45')}>
+                        Англійська дітям
+                    </StyledAdditionalTopicGrid>
+                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
+                                               onClick={() => router.push('/books?bookTypes=66901099d4b33119e2069792')}>
+                        Наліпки для найменших
+                    </StyledAdditionalTopicGrid>
+                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
+                                               onClick={() => router.push('/books?tags=новорічна,різдвяна,зимова')}>
+                        Новорічні книги
+                    </StyledAdditionalTopicGrid>
+                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
+                                               onClick={() => router.push('/books?bookTypes=671389883908259306710c62')}>
+                        Розмальовки
+                    </StyledAdditionalTopicGrid>
+                </Grid>
 
-            {!loadingOption && option && renderBackBox()}
+                {!loadingOption && option && renderBackBox()}
 
-            {items.length ? <>
-                    <Grid container justifyContent="center">
-                        <BooksList items={items} filters={filters} pageUrl="/books"></BooksList>
-                    </Grid>
+                {items.length ? <>
+                        <Grid container justifyContent="center">
+                            <BooksList items={items} filters={filters} pageUrl="/books"></BooksList>
+                        </Grid>
 
-                    <Pagination rowsPerPage={pageSettings.rowsPerPage} count={totalCount}
-                                page={pageSettings.page} onRowsPerPageChange={onRowsPerPageChange}
-                                onPageChange={onPageChange}/>
-                </> :
-                (!loading &&
-                  <IconWithText imageLink="/no_results.png"
-                                text="На жаль пошук не дав результатів. Cпробуйте ще раз"/>)}
+                        <Pagination rowsPerPage={pageSettings.rowsPerPage} count={totalCount}
+                                    page={pageSettings.page} onRowsPerPageChange={onRowsPerPageChange}
+                                    onPageChange={onPageChange}/>
+                    </> :
+                    (!loading &&
+                      <IconWithText imageLink="/no_results.png"
+                                    text="На жаль пошук не дав результатів. Cпробуйте ще раз"/>)}
 
-            {error && <ErrorNotification error={error}></ErrorNotification>}
+                {error && <ErrorNotification error={error}></ErrorNotification>}
+            </Box>
 
             <RecentlyViewedBooks/>
 
