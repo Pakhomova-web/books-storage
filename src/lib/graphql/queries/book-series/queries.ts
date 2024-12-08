@@ -33,6 +33,7 @@ export const bookSeriesOptionsQuery = gql`
             id
             label
             description
+            fullDescription
         }
     }
 `;

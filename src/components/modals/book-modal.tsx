@@ -113,7 +113,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     const [bookSeries, setBookSeries] = useState<IOption<string>>(item?.bookSeries ? {
         id: item.bookSeries.id,
         label: item.bookSeries.name,
-        description: item.bookSeries.description
+        fullDescription: item.bookSeries.description
     } : null);
     const { update, updating, updatingError } = useUpdateBook();
     const { create, creating, creatingError } = useCreateBook();
@@ -146,6 +146,9 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             .then(options => {
                 setLoadingBookSeries(false);
                 setBookSeriesOptions(options);
+                if (bookSeriesId) {
+                    setBookSeries(options.find(opt => opt.id === bookSeriesId));
+                }
                 formContext.setValue('bookSeriesId', id ? options.find(opt => opt.id === id)?.id : null);
             })
             .catch(() => {
@@ -509,10 +512,10 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                     <Ages selected={ages} onOptionClick={isAdmin ? onAgeClick : null}></Ages>
                 </Grid>
 
-                {!!bookSeries?.description &&
+                {!!bookSeries?.fullDescription &&
                   <Grid item xs={12}>
                     <Box mb={1}><b>Опис серії:</b></Box>
-                    <Box dangerouslySetInnerHTML={{ __html: bookSeries.description }}></Box>
+                    <Box dangerouslySetInnerHTML={{ __html: bookSeries.fullDescription }}></Box>
                   </Grid>}
 
                 <Grid item xs={12}>

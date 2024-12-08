@@ -31,7 +31,12 @@ export async function getBookSeriesOptions(filters?: BookSeriesFilter): Promise<
     }
     const items = await query.sort({ name: 'asc' });
 
-    return items.map(item => ({ id: item.id, label: item.name, description: item.publishingHouse.name }));
+    return items.map(item => ({
+        id: item.id,
+        label: item.name,
+        description: item.publishingHouse.name,
+        fullDescription: item.description
+    }));
 }
 
 

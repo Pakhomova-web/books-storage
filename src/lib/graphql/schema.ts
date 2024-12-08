@@ -144,6 +144,7 @@ const typeDefs =  /* GraphQL */ `
         id: ID!
         label: String!
         description: String
+        fullDescription: String
     }
 
     type Query {

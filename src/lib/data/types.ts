@@ -164,6 +164,7 @@ export interface IOption<T> {
     id: T,
     label: string,
     description?: string
+    fullDescription?: string
 }
 
 export interface IPageable {

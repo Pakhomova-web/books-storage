@@ -264,6 +264,7 @@ export type DeliveryUpdateInput = {
 
 export type IOption = {
   description?: Maybe<Scalars['String']['output']>;
+  fullDescription?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   label: Scalars['String']['output'];
 };
@@ -1264,6 +1265,7 @@ export type DeliverySubListResolvers<ContextType = any, ParentType extends Resol
 
 export type IOptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['IOption'] = ResolversParentTypes['IOption']> = {
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  fullDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   label?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
