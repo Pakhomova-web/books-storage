@@ -41,3 +41,7 @@ html, body {
 .MuiFormControlLabel-root {
     margin: 0;
 }
+
+.MuiToolbar-regular {
+    padding: 0 !important;
+}

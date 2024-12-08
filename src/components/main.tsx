@@ -12,6 +12,7 @@ import { isAdmin } from '@/utils/utils';
 import { styled } from '@mui/material/styles';
 import TopSoldBooks from '@/components/books/top-sold-books';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import CustomImage from '@/components/custom-image';
 
 const authUrls = ['/sign-in'];
 const commonUrls = ['/books', '/books/details'];
@@ -76,9 +77,9 @@ export default function Main({ children }) {
                 <Toolbar/>
                 <Box sx={styleVariables.overflowHidden}>
                   <Box sx={pageStyles} px={{ lg: '15%', md: '5%', xs: 1 }} pt={1}>
-                    <Box position="relative">
-                        {children}
-                    </Box>
+                      {mobileMatches && <TopSoldBooks mobile={true}/>}
+
+                      <Box position="relative">{children}</Box>
                   </Box>
                 </Box>
               </>}
