@@ -3,16 +3,15 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
 import { authStyles } from '@/styles/auth';
-import ErrorNotification from '@/components/error-notification';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
 import { emailValidatorExp, passwordValidatorExp } from '@/constants/validators-exp';
 import { useLogin, useSendResetPasswordLink } from '@/lib/graphql/queries/auth/hook';
 import { useAuth } from '@/components/auth-context';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomLink from '@/components/custom-link';
+import CustomImage from '@/components/custom-image';
 
 export default function LoginModal({ open }) {
     const router = useRouter();
@@ -26,6 +25,7 @@ export default function LoginModal({ open }) {
     } = useSendResetPasswordLink();
     const { email, password } = formContext.watch();
     const [successMsgAfterSendingResetPasswordLink, setSuccessMsgAfterSendingResetPasswordLink] = useState<boolean>(false);
+    const [showForgotPasswordModal, setShowForgotPasswordModal] = useState<boolean>(false);
 
     useEffect(() => {
         if (password && !passwordValidatorExp.test(password)) {
@@ -65,11 +65,16 @@ export default function LoginModal({ open }) {
         }
     }
 
-    function onForgotPasswordClick() {
-        setSuccessMsgAfterSendingResetPasswordLink(true);
+    function onSendResetPasswordLink() {
+        setShowForgotPasswordModal(false);
         sendResetPasswordLink(formContext.getValues().email)
+            .then(() => setSuccessMsgAfterSendingResetPasswordLink(true))
             .catch(() => {
             });
+    }
+
+    function onForgotPasswordClick() {
+        setShowForgotPasswordModal(true);
     }
 
     function goToSignInPage() {
@@ -82,7 +87,8 @@ export default function LoginModal({ open }) {
     }
 
     return (
-        <CustomModal open={open} loading={loading || sendingResetPasswordLink}>
+        <CustomModal open={open} loading={loading || sendingResetPasswordLink}
+                     error={error || errorSendingResetPasswordLink}>
             <Box sx={authStyles.title} mb={2}>Вхід</Box>
 
             <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
@@ -104,11 +110,24 @@ export default function LoginModal({ open }) {
                         </CustomLink> :
                         <CustomModal open={true}
                                      onClose={() => setSuccessMsgAfterSendingResetPasswordLink(false)}>
-                            <Box textAlign="center"><ThumbUpIcon color="primary"/></Box>
+                            <Box display="flex" justifyContent="center" width="100%">
+                                <Box width="80px" height="80px">
+                                    <CustomImage imageLink="/sent_email.png"/>
+                                </Box>
+                            </Box>
                             <Box textAlign="center">
                                 Посилання на відновлення паролю було успішно відправлено!
                             </Box>
                         </CustomModal>}
+                    {showForgotPasswordModal &&
+                      <CustomModal open={true}
+                                   onSubmit={onSendResetPasswordLink}
+                                   submitText="Так"
+                                   onClose={() => setShowForgotPasswordModal(false)}>
+                        <Box textAlign="center">
+                          Для відновлення паролю Вам буде надіслано повідомлення на ел. пошту {email}. Продовжити?
+                        </Box>
+                      </CustomModal>}
                 </Box>
 
                 <Grid container spacing={2} mb={1}>
@@ -135,10 +154,6 @@ export default function LoginModal({ open }) {
                     Створити новий аккаунт
                 </CustomLink>
             </Box>
-
-            {error && <ErrorNotification error={error}></ErrorNotification>}
-            {errorSendingResetPasswordLink &&
-              <ErrorNotification error={errorSendingResetPasswordLink}></ErrorNotification>}
         </CustomModal>
     );
 }

@@ -4,6 +4,8 @@ import React, { ReactNode } from 'react';
 import { borderRadius, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import { FormContainer } from 'react-hook-form-mui';
+import { ApolloError } from '@apollo/client';
+import ErrorNotification from '@/components/error-notification';
 
 const modalContainerStyle = {
     display: 'flex',
@@ -51,6 +53,7 @@ interface ICustomModalProps {
     children?: ReactNode,
     title?: string,
     loading?: boolean,
+    error?: ApolloError,
     open: boolean,
     disableBackdropClick?: boolean,
     isSubmitDisabled?: boolean,
@@ -58,6 +61,7 @@ interface ICustomModalProps {
     hideSubmit?: boolean,
     formContext?: any,
     onSubmit?: () => void,
+    submitText?: string,
     actions?: { title: string, onClick: () => void }[],
     big?: boolean
 }
@@ -82,6 +86,8 @@ export default function CustomModal(props: ICustomModalProps) {
                 <Box sx={innerContainer(isWithActions())}>
                     {!!props.title && <Box sx={titleStyles} pb={2}>{props.title}</Box>}
 
+                    {!!props.error && <ErrorNotification error={props.error}/>}
+
                     <Box sx={childrenContainer} pt={1}>
                         {!!props.formContext ?
                             <FormContainer formContext={props.formContext}
@@ -99,7 +105,7 @@ export default function CustomModal(props: ICustomModalProps) {
                         {props.onClose && <Button variant="outlined" onClick={props.onClose}>Закрити</Button>}
                         {!props.hideSubmit && props.onSubmit ?
                             <Button onClick={props.onSubmit} variant="contained" disabled={props.isSubmitDisabled || props.loading}>
-                                Зберегти
+                                {props.submitText || 'Зберегти' }
                             </Button>
                             : null}
                         {props.actions?.length && props.actions.map((action, index) => (
