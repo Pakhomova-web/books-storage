@@ -49,7 +49,7 @@ export default function SortButton(props: ISortButtonProps) {
                 Сортувати:<StyledSelected onClick={onSortClick}>{selectedItem?.title}</StyledSelected>
             </Box>
 
-            <IconButton aria-haspopup="true" color="primary"><SortIcon/></IconButton>
+            <IconButton aria-haspopup="true" color="primary" onClick={onSortClick}><SortIcon/></IconButton>
 
             <Menu anchorEl={anchorMenuEl}
                   open={!!anchorMenuEl}
