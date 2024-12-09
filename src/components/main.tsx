@@ -2,19 +2,20 @@ import { Box, Toolbar, Tooltip, useTheme } from '@mui/material';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react';
+import { styled } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+
 import { fullHeight, pageStyles, styleVariables } from '@/constants/styles-variables';
 import CustomToolbar from '@/components/custom-toolbar';
 import { useUser } from '@/lib/graphql/queries/auth/hook';
-import Loading from '@/components/loading';
 import { useAuth } from '@/components/auth-context';
+import Loading from '@/components/loading';
 import { UserEntity } from '@/lib/data/types';
 import { isAdmin } from '@/utils/utils';
-import { styled } from '@mui/material/styles';
 import TopSoldBooks from '@/components/books/top-sold-books';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 const authUrls = ['/sign-in', '/reset-password'];
-const commonUrls = ['/books', '/books/details'];
+const commonUrls = ['/books', '/books/details', '/publishing-houses'];
 
 const StyledDiscountBox = styled(Box)(({ theme }) => ({
     position: 'fixed',

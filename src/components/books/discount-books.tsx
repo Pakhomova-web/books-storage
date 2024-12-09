@@ -36,9 +36,8 @@ export default function DiscountBooks() {
               <Grid item xs={12} sx={styleVariables.sectionTitle}>
                 Акційні товари
 
-                  {items?.length === (mobileMatches ? 2 : 5) &&
-                    <Button variant="outlined" onClick={() => router.push(`/books?withDiscount=true`)}>
-                      Дивитися усі<ArrowForwardIcon/></Button>}
+                <Button variant="outlined" onClick={() => router.push(`/books?withDiscount=true`)}>
+                  Дивитися усі<ArrowForwardIcon/></Button>
               </Grid>
 
               <Grid container display="flex" justifyContent="center">

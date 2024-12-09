@@ -64,7 +64,7 @@ export default function BooksList({ items, filters = {}, pageUrl = '/' }) {
 
     return (
         items.map(((book, index) => (
-            <StyledGrid item key={index} xl={2} lg={3} md={4} xs={6} p={2} onClick={() => onClick(book)}>
+            <StyledGrid item key={index} xl={2} lg={3} md={4} xs={6} p={1} onClick={() => onClick(book)}>
                 <Box display="flex"
                      flexDirection="column"
                      alignItems="center"
