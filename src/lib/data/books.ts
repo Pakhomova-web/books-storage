@@ -414,7 +414,7 @@ function _getBookData(input: Partial<BookEntity>) {
         ...input,
         authors: input.authorIds,
         illustrators: input.illustratorIds,
-        language: input.languageIds,
+        languages: input.languageIds,
         bookSeries: input.bookSeriesId,
         coverType: input.coverTypeId,
         pageType: input.pageTypeId,
