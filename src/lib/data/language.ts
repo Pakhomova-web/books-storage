@@ -55,7 +55,7 @@ export async function getLanguageById(id: string) {
 }
 
 export async function deleteLanguage(id: string) {
-    await checkUsageInBook('language', [id], 'Language');
+    await checkUsageInBook('languages', [id], 'Language');
     await Language.findByIdAndDelete(id);
 
     return { id } as LanguageEntity;

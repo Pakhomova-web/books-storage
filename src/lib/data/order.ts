@@ -25,7 +25,7 @@ export async function getOrders(pageSettings?: IPageable, filters?: IOrderFilter
                             }
                         },
                         { path: 'bookTypes' },
-                        { path: 'language' }
+                        { path: 'languages' }
                     ]
                 }
             }])

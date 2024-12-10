@@ -100,8 +100,7 @@ export default function Books() {
         },
         {
             title: 'Мова',
-            sortValue: 'language',
-            renderValue: (item: BookEntity) => item.language?.name,
+            renderValue: (item: BookEntity) => item.languages?.map(l => l.name).join(', '),
             type: 'text'
         },
         {

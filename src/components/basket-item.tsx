@@ -80,7 +80,7 @@ export default function BasketItem({ book, editable, price, discount, count, pag
                             <CustomLink
                                 onClick={() => onBookClick(book)}><b>{book.name}</b></CustomLink>
                         </Box>
-                        <Box>{book.language.name}</Box>
+                        <Box>{book.languages.map(l => l.name).join(', ')}</Box>
 
                         {!!(discount || book.discount) &&
                           <Box display="flex"><Box sx={styleVariables.discountBoxStyles}>

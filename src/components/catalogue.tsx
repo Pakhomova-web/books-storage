@@ -233,7 +233,8 @@ export default function Catalogue() {
                     BOOK_TYPES.BOOK_IMAGE,
                     BOOK_TYPES.FOLD_OUT_BOOK,
                     BOOK_TYPES.POEMS
-                ]
+                ],
+                ages: [1, 2, 3, 4, 5]
             },
             children: [
                 {

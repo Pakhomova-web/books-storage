@@ -56,7 +56,7 @@ interface IForm {
     authorIds: string[],
     illustratorIds: string[],
     coverTypeId: string,
-    languageId: string,
+    languageIds: string[],
     pageTypeId: string,
     bookTypeIds: string[],
     bookSeriesId: string,
@@ -79,7 +79,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             price: item?.price,
             authorIds: item?.authors?.map(({ id }) => id),
             illustratorIds: item?.illustrators?.map(({ id }) => id),
-            languageId: item?.language?.id,
+            languageIds: item?.languages?.map(({ id }) => id),
             coverTypeId: item?.coverType?.id,
             pageTypeId: item?.pageType?.id,
             bookTypeIds: item?.bookTypes?.map(({ id }) => id),
@@ -105,6 +105,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         description,
         ages,
         authorIds,
+        languageIds,
         bookTypeIds,
         illustratorIds,
         discount,
@@ -288,10 +289,10 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             bookTypeIds,
             price,
             numberOfPages,
-            languageId
+            languageIds
         } = formContext.getValues();
 
-        return !!name && !!numberOfPages && !!bookTypeIds?.length && !!bookSeriesId && !!price && !!pageTypeId && !!coverTypeId && languageId;
+        return !!name && !!numberOfPages && !!bookTypeIds?.length && !!bookSeriesId && !!price && !!pageTypeId && !!coverTypeId && languageIds;
     }
 
     function onAddBookSeries(value: string) {
@@ -378,14 +379,13 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={3} lg={2}>
-                    <CustomSelectField fullWidth
-                                       required
-                                       disabled={!isAdmin}
-                                       loading={loadingLanguages}
-                                       options={languageOptions}
-                                       id="language-id"
-                                       label="Мова"
-                                       name="languageId"/>
+                    <CustomMultipleAutocompleteField required
+                                                     disabled={!isAdmin}
+                                                     loading={loadingLanguages}
+                                                     options={languageOptions}
+                                                     selected={languageIds}
+                                                     label="Мови"
+                                                     onChange={(values: IOption<string>[]) => formContext.setValue('languageIds', values?.map(v => v.id))}/>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={3} lg={2}>

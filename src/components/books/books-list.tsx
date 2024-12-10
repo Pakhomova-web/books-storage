@@ -82,7 +82,7 @@ export default function BooksList({ items, filters = {}, pageUrl = '/' }) {
                     <Box sx={styleVariables.titleFontSize} textAlign="center" mb={1}>{book.name}</Box>
 
                     <Box sx={styleVariables.hintFontSize} mb={1}>
-                        {book.language.name}
+                        {book.languages.map(l => l.name).join(', ')}
                     </Box>
 
                     <Box display="flex" alignItems="center" justifyContent="center" gap={1} mb={1} flexWrap="wrap">

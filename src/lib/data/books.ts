@@ -37,7 +37,7 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
         .populate('bookTypes')
         .populate('pageType')
         .populate('coverType')
-        .populate('language')
+        .populate('languages')
         .populate('authors')
         .populate('illustrators')
         .sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
@@ -47,14 +47,14 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
     await query.exec().then((items: BookEntity[]) => {
         if (quickSearch) {
             items = items.filter(
-                ({ authors, name, bookSeries, bookTypes, tags, illustrators, language, description }) =>
+                ({ authors, name, bookSeries, bookTypes, tags, illustrators, languages, description }) =>
                     quickSearch.test(name) ||
                     (authors?.length && authors.some(author => quickSearch.test(author.name))) ||
                     (illustrators?.length && illustrators.some(illustrator => quickSearch.test(illustrator.name))) ||
                     (bookTypes?.length && bookTypes.some(bookType => quickSearch.test(bookType.name))) ||
+                    (languages?.length && languages.some(language => quickSearch.test(language.name))) ||
                     quickSearch.test(bookSeries.name) ||
                     quickSearch.test(bookSeries.description) ||
-                    quickSearch.test(language.name) ||
                     quickSearch.test(description) ||
                     quickSearch.test(bookSeries.publishingHouse.name) ||
                     tags?.some(tag => quickSearch.test(tag))
@@ -85,7 +85,7 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
 
 export async function getBookById(id: string) {
     const item = await Book.findById(id)
-        .populate('language')
+        .populate('languages')
         .populate('bookTypes')
         .populate('authors')
         .populate('illustrators')
@@ -108,7 +108,7 @@ export async function getBookById(id: string) {
 }
 
 export async function createBook(input: Partial<BookEntity>) {
-    const item = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeIds, input.pageTypeId, input.coverTypeId, input.languageId);
+    const item = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeIds, input.pageTypeId, input.coverTypeId, input.languageIds);
 
     if (item) {
         return null;
@@ -134,7 +134,7 @@ export async function updateBook(input: Partial<BookEntity>, updateAllBooksInSer
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const itemByName = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeIds, input.pageTypeId, input.coverTypeId, input.languageId);
+    const itemByName = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeIds, input.pageTypeId, input.coverTypeId, input.languageIds);
 
     if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
         throw new GraphQLError(`Книга з назвою '${input.name}' вже є.`, {
@@ -225,14 +225,14 @@ export async function addComment(id: string, input: CommentEntity) {
     return book as BookEntity;
 }
 
-function _getBookByUnique(name: string, bookSeries: string, bookTypes: string[], pageType: string, coverType: string, language: string) {
+function _getBookByUnique(name: string, bookSeries: string, bookTypes: string[], pageType: string, coverType: string, languages: string[]) {
     return Book.findOne({
         name: new RegExp(`^${name}$`, "i"),
         bookSeries,
         bookTypes,
         pageType,
         coverType,
-        language
+        languages
     });
 }
 
@@ -293,7 +293,7 @@ export async function getBooksFromSeries(bookId: string, rowsPerPage: number) {
             }
         })
         .populate('bookTypes')
-        .populate('language')
+        .populate('languages')
         .sort({ numberInStock: 'desc' });
 }
 
@@ -319,7 +319,7 @@ export async function getBooksByAuthor(authorId: string, rowsPerPage: number, ex
             }
         })
         .populate('bookTypes')
-        .populate('language');
+        .populate('languages');
 }
 
 export async function getBooksByIds(ids: string[], pageSettings: IPageable) {
@@ -336,7 +336,7 @@ export async function getBooksByIds(ids: string[], pageSettings: IPageable) {
             }
         })
         .populate('bookTypes')
-        .populate('language');
+        .populate('languages');
 
     if (pageSettings && pageSettings.rowsPerPage && pageSettings.page !== undefined) {
         query
@@ -361,7 +361,7 @@ export async function getBooksWithDiscount(rowsPerPage: number) {
             }
         })
         .populate('bookTypes')
-        .populate('language');
+        .populate('languages');
     const totalCount = await query.countDocuments();
     const random = Math.floor(Math.random() * (totalCount - rowsPerPage + 1));
 
@@ -378,7 +378,7 @@ export async function getTopOfSoldBooks(rowsPerPage: number) {
             }
         })
         .populate('bookTypes')
-        .populate('language')
+        .populate('languages')
         .sort({ numberSold: 'desc' }).limit(rowsPerPage);
 }
 
@@ -414,7 +414,7 @@ function _getBookData(input: Partial<BookEntity>) {
         ...input,
         authors: input.authorIds,
         illustrators: input.illustratorIds,
-        language: input.languageId,
+        language: input.languageIds,
         bookSeries: input.bookSeriesId,
         coverType: input.coverTypeId,
         pageType: input.pageTypeId,

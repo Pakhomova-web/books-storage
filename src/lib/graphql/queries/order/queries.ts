@@ -37,7 +37,7 @@ const orderFragment = gql`
                 name
                 imageIds
                 numberInStock
-                language {
+                languages {
                     name
                 }
                 bookSeries {

@@ -34,11 +34,11 @@ const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
         type: Schema.Types.ObjectId,
         required: true
     },
-    language: {
+    languages: [{
         ref: 'language',
         type: Schema.Types.ObjectId,
         required: true
-    },
+    }],
     authors: [{
         ref: 'author',
         type: Schema.Types.ObjectId

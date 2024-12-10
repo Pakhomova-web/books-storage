@@ -107,10 +107,7 @@ export default function BookDetails() {
                 {
                     title: 'Мова',
                     type: 'text',
-                    renderValue: (book: BookEntity) => book.language?.name,
-                    onValueClick: () => {
-                        router.push(`/books?language=${book.language.id}`);
-                    }
+                    renderValue: (book: BookEntity) => book.languages.map(l => l.name).join(', ')
                 },
                 { title: 'Тип сторінок', type: 'text', renderValue: (book: BookEntity) => book.pageType?.name },
                 { title: 'Обкладинка', type: 'text', renderValue: (book: BookEntity) => book.coverType?.name },

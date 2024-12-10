@@ -89,8 +89,8 @@ export class BookEntity {
     bookTypes?: BookTypeEntity[];
     pageTypeId: string;
     pageType?: PageTypeEntity;
-    languageId: string;
-    language?: LanguageEntity;
+    languageIds: string[];
+    languages?: LanguageEntity[];
     authorIds: string[];
     authors?: AuthorEntity[];
     illustratorIds: string[];
@@ -121,8 +121,8 @@ export class BookEntity {
             this.bookTypes = data.bookTypes;
             this.pageTypeId = data.pageTypeId;
             this.pageType = data.pageType;
-            this.languageId = data.languageId;
-            this.language = data.language;
+            this.languageIds = data.languageIds;
+            this.languages = data.languages;
             this.imageIds = data.imageIds;
             this.tags = data.tags;
             this.authorIds = data.authorIds;
@@ -150,7 +150,7 @@ export class BookEntity {
             bookSeriesId: this.bookSeriesId || this.bookSeries?.id,
             coverTypeId: this.coverTypeId || this.coverType?.id,
             pageTypeId: this.pageTypeId || this.pageType?.id,
-            languageId: this.languageId || this.language?.id,
+            languageIds: this.languageIds || this.languages?.map(l => l.id),
             authorIds: this.authorIds || this.authors.map(({ id }) => id),
             imageIds: this.imageIds,
             tags: this.tags,

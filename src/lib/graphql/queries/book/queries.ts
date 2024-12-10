@@ -13,7 +13,7 @@ const bookFragment = gql`
         format
         imageIds
         ages
-        language {
+        languages {
             id
             name
         }
@@ -64,7 +64,7 @@ export const bookListFragment = gql`
         numberInStock
         archived
         imageIds
-        language {
+        languages {
             id
             name
         }
