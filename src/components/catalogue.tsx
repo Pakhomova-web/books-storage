@@ -336,6 +336,7 @@ export default function Catalogue() {
 
     function onSectionClick(params: { [key: string]: (string | number)[] }, title?: string, url?: string) {
         setParentIndex(null);
+        setOpenModal(false);
         let filters = {};
 
         Object.keys(params).forEach(key => {
