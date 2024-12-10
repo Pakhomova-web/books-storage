@@ -1,12 +1,17 @@
-import { Box, Grid, useTheme } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, Box, Grid, useTheme } from "@mui/material";
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import { borderRadius, primaryLightColor } from '@/constants/styles-variables';
 import { useRouter } from 'next/router';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+
+import { borderRadius, primaryLightColor } from '@/constants/styles-variables';
 import { getParamsQueryString } from '@/utils/utils';
 import { BOOK_TYPES, LANGUAGES } from '@/constants/options';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CustomLink from '@/components/custom-link';
+import CustomModal from '@/components/modals/custom-modal';
+import CustomImage from '@/components/custom-image';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const StyledChildrenContainer = styled(Box)(() => ({
     background: 'white',
@@ -320,7 +325,14 @@ export default function Catalogue() {
         }
     ]);
     const [parentIndex, setParentIndex] = useState<number | null>(null);
+    const [openModal, setOpenModal] = useState<boolean>(false);
     const router = useRouter();
+    const [expanded, setExpanded] = React.useState<string | false>(false);
+
+    const handleChange =
+        (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+            setExpanded(isExpanded ? panel : false);
+        };
 
     function onSectionClick(params: { [key: string]: (string | number)[] }, title?: string, url?: string) {
         setParentIndex(null);
@@ -337,12 +349,41 @@ export default function Catalogue() {
 
     return (
         mobileMatches ?
-            <StyledContainer container>
-                <StyledGrid item xs={12} px={2} py={2} sx={rightDivider}>
-                    Каталог
+            <StyledContainer container mb={1}>
+                <StyledGrid item xs={12} px={2} py={1} sx={rightDivider} onClick={() => setOpenModal(true)}>
+                    <Box width="30px" mr={1}><CustomImage imageLink="/catalogue.png"/></Box>Каталог
                 </StyledGrid>
+
+                <CustomModal open={openModal} onClose={() => setOpenModal(false)} title="Каталог">
+                    {items.map((item, index) => (
+                        <Accordion key={index} expanded={expanded === `panel-${index}`}
+                                   onChange={handleChange(`panel-${index}`)}>
+                            <AccordionSummary expandIcon={<KeyboardArrowDownIcon color="primary"/>}>
+                                {item.title}
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                {item.children.map((child, index) => (
+                                    <Box key={index} py={2}>
+                                        <CustomLink
+                                            onClick={() => onSectionClick(child.params, child.title, child.url)}>
+                                            {child.title}
+                                        </CustomLink>
+                                    </Box>
+                                ))}
+                                <Box key={index} py={2} mt={1}>
+                                    <CustomLink
+                                        onClick={() => onSectionClick(item.params, item.title, item.url)}>
+                                        <Box display="flex" alignItems="center" gap={1}>Дивитися усі
+                                            <ArrowForwardIcon color="primary"/>
+                                        </Box>
+                                    </CustomLink>
+                                </Box>
+                            </AccordionDetails>
+                        </Accordion>
+                    ))}
+                </CustomModal>
             </StyledContainer> :
-            <StyledContainer container>
+            <StyledContainer container mb={1}>
                 {items.map((item, index) => (
                     <>
                         <StyledGrid item xs={3} key={index} px={2} py={{ md: 1, lg: 2 }}
@@ -362,6 +403,10 @@ export default function Catalogue() {
                                   <CustomLink onClick={() => onSectionClick(item.params, item.title, item.url)}
                                               key={index}>{item.title}</CustomLink>)
                               )}
+
+                            <Box mb={1}></Box>
+                            <CustomLink onClick={() => onSectionClick({}, null, '/publishing-houses')}
+                                        key={index}>Подивитись усі видавництва</CustomLink>
                           </StyledChildrenContainer>}
                     </>
                 ))}

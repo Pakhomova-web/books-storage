@@ -11,6 +11,7 @@ import SocialMediaBox from '@/components/social-media-box';
 import DeliveriesBox from '@/components/deliveries-box';
 import { MAIN_NAME } from '@/constants/main-name';
 import DiscountBooks from '@/components/books/discount-books';
+import Catalogue from '@/components/catalogue';
 
 const mobileImageBoxStyles = {
     height: '70px',
@@ -40,6 +41,8 @@ export default function PublishingHouses() {
             </Head>
 
             <SocialMediaBox/>
+
+            <Catalogue/>
 
             <Grid container position="relative" mb={1}>
                 <Loading show={loadingPublishingHouses} isSmall={true}></Loading>

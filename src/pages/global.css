@@ -45,3 +45,11 @@ html, body {
 .MuiToolbar-regular {
     padding: 0 !important;
 }
+
+.MuiAccordion-root {
+    box-shadow: 0 2px 1px -1px rgba(68, 138, 255, 0.2), 0 1px 1px 0 rgba(68, 138, 255, 0.14), 0 1px 3px 0 rgba(68, 138, 255, 0.12);
+}
+
+.MuiPaper-root::before {
+    background-color: rgba(68, 138, 255, 0.2);
+}
