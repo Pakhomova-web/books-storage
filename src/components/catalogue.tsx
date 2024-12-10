@@ -352,7 +352,9 @@ export default function Catalogue() {
         mobileMatches ?
             <StyledContainer container mb={1}>
                 <StyledGrid item xs={12} px={2} py={1} sx={rightDivider} onClick={() => setOpenModal(true)}>
-                    <Box width="30px" mr={1}><CustomImage imageLink="/catalogue.png"/></Box>Каталог
+                    <Box width="30px" mr={1} display="flex" alignItems="center">
+                        <CustomImage imageLink="/catalogue.png"/>
+                    </Box>Каталог
                 </StyledGrid>
 
                 <CustomModal open={openModal} onClose={() => setOpenModal(false)} title="Каталог">
