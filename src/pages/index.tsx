@@ -76,7 +76,7 @@ export default function Home() {
             <Grid container position="relative" mb={1} justifyContent="center">
                 <Loading show={loadingBookTypes} isSmall={true}></Loading>
 
-                <Grid item xs={12} sx={styleVariables.sectionTitle} mb={1}>Типи книг</Grid>
+                <Grid item xs={12} sx={styleVariables.sectionTitle} mb={1}>Категорії</Grid>
 
                 {!!bookTypes?.length &&
                   <Grid container spacing={1} justifyContent="center">
