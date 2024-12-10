@@ -160,7 +160,7 @@ export function BookFilters(props: IBookFiltersProps) {
                                                      label="Серії"
                                                      loading={loadingBookSeries}
                                                      selected={bookSeries}
-                                                     onChange={val => formContext.setValue('bookSeries', val?.id)}/>
+                                                     onChange={values => formContext.setValue('bookSeries', values?.map(v => v.id))}/>
                 </Grid>
 
                 <Grid item xs={12}>
