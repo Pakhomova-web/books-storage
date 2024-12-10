@@ -364,7 +364,7 @@ export default function Catalogue() {
                             </AccordionSummary>
                             <AccordionDetails>
                                 {item.children.map((child, index) => (
-                                    <Box key={index} py={2}>
+                                    <Box key={index} py={2} pl={2}>
                                         <CustomLink
                                             onClick={() => onSectionClick(child.params, child.title, child.url)}>
                                             {child.title}

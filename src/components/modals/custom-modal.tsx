@@ -102,10 +102,13 @@ export default function CustomModal(props: ICustomModalProps) {
                     </Box>
 
                     {isWithActions() && <Box sx={buttonsContainerStyles} gap={2}>
-                        {props.onClose && <Button variant="outlined" onClick={props.onClose}>Закрити</Button>}
+                        {props.onClose &&
+                          <Button variant="outlined" onClick={props.onClose}
+                                  autoFocus={true}>Закрити</Button>}
                         {!props.hideSubmit && props.onSubmit ?
-                            <Button onClick={props.onSubmit} variant="contained" disabled={props.isSubmitDisabled || props.loading}>
-                                {props.submitText || 'Зберегти' }
+                            <Button onClick={props.onSubmit} variant="contained"
+                                    disabled={props.isSubmitDisabled || props.loading}>
+                                {props.submitText || 'Зберегти'}
                             </Button>
                             : null}
                         {props.actions?.length && props.actions.map((action, index) => (
