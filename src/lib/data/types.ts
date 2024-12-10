@@ -178,7 +178,7 @@ export class BookFilter {
     quickSearch?: string;
     id?: string;
     name?: string;
-    bookSeries?: string;
+    bookSeries?: string[];
     description?: string;
     bookTypes?: string[];
     coverType?: string;
@@ -197,25 +197,25 @@ export class BookFilter {
 
     constructor(data?) {
         if (data) {
-            this.quickSearch = data.quickSearch;
-            this.id = data.id;
-            this.name = data.name;
-            this.bookSeries = data.bookSeries;
-            this.description = data.description;
-            this.bookTypes = data.bookTypes && typeof data.bookTypes === 'string' ? data.bookTypes.split(',') : data.bookTypes;
-            this.coverType = data.coverType;
-            this.pageType = data.pageType;
+            this.quickSearch = data.quickSearch || '';
+            this.id = data.id || '';
+            this.name = data.name || '';
+            this.description = data.description || '';
+            this.bookTypes = data.bookTypes && typeof data.bookTypes === 'string' ? data.bookTypes.split(',') : (data.bookTypes || []);
+            this.bookSeries = data.bookSeries && typeof data.bookSeries === 'string' ? data.bookSeries.split(',') : (data.bookSeries || []);
+            this.coverType = data.coverType || '';
+            this.pageType = data.pageType || '';
             this.priceMax = +data.priceMax || null;
-            this.priceMin = +data.priceMin || null;
-            this.isbn = data.isbn;
-            this.authors = data.authors && typeof data.authors === 'string' ? data.authors.split(',') : data.authors;
-            this.languages = data.languages && typeof data.languages === 'string' ? data.languages.split(',') : data.languages;
+            this.priceMin = +data.priceMin || 0;
+            this.isbn = data.isbn || '';
+            this.authors = data.authors && typeof data.authors === 'string' ? data.authors.split(',') : (data.authors || []);
+            this.languages = data.languages && typeof data.languages === 'string' ? data.languages.split(',') : (data.languages || []);
             this.isInStock = data.isInStock ? data.isInStock.toString() === 'true' : null;
             this.withDiscount = data.withDiscount ? data.withDiscount.toString() === 'true' : null;
-            this.publishingHouse = data.publishingHouse;
+            this.publishingHouse = data.publishingHouse || '';
             this.tags = !!data.tags ? (typeof data.tags === 'string' ? data.tags.split(',') : data.tags) : [];
             this.archived = data.archived !== undefined ? data.archived : false;
-            this.ages = data.ages && typeof data.ages === 'string' ? data.ages.split(',').map(age => +age) : data.ages;
+            this.ages = data.ages && typeof data.ages === 'string' ? data.ages.split(',').map(age => +age) : (data.ages || []);
         }
     }
 }

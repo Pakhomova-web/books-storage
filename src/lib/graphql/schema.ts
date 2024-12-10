@@ -389,7 +389,7 @@ const typeDefs =  /* GraphQL */ `
         description: String
         bookTypes: [ID]
         coverType: ID
-        bookSeries: ID
+        bookSeries: [ID]
         pageType: ID
         isbn: String
         languages: [ID]

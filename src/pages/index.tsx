@@ -13,6 +13,7 @@ import SocialMediaBox from '@/components/social-media-box';
 import DeliveriesBox from '@/components/deliveries-box';
 import { MAIN_NAME } from '@/constants/main-name';
 import DiscountBooks from '@/components/books/discount-books';
+import Catalogue from '@/components/catalogue';
 
 const bookTypeBoxStyles = {
     borderRadius,
@@ -67,6 +68,8 @@ export default function Home() {
             </Head>
 
             <SocialMediaBox/>
+
+            <Catalogue/>
 
             <DiscountBooks/>
 

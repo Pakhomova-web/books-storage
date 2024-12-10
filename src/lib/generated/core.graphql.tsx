@@ -98,7 +98,7 @@ export type BookSearchInput = {
   ages?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   archived?: InputMaybe<Scalars['Boolean']['input']>;
   authors?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
-  bookSeries?: InputMaybe<Scalars['ID']['input']>;
+  bookSeries?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   bookTypes?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   coverType?: InputMaybe<Scalars['ID']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;

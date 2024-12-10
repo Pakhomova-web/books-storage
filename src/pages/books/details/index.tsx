@@ -34,6 +34,7 @@ import DiscountBooks from '@/components/books/discount-books';
 import RecentlyViewedBooks from '@/components/books/recently-viewed-books';
 import IconWithText from '@/components/icon-with-text';
 import BookModal from '@/components/modals/book-modal';
+import Catalogue from '@/components/catalogue';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
     height: '40px',
@@ -248,6 +249,8 @@ export default function BookDetails() {
             </Head>
 
             <Loading show={loading || refetching}></Loading>
+
+            <Catalogue/>
 
             <Grid container display="flex" alignItems="center" mb={!book ? 1 : 0}>
                 <Grid item sm={6}>

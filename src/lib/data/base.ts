@@ -48,7 +48,7 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
             if (key === 'quickSearch') {
                 return;
             }
-            if (filters[key] !== null && filters[key] !== undefined) {
+            if (filters[key] !== null && filters[key] !== undefined && filters[key].length > 0) {
                 if (key === 'name') {
                     andFilters.push({ [key]: getCaseInsensitiveSubstringOption(filters[key]) });
                 } else if (key === 'isInStock') {
@@ -60,20 +60,12 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
                 } else if (key === 'archived') {
                     andFilters.push({ archived: !!filters[key] ? true : { $in: [null, false] } });
                 } else if (key === 'authors') {
-                    if (!!filters[key]?.length) {
-                        orFilters.push({ authors: { $in: filters[key] } });
-                        orFilters.push({ illustrators: { $in: filters[key] } });
-                    }
-                } else if (key === 'ages') {
-                    andFilters.push({ [key]: { $all: filters[key] } });
+                    orFilters.push({ authors: { $in: filters[key] } });
+                    orFilters.push({ illustrators: { $in: filters[key] } });
                 } else if (key === 'tags') {
-                    if (!!filters[key]?.length) {
-                        andFilters.push({ [key]: { $in: filters[key].map(i => getCaseInsensitiveSubstringOption(i)) } });
-                    }
-                } else if (key === 'bookTypes') {
+                    andFilters.push({ [key]: { $in: filters[key].map(i => getCaseInsensitiveSubstringOption(i)) } });
+                } else if (['bookTypes', 'bookSeries', 'languages', 'ages'].includes(key)) {
                     andFilters.push({ [key]: { $in: filters[key] } });
-                } else if (key === 'languages') {
-                    andFilters.push({ language: { $in: filters[key] } });
                 } else if (key === 'priceMin') {
                     andFilters.push({ price: { $gt: filters[key] } });
                 } else if (key === 'priceMax') {

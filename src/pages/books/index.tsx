@@ -32,6 +32,7 @@ import SocialMediaBox from '@/components/social-media-box';
 import DeliveriesBox from '@/components/deliveries-box';
 import RecentlyViewedBooks from '@/components/books/recently-viewed-books';
 import Pagination from '@/components/pagination';
+import Catalogue from '@/components/catalogue';
 
 const StyledAdditionalTopicGrid = styled(Grid)(() => ({
     display: 'flex',
@@ -116,8 +117,12 @@ export default function Books() {
             setFilters(new BookFilter(data));
         }
 
-        if (data?.bookSeries) {
-            promise = getBookSeriesById(data?.bookSeries as string)
+        if (router.query.sectionTitle) {
+            console.log(router.query);
+            console.log(data);
+            setOption([{ title: router.query.sectionTitle as string }]);
+        } else if (!!data?.bookSeries?.length) {
+            promise = getBookSeriesById(data?.bookSeries[0])
                 .then((item: BookSeriesEntity) => [
                     {
                         title: item.publishingHouse.name,
@@ -125,10 +130,10 @@ export default function Books() {
                     },
                     { title: item.name }
                 ]);
-        } else if (data?.bookTypes) {
+        } else if (!!data?.bookTypes?.length) {
             promise = getBookTypeById(data?.bookTypes[0])
                 .then((item: BookTypeEntity) => [{ title: item.name }]);
-        } else if (data?.authors?.length) {
+        } else if (!!data?.authors?.length) {
             promise = getAuthorById(data?.authors[0])
                 .then((item: AuthorEntity) => [{ title: item.name }]);
         } else if (data?.publishingHouse) {
@@ -207,24 +212,7 @@ export default function Books() {
                              showAlwaysSorting={true}
                              onSort={(settings: IPageable) => setPageSettings(settings)}></BookFilters>
 
-                <Grid container mb={1}>
-                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
-                                               onClick={() => router.push('/books?languages=6687b7137b182a0a940db8e4,668bf546ec3efc1d3190cd45')}>
-                        Англійська дітям
-                    </StyledAdditionalTopicGrid>
-                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
-                                               onClick={() => router.push('/books?bookTypes=66901099d4b33119e2069792')}>
-                        Наліпки для найменших
-                    </StyledAdditionalTopicGrid>
-                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
-                                               onClick={() => router.push('/books?tags=новорічна,різдвяна,зимова')}>
-                        Новорічні книги
-                    </StyledAdditionalTopicGrid>
-                    <StyledAdditionalTopicGrid item xs={6} md={3} p={1}
-                                               onClick={() => router.push('/books?bookTypes=671389883908259306710c62')}>
-                        Розмальовки
-                    </StyledAdditionalTopicGrid>
-                </Grid>
+                <Catalogue/>
 
                 {!loadingOption && option && renderBackBox()}
 

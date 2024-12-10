@@ -81,7 +81,7 @@ export function BookFilters(props: IBookFiltersProps) {
     } = useBookSeriesOptions(publishingHouse ? new BookSeriesFilter({ publishingHouse }) : null);
 
     useEffect(() => {
-        formContext.setValue('bookSeries', null);
+        formContext.setValue('bookSeries', []);
     }, [publishingHouse]);
 
     useEffect(() => {
@@ -97,8 +97,8 @@ export function BookFilters(props: IBookFiltersProps) {
         props.onApply();
     }
 
-    function clearValue(controlName: keyof BookFilter) {
-        formContext.setValue(controlName, null);
+    function clearValue(controlName: keyof BookFilter, val) {
+        formContext.setValue(controlName, val);
     }
 
     function onAgeClick(opt: number) {
@@ -136,7 +136,7 @@ export function BookFilters(props: IBookFiltersProps) {
                                      name="quickSearch"
                                      autoFocus={true}
                                      showClear={!!quickSearch}
-                                     onClear={() => clearValue('quickSearch')}/>
+                                     onClear={() => clearValue('quickSearch', '')}/>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -145,7 +145,7 @@ export function BookFilters(props: IBookFiltersProps) {
                                      label="Теги"
                                      name="tags"
                                      showClear={!!tags?.length}
-                                     onClear={() => clearValue('tags')}/>
+                                     onClear={() => clearValue('tags', '')}/>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -156,11 +156,11 @@ export function BookFilters(props: IBookFiltersProps) {
                 </Grid>
 
                 <Grid item xs={12}>
-                    <CustomAutocompleteField options={bookSeriesOptions}
-                                             label="Серія"
-                                             loading={loadingBookSeries}
-                                             selected={bookSeries}
-                                             onChange={val => formContext.setValue('bookSeries', val?.id)}/>
+                    <CustomMultipleAutocompleteField options={bookSeriesOptions}
+                                                     label="Серії"
+                                                     loading={loadingBookSeries}
+                                                     selected={bookSeries}
+                                                     onChange={val => formContext.setValue('bookSeries', val?.id)}/>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -169,7 +169,7 @@ export function BookFilters(props: IBookFiltersProps) {
                                      label="Назва"
                                      name="name"
                                      showClear={!!name}
-                                     onClear={() => clearValue('name')}/>
+                                     onClear={() => clearValue('name', '')}/>
                 </Grid>
 
                 <Grid item xs={6}>
@@ -178,7 +178,7 @@ export function BookFilters(props: IBookFiltersProps) {
                                      name="priceMin"
                                      showClear={!!priceMin}
                                      type="number"
-                                     onClear={() => clearValue('priceMin')}/>
+                                     onClear={() => clearValue('priceMin', 0)}/>
                 </Grid>
 
                 <Grid item xs={6}>
@@ -187,7 +187,7 @@ export function BookFilters(props: IBookFiltersProps) {
                                      name="priceMax"
                                      showClear={!!priceMax}
                                      type="number"
-                                     onClear={() => clearValue('priceMax')}/>
+                                     onClear={() => clearValue('priceMax', '')}/>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -197,7 +197,7 @@ export function BookFilters(props: IBookFiltersProps) {
                                        label="Мова"
                                        name="languages"
                                        showClear={!!languages}
-                                       onClear={() => clearValue('languages')}/>
+                                       onClear={() => clearValue('languages', [])}/>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -210,7 +210,7 @@ export function BookFilters(props: IBookFiltersProps) {
                                             name="bookTypes" showCheckbox variant="outlined"/>
                         {!!bookTypes?.length &&
                           <Box sx={customFieldClearBtnStyles}
-                               onClick={() => clearValue('bookTypes')}>
+                               onClick={() => clearValue('bookTypes', [])}>
                             Очистити
                           </Box>}
                     </Box>
@@ -223,7 +223,7 @@ export function BookFilters(props: IBookFiltersProps) {
                                        label="Тип сторінок"
                                        name="pageType"
                                        showClear={!!pageType}
-                                       onClear={() => clearValue('pageType')}/>
+                                       onClear={() => clearValue('pageType', [])}/>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -233,7 +233,7 @@ export function BookFilters(props: IBookFiltersProps) {
                                        label="Обкладинка"
                                        name="coverType"
                                        showClear={!!coverType}
-                                       onClear={() => clearValue('coverType')}/>
+                                       onClear={() => clearValue('coverType', [])}/>
                 </Grid>
 
                 <Grid item xs={12}>

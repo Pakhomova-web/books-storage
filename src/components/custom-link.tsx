@@ -1,10 +1,14 @@
 import { styled } from "@mui/material/styles";
 import { Box, Link, Tooltip } from "@mui/material";
+import { primaryLightColor } from '@/constants/styles-variables';
 
-const StyledLink = styled(Link)(() => ({
+const StyledLink = styled(Link)(({ theme }) => ({
     color: 'black',
     cursor: 'pointer',
-    textDecoration: 'underline',
+    textDecoration: 'none',
+    ':hover': {
+        color: theme.palette.primary.main
+    }
 }));
 
 export default function CustomLink({ children, tooltip = '', disabled = false, onClick }) {
