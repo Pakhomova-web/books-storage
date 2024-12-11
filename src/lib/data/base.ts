@@ -48,7 +48,7 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
             if (key === 'quickSearch') {
                 return;
             }
-            if (filters[key] !== null && filters[key] !== undefined && filters[key].length > 0) {
+            if (filters[key] !== null && filters[key] !== undefined && (typeof filters[key] === 'boolean' || filters[key].length > 0)) {
                 if (key === 'name') {
                     andFilters.push({ [key]: getCaseInsensitiveSubstringOption(filters[key]) });
                 } else if (key === 'isInStock') {

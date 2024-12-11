@@ -330,11 +330,17 @@ export default function Catalogue() {
     const [expanded, setExpanded] = React.useState<string | false>(false);
 
     const handleChange =
-        (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+        (panel: string) => (_: React.SyntheticEvent, isExpanded: boolean) => {
             setExpanded(isExpanded ? panel : false);
         };
 
-    function onSectionClick(params: { [key: string]: (string | number)[] }, title?: string, url?: string) {
+    function onSectionClick(params: {
+        [key: string]: (string | number)[]
+    }, title?: string, url?: string, index?: number) {
+        if (!parentIndex && index >= 0) {
+            setParentIndex(index);
+            return;
+        }
         setParentIndex(null);
         setOpenModal(false);
         let filters = {};
@@ -393,7 +399,7 @@ export default function Catalogue() {
                                     sx={index === items.length - 1 ? rightDivider : {}}
                                     onMouseEnter={() => setParentIndex(index)}
                                     onMouseLeave={() => setParentIndex(null)}
-                                    onClick={() => onSectionClick(item.params, item.title, item.url)}>
+                                    onClick={() => onSectionClick(item.params, item.title, item.url, index)}>
                             {item.title}
                         </StyledGrid>
 
@@ -403,8 +409,11 @@ export default function Catalogue() {
                                                    onMouseLeave={() => setParentIndex(null)}
                                                    sx={{ visibility: parentIndex === index ? 'visible' : 'hidden' }}>
                               {item.children.map((item, index) => (
-                                  <CustomLink onClick={() => onSectionClick(item.params, item.title, item.url)}
-                                              key={index}>{item.title}</CustomLink>)
+                                  <Box key={index} pl={2}>
+                                      <CustomLink onClick={() => onSectionClick(item.params, item.title, item.url)}>
+                                          {item.title}
+                                      </CustomLink>
+                                  </Box>)
                               )}
 
                             <Box mb={1}></Box>
