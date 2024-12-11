@@ -4,17 +4,20 @@ import CustomTextField from '@/components/form-fields/custom-text-field';
 import { Box, Button, Grid, RadioGroup } from '@mui/material';
 import { styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
-import React from 'react';
-import { useCurrentUser } from '@/lib/graphql/queries/auth/hook';
+import React, { useEffect } from 'react';
+import { useChangePassword, useCurrentUser } from '@/lib/graphql/queries/auth/hook';
 import ErrorNotification from '@/components/error-notification';
 import ProfileMenu from '@/pages/profile/profile-menu';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 import { UserEntity } from '@/lib/data/types';
 import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
 import Head from 'next/head';
+import CustomPasswordElement from '@/components/form-fields/custom-password-element';
+import { passwordValidation } from '@/utils/utils';
 
 export default function PersonalInfo() {
     const { user, setUser } = useAuth();
+    const passwordFormContext = useForm<{ oldPassword: string, newPassword: string, confirmPassword: string }>();
     const formContext = useForm({
         defaultValues: {
             id: user?.id,
@@ -32,13 +35,37 @@ export default function PersonalInfo() {
         }
     });
     const { updating, update, updatingError } = useCurrentUser();
+    const { changingPassword, changePassword, changingPasswordError } = useChangePassword();
     const { items: deliveries, loading: loadingDeliveries } = useDeliveries();
+    const { oldPassword, newPassword, confirmPassword } = passwordFormContext.watch();
 
-    async function onSubmit() {
+    function onSubmit() {
         update(formContext.getValues())
             .then(user => setUser(new UserEntity(user)))
             .catch(() => {
             });
+    }
+
+    function onChangePassword() {
+        changePassword(oldPassword, newPassword)
+            .then(() => passwordFormContext.reset())
+            .catch(() => {
+            });
+    }
+
+    useEffect(() => {
+        passwordValidation(passwordFormContext, newPassword, 'newPassword', confirmPassword, 'confirmPassword');
+    }, [newPassword, confirmPassword, passwordFormContext]);
+
+    useEffect(() => {
+        passwordValidation(passwordFormContext, oldPassword, 'oldPassword');
+    }, [oldPassword, passwordFormContext]);
+
+    function isPasswordFormInvalid() {
+        return !oldPassword || !newPassword || !confirmPassword ||
+            !!passwordFormContext.formState.errors.newPassword ||
+            !!passwordFormContext.formState.errors.oldPassword ||
+            !!passwordFormContext.formState.errors.confirmPassword;
     }
 
     return (
@@ -47,7 +74,7 @@ export default function PersonalInfo() {
                 <title>Профіль - Персональні дані</title>
             </Head>
 
-            <Loading show={updating || loadingDeliveries}></Loading>
+            <Loading show={updating || loadingDeliveries || changingPassword}></Loading>
 
             <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
                 <Grid container spacing={2}>
@@ -132,6 +159,36 @@ export default function PersonalInfo() {
                         Зберегти
                     </Button>
                 </Box>
+            </FormContainer>
+
+            <FormContainer formContext={passwordFormContext} handleSubmit={formContext.handleSubmit(onChangePassword)}>
+                <Grid container spacing={2} mb={3} mt={1}>
+                    <Grid item xs={12}>
+                        <Box sx={styleVariables.sectionTitle}>Зміна пароля</Box>
+                    </Grid>
+
+                    <Grid item xs={12} sm={4}>
+                        <CustomPasswordElement name="oldPassword" required label="Поточний пароль" fullWidth/>
+                    </Grid>
+
+                    <Grid item xs={12} sm={4}>
+                        <CustomPasswordElement name="newPassword" required disabled={!oldPassword} label="Новий пароль"
+                                               fullWidth/>
+                    </Grid>
+
+                    <Grid item xs={12} sm={4}>
+                        <CustomPasswordElement name="confirmPassword" required disabled={!oldPassword}
+                                               label="Підтвердити пароль" fullWidth/>
+                    </Grid>
+
+                    {changingPasswordError && <ErrorNotification error={changingPasswordError}></ErrorNotification>}
+
+                    <Grid item xs={12} display="flex" justifyContent="center">
+                        <Button variant="contained" type="submit" disabled={isPasswordFormInvalid()}>
+                            Змінити
+                        </Button>
+                    </Grid>
+                </Grid>
             </FormContainer>
         </ProfileMenu>
     );

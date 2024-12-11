@@ -294,6 +294,7 @@ export type Mutation = {
   approveComment: Book;
   cancelOrder?: Maybe<Order>;
   changePassword?: Maybe<Scalars['String']['output']>;
+  changePasswordByToken?: Maybe<Scalars['String']['output']>;
   changeRecentlyViewedBooks?: Maybe<Array<Book>>;
   createAuthor?: Maybe<Author>;
   createBook?: Maybe<Book>;
@@ -359,6 +360,12 @@ export type MutationCancelOrderArgs = {
 
 
 export type MutationChangePasswordArgs = {
+  newPassword: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+
+export type MutationChangePasswordByTokenArgs = {
   password: Scalars['String']['input'];
   userId: Scalars['String']['input'];
 };
@@ -1308,7 +1315,8 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addBookInBasket?: Resolver<Maybe<Array<ResolversTypes['BasketItem']>>, ParentType, ContextType, RequireFields<MutationAddBookInBasketArgs, 'id'>>;
   approveComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationApproveCommentArgs, 'input'>>;
   cancelOrder?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationCancelOrderArgs, 'id'>>;
-  changePassword?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationChangePasswordArgs, 'password' | 'userId'>>;
+  changePassword?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationChangePasswordArgs, 'newPassword' | 'password'>>;
+  changePasswordByToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationChangePasswordByTokenArgs, 'password' | 'userId'>>;
   changeRecentlyViewedBooks?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<MutationChangeRecentlyViewedBooksArgs, 'id'>>;
   createAuthor?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<MutationCreateAuthorArgs, 'input'>>;
   createBook?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<MutationCreateBookArgs, 'input'>>;

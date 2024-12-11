@@ -9,11 +9,11 @@ import Loading from '@/components/loading';
 import { useSignIn } from '@/lib/graphql/queries/auth/hook';
 import React, { useEffect } from 'react';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
-import { emailValidatorExp, passwordValidatorExp } from '@/constants/validators-exp';
 import { useAuth } from '@/components/auth-context';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { MAIN_NAME } from '@/constants/main-name';
+import { emailValidation, passwordValidation } from '@/utils/utils';
 
 const containerStyles = {
     width: '400px',
@@ -34,36 +34,12 @@ export default function SignIn() {
     const { setOpenLoginModal } = useAuth();
 
     useEffect(() => {
-        if (formContext.formState.touchedFields.password || formContext.formState.touchedFields.confirmPassword) {
-            if (password && !passwordValidatorExp.test(password)) {
-                formContext.setError('password', { message: 'Мін 8 симовлів: A-Z, a-z, 0-9' });
-            } else if (!password && formContext.formState.touchedFields.password) {
-                formContext.setError('password', { message: 'Пароль обов\'язковий' });
-            } else if (!confirmPassword && formContext.formState.touchedFields.confirmPassword) {
-                formContext.setError('confirmPassword', { message: 'Пароль обов\'язковий' });
-            } else if (password !== confirmPassword && formContext.formState.touchedFields.confirmPassword && formContext.formState.touchedFields.password) {
-                formContext.setError('password', { message: 'Паролі повинні співпадати' });
-                formContext.setError('confirmPassword', { message: 'Паролі повинні співпадати' });
-            } else {
-                formContext.clearErrors('password');
-                formContext.clearErrors('confirmPassword');
-            }
-        }
-    }, [password, confirmPassword]);
+        passwordValidation(formContext, password, 'password', confirmPassword, 'confirmPassword');
+    }, [password, confirmPassword, formContext]);
 
     useEffect(() => {
-        if (formContext.formState.touchedFields.email) {
-            if (!email) {
-                formContext.setError('email', { message: 'Ел. адреса обов\'язкова' });
-            } else if (!emailValidatorExp.test(email)) {
-                formContext.setError('email', { message: 'Ел. адреса невірна' });
-            } else {
-                formContext.clearErrors('email');
-            }
-        } else {
-            formContext.clearErrors('email');
-        }
-    }, [email]);
+        emailValidation(formContext, email, 'email');
+    }, [email, formContext]);
 
     function onSubmit() {
         if (!isFormInvalid()) {

@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { UserEntity } from '@/lib/data/types';
 import { _useUpdateItem } from '@/lib/graphql/base-hooks';
 import {
+    changePasswordByTokenQuery,
     changePasswordQuery, checkResetPasswordTokenQuery,
     loginQuery,
     sendUpdatePasswordLinkQuery,
@@ -66,8 +67,8 @@ export function useUser() {
     };
 }
 
-export function useChangePassword() {
-    const [mutate, { loading, error }] = useMutation(changePasswordQuery);
+export function useChangePasswordByToken() {
+    const [mutate, { loading, error }] = useMutation(changePasswordByTokenQuery);
 
     return {
         changePassword: async (userId: string, password: string): Promise<any> => {
@@ -77,6 +78,20 @@ export function useChangePassword() {
         },
         loading,
         error
+    };
+}
+
+export function useChangePassword() {
+    const [mutate, { loading, error }] = useMutation(changePasswordQuery);
+
+    return {
+        changePassword: async (password: string, newPassword: string): Promise<any> => {
+            const { data } = await mutate({ variables: { newPassword, password } });
+
+            return data;
+        },
+        changingPassword: loading,
+        changingPasswordError: error
     };
 }
 

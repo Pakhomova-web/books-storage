@@ -53,7 +53,7 @@ import {
 import { createAuthor, deleteAuthor, getAuthorById, getAuthors, updateAuthor } from '@/lib/data/author';
 import { GraphQLError } from 'graphql/error';
 import {
-    addBookInBasket, changePassword,
+    addBookInBasket, changePassword, changePasswordByToken,
     changeRecentlyViewedBooks,
     createUser,
     getNewToken,
@@ -349,8 +349,12 @@ const resolvers: Resolvers = {
         sendUpdatePasswordLink: async (_root, { email }) => {
             return sendUpdatePasswordLink(email).catch(error => parseError(error));
         },
-        changePassword: async (_root, { userId, password }) => {
-            return changePassword(userId, password).catch(error => parseError(error));
+        changePasswordByToken: async (_root, { userId, password }) => {
+            return changePasswordByToken(userId, password).catch(error => parseError(error));
+        },
+        changePassword: async (_root, { newPassword, password }, { user }) => {
+            _checkUser(user);
+            return changePassword(user.id, password, newPassword).catch(error => parseError(error));
         },
         user: async (_root, {}, { user }) => {
             _checkUser(user);

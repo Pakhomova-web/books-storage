@@ -6,12 +6,12 @@ import React, { useEffect, useState } from 'react';
 
 import { authStyles } from '@/styles/auth';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
-import { emailValidatorExp, passwordValidatorExp } from '@/constants/validators-exp';
 import { useLogin, useSendResetPasswordLink } from '@/lib/graphql/queries/auth/hook';
 import { useAuth } from '@/components/auth-context';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomLink from '@/components/custom-link';
 import CustomImage from '@/components/custom-image';
+import { emailValidation, passwordValidation } from '@/utils/utils';
 
 export default function LoginModal({ open }) {
     const router = useRouter();
@@ -28,28 +28,12 @@ export default function LoginModal({ open }) {
     const [showForgotPasswordModal, setShowForgotPasswordModal] = useState<boolean>(false);
 
     useEffect(() => {
-        if (password && !passwordValidatorExp.test(password)) {
-            formContext.setError('password', { message: 'Мін 8 символів: A-Z, a-z, 0-9' });
-        } else if (!password && formContext.formState.touchedFields.password) {
-            formContext.setError('password', { message: 'Пароль обов\'язковий' });
-        } else {
-            formContext.clearErrors('password');
-        }
-    }, [password]);
+        passwordValidation(formContext, password, 'password');
+    }, [password, formContext]);
 
     useEffect(() => {
-        if (formContext.formState.touchedFields.email) {
-            if (!email) {
-                formContext.setError('email', { message: 'Ел. пошта обов\'язкова' });
-            } else if (!emailValidatorExp.test(email)) {
-                formContext.setError('email', { message: 'Ел. пошта невірна' });
-            } else {
-                formContext.clearErrors('email');
-            }
-        } else {
-            formContext.clearErrors('email');
-        }
-    }, [email]);
+        emailValidation(formContext, email, 'email');
+    }, [email, formContext]);
 
     async function onSubmit() {
         if (!isFormInvalid()) {

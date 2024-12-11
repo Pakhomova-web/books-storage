@@ -225,7 +225,8 @@ const typeDefs =  /* GraphQL */ `
         createUser(input: UserCreateInput!): User
         login(email: String!, password: String!): UserToken!
         sendUpdatePasswordLink(email: String!): String
-        changePassword(userId: String!, password: String!): String
+        changePasswordByToken(userId: String!, password: String!): String
+        changePassword(password: String!, newPassword: String!): String
         user: User
         updateUser(input: UserUpdateInput!): User!
 

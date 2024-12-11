@@ -74,9 +74,15 @@ export const userUpdateQuery = gql`
     ${userFragment}
 `;
 
+export const changePasswordByTokenQuery = gql`
+    mutation ChangePasswordByToken($userId: String!, $password: String!) {
+        changePasswordByToken(userId: $userId, password: $password)
+    }
+`;
+
 export const changePasswordQuery = gql`
-    mutation ChangePassword($userId: String!, $password: String!) {
-        changePassword(userId: $userId, password: $password)
+    mutation ChangePassword($password: String!, $newPassword: String!) {
+        changePassword(password: $password, newPassword: $newPassword)
     }
 `;
 

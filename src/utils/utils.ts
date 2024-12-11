@@ -1,7 +1,7 @@
 import { TableKey } from '@/components/table/table-key';
 import { OrderBookEntity, UserEntity } from '@/lib/data/types';
 import { ROLES } from '@/constants/roles';
-import { ageOptions } from '@/constants/options';
+import { emailValidatorExp, passwordValidatorExp } from '@/constants/validators-exp';
 
 export function downloadCsv<K>(items: K[], tableKeys: TableKey<K>[], filename = 'data') {
     const blob = new Blob(
@@ -96,10 +96,6 @@ export function renderOrderNumber(orderNumber: number): string {
     return res;
 }
 
-export function renderAges(ages: number[]) {
-    return ages.map(age => ageOptions.find(opt => opt.id === age)?.label).join(', ');
-}
-
 export function parseImageFromLink(imageLink: string) {
     if (imageLink) {
         // link example: https://drive.google.com/file/d/EXAMPLE_ID/view?usp=drive_link
@@ -109,6 +105,42 @@ export function parseImageFromLink(imageLink: string) {
             console.log(err);
             return null;
         }
+    }
+}
+
+export function passwordValidation(form, control, controlName: string, confirmControl?, confirmControlName?: string) {
+    if (form.formState.touchedFields[controlName] || form.formState.touchedFields[confirmControlName]) {
+        if (control && !passwordValidatorExp.test(control)) {
+            form.setError(controlName, { message: 'Мін 8 симовлів: A-Z, a-z, 0-9' });
+        } else if (!control && form.formState.touchedFields[controlName]) {
+            form.setError(controlName, { message: 'Пароль обов\'язковий' });
+        } else if (confirmControl && confirmControlName) {
+            if (!confirmControl && form.formState.touchedFields[confirmControlName]) {
+                form.setError(confirmControlName, { message: 'Пароль обов\'язковий' });
+            } else if (control !== confirmControl && form.formState.touchedFields[confirmControlName] && form.formState.touchedFields[controlName]) {
+                form.setError(controlName, { message: 'Паролі повинні співпадати' });
+                form.setError(confirmControlName, { message: 'Паролі повинні співпадати' });
+            } else {
+                form.clearErrors(controlName);
+                form.clearErrors(confirmControlName);
+            }
+        } else {
+            form.clearErrors(controlName);
+        }
+    }
+}
+
+export function emailValidation(form, control, controlName: string) {
+    if (form.formState.touchedFields[controlName]) {
+        if (!control) {
+            form.setError(controlName, { message: 'Ел. адреса обов\'язкова' });
+        } else if (!emailValidatorExp.test(control)) {
+            form.setError(controlName, { message: 'Ел. адреса невірна' });
+        } else {
+            form.clearErrors(controlName);
+        }
+    } else {
+        form.clearErrors(controlName);
     }
 }
 

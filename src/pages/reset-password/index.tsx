@@ -9,10 +9,14 @@ import ErrorNotification from '@/components/error-notification';
 import Loading from '@/components/loading';
 import React, { useEffect } from 'react';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
-import { passwordValidatorExp } from '@/constants/validators-exp';
 import { useAuth } from '@/components/auth-context';
 import { MAIN_NAME } from '@/constants/main-name';
-import { useChangePassword, useCheckResetPasswordToken } from '@/lib/graphql/queries/auth/hook';
+import {
+    useChangePassword,
+    useChangePasswordByToken,
+    useCheckResetPasswordToken
+} from '@/lib/graphql/queries/auth/hook';
+import { passwordValidation } from '@/utils/utils';
 
 const containerStyles = {
     width: '400px',
@@ -25,7 +29,7 @@ export default function ResetPassword() {
         password: string,
         confirmPassword: string
     }>();
-    const { loading, error, changePassword } = useChangePassword();
+    const { loading, error, changePassword } = useChangePasswordByToken();
     const {
         loading: checkingToken,
         error: failedToken
@@ -34,22 +38,8 @@ export default function ResetPassword() {
     const { setOpenLoginModal } = useAuth();
 
     useEffect(() => {
-        if (formContext.formState.touchedFields.password || formContext.formState.touchedFields.confirmPassword) {
-            if (password && !passwordValidatorExp.test(password)) {
-                formContext.setError('password', { message: 'Мін 8 симовлів: A-Z, a-z, 0-9' });
-            } else if (!password && formContext.formState.touchedFields.password) {
-                formContext.setError('password', { message: 'Пароль обов\'язковий' });
-            } else if (!confirmPassword && formContext.formState.touchedFields.confirmPassword) {
-                formContext.setError('confirmPassword', { message: 'Пароль обов\'язковий' });
-            } else if (password !== confirmPassword && formContext.formState.touchedFields.confirmPassword && formContext.formState.touchedFields.password) {
-                formContext.setError('password', { message: 'Паролі повинні співпадати' });
-                formContext.setError('confirmPassword', { message: 'Паролі повинні співпадати' });
-            } else {
-                formContext.clearErrors('password');
-                formContext.clearErrors('confirmPassword');
-            }
-        }
-    }, [password, confirmPassword]);
+        passwordValidation(formContext, password, 'password', confirmPassword, 'confirmPassword');
+    }, [password, confirmPassword, formContext]);
 
     function onSubmit() {
         if (!isFormInvalid()) {

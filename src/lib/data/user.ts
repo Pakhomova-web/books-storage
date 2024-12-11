@@ -74,7 +74,7 @@ export async function login(email: string, password: string): Promise<{
             delete item.password;
             return { user: item, token, refreshToken };
         } else {
-            throw new GraphQLError(`Password or Email is wrong.`, {
+            throw new GraphQLError(`Ел. адреса чи пароль невірні.`, {
                 extensions: { code: 'BAD_DATA' }
             });
         }
@@ -85,7 +85,7 @@ export async function getNewToken(refreshToken: string) {
     try {
         verify(refreshToken, SECRET_JWT_KEY);
     } catch (_) {
-        throw new GraphQLError(`Token is invalid.`, {
+        throw new GraphQLError(`Токен застарілий.`, {
             extensions: { code: 'UNAUTHORIZED' }
         });
     }
@@ -107,7 +107,7 @@ export async function updateUser(input: UserEntity): Promise<UserEntity> {
     const itemByEmail = await getByEmail<UserEntity>(User, input.email);
 
     if (itemByEmail && itemByEmail.id.toString() !== input.id) {
-        throw new GraphQLError(`Email '${input.email}' is used.`, {
+        throw new GraphQLError(`Ел. адреса '${input.email}' вже використовується.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
     }
@@ -118,7 +118,7 @@ export async function updateUser(input: UserEntity): Promise<UserEntity> {
     return item as UserEntity;
 }
 
-export async function changePassword(userId: string, password: string): Promise<any> {
+export async function changePasswordByToken(userId: string, password: string): Promise<any> {
     if (!userId) {
         throw new GraphQLError(`Не вказан ідентифікатор.`, {
             extensions: { code: 'NOT_FOUND' }
@@ -137,6 +137,33 @@ export async function changePassword(userId: string, password: string): Promise<
     await user.save();
     await ResetToken.findOneAndRemove({ userId });
     return 'OK';
+}
+
+export async function changePassword(userId: string, password: string, newPassword: string): Promise<any> {
+    if (!userId) {
+        throw new GraphQLError(`Не вказан ідентифікатор.`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new GraphQLError(`Такий користувач не зареєстрований.`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+    const identical = await comparePassword(password, user.password);
+
+    if (identical) {
+        user.password = await cryptPassword(newPassword);
+        await user.save();
+
+        return 'OK';
+    } else {
+        throw new GraphQLError(`Пароль невірний`, {
+            extensions: { code: 'BAD_DATA' }
+        });
+    }
 }
 
 export async function getUserById(id: string): Promise<UserEntity> {
