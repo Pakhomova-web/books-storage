@@ -11,11 +11,7 @@ import React, { useEffect } from 'react';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
 import { useAuth } from '@/components/auth-context';
 import { MAIN_NAME } from '@/constants/main-name';
-import {
-    useChangePassword,
-    useChangePasswordByToken,
-    useCheckResetPasswordToken
-} from '@/lib/graphql/queries/auth/hook';
+import { useChangePasswordByToken, useCheckResetPasswordToken } from '@/lib/graphql/queries/auth/hook';
 import { passwordValidation } from '@/utils/utils';
 
 const containerStyles = {
