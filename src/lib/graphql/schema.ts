@@ -72,6 +72,12 @@ const typeDefs =  /* GraphQL */ `
         discount: Float
     }
 
+    type GroupDiscount {
+        id: ID!
+        discount: Float!
+        books: [Book!]!
+    }
+
     type Comment {
         id: ID!
         value: String!
@@ -80,7 +86,7 @@ const typeDefs =  /* GraphQL */ `
         approved: Boolean
         date: String!
     }
-    
+
     type BasketItem {
         bookId: ID!
         count: Int!
@@ -139,7 +145,7 @@ const typeDefs =  /* GraphQL */ `
         adminComment: String
         date: String
     }
-    
+
     type IOption {
         id: ID!
         label: String!
@@ -176,6 +182,7 @@ const typeDefs =  /* GraphQL */ `
         booksByIds(ids: [ID!], pageSettings: PageableInput): BookSubList
         balance: Float
         checkResetPasswordToken(userId: String!, token: String!): String
+        groupDiscounts(pageSettings: PageableInput, filters: GroupDiscountSearchInput): GroupDiscountSubList
 
         refreshToken(refreshToken: String!): UserToken!
     }
@@ -233,6 +240,10 @@ const typeDefs =  /* GraphQL */ `
         updateDelivery(input: DeliveryUpdateInput!): Delivery
         createDelivery(input: DeliveryCreateInput!): Delivery
         deleteDelivery(id: ID!): Delivery
+
+        updateGroupDiscount(input: GroupDiscountUpdateInput!): GroupDiscount
+        createGroupDiscount(input: GroupDiscountCreateInput!): GroupDiscount
+        deleteGroupDiscount(id: ID!): GroupDiscount
 
         updateOrder(input: OrderUpdateInput!): Order
         cancelOrder(id: ID!): Order
@@ -410,6 +421,28 @@ const typeDefs =  /* GraphQL */ `
         items: [Book!]!
         totalCount: Int!
     }
+    
+    #    group discount
+
+    input GroupDiscountSearchInput {
+        bookId: ID
+    }
+
+    input GroupDiscountCreateInput {
+        discount: Float!
+        bookIds: [ID!]!
+    }
+
+    input GroupDiscountUpdateInput {
+        id: ID!
+        discount: Float!
+        bookIds: [ID!]!
+    }
+
+    type GroupDiscountSubList {
+        items: [GroupDiscount!]!
+        totalCount: Int!
+    }
 
     #    book series
 
@@ -509,17 +542,6 @@ const typeDefs =  /* GraphQL */ `
 
     #    order
 
-    input DeliveryUpdateInput {
-        id: ID!
-        name: String!
-        imageId: String
-    }
-
-    input DeliveryCreateInput {
-        name: String!
-        imageId: String
-    }
-
     input OrderBookInput {
         bookId: ID!
         count: Int!
@@ -585,6 +607,19 @@ const typeDefs =  /* GraphQL */ `
         instagramUsername: String
         phoneNumber: String
         orderNumber: Int
+    }
+    
+    #   delivery
+    
+    input DeliveryUpdateInput {
+        id: ID!
+        name: String!
+        imageId: String
+    }
+
+    input DeliveryCreateInput {
+        name: String!
+        imageId: String
     }
 `;
 

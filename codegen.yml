@@ -23,3 +23,4 @@ generates:
         User: '../data/types#UserEntity'
         Delivery: '../data/types#DeliveryEntity'
         Order: '../data/types#OrderEntity'
+        GroupDiscount: '../data/types#GroupDiscountEntity'

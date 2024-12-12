@@ -67,14 +67,14 @@ export function _useItemById<T>(query: DocumentNode, key: string, id: string) {
     return { loading, error, item: data ? data[key] as T : null, refetch };
 }
 
-export async function getItemById<T>(query: DocumentNode, id: string): Promise<T> {
+export async function getItemById<T>(query: DocumentNode, id: string, key?: string): Promise<T> {
     const { data } = await apolloClient.query({
         query,
         fetchPolicy: 'no-cache',
         variables: { id }
     });
 
-    return data.item;
+    return key ? data[key] : data.item;
 }
 
 export function _useDeleteItemById(query: DocumentNode): {

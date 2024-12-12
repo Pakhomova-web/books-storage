@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { LanguageEntity, PublishingHouseEntity, PageTypeEntity, BookTypeEntity, CoverTypeEntity, BookSeriesEntity, BookEntity, AuthorEntity, UserEntity, DeliveryEntity, OrderEntity } from '../data/types';
+import { LanguageEntity, PublishingHouseEntity, PageTypeEntity, BookTypeEntity, CoverTypeEntity, BookSeriesEntity, BookEntity, AuthorEntity, UserEntity, DeliveryEntity, OrderEntity, GroupDiscountEntity } from '../data/types';
 import { gql } from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -262,6 +262,32 @@ export type DeliveryUpdateInput = {
   name: Scalars['String']['input'];
 };
 
+export type GroupDiscount = {
+  books: Array<Book>;
+  discount: Scalars['Float']['output'];
+  id: Scalars['ID']['output'];
+};
+
+export type GroupDiscountCreateInput = {
+  bookIds: Array<Scalars['ID']['input']>;
+  discount: Scalars['Float']['input'];
+};
+
+export type GroupDiscountSearchInput = {
+  bookId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type GroupDiscountSubList = {
+  items: Array<GroupDiscount>;
+  totalCount: Scalars['Int']['output'];
+};
+
+export type GroupDiscountUpdateInput = {
+  bookIds: Array<Scalars['ID']['input']>;
+  discount: Scalars['Float']['input'];
+  id: Scalars['ID']['input'];
+};
+
 export type IOption = {
   description?: Maybe<Scalars['String']['output']>;
   fullDescription?: Maybe<Scalars['String']['output']>;
@@ -302,6 +328,7 @@ export type Mutation = {
   createBookType?: Maybe<BookType>;
   createCoverType?: Maybe<CoverType>;
   createDelivery?: Maybe<Delivery>;
+  createGroupDiscount?: Maybe<GroupDiscount>;
   createLanguage?: Maybe<Language>;
   createOrder?: Maybe<Order>;
   createPageType?: Maybe<PageType>;
@@ -312,6 +339,7 @@ export type Mutation = {
   deleteBookType?: Maybe<BookType>;
   deleteCoverType?: Maybe<CoverType>;
   deleteDelivery?: Maybe<Delivery>;
+  deleteGroupDiscount?: Maybe<GroupDiscount>;
   deleteLanguage?: Maybe<Language>;
   deletePageType?: Maybe<PageType>;
   deletePublishingHouse?: Maybe<PublishingHouse>;
@@ -329,6 +357,7 @@ export type Mutation = {
   updateBookType?: Maybe<BookType>;
   updateCoverType?: Maybe<CoverType>;
   updateDelivery?: Maybe<Delivery>;
+  updateGroupDiscount?: Maybe<GroupDiscount>;
   updateLanguage?: Maybe<Language>;
   updateOrder?: Maybe<Order>;
   updatePageType?: Maybe<PageType>;
@@ -406,6 +435,11 @@ export type MutationCreateDeliveryArgs = {
 };
 
 
+export type MutationCreateGroupDiscountArgs = {
+  input: GroupDiscountCreateInput;
+};
+
+
 export type MutationCreateLanguageArgs = {
   input: LanguageCreateInput;
 };
@@ -452,6 +486,11 @@ export type MutationDeleteCoverTypeArgs = {
 
 
 export type MutationDeleteDeliveryArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteGroupDiscountArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -541,6 +580,11 @@ export type MutationUpdateCoverTypeArgs = {
 
 export type MutationUpdateDeliveryArgs = {
   input: DeliveryUpdateInput;
+};
+
+
+export type MutationUpdateGroupDiscountArgs = {
+  input: GroupDiscountUpdateInput;
 };
 
 
@@ -742,6 +786,7 @@ export type Query = {
   coverTypes?: Maybe<CoverTypeSubList>;
   deliveries?: Maybe<DeliverySubList>;
   deliveryOptions?: Maybe<Array<Delivery>>;
+  groupDiscounts?: Maybe<GroupDiscountSubList>;
   languageById?: Maybe<Language>;
   languages?: Maybe<LanguageSubList>;
   orders?: Maybe<OrderSubList>;
@@ -857,6 +902,12 @@ export type QueryCoverTypesArgs = {
 
 export type QueryDeliveriesArgs = {
   filters?: InputMaybe<SearchByNameInput>;
+  pageSettings?: InputMaybe<PageableInput>;
+};
+
+
+export type QueryGroupDiscountsArgs = {
+  filters?: InputMaybe<GroupDiscountSearchInput>;
   pageSettings?: InputMaybe<PageableInput>;
 };
 
@@ -1074,6 +1125,11 @@ export type ResolversTypes = {
   DeliverySubList: ResolverTypeWrapper<Omit<DeliverySubList, 'items'> & { items: Array<ResolversTypes['Delivery']> }>;
   DeliveryUpdateInput: DeliveryUpdateInput;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
+  GroupDiscount: ResolverTypeWrapper<GroupDiscountEntity>;
+  GroupDiscountCreateInput: GroupDiscountCreateInput;
+  GroupDiscountSearchInput: GroupDiscountSearchInput;
+  GroupDiscountSubList: ResolverTypeWrapper<Omit<GroupDiscountSubList, 'items'> & { items: Array<ResolversTypes['GroupDiscount']> }>;
+  GroupDiscountUpdateInput: GroupDiscountUpdateInput;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   IOption: ResolverTypeWrapper<IOption>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
@@ -1142,6 +1198,11 @@ export type ResolversParentTypes = {
   DeliverySubList: Omit<DeliverySubList, 'items'> & { items: Array<ResolversParentTypes['Delivery']> };
   DeliveryUpdateInput: DeliveryUpdateInput;
   Float: Scalars['Float']['output'];
+  GroupDiscount: GroupDiscountEntity;
+  GroupDiscountCreateInput: GroupDiscountCreateInput;
+  GroupDiscountSearchInput: GroupDiscountSearchInput;
+  GroupDiscountSubList: Omit<GroupDiscountSubList, 'items'> & { items: Array<ResolversParentTypes['GroupDiscount']> };
+  GroupDiscountUpdateInput: GroupDiscountUpdateInput;
   ID: Scalars['ID']['output'];
   IOption: IOption;
   Int: Scalars['Int']['output'];
@@ -1290,6 +1351,19 @@ export type DeliverySubListResolvers<ContextType = any, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type GroupDiscountResolvers<ContextType = any, ParentType extends ResolversParentTypes['GroupDiscount'] = ResolversParentTypes['GroupDiscount']> = {
+  books?: Resolver<Array<ResolversTypes['Book']>, ParentType, ContextType>;
+  discount?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type GroupDiscountSubListResolvers<ContextType = any, ParentType extends ResolversParentTypes['GroupDiscountSubList'] = ResolversParentTypes['GroupDiscountSubList']> = {
+  items?: Resolver<Array<ResolversTypes['GroupDiscount']>, ParentType, ContextType>;
+  totalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type IOptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['IOption'] = ResolversParentTypes['IOption']> = {
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   fullDescription?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -1324,6 +1398,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   createBookType?: Resolver<Maybe<ResolversTypes['BookType']>, ParentType, ContextType, RequireFields<MutationCreateBookTypeArgs, 'input'>>;
   createCoverType?: Resolver<Maybe<ResolversTypes['CoverType']>, ParentType, ContextType, RequireFields<MutationCreateCoverTypeArgs, 'input'>>;
   createDelivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType, RequireFields<MutationCreateDeliveryArgs, 'input'>>;
+  createGroupDiscount?: Resolver<Maybe<ResolversTypes['GroupDiscount']>, ParentType, ContextType, RequireFields<MutationCreateGroupDiscountArgs, 'input'>>;
   createLanguage?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<MutationCreateLanguageArgs, 'input'>>;
   createOrder?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationCreateOrderArgs, 'input'>>;
   createPageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationCreatePageTypeArgs, 'input'>>;
@@ -1334,6 +1409,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deleteBookType?: Resolver<Maybe<ResolversTypes['BookType']>, ParentType, ContextType, RequireFields<MutationDeleteBookTypeArgs, 'id'>>;
   deleteCoverType?: Resolver<Maybe<ResolversTypes['CoverType']>, ParentType, ContextType, RequireFields<MutationDeleteCoverTypeArgs, 'id'>>;
   deleteDelivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType, RequireFields<MutationDeleteDeliveryArgs, 'id'>>;
+  deleteGroupDiscount?: Resolver<Maybe<ResolversTypes['GroupDiscount']>, ParentType, ContextType, RequireFields<MutationDeleteGroupDiscountArgs, 'id'>>;
   deleteLanguage?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<MutationDeleteLanguageArgs, 'id'>>;
   deletePageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationDeletePageTypeArgs, 'id'>>;
   deletePublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationDeletePublishingHouseArgs, 'id'>>;
@@ -1351,6 +1427,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateBookType?: Resolver<Maybe<ResolversTypes['BookType']>, ParentType, ContextType, RequireFields<MutationUpdateBookTypeArgs, 'input'>>;
   updateCoverType?: Resolver<Maybe<ResolversTypes['CoverType']>, ParentType, ContextType, RequireFields<MutationUpdateCoverTypeArgs, 'input'>>;
   updateDelivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType, RequireFields<MutationUpdateDeliveryArgs, 'input'>>;
+  updateGroupDiscount?: Resolver<Maybe<ResolversTypes['GroupDiscount']>, ParentType, ContextType, RequireFields<MutationUpdateGroupDiscountArgs, 'input'>>;
   updateLanguage?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<MutationUpdateLanguageArgs, 'input'>>;
   updateOrder?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationUpdateOrderArgs, 'input'>>;
   updatePageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationUpdatePageTypeArgs, 'input'>>;
@@ -1449,6 +1526,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   coverTypes?: Resolver<Maybe<ResolversTypes['CoverTypeSubList']>, ParentType, ContextType, Partial<QueryCoverTypesArgs>>;
   deliveries?: Resolver<Maybe<ResolversTypes['DeliverySubList']>, ParentType, ContextType, Partial<QueryDeliveriesArgs>>;
   deliveryOptions?: Resolver<Maybe<Array<ResolversTypes['Delivery']>>, ParentType, ContextType>;
+  groupDiscounts?: Resolver<Maybe<ResolversTypes['GroupDiscountSubList']>, ParentType, ContextType, Partial<QueryGroupDiscountsArgs>>;
   languageById?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<QueryLanguageByIdArgs, 'id'>>;
   languages?: Resolver<Maybe<ResolversTypes['LanguageSubList']>, ParentType, ContextType, Partial<QueryLanguagesArgs>>;
   orders?: Resolver<Maybe<ResolversTypes['OrderSubList']>, ParentType, ContextType, Partial<QueryOrdersArgs>>;
@@ -1502,6 +1580,8 @@ export type Resolvers<ContextType = any> = {
   CoverTypeSubList?: CoverTypeSubListResolvers<ContextType>;
   Delivery?: DeliveryResolvers<ContextType>;
   DeliverySubList?: DeliverySubListResolvers<ContextType>;
+  GroupDiscount?: GroupDiscountResolvers<ContextType>;
+  GroupDiscountSubList?: GroupDiscountSubListResolvers<ContextType>;
   IOption?: IOptionResolvers<ContextType>;
   Language?: LanguageResolvers<ContextType>;
   LanguageSubList?: LanguageSubListResolvers<ContextType>;

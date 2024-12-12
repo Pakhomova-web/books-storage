@@ -160,6 +160,17 @@ export class BookEntity {
     }
 }
 
+export interface GroupDiscountEntity {
+    id?: string,
+    bookIds?: string[],
+    books?: BookEntity[],
+    discount: number
+}
+
+export interface IGroupDiscountFilter {
+    bookId: string
+}
+
 export interface IOption<T> {
     id: T,
     label: string,

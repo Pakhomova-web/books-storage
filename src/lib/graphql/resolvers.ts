@@ -16,7 +16,7 @@ import {
     BookTypeEntity,
     CommentEntity,
     CoverTypeEntity,
-    DeliveryEntity,
+    DeliveryEntity, GroupDiscountEntity, IGroupDiscountFilter,
     IOrderFilter,
     IPageable,
     LanguageEntity,
@@ -68,6 +68,12 @@ import { createDelivery, deleteDelivery, getDeliveries, getDeliveryOptions, upda
 import { cancelOrder, createOrder, getBalance, getOrders, updateOrder } from '@/lib/data/order';
 import { isAdmin } from '@/utils/utils';
 import { checkResetPasswordToken, sendUpdatePasswordLink } from '@/lib/data/reset-token';
+import {
+    createGroupDiscount,
+    deleteGroupDiscount,
+    getGroupDiscounts,
+    updateGroupDiscount
+} from '@/lib/data/group-discounts';
 
 function parseError<T>(error): T {
     switch (error.extensions?.code) {
@@ -140,6 +146,9 @@ const resolvers: Resolvers = {
         },
         books: async (_root, { pageSettings, filters }) => {
             return getBooks(<IPageable>pageSettings, filters).catch(error => parseError(error));
+        },
+        groupDiscounts: async (_root, { pageSettings, filters }) => {
+            return getGroupDiscounts(<IPageable>pageSettings, <IGroupDiscountFilter>filters).catch(error => parseError(error));
         },
         bookById: async (_root, { id }) => {
             return getBookById(id).catch(error => parseError(error));
@@ -377,6 +386,19 @@ const resolvers: Resolvers = {
         createDelivery: async (_root, { input }: { input: DeliveryEntity }, { user }) => {
             _checkUser(user);
             return createDelivery(input).catch(error => parseError(error));
+        },
+        // group discount
+        updateGroupDiscount: async (_root, { input }: { input: GroupDiscountEntity }, { user }) => {
+            _checkUser(user);
+            return updateGroupDiscount(input).catch(error => parseError(error));
+        },
+        deleteGroupDiscount: async (_root, { id }: { id: string }, { user }) => {
+            _checkUser(user);
+            return deleteGroupDiscount(id).catch(error => parseError(error));
+        },
+        createGroupDiscount: async (_root, { input }: { input: GroupDiscountEntity }, { user }) => {
+            _checkUser(user);
+            return createGroupDiscount(input).catch(error => parseError(error));
         },
         // basket
         updateOrder: async (_root, { input }, { user }) => {

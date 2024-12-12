@@ -4,7 +4,7 @@ import {
     _useCreateItem,
     _useItemById,
     _usePageableItems,
-    _useUpdateItem
+    _useUpdateItem, getItemById
 } from '@/lib/graphql/base-hooks';
 import {
     addBookCommentQuery,
@@ -156,6 +156,10 @@ export function useApproveComment() {
 
 export function useRemoveComment() {
     return _useUpdateItem<BookEntity>(removeComment);
+}
+
+export function getBookById(id: string) {
+    return getItemById<BookEntity>(bookByIdQuery, id, 'bookById');
 }
 
 export function useAddBookComment() {

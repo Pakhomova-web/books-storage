@@ -360,10 +360,10 @@ export default function Catalogue() {
                 <StyledGrid item xs={12} px={2} py={1} sx={rightDivider} onClick={() => setOpenModal(true)}>
                     <Box width="30px" mr={1} display="flex" alignItems="center">
                         <CustomImage imageLink="/catalogue.png"/>
-                    </Box>Каталог
+                    </Box>Усі категорії
                 </StyledGrid>
 
-                <CustomModal open={openModal} onClose={() => setOpenModal(false)} title="Каталог">
+                <CustomModal open={openModal} onClose={() => setOpenModal(false)} title="Усі категорії">
                     {items.map((item, index) => (
                         <Accordion key={index} expanded={expanded === `panel-${index}`}
                                    onChange={handleChange(`panel-${index}`)}>
@@ -409,11 +409,12 @@ export default function Catalogue() {
                                                    onMouseLeave={() => setParentIndex(null)}
                                                    sx={{ visibility: parentIndex === index ? 'visible' : 'hidden' }}>
                               {item.children.map((item, index) => (
-                                  <Box key={index} pl={2}>
-                                      <CustomLink onClick={() => onSectionClick(item.params, item.title, item.url)}>
+                                  <CustomLink key={index}
+                                              onClick={() => onSectionClick(item.params, item.title, item.url)}>
+                                      <Box pl={2}>
                                           {item.title}
-                                      </CustomLink>
-                                  </Box>)
+                                      </Box>
+                                  </CustomLink>)
                               )}
 
                             <Box mb={1}></Box>

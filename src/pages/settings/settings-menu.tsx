@@ -25,6 +25,12 @@ const menuItems = [
         img: '/settings_books.png'
     },
     {
+        title: 'Групові знижки',
+        url: 'group-discounts',
+        activeImg: '/settings_group_discounts_color.png',
+        img: '/settings_group_discounts.png'
+    },
+    {
         title: 'Коментарі',
         url: 'comments',
         activeImg: '/settings_comments_color.png',

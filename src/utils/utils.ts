@@ -108,16 +108,16 @@ export function parseImageFromLink(imageLink: string) {
     }
 }
 
-export function passwordValidation(form, control, controlName: string, confirmControl?, confirmControlName?: string) {
+export function passwordValidation(form, value, controlName: string, confirmValue?, confirmControlName?: string) {
     if (form.formState.touchedFields[controlName] || form.formState.touchedFields[confirmControlName]) {
-        if (control && !passwordValidatorExp.test(control)) {
+        if (value && !passwordValidatorExp.test(value)) {
             form.setError(controlName, { message: 'Мін 8 симовлів: A-Z, a-z, 0-9' });
-        } else if (!control && form.formState.touchedFields[controlName]) {
+        } else if (!value && form.formState.touchedFields[controlName]) {
             form.setError(controlName, { message: 'Пароль обов\'язковий' });
-        } else if (confirmControl && confirmControlName) {
-            if (!confirmControl && form.formState.touchedFields[confirmControlName]) {
+        } else if (confirmValue && confirmControlName) {
+            if (!confirmValue && form.formState.touchedFields[confirmControlName]) {
                 form.setError(confirmControlName, { message: 'Пароль обов\'язковий' });
-            } else if (control !== confirmControl && form.formState.touchedFields[confirmControlName] && form.formState.touchedFields[controlName]) {
+            } else if (value !== confirmValue && form.formState.touchedFields[confirmControlName] && form.formState.touchedFields[controlName]) {
                 form.setError(controlName, { message: 'Паролі повинні співпадати' });
                 form.setError(confirmControlName, { message: 'Паролі повинні співпадати' });
             } else {
@@ -130,12 +130,28 @@ export function passwordValidation(form, control, controlName: string, confirmCo
     }
 }
 
-export function emailValidation(form, control, controlName: string) {
+export function emailValidation(form, value, controlName: string) {
     if (form.formState.touchedFields[controlName]) {
-        if (!control) {
+        if (!value) {
             form.setError(controlName, { message: 'Ел. адреса обов\'язкова' });
-        } else if (!emailValidatorExp.test(control)) {
+        } else if (!emailValidatorExp.test(value)) {
             form.setError(controlName, { message: 'Ел. адреса невірна' });
+        } else {
+            form.clearErrors(controlName);
+        }
+    } else {
+        form.clearErrors(controlName);
+    }
+}
+
+export function validateNumberControl(form, value, controlName: string, min: number, max?: number, isInteger = false) {
+    if ((value === null || value === undefined) && form.formState.touchedFields[controlName]) {
+        form.setError(controlName, { message: 'Обов\'язкове поле' });
+    } else if (value !== null && value !== undefined) {
+        if (value < min || (max !== undefined && value > max)) {
+            form.setError(controlName, { message: `Від ${min}${max ? ` до ${max}` : ''}` });
+        } else if (isInteger && Math.round(value) !== value) {
+            form.setError(controlName, { message: 'Повинне бути ціле число' });
         } else {
             form.clearErrors(controlName);
         }
