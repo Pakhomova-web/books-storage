@@ -9,6 +9,7 @@ const groupDiscountFragment = gql`
             name
             imageIds
             price
+            numberInStock
             bookSeries {
                 name
                 publishingHouse {
@@ -34,10 +35,33 @@ export const groupDiscountsQuery = gql`
     ${groupDiscountFragment}
 `;
 
+
+
+export const groupDiscountsByIdsQuery = gql`
+    query GroupDiscountsByIds($ids: [ID!], $pageSettings: PageableInput) {
+        groupDiscountsByIds(ids: $ids, pageSettings: $pageSettings) {
+            items {
+                ...GroupDiscount
+            }
+            totalCount
+        }
+    }
+    ${groupDiscountFragment}
+`;
+
 export const deleteGroupDiscountQuery = gql`
     mutation DeleteGroupDiscount($id: ID!) {
         item: deleteGroupDiscount(id: $id) {
             id
+        }
+    }
+`;
+
+export const updateGroupDiscountCountInBasket = gql`
+    mutation UpdateGroupDiscountCountIn($id: ID!, $count: Int!) {
+        items: updateGroupDiscountCountInBasket(id: $id, count: $count) {
+            groupDiscountId
+            count
         }
     }
 `;

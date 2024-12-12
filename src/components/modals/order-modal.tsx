@@ -14,7 +14,7 @@ import {
 import CustomModal from '@/components/modals/custom-modal';
 import { DeliveryEntity, OrderEntity } from '@/lib/data/types';
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
-import BasketItem from '@/components/basket-item';
+import BasketBookItem from '@/components/basket-book-item';
 import OrderDeliveryTrackingBox from '@/components/orders/order-delivery-tracking-box';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import OrderStatus from '@/components/orders/order-status';
@@ -344,14 +344,14 @@ export default function OrderModal({ open, order, onClose }: IProps) {
 
                     {orderItem?.books.map(({ book, count, price, discount }, index) => (
                         <Grid item xs={12} key={index}>
-                            <BasketItem book={book}
-                                        count={count}
-                                        price={price}
-                                        pageUrl="/profile/orders"
-                                        discount={discount}
-                                        editable={isAdmin(user) && !orderItem.isDone && !orderItem.isCanceled && !isSent}
-                                        onRemove={() => onRemove(book.id)}
-                                        onCountChange={(count: number) => onChangeBookCount(book.id, count)}/>
+                            <BasketBookItem book={book}
+                                            count={count}
+                                            price={price}
+                                            pageUrl="/profile/orders"
+                                            discount={discount}
+                                            editable={isAdmin(user) && !orderItem.isDone && !orderItem.isCanceled && !isSent}
+                                            onRemove={() => onRemove(book.id)}
+                                            onCountChange={(count: number) => onChangeBookCount(book.id, count)}/>
                         </Grid>
                     ))}
 

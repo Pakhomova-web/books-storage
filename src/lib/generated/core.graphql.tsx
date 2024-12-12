@@ -365,6 +365,7 @@ export type Mutation = {
   updateCoverType?: Maybe<CoverType>;
   updateDelivery?: Maybe<Delivery>;
   updateGroupDiscount?: Maybe<GroupDiscount>;
+  updateGroupDiscountCountInBasket?: Maybe<Array<BasketGroupDiscountItem>>;
   updateLanguage?: Maybe<Language>;
   updateOrder?: Maybe<Order>;
   updatePageType?: Maybe<PageType>;
@@ -605,6 +606,12 @@ export type MutationUpdateGroupDiscountArgs = {
 };
 
 
+export type MutationUpdateGroupDiscountCountInBasketArgs = {
+  count: Scalars['Int']['input'];
+  id: Scalars['ID']['input'];
+};
+
+
 export type MutationUpdateLanguageArgs = {
   input: LanguageUpdateInput;
 };
@@ -804,6 +811,7 @@ export type Query = {
   deliveries?: Maybe<DeliverySubList>;
   deliveryOptions?: Maybe<Array<Delivery>>;
   groupDiscounts?: Maybe<GroupDiscountSubList>;
+  groupDiscountsByIds?: Maybe<GroupDiscountSubList>;
   languageById?: Maybe<Language>;
   languages?: Maybe<LanguageSubList>;
   orders?: Maybe<OrderSubList>;
@@ -929,6 +937,12 @@ export type QueryGroupDiscountsArgs = {
 };
 
 
+export type QueryGroupDiscountsByIdsArgs = {
+  ids?: InputMaybe<Array<Scalars['ID']['input']>>;
+  pageSettings?: InputMaybe<PageableInput>;
+};
+
+
 export type QueryLanguageByIdArgs = {
   id: Scalars['ID']['input'];
 };
@@ -982,6 +996,7 @@ export type UpdateCommentInput = {
 };
 
 export type User = {
+  basketGroupDiscounts?: Maybe<Array<BasketGroupDiscountItem>>;
   basketItems?: Maybe<Array<BasketItem>>;
   city?: Maybe<Scalars['String']['output']>;
   email: Scalars['String']['output'];
@@ -1455,6 +1470,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateCoverType?: Resolver<Maybe<ResolversTypes['CoverType']>, ParentType, ContextType, RequireFields<MutationUpdateCoverTypeArgs, 'input'>>;
   updateDelivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType, RequireFields<MutationUpdateDeliveryArgs, 'input'>>;
   updateGroupDiscount?: Resolver<Maybe<ResolversTypes['GroupDiscount']>, ParentType, ContextType, RequireFields<MutationUpdateGroupDiscountArgs, 'input'>>;
+  updateGroupDiscountCountInBasket?: Resolver<Maybe<Array<ResolversTypes['BasketGroupDiscountItem']>>, ParentType, ContextType, RequireFields<MutationUpdateGroupDiscountCountInBasketArgs, 'count' | 'id'>>;
   updateLanguage?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<MutationUpdateLanguageArgs, 'input'>>;
   updateOrder?: Resolver<Maybe<ResolversTypes['Order']>, ParentType, ContextType, RequireFields<MutationUpdateOrderArgs, 'input'>>;
   updatePageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationUpdatePageTypeArgs, 'input'>>;
@@ -1554,6 +1570,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   deliveries?: Resolver<Maybe<ResolversTypes['DeliverySubList']>, ParentType, ContextType, Partial<QueryDeliveriesArgs>>;
   deliveryOptions?: Resolver<Maybe<Array<ResolversTypes['Delivery']>>, ParentType, ContextType>;
   groupDiscounts?: Resolver<Maybe<ResolversTypes['GroupDiscountSubList']>, ParentType, ContextType, Partial<QueryGroupDiscountsArgs>>;
+  groupDiscountsByIds?: Resolver<Maybe<ResolversTypes['GroupDiscountSubList']>, ParentType, ContextType, Partial<QueryGroupDiscountsByIdsArgs>>;
   languageById?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<QueryLanguageByIdArgs, 'id'>>;
   languages?: Resolver<Maybe<ResolversTypes['LanguageSubList']>, ParentType, ContextType, Partial<QueryLanguagesArgs>>;
   orders?: Resolver<Maybe<ResolversTypes['OrderSubList']>, ParentType, ContextType, Partial<QueryOrdersArgs>>;
@@ -1565,6 +1582,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  basketGroupDiscounts?: Resolver<Maybe<Array<ResolversTypes['BasketGroupDiscountItem']>>, ParentType, ContextType>;
   basketItems?: Resolver<Maybe<Array<ResolversTypes['BasketItem']>>, ParentType, ContextType>;
   city?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

@@ -189,6 +189,7 @@ const typeDefs =  /* GraphQL */ `
         balance: Float
         checkResetPasswordToken(userId: String!, token: String!): String
         groupDiscounts(pageSettings: PageableInput, filters: GroupDiscountSearchInput): GroupDiscountSubList
+        groupDiscountsByIds(ids: [ID!], pageSettings: PageableInput): GroupDiscountSubList
 
         refreshToken(refreshToken: String!): UserToken!
     }
@@ -252,6 +253,7 @@ const typeDefs =  /* GraphQL */ `
         updateGroupDiscount(input: GroupDiscountUpdateInput!): GroupDiscount
         createGroupDiscount(input: GroupDiscountCreateInput!): GroupDiscount
         deleteGroupDiscount(id: ID!): GroupDiscount
+        updateGroupDiscountCountInBasket(id: ID!, count: Int!): [BasketGroupDiscountItem!]
 
         updateOrder(input: OrderUpdateInput!): Order
         cancelOrder(id: ID!): Order

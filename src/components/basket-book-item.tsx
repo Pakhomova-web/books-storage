@@ -29,7 +29,7 @@ interface IProps {
     onCountChange?: (count: number) => void
 }
 
-export default function BasketItem({ book, editable, price, discount, count, pageUrl, onCountChange, onRemove }: IProps) {
+export default function BasketBookItem({ book, editable, price, discount, count, pageUrl, onCountChange, onRemove }: IProps) {
     const router = useRouter();
     const { setBookInBasket } = useAuth();
 

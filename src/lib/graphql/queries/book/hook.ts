@@ -237,7 +237,7 @@ export function useUpdateBookCountInBasket() {
     const [mutate, { loading, error }] = useMutation(updateBookCountInBasketQuery);
 
     return {
-        update: async (id: string, count: number) => {
+        updateBook: async (id: string, count: number) => {
             const { data: { items } } = await mutate({
                 fetchPolicy: 'no-cache',
                 variables: { id, count }
@@ -245,7 +245,7 @@ export function useUpdateBookCountInBasket() {
 
             return items;
         },
-        updating: loading,
-        updatingError: error
+        updatingBook: loading,
+        updatingBookError: error
     };
 }

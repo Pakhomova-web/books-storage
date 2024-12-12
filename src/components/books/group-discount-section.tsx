@@ -25,7 +25,7 @@ export default function GroupDiscountBooks({ bookId, onBookClick = null }) {
                   {items.map((item, index) =>
                       <GroupDiscountBox key={index} books={item.books} discount={item.discount}
                                         onBookClick={onBookClick}
-                                        isInBasket={user.basketGroupDiscounts?.some(group => group.groupDiscountId === item.id)}
+                                        isInBasket={user?.basketGroupDiscounts?.some(group => group.groupDiscountId === item.id)}
                                         onBuyClick={() => onBuyClick(item.id)}/>)}
               </Grid>
             </>}

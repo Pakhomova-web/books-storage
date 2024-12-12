@@ -3,7 +3,7 @@ import CustomImage from '@/components/custom-image';
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import { styled } from '@mui/material/styles';
 import { renderPrice } from '@/utils/utils';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { LocalMall } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -47,6 +47,8 @@ const StyledDivider = styled(Box)(() => ({
 
 export default function GroupDiscountBox({
                                              books,
+                                             count = 1,
+                                             onCountChange = null,
                                              key = null,
                                              discount,
                                              onDeleteBook = null,
@@ -56,7 +58,6 @@ export default function GroupDiscountBox({
                                              onDeleteGroupClick = null,
                                              onBookClick = null
                                          }) {
-    const { user } = useAuth();
     const [fullSum, setFullSum] = useState<number>();
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('sm'));
@@ -65,10 +66,15 @@ export default function GroupDiscountBox({
         setFullSum(books.reduce((a, b) => a + b.price, 0));
     }, [books])
 
+    // TODO отображать нет в наличии красным
+
     return (
-        !!books.length &&
+        !!books.length && <>
+        <Box width="100%">Акційний комплект</Box> delete btn
+
         <Box display="flex" gap={1} py={2} width="100%" overflow="hidden" key={key} justifyContent="center"
              flexDirection={{ xs: 'column', sm: 'row' }} alignItems="center">
+
           <Box sx={{ overflowX: 'scroll', overflowY: 'hidden' }} display="flex" gap={1}>
               {books.map((book, index) =>
                   (<>
@@ -113,6 +119,8 @@ export default function GroupDiscountBox({
                 <Box sx={priceStyles}>{renderPrice(fullSum, discount)}</Box>
               </Box>
 
+                {!!onCountChange && <Box> count fields </Box>}
+
                 {!!onBuyClick && (isInBasket ? <Button disabled={true} variant="outlined">В кошику</Button> :
                     <Button variant="contained" onClick={onBuyClick}>
                         <Box display="flex" alignItems="center" gap={1}><LocalMall/>Купити комплект</Box>
@@ -130,5 +138,5 @@ export default function GroupDiscountBox({
             </Box>
           </StyledContainer>
         </Box>
-    );
+      </>);
 }

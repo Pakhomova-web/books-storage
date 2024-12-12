@@ -61,7 +61,7 @@ import {
     login,
     removeBookFromBasket, removeGroupDiscountFromBasket,
     unlikeBook,
-    updateBookCountInBasket,
+    updateBookCountInBasket, updateGroupDiscountCountInBasket,
     updateUser
 } from '@/lib/data/user';
 import { createDelivery, deleteDelivery, getDeliveries, getDeliveryOptions, updateDelivery } from '@/lib/data/delivery';
@@ -71,7 +71,7 @@ import { checkResetPasswordToken, sendUpdatePasswordLink } from '@/lib/data/rese
 import {
     createGroupDiscount,
     deleteGroupDiscount,
-    getGroupDiscounts,
+    getGroupDiscounts, getGroupDiscountsByIds,
     updateGroupDiscount
 } from '@/lib/data/group-discounts';
 
@@ -149,6 +149,9 @@ const resolvers: Resolvers = {
         },
         groupDiscounts: async (_root, { pageSettings, filters }) => {
             return getGroupDiscounts(<IPageable>pageSettings, <IGroupDiscountFilter>filters).catch(error => parseError(error));
+        },
+        groupDiscountsByIds: async (_root, { pageSettings, ids }) => {
+            return getGroupDiscountsByIds(ids, <IPageable>pageSettings).catch(error => parseError(error));
         },
         bookById: async (_root, { id }) => {
             return getBookById(id).catch(error => parseError(error));
@@ -407,6 +410,10 @@ const resolvers: Resolvers = {
         createGroupDiscount: async (_root, { input }: { input: GroupDiscountEntity }, { user }) => {
             _checkUser(user);
             return createGroupDiscount(input).catch(error => parseError(error));
+        },
+        updateGroupDiscountCountInBasket: async (_root, { id, count }, { user }) => {
+            _checkUser(user);
+            return updateGroupDiscountCountInBasket(user.id, id, count).catch(error => parseError(error));
         },
         // basket
         updateOrder: async (_root, { input }, { user }) => {

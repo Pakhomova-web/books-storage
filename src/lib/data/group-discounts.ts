@@ -24,6 +24,39 @@ export async function getGroupDiscounts(pageSettings?: IPageable, filters?: IGro
     );
 }
 
+export async function getGroupDiscountsByIds(ids: string[], pageSettings: IPageable) {
+    if (!ids?.length) {
+        return { items: [], totalCount: 0 };
+    }
+
+    const query = GroupDiscount
+        .find({ _id: ids })
+        .populate({
+            path: 'books',
+            populate: [
+                { path: 'languages' },
+                {
+                    path: 'bookSeries',
+                    populate: {
+                        path: 'publishingHouse'
+                    }
+                }
+            ]
+        });
+
+    if (pageSettings && pageSettings.rowsPerPage && pageSettings.page !== undefined) {
+        query
+            .skip(pageSettings.rowsPerPage * pageSettings.page)
+            .limit(pageSettings.rowsPerPage);
+    }
+    query.sort({ bookSeries: 'desc', numberInStock: 'desc' });
+
+    const totalCount = await query.countDocuments();
+    const items = await query.find();
+
+    return { items, totalCount };
+}
+
 export async function createGroupDiscount(input: GroupDiscountEntity) {
     const items = await GroupDiscount.find({ books: { $all: input.bookIds } });
 

@@ -20,10 +20,15 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 import { useCreateOrder } from '@/lib/graphql/queries/order/hook';
-import BasketItem from '@/components/basket-item';
+import BasketBookItem from '@/components/basket-book-item';
 import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
 import Head from 'next/head';
 import IconWithText from '@/components/icon-with-text';
+import {
+    useGroupDiscountsByIds,
+    useUpdateGroupDiscountCountInBasket
+} from '@/lib/graphql/queries/group-discounts/hook';
+import GroupDiscountBox from '@/components/group-discount-box';
 
 const TitleBoxStyled = styled(Box)(({ theme }) => ({
     ...styleVariables.bigTitleFontSize(theme),
@@ -62,10 +67,17 @@ export default function Basket() {
         novaPostOffice
     } = formContext.watch();
     const { loading, error, items } = useBooksByIds(user?.basketItems?.map(({ bookId }) => bookId));
+    const {
+        loading: loadingGroups,
+        error: errorGroups,
+        items: groups
+    } = useGroupDiscountsByIds(user?.basketGroupDiscounts?.map(({ groupDiscountId }) => groupDiscountId));
     const [countFields, setCountFields] = useState<Map<string, number>>(new Map());
+    const [groupCountFields, setGroupCountFields] = useState<Map<string, number>>(new Map());
     const [finalFullSum, setFinalFullSum] = useState<number>();
     const [finalSumWithDiscounts, setFinalSumWithDiscounts] = useState<number>();
-    const { updating, updatingError, update } = useUpdateBookCountInBasket();
+    const { updatingBook, updatingBookError, updateBook } = useUpdateBookCountInBasket();
+    const { updatingGroup, updatingGroupError, updateGroup } = useUpdateGroupDiscountCountInBasket();
     const { items: deliveries, loading: loadingDeliveries } = useDeliveries();
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     const [orderNumber, setOrderNumber] = useState<string>();
@@ -136,7 +148,6 @@ export default function Basket() {
             formContext.setValue('novaPostOffice', null);
             invalid = true;
         } else {
-            formContext.clearErrors('novaPostOffice');
             formContext.clearErrors('postcode');
         }
 
@@ -144,8 +155,9 @@ export default function Basket() {
     }, [deliveryId, phoneNumber, firstName, lastName, region, city, postcode, novaPostOffice]);
 
     useEffect(() => {
-        if (!!items?.length) {
+        if (!!items?.length || !!groups?.length) {
             const map = new Map();
+            const groupMap = new Map();
             let finalSum = 0;
             let finalSumWithDiscounts = 0;
 
@@ -156,17 +168,37 @@ export default function Basket() {
                 finalSum += count * price;
                 finalSumWithDiscounts += count * price * (100 - discount) / 100;
             });
+            groups.forEach(({ id, books, discount }) => {
+                books.forEach(({ price }) => {
+                    const count = user.basketGroupDiscounts
+                        .find(({ groupDiscountId }) => groupDiscountId === id).count;
+
+                    groupMap.set(id, count);
+                    finalSum += count * price;
+                    finalSumWithDiscounts += count * price * (100 - discount) / 100;
+                })
+            });
             setCountFields(map);
+            setGroupCountFields(groupMap);
             setFinalFullSum(finalSum);
             setFinalSumWithDiscounts(finalSumWithDiscounts);
         }
-    }, [items, user]);
+    }, [groups, items, user]);
 
     function onChangeCountInBasket(bookId: string, count: number) {
         const newCount = countFields.get(bookId) + count;
 
-        update(bookId, newCount)
+        updateBook(bookId, newCount)
             .then(items => setUser({ ...user, basketItems: items }))
+            .catch(() => {
+            });
+    }
+
+    function onChangeCountGroupInBasket(groupId: string, count: number) {
+        const newCount = groupCountFields.get(groupId) + count;
+
+        updateGroup(groupId, newCount)
+            .then(items => setUser({ ...user, basketGroupDiscounts: items }))
             .catch(() => {
             });
     }
@@ -200,21 +232,28 @@ export default function Basket() {
                 <title>Кошик ({user?.basketItems?.length ? user.basketItems.length : 'пустий'})</title>
             </Head>
 
-            <Loading show={loading || updating || loadingDeliveries || creating}/>
+            <Loading show={loading || updatingBook || loadingDeliveries || creating || loadingGroups || updatingGroup}/>
 
             <TitleBoxStyled pb={1} m={1}>Кошик</TitleBoxStyled>
-
 
             <Box display="flex" flexDirection="column" gap={1} px={{ xs: 1 }}>
                 {items.map((book, index) => (
                     <Box key={index}>
-                        <BasketItem book={book} editable={true} count={countFields.get(book.id)}
-                                    onCountChange={(count: number) => onChangeCountInBasket(book.id, count)}/>
+                        <BasketBookItem book={book} editable={true} count={countFields.get(book.id)}
+                                        onCountChange={(count: number) => onChangeCountInBasket(book.id, count)}/>
+                    </Box>
+                ))}
+
+                {!!groups?.length && (groups || []).map((group, index) => (
+                    <Box key={index}>
+                        <GroupDiscountBox books={group.books} count={groupCountFields.get(group.id)}
+                                          discount={group.discount}
+                                          onCountChange={(count: number) => onChangeCountGroupInBasket(group.id, count)}/>
                     </Box>
                 ))}
 
                 <Grid container display="flex" alignItems="center" spacing={1}>
-                    {!loading && (!!items?.length ?
+                    {!loading && (!!items?.length || !!groups.length ?
                         <>
                             <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end"
                                   textAlign="end">
@@ -280,9 +319,11 @@ export default function Basket() {
             </Box>
 
             {error && <ErrorNotification error={error}/>}
-            {updatingError && <ErrorNotification error={updatingError}/>}
+            {updatingBookError && <ErrorNotification error={updatingBookError}/>}
+            {updatingGroupError && <ErrorNotification error={updatingGroupError}/>}
+            {errorGroups && <ErrorNotification error={errorGroups}/>}
 
-            {!!items?.length && <>
+            {(!!items?.length || !!groups?.length) && <>
               <FormContainer formContext={formContext}>
                 <Grid container spacing={2} px={1} mt={1}>
                   <Grid item xs={12}>
@@ -371,7 +412,7 @@ export default function Basket() {
               <Grid container spacing={2} mt={1} mb={3} p={1}>
                 <Grid item xs={12} display="flex" flexWrap="wrap"
                       gap={1} justifyContent={{ xs: 'center', md: 'flex-end' }} alignItems="center">
-                    {isAdmin(user) && !!items?.length &&
+                    {isAdmin(user) && (!!items?.length || !!groups?.length) &&
                       <Button variant="outlined" onClick={() => onCopyOrderClick(items.map(book => ({
                           book,
                           price: book.price,
@@ -380,7 +421,8 @@ export default function Basket() {
                         Скопіювати зміст замовлення
                       </Button>}
                   <Button type="submit" variant="contained"
-                          disabled={submitDisabled || items.some(i => !i.numberInStock)} onClick={onSubmit}>
+                          disabled={submitDisabled || items.some(i => !i.numberInStock) || groups.some(group => group.books.some(b => !b.numberInStock))}
+                          onClick={onSubmit}>
                     Підтвердити замовлення
                   </Button>
                 </Grid>

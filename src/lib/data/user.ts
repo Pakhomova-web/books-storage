@@ -244,21 +244,21 @@ export async function removeBookFromBasket(userId: string, bookId: string) {
 export async function addGroupDiscountInBasket(userId: string, groupDiscountId: string) {
     const user = await User.findById(userId);
 
-    if (user.basketGroupDiscount) {
-        user.basketGroupDiscount.push({ groupDiscountId, count: 1 });
+    if (user.basketGroupDiscounts) {
+        user.basketGroupDiscounts.push({ groupDiscountId, count: 1 });
     } else {
-        user.basketGroupDiscount = [{ groupDiscountId, count: 1 }];
+        user.basketGroupDiscounts = [{ groupDiscountId, count: 1 }];
     }
     await user.save();
 
-    return user.basketGroupDiscount;
+    return user.basketGroupDiscounts;
 }
 
 export async function removeGroupDiscountFromBasket(userId: string, groupDiscountId: string) {
     const user = await User.findById(userId);
 
     if (user.basketGroupDiscount) {
-        user.basketGroupDiscount = user.basketGroupDiscount.filter(item => item.groupDiscountId !== groupDiscountId);
+        user.basketGroupDiscount = user.basketGroupDiscounts.filter(item => item.groupDiscountId !== groupDiscountId);
     } else {
         user.basketGroupDiscount = [];
     }
@@ -281,6 +281,22 @@ export async function updateBookCountInBasket(userId: string, bookId: string, co
     }
 
     return user.basketItems;
+}
+
+export async function updateGroupDiscountCountInBasket(userId: string, groupDiscountId: string, count: number) {
+    const user = await User.findById(userId);
+    const item = user.basketGroupDiscounts?.find(i => i.groupDiscountId === groupDiscountId);
+
+    if (!!item) {
+        item.count = count;
+        await user.save();
+    } else {
+        throw new GraphQLError(`Немає такого комплекту в кошику.`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+
+    return user.basketGroupDiscounts;
 }
 
 async function setRecentlyViewedBooks(item) {
