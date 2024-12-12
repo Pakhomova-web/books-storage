@@ -1,4 +1,4 @@
-import { Box, Button, IconButton } from '@mui/material';
+import { Box, Button, IconButton, useTheme } from '@mui/material';
 import CustomImage from '@/components/custom-image';
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import { styled } from '@mui/material/styles';
@@ -6,6 +6,7 @@ import { renderPrice } from '@/utils/utils';
 import { useEffect, useState } from 'react';
 import { LocalMall } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const StyledContainer = styled(Box)(() => ({
     width: '250px',
@@ -35,7 +36,7 @@ const StyledDivider = styled(Box)(() => ({
     justifyContent: 'center',
     ':before': {
         content: '""',
-        height: '300px',
+        height: '250px',
         position: 'absolute',
         top: 0,
         right: '16px',
@@ -54,6 +55,8 @@ export default function GroupDiscountBox({
                                              onBookClick = null
                                          }) {
     const [fullSum, setFullSum] = useState<number>();
+    const theme = useTheme();
+    const mobileMatches = useMediaQuery(theme.breakpoints.down('sm'));
 
     useEffect(() => {
         setFullSum(books.reduce((a, b) => a + b.price, 0));
@@ -61,7 +64,8 @@ export default function GroupDiscountBox({
 
     return (
         !!books.length &&
-        <Box display="flex" gap={1} py={2} width="100%" overflow="hidden" key={key} justifyContent="center">
+        <Box display="flex" gap={1} py={2} width="100%" overflow="hidden" key={key} justifyContent="center"
+             flexDirection={{ xs: 'column', sm: 'row' }} alignItems="center">
           <Box sx={{ overflowX: 'scroll', overflowY: 'hidden' }} display="flex" gap={1}>
               {books.map((book, index) =>
                   (<>
@@ -94,18 +98,20 @@ export default function GroupDiscountBox({
                           </Box>
                       </StyledContainer>
                   </>))}
-          </Box>
 
-          <StyledDivider><CircleBox>=</CircleBox></StyledDivider>
+              {!mobileMatches && <StyledDivider><CircleBox>=</CircleBox></StyledDivider>}
+          </Box>
 
           <StyledContainer gap={1}>
             <Box display="flex" flexDirection="column" alignItems="center" gap={2} justifyContent="center"
                  width="100%">
-              <Box><s>{renderPrice(fullSum)}</s></Box>
-              <Box sx={priceStyles}>{renderPrice(fullSum, discount)}</Box>
+              <Box display="flex" flexDirection={{ xs: 'row', sm: 'column' }} alignItems="center" gap={1}>
+                <Box><s>{renderPrice(fullSum)}</s></Box>
+                <Box sx={priceStyles}>{renderPrice(fullSum, discount)}</Box>
+              </Box>
 
                 {!!onBuyClick &&
-                  <Button variant="outlined" onClick={onBuyClick}>
+                  <Button variant="contained" onClick={onBuyClick}>
                     <Box display="flex" alignItems="center" gap={1}><LocalMall/>Купити комплект</Box>
                   </Button>}
 

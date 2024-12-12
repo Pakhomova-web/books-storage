@@ -274,7 +274,7 @@ export type GroupDiscountCreateInput = {
 };
 
 export type GroupDiscountSearchInput = {
-  bookId?: InputMaybe<Scalars['ID']['input']>;
+  books?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 export type GroupDiscountSubList = {
