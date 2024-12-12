@@ -23,6 +23,10 @@ const userSchema = new Schema<UserEntity, Model<UserEntity>>({
         bookId: { type: String, required: true },
         count: { type: Number, required: true }
     }],
+    basketGroupDiscounts: [{
+        groupDiscountId: { type: String, required: true },
+        count: { type: Number, required: true }
+    }],
     phoneNumber: String,
     postcode: Number,
     novaPostOffice: Number,

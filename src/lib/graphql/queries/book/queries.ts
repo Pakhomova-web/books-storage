@@ -234,10 +234,28 @@ export const addBookInBasketQuery = gql`
     }
 `;
 
+export const addGroupDiscountInBasketQuery = gql`
+    mutation AddGroupDiscountInBasket($id: ID!) {
+        items: addGroupDiscountInBasket(id: $id) {
+            groupDiscountId
+            count
+        }
+    }
+`;
+
 export const removeBookFromBasketQuery = gql`
     mutation RemoveBookInBasket($id: ID!) {
         items: removeBookInBasket(id: $id) {
             bookId
+            count
+        }
+    }
+`;
+
+export const removeGroupDiscountFromBasketQuery = gql`
+    mutation RemoveGroupDiscountFromBasket($id: ID!) {
+        items: removeGroupDiscountFromBasket(id: $id) {
+            groupDiscountId
             count
         }
     }

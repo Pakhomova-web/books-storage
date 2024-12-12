@@ -406,6 +406,8 @@ export default function BookDetails() {
                 </Grid>
               </Grid>
 
+              <GroupDiscountBooks bookId={book.id} onBookClick={onGroupDiscountBookClick}/>
+
                 {/*comment*/}
               <Grid container spacing={2} position="relative">
                 <Loading show={!loading && loadingComments} isSmall={true}></Loading>
@@ -479,7 +481,6 @@ export default function BookDetails() {
                         </Grid>}
                   </Grid>}
 
-              <GroupDiscountBooks bookId={book.id} onBookClick={onGroupDiscountBookClick}/>
 
               <DiscountBooks/>
 

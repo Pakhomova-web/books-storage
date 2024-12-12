@@ -241,6 +241,32 @@ export async function removeBookFromBasket(userId: string, bookId: string) {
     return user.basketItems;
 }
 
+export async function addGroupDiscountInBasket(userId: string, groupDiscountId: string) {
+    const user = await User.findById(userId);
+
+    if (user.basketGroupDiscount) {
+        user.basketGroupDiscount.push({ groupDiscountId, count: 1 });
+    } else {
+        user.basketGroupDiscount = [{ groupDiscountId, count: 1 }];
+    }
+    await user.save();
+
+    return user.basketGroupDiscount;
+}
+
+export async function removeGroupDiscountFromBasket(userId: string, groupDiscountId: string) {
+    const user = await User.findById(userId);
+
+    if (user.basketGroupDiscount) {
+        user.basketGroupDiscount = user.basketGroupDiscount.filter(item => item.groupDiscountId !== groupDiscountId);
+    } else {
+        user.basketGroupDiscount = [];
+    }
+    await user.save();
+
+    return user.basketGroupDiscount;
+}
+
 export async function updateBookCountInBasket(userId: string, bookId: string, count: number) {
     const user = await User.findById(userId);
     const item = user.basketItems?.find(i => i.bookId === bookId);

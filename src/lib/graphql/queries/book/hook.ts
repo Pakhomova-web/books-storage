@@ -4,11 +4,13 @@ import {
     _useCreateItem,
     _useItemById,
     _usePageableItems,
-    _useUpdateItem, getItemById
+    _useUpdateItem,
+    getItemById
 } from '@/lib/graphql/base-hooks';
 import {
     addBookCommentQuery,
     addBookInBasketQuery,
+    addGroupDiscountInBasketQuery,
     approveComment,
     bookByIdQuery,
     bookCommentsQuery,
@@ -24,6 +26,7 @@ import {
     likeBookQuery,
     removeBookFromBasketQuery,
     removeComment,
+    removeGroupDiscountFromBasketQuery,
     topOfSoldBooksQuery,
     unlikeBookQuery,
     updateBookCountInBasketQuery,
@@ -206,8 +209,26 @@ export async function addBookInBasket(id: string): Promise<string[]> {
     return items;
 }
 
+export async function addGroupDiscountInBasket(id: string): Promise<string[]> {
+    const { data: { items } } = await apolloClient.mutate({
+        mutation: addGroupDiscountInBasketQuery,
+        variables: { id }
+    });
+
+    return items;
+}
+
 export async function removeBookFromBasket(id: string): Promise<string[]> {
     const { data: { items } } = await apolloClient.mutate({ mutation: removeBookFromBasketQuery, variables: { id } });
+
+    return items;
+}
+
+export async function removeGroupDiscountIdFromBasket(id: string): Promise<string[]> {
+    const { data: { items } } = await apolloClient.mutate({
+        mutation: removeGroupDiscountFromBasketQuery,
+        variables: { id }
+    });
 
     return items;
 }

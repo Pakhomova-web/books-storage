@@ -92,6 +92,11 @@ const typeDefs =  /* GraphQL */ `
         count: Int!
     }
 
+    type BasketGroupDiscountItem {
+        groupDiscountId: ID!
+        count: Int!
+    }
+
     type User {
         id: ID!
         email: String!
@@ -100,6 +105,7 @@ const typeDefs =  /* GraphQL */ `
         lastName: String
         role: String
         basketItems: [BasketItem!]
+        basketGroupDiscounts: [BasketGroupDiscountItem!]
         likedBookIds: [String]
         recentlyViewedBookIds: [String]
         recentlyViewedBooks: [Book!]
@@ -223,6 +229,8 @@ const typeDefs =  /* GraphQL */ `
         changeRecentlyViewedBooks(id: ID!): [Book!]
         addBookInBasket(id: ID!): [BasketItem!]
         removeBookInBasket(id: ID!): [BasketItem!]
+        addGroupDiscountInBasket(id: ID!): [BasketGroupDiscountItem!]
+        removeGroupDiscountFromBasket(id: ID!): [BasketGroupDiscountItem!]
         updateBookCountInBasket(id: ID!, count: Int!): [BasketItem!]
 
         updateAuthor(input: AuthorUpdateInput!): Author

@@ -12,6 +12,10 @@ const userFragment = gql`
             bookId
             count
         }
+        basketGroupDiscounts {
+            groupDiscountId
+            count
+        }
         likedBookIds
         recentlyViewedBookIds
         recentlyViewedBooks {

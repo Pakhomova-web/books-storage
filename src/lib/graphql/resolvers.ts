@@ -53,13 +53,13 @@ import {
 import { createAuthor, deleteAuthor, getAuthorById, getAuthors, updateAuthor } from '@/lib/data/author';
 import { GraphQLError } from 'graphql/error';
 import {
-    addBookInBasket, changePassword, changePasswordByToken,
+    addBookInBasket, addGroupDiscountInBasket, changePassword, changePasswordByToken,
     changeRecentlyViewedBooks,
     createUser,
     getNewToken,
     likeBook,
     login,
-    removeBookFromBasket,
+    removeBookFromBasket, removeGroupDiscountFromBasket,
     unlikeBook,
     updateBookCountInBasket,
     updateUser
@@ -345,6 +345,14 @@ const resolvers: Resolvers = {
         removeBookInBasket: async (_root, { id }, { user }) => {
             _checkUser(user);
             return removeBookFromBasket(user.id, id).catch(error => parseError(error));
+        },
+        addGroupDiscountInBasket: async (_root, { id }, { user }) => {
+            _checkUser(user);
+            return addGroupDiscountInBasket(user.id, id).catch(error => parseError(error));
+        },
+        removeGroupDiscountFromBasket: async (_root, { id }, { user }) => {
+            _checkUser(user);
+            return removeGroupDiscountFromBasket(user.id, id).catch(error => parseError(error));
         },
         updateBookCountInBasket: async (_root, { id, count }, { user }) => {
             _checkUser(user);

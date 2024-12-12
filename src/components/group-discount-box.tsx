@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { LocalMall } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { useAuth } from '@/components/auth-context';
 
 const StyledContainer = styled(Box)(() => ({
     width: '250px',
@@ -51,9 +52,11 @@ export default function GroupDiscountBox({
                                              onDeleteBook = null,
                                              onEditBook = null,
                                              onBuyClick = null,
+                                             isInBasket = false,
                                              onDeleteGroupClick = null,
                                              onBookClick = null
                                          }) {
+    const { user } = useAuth();
     const [fullSum, setFullSum] = useState<number>();
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('sm'));
@@ -110,10 +113,10 @@ export default function GroupDiscountBox({
                 <Box sx={priceStyles}>{renderPrice(fullSum, discount)}</Box>
               </Box>
 
-                {!!onBuyClick &&
-                  <Button variant="contained" onClick={onBuyClick}>
-                    <Box display="flex" alignItems="center" gap={1}><LocalMall/>Купити комплект</Box>
-                  </Button>}
+                {!!onBuyClick && (isInBasket ? <Button disabled={true} variant="outlined">В кошику</Button> :
+                    <Button variant="contained" onClick={onBuyClick}>
+                        <Box display="flex" alignItems="center" gap={1}><LocalMall/>Купити комплект</Box>
+                    </Button>)}
 
               <Box display="flex" gap={1}>
                   {!!onEditBook &&

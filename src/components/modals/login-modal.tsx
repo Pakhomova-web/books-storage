@@ -12,6 +12,7 @@ import CustomModal from '@/components/modals/custom-modal';
 import CustomLink from '@/components/custom-link';
 import CustomImage from '@/components/custom-image';
 import { emailValidation, passwordValidation } from '@/utils/utils';
+import ErrorNotification from '@/components/error-notification';
 
 export default function LoginModal({ open }) {
     const router = useRouter();
@@ -71,8 +72,7 @@ export default function LoginModal({ open }) {
     }
 
     return (
-        <CustomModal open={open} loading={loading || sendingResetPasswordLink}
-                     error={error || errorSendingResetPasswordLink}>
+        <CustomModal open={open} loading={loading || sendingResetPasswordLink}>
             <Box sx={authStyles.title} mb={2}>Вхід</Box>
 
             <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
@@ -113,6 +113,9 @@ export default function LoginModal({ open }) {
                         </Box>
                       </CustomModal>}
                 </Box>
+
+                {!!error && <ErrorNotification error={error} />}
+                {!!errorSendingResetPasswordLink && <ErrorNotification error={errorSendingResetPasswordLink} />}
 
                 <Grid container spacing={2} mb={1}>
                     <Grid item xs={6}>

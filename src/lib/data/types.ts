@@ -264,6 +264,7 @@ export class UserEntity {
     recentlyViewedBookIds?: string[];
     recentlyViewedBooks?: BookEntity[];
     basketItems?: { bookId: string, count: number }[];
+    basketGroupDiscounts?: { groupDiscountId: string, count: number }[];
 
     preferredDeliveryId?: string;
     region?: string;
@@ -286,6 +287,7 @@ export class UserEntity {
             this.recentlyViewedBookIds = data.recentlyViewedBookIds ? data.recentlyViewedBookIds : [];
             this.recentlyViewedBooks = data.recentlyViewedBooks ? data.recentlyViewedBooks : [];
             this.basketItems = data.basketItems ? data.basketItems : [];
+            this.basketGroupDiscounts = data.basketGroupDiscounts ? data.basketGroupDiscounts : [];
             this.region = data.region;
             this.district = data.district;
             this.city = data.city;

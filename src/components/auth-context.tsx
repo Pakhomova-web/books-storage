@@ -5,10 +5,10 @@ import { useRouter } from 'next/router';
 import { ApolloError } from '@apollo/client';
 import { GraphQLError } from 'graphql/error';
 import {
-    addBookInBasket,
+    addBookInBasket, addGroupDiscountInBasket,
     changeRecentlyViewedBooks,
     likeBook,
-    removeBookFromBasket,
+    removeBookFromBasket, removeGroupDiscountIdFromBasket,
     unlikeBook
 } from '@/lib/graphql/queries/book/hook';
 import { usePathname } from 'next/navigation';
@@ -24,6 +24,7 @@ type authContextType = {
     checkAuth: (error: ApolloError) => void;
     setLikedBook: (bookId: string) => void;
     setBookInBasket: (bookId: string) => void;
+    setGroupDiscountInBasket: (bookId: string) => void;
     setRecentlyViewedBooks: (bookId: string) => void;
     setDeliveries: (deliveries: DeliveryEntity[]) => void;
 };
@@ -43,6 +44,8 @@ const authContextDefaultValues: authContextType = {
     setLikedBook: (_bookId: string) => {
     },
     setBookInBasket: (_bookId: string) => {
+    },
+    setGroupDiscountInBasket: (_groupDiscountId: string) => {
     },
     setRecentlyViewedBooks: (_bookId: string) => {
     },
@@ -138,6 +141,26 @@ export function AuthProvider({ children }) {
 
             promise
                 .then(basketItems => setUser({ ...user, basketItems: basketItems }))
+                .catch(e => {
+                    console.log(e);
+                });
+        },
+        setGroupDiscountInBasket: (groupDiscountId: string) => {
+            if (!user) {
+                setOpenLoginModal(true);
+                return;
+            }
+
+            let promise;
+
+            if (user.basketGroupDiscounts?.some(item => item.groupDiscountId === groupDiscountId)) {
+                promise = removeGroupDiscountIdFromBasket(groupDiscountId);
+            } else {
+                promise = addGroupDiscountInBasket(groupDiscountId);
+            }
+
+            promise
+                .then(basketGroupDiscounts => setUser({ ...user, basketGroupDiscounts }))
                 .catch(e => {
                     console.log(e);
                 });

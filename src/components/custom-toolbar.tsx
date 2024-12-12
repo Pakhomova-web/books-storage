@@ -168,7 +168,8 @@ export default function CustomToolbar() {
                             </Box>
 
                             <Box>
-                                <Badge badgeContent={user?.basketItems?.length ? user.basketItems.length : null}>
+                                <Badge
+                                    badgeContent={user ? (user.basketItems.length + (user.basketGroupDiscounts?.length || 0)) : null}>
                                     <IconButton onClick={goToBasket}
                                                 color="primary"
                                                 className={selectedMenuItem === MainMenuItem.basket ? 'selectedToolbarMenuItem' : ''}>
