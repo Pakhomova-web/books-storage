@@ -229,7 +229,7 @@ export default function Basket() {
     return (
         <>
             <Head>
-                <title>Кошик ({user?.basketItems?.length ? user.basketItems.length : 'пустий'})</title>
+                <title>Кошик{(user?.basketItems?.length || user?.basketGroupDiscounts.length) ? '' : ' (пустий)'}</title>
             </Head>
 
             <Loading show={loading || updatingBook || loadingDeliveries || creating || loadingGroups || updatingGroup}/>
