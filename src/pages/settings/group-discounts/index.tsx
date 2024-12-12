@@ -12,6 +12,7 @@ import { isAdmin } from '@/utils/utils';
 import { useAuth } from '@/components/auth-context';
 import GroupDiscountBox from '@/components/group-discount-box';
 import { primaryLightColor } from '@/constants/styles-variables';
+import { useRouter } from 'next/router';
 
 export default function GroupDiscounts() {
     const [pageSettings, setPageSettings] = useState<IPageable>({ page: 0, rowsPerPage: 6 });
@@ -22,6 +23,7 @@ export default function GroupDiscounts() {
     const { deleteItem, deleting, deletingError } = useRemoveGroupDiscount();
     const [refetching, setRefetching] = useState<boolean>(false);
     const { user } = useAuth();
+    const router = useRouter();
 
     function onPageChange(val: number) {
         setPageSettings({
@@ -76,6 +78,7 @@ export default function GroupDiscounts() {
                 <Box key={index} borderBottom={1} borderColor={primaryLightColor}>
                     <GroupDiscountBox onDeleteGroupClick={() => onRemove(item.id)}
                                       onEditBook={() => onEditClick(item)}
+                                      onBookClick={(bookId: string) => router.push(`/books/details?id=${bookId}&pageUrl=/settings/group-discounts`)}
                                       discount={item.discount}
                                       books={item.books}/>
                 </Box>

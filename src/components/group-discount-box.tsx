@@ -9,7 +9,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 const StyledContainer = styled(Box)(() => ({
     width: '250px',
-    height: '300px',
+    maxHeight: '300px',
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'nowrap'
@@ -45,11 +45,13 @@ const StyledDivider = styled(Box)(() => ({
 
 export default function GroupDiscountBox({
                                              books,
+                                             key = null,
                                              discount,
                                              onDeleteBook = null,
                                              onEditBook = null,
                                              onBuyClick = null,
-                                             onDeleteGroupClick = null
+                                             onDeleteGroupClick = null,
+                                             onBookClick = null
                                          }) {
     const [fullSum, setFullSum] = useState<number>();
 
@@ -59,8 +61,8 @@ export default function GroupDiscountBox({
 
     return (
         !!books.length &&
-        <Box display="flex" gap={1} py={2} width="100%" overflow="hidden">
-          <Box sx={{ overflowX: 'scroll' }} display="flex" gap={1}>
+        <Box display="flex" gap={1} py={2} width="100%" overflow="hidden" key={key} justifyContent="center">
+          <Box sx={{ overflowX: 'scroll', overflowY: 'hidden' }} display="flex" gap={1}>
               {books.map((book, index) =>
                   (<>
                       {index !== 0 && <StyledDivider><CircleBox>+</CircleBox></StyledDivider>}
@@ -71,7 +73,8 @@ export default function GroupDiscountBox({
                                gap={1} width="100%"
                                position="relative" px={1}>
                               <Box display="flex" alignItems="center" justifyContent="center" gap={1}
-                                   flexDirection="column">
+                                   flexDirection="column" className={!!onBookClick ? 'cursor-pointer' : ''}
+                                   onClick={() => !!onBookClick && onBookClick(book.id)}>
                                   <Box height="120px" width="120px">
                                       <CustomImage imageId={book.imageIds[0]}/>
                                   </Box>

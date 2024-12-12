@@ -64,7 +64,7 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
                     orFilters.push({ illustrators: { $in: filters[key] } });
                 } else if (key === 'tags') {
                     andFilters.push({ [key]: { $in: filters[key].map(i => getCaseInsensitiveSubstringOption(i)) } });
-                } else if (['bookTypes', 'bookSeries', 'languages', 'ages'].includes(key)) {
+                } else if (['bookTypes', 'bookSeries', 'languages', 'ages', 'books'].includes(key)) {
                     andFilters.push({ [key]: { $in: filters[key] } });
                 } else if (key === 'priceMin') {
                     andFilters.push({ price: { $gt: filters[key] } });

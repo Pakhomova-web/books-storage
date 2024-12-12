@@ -168,7 +168,7 @@ export interface GroupDiscountEntity {
 }
 
 export interface IGroupDiscountFilter {
-    bookId: string
+    books: string[]
 }
 
 export interface IOption<T> {

@@ -53,3 +53,7 @@ html, body {
 .MuiPaper-root::before {
     background-color: rgba(68, 138, 255, 0.2);
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}

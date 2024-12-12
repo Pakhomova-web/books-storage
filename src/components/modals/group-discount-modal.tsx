@@ -135,7 +135,8 @@ export default function GroupDiscountModal({ item, onClose, isAdmin }: IGroupDis
                     ))}
                 </Box>
 
-                <GroupDiscountBox books={books} discount={discount} onDeleteBook={bookId => onDeleteBook(bookId)}/>
+                <GroupDiscountBox books={books} discount={discount}
+                                  onDeleteBook={(bookId: string) => onDeleteBook(bookId)}/>
 
                 {(creatingError || updatingError) &&
                   <ErrorNotification error={creatingError || updatingError}></ErrorNotification>}

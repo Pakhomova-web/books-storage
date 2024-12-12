@@ -425,7 +425,7 @@ const typeDefs =  /* GraphQL */ `
     #    group discount
 
     input GroupDiscountSearchInput {
-        bookId: ID
+        books: [ID!]
     }
 
     input GroupDiscountCreateInput {

@@ -35,6 +35,7 @@ import RecentlyViewedBooks from '@/components/books/recently-viewed-books';
 import IconWithText from '@/components/icon-with-text';
 import BookModal from '@/components/modals/book-modal';
 import Catalogue from '@/components/catalogue';
+import GroupDiscountBooks from '@/components/books/group-discount-section';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
     height: '40px',
@@ -173,6 +174,10 @@ export default function BookDetails() {
                 setLoadingComments(false);
                 setCommentsError(error);
             });
+    }
+
+    function onGroupDiscountBookClick(bookId: string) {
+        router.push(`/books/details?id=${bookId}${router.query.pageUrl ? `&pageUrl=${router.query.pageUrl}` : ''}${router.query.filters ? router.query.filters : ''}`);
     }
 
     function onBackClick() {
@@ -473,6 +478,8 @@ export default function BookDetails() {
                           В цій серії більше немає книг
                         </Grid>}
                   </Grid>}
+
+              <GroupDiscountBooks bookId={book.id} onBookClick={onGroupDiscountBookClick}/>
 
               <DiscountBooks/>
 
