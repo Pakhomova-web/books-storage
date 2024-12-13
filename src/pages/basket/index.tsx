@@ -389,6 +389,7 @@ export default function Basket() {
                   <Grid item xs={12} sm={6}>
                     <MuiTelInput value={phoneNumber}
                                  required={true}
+                                 defaultCountry="UA"
                                  onChange={handlePhoneNumberChange}
                                  label="Номер телефону"
                                  error={!!formContext.formState.errors.phoneNumber}

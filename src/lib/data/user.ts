@@ -104,13 +104,6 @@ export async function updateUser(input: UserEntity): Promise<UserEntity> {
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const itemByEmail = await getByEmail<UserEntity>(User, input.email);
-
-    if (itemByEmail && itemByEmail.id.toString() !== input.id) {
-        throw new GraphQLError(`Ел. адреса '${input.email}' вже використовується.`, {
-            extensions: { code: 'DUPLICATE_ERROR' }
-        });
-    }
     const item = await User.findByIdAndUpdate(input.id, input);
 
     await setRecentlyViewedBooks(item);

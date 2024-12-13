@@ -107,9 +107,9 @@ export default function PersonalInfo() {
 
                     <Grid item xs={12} sm={6}>
                         <MuiTelInput value={phoneNumber}
-                                     required={true}
                                      onChange={handlePhoneNumberChange}
                                      label="Номер телефону"
+                                     defaultCountry="UA"
                                      error={!!formContext.formState.errors.phoneNumber}
                                      fullWidth/>
                     </Grid>
