@@ -394,19 +394,15 @@ export default function Catalogue() {
             </StyledContainer> :
             <StyledContainer container mb={1}>
                 {items.map((item, index) => (
-                    <>
-                        <StyledGrid item xs={3} key={index} px={2} py={{ md: 1, lg: 2 }}
-                                    sx={index === items.length - 1 ? rightDivider : {}}
-                                    onMouseEnter={() => setParentIndex(index)}
-                                    onMouseLeave={() => setParentIndex(null)}
-                                    onClick={() => onSectionClick(item.params, item.title, item.url, index)}>
-                            {item.title}
-                        </StyledGrid>
+                    <StyledGrid item xs={3} key={index} px={2} py={{ md: 1, lg: 2 }}
+                                sx={index === items.length - 1 ? rightDivider : {}}
+                                onMouseEnter={() => setParentIndex(index)}
+                                onMouseLeave={() => setParentIndex(null)}
+                                onClick={() => onSectionClick(item.params, item.title, item.url, index)}>
+                        {item.title}
 
                         {!!item.children?.length &&
                           <StyledChildrenContainer px={2} py={3} gap={2}
-                                                   onMouseEnter={() => setParentIndex(index)}
-                                                   onMouseLeave={() => setParentIndex(null)}
                                                    sx={{ visibility: parentIndex === index ? 'visible' : 'hidden' }}>
                               {item.children.map((item, index) => (
                                   <CustomLink key={index}
@@ -421,7 +417,7 @@ export default function Catalogue() {
                             <CustomLink onClick={() => onSectionClick({}, null, '/publishing-houses')}
                                         key={index}>Подивитись усі видавництва</CustomLink>
                           </StyledChildrenContainer>}
-                    </>
+                    </StyledGrid>
                 ))}
             </StyledContainer>
     );
