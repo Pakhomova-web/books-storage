@@ -62,7 +62,8 @@ const orderSchema = new Schema<OrderEntity, Model<OrderEntity>>({
             price: {
                 type: Number,
                 required: true
-            }
+            },
+            groupDiscountId: Schema.Types.ObjectId
         }
     ],
     date: String

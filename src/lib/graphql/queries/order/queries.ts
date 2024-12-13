@@ -32,6 +32,7 @@ const orderFragment = gql`
             imageId
         }
         books {
+            groupDiscountId
             book {
                 id
                 name

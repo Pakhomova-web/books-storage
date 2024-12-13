@@ -69,7 +69,7 @@ export async function createOrder(input: OrderEntity) {
     item.date = new Date().toISOString();
 
     await item.save();
-    await User.findByIdAndUpdate(input.userId, { basketItems: [] });
+    await User.findByIdAndUpdate(input.userId, { basketItems: [], basketGroupDiscounts: [] });
 
     return item as OrderEntity;
 }

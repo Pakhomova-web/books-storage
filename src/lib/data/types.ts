@@ -319,6 +319,7 @@ export class OrderBookEntity {
     book: BookEntity;
     count: number;
     discount?: number;
+    groupDiscountId?: string;
     price: number;
 
     constructor(data?) {
@@ -327,6 +328,7 @@ export class OrderBookEntity {
             this.bookId = data.bookId;
             this.count = data.count;
             this.discount = data.discount;
+            this.groupDiscountId = data.groupDiscountId;
             this.price = data.price;
         }
     }

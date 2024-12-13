@@ -123,6 +123,7 @@ const typeDefs =  /* GraphQL */ `
         count: Int!
         discount: Float
         price: Float!
+        groupDiscountId: ID
     }
 
     type Order {
@@ -556,6 +557,7 @@ const typeDefs =  /* GraphQL */ `
         bookId: ID!
         count: Int!
         discount: Float
+        groupDiscountId: String
         price: Float!
     }
 

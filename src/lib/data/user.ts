@@ -257,14 +257,14 @@ export async function addGroupDiscountInBasket(userId: string, groupDiscountId: 
 export async function removeGroupDiscountFromBasket(userId: string, groupDiscountId: string) {
     const user = await User.findById(userId);
 
-    if (user.basketGroupDiscount) {
-        user.basketGroupDiscount = user.basketGroupDiscounts.filter(item => item.groupDiscountId !== groupDiscountId);
+    if (user.basketGroupDiscounts) {
+        user.basketGroupDiscounts = user.basketGroupDiscounts.filter(item => item.groupDiscountId !== groupDiscountId);
     } else {
-        user.basketGroupDiscount = [];
+        user.basketGroupDiscounts = [];
     }
     await user.save();
 
-    return user.basketGroupDiscount;
+    return user.basketGroupDiscounts;
 }
 
 export async function updateBookCountInBasket(userId: string, bookId: string, count: number) {

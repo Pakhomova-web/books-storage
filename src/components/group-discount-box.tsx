@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, useTheme } from '@mui/material';
+import { Box, Button, Grid, IconButton, useTheme } from '@mui/material';
 import CustomImage from '@/components/custom-image';
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import { styled } from '@mui/material/styles';
@@ -7,7 +7,9 @@ import React, { useEffect, useState } from 'react';
 import { LocalMall } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import { useAuth } from '@/components/auth-context';
+import ClearIcon from '@mui/icons-material/Clear';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
 const StyledContainer = styled(Box)(() => ({
     width: '250px',
@@ -63,19 +65,28 @@ export default function GroupDiscountBox({
     const mobileMatches = useMediaQuery(theme.breakpoints.down('sm'));
 
     useEffect(() => {
-        setFullSum(books.reduce((a, b) => a + b.price, 0));
-    }, [books])
+        setFullSum(count * books.reduce((a, b) => a + b.price, 0));
+    }, [books, count])
 
     // TODO отображать нет в наличии красным
 
     return (
-        !!books.length && <>
-        <Box width="100%">Акційний комплект</Box> delete btn
+        !!books.length &&
+      <>
+          {!!onCountChange && <>
+            <Box sx={styleVariables.sectionTitle}>
+              <Box display="flex" justifyContent="space-between" width="100%" alignItems="center">
+                Акційний комплект
+                  {!!onDeleteGroupClick && <IconButton onClick={onDeleteGroupClick}><ClearIcon/></IconButton>}
+              </Box>
+            </Box>
+          </>}
 
         <Box display="flex" gap={1} py={2} width="100%" overflow="hidden" key={key} justifyContent="center"
              flexDirection={{ xs: 'column', sm: 'row' }} alignItems="center">
 
-          <Box sx={{ overflowX: 'scroll', overflowY: 'hidden' }} display="flex" gap={1}>
+          <Box sx={{ overflowX: 'scroll', overflowY: 'hidden' }} display="flex" gap={1} width="100%"
+               justifyContent="flex-end">
               {books.map((book, index) =>
                   (<>
                       {index !== 0 && <StyledDivider><CircleBox>+</CircleBox></StyledDivider>}
@@ -114,12 +125,29 @@ export default function GroupDiscountBox({
           <StyledContainer gap={1}>
             <Box display="flex" flexDirection="column" alignItems="center" gap={2} justifyContent="center"
                  width="100%">
+                {!!onCountChange &&
+                  <Grid container spacing={1} display="flex" flexWrap="nowrap" alignItems="center"
+                        justifyContent="center">
+                    <Grid item>
+                      <IconButton onClick={() => onCountChange(-1)}
+                                  disabled={count === 1}>
+                        <RemoveCircleOutlineIcon fontSize="large"/>
+                      </IconButton>
+                    </Grid>
+
+                    <Grid item sx={styleVariables.titleFontSize}>{count}</Grid>
+
+                    <Grid item>
+                      <IconButton onClick={() => onCountChange(1)}>
+                        <AddCircleOutlineIcon fontSize="large"/>
+                      </IconButton>
+                    </Grid>
+                  </Grid>}
+
               <Box display="flex" flexDirection={{ xs: 'row', sm: 'column' }} alignItems="center" gap={1}>
                 <Box><s>{renderPrice(fullSum)}</s></Box>
                 <Box sx={priceStyles}>{renderPrice(fullSum, discount)}</Box>
               </Box>
-
-                {!!onCountChange && <Box> count fields </Box>}
 
                 {!!onBuyClick && (isInBasket ? <Button disabled={true} variant="outlined">В кошику</Button> :
                     <Button variant="contained" onClick={onBuyClick}>
@@ -130,7 +158,7 @@ export default function GroupDiscountBox({
                   {!!onEditBook &&
                     <IconButton onClick={onEditBook} color="primary"><EditIcon/></IconButton>}
 
-                  {!!onDeleteGroupClick &&
+                  {!onCountChange && !!onDeleteGroupClick &&
                     <Button variant="outlined" color="warning" onClick={onDeleteGroupClick}>
                       Видалити
                     </Button>}

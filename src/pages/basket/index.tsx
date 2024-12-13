@@ -38,7 +38,7 @@ const TitleBoxStyled = styled(Box)(({ theme }) => ({
 
 export default function Basket() {
     const router = useRouter();
-    const { user, setUser } = useAuth();
+    const { user, setUser, setGroupDiscountInBasket } = useAuth();
     const formContext = useForm({
         defaultValues: {
             userId: user?.id,
@@ -152,7 +152,7 @@ export default function Basket() {
         }
 
         setSubmitDisabled(invalid);
-    }, [deliveryId, phoneNumber, firstName, lastName, region, city, postcode, novaPostOffice]);
+    }, [deliveryId, phoneNumber, firstName, lastName, region, city, postcode, novaPostOffice, formContext]);
 
     useEffect(() => {
         if (!!items?.length || !!groups?.length) {
@@ -203,19 +203,33 @@ export default function Basket() {
             });
     }
 
+    function onDeleteGroupDiscount(groupDiscountId: string) {
+        setGroupDiscountInBasket(groupDiscountId);
+    }
+
     function onSubmit() {
         if (!submitDisabled) {
             const { novaPostOffice, postcode, ...values } = formContext.getValues();
+
             create({
                 ...values,
                 postcode: postcode || null,
                 novaPostOffice: novaPostOffice || null,
-                books: items.map(book => ({
-                    bookId: book.id,
-                    count: countFields.get(book.id),
-                    price: book.price,
-                    discount: book.discount
-                }))
+                books: [
+                    ...items.map(book => ({
+                        bookId: book.id,
+                        count: countFields.get(book.id),
+                        price: book.price,
+                        discount: book.discount
+                    })),
+                    ...groups.reduce((arr, group) => [...arr, ...group.books.map(book => ({
+                        bookId: book.id,
+                        count: groupCountFields.get(group.id),
+                        price: book.price,
+                        discount: group.discount,
+                        groupDiscountId: group.id
+                    }))], [])
+                ]
             })
                 .then(order => {
                     setOrderNumber(renderOrderNumber(order.orderNumber));
@@ -245,9 +259,10 @@ export default function Basket() {
                 ))}
 
                 {!!groups?.length && (groups || []).map((group, index) => (
-                    <Box key={index}>
+                    <Box key={index} mb={1}>
                         <GroupDiscountBox books={group.books} count={groupCountFields.get(group.id)}
                                           discount={group.discount}
+                                          onDeleteGroupClick={() => onDeleteGroupDiscount(group.id)}
                                           onCountChange={(count: number) => onChangeCountGroupInBasket(group.id, count)}/>
                     </Box>
                 ))}
