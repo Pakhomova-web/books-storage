@@ -108,12 +108,12 @@ export const booksByIdsQuery = gql`
     query BooksByIds($ids: [ID!], $pageSettings: PageableInput) {
         booksByIds(ids: $ids, pageSettings: $pageSettings) {
             items {
-                ...Book
+                ...BookList
             }
             totalCount
         }
     }
-    ${bookFragment}
+    ${bookListFragment}
 `;
 
 export const booksWithNotApprovedCommentsQuery = gql`
