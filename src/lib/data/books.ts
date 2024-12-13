@@ -96,6 +96,18 @@ export async function getBookById(id: string) {
             }
         })
         .populate('pageType')
+        .populate({
+            path: 'languageBooks',
+            populate: [
+                { path: 'languages' },
+                {
+                    path: 'bookSeries',
+                    populate: {
+                        path: 'publishingHouse'
+                    }
+                }
+            ]
+        })
         .populate('coverType');
 
     if (!item) {
@@ -119,9 +131,24 @@ export async function createBook(input: Partial<BookEntity>) {
         if (item.numberInStock && item.purchasePrice) {
             balance.value = balance.value - item.numberInStock * item.purchasePrice;
         }
+
+        const languageBooks = await Book.find({ _id: item.languageBooks });
+
         await Promise.all([
             balance.save(),
-            item.save()
+            item.save(),
+            languageBooks.map(book => {
+                if (!!book.languageBooks && book.languageBooks.some(id => item.id === id)) {
+                    return new Promise(null);
+                }
+
+                if (!book.languageBooks) {
+                    book.languageBooks = [item.id];
+                } else {
+                    book.languageBooks.push(item.id);
+                }
+                return book.save();
+            })
         ]);
 
         return { ...input, id: item.id } as BookEntity;
@@ -152,7 +179,23 @@ export async function updateBook(input: Partial<BookEntity>, updateAllBooksInSer
             return item.save();
         }));
     }
-    await Book.findByIdAndUpdate(input.id, _getBookData(input));
+    const languageBooks = await Book.find({ _id: input.languageBookIds });
+
+    await Promise.all([
+        Book.findByIdAndUpdate(input.id, _getBookData(input)),
+        languageBooks.map(book => {
+            if (!!book.languageBooks && book.languageBooks.some(id => input.id === id)) {
+                return new Promise(null);
+            }
+
+            if (!book.languageBooks) {
+                book.languageBooks = [input.id];
+            } else {
+                book.languageBooks.push(input.id);
+            }
+            return book.save();
+        })
+    ]);
 
     return { id: input.id } as BookEntity;
 }
@@ -418,6 +461,7 @@ function _getBookData(input: Partial<BookEntity>) {
         bookSeries: input.bookSeriesId,
         coverType: input.coverTypeId,
         pageType: input.pageTypeId,
+        languageBooks: input.languageBookIds,
         bookTypes: input.bookTypeIds
     };
 }

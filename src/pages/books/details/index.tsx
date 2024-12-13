@@ -36,6 +36,7 @@ import IconWithText from '@/components/icon-with-text';
 import BookModal from '@/components/modals/book-modal';
 import Catalogue from '@/components/catalogue';
 import GroupDiscountBooks from '@/components/books/group-discount-section';
+import ClickableOption from '@/components/clickable-option';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
     height: '40px',
@@ -105,11 +106,6 @@ export default function BookDetails() {
                 });
             }
             const keys = [
-                {
-                    title: 'Мова',
-                    type: 'text',
-                    renderValue: (book: BookEntity) => book.languages.map(l => l.name).join(', ')
-                },
                 { title: 'Тип сторінок', type: 'text', renderValue: (book: BookEntity) => book.pageType?.name },
                 { title: 'Обкладинка', type: 'text', renderValue: (book: BookEntity) => book.coverType?.name },
                 { title: 'ISBN', type: 'text', renderValue: (book: BookEntity) => book.isbn },
@@ -244,6 +240,10 @@ export default function BookDetails() {
         navigator.clipboard.writeText(description.replaceAll('</br>', '').replaceAll('<li>', '').replaceAll('</li>', ''));
     }
 
+    function onLanguageBookClick(id: string) {
+        router.push(`/books/details?id=${id}`);
+    }
+
     return (
         <>
             <Head>
@@ -350,8 +350,19 @@ export default function BookDetails() {
                         Теги:
                           {book.tags.map((tag, index) =>
                               <Tag key={index} tag={tag} onClick={() => onTagClick(tag)}/>)}
-                      </Grid>
-                    }
+                      </Grid>}
+
+                  <Grid container pl={1} alignItems="center" gap={1}>
+                    Мова:
+                    <ClickableOption selected={true}>{book.languages.map(l => l.name).join(', ')}</ClickableOption>
+
+                      {book.languageBooks.map((item, index) =>
+                          <Box key={index}>
+                              <ClickableOption onClick={() => onLanguageBookClick(item.id)}>
+                                  {item.languages.map(l => l.name).join(', ')}
+                              </ClickableOption>
+                          </Box>)}
+                  </Grid>
 
                     {!!book.ages?.length &&
                       <Box pl={1}>

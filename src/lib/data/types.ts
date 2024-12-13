@@ -100,6 +100,8 @@ export class BookEntity {
     ages: number[];
     comments?: CommentEntity[];
     discount?: number;
+    languageBookIds?: string[];
+    languageBooks?: BookEntity[];
 
     constructor(data?) {
         if (data) {
@@ -132,6 +134,8 @@ export class BookEntity {
             this.archived = data.archived;
             this.ages = data.ages
             this.discount = data.discount;
+            this.languageBookIds = data.languageBookIds ? data.languageBookIds : [];
+            this.languageBooks = data.languageBooks ? data.languageBooks : [];
         }
     }
 

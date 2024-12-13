@@ -1,6 +1,6 @@
 import { AuthorEntity, BookEntity, BookSeriesEntity, BookSeriesFilter, IOption } from '@/lib/data/types';
 import { MultiSelectElement, useForm } from 'react-hook-form-mui';
-import { useCreateBook, useUpdateBook } from '@/lib/graphql/queries/book/hook';
+import { getBookNamesByQuickSearch, useCreateBook, useUpdateBook } from '@/lib/graphql/queries/book/hook';
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Grid } from '@mui/material';
 
@@ -33,6 +33,7 @@ import CustomAutocompleteField from '@/components/form-fields/custom-autocomplet
 import AuthorModal from '@/components/modals/author-modal';
 import BookSeriesModal from '@/components/modals/book-series-modal';
 import { ApolloError } from '@apollo/client';
+import CustomLink from '@/components/custom-link';
 
 interface IBookModalProps {
     open: boolean,
@@ -67,7 +68,9 @@ interface IForm {
     tag: string,
     ages: number[],
     discount: number,
-    finalPrice: number
+    finalPrice: number,
+    languageBookIds: string[],
+    bookSearch: string
 }
 
 export default function BookModal({ open, item, onClose, isAdmin }: IBookModalProps) {
@@ -109,7 +112,8 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         bookTypeIds,
         illustratorIds,
         discount,
-        price
+        price,
+        bookSearch
     } = formContext.watch();
     const [bookSeries, setBookSeries] = useState<IOption<string>>(item?.bookSeries ? {
         id: item.bookSeries.id,
@@ -133,6 +137,27 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     const [bookSeriesModalValue, setBookSeriesModalValue] = useState<BookSeriesEntity>();
     const [loadingAuthorOptions, setLoadingAuthorOptions] = useState<boolean>();
     const [showModalWithNoNumberInStock, setShowModalWithNoNumberInStock] = useState<boolean>(false);
+    const [bookOptions, setBookOptions] = useState<IOption<string>[]>([]);
+    const [loadingBookOptions, setLoadingBookOptions] = useState<boolean>(false);
+    const [languageBooks, setLanguageBooks] = useState<IOption<string>[]>(item.languageBooks?.map(b => ({
+        id: b.id,
+        label: b.name,
+        description: `${b.bookSeries.publishingHouse.name}, ${b.bookSeries.name}`
+    })) || []);
+
+    useEffect(() => {
+        if (bookSearch?.length > 2) {
+            setLoadingBookOptions(true);
+            getBookNamesByQuickSearch(bookSearch)
+                .then(items => {
+                    setLoadingBookOptions(false);
+                    setBookOptions(items);
+                })
+                .catch(() => setLoadingBookOptions(false));
+        } else {
+            setBookOptions([]);
+        }
+    }, [bookSearch]);
 
     useEffect(() => {
         if (publishingHouseId) {
@@ -163,7 +188,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
 
     useEffect(() => {
         formContext.setValue('finalPrice', +(price * (100 - (discount || 0)) / 100).toFixed(2));
-    }, [discount, price]);
+    }, [formContext, discount, price]);
 
     async function onSubmit(submit = true, updateAllBooksInSeries = false) {
         if (!submit && !!item?.id && !item?.bookSeries.default) {
@@ -183,6 +208,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
 
         delete values.publishingHouseId;
         delete values.tag;
+        delete values.bookSearch;
         const data = {
             id: item?.id,
             ...values,
@@ -190,7 +216,8 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             discount: Number(values.discount),
             numberOfPages: Number(values.numberOfPages),
             numberInStock: values.numberInStock ? Number(values.numberInStock) : 0,
-            purchasePrice: values.purchasePrice ? Number(values.purchasePrice) : 0
+            purchasePrice: values.purchasePrice ? Number(values.purchasePrice) : 0,
+            languageBookIds: languageBooks.map(b => b.id)
         };
         if (data.id) {
             delete data.purchasePrice;
@@ -318,6 +345,17 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         if (item) {
             fetchBookSeriesOptions(item.id);
         }
+    }
+
+    function onLanguageBookClick(opt: IOption<string>, removeIfAdded = true) {
+        if (languageBooks?.some(({ id }) => id === opt.id)) {
+            if (removeIfAdded) {
+                setLanguageBooks(languageBooks.filter(({ id }) => id !== opt.id));
+            }
+        } else {
+            setLanguageBooks([...(languageBooks || []), opt]);
+        }
+        formContext.setValue('bookSearch', '');
     }
 
     return (
@@ -590,6 +628,32 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                                            onClick={() => removeImage(imageId)}/>}
                             </Box>
                         </Box>)}
+                </Grid>
+
+                <Grid item xs={12}>
+                    <CustomTextField fullWidth name="bookSearch"
+                                     id="bookSearch"
+                                     label="Пошук книги по назві"
+                                     helperText="Введіть як мін. 3 літери"/>
+
+                    <Box display="flex" flexDirection="column" gap={2} position="relative" mb={1}>
+                        <Loading show={loadingBookOptions} isSmall={true}/>
+                        {bookOptions.map((book, index) => (
+                            <CustomLink key={index} onClick={() => onLanguageBookClick(book, false)}>
+                                {book.label}{!!book.description ? ` (${book.description})` : ''}
+                            </CustomLink>
+                        ))}
+                    </Box>
+
+                    {!!languageBooks?.length &&
+                      <Box display="flex" flexDirection="column" gap={2} position="relative" mb={1}>
+                        <Box sx={styleVariables.sectionTitle}>Книжки іншою мовою, натисніть, щоб видалити</Box>
+                          {languageBooks.map((book, index) => (
+                              <CustomLink key={index} onClick={() => onLanguageBookClick(book)}>
+                                  {book.label}{!!book.description ? ` (${book.description})` : ''}
+                              </CustomLink>
+                          ))}
+                      </Box>}
                 </Grid>
             </Grid>
 

@@ -70,6 +70,12 @@ const typeDefs =  /* GraphQL */ `
         ages: [Int]
         comments: [Comment]
         discount: Float
+        languageBooks: [Book!]
+    }
+    
+    type BookLanguageItem {
+        id: ID!
+        languages: [String!]!
     }
 
     type GroupDiscount {
@@ -381,6 +387,7 @@ const typeDefs =  /* GraphQL */ `
         archived: Boolean
         ages: [Int]
         discount: Float
+        languageBookIds: [ID!]
     }
 
     input BookUpdateInput {
@@ -404,6 +411,7 @@ const typeDefs =  /* GraphQL */ `
         archived: Boolean
         ages: [Int]
         discount: Float
+        languageBookIds: [ID!]
     }
 
     input BookSearchInput {

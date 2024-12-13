@@ -54,6 +54,19 @@ const bookFragment = gql`
         tags
         discount
         archived
+        languageBooks {
+            id
+            name
+            bookSeries {
+                name
+                publishingHouse {
+                    name
+                }
+            }
+            languages {
+                name
+            }
+        }
     }
 `;
 export const bookListFragment = gql`

@@ -66,6 +66,7 @@ export type Book = {
   illustrators?: Maybe<Array<Maybe<Author>>>;
   imageIds?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   isbn?: Maybe<Scalars['String']['output']>;
+  languageBooks?: Maybe<Array<Book>>;
   languages: Array<Language>;
   name: Scalars['String']['output'];
   numberInStock?: Maybe<Scalars['Int']['output']>;
@@ -89,6 +90,7 @@ export type BookCreateInput = {
   illustratorIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   imageIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   isbn?: InputMaybe<Scalars['String']['input']>;
+  languageBookIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   languageIds: Array<Scalars['ID']['input']>;
   name: Scalars['String']['input'];
   numberInStock?: InputMaybe<Scalars['Int']['input']>;
@@ -97,6 +99,11 @@ export type BookCreateInput = {
   price: Scalars['Float']['input'];
   purchasePrice?: InputMaybe<Scalars['Float']['input']>;
   tags?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
+};
+
+export type BookLanguageItem = {
+  id: Scalars['ID']['output'];
+  languages: Array<Scalars['String']['output']>;
 };
 
 export type BookSearchInput = {
@@ -195,6 +202,7 @@ export type BookUpdateInput = {
   illustratorIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   imageIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
   isbn?: InputMaybe<Scalars['String']['input']>;
+  languageBookIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   languageIds: Array<Scalars['ID']['input']>;
   name: Scalars['String']['input'];
   numberInStock?: InputMaybe<Scalars['Int']['input']>;
@@ -1136,6 +1144,7 @@ export type ResolversTypes = {
   BasketItem: ResolverTypeWrapper<BasketItem>;
   Book: ResolverTypeWrapper<BookEntity>;
   BookCreateInput: BookCreateInput;
+  BookLanguageItem: ResolverTypeWrapper<BookLanguageItem>;
   BookSearchInput: BookSearchInput;
   BookSeries: ResolverTypeWrapper<BookSeriesEntity>;
   BookSeriesCreateInput: BookSeriesCreateInput;
@@ -1210,6 +1219,7 @@ export type ResolversParentTypes = {
   BasketItem: BasketItem;
   Book: BookEntity;
   BookCreateInput: BookCreateInput;
+  BookLanguageItem: BookLanguageItem;
   BookSearchInput: BookSearchInput;
   BookSeries: BookSeriesEntity;
   BookSeriesCreateInput: BookSeriesCreateInput;
@@ -1314,6 +1324,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
   illustrators?: Resolver<Maybe<Array<Maybe<ResolversTypes['Author']>>>, ParentType, ContextType>;
   imageIds?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   isbn?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  languageBooks?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType>;
   languages?: Resolver<Array<ResolversTypes['Language']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   numberInStock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -1322,6 +1333,12 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
   price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   purchasePrice?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   tags?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type BookLanguageItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['BookLanguageItem'] = ResolversParentTypes['BookLanguageItem']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  languages?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1620,6 +1637,7 @@ export type Resolvers<ContextType = any> = {
   BasketGroupDiscountItem?: BasketGroupDiscountItemResolvers<ContextType>;
   BasketItem?: BasketItemResolvers<ContextType>;
   Book?: BookResolvers<ContextType>;
+  BookLanguageItem?: BookLanguageItemResolvers<ContextType>;
   BookSeries?: BookSeriesResolvers<ContextType>;
   BookSeriesSubList?: BookSeriesSubListResolvers<ContextType>;
   BookSubList?: BookSubListResolvers<ContextType>;

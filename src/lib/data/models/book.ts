@@ -69,6 +69,10 @@ const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
             type: String,
             required: true
         }
+    }],
+    languageBooks: [{
+        type: Schema.Types.ObjectId,
+        ref: 'book'
     }]
 });
 
