@@ -7,7 +7,7 @@ import GroupDiscountBox from '@/components/group-discount-box';
 import { useAuth } from '@/components/auth-context';
 
 export default function GroupDiscountBooks({ bookId, onBookClick = null }) {
-    const { loading, items } = useGroupDiscounts(null, { books: [bookId] });
+    const { loading, items } = useGroupDiscounts(null, { books: [bookId], isInStock: true });
     const { setGroupDiscountInBasket, user } = useAuth();
 
     function onBuyClick(id: string) {

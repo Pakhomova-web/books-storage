@@ -437,6 +437,7 @@ const typeDefs =  /* GraphQL */ `
 
     input GroupDiscountSearchInput {
         books: [ID!]
+        isInStock: Boolean
     }
 
     input GroupDiscountCreateInput {

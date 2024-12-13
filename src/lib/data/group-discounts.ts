@@ -4,8 +4,13 @@ import { GraphQLError } from 'graphql/error';
 import { getDataByFiltersAndPageSettings, getValidFilters } from '@/lib/data/base';
 
 export async function getGroupDiscounts(pageSettings?: IPageable, filters?: IGroupDiscountFilter) {
+    const isInStock = !!filters?.isInStock;
+
+    if (filters) {
+        delete filters.isInStock;
+    }
     const { andFilters } = getValidFilters(filters);
-    return getDataByFiltersAndPageSettings(
+    const data = await getDataByFiltersAndPageSettings(
         GroupDiscount.find()
             .populate({
                 path: 'books',
@@ -22,6 +27,8 @@ export async function getGroupDiscounts(pageSettings?: IPageable, filters?: IGro
         andFilters,
         pageSettings
     );
+
+    return !!isInStock ? { ...data, items: data.items.filter(group => group.books.every(b => !!b.numberInStock)) } : data;
 }
 
 export async function getGroupDiscountsByIds(ids: string[], pageSettings: IPageable) {

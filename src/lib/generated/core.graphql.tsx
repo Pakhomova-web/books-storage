@@ -280,6 +280,7 @@ export type GroupDiscountCreateInput = {
 
 export type GroupDiscountSearchInput = {
   books?: InputMaybe<Array<Scalars['ID']['input']>>;
+  isInStock?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type GroupDiscountSubList = {

@@ -169,7 +169,8 @@ export interface GroupDiscountEntity {
 }
 
 export interface IGroupDiscountFilter {
-    books: string[]
+    books: string[],
+    isInStock?: boolean
 }
 
 export interface IOption<T> {
