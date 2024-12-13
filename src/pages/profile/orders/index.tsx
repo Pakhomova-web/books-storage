@@ -78,7 +78,7 @@ export default function Orders() {
 
             {gettingError && <ErrorNotification error={gettingError}></ErrorNotification>}
 
-            {selectedOrder &&
+            {!!selectedOrder &&
               <OrderModal open={true} order={selectedOrder} onClose={updated => closeOrderModal(updated)}></OrderModal>}
         </ProfileMenu>
     );

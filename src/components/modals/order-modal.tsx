@@ -375,8 +375,8 @@ export default function OrderModal({ open, order, onClose }: IProps) {
 
             <Grid container alignItems="center" display="flex" spacing={2} justifyContent="space-between" my={2}>
                 {orderItem?.books.filter(b => !b.groupDiscountId)
-                    .map(({ book, count, price, discount }, index) => (<>
-                        <Grid item xs={12} key={`${book.id}-${index}`}>
+                    .map(({ book, count, price, discount }) =>
+                        <Grid item xs={12} key={book.id}>
                             <BasketBookItem book={book}
                                             count={count}
                                             price={price}
@@ -387,7 +387,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                                             onCountChange={(count: number) => onChangeBookCount(book.id, count)}
                                             onDiscountChange={discount => onChangeBookDiscount(book.id, discount)}/>
                         </Grid>
-                    </>))}
+                    )}
 
                 {orderItem?.groupDiscounts.map(({ id, books, discount, count }, i) =>
                     <Grid item xs={12} key={`${id}-${i}`}>
