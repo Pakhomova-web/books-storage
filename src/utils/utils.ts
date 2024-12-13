@@ -2,6 +2,7 @@ import { TableKey } from '@/components/table/table-key';
 import { OrderBookEntity, UserEntity } from '@/lib/data/types';
 import { ROLES } from '@/constants/roles';
 import { emailValidatorExp, passwordValidatorExp } from '@/constants/validators-exp';
+import { matchIsValidTel } from 'mui-tel-input';
 
 export function downloadCsv<K>(items: K[], tableKeys: TableKey<K>[], filename = 'data') {
     const blob = new Blob(
@@ -176,6 +177,15 @@ export function getParamsQueryString(params: any): string {
     } else {
         return '';
     }
+}
+
+export function validatePhoneNumber(form, value: string) {
+    if (!matchIsValidTel(value)) {
+        form.setError('phoneNumber', { message: 'Номер телефону невірний!' });
+    } else {
+        form.clearErrors('phoneNumber');
+    }
+    form.setValue('phoneNumber', value);
 }
 
 export function isNovaPostSelected(deliveryId: string) {

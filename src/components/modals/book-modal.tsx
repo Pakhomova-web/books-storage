@@ -591,7 +591,6 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                         {tags.map(((tag, index) =>
                             <Tag key={index}
                                  tag={tag}
-                                 gap={1}
                                  onRemove={isAdmin ? (tag: string) => removeTag(tag) : null}/>))}
                     </Grid>}
                 </Grid>

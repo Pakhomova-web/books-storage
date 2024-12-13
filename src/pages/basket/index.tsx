@@ -13,7 +13,7 @@ import {
     isUkrPoshtaSelected,
     onCopyOrderClick,
     renderOrderNumber,
-    renderPrice
+    renderPrice, validatePhoneNumber
 } from '@/utils/utils';
 import { useRouter } from 'next/router';
 import { FormContainer, useForm } from 'react-hook-form-mui';
@@ -29,6 +29,7 @@ import {
     useUpdateGroupDiscountCountInBasket
 } from '@/lib/graphql/queries/group-discounts/hook';
 import GroupDiscountBox from '@/components/group-discount-box';
+import { MuiTelInput } from 'mui-tel-input';
 
 const TitleBoxStyled = styled(Box)(({ theme }) => ({
     ...styleVariables.bigTitleFontSize(theme),
@@ -265,6 +266,10 @@ export default function Basket() {
         recalculateSum(discountFields);
     }
 
+    function handlePhoneNumberChange(value: string) {
+        validatePhoneNumber(formContext, value);
+    }
+
     return (
         <>
             <Head>
@@ -382,7 +387,12 @@ export default function Basket() {
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
-                    <CustomTextField name="phoneNumber" required label="Номер телефону" fullWidth/>
+                    <MuiTelInput value={phoneNumber}
+                                 required={true}
+                                 onChange={handlePhoneNumberChange}
+                                 label="Номер телефону"
+                                 error={!!formContext.formState.errors.phoneNumber}
+                                 fullWidth/>
                   </Grid>
 
                   <Grid item xs={12} sm={6}>

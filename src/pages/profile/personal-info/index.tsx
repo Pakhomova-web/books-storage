@@ -1,19 +1,21 @@
-import { useAuth } from '@/components/auth-context';
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import CustomTextField from '@/components/form-fields/custom-text-field';
 import { Box, Button, Grid, RadioGroup } from '@mui/material';
+import React, { useEffect } from 'react';
+import Head from 'next/head';
+import { MuiTelInput } from 'mui-tel-input';
+
+import { useAuth } from '@/components/auth-context';
+import CustomTextField from '@/components/form-fields/custom-text-field';
 import { styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
-import React, { useEffect } from 'react';
 import { useChangePassword, useCurrentUser } from '@/lib/graphql/queries/auth/hook';
 import ErrorNotification from '@/components/error-notification';
 import ProfileMenu from '@/pages/profile/profile-menu';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 import { UserEntity } from '@/lib/data/types';
 import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
-import Head from 'next/head';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
-import { passwordValidation } from '@/utils/utils';
+import { passwordValidation, validatePhoneNumber } from '@/utils/utils';
 
 export default function PersonalInfo() {
     const { user, setUser } = useAuth();
@@ -37,6 +39,7 @@ export default function PersonalInfo() {
     const { updating, update, updatingError } = useCurrentUser();
     const { changingPassword, changePassword, changingPasswordError } = useChangePassword();
     const { items: deliveries, loading: loadingDeliveries } = useDeliveries();
+    const { phoneNumber } = formContext.watch();
     const { oldPassword, newPassword, confirmPassword } = passwordFormContext.watch();
 
     function onSubmit() {
@@ -68,6 +71,14 @@ export default function PersonalInfo() {
             !!passwordFormContext.formState.errors.confirmPassword;
     }
 
+    function handlePhoneNumberChange(value: string) {
+        validatePhoneNumber(formContext, value);
+    }
+
+    function isFormInvalid() {
+        return Object.keys(formContext.formState.errors).some(key => !!formContext.formState.errors[key]);
+    }
+
     return (
         <ProfileMenu activeUrl="personal-info">
             <Head>
@@ -95,7 +106,12 @@ export default function PersonalInfo() {
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <CustomTextField name="phoneNumber" label="Номер телефону" fullWidth/>
+                        <MuiTelInput value={phoneNumber}
+                                     required={true}
+                                     onChange={handlePhoneNumberChange}
+                                     label="Номер телефону"
+                                     error={!!formContext.formState.errors.phoneNumber}
+                                     fullWidth/>
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
@@ -155,7 +171,7 @@ export default function PersonalInfo() {
                 {updatingError && <ErrorNotification error={updatingError}></ErrorNotification>}
 
                 <Box sx={styleVariables.buttonsContainer}>
-                    <Button variant="contained" type="submit" disabled={!formContext.formState.isValid}>
+                    <Button variant="contained" type="submit" disabled={isFormInvalid()}>
                         Зберегти
                     </Button>
                 </Box>

@@ -1,10 +1,10 @@
 import { styled } from '@mui/material/styles';
-import { Grid, GridOwnProps } from '@mui/material';
+import { Grid } from '@mui/material';
 import { borderRadius, boxPadding, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import React from 'react';
 
-const StyledTagGrid = styled(Grid)<GridOwnProps>(({ theme }) => ({
+const StyledTagGrid = styled(Grid)(({ theme }) => ({
     padding: boxPadding,
     borderRadius,
     border: `1px solid ${primaryLightColor}`,
@@ -12,15 +12,9 @@ const StyledTagGrid = styled(Grid)<GridOwnProps>(({ theme }) => ({
     alignItems: 'center'
 }));
 
-interface ITagProps extends GridOwnProps {
-    tag: string,
-    onRemove?: (_: string) => void,
-    onClick?: () => void
-}
-
-export default function Tag({ tag, onRemove, onClick, ...props }: ITagProps) {
+export default function Tag({ tag, onRemove = null, onClick = null, ...props }) {
     return (
-        <StyledTagGrid item {...props} onClick={onClick} sx={onClick ? { cursor: 'pointer' } : {}}>
+        <StyledTagGrid item {...props} onClick={onClick} sx={onClick ? { cursor: 'pointer' } : {}} gap={1}>
             #{tag}
             {!!onRemove &&
               <RemoveCircleOutlineIcon fontSize="small"

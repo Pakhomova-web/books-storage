@@ -9,7 +9,7 @@ import {
     isUkrPoshtaSelected,
     onCopyOrderClick,
     renderOrderNumber,
-    renderPrice
+    renderPrice, validatePhoneNumber
 } from '@/utils/utils';
 import CustomModal from '@/components/modals/custom-modal';
 import { DeliveryEntity, OrderEntity } from '@/lib/data/types';
@@ -25,6 +25,7 @@ import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
 import CustomCheckbox from '@/components/form-fields/custom-checkbox';
 import GroupDiscountBox from '@/components/group-discount-box';
+import { MuiTelInput } from 'mui-tel-input';
 
 interface IProps {
     order: OrderEntity;
@@ -232,6 +233,10 @@ export default function OrderModal({ open, order, onClose }: IProps) {
             });
     }
 
+    function handlePhoneNumberChange(value: string) {
+        validatePhoneNumber(formContext, value);
+    }
+
     return (
         <CustomModal open={open} big={true}
                      title={'Замовлення № ' + renderOrderNumber(orderItem?.orderNumber)}
@@ -311,10 +316,13 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                     </Grid>
 
                     <Grid item xs={12} md={6} lg={3}>
-                        <CustomTextField name="phoneNumber" required
-                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
-                                         label="Номер телефону"
-                                         fullWidth/>
+                        <MuiTelInput value={phoneNumber}
+                                     required={true}
+                                     disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
+                                     onChange={handlePhoneNumberChange}
+                                     label="Номер телефону"
+                                     error={!!formContext.formState.errors.phoneNumber}
+                                     fullWidth/>
                     </Grid>
 
                     <Grid item xs={12} md={6} lg={3}>
