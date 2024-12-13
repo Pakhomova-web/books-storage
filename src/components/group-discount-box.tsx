@@ -1,8 +1,4 @@
 import { Box, Button, Grid, IconButton, useTheme } from '@mui/material';
-import CustomImage from '@/components/custom-image';
-import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
-import { styled } from '@mui/material/styles';
-import { renderPrice } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
 import { LocalMall } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -10,6 +6,12 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import ClearIcon from '@mui/icons-material/Clear';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import { styled } from '@mui/material/styles';
+
+import CustomImage from '@/components/custom-image';
+import { priceStyles, primaryLightColor, styleVariables, warnColor } from '@/constants/styles-variables';
+import { isAdmin, renderPrice } from '@/utils/utils';
+import { useAuth } from '@/components/auth-context';
 
 const StyledContainer = styled(Box)(() => ({
     width: '250px',
@@ -62,14 +64,13 @@ export default function GroupDiscountBox({
                                              onBookClick = null
                                          }) {
     const [fullSum, setFullSum] = useState<number>();
+    const { user } = useAuth();
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('sm'));
 
     useEffect(() => {
         setFullSum(count * books.reduce((a, b) => a + b.price, 0));
     }, [books, count])
-
-    // TODO отображать нет в наличии красным
 
     return (
         !!books.length &&
@@ -78,7 +79,8 @@ export default function GroupDiscountBox({
             <Box sx={styleVariables.sectionTitle}>
               <Box display="flex" justifyContent="space-between" width="100%" alignItems="center">
                 Акційний комплект
-                  {editable && !!onDeleteGroupClick && <IconButton onClick={onDeleteGroupClick}><ClearIcon/></IconButton>}
+                  {editable && !!onDeleteGroupClick &&
+                    <IconButton onClick={onDeleteGroupClick}><ClearIcon/></IconButton>}
               </Box>
             </Box>
           </>}
@@ -99,7 +101,18 @@ export default function GroupDiscountBox({
                                position="relative" px={1}>
                               <Box display="flex" alignItems="center" justifyContent="center" gap={1}
                                    flexDirection="column" className={!!onBookClick ? 'cursor-pointer' : ''}
+                                   position="relative"
                                    onClick={() => !!onBookClick && onBookClick(book.id)}>
+                                  {isAdmin(user) ?
+                                      <Box sx={styleVariables.fixedInStockBox(!!book.numberInStock)} ml={2}>
+                                          {!book.numberInStock ? 'Немає в наявності' : `В наявності (${book.numberInStock})`}
+                                      </Box> :
+                                      !book.numberInStock &&
+                                    <Box sx={styleVariables.fixedInStockBox(false)} ml={2}>
+                                      Немає в наявності
+                                    </Box>
+                                  }
+
                                   <Box height="120px" width="120px">
                                       <CustomImage imageId={book.imageIds[0]}/>
                                   </Box>
@@ -126,9 +139,15 @@ export default function GroupDiscountBox({
           <StyledContainer gap={1}>
             <Box display="flex" flexDirection="column" alignItems="center" gap={2} justifyContent="center"
                  width="100%">
-                {editable && !!onCountChange &&
+
+                {editable && !!onCountChange && <>
+                  <Box sx={{ ...styleVariables.hintFontSize, color: warnColor }} textAlign="center">
+                      {books.some(b => b.numberInStock < count) && 'Деяких позицій не вистачає в наявності'}
+                  </Box>
+
                   <Grid container spacing={1} display="flex" flexWrap="nowrap" alignItems="center"
                         justifyContent="center">
+
                     <Grid item>
                       <IconButton onClick={() => onCountChange(-1)}
                                   disabled={count === 1}>
@@ -143,7 +162,8 @@ export default function GroupDiscountBox({
                         <AddCircleOutlineIcon fontSize="large"/>
                       </IconButton>
                     </Grid>
-                  </Grid>}
+                  </Grid>
+                </>}
 
               <Box display="flex" flexDirection={{ xs: 'row', sm: 'column' }} alignItems="center" gap={1}>
                 <Box><s>{renderPrice(fullSum)}</s></Box>

@@ -262,6 +262,7 @@ export default function Basket() {
                     <Box key={index} mb={1}>
                         <GroupDiscountBox books={group.books} count={groupCountFields.get(group.id)}
                                           discount={group.discount}
+                                          editable={true}
                                           onDeleteGroupClick={() => onDeleteGroupDiscount(group.id)}
                                           onCountChange={(count: number) => onChangeCountGroupInBasket(group.id, count)}/>
                     </Box>
