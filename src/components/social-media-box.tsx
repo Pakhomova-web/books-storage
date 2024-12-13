@@ -4,6 +4,8 @@ import { styleVariables } from '@/constants/styles-variables';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import React from 'react';
 import CustomImage from '@/components/custom-image';
+import CustomLink from '@/components/custom-link';
+import { useRouter } from 'next/router';
 
 const StyledSocialsGrid = styled(Grid)(() => ({
     backgroundColor: 'white',
@@ -11,7 +13,8 @@ const StyledSocialsGrid = styled(Grid)(() => ({
     borderBottom: `1px solid ${styleVariables.gray}`
 }));
 
-export default function SocialMediaBox() {
+export default function SocialMediaBox({ showAboutUsLink = true }) {
+    const router = useRouter();
 
     function onInstagramClick() {
         window.open('https://instagram.com/ph_smart_kids', "_blank")
@@ -43,6 +46,11 @@ export default function SocialMediaBox() {
                         </Box>
                     </IconButton>
                 </Tooltip>
+
+                {showAboutUsLink &&
+                  <Box ml={1}>
+                    <CustomLink onClick={() => router.push('/about-us')}>Про нас</CustomLink>
+                  </Box>}
             </Grid>
         </StyledSocialsGrid>
     );
