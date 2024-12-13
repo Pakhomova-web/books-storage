@@ -96,24 +96,24 @@ export const booksQuery = gql`
     query Books($pageSettings: PageableInput, $filters: BookSearchInput) {
         books(pageSettings: $pageSettings, filters: $filters) {
             items {
-                ...Book
-            }
-            totalCount
-        }
-    }
-    ${bookFragment}
-`;
-
-export const booksByIdsQuery = gql`
-    query BooksByIds($ids: [ID!], $pageSettings: PageableInput) {
-        booksByIds(ids: $ids, pageSettings: $pageSettings) {
-            items {
                 ...BookList
             }
             totalCount
         }
     }
     ${bookListFragment}
+`;
+
+export const booksByIdsQuery = gql`
+    query BooksByIds($ids: [ID!], $pageSettings: PageableInput) {
+        booksByIds(ids: $ids, pageSettings: $pageSettings) {
+            items {
+                ...Book
+            }
+            totalCount
+        }
+    }
+    ${bookFragment}
 `;
 
 export const booksWithNotApprovedCommentsQuery = gql`

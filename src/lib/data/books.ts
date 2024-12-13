@@ -185,7 +185,7 @@ export async function updateBook(input: Partial<BookEntity>, updateAllBooksInSer
 
     await Promise.all([
         Book.findByIdAndUpdate(input.id, _getBookData(input)),
-        languageBooks.filter(book => (book.languageBooks || []).some((id: string) => input.id === id))
+        languageBooks.filter(book => !(book.languageBooks || []).some((id: string) => input.id === id))
             .map(book => {
                 if (!book.languageBooks) {
                     book.languageBooks = [input.id];
@@ -332,7 +332,11 @@ export async function getBooksFromSeries(bookId: string, rowsPerPage: number) {
     const book = await Book.findById(bookId);
 
     return Book
-        .find({ _id: { $ne: bookId }, bookSeries: book.bookSeries, archived: { $in: [false, null] } })
+        .find({
+            _id: { $nin: [bookId, ...(book.languageBooks || [])] },
+            bookSeries: book.bookSeries,
+            archived: { $in: [false, null] }
+        })
         .limit(rowsPerPage)
         .populate({
             path: 'bookSeries',
