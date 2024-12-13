@@ -164,7 +164,8 @@ export interface GroupDiscountEntity {
     id?: string,
     bookIds?: string[],
     books?: BookEntity[],
-    discount: number
+    discount: number,
+    count?: number
 }
 
 export interface IGroupDiscountFilter {
@@ -365,6 +366,8 @@ export class OrderEntity {
     finalSumWithDiscounts?: number;
     booksCount?: number;
 
+    groupDiscounts?: GroupDiscountEntity[];
+
     constructor(data?) {
         if (data) {
             this.id = data.id || null;
@@ -394,6 +397,22 @@ export class OrderEntity {
             this.finalSum = 0;
             this.finalSumWithDiscounts = 0;
             this.booksCount = 0;
+            this.groupDiscounts = [];
+
+            data.books.filter(b => !!b.groupDiscountId).forEach((orderBook: OrderBookEntity) => {
+                const group = this.groupDiscounts.find(group => group.id === orderBook.groupDiscountId);
+
+                if (!!group) {
+                    group.books.push(new BookEntity({ ...orderBook.book, price: orderBook.price }));
+                } else {
+                    this.groupDiscounts.push({
+                        count: orderBook.count,
+                        books: [new BookEntity({ ...orderBook.book, price: orderBook.price })],
+                        discount: orderBook.discount,
+                        id: orderBook.groupDiscountId
+                    });
+                }
+            });
             this.books = data.books.map(b => {
                 this.booksCount += b.count;
                 this.finalSum += b.price * b.count;

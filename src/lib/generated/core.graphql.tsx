@@ -667,6 +667,7 @@ export type OrderBook = {
   book: Book;
   count: Scalars['Int']['output'];
   discount?: Maybe<Scalars['Float']['output']>;
+  groupDiscountId?: Maybe<Scalars['ID']['output']>;
   price: Scalars['Float']['output'];
 };
 
@@ -674,6 +675,7 @@ export type OrderBookInput = {
   bookId: Scalars['ID']['input'];
   count: Scalars['Int']['input'];
   discount?: InputMaybe<Scalars['Float']['input']>;
+  groupDiscountId?: InputMaybe<Scalars['String']['input']>;
   price: Scalars['Float']['input'];
 };
 
@@ -1511,6 +1513,7 @@ export type OrderBookResolvers<ContextType = any, ParentType extends ResolversPa
   book?: Resolver<ResolversTypes['Book'], ParentType, ContextType>;
   count?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   discount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  groupDiscountId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };

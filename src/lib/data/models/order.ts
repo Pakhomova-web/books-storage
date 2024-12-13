@@ -63,7 +63,7 @@ const orderSchema = new Schema<OrderEntity, Model<OrderEntity>>({
                 type: Number,
                 required: true
             },
-            groupDiscountId: Schema.Types.ObjectId
+            groupDiscountId: String
         }
     ],
     date: String

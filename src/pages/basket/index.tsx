@@ -233,7 +233,7 @@ export default function Basket() {
             })
                 .then(order => {
                     setOrderNumber(renderOrderNumber(order.orderNumber));
-                    setUser({ ...user, basketItems: [] });
+                    setUser({ ...user, basketItems: [], basketGroupDiscounts: [] });
                 })
                 .catch(() => {
                 });

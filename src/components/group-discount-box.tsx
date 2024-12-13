@@ -53,6 +53,7 @@ export default function GroupDiscountBox({
                                              onCountChange = null,
                                              key = null,
                                              discount,
+                                             editable = true,
                                              onDeleteBook = null,
                                              onEditBook = null,
                                              onBuyClick = null,
@@ -77,7 +78,7 @@ export default function GroupDiscountBox({
             <Box sx={styleVariables.sectionTitle}>
               <Box display="flex" justifyContent="space-between" width="100%" alignItems="center">
                 Акційний комплект
-                  {!!onDeleteGroupClick && <IconButton onClick={onDeleteGroupClick}><ClearIcon/></IconButton>}
+                  {editable && !!onDeleteGroupClick && <IconButton onClick={onDeleteGroupClick}><ClearIcon/></IconButton>}
               </Box>
             </Box>
           </>}
@@ -111,7 +112,7 @@ export default function GroupDiscountBox({
                                   <Box><b>{renderPrice(book.price)}</b></Box>
                               </Box>
 
-                              {!!onDeleteBook &&
+                              {editable && !!onDeleteBook &&
                                 <Button variant="outlined" color="warning" onClick={() => onDeleteBook(book.id)}>
                                   Видалити
                                 </Button>}
@@ -125,7 +126,7 @@ export default function GroupDiscountBox({
           <StyledContainer gap={1}>
             <Box display="flex" flexDirection="column" alignItems="center" gap={2} justifyContent="center"
                  width="100%">
-                {!!onCountChange &&
+                {editable && !!onCountChange &&
                   <Grid container spacing={1} display="flex" flexWrap="nowrap" alignItems="center"
                         justifyContent="center">
                     <Grid item>
@@ -155,10 +156,10 @@ export default function GroupDiscountBox({
                     </Button>)}
 
               <Box display="flex" gap={1}>
-                  {!!onEditBook &&
+                  {editable && !!onEditBook &&
                     <IconButton onClick={onEditBook} color="primary"><EditIcon/></IconButton>}
 
-                  {!onCountChange && !!onDeleteGroupClick &&
+                  {editable && !onCountChange && !!onDeleteGroupClick &&
                     <Button variant="outlined" color="warning" onClick={onDeleteGroupClick}>
                       Видалити
                     </Button>}
