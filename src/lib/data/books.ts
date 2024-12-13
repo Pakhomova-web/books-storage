@@ -161,9 +161,9 @@ export async function updateBook(input: Partial<BookEntity>, updateAllBooksInSer
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const itemByName = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeIds, input.pageTypeId, input.coverTypeId, input.languageIds);
+    const itemByUnique = await _getBookByUnique(input.name, input.bookSeriesId, input.bookTypeIds, input.pageTypeId, input.coverTypeId, input.languageIds);
 
-    if (itemByName && itemByName.name.toLowerCase() === input.name.toLowerCase() && itemByName.id.toString() !== input.id) {
+    if (itemByUnique && itemByUnique.name.toLowerCase() === input.name.toLowerCase() && itemByUnique.id.toString() !== input.id) {
         throw new GraphQLError(`Книга з назвою '${input.name}' вже є.`, {
             extensions: { code: 'DUPLICATE_ERROR' }
         });
@@ -179,22 +179,27 @@ export async function updateBook(input: Partial<BookEntity>, updateAllBooksInSer
             return item.save();
         }));
     }
+    const item = await Book.findById(input.id);
+    const oldLanguageBooks = await Book.find({ _id: item.languageBooks });
     const languageBooks = await Book.find({ _id: input.languageBookIds });
 
     await Promise.all([
         Book.findByIdAndUpdate(input.id, _getBookData(input)),
-        languageBooks.map(book => {
-            if (!!book.languageBooks && book.languageBooks.some(id => input.id === id)) {
-                return new Promise(null);
-            }
+        languageBooks.filter(book => (book.languageBooks || []).some((id: string) => input.id === id))
+            .map(book => {
+                if (!book.languageBooks) {
+                    book.languageBooks = [input.id];
+                } else {
+                    book.languageBooks.push(input.id);
+                }
+                return book.save();
+            }),
+        oldLanguageBooks.filter(book => !book.languageBooks || !input.languageBookIds.includes(book.id))
+            .map(book => {
+                book.languageBooks = book.languageBooks.filter((id: string) => id !== input.id);
 
-            if (!book.languageBooks) {
-                book.languageBooks = [input.id];
-            } else {
-                book.languageBooks.push(input.id);
-            }
-            return book.save();
-        })
+                return book.save();
+            })
     ]);
 
     return { id: input.id } as BookEntity;
