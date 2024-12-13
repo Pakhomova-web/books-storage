@@ -41,7 +41,7 @@ export default function GroupDiscountModal({ item, onClose, isAdmin }: IGroupDis
     const { discount, bookSearch } = formContext.watch();
 
     useEffect(() => {
-        validateNumberControl(formContext, discount, 'discount', 1, 99, true);
+        validateNumberControl(formContext, discount, 'discount', 1, 99, true, true);
     }, [discount, formContext]);
 
     useEffect(() => {

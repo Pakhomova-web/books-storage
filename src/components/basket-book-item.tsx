@@ -1,5 +1,5 @@
 import { Box, Grid, IconButton } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import ClearIcon from '@mui/icons-material/Clear';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
@@ -9,9 +9,11 @@ import { styled } from '@mui/material/styles';
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import CustomImage from '@/components/custom-image';
 import CustomLink from '@/components/custom-link';
-import { getParamsQueryString, renderPrice } from '@/utils/utils';
+import { getParamsQueryString, renderPrice, validateNumberControl } from '@/utils/utils';
 import { BookEntity } from '@/lib/data/types';
 import { useAuth } from '@/components/auth-context';
+import { FormContainer, useForm } from 'react-hook-form-mui';
+import CustomTextField from '@/components/form-fields/custom-text-field';
 
 const StyledImageBox = styled(Box)(() => ({
     width: '150px',
@@ -26,12 +28,37 @@ interface IProps {
     count: number,
     pageUrl?: string,
     onRemove?: Function,
-    onCountChange?: (count: number) => void
+    onCountChange?: (count: number) => void,
+    onDiscountChange?: (discount: number) => void
 }
 
-export default function BasketBookItem({ book, editable, price, discount, count, pageUrl, onCountChange, onRemove }: IProps) {
+export default function BasketBookItem({
+                                           book,
+                                           editable,
+                                           price,
+                                           discount,
+                                           count,
+                                           pageUrl,
+                                           onCountChange,
+                                           onRemove,
+                                           onDiscountChange
+                                       }: IProps) {
     const router = useRouter();
     const { setBookInBasket } = useAuth();
+    const formContext = useForm<{ discountValue: number }>({
+        defaultValues: {
+            discountValue: discount
+        }
+    });
+    const { discountValue } = formContext.watch();
+
+    useEffect(() => {
+        formContext.setValue('discountValue', discount);
+    }, [discount]);
+
+    useEffect(() => {
+        validateNumberControl(formContext, discountValue, 'discountValue', 0, 100, false, true);
+    }, [discountValue, formContext])
 
     function onBookClick(book: BookEntity) {
         router.push(`/books/details?${getParamsQueryString({ id: book.id, pageUrl: pageUrl || '/basket' })}`);
@@ -43,6 +70,10 @@ export default function BasketBookItem({ book, editable, price, discount, count,
         } else {
             onRemove();
         }
+    }
+
+    function onDiscountClick() {
+        onDiscountChange(discountValue);
     }
 
     return (
@@ -80,14 +111,24 @@ export default function BasketBookItem({ book, editable, price, discount, count,
                             <CustomLink
                                 onClick={() => onBookClick(book)}><b>{book.name}</b></CustomLink>
                         </Box>
-                        <Box>{book.languages.map(l => l.name).join(', ')}</Box>
-
-                        {!!(discount || book.discount) &&
-                          <Box display="flex"><Box sx={styleVariables.discountBoxStyles}>
-                            Знижка: {discount || book.discount}%
-                          </Box></Box>}
-
+                        <Box>Мова: {book.languages.map(l => l.name).join(', ')}</Box>
                         <Box>{renderPrice(price || book.price)}</Box>
+
+                        {editable ?
+                            <FormContainer formContext={formContext}
+                                           handleSubmit={formContext.handleSubmit(onDiscountClick)}>
+                                <Box mt={1}>
+                                    <CustomTextField name="discountValue"
+                                                     type="number"
+                                                     fullWidth label="Знижка, %"
+                                                     helperText="Натисніть Enter, щоб застосувати знижку"/>
+                                </Box>
+                            </FormContainer> :
+                            !!discountValue &&
+                          <Box display="flex">
+                            <Box sx={styleVariables.discountBoxStyles}>Знижка: {discountValue}%</Box>
+                          </Box>
+                        }
                     </Grid>
 
                     {editable && <Grid item xs={2} display={{ md: 'none', xs: 'flex' }} alignItems="start"
@@ -130,7 +171,7 @@ export default function BasketBookItem({ book, editable, price, discount, count,
                   alignItems="center">
                 Кінцева ціна
                 <Box sx={priceStyles} textAlign="center">
-                    {renderPrice(count * (price || book.price), (discount || book.discount))}
+                    {renderPrice(count * (price || book.price), discount)}
                 </Box>
             </Grid>
 

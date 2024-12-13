@@ -145,6 +145,15 @@ export default function OrderModal({ open, order, onClose }: IProps) {
         }));
     }
 
+    function onChangeBookDiscount(bookId: string, discount: number) {
+        setOrderItem(new OrderEntity({
+            ...orderItem,
+            books: orderItem.books.map(bookOrder => bookId === bookOrder.book.id ?
+                ({ ...bookOrder, discount }) :
+                bookOrder)
+        }));
+    }
+
     function onChangeGroupDiscountCount(groupId: string, count: number) {
         setOrderItem(new OrderEntity({
             ...orderItem,
@@ -271,7 +280,8 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                                     onChange={(_, value) => onDeliveryChange(value)}>
                           <Grid container spacing={2}>
                               {deliveries.map((opt, index) => (
-                                  <Grid key={index} item xs={12} sm={4} md={3} pl={2}>
+                                  <Grid key={`${opt.id}-${index}`} item xs={12} sm={4} pl={2} display="flex"
+                                        justifyContent="center">
                                       <Box p={1}>
                                           <DeliveryRadioOption
                                               disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
@@ -360,30 +370,39 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                                          label="№ відділення / поштомату"
                                          fullWidth/>
                       </Grid>}
+                </Grid>
+            </FormContainer>
 
-                    {orderItem?.books.map(({ book, count, price, discount, groupDiscountId }, index) => (<>
-                        {!groupDiscountId && <Grid item xs={12} key={index}>
-                          <BasketBookItem book={book}
-                                          count={count}
-                                          price={price}
-                                          pageUrl="/profile/orders"
-                                          discount={discount}
-                                          editable={isAdmin(user) && !orderItem.isDone && !orderItem.isCanceled && !isSent}
-                                          onRemove={() => onRemove(book.id)}
-                                          onCountChange={(count: number) => onChangeBookCount(book.id, count)}/>
-                        </Grid>}
+            <Grid container alignItems="center" display="flex" spacing={2} justifyContent="space-between" my={2}>
+                {orderItem?.books.filter(b => !b.groupDiscountId)
+                    .map(({ book, count, price, discount }, index) => (<>
+                        <Grid item xs={12} key={`${book.id}-${index}`}>
+                            <BasketBookItem book={book}
+                                            count={count}
+                                            price={price}
+                                            pageUrl="/profile/orders"
+                                            discount={discount}
+                                            editable={isAdmin(user) && !orderItem.isDone && !orderItem.isCanceled && !isSent}
+                                            onRemove={() => onRemove(book.id)}
+                                            onCountChange={(count: number) => onChangeBookCount(book.id, count)}
+                                            onDiscountChange={discount => onChangeBookDiscount(book.id, discount)}/>
+                        </Grid>
                     </>))}
 
-                    {orderItem?.groupDiscounts.map(({ id, books, discount, count }, i) =>
-                        <Grid item xs={12} key={i}>
-                            <GroupDiscountBox books={books}
-                                              count={count}
-                                              discount={discount}
-                                              editable={isAdmin(user) && !orderItem.isDone && !orderItem.isCanceled && !isSent}
-                                              onDeleteGroupClick={() => onRemoveGroup(id)}
-                                              onCountChange={(count: number) => onChangeGroupDiscountCount(id, count)}/>
-                        </Grid>)}
+                {orderItem?.groupDiscounts.map(({ id, books, discount, count }, i) =>
+                    <Grid item xs={12} key={`${id}-${i}`}>
+                        <GroupDiscountBox books={books}
+                                          count={count}
+                                          discount={discount}
+                                          editable={isAdmin(user) && !orderItem.isDone && !orderItem.isCanceled && !isSent}
+                                          onDeleteGroupClick={() => onRemoveGroup(id)}
+                                          onCountChange={(count: number) => onChangeGroupDiscountCount(id, count)}/>
+                    </Grid>)}
+            </Grid>
 
+
+            <FormContainer formContext={formContext}>
+                <Grid container alignItems="center" display="flex" spacing={2} justifyContent="space-between" mb={2}>
                     <Grid item xs={7} sm={8} md={9} display="flex" justifyContent="flex-end"
                           textAlign="end">
                         Сума замовлення без знижки:

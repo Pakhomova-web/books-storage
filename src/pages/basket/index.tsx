@@ -73,6 +73,7 @@ export default function Basket() {
         items: groups
     } = useGroupDiscountsByIds(user?.basketGroupDiscounts?.map(({ groupDiscountId }) => groupDiscountId));
     const [countFields, setCountFields] = useState<Map<string, number>>(new Map());
+    const [discountFields, setDiscountFields] = useState<Map<string, number>>(new Map());
     const [groupCountFields, setGroupCountFields] = useState<Map<string, number>>(new Map());
     const [finalFullSum, setFinalFullSum] = useState<number>();
     const [finalSumWithDiscounts, setFinalSumWithDiscounts] = useState<number>();
@@ -157,33 +158,52 @@ export default function Basket() {
     useEffect(() => {
         if (!!items?.length || !!groups?.length) {
             const map = new Map();
+            const discountMap = new Map();
             const groupMap = new Map();
-            let finalSum = 0;
-            let finalSumWithDiscounts = 0;
 
-            items.forEach(({ id, price, discount }) => {
+            items.forEach(({ id, discount }) => {
                 const count = user.basketItems.find(({ bookId }) => bookId === id).count;
 
                 map.set(id, count);
-                finalSum += count * price;
-                finalSumWithDiscounts += count * price * (100 - discount) / 100;
+                discountMap.set(id, discount || 0);
             });
-            groups.forEach(({ id, books, discount }) => {
-                books.forEach(({ price }) => {
+            groups.forEach(({ id, books }) => {
+                books.forEach(() => {
                     const count = user.basketGroupDiscounts
                         .find(({ groupDiscountId }) => groupDiscountId === id).count;
 
                     groupMap.set(id, count);
-                    finalSum += count * price;
-                    finalSumWithDiscounts += count * price * (100 - discount) / 100;
                 })
             });
+            setDiscountFields(discountMap);
             setCountFields(map);
             setGroupCountFields(groupMap);
-            setFinalFullSum(finalSum);
-            setFinalSumWithDiscounts(finalSumWithDiscounts);
+            recalculateSum(discountMap);
         }
     }, [groups, items, user]);
+
+    function recalculateSum(discountMap: Map<string, number>) {
+        let finalSum = 0;
+        let sumWithDiscounts = 0;
+
+        items.forEach(({ id, price }) => {
+            const count = user.basketItems.find(({ bookId }) => bookId === id).count;
+
+            finalSum += count * price;
+            sumWithDiscounts += count * price * (100 - discountMap.get(id)) / 100;
+        });
+        groups.forEach(({ id, books, discount }) => {
+            books.forEach(({ price }) => {
+                const count = user.basketGroupDiscounts
+                    .find(({ groupDiscountId }) => groupDiscountId === id).count;
+
+                finalSum += count * price;
+                sumWithDiscounts += count * price * (100 - discount) / 100;
+            })
+        });
+        setFinalFullSum(finalSum);
+        setFinalSumWithDiscounts(sumWithDiscounts);
+    }
 
     function onChangeCountInBasket(bookId: string, count: number) {
         const newCount = countFields.get(bookId) + count;
@@ -220,7 +240,7 @@ export default function Basket() {
                         bookId: book.id,
                         count: countFields.get(book.id),
                         price: book.price,
-                        discount: book.discount
+                        discount: discountFields.get(book.id)
                     })),
                     ...groups.reduce((arr, group) => [...arr, ...group.books.map(book => ({
                         bookId: book.id,
@@ -240,6 +260,11 @@ export default function Basket() {
         }
     }
 
+    function onDiscountChange(bookId: string, discount: number) {
+        discountFields.set(bookId, discount);
+        recalculateSum(discountFields);
+    }
+
     return (
         <>
             <Head>
@@ -254,7 +279,9 @@ export default function Basket() {
                 {items.map((book, index) => (
                     <Box key={index}>
                         <BasketBookItem book={book} editable={true} count={countFields.get(book.id)}
-                                        onCountChange={(count: number) => onChangeCountInBasket(book.id, count)}/>
+                                        onCountChange={(count: number) => onChangeCountInBasket(book.id, count)}
+                                        discount={discountFields.get(book.id)}
+                                        onDiscountChange={isAdmin(user) ? (discount => onDiscountChange(book.id, discount)) : null}/>
                     </Box>
                 ))}
 

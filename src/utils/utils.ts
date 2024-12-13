@@ -144,10 +144,14 @@ export function emailValidation(form, value, controlName: string) {
     }
 }
 
-export function validateNumberControl(form, value, controlName: string, min: number, max?: number, isInteger = false) {
-    if ((value === null || value === undefined) && form.formState.touchedFields[controlName]) {
-        form.setError(controlName, { message: 'Обов\'язкове поле' });
-    } else if (value !== null && value !== undefined) {
+export function validateNumberControl(form, value, controlName: string, min: number, max?: number, required = true, isInteger = false) {
+    if ((value === null || value === undefined || value === '') && form.formState.touchedFields[controlName]) {
+        if (required) {
+            form.setError(controlName, { message: 'Обов\'язкове поле' });
+        } else {
+            form.clearErrors(controlName);
+        }
+    } else if (value !== null && value !== undefined && value !== '') {
         if (value < min || (max !== undefined && value > max)) {
             form.setError(controlName, { message: `Від ${min}${max ? ` до ${max}` : ''}` });
         } else if (isInteger && Math.round(value) !== value) {
