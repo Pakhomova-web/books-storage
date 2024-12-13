@@ -11,7 +11,7 @@ interface ISortFiltersContainerProps<T> {
     onApply: () => void;
     pageSettings: IPageable;
     formContext?: any;
-    sortKeys: ISortKey[];
+    sortKeys?: ISortKey[];
     children?: ReactNode;
     onSort?: (_: IPageable) => void;
     showAlwaysSorting?: boolean;
