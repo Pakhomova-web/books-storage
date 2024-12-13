@@ -128,8 +128,8 @@ export async function createBook(input: Partial<BookEntity>) {
         const item = new Book(_getBookData(input));
         const balance = await Balance.findOne();
 
-        if (item.numberInStock && item.purchasePrice) {
-            balance.value = balance.value - item.numberInStock * item.purchasePrice;
+        if (input.numberInStock && input.purchasePrice) {
+            balance.value = balance.value - input.numberInStock * input.purchasePrice;
         }
 
         const languageBooks = await Book.find({ _id: item.languageBooks });
