@@ -271,7 +271,7 @@ export default function BookDetails() {
                 <Grid item sm={6} xs={12}>
                   <Grid container>
                     <Grid item
-                          md={book.imageIds.length > 1 ? 9 : 12}
+                          md={book.imageIds?.length > 1 ? 9 : 12}
                           xs={12}
                           display="flex" justifyContent="center" alignItems="center"
                           position="relative">
@@ -287,15 +287,15 @@ export default function BookDetails() {
                             Знижка: {book.discount}%
                           </Box>}
 
-                      <Box sx={imageBoxStyles(!!book.imageIds.length)} mb={1}
+                      <Box sx={imageBoxStyles(!!book.imageIds?.length)} mb={1}
                            onClick={() => setImageIds(book.imageIds)}>
-                        <CustomImage isBookDetails={true} imageId={book.imageIds[0]}></CustomImage>
+                        <CustomImage isBookDetails={true} imageId={book.imageIds ? book.imageIds[0] : null}></CustomImage>
                       </Box>
                     </Grid>
 
                     <Grid item md={3} xs={12} display="flex" flexDirection={{ xs: 'row', md: 'column' }} gap={1}
                           justifyContent="center">
-                        {book.imageIds.map((imageId, index) =>
+                        {book.imageIds?.map((imageId, index) =>
                             (index !== 0 &&
                               <StyledSmallImageBox key={index} onClick={() => setImageIds(book.imageIds)}>
                                 <CustomImage isBookDetails={true} imageId={imageId}></CustomImage>

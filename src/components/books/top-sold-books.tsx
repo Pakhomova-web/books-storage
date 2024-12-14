@@ -63,7 +63,7 @@ export default function TopSoldBooks({ mobile = false }) {
                 <Box display="flex" flexDirection="row" flexWrap="nowrap" gap={1}>
                     {items.map((book, index) => (
                         <StyledMobileTopSoldBook key={index} onClick={() => onBookClick(book)}>
-                            <CustomImage imageId={book.imageIds[0]}/>
+                            <CustomImage imageId={book.imageIds ? book.imageIds[0] : null}/>
                         </StyledMobileTopSoldBook>
                     ))}
                 </Box>
@@ -81,7 +81,7 @@ export default function TopSoldBooks({ mobile = false }) {
                     {items.map((book, index) =>
                         <StyledBookBox key={index} gap={1} p={1} onClick={() => onBookClick(book)}>
                             <Box sx={{ height: '80px', width: '100%' }}>
-                                <CustomImage imageId={book.imageIds[0]}/>
+                                <CustomImage imageId={book.imageIds ? book.imageIds[0] : null}/>
                             </Box>
 
                             <Box>{book.name}</Box>

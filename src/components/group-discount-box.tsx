@@ -114,7 +114,7 @@ export default function GroupDiscountBox({
                                   }
 
                                   <Box height="120px" width="120px">
-                                      <CustomImage imageId={book.imageIds[0]}/>
+                                      <CustomImage imageId={book.imageIds ? book.imageIds[0] : null}/>
                                   </Box>
                                   <Box textAlign="center">
                                       {book.bookSeries.default ? '' : `${book.bookSeries.name}. `}{book.name}

@@ -74,7 +74,7 @@ export default function BooksList({ items, filters = {}, pageUrl = '/' }) {
                     {!!book.discount && <Box sx={styleVariables.fixedDiscountBox()}>Знижка: {book.discount}%</Box>}
 
                     <Box sx={bookBoxStyles} mb={1} mt={book.discount ? 1 : 0}>
-                        <CustomImage isBookDetails={true} imageId={book.imageIds[0]}></CustomImage>
+                        <CustomImage isBookDetails={true} imageId={book.imageIds ? book.imageIds[0] : null}></CustomImage>
                     </Box>
                     <Box sx={bookInfoStyles} textAlign="center">
                         {book.bookSeries.publishingHouse.name}{book.bookSeries.default ? '' : `. ${book.bookSeries.name}`}

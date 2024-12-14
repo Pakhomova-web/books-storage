@@ -125,7 +125,7 @@ export class BookEntity {
             this.pageType = data.pageType;
             this.languageIds = data.languageIds;
             this.languages = data.languages;
-            this.imageIds = data.imageIds;
+            this.imageIds = data.imageIds ? data.imageIds : [];
             this.tags = data.tags;
             this.authorIds = data.authorIds;
             this.authors = data.authors;
@@ -271,6 +271,7 @@ export class UserEntity {
     recentlyViewedBooks?: BookEntity[];
     basketItems?: { bookId: string, count: number }[];
     basketGroupDiscounts?: { groupDiscountId: string, count: number }[];
+    active?: boolean;
 
     preferredDeliveryId?: string;
     region?: string;
@@ -289,6 +290,7 @@ export class UserEntity {
             this.firstName = data.firstName;
             this.lastName = data.lastName;
             this.role = data.role;
+            this.active = data.active;
             this.likedBookIds = data.likedBookIds ? data.likedBookIds : [];
             this.recentlyViewedBookIds = data.recentlyViewedBookIds ? data.recentlyViewedBookIds : [];
             this.recentlyViewedBooks = data.recentlyViewedBooks ? data.recentlyViewedBooks : [];

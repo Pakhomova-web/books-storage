@@ -95,7 +95,7 @@ export default function BasketBookItem({
             <Grid item xs={3} md={2} display="flex" alignItems="center"
                   justifyContent="center">
                 <StyledImageBox>
-                    <CustomImage imageId={book.imageIds[0]} isBookDetails={true}></CustomImage>
+                    <CustomImage imageId={book.imageIds ? book.imageIds[0] : null} isBookDetails={true}></CustomImage>
                 </StyledImageBox>
             </Grid>
 

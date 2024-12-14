@@ -108,3 +108,9 @@ export const refreshTokenQuery = gql`
     }
     ${userFragment}
 `;
+
+export const activateUserQuery = gql`
+    query ActivateUser($email: String!) {
+        activateUser(email: $email)
+    }
+`;

@@ -329,6 +329,7 @@ export type LanguageUpdateInput = {
 };
 
 export type Mutation = {
+  activateUser: Scalars['ID']['output'];
   addBookComment: Book;
   addBookInBasket?: Maybe<Array<BasketItem>>;
   addGroupDiscountInBasket?: Maybe<Array<BasketGroupDiscountItem>>;
@@ -381,6 +382,11 @@ export type Mutation = {
   updatePublishingHouse?: Maybe<PublishingHouse>;
   updateUser: User;
   user?: Maybe<User>;
+};
+
+
+export type MutationActivateUserArgs = {
+  email: Scalars['String']['input'];
 };
 
 
@@ -1445,6 +1451,7 @@ export type LanguageSubListResolvers<ContextType = any, ParentType extends Resol
 };
 
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  activateUser?: Resolver<ResolversTypes['ID'], ParentType, ContextType, RequireFields<MutationActivateUserArgs, 'email'>>;
   addBookComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationAddBookCommentArgs, 'id' | 'input'>>;
   addBookInBasket?: Resolver<Maybe<Array<ResolversTypes['BasketItem']>>, ParentType, ContextType, RequireFields<MutationAddBookInBasketArgs, 'id'>>;
   addGroupDiscountInBasket?: Resolver<Maybe<Array<ResolversTypes['BasketGroupDiscountItem']>>, ParentType, ContextType, RequireFields<MutationAddGroupDiscountInBasketArgs, 'id'>>;

@@ -7,13 +7,16 @@ import { borderRadius, primaryLightColor } from '@/constants/styles-variables';
 import ErrorNotification from '@/components/error-notification';
 import Loading from '@/components/loading';
 import { useSignIn } from '@/lib/graphql/queries/auth/hook';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
 import { useAuth } from '@/components/auth-context';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { MAIN_NAME } from '@/constants/main-name';
-import { emailValidation, passwordValidation } from '@/utils/utils';
+import { emailValidation, passwordValidation, validatePhoneNumber } from '@/utils/utils';
+import CustomModal from '@/components/modals/custom-modal';
+import CustomImage from '@/components/custom-image';
+import { MuiTelInput } from 'mui-tel-input';
 
 const containerStyles = {
     width: '400px',
@@ -27,11 +30,13 @@ export default function SignIn() {
         password: string,
         confirmPassword: string,
         firstName: string,
-        lastName: string
+        lastName: string,
+        phoneNumber: string
     }>();
     const { loading, error, signIn } = useSignIn();
-    const { password, confirmPassword, email } = formContext.watch();
+    const { password, confirmPassword, email, phoneNumber } = formContext.watch();
     const { setOpenLoginModal } = useAuth();
+    const [openEmailConfirmationModal, setOpenEmailConfirmationModal] = useState<boolean>(false);
 
     useEffect(() => {
         passwordValidation(formContext, password, 'password', confirmPassword, 'confirmPassword');
@@ -41,15 +46,18 @@ export default function SignIn() {
         emailValidation(formContext, email, 'email');
     }, [email, formContext]);
 
+    function handlePhoneNumberChange(value: string) {
+        validatePhoneNumber(formContext, value);
+    }
+
     function onSubmit() {
         if (!isFormInvalid()) {
-            const { email, password, firstName, lastName } = formContext.getValues();
+            const { firstName, lastName } = formContext.getValues();
 
-            signIn({ email, password, firstName, lastName })
+            signIn({ email, password, firstName, lastName, phoneNumber })
                 .then(() => {
                     formContext.reset();
-                    openLoginModal();
-                    router.push('/');
+                    setOpenEmailConfirmationModal(true);
                 })
                 .catch(() => {
                 })
@@ -62,6 +70,11 @@ export default function SignIn() {
 
     function isFormInvalid(): boolean {
         return !password || !email || !!Object.keys(formContext.formState.errors).length;
+    }
+
+    function onCloseEmailModal() {
+        setOpenEmailConfirmationModal(false);
+        router.push('/');
     }
 
     return (
@@ -77,7 +90,7 @@ export default function SignIn() {
                 <Box sx={authStyles.title} mb={2}>Реєстрація</Box>
 
                 <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
-                    <Box gap={1} display="flex" flexDirection="column">
+                    <Box gap={2} display="flex" flexDirection="column">
                         <CustomTextField fullWidth name="email" required type="email" label="Ел. адреса"
                                          id="email"/>
 
@@ -94,6 +107,13 @@ export default function SignIn() {
                                                label="Підтвердіть пароль"
                                                name="confirmPassword"
                                                required/>
+
+                        <MuiTelInput value={phoneNumber}
+                                     onChange={handlePhoneNumberChange}
+                                     defaultCountry="UA"
+                                     label="Номер телефону"
+                                     error={!!formContext.formState.errors.phoneNumber}
+                                     fullWidth/>
 
                         <CustomTextField fullWidth name="firstName" label="Ім'я"/>
 
@@ -115,6 +135,17 @@ export default function SignIn() {
 
                 {error && <ErrorNotification error={error}></ErrorNotification>}
             </Box>
+
+            <CustomModal open={openEmailConfirmationModal} onClose={() => onCloseEmailModal()}>
+                <Box textAlign="center" display="flex" flexDirection="column" alignItems="center" gap={1}>
+                    <Box sx={{ width: '50px', height: '50px' }}>
+                        <CustomImage imageLink="/sent_email.png"/>
+                    </Box>
+                    <Box>Дякуємо за реєстрацію!</Box>
+                    На вказану Вами ел. пошту був надісланий лист для підтвердження.
+                    Будь ласка, активуйте свій профіль для закінчення реєстрації.
+                </Box>
+            </CustomModal>
         </Box>
     );
 }

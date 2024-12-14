@@ -2,6 +2,7 @@ import { useMutation, useQuery } from '@apollo/client';
 import { UserEntity } from '@/lib/data/types';
 import { _useUpdateItem } from '@/lib/graphql/base-hooks';
 import {
+    activateUserQuery,
     changePasswordByTokenQuery,
     changePasswordQuery, checkResetPasswordTokenQuery,
     loginQuery,
@@ -103,4 +104,8 @@ export function useCheckResetPasswordToken(userId: string, token: string) {
 
 export function useCurrentUser() {
     return _useUpdateItem<UserEntity>(userUpdateQuery);
+}
+
+export function useActivateUser() {
+    return _useUpdateItem<string>(activateUserQuery);
 }

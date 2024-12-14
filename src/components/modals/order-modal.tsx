@@ -1,4 +1,4 @@
-import { Box, Button, Grid, RadioGroup } from '@mui/material';
+import { Box, Button, Grid, RadioGroup, Tooltip } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 
@@ -9,7 +9,8 @@ import {
     isUkrPoshtaSelected,
     onCopyOrderClick,
     renderOrderNumber,
-    renderPrice, validatePhoneNumber
+    renderPrice,
+    validatePhoneNumber
 } from '@/utils/utils';
 import CustomModal from '@/components/modals/custom-modal';
 import { DeliveryEntity, OrderEntity } from '@/lib/data/types';
@@ -472,13 +473,15 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                                         name="isPartlyPaid"/>
                       </Grid>
 
-                      <Grid item xs={12} md={6}>
-                        <CustomCheckbox
-                          checked={isSent}
-                          disabled={(!isSelfPickup(delivery.id) && !trackingNumber) || !isConfirmed || orderItem.isDone || orderItem.isCanceled}
-                          label={'Замовлення ' + (isSelfPickup(delivery.id) ? 'вручене' : 'відправлене')}
-                          name="isSent"/>
-                      </Grid>
+                      <Tooltip title={!isSelfPickup(delivery.id) && !trackingNumber ? 'Немає ТТН' : ''}>
+                        <Grid item xs={12} md={6}>
+                          <CustomCheckbox
+                            checked={isSent}
+                            disabled={(!isSelfPickup(delivery.id) && !trackingNumber) || !isConfirmed || orderItem.isDone || orderItem.isCanceled}
+                            label={'Замовлення ' + (isSelfPickup(delivery.id) ? 'вручене' : 'відправлене')}
+                            name="isSent"/>
+                        </Grid>
+                      </Tooltip>
 
                       <Grid item xs={12} md={6}>
                         <CustomCheckbox checked={isDone}

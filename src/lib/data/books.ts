@@ -471,6 +471,7 @@ function _getBookData(input: Partial<BookEntity>) {
         coverType: input.coverTypeId,
         pageType: input.pageTypeId,
         languageBooks: input.languageBookIds,
-        bookTypes: input.bookTypeIds
+        bookTypes: input.bookTypeIds,
+        imageIds: input.imageIds || []
     };
 }

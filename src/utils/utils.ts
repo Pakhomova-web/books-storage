@@ -179,8 +179,12 @@ export function getParamsQueryString(params: any): string {
     }
 }
 
-export function validatePhoneNumber(form, value: string) {
-    if (!matchIsValidTel(value)) {
+export function validatePhoneNumber(form, value: string, required = false) {
+    if (!value && required) {
+        form.setError('phoneNumber', { message: 'Поле обов\'язкове!' });
+    } else if (!value) {
+        form.clearErrors('phoneNumber');
+    } else if (!matchIsValidTel(value)) {
         form.setError('phoneNumber', { message: 'Номер телефону невірний!' });
     } else {
         form.clearErrors('phoneNumber');

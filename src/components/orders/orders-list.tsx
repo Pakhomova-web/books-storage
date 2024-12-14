@@ -60,7 +60,7 @@ export default function OrdersList({ orders, onClick }) {
                           <Box display="flex" gap={1} flexWrap="wrap">
                               {order.books.map((b, index) => (
                                   <Box key={index} sx={{ height: '60px', width: '50px' }}>
-                                      <CustomImage imageId={b.book.imageIds[0]}/>
+                                      <CustomImage imageId={b.book.imageIds ? b.book.imageIds[0] : null}/>
                                   </Box>
                               ))}
                           </Box>}

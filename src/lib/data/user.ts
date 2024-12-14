@@ -15,6 +15,7 @@ import {
 } from '@/lib/data/auth-utils';
 import { verify } from 'jsonwebtoken';
 import { getBooksByIds } from '@/lib/data/books';
+import { createTransport } from 'nodemailer';
 
 const ADMIN_EMAILS: string[] = [
     'pakhomov.business@gmail.com'
@@ -37,13 +38,76 @@ export async function createUser(input: UserEntity) {
         const item = new User({
             ...input,
             password: hashPassword,
+            active: false,
             role: ADMIN_EMAILS.includes(input.email) ? ROLES.admin : ROLES.user
         });
 
-        await item.save();
+        try {
+            const transporter = createTransport({
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure: true,
+                auth: {
+                    user: process.env.EMAIL_ID,
+                    pass: process.env.EMAIL_PASSWORD
+                }
+            });
 
-        return { ...input, id: item.id } as UserEntity;
+            const mailOption = {
+                from: process.env.EMAIL_ID,
+                to: input.email,
+                subject: 'Підтвердження ел. адреси для реєстрації',
+                html: activateUserTemplate(`${process.env.FRONTEND_URL}/reset-password?email=${input.email}`)
+            };
+
+            transporter.sendMail(mailOption, async (err) => {
+                if (err) {
+                    throw new GraphQLError(`Щось пішло не так.`, {
+                        extensions: { code: 'INVALID_DATA' }
+                    });
+                }
+            });
+            await item.save();
+
+            return { ...input, id: item.id } as UserEntity;
+        } catch (e) {
+            throw new GraphQLError(`Щось пішло не так.`, {
+                extensions: { code: 'INVALID_DATA' }
+            });
+        }
     }
+}
+
+function activateUserTemplate(url: string) {
+    return `
+<!DOCTYPE html>
+  <html>
+  <body style="text-align: center; font-family: 'Verdana', serif; color: #000;">
+    <div style="max-width: 400px;
+        margin: 10px;
+        background-color: #fafafa;
+        padding: 25px;
+        border-radius: 20px">
+        <p style="text-align: left">
+            Цей лист було надіслано після реєстрації на сайті магазину, для закінчення реєстрації потрібно підтвердити ел. адресу.
+        </p>
+          <a href="${url}" target="_blank">
+            <buttonstyle="background-color: #444394; border: 0; width: 200px; height: 30px; border-radius: 6px; color: #fff">
+              Підтвердити
+            </button>
+          </a>
+          <p style="text-align: left">
+            Якщо ви не можете натиснути кнопку вище, скопіюйте наведену нижче URL-адресу в адресний рядок:
+          </p>
+          <a href="${url}" target="_blank">
+              <p style="margin: 0; text-align: left; font-size: 10px; text-decoration: none;">
+                ${url}
+              </p>
+          </a>
+    </div>
+  </body>
+</html>
+`;
 }
 
 export async function login(email: string, password: string): Promise<{
@@ -52,7 +116,7 @@ export async function login(email: string, password: string): Promise<{
     refreshToken: string
 }> {
     if (!email || !password) {
-        throw new GraphQLError(`Password and Email are required for logging.`, {
+        throw new GraphQLError(`Пароль та ел. адреса необхідні для входу.`, {
             extensions: { code: 'BAD_DATA' }
         });
     }
@@ -61,6 +125,10 @@ export async function login(email: string, password: string): Promise<{
     if (!item) {
         throw new GraphQLError(`Користувача не знайдено.`, {
             extensions: { code: 'NOT_AUTHORIZED' }
+        });
+    } else if (!item.active) {
+        throw new GraphQLError(`Ел. адреса не підтверджена.`, {
+            extensions: { code: 'NOT_ACTIVATED' }
         });
     } else {
         const identical = await comparePassword(password, item.password);
@@ -79,6 +147,17 @@ export async function login(email: string, password: string): Promise<{
             });
         }
     }
+}
+
+export async function activateUser(email: string): Promise<string> {
+    if (!email) {
+        throw new GraphQLError(`Не вказана ел. адреса.`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+    const item = await User.findByIdAndUpdate({ email }, { active: true });
+
+    return item.id;
 }
 
 export async function getNewToken(refreshToken: string) {
@@ -203,7 +282,10 @@ export async function changeRecentlyViewedBooks(userId: string, bookId: string) 
     }
     await user.save();
 
-    const { items } = await getBooksByIds(user.recentlyViewedBookIds, { page: 0, rowsPerPage: user.recentlyViewedBookIds.length });
+    const { items } = await getBooksByIds(user.recentlyViewedBookIds, {
+        page: 0,
+        rowsPerPage: user.recentlyViewedBookIds.length
+    });
 
     return items;
 }

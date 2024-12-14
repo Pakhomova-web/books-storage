@@ -53,6 +53,7 @@ import {
 import { createAuthor, deleteAuthor, getAuthorById, getAuthors, updateAuthor } from '@/lib/data/author';
 import { GraphQLError } from 'graphql/error';
 import {
+    activateUser,
     addBookInBasket, addGroupDiscountInBasket, changePassword, changePasswordByToken,
     changeRecentlyViewedBooks,
     createUser,
@@ -88,6 +89,8 @@ function parseError<T>(error): T {
         case 'USAGE_ERROR':
         case 'NOT_FOUND':
         case 'INVALID_TOKEN':
+        case 'NOT_AUTHORIZED':
+        case 'NOT_ACTIVATED':
         case 'DUPLICATE_ERROR':
             throw new GraphQLError(error, {
                 extensions: {
@@ -365,6 +368,9 @@ const resolvers: Resolvers = {
         // auth
         login: async (_root, { email, password }) => {
             return login(email, password).catch(error => parseError(error));
+        },
+        activateUser: async (_root, { email }) => {
+            return activateUser(email).catch(error => parseError(error));
         },
         sendUpdatePasswordLink: async (_root, { email }) => {
             return sendUpdatePasswordLink(email).catch(error => parseError(error));

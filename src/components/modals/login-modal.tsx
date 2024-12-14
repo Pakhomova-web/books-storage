@@ -28,6 +28,8 @@ export default function LoginModal({ open }) {
     const [successMsgAfterSendingResetPasswordLink, setSuccessMsgAfterSendingResetPasswordLink] = useState<boolean>(false);
     const [showForgotPasswordModal, setShowForgotPasswordModal] = useState<boolean>(false);
 
+    //NOT_ACTIVATED
+
     useEffect(() => {
         passwordValidation(formContext, password, 'password');
     }, [password, formContext]);
@@ -108,14 +110,17 @@ export default function LoginModal({ open }) {
                                    onSubmit={onSendResetPasswordLink}
                                    submitText="Так"
                                    onClose={() => setShowForgotPasswordModal(false)}>
-                        <Box textAlign="center">
+                        <Box textAlign="center" display="flex" flexDirection="column" alignItems="center" gap={1}>
+                          <Box sx={{ width: '50px', height: '50px' }}>
+                            <CustomImage imageLink="/sent_email.png"/>
+                          </Box>
                           Для відновлення паролю Вам буде надіслано повідомлення на ел. пошту {email}. Продовжити?
                         </Box>
                       </CustomModal>}
                 </Box>
 
-                {!!error && <ErrorNotification error={error} />}
-                {!!errorSendingResetPasswordLink && <ErrorNotification error={errorSendingResetPasswordLink} />}
+                {!!error && <ErrorNotification error={error}/>}
+                {!!errorSendingResetPasswordLink && <ErrorNotification error={errorSendingResetPasswordLink}/>}
 
                 <Grid container spacing={2} mb={1}>
                     <Grid item xs={6}>

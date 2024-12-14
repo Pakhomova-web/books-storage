@@ -1,3 +1,5 @@
+import { activateUser } from '@/lib/data/user';
+
 const typeDefs =  /* GraphQL */ `
     type Language {
         id: ID
@@ -247,6 +249,7 @@ const typeDefs =  /* GraphQL */ `
 
         createUser(input: UserCreateInput!): User
         login(email: String!, password: String!): UserToken!
+        activateUser(email: String!): ID!
         sendUpdatePasswordLink(email: String!): String
         changePasswordByToken(userId: String!, password: String!): String
         changePassword(password: String!, newPassword: String!): String

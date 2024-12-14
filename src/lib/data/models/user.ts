@@ -34,7 +34,11 @@ const userSchema = new Schema<UserEntity, Model<UserEntity>>({
     district: String,
     city: String,
     preferredDeliveryId: String,
-    instagramUsername: String
+    instagramUsername: String,
+    active: {
+        type: Boolean,
+        required: true
+    }
 });
 
 export default models?.user || model('user', userSchema);
