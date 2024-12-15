@@ -9,7 +9,6 @@ import {
 import Book from '@/lib/data/models/book';
 import { GraphQLError } from 'graphql/error';
 import { createTransport } from 'nodemailer';
-import { createToken } from '@/lib/data/auth-utils';
 import { primaryLightColor } from '@/constants/styles-variables';
 
 type CustomModelType = Model<
@@ -180,7 +179,7 @@ export function mailButton(url: string, title): string {
 }
 
 export function mailDivider(double = false): string {
-    return `<div style="width: 100%; border-top: ${double ? 2 : 1}px solid ${primaryLightColor}"></div>`;
+    return `<div style="margin-bottom: 5px; width: 100%; border-top: ${double ? 2 : 1}px solid ${primaryLightColor}"></div>`;
 }
 
 export function rowDivider(colspan = 1) {
