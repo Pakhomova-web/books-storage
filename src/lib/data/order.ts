@@ -77,6 +77,7 @@ export async function createOrder(input: OrderEntity) {
     item.date = new Date().toISOString();
 
     await item.save();
+    await sendEmailWithOrder(item.id);
     await User.findByIdAndUpdate(input.userId, { basketItems: [], basketGroupDiscounts: [] });
 
     return item as OrderEntity;
@@ -122,7 +123,13 @@ export async function updateOrder(input: OrderEntity) {
             balance.value = balance.value - count * price * (100 - discount) / 100);
         await balance.save();
     }
+    const sentEmail = !!data.trackingNumber && data.isSent && !order.isSent;
+
     await Order.findByIdAndUpdate(input.id, data);
+
+    if (sentEmail) {
+        await sendEmailWithOrder(order.id);
+    }
 
     return input as OrderEntity;
 }
@@ -228,8 +235,13 @@ function orderTemplate(order: OrderEntity) {
     return mailContainer(`
         <p style="font-size: 16px"><b>Замовлення №${order.orderNumber}</b></p>
         ${mailDivider(true)}
+        ${order.isSent && order.trackingNumber ? `<p>Ваше замовлення відправлене!</p>` : ''}
         
         <table style="width: 100%">
+            ${order.isSent && order.trackingNumber ? `<tr>
+                <th style="text-align: left">ТТН</th>
+                <td style="text-align: left">${order.trackingNumber}</td>
+            </tr>${rowDivider(4)}` : ''}
             <tr>
                 <th style="text-align: left">ПІБ</th>
                 <td style="text-align: left">${order.lastName} ${order.firstName}</td>
@@ -248,6 +260,10 @@ function orderTemplate(order: OrderEntity) {
                     ${order.region} область${order.district ? `, ${order.district} район` : ''}, ${order.city}${isNovaPostSelected(order.delivery.id) ? `, ${order.novaPostOffice}` : ''}${isUkrPoshtaSelected(order.delivery.id) ? `, ${order.postcode}` : ''}
                 </td>
             </tr>
+            ${!!order.comment ? `<tr>
+                                    <th style="text-align: left">Коментар</th>
+                                    <td style="text-align: left">${order.comment}</td>
+                                </tr>` : ''}
         </table>
         ${mailDivider(true)}
         

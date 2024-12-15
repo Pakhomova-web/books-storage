@@ -72,7 +72,7 @@ const typeDefs =  /* GraphQL */ `
         ages: [Int]
         comments: [Comment]
         discount: Float
-        languageBooks: [Book!]
+        languageBooks: [Book]
     }
     
     type BookLanguageItem {

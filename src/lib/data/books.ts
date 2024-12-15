@@ -40,6 +40,16 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
         .populate('languages')
         .populate('authors')
         .populate('illustrators')
+        .populate({
+            path: 'languageBooks',
+            populate: [
+                {
+                    path: 'bookSeries',
+                    populate: 'publishingHouse'
+                },
+                { path: 'languages' }
+            ]
+        })
         .sort({ [pageSettings?.orderBy || 'name']: pageSettings?.order || 'asc' });
 
     let res = { items: [], totalCount: 0 };
