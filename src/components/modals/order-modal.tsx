@@ -20,13 +20,14 @@ import OrderDeliveryTrackingBox from '@/components/orders/order-delivery-trackin
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import OrderStatus from '@/components/orders/order-status';
 import { useAuth } from '@/components/auth-context';
-import { useCancelOrder, useUpdateOrder } from '@/lib/graphql/queries/order/hook';
+import { sendEmailWithOrder, useCancelOrder, useUpdateOrder } from '@/lib/graphql/queries/order/hook';
 import ErrorNotification from '@/components/error-notification';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
 import CustomCheckbox from '@/components/form-fields/custom-checkbox';
 import GroupDiscountBox from '@/components/group-discount-box';
 import { MuiTelInput } from 'mui-tel-input';
+import { ApolloError } from '@apollo/client';
 
 interface IProps {
     order: OrderEntity;
@@ -45,6 +46,8 @@ export default function OrderModal({ open, order, onClose }: IProps) {
     const { update, updating, updatingError } = useUpdateOrder();
     const { update: cancel, updating: canceling, updatingError: cancelingError } = useCancelOrder();
     const { items: deliveries, loading: loadingDeliveries } = useDeliveries();
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<ApolloError>();
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     const formContext = useForm<Form>({
         defaultValues: {
@@ -71,6 +74,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
     } = formContext.watch();
 
     useEffect(() => {
+        setError(null);
         let invalid = false;
 
         if (!isAdmin(user) || orderItem.isDone || orderItem.isCanceled) {
@@ -234,6 +238,19 @@ export default function OrderModal({ open, order, onClose }: IProps) {
             });
     }
 
+    function onSendEmailWithOrder() {
+        setLoading(true);
+        setError(null);
+        sendEmailWithOrder(orderItem.id)
+            .then(() => {
+                setLoading(false);
+            })
+            .catch(err => {
+                setError(err);
+                setLoading(false);
+            });
+    }
+
     function handlePhoneNumberChange(value: string) {
         validatePhoneNumber(formContext, value);
     }
@@ -244,7 +261,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                      onClose={() => onClose()}
                      isSubmitDisabled={submitDisabled}
                      onSubmit={isAdmin(user) && !orderItem.isDone && !orderItem.isCanceled ? onSubmit : null}
-                     loading={!orderItem || updating || loadingDeliveries || canceling}>
+                     loading={loading || !orderItem || updating || loadingDeliveries || canceling}>
             <FormContainer formContext={formContext}>
                 <Grid container alignItems="center" display="flex" spacing={2} justifyContent="space-between" mb={2}>
                     <Grid item xs={12} sm={6} md={8} lg={10} display="flex"
@@ -493,7 +510,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                 </Grid>
             </FormContainer>
 
-            {isAdmin(user) &&
+            {isAdmin(user) && <>
               <Grid container spacing={2} mt={1} display="flex" alignItems="center" justifyContent="space-between">
                 <Grid item xs={12} md={6} lg={4} display="flex" justifyContent="center">
                   <Button variant="outlined" fullWidth
@@ -509,7 +526,21 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                   </Button>
                 </Grid>
               </Grid>
-            }
+
+              <Grid container spacing={2} mt={1} display="flex" alignItems="center" justifyContent="space-between">
+                <Grid item xs={12} md={6} lg={4} display="flex" justifyContent="center">
+                  <Button variant="outlined" fullWidth onClick={onSendEmailWithOrder}>
+                    Відправити замовлення на ел. пошту
+                  </Button>
+                </Grid>
+
+                  {!!error &&
+                    <Grid item xs={12} md={6} lg={4} display="flex" justifyContent="center">
+                      <ErrorNotification error={error}/>
+                    </Grid>
+                  }
+              </Grid>
+            </>}
 
             {!!updatingError && <ErrorNotification error={updatingError}/>}
             {!!cancelingError && <ErrorNotification error={cancelingError}/>}

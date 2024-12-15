@@ -8,6 +8,9 @@ import {
 } from '@/lib/data/types';
 import Book from '@/lib/data/models/book';
 import { GraphQLError } from 'graphql/error';
+import { createTransport } from 'nodemailer';
+import { createToken } from '@/lib/data/auth-utils';
+import { primaryLightColor } from '@/constants/styles-variables';
 
 type CustomModelType = Model<
     PublishingHouseEntity |
@@ -109,6 +112,35 @@ export async function getDataByFiltersAndPageSettings(query, andFilters, pageSet
     return { items, totalCount };
 }
 
+export function createMailOptions(emailTo: string, subject: string, html: string, attachments = []) {
+    return {
+        from: process.env.EMAIL_ID,
+        to: emailTo,
+        subject,
+        html,
+        attachments: [
+            {
+                filename: 'logo.png',
+                path: `${process.cwd()}/public/logo.png`,
+                cid: 'logo'
+            },
+            ...attachments
+        ]
+    };
+}
+
+export function createMailTransport() {
+    return createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.EMAIL_ID,
+            pass: process.env.EMAIL_PASSWORD
+        }
+    });
+}
+
 export function mailContainer(content: string): string {
     return `
 <!DOCTYPE html>
@@ -119,7 +151,10 @@ export function mailContainer(content: string): string {
         background-color: #fafafa;
         padding: 25px;
         border-radius: 20px">
-        <img src="cid:logo" alt="logo" style="width: 200px"/>
+        <a href="${process.env.FRONTEND_URL}" target="_blank">
+            <img src="cid:logo" alt="logo" style="width: 200px; margin-bottom: 10px"/>
+        </a>
+        
         ${content}
     </div>
   </body>
@@ -141,5 +176,19 @@ export function mailButton(url: string, title): string {
                 ${url}
             </p>
         </a>
+    `;
+}
+
+export function mailDivider(double = false): string {
+    return `<div style="width: 100%; border-top: ${double ? 2 : 1}px solid ${primaryLightColor}"></div>`;
+}
+
+export function rowDivider(colspan = 1) {
+    return `
+        <tr>
+            <td colspan="${colspan}">
+                ${mailDivider()}
+            </td>
+        </tr>
     `;
 }

@@ -5,6 +5,7 @@ import {
     cancelOrderQuery,
     createOrderQuery,
     ordersQuery,
+    sendEmailWithOrderQuery,
     updateOrderQuery
 } from '@/lib/graphql/queries/order/queries';
 import { apolloClient } from '@/lib/apollo';
@@ -34,4 +35,8 @@ export async function getBalance() {
     });
 
     return data.balance;
+}
+
+export function sendEmailWithOrder(orderId: string) {
+    return apolloClient.query({ query: sendEmailWithOrderQuery, fetchPolicy: 'network-only', variables: { orderId } });
 }

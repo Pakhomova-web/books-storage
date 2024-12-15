@@ -87,6 +87,12 @@ export const balanceQuery = gql`
     }
 `;
 
+export const sendEmailWithOrderQuery = gql`
+    query SendEmailWithOrder($orderId: ID!) {
+        sendEmailWithOrder(orderId: $orderId)
+    }
+`;
+
 export const updateOrderQuery = gql`
     mutation UpdateOrder($input: OrderUpdateInput!) {
         item: updateOrder(input: $input) {

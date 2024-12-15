@@ -181,6 +181,7 @@ const typeDefs =  /* GraphQL */ `
         deliveryOptions: [Delivery!]
         bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): BookTypeSubList
         orders(pageSettings: PageableInput, filters: OrderSearchInput): OrderSubList
+        sendEmailWithOrder(orderId: ID!): String!
         bookSeriesOptions(filters: BookSeriesSearchInput): [IOption!]
         bookById(id: ID!): Book
         bookTypeById(id: ID!): BookType

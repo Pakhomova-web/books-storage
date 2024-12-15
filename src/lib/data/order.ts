@@ -1,11 +1,19 @@
 import { IOrderFilter, IPageable, OrderEntity } from '@/lib/data/types';
 import Order from '@/lib/data/models/order';
 import { GraphQLError } from 'graphql/error';
-import { getValidFilters } from '@/lib/data/base';
+import {
+    createMailOptions,
+    createMailTransport,
+    getValidFilters,
+    mailContainer,
+    mailDivider,
+    rowDivider
+} from '@/lib/data/base';
 import OrderNumber from '@/lib/data/models/order-number';
 import User from '@/lib/data/models/user';
 import Book from '@/lib/data/models/book';
 import Balance from '@/lib/data/models/balance';
+import { isNovaPostSelected, isSelfPickup, isUkrPoshtaSelected, renderPrice } from '@/utils/utils';
 
 export async function getOrders(pageSettings?: IPageable, filters?: IOrderFilter) {
     const { quickSearch, andFilters } = getValidFilters(filters);
@@ -148,6 +156,126 @@ export async function cancelOrder(id: string) {
     await order.save();
 
     return { id } as OrderEntity;
+}
+
+export async function sendEmailWithOrder(orderId: string) {
+    const order = await Order.findById(orderId).populate([
+        { path: 'user' },
+        { path: 'delivery' },
+        {
+            path: 'books',
+            populate: {
+                path: 'book',
+                populate: [
+                    {
+                        path: 'languages'
+                    },
+                    {
+                        path: 'bookSeries',
+                        populate: {
+                            path: 'publishingHouse'
+                        }
+                    }
+                ]
+            }
+        }
+    ]);
+
+    if (!order) {
+        throw new GraphQLError(`Такого замовлення немає.`, {
+            extensions: { code: 'NOT_FOUND' }
+        });
+    }
+
+    createMailTransport().sendMail(
+        createMailOptions(
+            order.user.email,
+            `Замовлення №${order.orderNumber}`,
+            orderTemplate(order),
+            order.books.map(({ book }) => ({
+                filename: `${book.id}.png`,
+                path: `https://drive.google.com/thumbnail?id=${book.imageIds[0]}&sz=w1000`,
+                cid: book.id
+            }))
+        ), async (err) => {
+            if (err) {
+                throw new GraphQLError(`Щось пішло не так.`, {
+                    extensions: { code: 'INVALID_DATA' }
+                });
+            }
+        });
+
+    return 'OK';
+}
+
+function orderTemplate(order: OrderEntity) {
+    let finalSum = 0;
+    let finalSumWithDiscounts = 0;
+    const bookRows = order.books.map(({ book, price, discount, count }) => {
+        finalSum = finalSum + price * count;
+        finalSumWithDiscounts = finalSumWithDiscounts + price * count * (100 - discount) / 100;
+
+        return `
+            <tr>
+                <td><img src="cid:${book.id}" style="width: 60px; height: 60px; object-fit: contain"/></td>
+                <td>${book.name} (${book.languages.map(l => l.name).join(', ')})</td>
+                <td>${count}</td>
+                <td>${renderPrice(price * count, discount)}</td>
+            </tr>
+    `;
+    }).join('');
+
+    return mailContainer(`
+        <p style="font-size: 16px"><b>Замовлення №${order.orderNumber}</b></p>
+        ${mailDivider(true)}
+        
+        <table style="width: 100%">
+            <tr>
+                <th style="text-align: left">ПІБ</th>
+                <td style="text-align: left">${order.lastName} ${order.firstName}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left">Номер телефону</th>
+                <td style="text-align: left">${order.phoneNumber}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left">Спосіб доставки</th>
+                <td style="text-align: left">${order.delivery.name}</td>
+            </tr>
+            <tr>
+                <th style="text-align: left">Адреса доставки</th>
+                <td style="text-align: left">
+                    ${order.region} область${order.district ? `, ${order.district} район` : ''}, ${order.city}${isNovaPostSelected(order.delivery.id) ? `, ${order.novaPostOffice}` : ''}${isUkrPoshtaSelected(order.delivery.id) ? `, ${order.postcode}` : ''}
+                </td>
+            </tr>
+        </table>
+        ${mailDivider(true)}
+        
+        <table style="width: 100%">
+            <tr>
+                <th>Зображення</th>
+                <th>Назва (мова)</th>
+                <th>Кількість</th>
+                <th>Ціна</th>
+            </tr>
+            ${bookRows}
+            ${rowDivider(4)}
+            <tr>
+                <th colspan="3" style="text-align: right">Кінцева сума без знижки:</th>
+                <td style="text-align: center">${renderPrice(finalSum)}</td>
+            </tr>
+            ${rowDivider(4)}
+            <tr>
+                <th colspan="3" style="text-align: right">Знижка:</th>
+                <td style="text-align: center">${renderPrice(finalSum - finalSumWithDiscounts)}</td>
+            </tr>
+            ${rowDivider(4)}
+            <tr>
+                <th colspan="3" style="text-align: right">Кінцева сума:</th>
+                <td style="text-align: center; font-size: 16px"><b>${renderPrice(finalSumWithDiscounts)}</b></td>
+            </tr>
+        </table>
+    `);
 }
 
 function _getOrderData(input: OrderEntity, orderNumber?: number) {

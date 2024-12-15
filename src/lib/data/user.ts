@@ -1,7 +1,7 @@
 import { GraphQLError } from 'graphql/error';
 
 import { UserEntity } from '@/lib/data/types';
-import { getByEmail, mailButton, mailContainer } from '@/lib/data/base';
+import { createMailOptions, createMailTransport, getByEmail, mailButton, mailContainer } from '@/lib/data/base';
 import User from '@/lib/data/models/user';
 import ResetToken from '@/lib/data/models/reset-token';
 import { ROLES } from '@/constants/roles';
@@ -349,37 +349,18 @@ async function setRecentlyViewedBooks(item) {
 }
 
 function sendActivatedLink(userId: string, email: string) {
-    const transporter = createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: {
-            user: process.env.EMAIL_ID,
-            pass: process.env.EMAIL_PASSWORD
-        }
-    });
-
-    const mailOption = {
-        from: process.env.EMAIL_ID,
-        to: email,
-        subject: 'Підтвердження ел. адреси для реєстрації',
-        html: activateUserTemplate(`${process.env.FRONTEND_URL}/activation?token=${createToken(userId)}`),
-        attachments: [
-            {
-                filename: 'logo.png',
-                path: `${process.cwd()}/public/logo.png`,
-                cid: 'logo'
+    createMailTransport().sendMail(
+        createMailOptions(
+            email,
+            'Підтвердження ел. адреси для реєстрації',
+            activateUserTemplate(`${process.env.FRONTEND_URL}/activation?token=${createToken(userId)}`)
+        ), async (err) => {
+            if (err) {
+                throw new GraphQLError(`Щось пішло не так.`, {
+                    extensions: { code: 'INVALID_DATA' }
+                });
             }
-        ]
-    };
-
-    transporter.sendMail(mailOption, async (err) => {
-        if (err) {
-            throw new GraphQLError(`Щось пішло не так.`, {
-                extensions: { code: 'INVALID_DATA' }
-            });
-        }
-    });
+        });
 }
 
 function activateUserTemplate(url: string) {

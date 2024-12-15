@@ -1,11 +1,10 @@
 import { GraphQLError } from 'graphql/error';
-import { createTransport } from 'nodemailer';
 import { verify } from 'jsonwebtoken';
 
 import User from '@/lib/data/models/user';
 import ResetToken from '@/lib/data/models/reset-token';
 import { createToken, SECRET_JWT_KEY } from '@/lib/data/auth-utils';
-import { mailButton, mailContainer } from '@/lib/data/base';
+import { createMailOptions, createMailTransport, mailButton, mailContainer } from '@/lib/data/base';
 
 export async function checkResetPasswordToken(userId: string, token: string): Promise<any> {
     const resetToken = await ResetToken.findOne({ userId, token }).catch(() => {
@@ -56,32 +55,20 @@ export async function sendUpdatePasswordLink(email: string): Promise<any> {
     }
 
     try {
-        const transporter = createTransport({
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true,
-            auth: {
-                user: process.env.EMAIL_ID,
-                pass: process.env.EMAIL_PASSWORD
-            }
-        });
-
-        const mailOption = {
-            from: process.env.EMAIL_ID,
-            to: email,
-            subject: 'Посилання на скидання паролю',
-            html: mailTemplate(`${process.env.FRONTEND_URL}/reset-password?id=${user.id}&token=${item.token}`)
-        };
-
-        return transporter.sendMail(mailOption, (err, info) => {
-            if (err) {
-                throw new GraphQLError(`Щось пішло не так.`, {
-                    extensions: { code: 'INVALID_DATA' }
-                });
-            } else {
-                return 'OK';
-            }
-        });
+        return createMailTransport().sendMail(
+            createMailOptions(
+                email,
+                'Посилання на скидання паролю',
+                mailTemplate(`${process.env.FRONTEND_URL}/reset-password?id=${user.id}&token=${item.token}`)
+            ), (err, info) => {
+                if (err) {
+                    throw new GraphQLError(`Щось пішло не так.`, {
+                        extensions: { code: 'INVALID_DATA' }
+                    });
+                } else {
+                    return 'OK';
+                }
+            });
     } catch (e) {
         throw new GraphQLError(`Щось пішло не так.`, {
             extensions: { code: 'INVALID_DATA' }

@@ -832,6 +832,7 @@ export type Query = {
   publishingHouses?: Maybe<PublishingHouseSubList>;
   refreshToken: UserToken;
   sendActivationLinkTo: Scalars['String']['output'];
+  sendEmailWithOrder: Scalars['String']['output'];
   topOfSoldBooks?: Maybe<Array<Book>>;
 };
 
@@ -1006,6 +1007,11 @@ export type QueryRefreshTokenArgs = {
 };
 
 
+export type QuerySendEmailWithOrderArgs = {
+  orderId: Scalars['ID']['input'];
+};
+
+
 export type QueryTopOfSoldBooksArgs = {
   rowsPerPage: Scalars['Int']['input'];
 };
@@ -1020,6 +1026,7 @@ export type UpdateCommentInput = {
 };
 
 export type User = {
+  active?: Maybe<Scalars['Boolean']['output']>;
   basketGroupDiscounts?: Maybe<Array<BasketGroupDiscountItem>>;
   basketItems?: Maybe<Array<BasketItem>>;
   city?: Maybe<Scalars['String']['output']>;
@@ -1615,10 +1622,12 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   publishingHouses?: Resolver<Maybe<ResolversTypes['PublishingHouseSubList']>, ParentType, ContextType, Partial<QueryPublishingHousesArgs>>;
   refreshToken?: Resolver<ResolversTypes['UserToken'], ParentType, ContextType, RequireFields<QueryRefreshTokenArgs, 'refreshToken'>>;
   sendActivationLinkTo?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  sendEmailWithOrder?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<QuerySendEmailWithOrderArgs, 'orderId'>>;
   topOfSoldBooks?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryTopOfSoldBooksArgs, 'rowsPerPage'>>;
 };
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
+  active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   basketGroupDiscounts?: Resolver<Maybe<Array<ResolversTypes['BasketGroupDiscountItem']>>, ParentType, ContextType>;
   basketItems?: Resolver<Maybe<Array<ResolversTypes['BasketItem']>>, ParentType, ContextType>;
   city?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

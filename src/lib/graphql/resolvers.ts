@@ -16,7 +16,9 @@ import {
     BookTypeEntity,
     CommentEntity,
     CoverTypeEntity,
-    DeliveryEntity, GroupDiscountEntity, IGroupDiscountFilter,
+    DeliveryEntity,
+    GroupDiscountEntity,
+    IGroupDiscountFilter,
     IOrderFilter,
     IPageable,
     LanguageEntity,
@@ -45,7 +47,8 @@ import {
     getBooksFromSeries,
     getBooksNameByQuickSearch,
     getBooksWithDiscount,
-    getBooksWithNotApprovedComments, getTopOfSoldBooks,
+    getBooksWithNotApprovedComments,
+    getTopOfSoldBooks,
     removeComment,
     updateBook,
     updateBookNumberInStock
@@ -54,25 +57,32 @@ import { createAuthor, deleteAuthor, getAuthorById, getAuthors, updateAuthor } f
 import { GraphQLError } from 'graphql/error';
 import {
     activateUser,
-    addBookInBasket, addGroupDiscountInBasket, changePassword, changePasswordByToken,
+    addBookInBasket,
+    addGroupDiscountInBasket,
+    changePassword,
+    changePasswordByToken,
     changeRecentlyViewedBooks,
     createUser,
     getNewToken,
     likeBook,
     login,
-    removeBookFromBasket, removeGroupDiscountFromBasket, sendActivationLinkTo,
+    removeBookFromBasket,
+    removeGroupDiscountFromBasket,
+    sendActivationLinkTo,
     unlikeBook,
-    updateBookCountInBasket, updateGroupDiscountCountInBasket,
+    updateBookCountInBasket,
+    updateGroupDiscountCountInBasket,
     updateUser
 } from '@/lib/data/user';
 import { createDelivery, deleteDelivery, getDeliveries, getDeliveryOptions, updateDelivery } from '@/lib/data/delivery';
-import { cancelOrder, createOrder, getBalance, getOrders, updateOrder } from '@/lib/data/order';
+import { cancelOrder, createOrder, getBalance, getOrders, sendEmailWithOrder, updateOrder } from '@/lib/data/order';
 import { isAdmin } from '@/utils/utils';
 import { checkResetPasswordToken, sendUpdatePasswordLink } from '@/lib/data/reset-token';
 import {
     createGroupDiscount,
     deleteGroupDiscount,
-    getGroupDiscounts, getGroupDiscountsByIds,
+    getGroupDiscounts,
+    getGroupDiscountsByIds,
     updateGroupDiscount
 } from '@/lib/data/group-discounts';
 
@@ -185,6 +195,9 @@ const resolvers: Resolvers = {
         },
         orders: async (_root, { pageSettings, filters }) => {
             return getOrders(<IPageable>pageSettings, <IOrderFilter>filters).catch(error => parseError(error));
+        },
+        sendEmailWithOrder: async (_root, { orderId }) => {
+            return sendEmailWithOrder(orderId).catch(error => parseError(error));
         },
         bookComments: async (_root, { id, page, rowsPerPage }) => {
             return getBookComments(id, page, rowsPerPage).catch(error => parseError(error));
