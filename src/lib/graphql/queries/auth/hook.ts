@@ -4,13 +4,16 @@ import { _useUpdateItem } from '@/lib/graphql/base-hooks';
 import {
     activateUserQuery,
     changePasswordByTokenQuery,
-    changePasswordQuery, checkResetPasswordTokenQuery,
+    changePasswordQuery,
+    checkResetPasswordTokenQuery,
     loginQuery,
+    sendActivationLinkToQuery,
     sendUpdatePasswordLinkQuery,
     signInQuery,
     userQuery,
     userUpdateQuery
 } from '@/lib/graphql/queries/auth/queries';
+import { apolloClient } from '@/lib/apollo';
 
 export function useSignIn() {
     const [mutate, { loading, error }] = useMutation(signInQuery);
@@ -26,22 +29,8 @@ export function useSignIn() {
     };
 }
 
-export function useLogin() {
-    const [mutate, { loading, error }] = useMutation(loginQuery);
-
-    return {
-        loginUser: async (email: string, password: string): Promise<{
-            token: string,
-            user: UserEntity,
-            refreshToken: string
-        }> => {
-            const { data: { login } } = await mutate({ variables: { email, password } });
-
-            return login;
-        },
-        loading,
-        error
-    };
+export function loginUser(email: string, password: string) {
+    return apolloClient.query({ query: loginQuery, variables: { email, password }, fetchPolicy: 'network-only' });
 }
 
 export function useSendResetPasswordLink() {
@@ -106,6 +95,10 @@ export function useCurrentUser() {
     return _useUpdateItem<UserEntity>(userUpdateQuery);
 }
 
-export function useActivateUser() {
-    return _useUpdateItem<string>(activateUserQuery);
+export function useActivateUser(token: string) {
+    return useQuery(activateUserQuery, { fetchPolicy: 'network-only', variables: { token } });
+}
+
+export function sendActivationLinkToUser() {
+    return apolloClient.query({ query: sendActivationLinkToQuery, fetchPolicy: 'network-only' });
 }

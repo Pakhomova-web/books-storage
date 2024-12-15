@@ -1,4 +1,4 @@
-import { activateUser } from '@/lib/data/user';
+import { activateUser, sendActivationLinkTo } from '@/lib/data/user';
 
 const typeDefs =  /* GraphQL */ `
     type Language {
@@ -124,6 +124,7 @@ const typeDefs =  /* GraphQL */ `
         phoneNumber: String
         preferredDeliveryId: ID
         instagramUsername: String
+        active: Boolean
     }
 
     type OrderBook {
@@ -201,6 +202,9 @@ const typeDefs =  /* GraphQL */ `
         groupDiscountsByIds(ids: [ID!], pageSettings: PageableInput): GroupDiscountSubList
 
         refreshToken(refreshToken: String!): UserToken!
+        login(email: String!, password: String!): UserToken!
+        activateUser(token: String!): String!
+        sendActivationLinkTo: String!
     }
 
     type Mutation {
@@ -248,7 +252,6 @@ const typeDefs =  /* GraphQL */ `
         deleteAuthor(id: ID!): Author
 
         createUser(input: UserCreateInput!): User
-        login(email: String!, password: String!): UserToken!
         activateUser(email: String!): ID!
         sendUpdatePasswordLink(email: String!): String
         changePasswordByToken(userId: String!, password: String!): String

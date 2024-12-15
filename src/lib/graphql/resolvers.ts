@@ -60,7 +60,7 @@ import {
     getNewToken,
     likeBook,
     login,
-    removeBookFromBasket, removeGroupDiscountFromBasket,
+    removeBookFromBasket, removeGroupDiscountFromBasket, sendActivationLinkTo,
     unlikeBook,
     updateBookCountInBasket, updateGroupDiscountCountInBasket,
     updateUser
@@ -212,6 +212,16 @@ const resolvers: Resolvers = {
         },
         checkResetPasswordToken: async (_root, { userId, token }) => {
             return checkResetPasswordToken(userId, token).catch(error => parseError(error));
+        },
+        login: async (_root, { email, password }) => {
+            return login(email, password).catch(error => parseError(error));
+        },
+        activateUser: async (_root, { token }) => {
+            return activateUser(token).catch(error => parseError(error));
+        },
+        sendActivationLinkTo: async (_root, _, { user }) => {
+            _checkUser(user);
+            return sendActivationLinkTo(user.id, user.email).catch(error => parseError(error));
         }
     },
     Mutation: {
@@ -366,9 +376,6 @@ const resolvers: Resolvers = {
             return updateBookCountInBasket(user.id, id, count).catch(error => parseError(error));
         },
         // auth
-        login: async (_root, { email, password }) => {
-            return login(email, password).catch(error => parseError(error));
-        },
         activateUser: async (_root, { email }) => {
             return activateUser(email).catch(error => parseError(error));
         },

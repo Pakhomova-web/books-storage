@@ -3,10 +3,11 @@ import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
+import { ApolloError } from '@apollo/client';
 
 import { authStyles } from '@/styles/auth';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
-import { useLogin, useSendResetPasswordLink } from '@/lib/graphql/queries/auth/hook';
+import { loginUser, useSendResetPasswordLink } from '@/lib/graphql/queries/auth/hook';
 import { useAuth } from '@/components/auth-context';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomLink from '@/components/custom-link';
@@ -17,7 +18,9 @@ import ErrorNotification from '@/components/error-notification';
 export default function LoginModal({ open }) {
     const router = useRouter();
     const formContext = useForm<{ email: string, password: string }>();
-    const { loading, error, loginUser } = useLogin();
+    const [loading, setLoading] = useState<boolean>(false);
+    const [showNotActivatedMsg, setShowNotActivatedMsg] = useState<boolean>(false);
+    const [error, setError] = useState<ApolloError>();
     const { login, setOpenLoginModal } = useAuth();
     const {
         sendingResetPasswordLink,
@@ -28,9 +31,8 @@ export default function LoginModal({ open }) {
     const [successMsgAfterSendingResetPasswordLink, setSuccessMsgAfterSendingResetPasswordLink] = useState<boolean>(false);
     const [showForgotPasswordModal, setShowForgotPasswordModal] = useState<boolean>(false);
 
-    //NOT_ACTIVATED
-
     useEffect(() => {
+        setError(null);
         passwordValidation(formContext, password, 'password');
     }, [password, formContext]);
 
@@ -39,15 +41,25 @@ export default function LoginModal({ open }) {
     }, [email, formContext]);
 
     async function onSubmit() {
+        setError(null);
         if (!isFormInvalid()) {
             const values = formContext.getValues();
 
+            setLoading(true);
             loginUser(values.email, values.password)
-                .then(({ user, token, refreshToken }) => {
+                .then(({ data: { login: { user, token, refreshToken } } }) => {
                     login(user, token, refreshToken);
-                    setOpenLoginModal(false);
+                    formContext.reset();
+                    setLoading(false);
+                    if (!user.active) {
+                        setShowNotActivatedMsg(true);
+                    } else {
+                        setOpenLoginModal(false);
+                    }
                 })
-                .catch(() => {
+                .catch(err => {
+                    setError(err);
+                    setLoading(false);
                 });
         }
     }
@@ -71,6 +83,11 @@ export default function LoginModal({ open }) {
 
     function isFormInvalid(): boolean {
         return !password || !email || !!Object.keys(formContext.formState.errors).length;
+    }
+
+    function closeModal() {
+        setShowNotActivatedMsg(false);
+        setOpenLoginModal(false);
     }
 
     return (
@@ -146,6 +163,17 @@ export default function LoginModal({ open }) {
                     Створити новий аккаунт
                 </CustomLink>
             </Box>
+
+            <CustomModal open={showNotActivatedMsg} onClose={() => closeModal()}>
+                <Box textAlign="center" display="flex" flexDirection="column" alignItems="center" gap={1}>
+                    <Box sx={{ width: '50px', height: '50px' }}>
+                        <CustomImage imageLink="/sent_email.png"/>
+                    </Box>
+                    На вказану Вами ел. пошту був надісланий лист для підтвердження.
+                    Будь ласка, активуйте свій профіль для закінчення реєстрації.
+                    Надіслати повторний лист можна зі сторінки персональної інформації.
+                </Box>
+            </CustomModal>
         </CustomModal>
     );
 }

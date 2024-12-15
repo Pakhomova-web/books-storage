@@ -28,6 +28,7 @@ const userFragment = gql`
         phoneNumber
         preferredDeliveryId
         instagramUsername
+        active
     }
     ${bookListFragment}
 `;
@@ -42,7 +43,7 @@ export const signInQuery = gql`
 `;
 
 export const loginQuery = gql`
-    mutation Login($email: String!, $password: String!) {
+    query Login($email: String!, $password: String!) {
         login(email: $email, password: $password) {
             token
             refreshToken
@@ -110,7 +111,13 @@ export const refreshTokenQuery = gql`
 `;
 
 export const activateUserQuery = gql`
-    query ActivateUser($email: String!) {
-        activateUser(email: $email)
+    query ActivateUser($token: String!) {
+        activateUser(token: $token)
+    }
+`;
+
+export const sendActivationLinkToQuery = gql`
+    query SendActivationLinkTo {
+        sendActivationLinkTo
     }
 `;

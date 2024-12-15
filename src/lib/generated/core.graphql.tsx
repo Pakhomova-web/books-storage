@@ -360,7 +360,6 @@ export type Mutation = {
   deletePageType?: Maybe<PageType>;
   deletePublishingHouse?: Maybe<PublishingHouse>;
   likeBook?: Maybe<Array<Scalars['ID']['output']>>;
-  login: UserToken;
   removeBookInBasket?: Maybe<Array<BasketItem>>;
   removeComment: Book;
   removeGroupDiscountFromBasket?: Maybe<Array<BasketGroupDiscountItem>>;
@@ -540,12 +539,6 @@ export type MutationDeletePublishingHouseArgs = {
 
 export type MutationLikeBookArgs = {
   id: Scalars['ID']['input'];
-};
-
-
-export type MutationLoginArgs = {
-  email: Scalars['String']['input'];
-  password: Scalars['String']['input'];
 };
 
 
@@ -806,6 +799,7 @@ export type PublishingHouseUpdateInput = {
 };
 
 export type Query = {
+  activateUser: Scalars['String']['output'];
   authorById?: Maybe<Author>;
   authors?: Maybe<AuthorSubList>;
   balance?: Maybe<Scalars['Float']['output']>;
@@ -831,12 +825,19 @@ export type Query = {
   groupDiscountsByIds?: Maybe<GroupDiscountSubList>;
   languageById?: Maybe<Language>;
   languages?: Maybe<LanguageSubList>;
+  login: UserToken;
   orders?: Maybe<OrderSubList>;
   pageTypes?: Maybe<PageTypeSubList>;
   publishingHouseById?: Maybe<PublishingHouse>;
   publishingHouses?: Maybe<PublishingHouseSubList>;
   refreshToken: UserToken;
+  sendActivationLinkTo: Scalars['String']['output'];
   topOfSoldBooks?: Maybe<Array<Book>>;
+};
+
+
+export type QueryActivateUserArgs = {
+  token: Scalars['String']['input'];
 };
 
 
@@ -968,6 +969,12 @@ export type QueryLanguageByIdArgs = {
 export type QueryLanguagesArgs = {
   filters?: InputMaybe<SearchByNameInput>;
   pageSettings?: InputMaybe<PageableInput>;
+};
+
+
+export type QueryLoginArgs = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
 };
 
 
@@ -1482,7 +1489,6 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   deletePageType?: Resolver<Maybe<ResolversTypes['PageType']>, ParentType, ContextType, RequireFields<MutationDeletePageTypeArgs, 'id'>>;
   deletePublishingHouse?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<MutationDeletePublishingHouseArgs, 'id'>>;
   likeBook?: Resolver<Maybe<Array<ResolversTypes['ID']>>, ParentType, ContextType, RequireFields<MutationLikeBookArgs, 'id'>>;
-  login?: Resolver<ResolversTypes['UserToken'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'email' | 'password'>>;
   removeBookInBasket?: Resolver<Maybe<Array<ResolversTypes['BasketItem']>>, ParentType, ContextType, RequireFields<MutationRemoveBookInBasketArgs, 'id'>>;
   removeComment?: Resolver<ResolversTypes['Book'], ParentType, ContextType, RequireFields<MutationRemoveCommentArgs, 'input'>>;
   removeGroupDiscountFromBasket?: Resolver<Maybe<Array<ResolversTypes['BasketGroupDiscountItem']>>, ParentType, ContextType, RequireFields<MutationRemoveGroupDiscountFromBasketArgs, 'id'>>;
@@ -1576,6 +1582,7 @@ export type PublishingHouseSubListResolvers<ContextType = any, ParentType extend
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  activateUser?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<QueryActivateUserArgs, 'token'>>;
   authorById?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<QueryAuthorByIdArgs, 'id'>>;
   authors?: Resolver<Maybe<ResolversTypes['AuthorSubList']>, ParentType, ContextType, Partial<QueryAuthorsArgs>>;
   balance?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
@@ -1601,11 +1608,13 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   groupDiscountsByIds?: Resolver<Maybe<ResolversTypes['GroupDiscountSubList']>, ParentType, ContextType, Partial<QueryGroupDiscountsByIdsArgs>>;
   languageById?: Resolver<Maybe<ResolversTypes['Language']>, ParentType, ContextType, RequireFields<QueryLanguageByIdArgs, 'id'>>;
   languages?: Resolver<Maybe<ResolversTypes['LanguageSubList']>, ParentType, ContextType, Partial<QueryLanguagesArgs>>;
+  login?: Resolver<ResolversTypes['UserToken'], ParentType, ContextType, RequireFields<QueryLoginArgs, 'email' | 'password'>>;
   orders?: Resolver<Maybe<ResolversTypes['OrderSubList']>, ParentType, ContextType, Partial<QueryOrdersArgs>>;
   pageTypes?: Resolver<Maybe<ResolversTypes['PageTypeSubList']>, ParentType, ContextType, Partial<QueryPageTypesArgs>>;
   publishingHouseById?: Resolver<Maybe<ResolversTypes['PublishingHouse']>, ParentType, ContextType, RequireFields<QueryPublishingHouseByIdArgs, 'id'>>;
   publishingHouses?: Resolver<Maybe<ResolversTypes['PublishingHouseSubList']>, ParentType, ContextType, Partial<QueryPublishingHousesArgs>>;
   refreshToken?: Resolver<ResolversTypes['UserToken'], ParentType, ContextType, RequireFields<QueryRefreshTokenArgs, 'refreshToken'>>;
+  sendActivationLinkTo?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   topOfSoldBooks?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryTopOfSoldBooksArgs, 'rowsPerPage'>>;
 };
 

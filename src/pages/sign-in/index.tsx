@@ -66,6 +66,7 @@ export default function SignIn() {
 
     function openLoginModal() {
         setOpenLoginModal(true);
+        router.push('/');
     }
 
     function isFormInvalid(): boolean {

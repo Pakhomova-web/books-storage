@@ -1,14 +1,15 @@
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import { Box, Button, Grid, RadioGroup } from '@mui/material';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { MuiTelInput } from 'mui-tel-input';
+import { ApolloError } from '@apollo/client';
 
 import { useAuth } from '@/components/auth-context';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import { styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
-import { useChangePassword, useCurrentUser } from '@/lib/graphql/queries/auth/hook';
+import { sendActivationLinkToUser, useChangePassword, useCurrentUser } from '@/lib/graphql/queries/auth/hook';
 import ErrorNotification from '@/components/error-notification';
 import ProfileMenu from '@/pages/profile/profile-menu';
 import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
@@ -16,6 +17,9 @@ import { UserEntity } from '@/lib/data/types';
 import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
 import { passwordValidation, validatePhoneNumber } from '@/utils/utils';
+import CustomLink from '@/components/custom-link';
+import CustomImage from '@/components/custom-image';
+import CustomModal from '@/components/modals/custom-modal';
 
 export default function PersonalInfo() {
     const { user, setUser } = useAuth();
@@ -41,6 +45,9 @@ export default function PersonalInfo() {
     const { items: deliveries, loading: loadingDeliveries } = useDeliveries();
     const { phoneNumber } = formContext.watch();
     const { oldPassword, newPassword, confirmPassword } = passwordFormContext.watch();
+    const [loading, setLoading] = useState<boolean>(false);
+    const [sentActivationLinkModal, setSentActivationLinkModal] = useState<boolean>(false);
+    const [error, setError] = useState<ApolloError>();
 
     function onSubmit() {
         update(formContext.getValues())
@@ -64,6 +71,10 @@ export default function PersonalInfo() {
         passwordValidation(passwordFormContext, oldPassword, 'oldPassword');
     }, [oldPassword, passwordFormContext]);
 
+    useEffect(() => {
+        setError(null);
+    }, [formContext, passwordFormContext]);
+
     function isPasswordFormInvalid() {
         return !oldPassword || !newPassword || !confirmPassword ||
             !!passwordFormContext.formState.errors.newPassword ||
@@ -79,13 +90,33 @@ export default function PersonalInfo() {
         return Object.keys(formContext.formState.errors).some(key => !!formContext.formState.errors[key]);
     }
 
+    function onSendActivationLink() {
+        setLoading(true);
+        setError(null);
+        sendActivationLinkToUser().then(() => {
+            setLoading(false);
+            setSentActivationLinkModal(true);
+        }).catch(err => {
+            setLoading(false);
+            setError(err);
+        });
+    }
+
     return (
         <ProfileMenu activeUrl="personal-info">
             <Head>
                 <title>Профіль - Персональні дані</title>
             </Head>
 
-            <Loading show={updating || loadingDeliveries || changingPassword}></Loading>
+            <Loading show={loading || updating || loadingDeliveries || changingPassword}></Loading>
+
+            {!user?.active &&
+              <Box textAlign="center" my={2}>
+                Для оформлення замовлення необхідно підтвердити ел. пошту.&nbsp;
+                <CustomLink onClick={onSendActivationLink}>Надіслати лист для активації</CustomLink>
+              </Box>}
+
+            {error && <ErrorNotification error={error}/>}
 
             <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
                 <Grid container spacing={2}>
@@ -206,6 +237,16 @@ export default function PersonalInfo() {
                     </Grid>
                 </Grid>
             </FormContainer>
+
+            <CustomModal open={sentActivationLinkModal} onClose={() => setSentActivationLinkModal(false)}>
+                <Box textAlign="center" display="flex" flexDirection="column" alignItems="center" gap={1}>
+                    <Box sx={{ width: '50px', height: '50px' }}>
+                        <CustomImage imageLink="/sent_email.png"/>
+                    </Box>
+                    На вказану Вами ел. пошту був надісланий лист для підтвердження.
+                    Будь ласка, активуйте свій профіль для закінчення реєстрації.
+                </Box>
+            </CustomModal>
         </ProfileMenu>
     );
 }

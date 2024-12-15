@@ -42,32 +42,10 @@ export async function createUser(input: UserEntity) {
             role: ADMIN_EMAILS.includes(input.email) ? ROLES.admin : ROLES.user
         });
 
+        await item.save();
+
         try {
-            const transporter = createTransport({
-                host: 'smtp.gmail.com',
-                port: 465,
-                secure: true,
-                auth: {
-                    user: process.env.EMAIL_ID,
-                    pass: process.env.EMAIL_PASSWORD
-                }
-            });
-
-            const mailOption = {
-                from: process.env.EMAIL_ID,
-                to: input.email,
-                subject: 'Підтвердження ел. адреси для реєстрації',
-                html: activateUserTemplate(`${process.env.FRONTEND_URL}/reset-password?email=${input.email}`)
-            };
-
-            transporter.sendMail(mailOption, async (err) => {
-                if (err) {
-                    throw new GraphQLError(`Щось пішло не так.`, {
-                        extensions: { code: 'INVALID_DATA' }
-                    });
-                }
-            });
-            await item.save();
+            sendActivatedLink(item.id, input.email);
 
             return { ...input, id: item.id } as UserEntity;
         } catch (e) {
@@ -76,38 +54,6 @@ export async function createUser(input: UserEntity) {
             });
         }
     }
-}
-
-function activateUserTemplate(url: string) {
-    return `
-<!DOCTYPE html>
-  <html>
-  <body style="text-align: center; font-family: 'Verdana', serif; color: #000;">
-    <div style="max-width: 400px;
-        margin: 10px;
-        background-color: #fafafa;
-        padding: 25px;
-        border-radius: 20px">
-        <p style="text-align: left">
-            Цей лист було надіслано після реєстрації на сайті магазину, для закінчення реєстрації потрібно підтвердити ел. адресу.
-        </p>
-          <a href="${url}" target="_blank">
-            <buttonstyle="background-color: #444394; border: 0; width: 200px; height: 30px; border-radius: 6px; color: #fff">
-              Підтвердити
-            </button>
-          </a>
-          <p style="text-align: left">
-            Якщо ви не можете натиснути кнопку вище, скопіюйте наведену нижче URL-адресу в адресний рядок:
-          </p>
-          <a href="${url}" target="_blank">
-              <p style="margin: 0; text-align: left; font-size: 10px; text-decoration: none;">
-                ${url}
-              </p>
-          </a>
-    </div>
-  </body>
-</html>
-`;
 }
 
 export async function login(email: string, password: string): Promise<{
@@ -126,11 +72,10 @@ export async function login(email: string, password: string): Promise<{
         throw new GraphQLError(`Користувача не знайдено.`, {
             extensions: { code: 'NOT_AUTHORIZED' }
         });
-    } else if (!item.active) {
-        throw new GraphQLError(`Ел. адреса не підтверджена.`, {
-            extensions: { code: 'NOT_ACTIVATED' }
-        });
     } else {
+        if (!item.active) {
+            sendActivatedLink(item.id, email);
+        }
         const identical = await comparePassword(password, item.password);
 
         if (identical) {
@@ -149,15 +94,33 @@ export async function login(email: string, password: string): Promise<{
     }
 }
 
-export async function activateUser(email: string): Promise<string> {
-    if (!email) {
-        throw new GraphQLError(`Не вказана ел. адреса.`, {
+export async function sendActivationLinkTo(userId: string, email: string): Promise<string> {
+    sendActivatedLink(userId, email);
+    return 'OK';
+}
+
+export async function activateUser(token: string): Promise<string> {
+    if (!token) {
+        throw new GraphQLError(`Не вказан токен.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const item = await User.findByIdAndUpdate({ email }, { active: true });
+    const userId = getUserIdFromToken(token);
+    const user = await User.findById(userId);
 
-    return item.id;
+    if (!user.active) {
+        try {
+            verify(token, SECRET_JWT_KEY);
+        } catch (_) {
+            throw new GraphQLError(`Токен застарілий.`, {
+                extensions: { code: 'BAD_DATA' }
+            });
+        }
+        user.active = true;
+        await user.save();
+    }
+
+    return user.id;
 }
 
 export async function getNewToken(refreshToken: string) {
@@ -383,4 +346,63 @@ async function setRecentlyViewedBooks(item) {
 
         item.recentlyViewedBooks = items;
     }
+}
+
+function sendActivatedLink(userId: string, email: string) {
+    const transporter = createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+            user: process.env.EMAIL_ID,
+            pass: process.env.EMAIL_PASSWORD
+        }
+    });
+
+    const mailOption = {
+        from: process.env.EMAIL_ID,
+        to: email,
+        subject: 'Підтвердження ел. адреси для реєстрації',
+        html: activateUserTemplate(`${process.env.FRONTEND_URL}/activation?token=${createToken(userId)}`)
+    };
+
+    transporter.sendMail(mailOption, async (err) => {
+        if (err) {
+            throw new GraphQLError(`Щось пішло не так.`, {
+                extensions: { code: 'INVALID_DATA' }
+            });
+        }
+    });
+}
+
+function activateUserTemplate(url: string) {
+    return `
+<!DOCTYPE html>
+  <html>
+  <body style="text-align: center; font-family: 'Verdana', serif; color: #000;">
+    <div style="max-width: 400px;
+        margin: 10px;
+        background-color: #fafafa;
+        padding: 25px;
+        border-radius: 20px">
+        <p style="text-align: left">
+            Цей лист було надіслано після реєстрації на сайті магазину, для закінчення реєстрації потрібно підтвердити ел. адресу.
+        </p>
+          <a href="${url}" target="_blank">
+            <buttonstyle="background-color: #444394; border: 0; width: 200px; height: 30px; border-radius: 6px; color: #fff">
+              Підтвердити
+            </button>
+          </a>
+          <p style="text-align: left">
+            Якщо ви не можете натиснути кнопку вище, скопіюйте наведену нижче URL-адресу в адресний рядок:
+          </p>
+          <a href="${url}" target="_blank">
+              <p style="margin: 0; text-align: left; font-size: 10px; text-decoration: none;">
+                ${url}
+              </p>
+          </a>
+    </div>
+  </body>
+</html>
+`;
 }
