@@ -1,7 +1,7 @@
 import { GraphQLError } from 'graphql/error';
 
 import { UserEntity } from '@/lib/data/types';
-import { getByEmail } from '@/lib/data/base';
+import { getByEmail, mailButton, mailContainer } from '@/lib/data/base';
 import User from '@/lib/data/models/user';
 import ResetToken from '@/lib/data/models/reset-token';
 import { ROLES } from '@/constants/roles';
@@ -363,7 +363,14 @@ function sendActivatedLink(userId: string, email: string) {
         from: process.env.EMAIL_ID,
         to: email,
         subject: 'Підтвердження ел. адреси для реєстрації',
-        html: activateUserTemplate(`${process.env.FRONTEND_URL}/activation?token=${createToken(userId)}`)
+        html: activateUserTemplate(`${process.env.FRONTEND_URL}/activation?token=${createToken(userId)}`),
+        attachments: [
+            {
+                filename: 'logo.png',
+                path: `${process.cwd()}/public/logo.png`,
+                cid: 'logo'
+            }
+        ]
     };
 
     transporter.sendMail(mailOption, async (err) => {
@@ -376,33 +383,10 @@ function sendActivatedLink(userId: string, email: string) {
 }
 
 function activateUserTemplate(url: string) {
-    return `
-<!DOCTYPE html>
-  <html>
-  <body style="text-align: center; font-family: 'Verdana', serif; color: #000;">
-    <div style="max-width: 400px;
-        margin: 10px;
-        background-color: #fafafa;
-        padding: 25px;
-        border-radius: 20px">
-        <p style="text-align: left">
-            Цей лист було надіслано після реєстрації на сайті магазину, для закінчення реєстрації потрібно підтвердити ел. адресу.
-        </p>
-          <a href="${url}" target="_blank">
-            <buttonstyle="background-color: #444394; border: 0; width: 200px; height: 30px; border-radius: 6px; color: #fff">
-              Підтвердити
-            </button>
-          </a>
-          <p style="text-align: left">
-            Якщо ви не можете натиснути кнопку вище, скопіюйте наведену нижче URL-адресу в адресний рядок:
-          </p>
-          <a href="${url}" target="_blank">
-              <p style="margin: 0; text-align: left; font-size: 10px; text-decoration: none;">
-                ${url}
-              </p>
-          </a>
-    </div>
-  </body>
-</html>
-`;
+    return mailContainer(`
+        <p>Цей лист було надіслано для підтвердження ел. адреси на сайті магазину.</p>
+        <p>Якщо Ви не реєструвалися, то проігноруйте цей лист.</p>
+        
+        ${mailButton(url, 'Підтвердити')}
+`);
 }

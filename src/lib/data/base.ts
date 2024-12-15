@@ -108,3 +108,38 @@ export async function getDataByFiltersAndPageSettings(query, andFilters, pageSet
 
     return { items, totalCount };
 }
+
+export function mailContainer(content: string): string {
+    return `
+<!DOCTYPE html>
+  <html>
+  <body style="text-align: center; font-family: 'Tomes New Roman', serif; color: #000;">
+    <div style="max-width: 90%;
+        margin: 10px auto;
+        background-color: #fafafa;
+        padding: 25px;
+        border-radius: 20px">
+        <img src="cid:logo" alt="logo" style="width: 200px"/>
+        ${content}
+    </div>
+  </body>
+</html>
+`;
+}
+
+export function mailButton(url: string, title): string {
+    return `
+        <a href="${url}" target="_blank">
+            <button style="background-color: #448AFF; border: 0; width: 200px; height: 30px; border-radius: 6px; color: #fff">
+              ${title}
+            </button>
+        </a>
+        
+        <p>Якщо ви не можете натиснути кнопку вище, скопіюйте наведену нижче URL-адресу в адресний рядок:</p>
+        <a href="${url}" target="_blank" style="text-decoration: none">
+            <p style="margin: 0; font-size: 10px">
+                ${url}
+            </p>
+        </a>
+    `;
+}
