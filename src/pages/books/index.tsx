@@ -118,8 +118,6 @@ export default function Books() {
         }
 
         if (router.query.sectionTitle) {
-            console.log(router.query);
-            console.log(data);
             setOption([{ title: router.query.sectionTitle as string }]);
         } else if (!!data?.bookSeries?.length) {
             promise = getBookSeriesById(data?.bookSeries[0])

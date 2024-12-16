@@ -336,7 +336,11 @@ export default function Catalogue() {
 
     function onSectionClick(params: {
         [key: string]: (string | number)[]
-    }, title?: string, url?: string, index?: number) {
+    }, title?: string, url?: string, index?: number, event?) {
+        if (event){
+            event.stopPropagation();
+            event.preventDefault();
+        }
         if (!parentIndex && index >= 0) {
             setParentIndex(index);
             return;
@@ -406,7 +410,7 @@ export default function Catalogue() {
                                                    sx={{ visibility: parentIndex === index ? 'visible' : 'hidden' }}>
                               {item.children.map((item, index) => (
                                   <CustomLink key={index}
-                                              onClick={() => onSectionClick(item.params, item.title, item.url)}>
+                                              onClick={event => onSectionClick(item.params, item.title, item.url, event)}>
                                       <Box pl={2}>
                                           {item.title}
                                       </Box>
@@ -414,7 +418,7 @@ export default function Catalogue() {
                               )}
 
                             <Box mb={1}></Box>
-                            <CustomLink onClick={() => onSectionClick({}, null, '/publishing-houses')}
+                            <CustomLink onClick={event => onSectionClick({}, null, '/publishing-houses', event)}
                                         key={index}>Подивитись усі видавництва</CustomLink>
                           </StyledChildrenContainer>}
                     </StyledGrid>
