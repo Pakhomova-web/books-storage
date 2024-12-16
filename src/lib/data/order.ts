@@ -225,7 +225,14 @@ function orderTemplate(order: OrderEntity) {
         return `
             <tr>
                 <td><img src="cid:${book.id}" style="width: 60px; height: 60px; object-fit: contain"/></td>
-                <td>${book.name} (${book.languages.map(l => l.name).join(', ')})</td>
+                <td>
+                    <div>
+                        <a href="${process.env.FRONTEND_URL}/books/details?id=${book.id}">
+                            ${book.name}
+                        </a>
+                    </div>
+                    <div>(${book.languages.map(l => l.name).join(', ')})</div>
+                </td>
                 <td>${count}</td>
                 <td>${renderPrice(price * count, discount)}</td>
             </tr>
@@ -271,24 +278,24 @@ function orderTemplate(order: OrderEntity) {
             <tr>
                 <th>Зображення</th>
                 <th>Назва (мова)</th>
-                <th>Кількість</th>
+                <th>#</th>
                 <th>Ціна</th>
             </tr>
             ${bookRows}
             ${rowDivider(4)}
             <tr>
-                <th colspan="3" style="text-align: right">Кінцева сума без знижки:</th>
-                <td style="text-align: center">${renderPrice(finalSum)}</td>
+                <th colspan="2" style="text-align: right">Кінцева сума без знижки:</th>
+                <td colspan="2" style="text-align: center">${renderPrice(finalSum)}</td>
             </tr>
             ${rowDivider(4)}
             <tr>
-                <th colspan="3" style="text-align: right">Знижка:</th>
-                <td style="text-align: center">${renderPrice(finalSum - finalSumWithDiscounts)}</td>
+                <th colspan="2" style="text-align: right">Знижка:</th>
+                <td colspan="2" style="text-align: center">${renderPrice(finalSum - finalSumWithDiscounts)}</td>
             </tr>
             ${rowDivider(4)}
             <tr>
-                <th colspan="3" style="text-align: right">Кінцева сума:</th>
-                <td style="text-align: center; font-size: 16px"><b>${renderPrice(finalSumWithDiscounts)}</b></td>
+                <th colspan="2" style="text-align: right">Кінцева сума:</th>
+                <td colspan="2" style="text-align: center; font-size: 16px"><b>${renderPrice(finalSumWithDiscounts)}</b></td>
             </tr>
         </table>
     `);
