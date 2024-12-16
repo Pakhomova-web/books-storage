@@ -6,27 +6,32 @@ import { useRouter } from 'next/router';
 import SocialMediaBox from '@/components/social-media-box';
 import { MAIN_NAME } from '@/constants/main-name';
 import DeliveriesBox from '@/components/deliveries-box';
+import { styleVariables } from '@/constants/styles-variables';
 
 export default function AboutUsPage() {
     const router = useRouter();
 
     return (
-        <Box>
+        <Box textAlign="center">
             <Head>
                 <title>Про {MAIN_NAME}</title>
             </Head>
-            <Box display="flex" width="100%" my={1}>
+
+            <Box display="flex" width="100%" my={3} justifyContent="center" sx={styleVariables.titleFontSize}>
                 Ласкаво просимо до сімейного інтернет магазину дитячої літератури.
             </Box>
 
             <b>{MAIN_NAME}</b> – це магазин дитячої літератури, заснований у 2020 році у м. Харків.
 
-            <Box display="flex" alignItems="center" gap={1} my={1} flexWrap="wrap" justifyContent="center">
+            <Box display="flex" alignItems="center" flexDirection="column" gap={1} my={1}
+                 justifyContent="center">
                 У нас зібрані найкращі книги від різних видавництв.
 
-                <Button variant="outlined" onClick={() => router.push('/publishing-houses')}>
-                    Подивитися усі видавництва
-                </Button>
+                <Box mb={3}>
+                    <Button variant="outlined" onClick={() => router.push('/publishing-houses')}>
+                        Подивитися усі видавництва
+                    </Button>
+                </Box>
             </Box>
 
             <Box display="flex" alignItems="center" my={1}>
@@ -36,14 +41,14 @@ export default function AboutUsPage() {
                 мислення і т.д.
             </Box>
 
-            <Box display="flex" alignItems="center" my={1}>
+            <Box display="flex" alignItems="center" my={1} justifyContent="center">
                 Ми додаємо відеоогляди та намагаємося проводити регулярно Акції, тому слідкуйте за нашими новинами на
                 сайті та на сторінках у соціальних мережах.
             </Box>
 
             <SocialMediaBox showAboutUsLink={false}/>
 
-            <Box display="flex" alignItems="center" my={1}>
+            <Box display="flex" alignItems="center" my={2} justifyContent="center">
                 Для вашої зручності ми пропонуємо різні варіанти способів оплати
                 (повна оплата або післяплата з передплатою у 100 грн) та доставки у ваш регіон.
             </Box>
@@ -52,7 +57,7 @@ export default function AboutUsPage() {
 
             <Box display="flex" alignItems="center" my={3} justifyContent="center" textAlign="center"
                  fontWeight="bold">
-                З найкращими побажаннями - команда {MAIN_NAME}
+                З найкращими побажаннями - команда {MAIN_NAME}!
             </Box>
         </Box>
     );

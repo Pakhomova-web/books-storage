@@ -66,7 +66,7 @@ export type Book = {
   illustrators?: Maybe<Array<Maybe<Author>>>;
   imageIds?: Maybe<Array<Maybe<Scalars['String']['output']>>>;
   isbn?: Maybe<Scalars['String']['output']>;
-  languageBooks?: Maybe<Array<Book>>;
+  languageBooks?: Maybe<Array<Maybe<Book>>>;
   languages: Array<Language>;
   name: Scalars['String']['output'];
   numberInStock?: Maybe<Scalars['Int']['output']>;
@@ -1344,7 +1344,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
   illustrators?: Resolver<Maybe<Array<Maybe<ResolversTypes['Author']>>>, ParentType, ContextType>;
   imageIds?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>;
   isbn?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  languageBooks?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType>;
+  languageBooks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType>;
   languages?: Resolver<Array<ResolversTypes['Language']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   numberInStock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
