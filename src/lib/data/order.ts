@@ -240,15 +240,13 @@ function orderTemplate(order: OrderEntity) {
     }).join('');
 
     return mailContainer(`
+        ${order.isSent && order.trackingNumber ?
+        `<p style="font-size: 16px">Ваше замовлення відправлене! ТТН: ${order.trackingNumber}</p>${mailDivider()}` : ''} 
+        
         <p style="font-size: 16px"><b>Замовлення №${order.orderNumber}</b></p>
         ${mailDivider(true)}
-        ${order.isSent && order.trackingNumber ? `<p>Ваше замовлення відправлене!</p>` : ''}
         
         <table style="width: 100%">
-            ${order.isSent && order.trackingNumber ? `<tr>
-                <th style="text-align: left">ТТН</th>
-                <td style="text-align: left">${order.trackingNumber}</td>
-            </tr>${rowDivider(4)}` : ''}
             <tr>
                 <th style="text-align: left">ПІБ</th>
                 <td style="text-align: left">${order.lastName} ${order.firstName}</td>
