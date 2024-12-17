@@ -63,8 +63,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
         lastName,
         region,
         city,
-        postcode,
-        novaPostOffice,
+        warehouse,
         trackingNumber,
         isConfirmed,
         isSent,
@@ -121,25 +120,25 @@ export default function OrderModal({ open, order, onClose }: IProps) {
             formContext.clearErrors('lastName');
         }
 
-        if (isNovaPostSelected(delivery.id) && !novaPostOffice) {
-            formContext.setError('novaPostOffice', { message: '№ відділення/поштомата обов\'язкове' });
-            formContext.clearErrors('postcode');
+        if (isNovaPostSelected(delivery.id) && !warehouse) {
+            formContext.setError('warehouse', { message: '№ відділення/поштомата обов\'язкове' });
+            formContext.clearErrors('warehouse');
             setSubmitDisabled(true);
             invalid = true;
-        } else if (isUkrPoshtaSelected(delivery.id) && !postcode) {
-            formContext.setError('postcode', { message: 'Індекс обов\'язковий' });
-            formContext.clearErrors('novaPostOffice');
+        } else if (isUkrPoshtaSelected(delivery.id) && !warehouse) {
+            formContext.setError('warehouse', { message: 'Індекс обов\'язковий' });
+            formContext.clearErrors('warehouse');
             setSubmitDisabled(true);
             invalid = true;
         } else {
-            formContext.clearErrors('novaPostOffice');
-            formContext.clearErrors('postcode');
+            formContext.clearErrors('warehouse');
+            formContext.clearErrors('warehouse');
         }
 
         if (!invalid) {
             setSubmitDisabled(false);
         }
-    }, [formContext, delivery, phoneNumber, firstName, lastName, region, city, postcode, novaPostOffice]);
+    }, [formContext, delivery, phoneNumber, firstName, lastName, region, city, warehouse]);
 
     function onChangeBookCount(bookId: string, count: number) {
         setOrderItem(new OrderEntity({
@@ -195,8 +194,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
             district: values.district,
             city: values.city,
             phoneNumber: values.phoneNumber,
-            postcode: values.postcode ? +values.postcode : null,
-            novaPostOffice: values.novaPostOffice ? +values.novaPostOffice : null,
+            warehouse: values.warehouse ? +values.warehouse : null,
             firstName: values.firstName,
             lastName: values.lastName,
             deliveryId: delivery.id,
@@ -377,25 +375,13 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                                          label="Місто" fullWidth/>
                     </Grid>
 
-                    {isUkrPoshtaSelected(delivery.id) &&
-                      <Grid item xs={12} md={6} lg={3}>
-                        <CustomTextField name="postcode"
+                    <Grid item xs={12} md={6} lg={3}>
+                        <CustomTextField name="warehouse"
                                          type="number"
                                          disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
-                                         label="Індекс"
-                                         required={isUkrPoshtaSelected(orderItem.delivery.id)}
-                                         fullWidth/>
-                      </Grid>}
-
-                    {isNovaPostSelected(delivery.id) &&
-                      <Grid item xs={12} md={6} lg={3}>
-                        <CustomTextField name="novaPostOffice"
-                                         type="number"
-                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
-                                         required={isNovaPostSelected(orderItem.delivery.id)}
                                          label="№ відділення / поштомату"
                                          fullWidth/>
-                      </Grid>}
+                    </Grid>
                 </Grid>
             </FormContainer>
 

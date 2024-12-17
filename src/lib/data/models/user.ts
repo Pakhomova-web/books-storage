@@ -27,13 +27,57 @@ const userSchema = new Schema<UserEntity, Model<UserEntity>>({
         groupDiscountId: { type: String, required: true },
         count: { type: Number, required: true }
     }],
+    novaPoshtaWarehouseAddress: {
+        warehouse: {
+            type: Number,
+            required: true
+        },
+        region: {
+            type: String,
+            required: true
+        },
+        district: String,
+        city: {
+            type: String,
+            required: true
+        }
+    },
+    novaPoshtaCourierAddress: {
+        region: {
+            type: String,
+            required: true
+        },
+        district: String,
+        city: {
+            type: String,
+            required: true
+        },
+        street: {
+            type: String,
+            required: true
+        },
+        house: {
+            type: String,
+            required: true
+        },
+        flat: String
+    },
+    ukrPoshtaWarehouseAddress: {
+        region: {
+            type: String,
+            required: true
+        },
+        district: String,
+        city: {
+            type: String,
+            required: true
+        },
+        warehouse: {
+            type: Number,
+            required: true
+        }
+    },
     phoneNumber: String,
-    postcode: Number,
-    novaPostOffice: Number,
-    region: String,
-    district: String,
-    city: String,
-    preferredDeliveryId: String,
     instagramUsername: String,
     active: {
         type: Boolean,

@@ -85,6 +85,7 @@ import {
     getGroupDiscountsByIds,
     updateGroupDiscount
 } from '@/lib/data/group-discounts';
+import { getSettlements, getStreets, getWarehouses } from '@/lib/data/nova-poshta';
 
 function parseError<T>(error): T {
     switch (error.extensions?.code) {
@@ -235,6 +236,15 @@ const resolvers: Resolvers = {
         sendActivationLinkTo: async (_root, _, { user }) => {
             _checkUser(user);
             return sendActivationLinkTo(user.id, user.email).catch(error => parseError(error));
+        },
+        settlements: async (_root, { searchValue }) => {
+            return getSettlements(searchValue).catch(error => parseError(error));
+        },
+        warehouses: async (_root, { settlementRef, searchValue }) => {
+            return getWarehouses(settlementRef, searchValue).catch(error => parseError(error));
+        },
+        streets: async (_root, { ref, searchValue }) => {
+            return getStreets(ref, searchValue).catch(error => parseError(error));
         }
     },
     Mutation: {
@@ -352,7 +362,7 @@ const resolvers: Resolvers = {
         addBookComment: async (_root, { id, input }: { id: string, input: CommentEntity }) => {
             return addComment(id, input).catch(error => parseError(error));
         },
-        createUser: async (_root, { input }: { input: UserEntity }) => {
+        createUser: async (_root, { input }) => {
             return createUser(input).catch(error => parseError(error));
         },
         likeBook: async (_root, { id }, { user }) => {

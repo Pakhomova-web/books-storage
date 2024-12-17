@@ -273,12 +273,27 @@ export class UserEntity {
     basketGroupDiscounts?: { groupDiscountId: string, count: number }[];
     active?: boolean;
 
-    preferredDeliveryId?: string;
-    region?: string;
-    city?: string;
-    district?: string;
-    postcode?: number;
-    novaPostOffice?: number;
+    novaPoshtaWarehouseAddress?: {
+        warehouse?: number,
+        region?: string,
+        district?: string,
+        city?: string
+    };
+    novaPoshtaCourierAddress?: {
+        region?: string,
+        district?: string,
+        city?: string
+        street?: string,
+        house?: string,
+        flat?: string,
+        postcode?: number
+    };
+    ukrPoshtaWarehouseAddress?: {
+        region?: string,
+        district?: string,
+        city?: string
+        postcode?: number
+    };
     phoneNumber?: string;
     instagramUsername?: string;
 
@@ -296,13 +311,10 @@ export class UserEntity {
             this.recentlyViewedBooks = data.recentlyViewedBooks ? data.recentlyViewedBooks : [];
             this.basketItems = data.basketItems ? data.basketItems : [];
             this.basketGroupDiscounts = data.basketGroupDiscounts ? data.basketGroupDiscounts : [];
-            this.region = data.region;
-            this.district = data.district;
-            this.city = data.city;
-            this.postcode = data.postcode;
-            this.novaPostOffice = data.novaPostOffice;
+            this.novaPoshtaWarehouseAddress = data.novaPoshtaWarehouseAddress;
+            this.novaPoshtaCourierAddress = data.novaPoshtaCourierAddress;
+            this.ukrPoshtaWarehouseAddress = data.ukrPoshtaWarehouseAddress;
             this.phoneNumber = data.phoneNumber;
-            this.preferredDeliveryId = data.preferredDeliveryId;
             this.instagramUsername = data.instagramUsername;
         }
     }
@@ -357,8 +369,7 @@ export class OrderEntity {
     region: string;
     district?: string;
     city: string;
-    postcode?: number;
-    novaPostOffice?: number;
+    warehouse?: number;
     isCanceled?: boolean;
     isConfirmed?: boolean;
     isPaid?: boolean;
@@ -391,8 +402,7 @@ export class OrderEntity {
             this.region = data.region || null;
             this.district = data.district || null;
             this.city = data.city || null;
-            this.postcode = data.postcode || null;
-            this.novaPostOffice = data.novaPostOffice || null;
+            this.warehouse = data.warehouse || null;
             this.isCanceled = !!data.isCanceled;
             this.isConfirmed = !!data.isConfirmed;
             this.isPaid = !!data.isPaid;
@@ -530,4 +540,21 @@ export interface ResetTokenEntity {
     userId: string,
     expiresAt: string,
     createdAt: string
+}
+
+export interface NovaPoshtaSettlementEntity {
+    title: string;
+    ref: string;
+    city: string;
+    region: string;
+    district: string;
+}
+
+export interface NovaPoshtaWarehouseEntity {
+    number: number;
+    description: string;
+}
+
+export interface NovaPoshtaStreetEntity {
+    description: string;
 }

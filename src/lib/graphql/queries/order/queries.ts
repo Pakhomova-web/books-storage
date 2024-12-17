@@ -24,8 +24,10 @@ const orderFragment = gql`
         region
         district
         city
-        postcode
-        novaPostOffice
+        street
+        house
+        flat
+        warehouse
         delivery {
             id
             name

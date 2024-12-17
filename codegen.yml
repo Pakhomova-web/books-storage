@@ -24,3 +24,6 @@ generates:
         Delivery: '../data/types#DeliveryEntity'
         Order: '../data/types#OrderEntity'
         GroupDiscount: '../data/types#GroupDiscountEntity'
+        NovaPoshtaSettlement: '../data/types#NovaPoshtaSettlementEntity'
+        NovaPoshtaStreet: '../data/types#NovaPoshtaStreetEntity'
+        NovaPoshtaWarehouse: '../data/types#NovaPoshtaWarehouseEntity'

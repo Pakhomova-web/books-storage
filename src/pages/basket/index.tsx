@@ -13,7 +13,8 @@ import {
     isUkrPoshtaSelected,
     onCopyOrderClick,
     renderOrderNumber,
-    renderPrice, validatePhoneNumber
+    renderPrice,
+    validatePhoneNumber
 } from '@/utils/utils';
 import { useRouter } from 'next/router';
 import { FormContainer, useForm } from 'react-hook-form-mui';
@@ -37,10 +38,27 @@ const TitleBoxStyled = styled(Box)(({ theme }) => ({
     textAlign: 'center'
 }));
 
+interface IForm {
+    userId: string,
+    email: string,
+    lastName: string,
+    firstName: string,
+    instagramUsername: string,
+    phoneNumber: string,
+    deliveryId: string,
+    comment: string,
+    region: string,
+    city: string,
+    street: string,
+    house: string,
+    flat: string,
+    warehouse: number
+}
+
 export default function Basket() {
     const router = useRouter();
     const { user, setUser, setGroupDiscountInBasket } = useAuth();
-    const formContext = useForm({
+    const formContext = useForm<IForm>({
         defaultValues: {
             userId: user?.id,
             email: user?.email,
@@ -48,12 +66,11 @@ export default function Basket() {
             firstName: isAdmin(user) ? '' : user?.firstName,
             instagramUsername: isAdmin(user) ? '' : user?.instagramUsername,
             phoneNumber: isAdmin(user) ? '' : user?.phoneNumber,
-            region: isAdmin(user) ? '' : user?.region,
-            city: isAdmin(user) ? '' : user?.city,
-            district: isAdmin(user) ? '' : user?.district,
-            postcode: isAdmin(user) ? '' : user?.postcode,
-            novaPostOffice: isAdmin(user) ? '' : user?.novaPostOffice,
-            deliveryId: user?.preferredDeliveryId,
+            // region: isAdmin(user) ? '' : user?.region,
+            // city: isAdmin(user) ? '' : user?.city,
+            // district: isAdmin(user) ? '' : user?.district,
+            // warehouse: isAdmin(user) ? '' : user?.warehouse,
+            // novaPostOffice: isAdmin(user) ? '' : user?.novaPostOffice,
             comment: null
         }
     });
@@ -64,8 +81,7 @@ export default function Basket() {
         lastName,
         region,
         city,
-        postcode,
-        novaPostOffice
+        warehouse
     } = formContext.watch();
     const { loading, error, items } = useBooksByIds(user?.basketItems?.map(({ bookId }) => bookId));
     const {
@@ -135,26 +151,26 @@ export default function Basket() {
 
         if (!deliveryId) {
             invalid = true;
-        } else if (isNovaPostSelected(deliveryId) && !novaPostOffice) {
-            if (formContext.formState.touchedFields.novaPostOffice) {
-                formContext.setError('novaPostOffice', { message: '№ відділення/поштомата обов\'язкове' });
+        } else if (isNovaPostSelected(deliveryId) && !warehouse) {
+            if (formContext.formState.touchedFields.warehouse) {
+                formContext.setError('warehouse', { message: '№ відділення/поштомата обов\'язкове' });
             }
-            formContext.clearErrors('postcode');
-            formContext.setValue('postcode', null);
+            formContext.clearErrors('warehouse');
+            formContext.setValue('warehouse', null);
             invalid = true;
-        } else if (isUkrPoshtaSelected(deliveryId) && !postcode) {
-            if (formContext.formState.touchedFields.postcode) {
-                formContext.setError('postcode', { message: 'Індекс обов\'язковий' });
+        } else if (isUkrPoshtaSelected(deliveryId) && !warehouse) {
+            if (formContext.formState.touchedFields.warehouse) {
+                formContext.setError('warehouse', { message: 'Індекс обов\'язковий' });
             }
-            formContext.clearErrors('novaPostOffice');
-            formContext.setValue('novaPostOffice', null);
+            formContext.clearErrors('warehouse');
+            formContext.setValue('warehouse', null);
             invalid = true;
         } else {
-            formContext.clearErrors('postcode');
+            formContext.clearErrors('warehouse');
         }
 
         setSubmitDisabled(invalid);
-    }, [deliveryId, phoneNumber, firstName, lastName, region, city, postcode, novaPostOffice, formContext]);
+    }, [deliveryId, phoneNumber, firstName, lastName, region, city, warehouse, formContext]);
 
     useEffect(() => {
         if (!!items?.length || !!groups?.length) {
@@ -230,12 +246,11 @@ export default function Basket() {
 
     function onSubmit() {
         if (!submitDisabled) {
-            const { novaPostOffice, postcode, ...values } = formContext.getValues();
+            const { warehouse, ...values } = formContext.getValues();
 
             create({
                 ...values,
-                postcode: postcode || null,
-                novaPostOffice: novaPostOffice || null,
+                warehouse: warehouse || null,
                 books: [
                     ...items.map(book => ({
                         bookId: book.id,
@@ -409,8 +424,7 @@ export default function Basket() {
                   <Grid item xs={12}>
                     <Box sx={styleVariables.sectionTitle}>Спосіб доставки</Box>
 
-                    <RadioGroup defaultValue={user?.preferredDeliveryId}
-                                onChange={(_, value) => formContext.setValue('deliveryId', value)}>
+                    <RadioGroup onChange={(_, value) => formContext.setValue('deliveryId', value)}>
                       <Grid container spacing={2}>
                           {deliveries.map((delivery, index) => (
                               <Grid key={index} item xs={12} sm={6} pl={2}>
@@ -440,18 +454,9 @@ export default function Basket() {
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
-                    <CustomTextField name="novaPostOffice"
-                                     required={isNovaPostSelected(deliveryId)}
+                    <CustomTextField name="warehouse"
                                      label="№ відділення/поштомату"
                                      type="number"
-                                     fullWidth/>
-                  </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                    <CustomTextField name="postcode"
-                                     required={isUkrPoshtaSelected(deliveryId)}
-                                     type="number"
-                                     label="Індекс"
                                      fullWidth/>
                   </Grid>
 

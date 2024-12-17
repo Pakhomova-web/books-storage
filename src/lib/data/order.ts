@@ -262,7 +262,7 @@ function orderTemplate(order: OrderEntity) {
             <tr>
                 <th style="text-align: left">Адреса доставки</th>
                 <td style="text-align: left">
-                    ${order.region} область${order.district ? `, ${order.district} район` : ''}, ${order.city}${isNovaPostSelected(order.delivery.id) ? `, ${order.novaPostOffice}` : ''}${isUkrPoshtaSelected(order.delivery.id) ? `, ${order.postcode}` : ''}
+                    ${order.region} область${order.district ? `, ${order.district} район` : ''}, ${order.city}${isNovaPostSelected(order.delivery.id) ? `, ${order.warehouse}` : ''}${isUkrPoshtaSelected(order.delivery.id) ? `, ${order.warehouse}` : ''}
                 </td>
             </tr>
             ${!!order.comment ? `<tr>

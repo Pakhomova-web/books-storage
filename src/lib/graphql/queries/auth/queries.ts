@@ -21,12 +21,27 @@ const userFragment = gql`
         recentlyViewedBooks {
             ...BookList
         }
-        postcode
-        city
-        region
-        novaPostOffice
+        novaPoshtaCourierAddress {
+            city
+            region
+            district
+            street
+            house
+            flat
+        }
+        novaPoshtaWarehouseAddress {
+            city
+            region
+            district
+            warehouse
+        }
+        ukrPoshtaWarehouseAddress {
+            city
+            region
+            district
+            postcode
+        }
         phoneNumber
-        preferredDeliveryId
         instagramUsername
         active
     }

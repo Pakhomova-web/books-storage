@@ -1,5 +1,3 @@
-import { activateUser, sendActivationLinkTo } from '@/lib/data/user';
-
 const typeDefs =  /* GraphQL */ `
     type Language {
         id: ID
@@ -74,7 +72,7 @@ const typeDefs =  /* GraphQL */ `
         discount: Float
         languageBooks: [Book]
     }
-    
+
     type BookLanguageItem {
         id: ID!
         languages: [String!]!
@@ -105,6 +103,30 @@ const typeDefs =  /* GraphQL */ `
         count: Int!
     }
 
+    type NovaPoshtaCourierAddress {
+        city: String
+        region: String
+        district: String
+        street: String
+        house: String
+        flat: String
+        postcode: Int
+    }
+
+    type NovaPoshtaWarehouseAddress {
+        city: String
+        region: String
+        district: String
+        warehouse: Int
+    }
+
+    type UkrPoshtaWarehouseAddress {
+        city: String
+        region: String
+        district: String
+        postcode: Int
+    }
+
     type User {
         id: ID!
         email: String!
@@ -117,14 +139,12 @@ const typeDefs =  /* GraphQL */ `
         likedBookIds: [String]
         recentlyViewedBookIds: [String]
         recentlyViewedBooks: [Book!]
-        postcode: Int
-        city: String
-        region: String
-        novaPostOffice: Int
         phoneNumber: String
-        preferredDeliveryId: ID
         instagramUsername: String
         active: Boolean
+        novaPoshtaCourierAddress: NovaPoshtaCourierAddress
+        novaPoshtaWarehouseAddress: NovaPoshtaWarehouseAddress
+        ukrPoshtaWarehouseAddress: UkrPoshtaWarehouseAddress
     }
 
     type OrderBook {
@@ -155,8 +175,10 @@ const typeDefs =  /* GraphQL */ `
         region: String!
         district: String
         city: String!
-        postcode: Int
-        novaPostOffice: Int
+        street: String
+        house: String
+        flat: String
+        warehouse: Int
         comment: String
         adminComment: String
         date: String
@@ -167,6 +189,23 @@ const typeDefs =  /* GraphQL */ `
         label: String!
         description: String
         fullDescription: String
+    }
+
+    type NovaPoshtaSettlement {
+        title: String!
+        ref: String!
+        city: String!
+        region: String!
+        district: String!
+    }
+
+    type NovaPoshtaWarehouse {
+        number : Int!
+        description : String!
+    }
+
+    type NovaPoshtaStreet {
+        description : String!
     }
 
     type Query {
@@ -206,6 +245,10 @@ const typeDefs =  /* GraphQL */ `
         login(email: String!, password: String!): UserToken!
         activateUser(token: String!): String!
         sendActivationLinkTo: String!
+
+        settlements(searchValue: String!): [NovaPoshtaSettlement!]!
+        warehouses(settlementRef: String!, searchValue: String!): [NovaPoshtaWarehouse!]!
+        streets(ref: String!, searchValue: String!): [NovaPoshtaStreet!]!
     }
 
     type Mutation {
@@ -447,7 +490,7 @@ const typeDefs =  /* GraphQL */ `
         items: [Book!]!
         totalCount: Int!
     }
-    
+
     #    group discount
 
     input GroupDiscountSearchInput {
@@ -549,22 +592,39 @@ const typeDefs =  /* GraphQL */ `
         instagramUsername: String
     }
 
+    input NovaPoshtaWarehouseAddressInput {
+        city: String!
+        region: String!
+        district: String
+        warehouse: Int
+    }
+
+    input NovaPoshtaCourierAddressInput {
+        city: String!
+        region: String!
+        district: String
+        street: String!
+        house: String!
+        flat: String
+        postcode: Int
+    }
+
+    input UkrPoshtaWarehouseAddressInput {
+        city: String!
+        region: String!
+        district: String
+        postcode: Int
+    }
+
     input UserUpdateInput {
-        id: ID!,
-        firstName: String,
-        lastName: String,
-        postcode: Int,
-        novaPostOffice: Int,
-        isPaid: Boolean
-        isPartlyPaid: Boolean
-        isConfirmed: Boolean
-        isSent: Boolean
-        isDone: Boolean
-        region: String,
-        city: String,
+        id: ID!
+        firstName: String
+        lastName: String
         phoneNumber: String
-        preferredDeliveryId: ID
         instagramUsername: String
+        novaPoshtaWarehouseAddress: NovaPoshtaWarehouseAddressInput
+        novaPoshtaCourierAddress: NovaPoshtaCourierAddressInput
+        ukrPoshtaWarehouseAddress: UkrPoshtaWarehouseAddressInput
     }
 
     #    order
@@ -626,7 +686,7 @@ const typeDefs =  /* GraphQL */ `
         items: [Order!]!
         totalCount: Int!
     }
-    
+
     input OrderSearchInput {
         quickSearch: String
         user: ID
@@ -636,9 +696,9 @@ const typeDefs =  /* GraphQL */ `
         phoneNumber: String
         orderNumber: Int
     }
-    
+
     #   delivery
-    
+
     input DeliveryUpdateInput {
         id: ID!
         name: String!

@@ -46,8 +46,10 @@ const orderSchema = new Schema<OrderEntity, Model<OrderEntity>>({
         type: String,
         required: true
     },
-    postcode: Number,
-    novaPostOffice: Number,
+    street: String,
+    house: String,
+    flat: String,
+    warehouse: Number,
     books: [
         {
             book: {

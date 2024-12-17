@@ -1,5 +1,5 @@
 import { FormContainer, useForm } from 'react-hook-form-mui';
-import { Box, Button, Grid, RadioGroup } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { MuiTelInput } from 'mui-tel-input';
@@ -7,19 +7,20 @@ import { ApolloError } from '@apollo/client';
 
 import { useAuth } from '@/components/auth-context';
 import CustomTextField from '@/components/form-fields/custom-text-field';
-import { styleVariables } from '@/constants/styles-variables';
+import { primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import { sendActivationLinkToUser, useChangePassword, useCurrentUser } from '@/lib/graphql/queries/auth/hook';
 import ErrorNotification from '@/components/error-notification';
 import ProfileMenu from '@/pages/profile/profile-menu';
-import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
-import { UserEntity } from '@/lib/data/types';
-import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
+import { NovaPoshtaSettlementEntity, NovaPoshtaStreetEntity, NovaPoshtaWarehouseEntity, UserEntity } from '@/lib/data/types';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
 import { passwordValidation, validatePhoneNumber } from '@/utils/utils';
 import CustomLink from '@/components/custom-link';
 import CustomImage from '@/components/custom-image';
 import CustomModal from '@/components/modals/custom-modal';
+import WarehouseAutocompleteField from '@/components/form-fields/warehouses-autocomplete-field';
+import StreetAutocompleteField from '@/components/form-fields/street-autocomplete-field';
+import SettlementAutocompleteField from '@/components/form-fields/settlement-autocomplete-field';
 
 export default function PersonalInfo() {
     const { user, setUser } = useAuth();
@@ -31,26 +32,76 @@ export default function PersonalInfo() {
             firstName: user?.firstName,
             lastName: user?.lastName,
             phoneNumber: user?.phoneNumber,
-            region: user?.region,
-            district: user?.district,
-            city: user?.city,
-            novaPostOffice: user?.novaPostOffice,
-            postcode: user?.postcode,
-            preferredDeliveryId: user?.preferredDeliveryId,
-            instagramUsername: user?.instagramUsername
+            instagramUsername: user?.instagramUsername,
+            novaPoshtaWarehouseCityRef: '',
+            novaPoshtaWarehouseCity: user?.novaPoshtaWarehouseAddress?.city,
+            novaPoshtaWarehouseRegion: user?.novaPoshtaWarehouseAddress?.region,
+            novaPoshtaWarehouseDistrict: user?.novaPoshtaWarehouseAddress?.district,
+            novaPoshtaWarehouse: user?.novaPoshtaWarehouseAddress?.warehouse,
+            novaPoshtaCourierCity: user?.novaPoshtaCourierAddress?.city,
+            novaPoshtaCourierRegion: user?.novaPoshtaCourierAddress?.region,
+            novaPoshtaCourierDistrict: user?.novaPoshtaCourierAddress?.district,
+            novaPoshtaCourierStreet: user?.novaPoshtaCourierAddress?.street,
+            novaPoshtaCourierHouse: user?.novaPoshtaCourierAddress?.house,
+            novaPoshtaCourierFlat: user?.novaPoshtaCourierAddress?.flat,
+            novaPoshtaCourierCityRef: ''
         }
     });
     const { updating, update, updatingError } = useCurrentUser();
     const { changingPassword, changePassword, changingPasswordError } = useChangePassword();
-    const { items: deliveries, loading: loadingDeliveries } = useDeliveries();
-    const { phoneNumber } = formContext.watch();
+    const {
+        phoneNumber,
+        novaPoshtaWarehouseCityRef,
+        novaPoshtaWarehouseRegion,
+        novaPoshtaWarehouseDistrict,
+        novaPoshtaWarehouseCity,
+        novaPoshtaWarehouse,
+        novaPoshtaCourierCity,
+        novaPoshtaCourierRegion,
+        novaPoshtaCourierDistrict,
+        novaPoshtaCourierCityRef,
+        novaPoshtaCourierStreet
+    } = formContext.watch();
     const { oldPassword, newPassword, confirmPassword } = passwordFormContext.watch();
     const [loading, setLoading] = useState<boolean>(false);
     const [sentActivationLinkModal, setSentActivationLinkModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
 
     function onSubmit() {
-        update(formContext.getValues())
+        const {
+            id,
+            phoneNumber,
+            firstName,
+            lastName,
+            instagramUsername,
+            novaPoshtaWarehouseCity,
+            novaPoshtaWarehouseRegion,
+            novaPoshtaWarehouseDistrict,
+            novaPoshtaCourierHouse,
+            novaPoshtaCourierFlat
+        } = formContext.getValues();
+
+        update({
+            id,
+            phoneNumber,
+            firstName,
+            lastName,
+            instagramUsername,
+            novaPoshtaWarehouseAddress: {
+                city: novaPoshtaWarehouseCity,
+                region: novaPoshtaWarehouseRegion,
+                district: novaPoshtaWarehouseDistrict,
+                warehouse: novaPoshtaWarehouse
+            },
+            novaPoshtaCourierAddress: {
+                city: novaPoshtaCourierCity,
+                region: novaPoshtaCourierRegion,
+                district: novaPoshtaCourierDistrict,
+                street: novaPoshtaCourierStreet,
+                house: novaPoshtaCourierHouse,
+                flat: novaPoshtaCourierFlat
+            }
+        })
             .then(user => setUser(new UserEntity(user)))
             .catch(() => {
             });
@@ -102,13 +153,49 @@ export default function PersonalInfo() {
         });
     }
 
+    function onNovaPoshtaSettlementSelect(val: NovaPoshtaSettlementEntity, refreshData = false) {
+        if (refreshData) {
+            formContext.setValue('novaPoshtaWarehouseCity', val?.city || '');
+            formContext.setValue('novaPoshtaWarehouseRegion', val?.region || '');
+            formContext.setValue('novaPoshtaWarehouseDistrict', val?.district || '');
+            if (!val) {
+                formContext.setValue('novaPoshtaWarehouse', null);
+            }
+        }
+        formContext.setValue('novaPoshtaWarehouseCityRef', val?.ref || '');
+    }
+
+    function onNovaPoshtaCourierCitySelect(val: NovaPoshtaSettlementEntity, refreshData = false) {
+        if (refreshData) {
+            formContext.setValue('novaPoshtaCourierCity', val?.city || '');
+            formContext.setValue('novaPoshtaCourierRegion', val?.region || '');
+            formContext.setValue('novaPoshtaCourierDistrict', val?.district || '');
+            if (!val) {
+                formContext.setValue('novaPoshtaCourierStreet', null);
+            }
+        }
+        formContext.setValue('novaPoshtaCourierCityRef', val?.ref || '');
+    }
+
+    function onNovaPoshtaCourierStreetSelect(val: NovaPoshtaStreetEntity, refreshData = false) {
+        if (refreshData) {
+            formContext.setValue('novaPoshtaCourierStreet', val?.description);
+        }
+    }
+
+    function onNovaPoshtaWarehouseSelect(val: NovaPoshtaWarehouseEntity, refreshData = false) {
+        if (refreshData) {
+            formContext.setValue('novaPoshtaWarehouse', val?.number);
+        }
+    }
+
     return (
         <ProfileMenu activeUrl="personal-info">
             <Head>
                 <title>Профіль - Персональні дані</title>
             </Head>
 
-            <Loading show={loading || updating || loadingDeliveries || changingPassword}></Loading>
+            <Loading show={loading || updating || changingPassword}></Loading>
 
             {!user?.active &&
               <Box textAlign="center" my={2}>
@@ -155,47 +242,62 @@ export default function PersonalInfo() {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Box sx={styleVariables.sectionTitle}>Адреса</Box>
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <CustomTextField name="region" label="Область" fullWidth/>
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <CustomTextField name="district" label="Район" fullWidth/>
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <CustomTextField name="city" label="Місто" fullWidth/>
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <CustomTextField name="novaPostOffice"
-                                         label="№ відділення/поштомату"
-                                         type="number"
-                                         fullWidth/>
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <CustomTextField name="postcode" type="number" label="Індекс" fullWidth/>
+                        <Box sx={styleVariables.sectionTitle}>Адреси</Box>
+                        <Box textAlign="center" mt={1}>
+                            Ці адреси використовуються під час створення замовлення.
+                        </Box>
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Box sx={styleVariables.sectionTitle}>Спосіб доставки</Box>
+                        <Box borderBottom={1} borderColor={primaryLightColor} pb={1} mt={1}>
+                            Нова пошта (відділення/поштомат)
+                        </Box>
+                    </Grid>
 
-                        <RadioGroup defaultValue={user?.preferredDeliveryId}
-                                    onChange={(_, value) => formContext.setValue('preferredDeliveryId', value)}>
-                            <Grid container spacing={2}>
-                                {deliveries.map((delivery, index) => (
-                                    <Grid key={index} item xs={12} sm={6} pl={2}>
-                                        <Box p={1}>
-                                            <DeliveryRadioOption option={delivery}/>
-                                        </Box>
-                                    </Grid>
-                                ))}
-                            </Grid>
-                        </RadioGroup>
+                    <Grid item xs={12} sm={6}>
+                        <SettlementAutocompleteField onSelect={onNovaPoshtaSettlementSelect}
+                                                     city={novaPoshtaWarehouseCity}
+                                                     region={novaPoshtaWarehouseRegion}
+                                                     district={novaPoshtaWarehouseDistrict}/>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <WarehouseAutocompleteField settlementRef={novaPoshtaWarehouseCityRef}
+                                                    warehouse={novaPoshtaWarehouse}
+                                                    onSelect={onNovaPoshtaWarehouseSelect}/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Box borderBottom={1} borderColor={primaryLightColor} pb={1} mt={1}>
+                            Нова пошта (адресна доставка до дверей)
+                        </Box>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <SettlementAutocompleteField onSelect={onNovaPoshtaCourierCitySelect}
+                                                     city={novaPoshtaCourierCity}
+                                                     region={novaPoshtaCourierRegion}
+                                                     district={novaPoshtaCourierDistrict}/>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <StreetAutocompleteField onSelect={onNovaPoshtaCourierStreetSelect}
+                                                 settlementRef={novaPoshtaCourierCityRef}
+                                                 street={novaPoshtaCourierStreet}/>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <CustomTextField name="novaPoshtaCourierHouse" label="Будинок" fullWidth/>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <CustomTextField name="novaPoshtaCourierFlat" label="Квартира" fullWidth/>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Box borderBottom={1} borderColor={primaryLightColor} pb={1} mt={1}>
+                            Укрпошта (відділення)
+                        </Box>
                     </Grid>
                 </Grid>
 
