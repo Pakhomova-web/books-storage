@@ -650,11 +650,13 @@ const typeDefs =  /* GraphQL */ `
         isDone: Boolean
         deliveryId: ID!
         books: [OrderBookInput!]!
-        region: String!
+        region: String
         district: String
-        city: String!
-        postcode: Int
-        novaPostOffice: Int
+        city: String
+        street: String
+        house: String
+        flat: String
+        warehouse: Int
         comment: String
         adminComment: String
     }

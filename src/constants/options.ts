@@ -13,6 +13,12 @@ export const ageOptions: IOption<number>[] = [
     { label: '9 - 10', id: 10 }
 ];
 
+export const DELIVERIES = {
+    UKRPOSHTA: '66d5c9173415a4551a000606',
+    NOVA_POSHTA: '66d5c90e3415a4551a000600',
+    SELF_PICKUP: '67406cec5f3c198cb08c3ffb'
+}
+
 export const BOOK_TYPES = {
     HISTORIES: '66900e5cd4b33119e2069772',
     ALPHABET: '669134b094f74a2ad6b0e48a',

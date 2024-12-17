@@ -1,36 +1,40 @@
-import { Box, Button, Grid, RadioGroup } from '@mui/material';
+import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { MuiTelInput } from 'mui-tel-input';
+import { styled } from '@mui/material/styles';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { FormContainer, useForm } from 'react-hook-form-mui';
 
 import { useBooksByIds, useUpdateBookCountInBasket } from '@/lib/graphql/queries/book/hook';
-import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import { borderRadius, priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
-import { styled } from '@mui/material/styles';
 import {
     isAdmin,
     isNovaPostSelected,
+    isSelfPickup,
     isUkrPoshtaSelected,
     onCopyOrderClick,
     renderOrderNumber,
     renderPrice,
     validatePhoneNumber
 } from '@/utils/utils';
-import { useRouter } from 'next/router';
-import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
-import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
 import { useCreateOrder } from '@/lib/graphql/queries/order/hook';
 import BasketBookItem from '@/components/basket-book-item';
-import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
-import Head from 'next/head';
 import IconWithText from '@/components/icon-with-text';
 import {
     useGroupDiscountsByIds,
     useUpdateGroupDiscountCountInBasket
 } from '@/lib/graphql/queries/group-discounts/hook';
 import GroupDiscountBox from '@/components/group-discount-box';
-import { MuiTelInput } from 'mui-tel-input';
+import { DELIVERIES } from '@/constants/options';
+import SettlementAutocompleteField from '@/components/form-fields/settlement-autocomplete-field';
+import WarehouseAutocompleteField from '@/components/form-fields/warehouses-autocomplete-field';
+import { NovaPoshtaSettlementEntity, NovaPoshtaStreetEntity, NovaPoshtaWarehouseEntity } from '@/lib/data/types';
+import StreetAutocompleteField from '@/components/form-fields/street-autocomplete-field';
 
 const TitleBoxStyled = styled(Box)(({ theme }) => ({
     ...styleVariables.bigTitleFontSize(theme),
@@ -45,15 +49,20 @@ interface IForm {
     firstName: string,
     instagramUsername: string,
     phoneNumber: string,
-    deliveryId: string,
-    comment: string,
-    region: string,
-    city: string,
-    street: string,
-    house: string,
-    flat: string,
-    warehouse: number
+    comment: string
 }
+
+const DeliveryBoxOption = styled(Box)(() => ({
+    borderRadius,
+    border: `1px solid ${primaryLightColor}`
+}));
+
+const deliveryOptions: { title: string, value: string }[] = [
+    { value: 'NOVA_POSHTA_WAREHOUSE', title: 'Нова пошта (відділення/поштомат)' },
+    { value: 'NOVA_POSHTA_COURIER', title: 'Нова пошта (адресна доставка до дверей)' },
+    { value: 'UKRPOSHTA', title: 'Укрпошта (відділення)' },
+    { value: 'SELF_PICKUP', title: 'Самовивіз' }
+];
 
 export default function Basket() {
     const router = useRouter();
@@ -66,23 +75,10 @@ export default function Basket() {
             firstName: isAdmin(user) ? '' : user?.firstName,
             instagramUsername: isAdmin(user) ? '' : user?.instagramUsername,
             phoneNumber: isAdmin(user) ? '' : user?.phoneNumber,
-            // region: isAdmin(user) ? '' : user?.region,
-            // city: isAdmin(user) ? '' : user?.city,
-            // district: isAdmin(user) ? '' : user?.district,
-            // warehouse: isAdmin(user) ? '' : user?.warehouse,
-            // novaPostOffice: isAdmin(user) ? '' : user?.novaPostOffice,
             comment: null
         }
     });
-    const {
-        deliveryId,
-        phoneNumber,
-        firstName,
-        lastName,
-        region,
-        city,
-        warehouse
-    } = formContext.watch();
+    const { phoneNumber, firstName, lastName } = formContext.watch();
     const { loading, error, items } = useBooksByIds(user?.basketItems?.map(({ bookId }) => bookId));
     const {
         loading: loadingGroups,
@@ -96,10 +92,42 @@ export default function Basket() {
     const [finalSumWithDiscounts, setFinalSumWithDiscounts] = useState<number>();
     const { updatingBook, updatingBookError, updateBook } = useUpdateBookCountInBasket();
     const { updatingGroup, updatingGroupError, updateGroup } = useUpdateGroupDiscountCountInBasket();
-    const { items: deliveries, loading: loadingDeliveries } = useDeliveries();
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     const [orderNumber, setOrderNumber] = useState<string>();
     const { create, creating, creatingError } = useCreateOrder();
+    const addressFormContext = useForm({
+        defaultValues: {
+            isCourier: false,
+            deliveryId: DELIVERIES.NOVA_POSHTA,
+            novaPoshtaWarehouseCityRef: '',
+            novaPoshtaWarehouseCity: user?.novaPoshtaWarehouseAddress?.city,
+            novaPoshtaWarehouseRegion: user?.novaPoshtaWarehouseAddress?.region,
+            novaPoshtaWarehouseDistrict: user?.novaPoshtaWarehouseAddress?.district,
+            novaPoshtaWarehouse: user?.novaPoshtaWarehouseAddress?.warehouse,
+            novaPoshtaCourierCity: user?.novaPoshtaCourierAddress?.city,
+            novaPoshtaCourierRegion: user?.novaPoshtaCourierAddress?.region,
+            novaPoshtaCourierDistrict: user?.novaPoshtaCourierAddress?.district,
+            novaPoshtaCourierStreet: user?.novaPoshtaCourierAddress?.street,
+            novaPoshtaCourierHouse: user?.novaPoshtaCourierAddress?.house,
+            novaPoshtaCourierFlat: user?.novaPoshtaCourierAddress?.flat,
+            novaPoshtaCourierCityRef: ''
+        }
+    });
+    const {
+        novaPoshtaWarehouseCity,
+        novaPoshtaWarehouseRegion,
+        novaPoshtaWarehouseDistrict,
+        novaPoshtaWarehouseCityRef,
+        novaPoshtaWarehouse,
+        deliveryId,
+        isCourier,
+        novaPoshtaCourierCity,
+        novaPoshtaCourierStreet,
+        novaPoshtaCourierHouse,
+        novaPoshtaCourierCityRef,
+        novaPoshtaCourierDistrict,
+        novaPoshtaCourierRegion
+    } = addressFormContext.watch();
 
     useEffect(() => {
         let invalid = false;
@@ -111,24 +139,6 @@ export default function Basket() {
             invalid = true;
         } else {
             formContext.clearErrors('phoneNumber');
-        }
-
-        if (!region) {
-            if (formContext.formState.touchedFields.region) {
-                formContext.setError('region', { message: 'Область обов\'язкова' });
-            }
-            invalid = true;
-        } else {
-            formContext.clearErrors('region');
-        }
-
-        if (!city) {
-            if (formContext.formState.touchedFields.city) {
-                formContext.setError('city', { message: 'Місто обов\'язкове' });
-            }
-            invalid = true;
-        } else {
-            formContext.clearErrors('city');
         }
 
         if (!firstName) {
@@ -149,28 +159,8 @@ export default function Basket() {
             formContext.clearErrors('lastName');
         }
 
-        if (!deliveryId) {
-            invalid = true;
-        } else if (isNovaPostSelected(deliveryId) && !warehouse) {
-            if (formContext.formState.touchedFields.warehouse) {
-                formContext.setError('warehouse', { message: '№ відділення/поштомата обов\'язкове' });
-            }
-            formContext.clearErrors('warehouse');
-            formContext.setValue('warehouse', null);
-            invalid = true;
-        } else if (isUkrPoshtaSelected(deliveryId) && !warehouse) {
-            if (formContext.formState.touchedFields.warehouse) {
-                formContext.setError('warehouse', { message: 'Індекс обов\'язковий' });
-            }
-            formContext.clearErrors('warehouse');
-            formContext.setValue('warehouse', null);
-            invalid = true;
-        } else {
-            formContext.clearErrors('warehouse');
-        }
-
         setSubmitDisabled(invalid);
-    }, [deliveryId, phoneNumber, firstName, lastName, region, city, warehouse, formContext]);
+    }, [phoneNumber, firstName, lastName, formContext]);
 
     useEffect(() => {
         if (!!items?.length || !!groups?.length) {
@@ -246,11 +236,43 @@ export default function Basket() {
 
     function onSubmit() {
         if (!submitDisabled) {
-            const { warehouse, ...values } = formContext.getValues();
+            const mainInfo = formContext.getValues();
+            const address = addressFormContext.getValues();
+            let city = null;
+            let region = null;
+            let district = null;
+            let street = null;
+            let house = null;
+            let flat = null;
+            let warehouse = null;
 
+            if (isNovaPostSelected(deliveryId)) {
+                if (isCourier) {
+                    city = address.novaPoshtaCourierCity;
+                    region = address.novaPoshtaCourierRegion;
+                    district = address.novaPoshtaCourierDistrict;
+                    street = address.novaPoshtaCourierStreet;
+                    house = address.novaPoshtaCourierHouse;
+                    flat = address.novaPoshtaCourierFlat;
+                } else {
+                    city = address.novaPoshtaWarehouseCity;
+                    region = address.novaPoshtaWarehouseRegion;
+                    district = address.novaPoshtaWarehouseDistrict;
+                    warehouse = address.novaPoshtaWarehouse;
+                }
+            } else if (isUkrPoshtaSelected(deliveryId)) {
+                // TODO
+            }
             create({
-                ...values,
-                warehouse: warehouse || null,
+                ...mainInfo,
+                deliveryId: address.deliveryId,
+                city,
+                region,
+                district,
+                street,
+                flat,
+                house,
+                warehouse,
                 books: [
                     ...items.map(book => ({
                         bookId: book.id,
@@ -285,13 +307,88 @@ export default function Basket() {
         validatePhoneNumber(formContext, value);
     }
 
+    function onDeliveryOptionChange(value: string) {
+        switch (value) {
+            case 'UKRPOSHTA':
+                addressFormContext.setValue('deliveryId', DELIVERIES.UKRPOSHTA);
+                addressFormContext.setValue('isCourier', false);
+                break;
+            case 'NOVA_POSHTA_WAREHOUSE':
+                addressFormContext.setValue('deliveryId', DELIVERIES.NOVA_POSHTA);
+                addressFormContext.setValue('isCourier', false);
+                break;
+            case 'NOVA_POSHTA_COURIER':
+                addressFormContext.setValue('deliveryId', DELIVERIES.NOVA_POSHTA);
+                addressFormContext.setValue('isCourier', true);
+                break;
+            case 'SELF_PICKUP':
+                addressFormContext.setValue('deliveryId', DELIVERIES.SELF_PICKUP);
+                addressFormContext.setValue('isCourier', false);
+        }
+    }
+
+    function onNovaPoshtaWarehouseSelect(val: NovaPoshtaWarehouseEntity, refreshData = false) {
+        if (refreshData) {
+            addressFormContext.setValue('novaPoshtaWarehouse', val?.number);
+        }
+    }
+
+    function onNovaPoshtaSettlementSelect(val: NovaPoshtaSettlementEntity, refreshData = false) {
+        if (refreshData) {
+            addressFormContext.setValue('novaPoshtaWarehouseCity', val?.city || '');
+            addressFormContext.setValue('novaPoshtaWarehouseRegion', val?.region || '');
+            addressFormContext.setValue('novaPoshtaWarehouseDistrict', val?.district || '');
+            if (!val) {
+                addressFormContext.setValue('novaPoshtaWarehouse', null);
+            }
+        }
+        addressFormContext.setValue('novaPoshtaWarehouseCityRef', val?.ref || '');
+    }
+
+    function onNovaPoshtaCourierCitySelect(val: NovaPoshtaSettlementEntity, refreshData = false) {
+        if (refreshData) {
+            addressFormContext.setValue('novaPoshtaCourierCity', val?.city || '');
+            addressFormContext.setValue('novaPoshtaCourierRegion', val?.region || '');
+            addressFormContext.setValue('novaPoshtaCourierDistrict', val?.district || '');
+            if (!val) {
+                addressFormContext.setValue('novaPoshtaCourierStreet', null);
+            }
+        }
+        addressFormContext.setValue('novaPoshtaCourierCityRef', val?.ref || '');
+    }
+
+    function onNovaPoshtaCourierStreetSelect(val: NovaPoshtaStreetEntity, refreshData = false) {
+        if (refreshData) {
+            addressFormContext.setValue('novaPoshtaCourierStreet', val?.description);
+        }
+    }
+
+    function isSubmitDisabled() {
+        if (!firstName || !lastName || !phoneNumber || !deliveryId ||
+            items.some(i => !i.numberInStock) || groups.some(({ books }) => books.some(b => !b.numberInStock))) {
+            return true;
+        }
+
+        if (isNovaPostSelected(deliveryId)) {
+            if (isCourier) {
+                return !novaPoshtaCourierCity || !novaPoshtaCourierRegion ||
+                    !novaPoshtaCourierStreet || !novaPoshtaCourierHouse;
+            } else {
+                return !novaPoshtaWarehouseCity || !novaPoshtaWarehouseRegion || !novaPoshtaWarehouse;
+            }
+        } else if (isUkrPoshtaSelected(deliveryId)) {
+            return true;
+        }
+        return false;
+    }
+
     return (
         <>
             <Head>
                 <title>Кошик{(user?.basketItems?.length || user?.basketGroupDiscounts.length) ? '' : ' (пустий)'}</title>
             </Head>
 
-            <Loading show={loading || updatingBook || loadingDeliveries || creating || loadingGroups || updatingGroup}/>
+            <Loading show={loading || updatingBook || creating || loadingGroups || updatingGroup}/>
 
             <TitleBoxStyled pb={1} m={1}>Кошик</TitleBoxStyled>
 
@@ -420,47 +517,85 @@ export default function Basket() {
                                      label="Нікнейм в інстаграм для зв'язку"
                                      fullWidth/>
                   </Grid>
+                </Grid>
+              </FormContainer>
 
+              <FormContainer formContext={addressFormContext}>
+                <Grid container spacing={2} px={1} mt={1}>
                   <Grid item xs={12}>
                     <Box sx={styleVariables.sectionTitle}>Спосіб доставки</Box>
+                  </Grid>
 
-                    <RadioGroup onChange={(_, value) => formContext.setValue('deliveryId', value)}>
-                      <Grid container spacing={2}>
-                          {deliveries.map((delivery, index) => (
-                              <Grid key={index} item xs={12} sm={6} pl={2}>
-                                  <Box p={1}>
-                                      <DeliveryRadioOption option={delivery}/>
-                                  </Box>
-                              </Grid>
+                  <Grid item xs={12}>
+                    <RadioGroup defaultValue={deliveryOptions[0].value}
+                                onChange={(_, value: string) => onDeliveryOptionChange(value)}>
+                      <Box display="flex" flexDirection="column" gap={1}>
+                          {deliveryOptions.map((option, index) => (
+                              <DeliveryBoxOption p={1} key={index}>
+                                  <FormControlLabel value={option.value}
+                                                    control={<Radio/>}
+                                                    label={option.title}/>
+
+                                  {option.value === 'NOVA_POSHTA_WAREHOUSE' &&
+                                    <Grid container spacing={2} mt={0}
+                                          display={isNovaPostSelected(deliveryId) && !isCourier ? 'flex' : 'none'}>
+                                      <Grid item xs={12} sm={6}>
+                                        <SettlementAutocompleteField onSelect={onNovaPoshtaSettlementSelect}
+                                                                     city={novaPoshtaWarehouseCity}
+                                                                     region={novaPoshtaWarehouseRegion}
+                                                                     district={novaPoshtaWarehouseDistrict}/>
+                                      </Grid>
+
+                                      <Grid item xs={12} sm={6}>
+                                        <WarehouseAutocompleteField settlementRef={novaPoshtaWarehouseCityRef}
+                                                                    warehouse={novaPoshtaWarehouse}
+                                                                    onSelect={onNovaPoshtaWarehouseSelect}/>
+                                      </Grid>
+                                    </Grid>}
+
+                                  {option.value === 'NOVA_POSHTA_COURIER' &&
+                                    <Grid container spacing={2} mt={0}
+                                          display={isNovaPostSelected(deliveryId) && isCourier ? 'flex' : 'none'}>
+                                      <Grid item xs={12} sm={6}>
+                                        <SettlementAutocompleteField onSelect={onNovaPoshtaCourierCitySelect}
+                                                                     city={novaPoshtaCourierCity}
+                                                                     region={novaPoshtaCourierRegion}
+                                                                     district={novaPoshtaCourierDistrict}/>
+                                      </Grid>
+
+                                      <Grid item xs={12} sm={6}>
+                                        <StreetAutocompleteField onSelect={onNovaPoshtaCourierStreetSelect}
+                                                                 settlementRef={novaPoshtaCourierCityRef}
+                                                                 street={novaPoshtaCourierStreet}/>
+                                      </Grid>
+
+                                      <Grid item xs={6}>
+                                        <CustomTextField name="novaPoshtaCourierHouse" label="Будинок" fullWidth/>
+                                      </Grid>
+
+                                      <Grid item xs={6}>
+                                        <CustomTextField name="novaPoshtaCourierFlat" label="Квартира" fullWidth/>
+                                      </Grid>
+                                    </Grid>}
+
+                                  {option.value === 'SELF_PICKUP' &&
+                                    <Grid container spacing={2} mt={0}
+                                          display={isUkrPoshtaSelected(deliveryId) && isCourier ? 'flex' : 'none'}>
+                                    </Grid>}
+
+                                  {option.value === 'SELF_PICKUP' &&
+                                    <Box mt={1} justifyContent="center"
+                                         display={isSelfPickup(deliveryId) ? 'flex' : 'none'}>
+                                      Самовивіз за адресою: м. Харків, проспект Героїв Харкова, 162 (лише після
+                                      дзвінка-підтвердження).
+                                    </Box>}
+                              </DeliveryBoxOption>
                           ))}
-                      </Grid>
+                      </Box>
                     </RadioGroup>
                   </Grid>
 
-                  <Grid item xs={12}>
-                    <Box sx={styleVariables.sectionTitle}>Адреса</Box>
-                  </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                    <CustomTextField name="region" required label="Область" fullWidth/>
-                  </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                    <CustomTextField name="district" label="Район" fullWidth/>
-                  </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                    <CustomTextField name="city" required label="Місто" fullWidth/>
-                  </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                    <CustomTextField name="warehouse"
-                                     label="№ відділення/поштомату"
-                                     type="number"
-                                     fullWidth/>
-                  </Grid>
-
-                  <Grid item xs={12}>
+                  <Grid item xs={12} mt={2}>
                     <CustomTextField name="comment" label="Коментар" multiline fullWidth/>
                   </Grid>
                 </Grid>
@@ -480,7 +615,7 @@ export default function Basket() {
                         Скопіювати зміст замовлення
                       </Button>}
                   <Button type="submit" variant="contained"
-                          disabled={submitDisabled || items.some(i => !i.numberInStock) || groups.some(group => group.books.some(b => !b.numberInStock))}
+                          disabled={isSubmitDisabled()}
                           onClick={onSubmit}>
                     Підтвердити замовлення
                   </Button>
