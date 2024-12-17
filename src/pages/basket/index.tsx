@@ -613,7 +613,7 @@ export default function Basket() {
                                   {option.value === 'SELF_PICKUP' &&
                                     <Box mt={1} justifyContent="center"
                                          display={isSelfPickup(deliveryId) ? 'flex' : 'none'}>
-                                      Самовивіз за адресою: {process.env.SELF_PICKUP_ADDRESS} (лише після дзвінка-підтвердження).
+                                      Самовивіз за адресою: м. Харків, проспект Героїв Харкова, 162 (лише після дзвінка-підтвердження).
                                     </Box>}
                               </DeliveryBoxOption>
                           ))}
