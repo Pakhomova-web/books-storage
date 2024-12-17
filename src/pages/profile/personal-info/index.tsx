@@ -44,7 +44,11 @@ export default function PersonalInfo() {
             novaPoshtaCourierStreet: user?.novaPoshtaCourierAddress?.street,
             novaPoshtaCourierHouse: user?.novaPoshtaCourierAddress?.house,
             novaPoshtaCourierFlat: user?.novaPoshtaCourierAddress?.flat,
-            novaPoshtaCourierCityRef: ''
+            novaPoshtaCourierCityRef: '',
+            city: user?.ukrPoshtaWarehouseAddress?.city,
+            region: user?.ukrPoshtaWarehouseAddress?.region,
+            district: user?.ukrPoshtaWarehouseAddress?.district,
+            warehouse: user?.ukrPoshtaWarehouseAddress?.warehouse
         }
     });
     const { updating, update, updatingError } = useCurrentUser();
@@ -78,7 +82,11 @@ export default function PersonalInfo() {
             novaPoshtaWarehouseRegion,
             novaPoshtaWarehouseDistrict,
             novaPoshtaCourierHouse,
-            novaPoshtaCourierFlat
+            novaPoshtaCourierFlat,
+            city,
+            district,
+            region,
+            warehouse
         } = formContext.getValues();
 
         update({
@@ -100,6 +108,12 @@ export default function PersonalInfo() {
                 street: novaPoshtaCourierStreet,
                 house: novaPoshtaCourierHouse,
                 flat: novaPoshtaCourierFlat
+            },
+            ukrposhtaWarehouseAddress: {
+                city,
+                district,
+                region,
+                warehouse
             }
         })
             .then(user => setUser(new UserEntity(user)))
@@ -298,6 +312,23 @@ export default function PersonalInfo() {
                         <Box borderBottom={1} borderColor={primaryLightColor} pb={1} mt={1}>
                             Укрпошта (відділення)
                         </Box>
+                    </Grid>
+
+                    <Grid item xs={12} md={6}>
+                        <CustomTextField name="region" label="Область" required={true} fullWidth/>
+                    </Grid>
+
+                    <Grid item xs={12} md={6}>
+                        <CustomTextField name="district" label="Район" fullWidth/>
+                    </Grid>
+
+                    <Grid item xs={12} md={6}>
+                        <CustomTextField name="city" label="Місто" required={true} fullWidth/>
+                    </Grid>
+
+                    <Grid item xs={12} md={6}>
+                        <CustomTextField name="warehouse" label="Відділення (індекс)" required={true}
+                                         fullWidth/>
                     </Grid>
                 </Grid>
 

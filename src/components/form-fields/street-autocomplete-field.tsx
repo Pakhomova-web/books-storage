@@ -14,6 +14,7 @@ export default function StreetAutocompleteField({ settlementRef, street = null, 
         if (street && settlementRef) {
             getOptions(`${street}`, street);
         } else if (!settlementRef && !street) {
+            setInputValue('');
             onSelect(null, true);
         }
     }, [street, settlementRef]);

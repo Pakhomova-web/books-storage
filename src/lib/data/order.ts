@@ -259,12 +259,12 @@ function orderTemplate(order: OrderEntity) {
                 <th style="text-align: left">Спосіб доставки</th>
                 <td style="text-align: left">${order.delivery.name}</td>
             </tr>
-            <tr>
+            ${isSelfPickup(order.delivery.id) && `<tr>
                 <th style="text-align: left">Адреса доставки</th>
                 <td style="text-align: left">
                     ${order.region} область${order.district ? `, ${order.district} район` : ''}, ${order.city}${isNovaPostSelected(order.delivery.id) ? `, ${order.warehouse}` : ''}${isUkrPoshtaSelected(order.delivery.id) ? `, ${order.warehouse}` : ''}
                 </td>
-            </tr>
+            </tr>`}
             ${!!order.comment ? `<tr>
                                     <th style="text-align: left">Коментар</th>
                                     <td style="text-align: left">${order.comment}</td>

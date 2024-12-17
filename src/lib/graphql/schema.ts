@@ -110,7 +110,6 @@ const typeDefs =  /* GraphQL */ `
         street: String
         house: String
         flat: String
-        postcode: Int
     }
 
     type NovaPoshtaWarehouseAddress {
@@ -124,7 +123,7 @@ const typeDefs =  /* GraphQL */ `
         city: String
         region: String
         district: String
-        postcode: Int
+        warehouse: Int
     }
 
     type User {
@@ -579,16 +578,11 @@ const typeDefs =  /* GraphQL */ `
     #    user
 
     input UserCreateInput {
-        email: String!,
-        password: String!,
-        firstName: String,
-        lastName: String,
-        postcode: Int,
-        novaPostOffice: Int,
-        region: String,
-        city: String,
+        email: String!
+        password: String!
+        firstName: String
+        lastName: String
         phoneNumber: String
-        preferredDeliveryId: ID
         instagramUsername: String
     }
 
@@ -606,14 +600,13 @@ const typeDefs =  /* GraphQL */ `
         street: String!
         house: String!
         flat: String
-        postcode: Int
     }
 
     input UkrPoshtaWarehouseAddressInput {
         city: String!
         region: String!
         district: String
-        postcode: Int
+        warehouse: Int
     }
 
     input UserUpdateInput {

@@ -110,10 +110,17 @@ export default function Basket() {
             novaPoshtaCourierStreet: user?.novaPoshtaCourierAddress?.street,
             novaPoshtaCourierHouse: user?.novaPoshtaCourierAddress?.house,
             novaPoshtaCourierFlat: user?.novaPoshtaCourierAddress?.flat,
-            novaPoshtaCourierCityRef: ''
+            novaPoshtaCourierCityRef: '',
+            city: user?.ukrPoshtaWarehouseAddress?.city,
+            district: user?.ukrPoshtaWarehouseAddress?.district,
+            region: user?.ukrPoshtaWarehouseAddress?.region,
+            warehouse: user?.ukrPoshtaWarehouseAddress?.warehouse
         }
     });
     const {
+        city,
+        region,
+        warehouse,
         novaPoshtaWarehouseCity,
         novaPoshtaWarehouseRegion,
         novaPoshtaWarehouseDistrict,
@@ -261,7 +268,10 @@ export default function Basket() {
                     warehouse = address.novaPoshtaWarehouse;
                 }
             } else if (isUkrPoshtaSelected(deliveryId)) {
-                // TODO
+                city = address.city;
+                region = address.region;
+                district = address.district;
+                warehouse = address.warehouse;
             }
             create({
                 ...mainInfo,
@@ -377,7 +387,7 @@ export default function Basket() {
                 return !novaPoshtaWarehouseCity || !novaPoshtaWarehouseRegion || !novaPoshtaWarehouse;
             }
         } else if (isUkrPoshtaSelected(deliveryId)) {
-            return true;
+            return !city || !region || !warehouse;
         }
         return false;
     }
@@ -570,7 +580,8 @@ export default function Basket() {
                                       </Grid>
 
                                       <Grid item xs={6}>
-                                        <CustomTextField name="novaPoshtaCourierHouse" label="Будинок" fullWidth/>
+                                        <CustomTextField name="novaPoshtaCourierHouse" label="Будинок" required={true}
+                                                         fullWidth/>
                                       </Grid>
 
                                       <Grid item xs={6}>
@@ -578,16 +589,31 @@ export default function Basket() {
                                       </Grid>
                                     </Grid>}
 
-                                  {option.value === 'SELF_PICKUP' &&
+                                  {option.value === 'UKRPOSHTA' &&
                                     <Grid container spacing={2} mt={0}
-                                          display={isUkrPoshtaSelected(deliveryId) && isCourier ? 'flex' : 'none'}>
+                                          display={isUkrPoshtaSelected(deliveryId) ? 'flex' : 'none'}>
+                                      <Grid item xs={12} md={6}>
+                                        <CustomTextField name="region" label="Область" required={true} fullWidth/>
+                                      </Grid>
+
+                                      <Grid item xs={12} md={6}>
+                                        <CustomTextField name="district" label="Район" fullWidth/>
+                                      </Grid>
+
+                                      <Grid item xs={12} md={6}>
+                                        <CustomTextField name="city" label="Місто" required={true} fullWidth/>
+                                      </Grid>
+
+                                      <Grid item xs={12} md={6}>
+                                        <CustomTextField name="warehouse" label="Відділення (індекс)" required={true}
+                                                         fullWidth/>
+                                      </Grid>
                                     </Grid>}
 
                                   {option.value === 'SELF_PICKUP' &&
                                     <Box mt={1} justifyContent="center"
                                          display={isSelfPickup(deliveryId) ? 'flex' : 'none'}>
-                                      Самовивіз за адресою: м. Харків, проспект Героїв Харкова, 162 (лише після
-                                      дзвінка-підтвердження).
+                                      Самовивіз за адресою: {process.env.SELF_PICKUP_ADDRESS} (лише після дзвінка-підтвердження).
                                     </Box>}
                               </DeliveryBoxOption>
                           ))}

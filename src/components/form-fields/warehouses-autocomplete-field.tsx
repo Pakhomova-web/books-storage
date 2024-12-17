@@ -17,12 +17,13 @@ export default function WarehouseAutocompleteField({ settlementRef, warehouse = 
     }, [warehouse]);
 
     useEffect(() => {
-        setSelected(null);
         if (settlementRef) {
             getOptions(warehouse ? `${warehouse}` : '', warehouse);
         } else {
             setOptions([]);
-            onSelect(selected, !warehouse);
+            if (selected) {
+                setInputValue('');
+            }
         }
     }, [settlementRef]);
 
@@ -34,7 +35,7 @@ export default function WarehouseAutocompleteField({ settlementRef, warehouse = 
         } else if (!inputValue?.length) {
             if (selected) {
                 setSelected(null);
-                onSelect(selected, true);
+                onSelect(null, true);
             }
             setOptions([]);
         }
@@ -67,6 +68,7 @@ export default function WarehouseAutocompleteField({ settlementRef, warehouse = 
                       loading={loading}
                       disabled={!settlementRef}
                       value={selected}
+                      inputValue={inputValue}
                       onInputChange={(_, value) => setInputValue(value)}
                       options={options}
                       onChange={(_, value: NovaPoshtaWarehouseEntity) => {

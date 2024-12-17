@@ -285,14 +285,13 @@ export class UserEntity {
         city?: string
         street?: string,
         house?: string,
-        flat?: string,
-        postcode?: number
+        flat?: string
     };
     ukrPoshtaWarehouseAddress?: {
         region?: string,
         district?: string,
         city?: string
-        postcode?: number
+        warehouse?: number
     };
     phoneNumber?: string;
     instagramUsername?: string;

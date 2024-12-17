@@ -19,12 +19,13 @@ export default function SettlementAutocompleteField({ city = null, region = null
     useEffect(() => {
         if (!!inputValue?.length && selected?.title !== inputValue) {
             setSelected(null);
-            onSelect(selected, true);
+            onSelect(null, true);
             getOptions(inputValue);
         } else if (!inputValue) {
             if (selected) {
+                setInputValue('');
                 setSelected(null);
-                onSelect(selected, true);
+                onSelect(null, true);
             }
             setOptions([]);
         }

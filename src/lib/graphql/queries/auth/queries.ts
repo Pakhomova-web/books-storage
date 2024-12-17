@@ -39,7 +39,7 @@ const userFragment = gql`
             city
             region
             district
-            postcode
+            warehouse
         }
         phoneNumber
         instagramUsername

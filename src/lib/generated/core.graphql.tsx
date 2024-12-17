@@ -649,7 +649,6 @@ export type NovaPoshtaCourierAddress = {
   district?: Maybe<Scalars['String']['output']>;
   flat?: Maybe<Scalars['String']['output']>;
   house?: Maybe<Scalars['String']['output']>;
-  postcode?: Maybe<Scalars['Int']['output']>;
   region?: Maybe<Scalars['String']['output']>;
   street?: Maybe<Scalars['String']['output']>;
 };
@@ -659,7 +658,6 @@ export type NovaPoshtaCourierAddressInput = {
   district?: InputMaybe<Scalars['String']['input']>;
   flat?: InputMaybe<Scalars['String']['input']>;
   house: Scalars['String']['input'];
-  postcode?: InputMaybe<Scalars['Int']['input']>;
   region: Scalars['String']['input'];
   street: Scalars['String']['input'];
 };
@@ -1098,15 +1096,15 @@ export type SearchByNameInput = {
 export type UkrPoshtaWarehouseAddress = {
   city?: Maybe<Scalars['String']['output']>;
   district?: Maybe<Scalars['String']['output']>;
-  postcode?: Maybe<Scalars['Int']['output']>;
   region?: Maybe<Scalars['String']['output']>;
+  warehouse?: Maybe<Scalars['Int']['output']>;
 };
 
 export type UkrPoshtaWarehouseAddressInput = {
   city: Scalars['String']['input'];
   district?: InputMaybe<Scalars['String']['input']>;
-  postcode?: InputMaybe<Scalars['Int']['input']>;
   region: Scalars['String']['input'];
+  warehouse?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type UpdateCommentInput = {
@@ -1135,17 +1133,12 @@ export type User = {
 };
 
 export type UserCreateInput = {
-  city?: InputMaybe<Scalars['String']['input']>;
   email: Scalars['String']['input'];
   firstName?: InputMaybe<Scalars['String']['input']>;
   instagramUsername?: InputMaybe<Scalars['String']['input']>;
   lastName?: InputMaybe<Scalars['String']['input']>;
-  novaPostOffice?: InputMaybe<Scalars['Int']['input']>;
   password: Scalars['String']['input'];
   phoneNumber?: InputMaybe<Scalars['String']['input']>;
-  postcode?: InputMaybe<Scalars['Int']['input']>;
-  preferredDeliveryId?: InputMaybe<Scalars['ID']['input']>;
-  region?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UserToken = {
@@ -1622,7 +1615,6 @@ export type NovaPoshtaCourierAddressResolvers<ContextType = any, ParentType exte
   district?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   flat?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   house?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  postcode?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   street?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
@@ -1771,8 +1763,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type UkrPoshtaWarehouseAddressResolvers<ContextType = any, ParentType extends ResolversParentTypes['UkrPoshtaWarehouseAddress'] = ResolversParentTypes['UkrPoshtaWarehouseAddress']> = {
   city?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   district?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  postcode?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  warehouse?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
