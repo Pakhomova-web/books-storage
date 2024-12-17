@@ -1101,9 +1101,9 @@ export type UkrPoshtaWarehouseAddress = {
 };
 
 export type UkrPoshtaWarehouseAddressInput = {
-  city: Scalars['String']['input'];
+  city?: InputMaybe<Scalars['String']['input']>;
   district?: InputMaybe<Scalars['String']['input']>;
-  region: Scalars['String']['input'];
+  region?: InputMaybe<Scalars['String']['input']>;
   warehouse?: InputMaybe<Scalars['Int']['input']>;
 };
 

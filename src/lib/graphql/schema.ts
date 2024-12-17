@@ -603,8 +603,8 @@ const typeDefs =  /* GraphQL */ `
     }
 
     input UkrPoshtaWarehouseAddressInput {
-        city: String!
-        region: String!
+        city: String
+        region: String
         district: String
         warehouse: Int
     }
