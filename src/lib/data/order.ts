@@ -13,7 +13,8 @@ import OrderNumber from '@/lib/data/models/order-number';
 import User from '@/lib/data/models/user';
 import Book from '@/lib/data/models/book';
 import Balance from '@/lib/data/models/balance';
-import { isNovaPostSelected, isSelfPickup, isUkrPoshtaSelected, renderPrice } from '@/utils/utils';
+import { isSelfPickup, renderPrice } from '@/utils/utils';
+import { primaryLightColor } from '@/constants/styles-variables';
 
 export async function getOrders(pageSettings?: IPageable, filters?: IOrderFilter) {
     const { quickSearch, andFilters } = getValidFilters(filters);
@@ -233,7 +234,7 @@ function orderTemplate(order: OrderEntity) {
                     </div>
                     <div>(${book.languages.map(l => l.name).join(', ')})</div>
                 </td>
-                <td>${count}</td>
+                <td style="border-right: 1px solid ${primaryLightColor}; border-left: 1px solid ${primaryLightColor}">${count}</td>
                 <td>${renderPrice(price * count, discount)}</td>
             </tr>
     `;
@@ -246,37 +247,23 @@ function orderTemplate(order: OrderEntity) {
         <p style="font-size: 16px"><b>Замовлення №${order.orderNumber}</b></p>
         ${mailDivider(true)}
         
-        <table style="width: 100%">
-            <tr>
-                <th style="text-align: left">ПІБ</th>
-                <td style="text-align: left">${order.lastName} ${order.firstName}</td>
-            </tr>
-            <tr>
-                <th style="text-align: left">Номер телефону</th>
-                <td style="text-align: left">${order.phoneNumber}</td>
-            </tr>
-            <tr>
-                <th style="text-align: left">Спосіб доставки</th>
-                <td style="text-align: left">${order.delivery.name}</td>
-            </tr>
-            ${isSelfPickup(order.delivery.id) && `<tr>
-                <th style="text-align: left">Адреса доставки</th>
-                <td style="text-align: left">
-                    ${order.region} область${order.district ? `, ${order.district} район` : ''}, ${order.city}${isNovaPostSelected(order.delivery.id) ? `, ${order.warehouse}` : ''}${isUkrPoshtaSelected(order.delivery.id) ? `, ${order.warehouse}` : ''}
-                </td>
-            </tr>`}
-            ${!!order.comment ? `<tr>
-                                    <th style="text-align: left">Коментар</th>
-                                    <td style="text-align: left">${order.comment}</td>
-                                </tr>` : ''}
-        </table>
+        <div style="text-align: left">
+            <p><b>ПІБ: </b>${order.lastName} ${order.firstName}</p>
+            <p><b>Номер телефону: </b>${order.phoneNumber}</p>
+            <p><b>Спосіб доставки: </b>${order.delivery.name}</p>
+            ${!isSelfPickup(order.delivery.id) && `<p>
+                    <b>Адреса доставки: </b>
+                    ${order.region} область${order.district ? `, ${order.district} район` : ''}, ${order.city}${order.house ? `, буд. ${order.house}${order.flat ? `, кв. ${order.flat}` : ''}` : ''}${order.warehouse ? `, № відділення/поштомат ${order.warehouse}` : ''}
+                </p>`}
+            ${!!order.comment && `<p><b>Коментар: </b>${order.comment}</p>`}
+        </div>
         ${mailDivider(true)}
         
         <table style="width: 100%">
             <tr>
-                <th>Зображення</th>
+                <th>Зображ.</th>
                 <th>Назва (мова)</th>
-                <th>#</th>
+                <th style="border-right: 1px solid ${primaryLightColor}; border-left: 1px solid ${primaryLightColor}">#</th>
                 <th>Ціна</th>
             </tr>
             ${bookRows}
@@ -297,7 +284,7 @@ function orderTemplate(order: OrderEntity) {
             </tr>
         </table>
     `);
-}
+    }
 
 function _getOrderData(input: OrderEntity, orderNumber?: number) {
     return {

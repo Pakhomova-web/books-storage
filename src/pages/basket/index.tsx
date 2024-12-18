@@ -228,7 +228,6 @@ export default function Basket() {
             create({
                 ...mainInfo,
                 ...getAddressFromForm(addressFormContext.getValues()),
-                warehouse,
                 books: [
                     ...items.map(book => ({
                         bookId: book.id,

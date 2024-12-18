@@ -9,7 +9,7 @@ import {
 import Book from '@/lib/data/models/book';
 import { GraphQLError } from 'graphql/error';
 import { createTransport } from 'nodemailer';
-import { primaryLightColor } from '@/constants/styles-variables';
+import { borderRadius, primaryLightColor } from '@/constants/styles-variables';
 
 type CustomModelType = Model<
     PublishingHouseEntity |
@@ -145,11 +145,11 @@ export function mailContainer(content: string): string {
 <!DOCTYPE html>
   <html>
   <body style="text-align: center; font-family: 'Tomes New Roman', serif; color: #000;">
-    <div style="max-width: 90%;
+    <div style="max-width: 95%;
         margin: 10px auto;
         background-color: #fafafa;
-        padding: 25px;
-        border-radius: 20px">
+        padding: 10px;
+        border-radius: ${borderRadius}">
         <a href="${process.env.FRONTEND_URL}" target="_blank">
             <img src="cid:logo" alt="logo" style="width: 200px; margin-bottom: 10px"/>
         </a>

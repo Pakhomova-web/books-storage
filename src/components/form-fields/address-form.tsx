@@ -119,6 +119,7 @@ export default function AddressForm({ formContext, disabled = false }) {
 
     function onNovaPoshtaWarehouseSelect(val: NovaPoshtaWarehouseEntity, refreshData = false) {
         if (refreshData) {
+            console.log(val?.number);
             formContext.setValue('novaPoshtaWarehouse', val?.number);
         }
     }
@@ -186,7 +187,7 @@ export default function AddressForm({ formContext, disabled = false }) {
                                           <WarehouseAutocompleteField settlementRef={novaPoshtaWarehouseCityRef}
                                                                       disabled={disabled}
                                                                       warehouse={novaPoshtaWarehouse}
-                                                                      onSelect={onNovaPoshtaWarehouseSelect}/>
+                                                                      onSelect={(val: NovaPoshtaWarehouseEntity, refresh: boolean) => onNovaPoshtaWarehouseSelect(val, refresh)}/>
                                         </Grid>
                                       </Grid>}
 
