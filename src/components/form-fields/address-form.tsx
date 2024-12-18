@@ -156,7 +156,7 @@ export default function AddressForm({ formContext, disabled = false }) {
 
     return (
         <FormContainer formContext={formContext}>
-            <Grid container spacing={2} px={1} mt={1}>
+            <Grid container spacing={2} mt={1}>
                 <Grid item xs={12}>
                     <Box sx={styleVariables.sectionTitle}>Спосіб доставки</Box>
                 </Grid>

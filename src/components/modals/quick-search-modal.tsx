@@ -1,38 +1,18 @@
 import { Box, Button } from '@mui/material';
-import CustomModal from '@/components/modals/custom-modal';
-import { FormContainer, useForm } from 'react-hook-form-mui';
-import CustomTextField from '@/components/form-fields/custom-text-field';
-import Loading from '@/components/loading';
-import React, { useEffect, useState } from 'react';
-import { getBookNamesByQuickSearch } from '@/lib/graphql/queries/book/hook';
-import { IOption } from '@/lib/data/types';
 import { useRouter } from 'next/router';
-import { StyledHintBox } from '@/constants/styles-variables';
+import React, { useState } from 'react';
+import { FormContainer } from 'react-hook-form-mui';
+
+import CustomModal from '@/components/modals/custom-modal';
+import { IOption } from '@/lib/data/types';
+import BookSearchAutocompleteField from '@/components/form-fields/book-search-autocomplete-field';
 
 export default function QuickSearchModal({ open, onClose }) {
     const router = useRouter();
-    const formContext = useForm<{ quickSearch: string }>();
-    const { quickSearch } = formContext.watch();
-    const [bookHints, setBookHints] = useState<IOption<string>[]>([]);
-    const [loadingHints, setLoadingHints] = useState<boolean>(false);
+    const [inputValue, setInputValue] = useState<string>('');
 
-    useEffect(() => {
-        if (!!quickSearch) {
-            if (quickSearch.length > 3) {
-                setLoadingHints(true);
-                getBookNamesByQuickSearch(quickSearch)
-                    .then(hints => {
-                        setLoadingHints(false);
-                        setBookHints(hints);
-                    });
-            }
-        } else {
-            setBookHints([]);
-        }
-    }, [quickSearch]);
-
-    function onQuickSearchClick(value: string) {
-        router.push(`/books?quickSearch=${value}`);
+    function onQuickSearchClick() {
+        router.push(`/books?quickSearch=${inputValue}`);
         onClose();
     }
 
@@ -43,32 +23,18 @@ export default function QuickSearchModal({ open, onClose }) {
 
     return (
         <CustomModal open={open} title="Швидкий пошук">
-            <FormContainer formContext={formContext}
-                           handleSubmit={() => onQuickSearchClick(quickSearch)}>
-                <CustomTextField name="quickSearch" placeholder="Пошук" autoFocus={true} fullWidth
-                                 required={true}/>
+            <BookSearchAutocompleteField onSelect={(opt: IOption<string>) => onHintClick(opt)}
+                                         onInputChange={setInputValue}/>
 
-                <Box position="relative" p={1} mt={1}>
-                    <Loading show={loadingHints} isSmall={true}/>
+            <Box display="flex" alignItems="center" flexWrap="wrap" gap={1} mt={2}
+                 justifyContent="center">
+                <Button variant="outlined" onClick={onClose}>
+                    Закрити
+                </Button>
 
-                    {bookHints?.map((hint, i) => (
-                        <StyledHintBox key={i} mb={1}
-                                       onClick={() => onHintClick(hint)}>
-                            {hint.label}
-                        </StyledHintBox>
-                    ))}
-                </Box>
-
-                <Box display="flex" alignItems="center" flexWrap="wrap" gap={1} mt={2}
-                     justifyContent="center">
-                    <Button variant="outlined" onClick={onClose}>
-                        Закрити
-                    </Button>
-
-                    <Button variant="contained" type="submit"
-                            disabled={!quickSearch}>Знайти</Button>
-                </Box>
-            </FormContainer>
+                <Button variant="contained" type="submit"
+                        disabled={!inputValue} onClick={onQuickSearchClick}>Знайти</Button>
+            </Box>
         </CustomModal>
     );
 }

@@ -13,7 +13,7 @@ import {
     validatePhoneNumber
 } from '@/utils/utils';
 import CustomModal from '@/components/modals/custom-modal';
-import { OrderEntity } from '@/lib/data/types';
+import { BookEntity, IOption, OrderEntity } from '@/lib/data/types';
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import BasketBookItem from '@/components/basket-book-item';
 import OrderDeliveryTrackingBox from '@/components/orders/order-delivery-tracking-box';
@@ -27,6 +27,8 @@ import GroupDiscountBox from '@/components/group-discount-box';
 import { MuiTelInput } from 'mui-tel-input';
 import { ApolloError } from '@apollo/client';
 import AddressForm, { getAddressFromForm, IAddressForm } from '@/components/form-fields/address-form';
+import BookSearchAutocompleteField from '@/components/form-fields/book-search-autocomplete-field';
+import { getBookById } from '@/lib/graphql/queries/book/hook';
 
 interface IProps {
     order: OrderEntity;
@@ -262,6 +264,34 @@ export default function OrderModal({ open, order, onClose }: IProps) {
         return false;
     }
 
+    function onBookAdd(id: string) {
+        if (id && !orderItem.books.some(({ book }) => book.id === id)) {
+            setLoading(true);
+            getBookById(id)
+                .then((book: BookEntity) => {
+                    setLoading(false);
+                    if (!!book.numberInStock) {
+                        setOrderItem(new OrderEntity({
+                            ...orderItem,
+                            books: [
+                                ...orderItem.books,
+                                {
+                                    count: 1,
+                                    price: book.price,
+                                    discount: book.discount,
+                                    book,
+                                    bookId: book.id
+                                }
+                            ]
+                        }));
+                    }
+                })
+                .catch(() => {
+                    setLoading(false);
+                });
+        }
+    }
+
     return (
         <CustomModal open={open} big={true}
                      title={'Замовлення № ' + renderOrderNumber(orderItem?.orderNumber)}
@@ -340,6 +370,13 @@ export default function OrderModal({ open, order, onClose }: IProps) {
             </FormContainer>
 
             <AddressForm formContext={addressFormContext} disabled={disabledPersonalInfo}/>
+
+            {isAdmin(user) &&
+              <Grid container spacing={2} my={1}>
+                <Grid item xs={12} md={4}>
+                  <BookSearchAutocompleteField onSelect={(val: IOption<string>) => onBookAdd(val?.id)}/>
+                </Grid>
+              </Grid>}
 
             <Grid container alignItems="center" display="flex" spacing={2} justifyContent="space-between" my={2}>
                 {orderItem?.books.filter(b => !b.groupDiscountId)
