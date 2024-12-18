@@ -41,7 +41,7 @@ export async function checkUsageInBook(propKey: keyof BookEntity, ids: string[],
     }
 }
 
-export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilters: any[] } {
+export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilters: any[], orFilters: any[] } {
     const andFilters = [];
     const orFilters = [];
 
@@ -81,7 +81,8 @@ export function getValidFilters<T>(filters?: T): { quickSearch: RegExp, andFilte
 
     return {
         quickSearch: filters && filters['quickSearch'] ? getCaseInsensitiveSubstringOption(filters['quickSearch']) : null,
-        andFilters
+        andFilters,
+        orFilters
     };
 }
 
@@ -120,7 +121,7 @@ export function createMailOptions(emailTo: string, subject: string, html: string
         attachments: [
             {
                 filename: 'logo.png',
-                path: process.env.NODE_ENV === 'development' ?`${process.cwd()}/public/logo.png` : `${process.env.FRONTEND_URL}/logo.png`,
+                path: process.env.NODE_ENV === 'development' ? `${process.cwd()}/public/logo.png` : `${process.env.FRONTEND_URL}/logo.png`,
                 cid: 'logo'
             },
             ...attachments

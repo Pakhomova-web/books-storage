@@ -9,7 +9,7 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
     items: BookEntity[],
     totalCount: number
 }> {
-    const { quickSearch, andFilters } = getValidFilters(filters);
+    const { quickSearch, andFilters, orFilters } = getValidFilters(filters);
     const indexFilterByPublishingHouse = andFilters.findIndex(filter => filter.publishingHouse);
 
     if (indexFilterByPublishingHouse !== -1) {
@@ -25,6 +25,9 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
 
     if (andFilters?.length) {
         query.and(andFilters);
+    }
+    if (orFilters?.length) {
+        query.or(orFilters);
     }
 
     query
