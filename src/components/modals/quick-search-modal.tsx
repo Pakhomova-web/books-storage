@@ -1,7 +1,6 @@
 import { Box, Button } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
-import { FormContainer } from 'react-hook-form-mui';
 
 import CustomModal from '@/components/modals/custom-modal';
 import { IOption } from '@/lib/data/types';
