@@ -13,6 +13,7 @@ import Loading from '@/components/loading';
 import { UserEntity } from '@/lib/data/types';
 import { isAdmin } from '@/utils/utils';
 import TopSoldBooks from '@/components/books/top-sold-books';
+import { getDeliveryOptions } from '@/lib/graphql/queries/delivery/hook';
 
 const authUrls = ['/sign-in', '/reset-password'];
 const commonUrls = ['/books', '/books/details', '/publishing-houses'];
@@ -36,13 +37,18 @@ const StyledDiscountBox = styled(Box)(({ theme }) => ({
 export default function Main({ children }) {
     const [loading, setLoading] = useState<boolean>(false);
     const { fetchUser } = useUser();
-    const { user, logout, setUser } = useAuth();
+    const { user, logout, setUser, setDeliveries, deliveries } = useAuth();
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('lg'));
     const router = useRouter();
     const pathname = usePathname();
 
     useEffect(() => {
+        if (!deliveries?.length) {
+            getDeliveryOptions().then(items => {
+                setDeliveries(items);
+            })
+        }
         setLoading(true);
         fetchUser()
             .then((user: UserEntity) => {

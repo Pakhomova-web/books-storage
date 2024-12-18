@@ -780,11 +780,13 @@ export type OrderSubList = {
 export type OrderUpdateInput = {
   adminComment?: InputMaybe<Scalars['String']['input']>;
   books: Array<OrderBookInput>;
-  city: Scalars['String']['input'];
+  city?: InputMaybe<Scalars['String']['input']>;
   comment?: InputMaybe<Scalars['String']['input']>;
   deliveryId: Scalars['ID']['input'];
   district?: InputMaybe<Scalars['String']['input']>;
   firstName: Scalars['String']['input'];
+  flat?: InputMaybe<Scalars['String']['input']>;
+  house?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   instagramUsername?: InputMaybe<Scalars['String']['input']>;
   isConfirmed?: InputMaybe<Scalars['Boolean']['input']>;
@@ -793,11 +795,11 @@ export type OrderUpdateInput = {
   isPartlyPaid?: InputMaybe<Scalars['Boolean']['input']>;
   isSent?: InputMaybe<Scalars['Boolean']['input']>;
   lastName: Scalars['String']['input'];
-  novaPostOffice?: InputMaybe<Scalars['Int']['input']>;
   phoneNumber: Scalars['String']['input'];
-  postcode?: InputMaybe<Scalars['Int']['input']>;
-  region: Scalars['String']['input'];
+  region?: InputMaybe<Scalars['String']['input']>;
+  street?: InputMaybe<Scalars['String']['input']>;
   trackingNumber?: InputMaybe<Scalars['String']['input']>;
+  warehouse?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type PageType = {

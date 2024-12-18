@@ -3,6 +3,7 @@ import { OrderBookEntity, UserEntity } from '@/lib/data/types';
 import { ROLES } from '@/constants/roles';
 import { emailValidatorExp, passwordValidatorExp } from '@/constants/validators-exp';
 import { matchIsValidTel } from 'mui-tel-input';
+import { DELIVERIES } from '@/constants/options';
 
 export function downloadCsv<K>(items: K[], tableKeys: TableKey<K>[], filename = 'data') {
     const blob = new Blob(
@@ -193,15 +194,15 @@ export function validatePhoneNumber(form, value: string, required = false) {
 }
 
 export function isNovaPostSelected(deliveryId: string) {
-    return deliveryId === '66d5c90e3415a4551a000600';
+    return deliveryId === DELIVERIES.NOVA_POSHTA;
 }
 
 export function isUkrPoshtaSelected(deliveryId: string) {
-    return deliveryId === '66d5c9173415a4551a000606';
+    return deliveryId === DELIVERIES.UKRPOSHTA;
 }
 
 export function isSelfPickup(deliveryId: string) {
-    return deliveryId === '67406cec5f3c198cb08c3ffb';
+    return deliveryId === DELIVERIES.SELF_PICKUP;
 }
 
 export function getLinkForTracking(deliveryId: string, trackingNumber: string) {

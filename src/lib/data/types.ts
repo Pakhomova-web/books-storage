@@ -368,6 +368,9 @@ export class OrderEntity {
     region: string;
     district?: string;
     city: string;
+    street: string;
+    house: string;
+    flat: string;
     warehouse?: number;
     isCanceled?: boolean;
     isConfirmed?: boolean;
@@ -401,6 +404,9 @@ export class OrderEntity {
             this.region = data.region || null;
             this.district = data.district || null;
             this.city = data.city || null;
+            this.street = data.street || null;
+            this.house = data.house || null;
+            this.flat = data.flat || null;
             this.warehouse = data.warehouse || null;
             this.isCanceled = !!data.isCanceled;
             this.isConfirmed = !!data.isConfirmed;

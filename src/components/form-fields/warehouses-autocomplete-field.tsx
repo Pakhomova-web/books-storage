@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { getWarehouses } from '@/lib/graphql/queries/nova-poshta/hooks';
 import { NovaPoshtaWarehouseEntity } from '@/lib/data/types';
 
-export default function WarehouseAutocompleteField({ settlementRef, warehouse = null, onSelect }) {
+export default function WarehouseAutocompleteField({ disabled = false, settlementRef, warehouse = null, onSelect }) {
     const [loading, setLoading] = useState<boolean>(false);
     const [options, setOptions] = useState<NovaPoshtaWarehouseEntity[]>([]);
     const [inputValue, setInputValue] = useState<string>('');
@@ -66,7 +66,7 @@ export default function WarehouseAutocompleteField({ settlementRef, warehouse = 
         <Autocomplete filterOptions={x => x}
                       clearOnBlur={false}
                       loading={loading}
-                      disabled={!settlementRef}
+                      disabled={!settlementRef || disabled}
                       value={selected}
                       inputValue={inputValue}
                       onInputChange={(_, value) => setInputValue(value)}

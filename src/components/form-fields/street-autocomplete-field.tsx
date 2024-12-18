@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { getStreets } from '@/lib/graphql/queries/nova-poshta/hooks';
 import { NovaPoshtaStreetEntity } from '@/lib/data/types';
 
-export default function StreetAutocompleteField({ settlementRef, street = null, onSelect }) {
+export default function StreetAutocompleteField({ disabled = false, settlementRef, street = null, onSelect }) {
     const [loading, setLoading] = useState<boolean>(false);
     const [options, setOptions] = useState<NovaPoshtaStreetEntity[]>([]);
     const [inputValue, setInputValue] = useState<string>('');
@@ -54,7 +54,7 @@ export default function StreetAutocompleteField({ settlementRef, street = null, 
         <Autocomplete filterOptions={x => x}
                       clearOnBlur={false}
                       loading={loading}
-                      disabled={!settlementRef}
+                      disabled={!settlementRef || disabled}
                       value={selected}
                       onInputChange={(_, value) => setInputValue(value)}
                       options={options}

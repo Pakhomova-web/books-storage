@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { getSettlements } from '@/lib/graphql/queries/nova-poshta/hooks';
 import { NovaPoshtaSettlementEntity } from '@/lib/data/types';
 
-export default function SettlementAutocompleteField({ city = null, region = null, district = null, onSelect }) {
+export default function SettlementAutocompleteField({ disabled = false, city = null, region = null, district = null, onSelect }) {
     const [loading, setLoading] = useState<boolean>(false);
     const [options, setOptions] = useState<NovaPoshtaSettlementEntity[]>([]);
     const [inputValue, setInputValue] = useState<string>('');
@@ -12,9 +12,9 @@ export default function SettlementAutocompleteField({ city = null, region = null
     useEffect(() => {
         if (city && region && selected?.title !== inputValue) {
             setSelected(null);
-            getOptions(`${city} ${region}`, city, region);
+            getOptions(`${city} ${region}`, city, region, district);
         }
-    }, [city, region]);
+    }, [city, region, district]);
 
     useEffect(() => {
         if (!!inputValue?.length && selected?.title !== inputValue) {
@@ -31,12 +31,12 @@ export default function SettlementAutocompleteField({ city = null, region = null
         }
     }, [inputValue]);
 
-    function getOptions(value: string, city?: string, region?: string) {
+    function getOptions(value: string, city?: string, region?: string, district?: string) {
         setLoading(true);
         getSettlements(value).then((cities: NovaPoshtaSettlementEntity[]) => {
             setOptions(cities);
             if (city && region) {
-                const val = cities.find(c => c.city === city && c.region === region && c.district === district);
+                const val = cities.find(c => c.city === city && c.region === region && (!district && !c.district || c.district === district));
 
                 setSelected(val);
                 onSelect(val, false);
@@ -52,6 +52,7 @@ export default function SettlementAutocompleteField({ city = null, region = null
         <Autocomplete filterOptions={x => x}
                       clearOnBlur={false}
                       loading={loading}
+                      disabled={disabled}
                       value={selected}
                       onInputChange={(_, value) => setInputValue(value)}
                       options={options}

@@ -1,4 +1,4 @@
-import { Box, Button, FormControlLabel, Grid, Radio, RadioGroup } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { MuiTelInput } from 'mui-tel-input';
 import { styled } from '@mui/material/styles';
@@ -7,14 +7,13 @@ import { useRouter } from 'next/router';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 
 import { useBooksByIds, useUpdateBookCountInBasket } from '@/lib/graphql/queries/book/hook';
-import { borderRadius, priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
+import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
 import {
     isAdmin,
     isNovaPostSelected,
-    isSelfPickup,
     isUkrPoshtaSelected,
     onCopyOrderClick,
     renderOrderNumber,
@@ -31,10 +30,7 @@ import {
 } from '@/lib/graphql/queries/group-discounts/hook';
 import GroupDiscountBox from '@/components/group-discount-box';
 import { DELIVERIES } from '@/constants/options';
-import SettlementAutocompleteField from '@/components/form-fields/settlement-autocomplete-field';
-import WarehouseAutocompleteField from '@/components/form-fields/warehouses-autocomplete-field';
-import { NovaPoshtaSettlementEntity, NovaPoshtaStreetEntity, NovaPoshtaWarehouseEntity } from '@/lib/data/types';
-import StreetAutocompleteField from '@/components/form-fields/street-autocomplete-field';
+import AddressForm, { getAddressFromForm, IAddressForm } from '@/components/form-fields/address-form';
 
 const TitleBoxStyled = styled(Box)(({ theme }) => ({
     ...styleVariables.bigTitleFontSize(theme),
@@ -51,18 +47,6 @@ interface IForm {
     phoneNumber: string,
     comment: string
 }
-
-const DeliveryBoxOption = styled(Box)(() => ({
-    borderRadius,
-    border: `1px solid ${primaryLightColor}`
-}));
-
-const deliveryOptions: { title: string, value: string }[] = [
-    { value: 'NOVA_POSHTA_WAREHOUSE', title: 'Нова пошта (відділення/поштомат)' },
-    { value: 'NOVA_POSHTA_COURIER', title: 'Нова пошта (адресна доставка до дверей)' },
-    { value: 'UKRPOSHTA', title: 'Укрпошта (відділення)' },
-    { value: 'SELF_PICKUP', title: 'Самовивіз' }
-];
 
 export default function Basket() {
     const router = useRouter();
@@ -95,7 +79,7 @@ export default function Basket() {
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     const [orderNumber, setOrderNumber] = useState<string>();
     const { create, creating, creatingError } = useCreateOrder();
-    const addressFormContext = useForm({
+    const addressFormContext = useForm<IAddressForm>({
         defaultValues: {
             isCourier: false,
             deliveryId: DELIVERIES.NOVA_POSHTA,
@@ -123,16 +107,12 @@ export default function Basket() {
         warehouse,
         novaPoshtaWarehouseCity,
         novaPoshtaWarehouseRegion,
-        novaPoshtaWarehouseDistrict,
-        novaPoshtaWarehouseCityRef,
         novaPoshtaWarehouse,
         deliveryId,
         isCourier,
         novaPoshtaCourierCity,
         novaPoshtaCourierStreet,
         novaPoshtaCourierHouse,
-        novaPoshtaCourierCityRef,
-        novaPoshtaCourierDistrict,
         novaPoshtaCourierRegion
     } = addressFormContext.watch();
 
@@ -244,44 +224,10 @@ export default function Basket() {
     function onSubmit() {
         if (!submitDisabled) {
             const mainInfo = formContext.getValues();
-            const address = addressFormContext.getValues();
-            let city = null;
-            let region = null;
-            let district = null;
-            let street = null;
-            let house = null;
-            let flat = null;
-            let warehouse = null;
 
-            if (isNovaPostSelected(deliveryId)) {
-                if (isCourier) {
-                    city = address.novaPoshtaCourierCity;
-                    region = address.novaPoshtaCourierRegion;
-                    district = address.novaPoshtaCourierDistrict;
-                    street = address.novaPoshtaCourierStreet;
-                    house = address.novaPoshtaCourierHouse;
-                    flat = address.novaPoshtaCourierFlat;
-                } else {
-                    city = address.novaPoshtaWarehouseCity;
-                    region = address.novaPoshtaWarehouseRegion;
-                    district = address.novaPoshtaWarehouseDistrict;
-                    warehouse = address.novaPoshtaWarehouse;
-                }
-            } else if (isUkrPoshtaSelected(deliveryId)) {
-                city = address.city;
-                region = address.region;
-                district = address.district;
-                warehouse = address.warehouse;
-            }
             create({
                 ...mainInfo,
-                deliveryId: address.deliveryId,
-                city,
-                region,
-                district,
-                street,
-                flat,
-                house,
+                ...getAddressFromForm(addressFormContext.getValues()),
                 warehouse,
                 books: [
                     ...items.map(book => ({
@@ -315,62 +261,6 @@ export default function Basket() {
 
     function handlePhoneNumberChange(value: string) {
         validatePhoneNumber(formContext, value);
-    }
-
-    function onDeliveryOptionChange(value: string) {
-        switch (value) {
-            case 'UKRPOSHTA':
-                addressFormContext.setValue('deliveryId', DELIVERIES.UKRPOSHTA);
-                addressFormContext.setValue('isCourier', false);
-                break;
-            case 'NOVA_POSHTA_WAREHOUSE':
-                addressFormContext.setValue('deliveryId', DELIVERIES.NOVA_POSHTA);
-                addressFormContext.setValue('isCourier', false);
-                break;
-            case 'NOVA_POSHTA_COURIER':
-                addressFormContext.setValue('deliveryId', DELIVERIES.NOVA_POSHTA);
-                addressFormContext.setValue('isCourier', true);
-                break;
-            case 'SELF_PICKUP':
-                addressFormContext.setValue('deliveryId', DELIVERIES.SELF_PICKUP);
-                addressFormContext.setValue('isCourier', false);
-        }
-    }
-
-    function onNovaPoshtaWarehouseSelect(val: NovaPoshtaWarehouseEntity, refreshData = false) {
-        if (refreshData) {
-            addressFormContext.setValue('novaPoshtaWarehouse', val?.number);
-        }
-    }
-
-    function onNovaPoshtaSettlementSelect(val: NovaPoshtaSettlementEntity, refreshData = false) {
-        if (refreshData) {
-            addressFormContext.setValue('novaPoshtaWarehouseCity', val?.city || '');
-            addressFormContext.setValue('novaPoshtaWarehouseRegion', val?.region || '');
-            addressFormContext.setValue('novaPoshtaWarehouseDistrict', val?.district || '');
-            if (!val) {
-                addressFormContext.setValue('novaPoshtaWarehouse', null);
-            }
-        }
-        addressFormContext.setValue('novaPoshtaWarehouseCityRef', val?.ref || '');
-    }
-
-    function onNovaPoshtaCourierCitySelect(val: NovaPoshtaSettlementEntity, refreshData = false) {
-        if (refreshData) {
-            addressFormContext.setValue('novaPoshtaCourierCity', val?.city || '');
-            addressFormContext.setValue('novaPoshtaCourierRegion', val?.region || '');
-            addressFormContext.setValue('novaPoshtaCourierDistrict', val?.district || '');
-            if (!val) {
-                addressFormContext.setValue('novaPoshtaCourierStreet', null);
-            }
-        }
-        addressFormContext.setValue('novaPoshtaCourierCityRef', val?.ref || '');
-    }
-
-    function onNovaPoshtaCourierStreetSelect(val: NovaPoshtaStreetEntity, refreshData = false) {
-        if (refreshData) {
-            addressFormContext.setValue('novaPoshtaCourierStreet', val?.description);
-        }
     }
 
     function isSubmitDisabled() {
@@ -527,105 +417,14 @@ export default function Basket() {
                                      label="Нікнейм в інстаграм для зв'язку"
                                      fullWidth/>
                   </Grid>
-                </Grid>
-              </FormContainer>
-
-              <FormContainer formContext={addressFormContext}>
-                <Grid container spacing={2} px={1} mt={1}>
-                  <Grid item xs={12}>
-                    <Box sx={styleVariables.sectionTitle}>Спосіб доставки</Box>
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <RadioGroup defaultValue={deliveryOptions[0].value}
-                                onChange={(_, value: string) => onDeliveryOptionChange(value)}>
-                      <Box display="flex" flexDirection="column" gap={1}>
-                          {deliveryOptions.map((option, index) => (
-                              <DeliveryBoxOption p={1} key={index}>
-                                  <FormControlLabel value={option.value}
-                                                    control={<Radio/>}
-                                                    label={option.title}/>
-
-                                  {option.value === 'NOVA_POSHTA_WAREHOUSE' &&
-                                    <Grid container spacing={2} mt={0}
-                                          display={isNovaPostSelected(deliveryId) && !isCourier ? 'flex' : 'none'}>
-                                      <Grid item xs={12} sm={6}>
-                                        <SettlementAutocompleteField onSelect={onNovaPoshtaSettlementSelect}
-                                                                     city={novaPoshtaWarehouseCity}
-                                                                     region={novaPoshtaWarehouseRegion}
-                                                                     district={novaPoshtaWarehouseDistrict}/>
-                                      </Grid>
-
-                                      <Grid item xs={12} sm={6}>
-                                        <WarehouseAutocompleteField settlementRef={novaPoshtaWarehouseCityRef}
-                                                                    warehouse={novaPoshtaWarehouse}
-                                                                    onSelect={onNovaPoshtaWarehouseSelect}/>
-                                      </Grid>
-                                    </Grid>}
-
-                                  {option.value === 'NOVA_POSHTA_COURIER' &&
-                                    <Grid container spacing={2} mt={0}
-                                          display={isNovaPostSelected(deliveryId) && isCourier ? 'flex' : 'none'}>
-                                      <Grid item xs={12} sm={6}>
-                                        <SettlementAutocompleteField onSelect={onNovaPoshtaCourierCitySelect}
-                                                                     city={novaPoshtaCourierCity}
-                                                                     region={novaPoshtaCourierRegion}
-                                                                     district={novaPoshtaCourierDistrict}/>
-                                      </Grid>
-
-                                      <Grid item xs={12} sm={6}>
-                                        <StreetAutocompleteField onSelect={onNovaPoshtaCourierStreetSelect}
-                                                                 settlementRef={novaPoshtaCourierCityRef}
-                                                                 street={novaPoshtaCourierStreet}/>
-                                      </Grid>
-
-                                      <Grid item xs={6}>
-                                        <CustomTextField name="novaPoshtaCourierHouse" label="Будинок" required={true}
-                                                         fullWidth/>
-                                      </Grid>
-
-                                      <Grid item xs={6}>
-                                        <CustomTextField name="novaPoshtaCourierFlat" label="Квартира" fullWidth/>
-                                      </Grid>
-                                    </Grid>}
-
-                                  {option.value === 'UKRPOSHTA' &&
-                                    <Grid container spacing={2} mt={0}
-                                          display={isUkrPoshtaSelected(deliveryId) ? 'flex' : 'none'}>
-                                      <Grid item xs={12} md={6}>
-                                        <CustomTextField name="region" label="Область" required={true} fullWidth/>
-                                      </Grid>
-
-                                      <Grid item xs={12} md={6}>
-                                        <CustomTextField name="district" label="Район" fullWidth/>
-                                      </Grid>
-
-                                      <Grid item xs={12} md={6}>
-                                        <CustomTextField name="city" label="Місто" required={true} fullWidth/>
-                                      </Grid>
-
-                                      <Grid item xs={12} md={6}>
-                                        <CustomTextField name="warehouse" label="Відділення (індекс)" required={true}
-                                                         fullWidth/>
-                                      </Grid>
-                                    </Grid>}
-
-                                  {option.value === 'SELF_PICKUP' &&
-                                    <Box mt={1} justifyContent="center"
-                                         display={isSelfPickup(deliveryId) ? 'flex' : 'none'}>
-                                      Самовивіз за адресою: м. Харків, проспект Героїв Харкова, 162 (лише після дзвінка-підтвердження).
-                                    </Box>}
-                              </DeliveryBoxOption>
-                          ))}
-                      </Box>
-                    </RadioGroup>
-                  </Grid>
 
                   <Grid item xs={12} mt={2}>
                     <CustomTextField name="comment" label="Коментар" multiline fullWidth/>
                   </Grid>
                 </Grid>
               </FormContainer>
+
+              <AddressForm formContext={addressFormContext}/>
 
                 {creatingError && <ErrorNotification error={creatingError}/>}
 

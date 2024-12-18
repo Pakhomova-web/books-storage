@@ -1,4 +1,4 @@
-import { Box, Button, Grid, RadioGroup, Tooltip } from '@mui/material';
+import { Box, Button, Grid, Tooltip } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { FormContainer, useForm } from 'react-hook-form-mui';
 
@@ -13,7 +13,7 @@ import {
     validatePhoneNumber
 } from '@/utils/utils';
 import CustomModal from '@/components/modals/custom-modal';
-import { DeliveryEntity, OrderEntity } from '@/lib/data/types';
+import { OrderEntity } from '@/lib/data/types';
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import BasketBookItem from '@/components/basket-book-item';
 import OrderDeliveryTrackingBox from '@/components/orders/order-delivery-tracking-box';
@@ -22,12 +22,11 @@ import OrderStatus from '@/components/orders/order-status';
 import { useAuth } from '@/components/auth-context';
 import { sendEmailWithOrder, useCancelOrder, useUpdateOrder } from '@/lib/graphql/queries/order/hook';
 import ErrorNotification from '@/components/error-notification';
-import { useDeliveries } from '@/lib/graphql/queries/delivery/hook';
-import DeliveryRadioOption from '@/components/form-fields/delivery-radio-option';
 import CustomCheckbox from '@/components/form-fields/custom-checkbox';
 import GroupDiscountBox from '@/components/group-discount-box';
 import { MuiTelInput } from 'mui-tel-input';
 import { ApolloError } from '@apollo/client';
+import AddressForm, { getAddressFromForm, IAddressForm } from '@/components/form-fields/address-form';
 
 interface IProps {
     order: OrderEntity;
@@ -35,21 +34,33 @@ interface IProps {
     onClose: (updated?: boolean) => void;
 }
 
-class Form extends OrderEntity {
-    email: string;
+interface IForm {
+    id: string,
+    email: string,
+    firstName: string,
+    lastName: string,
+    trackingNumber: string,
+    phoneNumber: string,
+    date: string,
+    isPaid: boolean,
+    isConfirmed: boolean,
+    isSent: boolean,
+    isCanceled: boolean,
+    isPartlyPaid: boolean,
+    isDone: boolean,
+    comment: string,
+    adminComment: string,
+    instagramUsername: string
 }
 
 export default function OrderModal({ open, order, onClose }: IProps) {
     const { user } = useAuth();
     const [orderItem, setOrderItem] = useState<OrderEntity>(order);
-    const [delivery, setDelivery] = useState<DeliveryEntity>(order.delivery);
     const { update, updating, updatingError } = useUpdateOrder();
     const { update: cancel, updating: canceling, updatingError: cancelingError } = useCancelOrder();
-    const { items: deliveries, loading: loadingDeliveries } = useDeliveries();
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
-    const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
-    const formContext = useForm<Form>({
+    const formContext = useForm<IForm>({
         defaultValues: {
             ...orderItem,
             date: new Date(orderItem?.date).toLocaleDateString(),
@@ -57,13 +68,11 @@ export default function OrderModal({ open, order, onClose }: IProps) {
             instagramUsername: orderItem?.instagramUsername || orderItem?.user.instagramUsername
         }
     });
+    const [disabledPersonalInfo] = useState<boolean>(!isAdmin(user) || orderItem.isCanceled || orderItem.isDone);
     const {
         phoneNumber,
         firstName,
         lastName,
-        region,
-        city,
-        warehouse,
         trackingNumber,
         isConfirmed,
         isSent,
@@ -71,74 +80,63 @@ export default function OrderModal({ open, order, onClose }: IProps) {
         isPartlyPaid,
         isDone
     } = formContext.watch();
+    const addressFormContext = useForm<IAddressForm>({
+        defaultValues: {
+            isCourier: !!orderItem.house,
+            deliveryId: orderItem.delivery.id,
+            novaPoshtaWarehouseCityRef: '',
+            novaPoshtaWarehouseCity: isNovaPostSelected(orderItem.delivery.id) && !!orderItem.warehouse ? orderItem.city : null,
+            novaPoshtaWarehouseRegion: isNovaPostSelected(orderItem.delivery.id) && !!orderItem.warehouse ? orderItem.region : null,
+            novaPoshtaWarehouseDistrict: isNovaPostSelected(orderItem.delivery.id) && !!orderItem.warehouse ? orderItem.district : null,
+            novaPoshtaWarehouse: isNovaPostSelected(orderItem.delivery.id) && !!orderItem.warehouse ? orderItem.warehouse : null,
+            novaPoshtaCourierCity: isNovaPostSelected(orderItem.delivery.id) && !orderItem.warehouse ? orderItem.city : null,
+            novaPoshtaCourierRegion: isNovaPostSelected(orderItem.delivery.id) && !orderItem.warehouse ? orderItem.region : null,
+            novaPoshtaCourierDistrict: isNovaPostSelected(orderItem.delivery.id) && !orderItem.warehouse ? orderItem.district : null,
+            novaPoshtaCourierStreet: isNovaPostSelected(orderItem.delivery.id) && !orderItem.warehouse ? orderItem.street : null,
+            novaPoshtaCourierHouse: isNovaPostSelected(orderItem.delivery.id) && !orderItem.warehouse ? orderItem.house : null,
+            novaPoshtaCourierFlat: isNovaPostSelected(orderItem.delivery.id) && !orderItem.warehouse ? orderItem.flat : null,
+            novaPoshtaCourierCityRef: '',
+            city: isUkrPoshtaSelected(orderItem.delivery.id) ? orderItem.city : null,
+            district: isUkrPoshtaSelected(orderItem.delivery.id) ? orderItem.district : null,
+            region: isUkrPoshtaSelected(orderItem.delivery.id) ? orderItem.region : null,
+            warehouse: isUkrPoshtaSelected(orderItem.delivery.id) ? orderItem.warehouse : null
+        }
+    });
+    const {
+        city,
+        region,
+        warehouse,
+        novaPoshtaWarehouseCity,
+        novaPoshtaWarehouseRegion,
+        novaPoshtaWarehouse,
+        deliveryId,
+        isCourier,
+        novaPoshtaCourierCity,
+        novaPoshtaCourierStreet,
+        novaPoshtaCourierHouse,
+        novaPoshtaCourierRegion
+    } = addressFormContext.watch();
 
     useEffect(() => {
         setError(null);
-        let invalid = false;
-
-        if (!isAdmin(user) || orderItem.isDone || orderItem.isCanceled) {
-            setSubmitDisabled(false);
-            return;
-        }
-        if (!phoneNumber) {
+        if (!phoneNumber && !disabledPersonalInfo) {
             formContext.setError('phoneNumber', { message: 'Номер телефону обов\'язковий' });
-            setSubmitDisabled(true);
-            invalid = true;
         } else {
             formContext.clearErrors('phoneNumber');
         }
 
-        if (!region) {
-            formContext.setError('region', { message: 'Область обов\'язкова' });
-            setSubmitDisabled(true);
-            invalid = true;
-        } else {
-            formContext.clearErrors('region');
-        }
-
-        if (!city) {
-            formContext.setError('city', { message: 'Місто обов\'язкове' });
-            setSubmitDisabled(true);
-            invalid = true;
-        } else {
-            formContext.clearErrors('city');
-        }
-
-        if (!firstName) {
+        if (!firstName && !disabledPersonalInfo) {
             formContext.setError('firstName', { message: 'Ім\'я обов\'язкове' });
-            setSubmitDisabled(true);
-            invalid = true;
         } else {
             formContext.clearErrors('firstName');
         }
 
-        if (!lastName) {
+        if (!lastName && !disabledPersonalInfo) {
             formContext.setError('lastName', { message: 'Прізвище обов\'язкове' });
-            setSubmitDisabled(true);
-            invalid = true;
         } else {
             formContext.clearErrors('lastName');
         }
-
-        if (isNovaPostSelected(delivery.id) && !warehouse) {
-            formContext.setError('warehouse', { message: '№ відділення/поштомата обов\'язкове' });
-            formContext.clearErrors('warehouse');
-            setSubmitDisabled(true);
-            invalid = true;
-        } else if (isUkrPoshtaSelected(delivery.id) && !warehouse) {
-            formContext.setError('warehouse', { message: 'Індекс обов\'язковий' });
-            formContext.clearErrors('warehouse');
-            setSubmitDisabled(true);
-            invalid = true;
-        } else {
-            formContext.clearErrors('warehouse');
-            formContext.clearErrors('warehouse');
-        }
-
-        if (!invalid) {
-            setSubmitDisabled(false);
-        }
-    }, [formContext, delivery, phoneNumber, firstName, lastName, region, city, warehouse]);
+    }, [formContext, phoneNumber, firstName, lastName, disabledPersonalInfo]);
 
     function onChangeBookCount(bookId: string, count: number) {
         setOrderItem(new OrderEntity({
@@ -190,14 +188,11 @@ export default function OrderModal({ open, order, onClose }: IProps) {
             id: orderItem.id,
             comment: values.comment,
             adminComment: values.adminComment,
-            region: values.region,
-            district: values.district,
-            city: values.city,
             phoneNumber: values.phoneNumber,
-            warehouse: values.warehouse ? +values.warehouse : null,
             firstName: values.firstName,
             lastName: values.lastName,
-            deliveryId: delivery.id,
+            ...getAddressFromForm(addressFormContext.getValues()),
+            warehouse,
             ...(values.isDone ? {
                 isConfirmed: true,
                 isPaid: orderItem.isPaid,
@@ -225,10 +220,6 @@ export default function OrderModal({ open, order, onClose }: IProps) {
             });
     }
 
-    function onDeliveryChange(id: string) {
-        setDelivery(deliveries.find(d => d.id === id));
-    }
-
     function onCancel() {
         cancel(orderItem.id)
             .then(() => onClose(true))
@@ -253,13 +244,31 @@ export default function OrderModal({ open, order, onClose }: IProps) {
         validatePhoneNumber(formContext, value);
     }
 
+    function isSubmitDisabled() {
+        if (!firstName || !lastName || !phoneNumber || !deliveryId) {
+            return true;
+        }
+
+        if (isNovaPostSelected(deliveryId)) {
+            if (isCourier) {
+                return !novaPoshtaCourierCity || !novaPoshtaCourierRegion ||
+                    !novaPoshtaCourierStreet || !novaPoshtaCourierHouse;
+            } else {
+                return !novaPoshtaWarehouseCity || !novaPoshtaWarehouseRegion || !novaPoshtaWarehouse;
+            }
+        } else if (isUkrPoshtaSelected(deliveryId)) {
+            return !city || !region || !warehouse;
+        }
+        return false;
+    }
+
     return (
         <CustomModal open={open} big={true}
                      title={'Замовлення № ' + renderOrderNumber(orderItem?.orderNumber)}
                      onClose={() => onClose()}
-                     isSubmitDisabled={submitDisabled}
+                     isSubmitDisabled={isSubmitDisabled()}
                      onSubmit={isAdmin(user) && !orderItem.isDone && !orderItem.isCanceled ? onSubmit : null}
-                     loading={loading || !orderItem || updating || loadingDeliveries || canceling}>
+                     loading={loading || !orderItem || updating || canceling}>
             <FormContainer formContext={formContext}>
                 <Grid container alignItems="center" display="flex" spacing={2} justifyContent="space-between" mb={2}>
                     <Grid item xs={12} sm={6} md={8} lg={10} display="flex"
@@ -273,47 +282,23 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                 </Grid>
 
                 <Grid container spacing={2}>
+                    <Grid item xs={12} md={6}>
+                        <OrderDeliveryTrackingBox deliveryId={deliveryId}
+                                                  trackingNumber={trackingNumber}
+                                                  editable={isAdmin(user)}
+                                                  disabled={orderItem.isDone}/>
+                    </Grid>
+
                     <Grid item xs={12}>
                         <CustomTextField name="comment"
-                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
+                                         disabled={disabledPersonalInfo}
                                          label="Коментар" fullWidth/>
                     </Grid>
 
                     {isAdmin(user) && <Grid item xs={12}>
-                      <CustomTextField name="adminComment" disabled={orderItem.isDone || orderItem.isCanceled}
+                      <CustomTextField name="adminComment" disabled={disabledPersonalInfo}
                                        label="Коментар адміністратора" fullWidth/>
                     </Grid>}
-
-                    {!!delivery && <>
-                      <Grid item xs={12} md={6}>
-                        <OrderDeliveryTrackingBox delivery={delivery}
-                                                  trackingNumber={trackingNumber}
-                                                  editable={isAdmin(user)}
-                                                  disabled={orderItem.isDone}/>
-                      </Grid>
-
-                      <Grid item xs={12}>
-                        <Box sx={styleVariables.sectionTitle}>Спосіб доставки</Box>
-                      </Grid>
-
-                      <Grid item xs={12}>
-                        <RadioGroup defaultValue={delivery.id}
-                                    onChange={(_, value) => onDeliveryChange(value)}>
-                          <Grid container spacing={2}>
-                              {deliveries.map((opt, index) => (
-                                  <Grid key={`${opt.id}-${index}`} item xs={12} sm={4} pl={2} display="flex"
-                                        justifyContent="center">
-                                      <Box p={1}>
-                                          <DeliveryRadioOption
-                                              disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
-                                              option={opt}/>
-                                      </Box>
-                                  </Grid>
-                              ))}
-                          </Grid>
-                        </RadioGroup>
-                      </Grid>
-                    </>}
 
                     <Grid item xs={12}>
                         <Box sx={styleVariables.sectionTitle}>Особиста інформація</Box>
@@ -321,20 +306,20 @@ export default function OrderModal({ open, order, onClose }: IProps) {
 
                     <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="firstName" required
-                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
+                                         disabled={disabledPersonalInfo}
                                          label="Ім'я" fullWidth/>
                     </Grid>
 
                     <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="lastName" required
-                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
+                                         disabled={disabledPersonalInfo}
                                          label="Прізвище" fullWidth/>
                     </Grid>
 
                     <Grid item xs={12} md={6} lg={3}>
                         <MuiTelInput value={phoneNumber}
                                      required={true}
-                                     disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
+                                     disabled={disabledPersonalInfo}
                                      onChange={handlePhoneNumberChange}
                                      label="Номер телефону"
                                      error={!!formContext.formState.errors.phoneNumber}
@@ -347,43 +332,14 @@ export default function OrderModal({ open, order, onClose }: IProps) {
 
                     <Grid item xs={12} md={6} lg={3}>
                         <CustomTextField name="instagramUsername"
-                                         disabled={orderItem.isDone || orderItem.isCanceled}
+                                         disabled={disabledPersonalInfo}
                                          label="Нікнейм в інстаграм для зв'язку"
-                                         fullWidth/>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <Box sx={styleVariables.sectionTitle}>Адреса</Box>
-                    </Grid>
-
-                    <Grid item xs={12} md={6} lg={3}>
-                        <CustomTextField name="region" required
-                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
-                                         label="Область" fullWidth/>
-                    </Grid>
-
-                    <Grid item xs={12} md={6} lg={3}>
-                        <CustomTextField name="district"
-                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
-                                         label="Район"
-                                         fullWidth/>
-                    </Grid>
-
-                    <Grid item xs={12} md={6} lg={3}>
-                        <CustomTextField name="city" required
-                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
-                                         label="Місто" fullWidth/>
-                    </Grid>
-
-                    <Grid item xs={12} md={6} lg={3}>
-                        <CustomTextField name="warehouse"
-                                         type="number"
-                                         disabled={!isAdmin(user) || orderItem.isDone || orderItem.isCanceled}
-                                         label="№ відділення / поштомату"
                                          fullWidth/>
                     </Grid>
                 </Grid>
             </FormContainer>
+
+            <AddressForm formContext={addressFormContext} disabled={disabledPersonalInfo}/>
 
             <Grid container alignItems="center" display="flex" spacing={2} justifyContent="space-between" my={2}>
                 {orderItem?.books.filter(b => !b.groupDiscountId)
@@ -394,7 +350,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                                             price={price}
                                             pageUrl="/profile/orders"
                                             discount={discount}
-                                            editable={isAdmin(user) && !orderItem.isDone && !orderItem.isCanceled && !isSent}
+                                            editable={!disabledPersonalInfo && !isSent}
                                             onRemove={() => onRemove(book.id)}
                                             onCountChange={(count: number) => onChangeBookCount(book.id, count)}
                                             onDiscountChange={discount => onChangeBookDiscount(book.id, discount)}/>
@@ -476,12 +432,12 @@ export default function OrderModal({ open, order, onClose }: IProps) {
                                         name="isPartlyPaid"/>
                       </Grid>
 
-                      <Tooltip title={!isSelfPickup(delivery.id) && !trackingNumber ? 'Немає ТТН' : ''}>
+                      <Tooltip title={!isSelfPickup(deliveryId) && !trackingNumber ? 'Немає ТТН' : ''}>
                         <Grid item xs={12} md={6}>
                           <CustomCheckbox
                             checked={isSent}
-                            disabled={(!isSelfPickup(delivery.id) && !trackingNumber) || !isConfirmed || orderItem.isDone || orderItem.isCanceled}
-                            label={'Замовлення ' + (isSelfPickup(delivery.id) ? 'вручене' : 'відправлене')}
+                            disabled={(!isSelfPickup(deliveryId) && !trackingNumber) || !isConfirmed || orderItem.isDone || orderItem.isCanceled}
+                            label={'Замовлення ' + (isSelfPickup(deliveryId) ? 'вручене' : 'відправлене')}
                             name="isSent"/>
                         </Grid>
                       </Tooltip>

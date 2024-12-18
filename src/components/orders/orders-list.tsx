@@ -37,7 +37,7 @@ export default function OrdersList({ orders, onClick }) {
                             <OrderStatus status={order.status}/>
                         </Box>
 
-                        <OrderDeliveryTrackingBox delivery={order.delivery}
+                        <OrderDeliveryTrackingBox deliveryId={order.delivery.id}
                                                   trackingNumber={order.trackingNumber}/>
 
                         <Grid container spacing={1}>
