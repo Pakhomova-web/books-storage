@@ -57,8 +57,16 @@ export default function PublishingHouseModal({ open, item, onClose, isAdmin }: I
         }
     }
 
-    function parseImage() {
-        formContext.setValue('imageId', parseImageFromLink(imageLink));
+    function parseImage(e?) {
+        if (!e || e.key === 'Enter') {
+            e?.preventDefault()
+            e?.stopPropagation();
+
+            if (!!imageLink) {
+                formContext.setValue('imageId', parseImageFromLink(imageLink));
+                formContext.setValue('imageLink', null);
+            }
+        }
     }
 
     return (

@@ -94,7 +94,7 @@ export async function updateOrder(input: OrderEntity) {
     delete data.orderNumber;
     delete data.user;
 
-    const order = await Order.findById(input.id);
+    const order = await Order.findById(input.id).populate({ path: 'books', populate: 'book' });
     const balance = await Balance.findOne();
 
     if (!order.isConfirmed && input.isConfirmed) {
@@ -159,7 +159,6 @@ export async function updateOrder(input: OrderEntity) {
 
                     return book.save();
                 }
-
                 const removedBook = removedBooks.find(b => b.book.id === book.id);
 
                 if (removedBook) {

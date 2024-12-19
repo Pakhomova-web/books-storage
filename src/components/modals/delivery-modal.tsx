@@ -45,10 +45,15 @@ export default function DeliveryModal({ open, item, onClose, isAdmin }: IDeliver
         }
     }
 
-    function parseImage() {
-        if (!!imageLink) {
-            formContext.setValue('imageId', parseImageFromLink(imageLink));
-            formContext.setValue('imageLink', null);
+    function parseImage(e?) {
+        if (!e || e.key === 'Enter') {
+            e?.preventDefault()
+            e?.stopPropagation();
+
+            if (!!imageLink) {
+                formContext.setValue('imageId', parseImageFromLink(imageLink));
+                formContext.setValue('imageLink', null);
+            }
         }
     }
 

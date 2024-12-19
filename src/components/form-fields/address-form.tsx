@@ -119,7 +119,6 @@ export default function AddressForm({ formContext, disabled = false }) {
 
     function onNovaPoshtaWarehouseSelect(val: NovaPoshtaWarehouseEntity, refreshData = false) {
         if (refreshData) {
-            console.log(val?.number);
             formContext.setValue('novaPoshtaWarehouse', val?.number);
         }
     }
@@ -133,7 +132,6 @@ export default function AddressForm({ formContext, disabled = false }) {
                 formContext.setValue('novaPoshtaWarehouse', null);
             }
         }
-        console.log(val?.ref);
         formContext.setValue('novaPoshtaWarehouseCityRef', val?.ref || '');
     }
 

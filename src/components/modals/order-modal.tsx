@@ -246,7 +246,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
     }
 
     function isSubmitDisabled() {
-        if (!firstName || !lastName || !phoneNumber || !deliveryId) {
+        if (!firstName || !lastName || !phoneNumber || !deliveryId || !orderItem.books.length) {
             return true;
         }
 
