@@ -133,6 +133,7 @@ export default function AddressForm({ formContext, disabled = false }) {
                 formContext.setValue('novaPoshtaWarehouse', null);
             }
         }
+        console.log(val?.ref);
         formContext.setValue('novaPoshtaWarehouseCityRef', val?.ref || '');
     }
 
@@ -174,9 +175,9 @@ export default function AddressForm({ formContext, disabled = false }) {
 
                                     {option.value === 'NOVA_POSHTA_WAREHOUSE' &&
                                       <Grid container spacing={2} mt={0}
-                                            display={isNovaPostSelected(deliveryId) && !isCourier ? 'flex' : 'none'}>
+                                            display={deliveryOption === option.value ? 'flex' : 'none'}>
                                         <Grid item xs={12} sm={6}>
-                                          <SettlementAutocompleteField onSelect={onNovaPoshtaSettlementSelect}
+                                          <SettlementAutocompleteField onSelect={(v, refresh) => onNovaPoshtaSettlementSelect(v, refresh)}
                                                                        disabled={disabled}
                                                                        city={novaPoshtaWarehouseCity}
                                                                        region={novaPoshtaWarehouseRegion}
@@ -193,7 +194,7 @@ export default function AddressForm({ formContext, disabled = false }) {
 
                                     {option.value === 'NOVA_POSHTA_COURIER' &&
                                       <Grid container spacing={2} mt={0}
-                                            display={isNovaPostSelected(deliveryId) && isCourier ? 'flex' : 'none'}>
+                                            display={deliveryOption === option.value ? 'flex' : 'none'}>
                                         <Grid item xs={12} sm={6}>
                                           <SettlementAutocompleteField onSelect={onNovaPoshtaCourierCitySelect}
                                                                        disabled={disabled}
@@ -223,7 +224,7 @@ export default function AddressForm({ formContext, disabled = false }) {
 
                                     {option.value === 'UKRPOSHTA' &&
                                       <Grid container spacing={2} mt={0}
-                                            display={isUkrPoshtaSelected(deliveryId) ? 'flex' : 'none'}>
+                                            display={deliveryOption === option.value ? 'flex' : 'none'}>
                                         <Grid item xs={12} md={6}>
                                           <CustomTextField name="region" label="Область" required={true} fullWidth
                                                            disabled={disabled}/>
@@ -247,7 +248,7 @@ export default function AddressForm({ formContext, disabled = false }) {
 
                                     {option.value === 'SELF_PICKUP' &&
                                       <Box mt={1} justifyContent="center"
-                                           display={isSelfPickup(deliveryId) ? 'flex' : 'none'}>
+                                           display={deliveryOption === option.value ? 'flex' : 'none'}>
                                         Самовивіз за адресою: м. Харків, проспект Героїв Харкова, 162 (лише після
                                         дзвінка-підтвердження).
                                       </Box>}

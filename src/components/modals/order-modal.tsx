@@ -194,7 +194,6 @@ export default function OrderModal({ open, order, onClose }: IProps) {
             firstName: values.firstName,
             lastName: values.lastName,
             ...getAddressFromForm(addressFormContext.getValues()),
-            warehouse,
             ...(values.isDone ? {
                 isConfirmed: true,
                 isPaid: orderItem.isPaid,

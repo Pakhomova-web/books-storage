@@ -41,8 +41,10 @@ export default function Orders() {
     const [balance, setBalance] = useState<number>(0);
 
     useEffect(() => {
-        getBalance().then(value => setBalance(value));
-    }, [items]);
+        if (loading) {
+            getBalance().then(value => setBalance(value));
+        }
+    }, [loading]);
 
     function refreshData(updated = true) {
         if (updated) {

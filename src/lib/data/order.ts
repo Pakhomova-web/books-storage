@@ -1,4 +1,4 @@
-import { IOrderFilter, IPageable, OrderEntity } from '@/lib/data/types';
+import { IOrderFilter, IPageable, OrderBookEntity, OrderEntity } from '@/lib/data/types';
 import Order from '@/lib/data/models/order';
 import { GraphQLError } from 'graphql/error';
 import {
@@ -107,22 +107,83 @@ export async function updateOrder(input: OrderEntity) {
             return book.save();
         }));
 
-        input.books.forEach(({ count, price, discount }) =>
-            balance.value = balance.value + count * price * (100 - discount) / 100);
+        input.books.forEach(orderBook => {
+            balance.value = balance.value + calculateBookPrice(orderBook);
+        });
         await balance.save();
     } else if (!order.isDone && !order.isSent && !order.isPaid && !order.isPartlyPaid && order.isConfirmed && !input.isConfirmed) {
-        const books = await Book.find({ _id: { $in: input.books.map(b => b.bookId) } });
+        // change order from confirmed to unconfirmed
+        // recalculate numberInStock & balance only for book which were in order
+        const books = await Book.find({ _id: { $in: order.books.map(b => b.book.id) } });
 
         await Promise.all(books.map(book => {
-            book.numberInStock = book.numberInStock + input.books.find(b => b.bookId === book.id).count;
-            book.numberSold = (book.numberSold || 0) - input.books.find(b => b.bookId === book.id).count;
+            book.numberInStock = book.numberInStock + order.books.find(b => b.book.id === book.id).count;
+            book.numberSold = (book.numberSold || 0) - order.books.find(b => b.book.id === book.id).count;
 
             return book.save();
         }));
 
-        input.books.forEach(({ count, price, discount }) =>
-            balance.value = balance.value - count * price * (100 - discount) / 100);
+        order.books.forEach(orderBook => {
+            balance.value = balance.value - calculateBookPrice(orderBook);
+        });
         await balance.save();
+    } else if (order.isConfirmed && input.isConfirmed) {
+        // change books in confirmed order
+        // change balance and numberInStock
+        const newBooks = input.books.filter(({ bookId }) => !order.books.some(b => b.book.id === bookId));
+        const removedBooks = order.books.filter(({ book }) =>
+            !input.books.some(({ bookId }) => bookId === book.id));
+        const changedBooks = order.books.filter(orderBook =>
+            input.books.some(({ bookId, count, discount }) =>
+                orderBook.book.id === bookId && (orderBook.discount !== discount || orderBook.count !== count)));
+
+        if (newBooks.length || removedBooks.length || changedBooks.length) {
+            const books = await Book.find({
+                _id: {
+                    $in: [
+                        ...newBooks.map(({ bookId }) => bookId),
+                        ...changedBooks.map(({ book }) => book.id),
+                        ...removedBooks.map(({ book }) => book.id)
+                    ]
+                }
+            });
+            let balanceSum = 0;
+
+            await Promise.all(books.map(book => {
+                const newBook = newBooks.find(b => b.bookId === book.id);
+
+                if (newBook) {
+                    book.numberInStock = book.numberInStock - newBook.count;
+                    book.numberSold = (book.numberSold || 0) + newBook.count;
+                    balanceSum = balanceSum + calculateBookPrice(newBook);
+
+                    return book.save();
+                }
+
+                const removedBook = removedBooks.find(b => b.book.id === book.id);
+
+                if (removedBook) {
+                    book.numberInStock = book.numberInStock + removedBook.count;
+                    book.numberSold = (book.numberSold || 0) - removedBook.count;
+                    balanceSum = balanceSum - calculateBookPrice(removedBook);
+
+                    return book.save();
+                }
+
+                const bookFromOrder = changedBooks.find(({ book: { id } }) => id === book.id);
+                const bookFromInput = input.books.find(({ bookId }) => bookId === bookFromOrder.book.id);
+                const countDiff = bookFromOrder.count - bookFromInput.count;
+
+                book.numberInStock = book.numberInStock + countDiff;
+                book.numberSold = (book.numberSold || 0) - countDiff;
+                balanceSum = balanceSum - calculateBookPrice(bookFromOrder) + calculateBookPrice(bookFromInput);
+
+                return book.save();
+            }));
+
+            balance.value = balance.value + balanceSum;
+            await balance.save();
+        }
     }
     const sentEmail = !!data.trackingNumber && data.isSent && !order.isSent;
 
@@ -133,6 +194,10 @@ export async function updateOrder(input: OrderEntity) {
     }
 
     return input as OrderEntity;
+}
+
+function calculateBookPrice(orderBook: OrderBookEntity) {
+    return orderBook.count * orderBook.price * (100 - orderBook.discount) / 100;
 }
 
 export async function getBalance() {
@@ -284,7 +349,7 @@ function orderTemplate(order: OrderEntity) {
             </tr>
         </table>
     `);
-    }
+}
 
 function _getOrderData(input: OrderEntity, orderNumber?: number) {
     return {
