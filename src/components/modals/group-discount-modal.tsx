@@ -58,7 +58,7 @@ export default function GroupDiscountModal({ item, onClose, isAdmin }: IGroupDis
         }
     }, [bookSearch]);
 
-    async function onSubmit() {
+    function onSubmit() {
         let promise;
 
         if (!!item?.id) {

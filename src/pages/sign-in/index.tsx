@@ -13,7 +13,7 @@ import { useAuth } from '@/components/auth-context';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { MAIN_NAME } from '@/constants/main-name';
-import { emailValidation, passwordValidation, validatePhoneNumber } from '@/utils/utils';
+import { emailValidation, passwordValidation, trimValues, validatePhoneNumber } from '@/utils/utils';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomImage from '@/components/custom-image';
 import { MuiTelInput } from 'mui-tel-input';
@@ -52,9 +52,9 @@ export default function SignIn() {
 
     function onSubmit() {
         if (!isFormInvalid()) {
-            const { firstName, lastName } = formContext.getValues();
+            const { firstName, lastName } = trimValues(formContext.getValues());
 
-            signIn({ email, password, firstName, lastName, phoneNumber })
+            signIn({ email, password, firstName: firstName.trim(), lastName: lastName.trim(), phoneNumber })
                 .then(() => {
                     formContext.reset();
                     setOpenEmailConfirmationModal(true);

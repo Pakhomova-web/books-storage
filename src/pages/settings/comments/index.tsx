@@ -34,7 +34,7 @@ const StyledBookBox = styled(Box)(() => ({
 
 export default function Comments() {
     const [pageSettings, setPageSettings] = useState<IPageable>({ page: 0, rowsPerPage: 12 });
-    const { items, totalCount, loading, gettingError } = useBooksComments(pageSettings);
+    const { items, totalCount, loading, gettingError, refetch } = useBooksComments(pageSettings);
     const [selectedItem, setSelectedItem] = useState<BookEntity>();
     const { update: approveComment, updating: approving, updatingError: errorApproving } = useApproveComment();
     const { update: removeComment, updating: removing, updatingError: errorRemoving } = useRemoveComment();
@@ -61,7 +61,7 @@ export default function Comments() {
     function onApproveComment(bookId: string, commentId: string) {
         approveComment({ bookId, commentId }).then(({ comments }) => {
             if (comments.length === 0) {
-                setPageSettings({ ...pageSettings });
+                refetch(pageSettings);
                 setSelectedItem(null);
             } else {
                 selectedItem.comments = comments;
@@ -73,7 +73,7 @@ export default function Comments() {
         removeComment({ bookId, commentId }).then(({ comments }) => {
             if (comments.length === 0) {
                 setSelectedItem(null);
-                setPageSettings({ ...pageSettings });
+                refetch(pageSettings);
             } else {
                 selectedItem.comments = comments;
             }

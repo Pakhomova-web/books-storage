@@ -5,6 +5,7 @@ import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
+import { trimValues } from '@/utils/utils';
 
 interface ICoverTypeModalProps {
     open: boolean,
@@ -20,18 +21,13 @@ export default function CoverTypeModal({ open, item, onClose, isAdmin }: ICoverT
     const { create, creating, creatingError } = useCreateCoverType();
     const { checkAuth } = useAuth();
 
-    async function onSubmit() {
-        try {
-            if (item) {
-                await update({ ...item, ...formContext.getValues() } as CoverTypeEntity);
-            } else {
-                await create({ ...formContext.getValues() } as CoverTypeEntity);
-            }
+    function onSubmit() {
+        const data = { ...(item ? item : {}), ...trimValues(formContext.getValues()) } as CoverTypeEntity;
+        const promise = item ? update(data) : create(data);
 
-            onClose(true);
-        } catch (err) {
-            checkAuth(err);
-        }
+        promise
+            .then(() => onClose(true))
+            .catch(err => checkAuth(err));
     }
 
     return (

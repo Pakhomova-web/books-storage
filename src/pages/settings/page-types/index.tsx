@@ -59,13 +59,9 @@ export default function PageTypes() {
         }
     }, [gettingError, deletingError]);
 
-    async function deleteHandler(item: PageTypeEntity) {
-        try {
-            await deleteItem(item.id);
-            refreshData();
-        } catch (err) {
-            checkAuth(err);
-        }
+    function deleteHandler(item: PageTypeEntity) {
+        deleteItem(item.id).then(() => refreshData())
+            .catch(err => checkAuth(err));
     }
 
     function refreshData(updated = true) {

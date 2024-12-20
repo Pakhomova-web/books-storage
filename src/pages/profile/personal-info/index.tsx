@@ -14,7 +14,7 @@ import ErrorNotification from '@/components/error-notification';
 import ProfileMenu from '@/pages/profile/profile-menu';
 import { NovaPoshtaSettlementEntity, NovaPoshtaStreetEntity, NovaPoshtaWarehouseEntity, UserEntity } from '@/lib/data/types';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
-import { passwordValidation, validatePhoneNumber } from '@/utils/utils';
+import { passwordValidation, trimValues, validatePhoneNumber } from '@/utils/utils';
 import CustomLink from '@/components/custom-link';
 import CustomImage from '@/components/custom-image';
 import CustomModal from '@/components/modals/custom-modal';
@@ -87,7 +87,7 @@ export default function PersonalInfo() {
             district,
             region,
             warehouse
-        } = formContext.getValues();
+        } = trimValues(formContext.getValues());
 
         update({
             id,

@@ -56,13 +56,9 @@ export default function Authors() {
         }
     }, [gettingError, deletingError]);
 
-    async function deleteHandler(item: AuthorEntity) {
-        try {
-            await deleteItem(item.id);
-            refreshData();
-        } catch (err) {
-            checkAuth(err);
-        }
+    function deleteHandler(item: AuthorEntity) {
+        deleteItem(item.id).then(() => refreshData())
+            .catch(err => checkAuth(err));
     }
 
     function refreshData(updated = true) {

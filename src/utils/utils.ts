@@ -229,3 +229,13 @@ export function onCopyOrderClick(items: OrderBookEntity[], finalFullSum: number,
     }
     navigator.clipboard.writeText(value);
 }
+
+export function trimValues<T>(obj: T): T {
+    Object.keys(obj).forEach(key => {
+        if (typeof obj[key] === 'string') {
+            obj[key] = obj[key].trim();
+        }
+    });
+
+    return obj;
+}

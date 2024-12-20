@@ -11,6 +11,7 @@ import { useAddBookComment } from '@/lib/graphql/queries/book/hook';
 import Loading from '@/components/loading';
 import ErrorNotification from '@/components/error-notification';
 import CustomModal from '@/components/modals/custom-modal';
+import { trimValues } from '@/utils/utils';
 
 const commentFormStyles = {
     borderRadius,
@@ -55,7 +56,10 @@ export default function CommentForm({ bookId }: ICommentFormProps) {
     }, [email, formContext]);
 
     function onSubmit() {
-        addComment(bookId, new CommentEntity({ ...formContext.getValues(), date: new Date().toISOString() }))
+        addComment(bookId, new CommentEntity({
+            ...trimValues(formContext.getValues()),
+            date: new Date().toISOString()
+        }))
             .then(() => {
                 formContext.reset();
                 setOpenModal(true);

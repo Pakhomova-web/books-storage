@@ -17,7 +17,7 @@ import {
     isUkrPoshtaSelected,
     onCopyOrderClick,
     renderOrderNumber,
-    renderPrice,
+    renderPrice, trimValues,
     validatePhoneNumber
 } from '@/utils/utils';
 import CustomTextField from '@/components/form-fields/custom-text-field';
@@ -223,11 +223,9 @@ export default function Basket() {
 
     function onSubmit() {
         if (!submitDisabled) {
-            const mainInfo = formContext.getValues();
-
             create({
-                ...mainInfo,
-                ...getAddressFromForm(addressFormContext.getValues()),
+                ...trimValues(formContext.getValues()),
+                ...getAddressFromForm(trimValues<IAddressForm>(addressFormContext.getValues())),
                 books: [
                     ...items.map(book => ({
                         bookId: book.id,

@@ -6,7 +6,7 @@ import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
-import { parseImageFromLink } from '@/utils/utils';
+import { parseImageFromLink, trimValues } from '@/utils/utils';
 import { Box, Button } from '@mui/material';
 import CustomImage from '@/components/custom-image';
 import React from 'react';
@@ -43,18 +43,15 @@ export default function PublishingHouseModal({ open, item, onClose, isAdmin }: I
     const { imageLink } = formContext.watch();
     const { checkAuth } = useAuth();
 
-    async function onSubmit() {
-        try {
-            if (item) {
-                await update(new PublishingHouseEntity(formContext.getValues()));
-            } else {
-                await create(new PublishingHouseEntity(formContext.getValues()));
-            }
+    function onSubmit() {
+        let promise;
+        const data = new PublishingHouseEntity(trimValues(formContext.getValues()));
 
-            onClose(true);
-        } catch (err) {
-            checkAuth(err);
-        }
+        promise = item ? update(data) : create(data);
+
+        promise
+            .then(() => onClose(true))
+            .catch(err => checkAuth(err));
     }
 
     function parseImage(e?) {

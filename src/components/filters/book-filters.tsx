@@ -20,6 +20,7 @@ import { ISortKey } from '@/components/types';
 import Loading from '@/components/loading';
 import CustomAutocompleteField from '@/components/form-fields/custom-autocomplete-field';
 import CustomMultipleAutocompleteField from '@/components/form-fields/custom-multiple-autocomplete-field';
+import { trimValues } from '@/utils/utils';
 
 interface IBookFiltersProps {
     defaultValues?: BookFilter,
@@ -110,7 +111,7 @@ export function BookFilters(props: IBookFiltersProps) {
     }
 
     function getValues() {
-        const { priceMin, priceMax, ...values } = formContext.getValues();
+        const { priceMin, priceMax, ...values } = trimValues(formContext.getValues());
 
         return {
             ...values,

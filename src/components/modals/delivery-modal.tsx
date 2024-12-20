@@ -8,7 +8,7 @@ import { useAuth } from '@/components/auth-context';
 import { Box, Button } from '@mui/material';
 import CustomImage from '@/components/custom-image';
 import React from 'react';
-import { parseImageFromLink } from '@/utils/utils';
+import { parseImageFromLink, trimValues } from '@/utils/utils';
 
 interface IDeliveryModalProps {
     open: boolean,
@@ -31,18 +31,13 @@ export default function DeliveryModal({ open, item, onClose, isAdmin }: IDeliver
     const { checkAuth } = useAuth();
     const { imageLink } = formContext.watch();
 
-    async function onSubmit() {
-        try {
-            if (item) {
-                await update(new DeliveryEntity({ ...item, ...formContext.getValues() }));
-            } else {
-                await create(new DeliveryEntity(formContext.getValues()));
-            }
+    function onSubmit() {
+        const data = new DeliveryEntity({ ...(item ? item : {}), ...trimValues(formContext.getValues()) });
+        const promise = item ? update(data) : create(data);
 
-            onClose(true);
-        } catch (err) {
-            checkAuth(err);
-        }
+        promise
+            .then(() => onClose(true))
+            .catch(err => checkAuth(err));
     }
 
     function parseImage(e?) {

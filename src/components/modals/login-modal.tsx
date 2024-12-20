@@ -40,7 +40,7 @@ export default function LoginModal({ open }) {
         emailValidation(formContext, email, 'email');
     }, [email, formContext]);
 
-    async function onSubmit() {
+    function onSubmit() {
         setError(null);
         if (!isFormInvalid()) {
             const values = formContext.getValues();

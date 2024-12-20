@@ -59,13 +59,9 @@ export default function Languages() {
         }
     }, [gettingError, deletingError]);
 
-    async function deleteHandler(item: LanguageEntity) {
-        try {
-            await deleteItem(item.id);
-            refreshData();
-        } catch (err) {
-            checkAuth(err);
-        }
+     function deleteHandler(item: LanguageEntity) {
+        deleteItem(item.id).then(() => refreshData())
+            .catch(err => checkAuth(err));
     }
 
     function refreshData(updated = true) {

@@ -9,7 +9,7 @@ import {
     isUkrPoshtaSelected,
     onCopyOrderClick,
     renderOrderNumber,
-    renderPrice,
+    renderPrice, trimValues,
     validatePhoneNumber
 } from '@/utils/utils';
 import CustomModal from '@/components/modals/custom-modal';
@@ -184,7 +184,7 @@ export default function OrderModal({ open, order, onClose }: IProps) {
     }
 
     function onSubmit() {
-        const values = formContext.getValues();
+        const values = trimValues<IForm>(formContext.getValues());
 
         update({
             id: orderItem.id,

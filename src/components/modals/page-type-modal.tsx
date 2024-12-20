@@ -5,6 +5,7 @@ import CustomModal from '@/components/modals/custom-modal';
 import { useCreatePageType, useUpdatePageType } from '@/lib/graphql/queries/page-type/hook';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
+import { trimValues } from '@/utils/utils';
 
 interface IPageTypeModalProps {
     open: boolean,
@@ -20,18 +21,13 @@ export default function PageTypeModal({ open, item, onClose, isAdmin }: IPageTyp
     const { create, creating, creatingError } = useCreatePageType();
     const { checkAuth } = useAuth();
 
-    async function onSubmit() {
-        try {
-            if (item) {
-                await update({ ...item, ...formContext.getValues() } as PageTypeEntity);
-            } else {
-                await create({ ...formContext.getValues() } as PageTypeEntity);
-            }
+    function onSubmit() {
+        const data = { ...(item ? item : {}), ...trimValues(formContext.getValues()) } as PageTypeEntity;
+        const promise = item ? update(data) : create(data);
 
-            onClose(true);
-        } catch (err) {
-            checkAuth(err);
-        }
+        promise
+            .then(() => onClose(true))
+            .catch(err => checkAuth(err));
     }
 
     return (

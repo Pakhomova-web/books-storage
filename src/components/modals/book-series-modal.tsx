@@ -10,6 +10,7 @@ import { useAuth } from '@/components/auth-context';
 import { Box, Grid } from '@mui/material';
 import React from 'react';
 import { ApolloError } from '@apollo/client';
+import { trimValues } from '@/utils/utils';
 
 interface IBookSeriesModalProps {
     open: boolean,
@@ -35,16 +36,13 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
     const { items: publishingHouseOptions, loading: loadingPublishingHouses } = usePublishingHouseOptions();
     const { checkAuth } = useAuth();
 
-    async function onSubmit() {
-        if (!!item?.id) {
-            update(formContext.getValues() as BookSeriesEntity)
-                .then((val: BookSeriesEntity) => onClose(val))
-                .catch((err: ApolloError) => checkAuth(err));
-        } else {
-            create(formContext.getValues() as BookSeriesEntity)
-                .then((val: BookSeriesEntity) => onClose(val))
-                .catch((err: ApolloError) => checkAuth(err));
-        }
+    function onSubmit() {
+        const data = trimValues(formContext.getValues()) as BookSeriesEntity;
+        const promise = !!item?.id ? update(data) : create(data);
+
+        promise
+            .then((val: BookSeriesEntity) => onClose(val))
+            .catch((err: ApolloError) => checkAuth(err));
     }
 
     return (

@@ -7,6 +7,7 @@ import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
 import { Box, Grid } from '@mui/material';
 import React from 'react';
+import { trimValues } from '@/utils/utils';
 
 interface IAuthorModalProps {
     open: boolean,
@@ -28,18 +29,18 @@ export default function AuthorModal({ open, item, onClose, isAdmin }: IAuthorMod
     const { checkAuth } = useAuth();
     const { description } = formContext.watch();
 
-    async function onSubmit() {
-        try {
-            if (!!item?.id) {
-                await update({ id: item.id, ...formContext.getValues() } as AuthorEntity);
-            } else {
-                await create({ ...formContext.getValues() } as AuthorEntity);
-            }
+    function onSubmit() {
+        let promise;
+        const values = trimValues(formContext.getValues());
 
-            onClose(true);
-        } catch (err) {
-            checkAuth(err);
+        if (!!item?.id) {
+            promise = update({ id: item.id, ...values } as AuthorEntity);
+        } else {
+            promise = create({ ...values } as AuthorEntity);
         }
+        promise
+            .then(() => onClose(true))
+            .catch(err => checkAuth(err));
     }
 
     function isInvalid() {

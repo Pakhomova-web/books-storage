@@ -67,13 +67,9 @@ export default function BookSeries() {
         }
     }, [gettingError, deletingError]);
 
-    async function deleteHandler(item: BookSeriesEntity) {
-        try {
-            await deleteItem(item.id);
-            refreshData();
-        } catch (err) {
-            checkAuth(err);
-        }
+    function deleteHandler(item: BookSeriesEntity) {
+        deleteItem(item.id).then(() => refreshData())
+            .catch(err => checkAuth(err));
     }
 
     function refreshData(updated = true) {

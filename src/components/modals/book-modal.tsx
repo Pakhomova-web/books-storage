@@ -18,7 +18,7 @@ import { useCoverTypeOptions } from '@/lib/graphql/queries/cover-type/hook';
 import { getBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
-import { parseImageFromLink } from '@/utils/utils';
+import { parseImageFromLink, trimValues } from '@/utils/utils';
 import {
     borderRadius,
     customFieldClearBtnStyles,
@@ -174,6 +174,9 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
     }, [formContext, discount, price]);
 
     async function onSubmit(submit = true, updateAllBooksInSeries = false) {
+        if (!isFormValid()) {
+            return;
+        }
         if (!submit && !!item?.id && !item?.bookSeries.default) {
             setShowModalForSeries(true);
             return;
@@ -187,7 +190,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
 
         setShowModalForSeries(false);
         parseImage();
-        const { imageLinks, ...values } = formContext.getValues();
+        const { imageLinks, ...values } = trimValues(formContext.getValues());
 
         delete values.publishingHouseId;
         delete values.tag;
@@ -299,7 +302,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             price,
             numberOfPages,
             languageIds
-        } = formContext.getValues();
+        } = trimValues(formContext.getValues());
 
         return !!name && !!numberOfPages && !!bookTypeIds?.length && !!bookSeriesId && !!price && !!pageTypeId && !!coverTypeId && languageIds;
     }

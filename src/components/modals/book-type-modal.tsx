@@ -5,7 +5,7 @@ import CustomModal from '@/components/modals/custom-modal';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
-import { parseImageFromLink } from '@/utils/utils';
+import { parseImageFromLink, trimValues } from '@/utils/utils';
 import { Box, Button } from '@mui/material';
 import CustomImage from '@/components/custom-image';
 import React from 'react';
@@ -50,22 +50,16 @@ export default function BookTypeModal({ open, item, onClose, isAdmin }: IBookTyp
         }
     }
 
-    async function onSubmit() {
-        try {
-            parseImage();
-            const data = formContext.getValues();
+    function onSubmit() {
+        parseImage();
+        const data = { ...(item ? item : {}), ...trimValues(formContext.getValues()) };
 
-            delete data.imageLink;
-            if (item) {
-                await update({ ...item, ...data });
-            } else {
-                await create(data);
-            }
+        delete data.imageLink;
+        const promise = item ? update(data) : create(data);
 
-            onClose(true);
-        } catch (err) {
-            checkAuth(err);
-        }
+        promise
+            .then(() => onClose(true))
+            .catch(err => checkAuth(err));
     }
 
     return (

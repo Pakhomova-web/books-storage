@@ -60,13 +60,9 @@ export default function Deliveries() {
         }
     }, [gettingError, deletingError]);
 
-    async function deleteHandler(item: DeliveryEntity) {
-        try {
-            await deleteItem(item.id);
-            refreshData();
-        } catch (err) {
-            checkAuth(err);
-        }
+    function deleteHandler(item: DeliveryEntity) {
+        deleteItem(item.id).then(() => refreshData())
+            .catch(err => checkAuth(err));
     }
 
     function refreshData(updated = true) {
