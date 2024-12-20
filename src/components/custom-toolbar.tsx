@@ -90,7 +90,7 @@ export default function CustomToolbar() {
 
     function onLogoutClick() {
         logout();
-        if (['settings', 'profile'].some(url => pathname.includes(url))) {
+        if (['settings', 'profile', 'basket'].some(url => pathname.includes(url))) {
             goToPage('/');
             setSelectedMenuItem(null);
         }

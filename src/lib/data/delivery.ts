@@ -1,7 +1,8 @@
-import { DeliveryEntity, IPageable } from '@/lib/data/types';
+import { DeliveryEntity, IPageable, UkrPoshtaWarehouses } from '@/lib/data/types';
 import Delivery from '@/lib/data/models/delivery';
 import { GraphQLError } from 'graphql/error';
 import { getByName, getValidFilters, getDataByFiltersAndPageSettings } from '@/lib/data/base';
+import GoogleSheetsMapper from 'google-sheets-mapper';
 
 export async function getDeliveries(pageSettings?: IPageable, filters?: DeliveryEntity) {
     const { andFilters } = getValidFilters(filters);
@@ -13,7 +14,18 @@ export async function getDeliveries(pageSettings?: IPageable, filters?: Delivery
 }
 
 export async function getDeliveryOptions() {
-    return Delivery.find().sort({ name: 'asc'});
+    return Delivery.find().sort({ name: 'asc' });
+}
+
+export async function getUkrPoshtaWarehouses() {
+    return GoogleSheetsMapper.fetchGoogleSheetsData({
+        sheetId: '1bEQ8a8PNVTrUIHylIceu8Ho7s1XImvzLWPVTCIPQL0s',
+        apiKey: process.env.GOOGLE_API_KEY
+    }).then(res => {
+        let temp = res.find(({ id }) => id === 'postindex');
+
+        return temp ? temp.data : [];
+    });
 }
 
 export async function createDelivery(input: DeliveryEntity) {

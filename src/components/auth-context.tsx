@@ -1,4 +1,4 @@
-import { DeliveryEntity, UserEntity } from '@/lib/data/types';
+import { DeliveryEntity, UkrPoshtaWarehouses, UserEntity } from '@/lib/data/types';
 import { createContext, useContext, useState } from 'react';
 import { removeTokenFromLocalStorage, saveTokenToLocalStorage } from '@/utils/utils';
 import { useRouter } from 'next/router';
@@ -15,6 +15,7 @@ import { usePathname } from 'next/navigation';
 
 type authContextType = {
     user: UserEntity;
+    ukrPoshtaWarehouses: UkrPoshtaWarehouses[],
     deliveries: DeliveryEntity[],
     openLoginModal: boolean,
     setOpenLoginModal: (open: boolean) => void,
@@ -27,11 +28,13 @@ type authContextType = {
     setGroupDiscountInBasket: (bookId: string) => void;
     setRecentlyViewedBooks: (bookId: string) => void;
     setDeliveries: (deliveries: DeliveryEntity[]) => void;
+    setUkrPoshtaWarehouses: (warehouses: UkrPoshtaWarehouses[]) => void;
 };
 
 const authContextDefaultValues: authContextType = {
     user: null,
     openLoginModal: false,
+    ukrPoshtaWarehouses: [],
     deliveries: [],
     login: (_user: UserEntity, _token: string, _refreshToken: string) => {
     },
@@ -51,7 +54,8 @@ const authContextDefaultValues: authContextType = {
     },
     setOpenLoginModal: (_open: boolean) => {
     },
-    setDeliveries: (_opts: DeliveryEntity[]) => {}
+    setDeliveries: (_opts: DeliveryEntity[]) => {},
+    setUkrPoshtaWarehouses: (_opts: UkrPoshtaWarehouses[]) => {}
 };
 
 const AuthContext = createContext<authContextType>(authContextDefaultValues);
@@ -65,10 +69,12 @@ export function AuthProvider({ children }) {
     const pathname = usePathname();
     const [user, setUser] = useState<UserEntity>(null);
     const [deliveries, setDeliveries] = useState<DeliveryEntity[]>(null);
+    const [ukrPoshtaWarehouses, setUkrPoshtaWarehouses] = useState<UkrPoshtaWarehouses[]>([]);
     const [openLoginModal, setOpenLoginModal] = useState<boolean>(false);
     const value = {
         user,
         deliveries,
+        ukrPoshtaWarehouses,
         openLoginModal,
         login: (user: UserEntity, token: string, refreshToken: string) => {
             saveTokenToLocalStorage(token, refreshToken);
@@ -170,6 +176,9 @@ export function AuthProvider({ children }) {
         },
         setDeliveries: (deliveries: DeliveryEntity[]) => {
             setDeliveries(deliveries);
+        },
+        setUkrPoshtaWarehouses: (opts: UkrPoshtaWarehouses[]) => {
+            setUkrPoshtaWarehouses(opts);
         }
     };
 

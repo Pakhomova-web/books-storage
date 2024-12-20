@@ -1,4 +1,4 @@
-import { Box, Button, IconButton } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';

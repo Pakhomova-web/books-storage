@@ -27,3 +27,4 @@ generates:
         NovaPoshtaSettlement: '../data/types#NovaPoshtaSettlementEntity'
         NovaPoshtaStreet: '../data/types#NovaPoshtaStreetEntity'
         NovaPoshtaWarehouse: '../data/types#NovaPoshtaWarehouseEntity'
+        UkrPoshtaWarehouseAddress: '../data/types#UkrPoshtaWarehouse'

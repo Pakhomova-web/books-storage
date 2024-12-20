@@ -3,14 +3,20 @@ import { FormContainer } from 'react-hook-form-mui';
 import React, { useState } from 'react';
 
 import { borderRadius, primaryLightColor, styleVariables } from '@/constants/styles-variables';
-import { isNovaPostSelected, isSelfPickup, isUkrPoshtaSelected } from '@/utils/utils';
+import { isNovaPostSelected, isUkrPoshtaSelected } from '@/utils/utils';
 import SettlementAutocompleteField from '@/components/form-fields/settlement-autocomplete-field';
 import WarehouseAutocompleteField from '@/components/form-fields/warehouses-autocomplete-field';
 import StreetAutocompleteField from '@/components/form-fields/street-autocomplete-field';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import { styled } from '@mui/material/styles';
 import { DELIVERIES } from '@/constants/options';
-import { NovaPoshtaSettlementEntity, NovaPoshtaStreetEntity, NovaPoshtaWarehouseEntity } from '@/lib/data/types';
+import {
+    NovaPoshtaSettlementEntity,
+    NovaPoshtaStreetEntity,
+    NovaPoshtaWarehouseEntity,
+    UkrPoshtaWarehouses
+} from '@/lib/data/types';
+import UkrPoshtaWarehouseAutocompleteField from '@/components/form-fields/ukrposhta-warehouse-autocomplete-field';
 
 export interface IAddressForm {
     isCourier: boolean,
@@ -153,6 +159,15 @@ export default function AddressForm({ formContext, disabled = false }) {
         }
     }
 
+    function onUkrPoshtaWarehouseSelect(val: UkrPoshtaWarehouses) {
+        if (val) {
+            formContext.setValue('city', val?.city || '');
+            formContext.setValue('region', val?.region || '');
+            formContext.setValue('district', val?.district || '');
+            formContext.setValue('warehouse', val?.warehouse);
+        }
+    }
+
     return (
         <FormContainer formContext={formContext}>
             <Grid container spacing={2} mt={1}>
@@ -175,11 +190,12 @@ export default function AddressForm({ formContext, disabled = false }) {
                                       <Grid container spacing={2} mt={0}
                                             display={deliveryOption === option.value ? 'flex' : 'none'}>
                                         <Grid item xs={12} sm={6}>
-                                          <SettlementAutocompleteField onSelect={(v, refresh) => onNovaPoshtaSettlementSelect(v, refresh)}
-                                                                       disabled={disabled}
-                                                                       city={novaPoshtaWarehouseCity}
-                                                                       region={novaPoshtaWarehouseRegion}
-                                                                       district={novaPoshtaWarehouseDistrict}/>
+                                          <SettlementAutocompleteField
+                                            onSelect={(v, refresh) => onNovaPoshtaSettlementSelect(v, refresh)}
+                                            disabled={disabled}
+                                            city={novaPoshtaWarehouseCity}
+                                            region={novaPoshtaWarehouseRegion}
+                                            district={novaPoshtaWarehouseDistrict}/>
                                         </Grid>
 
                                         <Grid item xs={12} sm={6}>
@@ -223,22 +239,40 @@ export default function AddressForm({ formContext, disabled = false }) {
                                     {option.value === 'UKRPOSHTA' &&
                                       <Grid container spacing={2} mt={0}
                                             display={deliveryOption === option.value ? 'flex' : 'none'}>
+                                        <Grid item xs={12}>
+                                          <Grid container spacing={2}>
+                                            <Grid item xs={12} md={6}>
+                                              <UkrPoshtaWarehouseAutocompleteField disabled={disabled}
+                                                                                   onSelect={onUkrPoshtaWarehouseSelect}/>
+                                            </Grid>
+                                          </Grid>
+                                        </Grid>
+
                                         <Grid item xs={12} md={6}>
                                           <CustomTextField name="region" label="Область" required={true} fullWidth
+                                                           onClear={() => formContext.setValue('region', '')}
+                                                           showClear={true}
                                                            disabled={disabled}/>
                                         </Grid>
 
                                         <Grid item xs={12} md={6}>
-                                          <CustomTextField name="district" label="Район" fullWidth disabled={disabled}/>
+                                          <CustomTextField name="district"
+                                                           onClear={() => formContext.setValue('district', '')}
+                                                           showClear={true}
+                                                           label="Район" fullWidth disabled={disabled}/>
                                         </Grid>
 
                                         <Grid item xs={12} md={6}>
                                           <CustomTextField name="city" label="Місто" required={true} fullWidth
+                                                           showClear={true}
+                                                           onClear={() => formContext.setValue('city', '')}
                                                            disabled={disabled}/>
                                         </Grid>
 
                                         <Grid item xs={12} md={6}>
                                           <CustomTextField name="warehouse" label="Відділення (індекс)" required={true}
+                                                           showClear={true}
+                                                           onClear={() => formContext.setValue('warehouse', null)}
                                                            disabled={disabled}
                                                            fullWidth/>
                                         </Grid>

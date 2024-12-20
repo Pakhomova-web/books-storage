@@ -10,10 +10,10 @@ import CustomToolbar from '@/components/custom-toolbar';
 import { useUser } from '@/lib/graphql/queries/auth/hook';
 import { useAuth } from '@/components/auth-context';
 import Loading from '@/components/loading';
-import { UserEntity } from '@/lib/data/types';
+import { UkrPoshtaWarehouses, UserEntity } from '@/lib/data/types';
 import { isAdmin } from '@/utils/utils';
 import TopSoldBooks from '@/components/books/top-sold-books';
-import { getDeliveryOptions } from '@/lib/graphql/queries/delivery/hook';
+import { getDeliveryOptions, getUkrPoshtaWarehouses } from '@/lib/graphql/queries/delivery/hook';
 
 const authUrls = ['/sign-in', '/reset-password'];
 const commonUrls = ['/books', '/books/details', '/publishing-houses'];
@@ -37,7 +37,7 @@ const StyledDiscountBox = styled(Box)(({ theme }) => ({
 export default function Main({ children }) {
     const [loading, setLoading] = useState<boolean>(false);
     const { fetchUser } = useUser();
-    const { user, logout, setUser, setDeliveries, deliveries } = useAuth();
+    const { user, logout, setUser, setDeliveries, deliveries, setUkrPoshtaWarehouses, ukrPoshtaWarehouses } = useAuth();
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('lg'));
     const router = useRouter();
@@ -45,10 +45,14 @@ export default function Main({ children }) {
 
     useEffect(() => {
         if (!deliveries?.length) {
-            getDeliveryOptions().then(items => {
-                setDeliveries(items);
-            })
+            getDeliveryOptions().then(items => setDeliveries(items));
         }
+        if (!ukrPoshtaWarehouses?.length) {
+            getUkrPoshtaWarehouses()
+                .then(res => setUkrPoshtaWarehouses(res.map(d => new UkrPoshtaWarehouses(d))))
+                .catch(() => {});
+        }
+
         setLoading(true);
         fetchUser()
             .then((user: UserEntity) => {
@@ -85,7 +89,7 @@ export default function Main({ children }) {
                   <Box sx={pageStyles} px={{ lg: '15%', md: '5%', xs: 1 }} pt={1}>
                       {mobileMatches && <TopSoldBooks mobile={true}/>}
 
-                      <Box position="relative">{children}</Box>
+                    <Box position="relative">{children}</Box>
                   </Box>
                 </Box>
               </>}

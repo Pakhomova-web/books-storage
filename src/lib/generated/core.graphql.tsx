@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo } from 'graphql';
-import { LanguageEntity, PublishingHouseEntity, PageTypeEntity, BookTypeEntity, CoverTypeEntity, BookSeriesEntity, BookEntity, AuthorEntity, UserEntity, DeliveryEntity, OrderEntity, GroupDiscountEntity, NovaPoshtaSettlementEntity, NovaPoshtaStreetEntity, NovaPoshtaWarehouseEntity } from '../data/types';
+import { LanguageEntity, PublishingHouseEntity, PageTypeEntity, BookTypeEntity, CoverTypeEntity, BookSeriesEntity, BookEntity, AuthorEntity, UserEntity, DeliveryEntity, OrderEntity, GroupDiscountEntity, NovaPoshtaSettlementEntity, NovaPoshtaStreetEntity, NovaPoshtaWarehouseEntity, UkrPoshtaWarehouse } from '../data/types';
 import { gql } from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -654,12 +654,12 @@ export type NovaPoshtaCourierAddress = {
 };
 
 export type NovaPoshtaCourierAddressInput = {
-  city: Scalars['String']['input'];
+  city?: InputMaybe<Scalars['String']['input']>;
   district?: InputMaybe<Scalars['String']['input']>;
   flat?: InputMaybe<Scalars['String']['input']>;
-  house: Scalars['String']['input'];
-  region: Scalars['String']['input'];
-  street: Scalars['String']['input'];
+  house?: InputMaybe<Scalars['String']['input']>;
+  region?: InputMaybe<Scalars['String']['input']>;
+  street?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type NovaPoshtaSettlement = {
@@ -687,9 +687,9 @@ export type NovaPoshtaWarehouseAddress = {
 };
 
 export type NovaPoshtaWarehouseAddressInput = {
-  city: Scalars['String']['input'];
+  city?: InputMaybe<Scalars['String']['input']>;
   district?: InputMaybe<Scalars['String']['input']>;
-  region: Scalars['String']['input'];
+  region?: InputMaybe<Scalars['String']['input']>;
   warehouse?: InputMaybe<Scalars['Int']['input']>;
 };
 
@@ -891,6 +891,7 @@ export type Query = {
   settlements: Array<NovaPoshtaSettlement>;
   streets: Array<NovaPoshtaStreet>;
   topOfSoldBooks?: Maybe<Array<Book>>;
+  ukrPoshtaWarehouses?: Maybe<Array<UkrPoshtaWarehouseAddress>>;
   warehouses: Array<NovaPoshtaWarehouse>;
 };
 
@@ -1304,7 +1305,7 @@ export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>;
   SearchByNameInput: SearchByNameInput;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
-  UkrPoshtaWarehouseAddress: ResolverTypeWrapper<UkrPoshtaWarehouseAddress>;
+  UkrPoshtaWarehouseAddress: ResolverTypeWrapper<UkrPoshtaWarehouse>;
   UkrPoshtaWarehouseAddressInput: UkrPoshtaWarehouseAddressInput;
   UpdateCommentInput: UpdateCommentInput;
   User: ResolverTypeWrapper<UserEntity>;
@@ -1388,7 +1389,7 @@ export type ResolversParentTypes = {
   Query: {};
   SearchByNameInput: SearchByNameInput;
   String: Scalars['String']['output'];
-  UkrPoshtaWarehouseAddress: UkrPoshtaWarehouseAddress;
+  UkrPoshtaWarehouseAddress: UkrPoshtaWarehouse;
   UkrPoshtaWarehouseAddressInput: UkrPoshtaWarehouseAddressInput;
   UpdateCommentInput: UpdateCommentInput;
   User: UserEntity;
@@ -1759,6 +1760,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   settlements?: Resolver<Array<ResolversTypes['NovaPoshtaSettlement']>, ParentType, ContextType, RequireFields<QuerySettlementsArgs, 'searchValue'>>;
   streets?: Resolver<Array<ResolversTypes['NovaPoshtaStreet']>, ParentType, ContextType, RequireFields<QueryStreetsArgs, 'ref' | 'searchValue'>>;
   topOfSoldBooks?: Resolver<Maybe<Array<ResolversTypes['Book']>>, ParentType, ContextType, RequireFields<QueryTopOfSoldBooksArgs, 'rowsPerPage'>>;
+  ukrPoshtaWarehouses?: Resolver<Maybe<Array<ResolversTypes['UkrPoshtaWarehouseAddress']>>, ParentType, ContextType>;
   warehouses?: Resolver<Array<ResolversTypes['NovaPoshtaWarehouse']>, ParentType, ContextType, RequireFields<QueryWarehousesArgs, 'searchValue' | 'settlementRef'>>;
 };
 

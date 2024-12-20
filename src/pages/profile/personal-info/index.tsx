@@ -12,7 +12,13 @@ import Loading from '@/components/loading';
 import { sendActivationLinkToUser, useChangePassword, useCurrentUser } from '@/lib/graphql/queries/auth/hook';
 import ErrorNotification from '@/components/error-notification';
 import ProfileMenu from '@/pages/profile/profile-menu';
-import { NovaPoshtaSettlementEntity, NovaPoshtaStreetEntity, NovaPoshtaWarehouseEntity, UserEntity } from '@/lib/data/types';
+import {
+    NovaPoshtaSettlementEntity,
+    NovaPoshtaStreetEntity,
+    NovaPoshtaWarehouseEntity,
+    UkrPoshtaWarehouses,
+    UserEntity
+} from '@/lib/data/types';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
 import { passwordValidation, trimValues, validatePhoneNumber } from '@/utils/utils';
 import CustomLink from '@/components/custom-link';
@@ -21,6 +27,7 @@ import CustomModal from '@/components/modals/custom-modal';
 import WarehouseAutocompleteField from '@/components/form-fields/warehouses-autocomplete-field';
 import StreetAutocompleteField from '@/components/form-fields/street-autocomplete-field';
 import SettlementAutocompleteField from '@/components/form-fields/settlement-autocomplete-field';
+import UkrPoshtaWarehouseAutocompleteField from '@/components/form-fields/ukrposhta-warehouse-autocomplete-field';
 
 export default function PersonalInfo() {
     const { user, setUser } = useAuth();
@@ -109,7 +116,7 @@ export default function PersonalInfo() {
                 house: novaPoshtaCourierHouse,
                 flat: novaPoshtaCourierFlat
             },
-            ukrposhtaWarehouseAddress: {
+            ukrPoshtaWarehouseAddress: {
                 city,
                 district,
                 region,
@@ -200,6 +207,15 @@ export default function PersonalInfo() {
     function onNovaPoshtaWarehouseSelect(val: NovaPoshtaWarehouseEntity, refreshData = false) {
         if (refreshData) {
             formContext.setValue('novaPoshtaWarehouse', val?.number);
+        }
+    }
+
+    function onUkrPoshtaWarehouseSelect(val: UkrPoshtaWarehouses) {
+        if (val) {
+            formContext.setValue('city', val?.city || '');
+            formContext.setValue('region', val?.region || '');
+            formContext.setValue('district', val?.district || '');
+            formContext.setValue('warehouse', val?.warehouse);
         }
     }
 
@@ -312,6 +328,14 @@ export default function PersonalInfo() {
                         <Box borderBottom={1} borderColor={primaryLightColor} pb={1} mt={1}>
                             Укрпошта (відділення)
                         </Box>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={6}>
+                                <UkrPoshtaWarehouseAutocompleteField onSelect={onUkrPoshtaWarehouseSelect}/>
+                            </Grid>
+                        </Grid>
                     </Grid>
 
                     <Grid item xs={12} md={6}>

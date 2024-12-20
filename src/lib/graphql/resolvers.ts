@@ -74,7 +74,14 @@ import {
     updateGroupDiscountCountInBasket,
     updateUser
 } from '@/lib/data/user';
-import { createDelivery, deleteDelivery, getDeliveries, getDeliveryOptions, updateDelivery } from '@/lib/data/delivery';
+import {
+    createDelivery,
+    deleteDelivery,
+    getDeliveries,
+    getDeliveryOptions,
+    getUkrPoshtaWarehouses,
+    updateDelivery
+} from '@/lib/data/delivery';
 import { cancelOrder, createOrder, getBalance, getOrders, sendEmailWithOrder, updateOrder } from '@/lib/data/order';
 import { isAdmin } from '@/utils/utils';
 import { checkResetPasswordToken, sendUpdatePasswordLink } from '@/lib/data/reset-token';
@@ -193,6 +200,9 @@ const resolvers: Resolvers = {
         },
         deliveryOptions: async () => {
             return getDeliveryOptions().catch(error => parseError(error));
+        },
+        ukrPoshtaWarehouses: async () => {
+            return getUkrPoshtaWarehouses().catch(error => parseError(error));
         },
         orders: async (_root, { pageSettings, filters }) => {
             return getOrders(<IPageable>pageSettings, <IOrderFilter>filters).catch(error => parseError(error));

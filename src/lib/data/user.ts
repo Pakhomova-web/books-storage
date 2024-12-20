@@ -15,7 +15,6 @@ import {
 } from '@/lib/data/auth-utils';
 import { verify } from 'jsonwebtoken';
 import { getBooksByIds } from '@/lib/data/books';
-import { createTransport } from 'nodemailer';
 
 const ADMIN_EMAILS: string[] = [
     'pakhomov.business@gmail.com'
@@ -146,7 +145,8 @@ export async function updateUser(input: UserEntity): Promise<UserEntity> {
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const item = await User.findByIdAndUpdate(input.id, input);
+    await User.findByIdAndUpdate(input.id, input);
+    const item = await User.findById(input.id);
 
     await setRecentlyViewedBooks(item);
 

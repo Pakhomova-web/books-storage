@@ -217,6 +217,7 @@ const typeDefs =  /* GraphQL */ `
         books(pageSettings: PageableInput, filters: BookSearchInput): BookSubList
         deliveries(pageSettings: PageableInput, filters: SearchByNameInput): DeliverySubList
         deliveryOptions: [Delivery!]
+        ukrPoshtaWarehouses: [UkrPoshtaWarehouseAddress!]
         bookTypes(pageSettings: PageableInput, filters: SearchByNameInput): BookTypeSubList
         orders(pageSettings: PageableInput, filters: OrderSearchInput): OrderSubList
         sendEmailWithOrder(orderId: ID!): String!
@@ -587,18 +588,18 @@ const typeDefs =  /* GraphQL */ `
     }
 
     input NovaPoshtaWarehouseAddressInput {
-        city: String!
-        region: String!
+        city: String
+        region: String
         district: String
         warehouse: Int
     }
 
     input NovaPoshtaCourierAddressInput {
-        city: String!
-        region: String!
+        city: String
+        region: String
         district: String
-        street: String!
-        house: String!
+        street: String
+        house: String
         flat: String
     }
 

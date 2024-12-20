@@ -23,6 +23,17 @@ export const deliveryOptionsQuery = gql`
     }
 `;
 
+export const ukrPoshtaWarehousesQuery = gql`
+    query UkrPoshtaWarehouses {
+        items: ukrPoshtaWarehouses {
+            warehouse
+            city
+            region
+            district
+        }
+    }
+`;
+
 export const createDeliveryQuery = gql`
     mutation CreateDelivery($input: DeliveryCreateInput!) {
         item: createDelivery(input: $input) {

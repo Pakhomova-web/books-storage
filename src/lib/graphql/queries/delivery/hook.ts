@@ -1,4 +1,4 @@
-import { DeliveryEntity, IPageable } from '@/lib/data/types';
+import { DeliveryEntity, IPageable, UkrPoshtaWarehouses } from '@/lib/data/types';
 import {
     _useCreateItem,
     _useDeleteItemById,
@@ -10,7 +10,7 @@ import {
     createDeliveryQuery,
     deleteDeliveryQuery,
     deliveriesQuery,
-    deliveryOptionsQuery,
+    deliveryOptionsQuery, ukrPoshtaWarehousesQuery,
     updateDeliveryQuery
 } from '@/lib/graphql/queries/delivery/queries';
 
@@ -32,4 +32,8 @@ export function useDeleteDelivery() {
 
 export function getDeliveryOptions() {
     return _useOptions<DeliveryEntity>(deliveryOptionsQuery);
+}
+
+export function getUkrPoshtaWarehouses() {
+    return _useOptions<UkrPoshtaWarehouses>(ukrPoshtaWarehousesQuery);
 }

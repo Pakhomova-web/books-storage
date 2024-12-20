@@ -333,6 +333,26 @@ export class DeliveryEntity {
     }
 }
 
+export class UkrPoshtaWarehouses {
+    region: string;
+    city: string;
+    district: string;
+    warehouse: number;
+
+    constructor(data?) {
+        if (data) {
+            this.city = data.city;
+            this.district = data.district;
+            this.warehouse = data.warehouse;
+            this.region = data.region;
+        }
+    }
+
+    get label(): string {
+        return `${this.warehouse}, ${this.city}${this.district ? `, ${this.district} р-он.` : ''}, ${this.region} обл.`;
+    }
+}
+
 export class OrderBookEntity {
     bookId: string;
     book: BookEntity;
