@@ -1,6 +1,7 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button, IconButton } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import SearchIcon from '@mui/icons-material/Search';
 
 import CustomModal from '@/components/modals/custom-modal';
 import { IOption } from '@/lib/data/types';
@@ -21,18 +22,17 @@ export default function QuickSearchModal({ open, onClose }) {
     }
 
     return (
-        <CustomModal open={open} title="Швидкий пошук">
-            <BookSearchAutocompleteField onSelect={(opt: IOption<string>) => onHintClick(opt)}
-                                         onInputChange={setInputValue}/>
+        <CustomModal open={open} title="Швидкий пошук" onClose={onClose}>
+            <Box display="flex" flexWrap="nowrap" gap={1}>
+                <Box width="100%">
+                    <BookSearchAutocompleteField onSelect={(opt: IOption<string>) => onHintClick(opt)}
+                                                 onInputChange={setInputValue}/>
+                </Box>
 
-            <Box display="flex" alignItems="center" flexWrap="wrap" gap={1} mt={2}
-                 justifyContent="center">
-                <Button variant="outlined" onClick={onClose}>
-                    Закрити
-                </Button>
-
-                <Button variant="contained" type="submit"
-                        disabled={!inputValue} onClick={onQuickSearchClick}>Знайти</Button>
+                <Box display="flex" alignItems="start" mt={1}>
+                    <IconButton disabled={!inputValue} onClick={onQuickSearchClick}
+                                color="primary"><SearchIcon/></IconButton>
+                </Box>
             </Box>
         </CustomModal>
     );

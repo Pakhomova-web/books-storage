@@ -3,12 +3,14 @@ import { useEffect, useState } from 'react';
 
 import { IOption } from '@/lib/data/types';
 import { getBookNamesByQuickSearch } from '@/lib/graphql/queries/book/hook';
+import CancelablePromise, { cancelable } from 'cancelable-promise';
 
 export default function BookSearchAutocompleteField({ disabled = false, onSelect, onInputChange = null }) {
     const [loading, setLoading] = useState<boolean>(false);
     const [options, setOptions] = useState<IOption<string>[]>([]);
     const [inputValue, setInputValue] = useState<string>('');
     const [selected, setSelected] = useState<IOption<string>>(null);
+    const [promise, setPromise] = useState<CancelablePromise>();
 
     useEffect(() => {
         if (onInputChange) {
@@ -27,14 +29,19 @@ export default function BookSearchAutocompleteField({ disabled = false, onSelect
     }, [inputValue]);
 
     function getOptions(value: string) {
+        if (promise) {
+            promise.cancel();
+        }
         setLoading(true);
-        getBookNamesByQuickSearch(value).then((opts: IOption<string>[]) => {
-            setOptions(opts);
-            setLoading(false);
-        }).catch(() => {
-            setOptions([]);
-            setLoading(false);
-        });
+        setPromise(cancelable(getBookNamesByQuickSearch(value)
+            .then((opts: IOption<string>[]) => {
+                setOptions(opts);
+                setLoading(false);
+            })
+            .catch(() => {
+                setOptions([]);
+                setLoading(false);
+            })));
     }
 
     return (
@@ -54,6 +61,7 @@ export default function BookSearchAutocompleteField({ disabled = false, onSelect
                           <TextField {...params}
                                      label="Пошук книги"
                                      variant="outlined"
+                                     fullWidth
                                      helperText="Введіть мін. 3 літери"/>
                       )}
                       renderOption={(p, option: IOption<string>) =>
