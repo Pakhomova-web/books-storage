@@ -289,7 +289,8 @@ export default function BookDetails() {
 
                       <Box sx={imageBoxStyles(!!book.imageIds?.length)} mb={1}
                            onClick={() => setImageIds(book.imageIds)}>
-                        <CustomImage isBookDetails={true} imageId={book.imageIds ? book.imageIds[0] : null}></CustomImage>
+                        <CustomImage isBookDetails={true}
+                                     imageId={book.imageIds ? book.imageIds[0] : null}></CustomImage>
                       </Box>
                     </Grid>
 
@@ -427,7 +428,8 @@ export default function BookDetails() {
                   <Box sx={styleVariables.sectionTitle} mb={loadingComments ? 1 : 0}>Відгуки покупців</Box>
                 </Grid>
 
-                <Grid item xs={12} md={7} lg={8} display="flex" alignItems="center" justifyContent="center">
+                <Grid item xs={12} md={7} lg={8} display="flex" justifyContent="center"
+                      alignItems={!comments?.length ? 'center' : 'flex-start'}>
                     {!!comments?.length ?
                         <Box width="100%">
                             {comments.map((comment, index) => (
