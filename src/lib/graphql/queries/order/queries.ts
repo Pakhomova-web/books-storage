@@ -83,12 +83,6 @@ export const createOrderQuery = gql`
     }
 `;
 
-export const balanceQuery = gql`
-    query Balance {
-        balance
-    }
-`;
-
 export const sendEmailWithOrderQuery = gql`
     query SendEmailWithOrder($orderId: ID!) {
         sendEmailWithOrder(orderId: $orderId)

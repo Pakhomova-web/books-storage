@@ -82,7 +82,7 @@ import {
     getUkrPoshtaWarehouses,
     updateDelivery
 } from '@/lib/data/delivery';
-import { cancelOrder, createOrder, getBalance, getOrders, sendEmailWithOrder, updateOrder } from '@/lib/data/order';
+import { cancelOrder, createOrder, getOrders, sendEmailWithOrder, updateOrder } from '@/lib/data/order';
 import { isAdmin } from '@/utils/utils';
 import { checkResetPasswordToken, sendUpdatePasswordLink } from '@/lib/data/reset-token';
 import {
@@ -93,6 +93,7 @@ import {
     updateGroupDiscount
 } from '@/lib/data/group-discounts';
 import { getSettlements, getStreets, getWarehouses } from '@/lib/data/nova-poshta';
+import { updateBalance, getBalance } from '@/lib/data/balance';
 
 function parseError<T>(error): T {
     switch (error.extensions?.code) {
@@ -473,6 +474,10 @@ const resolvers: Resolvers = {
         createOrder: async (_root, { input }, { user }) => {
             _checkUser(user);
             return createOrder(input as OrderEntity).catch(error => parseError(error));
+        },
+        updateBalance: async (_root, { expense }, { user }) => {
+            _checkUser(user);
+            return updateBalance(expense).catch(error => parseError(error));
         }
     }
 };

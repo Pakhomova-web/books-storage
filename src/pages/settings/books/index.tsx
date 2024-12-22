@@ -19,6 +19,7 @@ import HdrWeakIcon from '@mui/icons-material/HdrWeak';
 import { ApolloError } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import AddExpenseModal from '@/components/modals/add-expense-modal';
 
 const subTitleStyles = {
     ...styleVariables.hintFontSize,
@@ -141,7 +142,8 @@ export default function Books() {
     });
     const [filters, setFilters] = useState<BookFilter>(new BookFilter({ ...(router.query as Object), archived: null }));
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
-    const [openNewModal, setOpenNewModal] = useState<boolean>(false);
+    const [openBookModal, setOpenBookModal] = useState<boolean>(false);
+    const [openExpensesModal, setOpenExpensesModal] = useState<boolean>(false);
     const [openNumberInStockModal, setOpenNumberInStockModal] = useState<boolean>(false);
     const [error, setError] = useState<ApolloError>();
     const [downloadingCsv, setDownloadingCsv] = useState<boolean>(false);
@@ -177,7 +179,7 @@ export default function Books() {
     function refreshData(updated = true, bookSeriesId?: string) {
         setError(null);
         setOpenNumberInStockModal(false);
-        setOpenNewModal(false);
+        setOpenBookModal(false);
         setSelectedItem(undefined);
         if (bookSeriesId) {
             setFilters(new BookFilter({ archived: null, bookSeries: [bookSeriesId] }));
@@ -191,13 +193,13 @@ export default function Books() {
     function onAdd(parentItem?: BookEntity) {
         setError(null);
         setSelectedItem(parentItem);
-        setOpenNewModal(true);
+        setOpenBookModal(true);
     }
 
     function onEdit(item: BookEntity) {
         setError(null);
         setSelectedItem(item);
-        setOpenNewModal(true);
+        setOpenBookModal(true);
     }
 
     async function onDownloadCSV() {
@@ -216,6 +218,11 @@ export default function Books() {
     function onAddNumberInStock() {
         setError(null);
         setOpenNumberInStockModal(true);
+    }
+
+    function onAddExpense() {
+        setError(null);
+        setOpenExpensesModal(true);
     }
 
     return (
@@ -254,6 +261,10 @@ export default function Books() {
                   {isAdmin(user) &&
                     <Box sx={styleVariables.buttonsContainer} gap={2}>
                         {!!items?.length && <>
+                          <Button variant="outlined" onClick={() => onAddExpense()}>
+                            Додати витрати
+                          </Button>
+
                           <Button variant="outlined" onClick={() => onAddNumberInStock()}>
                             Поповнити наявність
                           </Button>
@@ -264,11 +275,14 @@ export default function Books() {
                         </>}
                     </Box>}
 
-                  {openNewModal &&
-                    <BookModal open={openNewModal}
+                  {openBookModal &&
+                    <BookModal open={true}
                                item={selectedItem}
                                isAdmin={isAdmin(user)}
                                onClose={(updated = false, bookSeries?: string) => refreshData(updated, bookSeries)}></BookModal>}
+
+                  {openExpensesModal &&
+                    <AddExpenseModal open={true} onClose={() => setOpenExpensesModal(false)}></AddExpenseModal>}
 
                   {openNumberInStockModal &&
                     <BookNumberInStockModal open={true}

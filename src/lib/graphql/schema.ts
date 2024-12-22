@@ -315,6 +315,7 @@ const typeDefs =  /* GraphQL */ `
         updateOrder(input: OrderUpdateInput!): Order
         cancelOrder(id: ID!): Order
         createOrder(input: OrderCreateInput!): Order
+        updateBalance(expense: Float!): Float
     }
 
     type UserToken {

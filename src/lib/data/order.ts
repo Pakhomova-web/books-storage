@@ -199,12 +199,6 @@ function calculateBookPrice(orderBook: OrderBookEntity) {
     return orderBook.count * orderBook.price * (100 - orderBook.discount) / 100;
 }
 
-export async function getBalance() {
-    const balance = await Balance.findOne();
-
-    return Number(balance?.value.toFixed(2)) || 0;
-}
-
 export async function cancelOrder(id: string) {
     const order = await Order.findById(id);
 

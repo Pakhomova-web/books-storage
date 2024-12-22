@@ -2,7 +2,7 @@ import { useAuth } from '@/components/auth-context';
 import { IOrderFilter, IPageable, OrderEntity } from '@/lib/data/types';
 import { isAdmin } from '@/utils/utils';
 import React, { useEffect, useState } from 'react';
-import { getBalance, useOrders } from '@/lib/graphql/queries/order/hook';
+import { useOrders } from '@/lib/graphql/queries/order/hook';
 import { ApolloError } from '@apollo/client';
 import Loading from '@/components/loading';
 import ErrorNotification from '@/components/error-notification';
@@ -16,6 +16,7 @@ import CustomTextField from '@/components/form-fields/custom-text-field';
 import Head from 'next/head';
 import { ISortKey } from '@/components/types';
 import Pagination from '@/components/pagination';
+import { getBalance } from '@/lib/graphql/queries/balance/hook';
 
 export default function Orders() {
     const { user } = useAuth();

@@ -1,7 +1,6 @@
 import { IOrderFilter, IPageable, OrderEntity } from '@/lib/data/types';
 import { _useCreateItem, _usePageableItems, _useUpdateItem } from '@/lib/graphql/base-hooks';
 import {
-    balanceQuery,
     cancelOrderQuery,
     createOrderQuery,
     ordersQuery,
@@ -26,15 +25,6 @@ export function useCancelOrder() {
 
 export function useCreateOrder() {
     return _useCreateItem<OrderEntity>(createOrderQuery);
-}
-
-export async function getBalance() {
-    const { data } = await apolloClient.query({
-        query: balanceQuery,
-        fetchPolicy: 'no-cache'
-    });
-
-    return data.balance;
 }
 
 export function sendEmailWithOrder(orderId: string) {

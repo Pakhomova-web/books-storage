@@ -16,7 +16,7 @@ import {
     NovaPoshtaSettlementEntity,
     NovaPoshtaStreetEntity,
     NovaPoshtaWarehouseEntity,
-    UkrPoshtaWarehouses,
+    UkrPoshtaWarehouse,
     UserEntity
 } from '@/lib/data/types';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
@@ -210,7 +210,7 @@ export default function PersonalInfo() {
         }
     }
 
-    function onUkrPoshtaWarehouseSelect(val: UkrPoshtaWarehouses) {
+    function onUkrPoshtaWarehouseSelect(val: UkrPoshtaWarehouse) {
         if (val) {
             formContext.setValue('city', val?.city || '');
             formContext.setValue('region', val?.region || '');
