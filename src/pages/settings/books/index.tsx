@@ -139,7 +139,7 @@ export default function Books() {
     const [pageSettings, setPageSettings] = useState<IPageable>({
         order: 'asc', orderBy: '', page: 0, rowsPerPage: 6
     });
-    const [filters, setFilters] = useState<BookFilter>({ archived: null });
+    const [filters, setFilters] = useState<BookFilter>(new BookFilter({ ...(router.query as Object), archived: null }));
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
     const [openNewModal, setOpenNewModal] = useState<boolean>(false);
     const [openNumberInStockModal, setOpenNumberInStockModal] = useState<boolean>(false);
@@ -155,6 +155,19 @@ export default function Books() {
         }
     }, [gettingError, updatingError]);
 
+    useEffect(() => {
+        const url = new URL(window.location.href);
+
+        Object.keys(filters || {}).forEach(key => {
+            if (filters[key] !== null && filters[key] !== undefined && (typeof filters[key] === 'boolean' || !!filters[key].length)) {
+                url.searchParams.set(key, filters[key]);
+            }
+        });
+        setPageSettings({ ...pageSettings, page: 0 });
+        window.history.pushState(null, '', url.toString());
+        refetch(pageSettings, filters);
+    }, [filters]);
+
     function highlightInRed(numberInStock: number) {
         return !numberInStock ? {
             background: redLightColor
@@ -167,7 +180,7 @@ export default function Books() {
         setOpenNewModal(false);
         setSelectedItem(undefined);
         if (bookSeriesId) {
-            setFilters(new BookFilter({ archived: null, bookSeries: bookSeriesId }));
+            setFilters(new BookFilter({ archived: null, bookSeries: [bookSeriesId] }));
         }
         if (updated) {
             setLoadingItems(true);
@@ -217,10 +230,7 @@ export default function Books() {
               <>
                 <BookFilters totalCount={totalCount}
                              defaultValues={filters}
-                             onApply={(filters: BookFilter) => {
-                                 setPageSettings(prev => ({ ...prev, page: 0 }));
-                                 setFilters(filters)
-                             }}
+                             onApply={(filters: BookFilter) => setFilters(filters)}
                              pageSettings={pageSettings}
                              onSort={(settings: IPageable) => setPageSettings(settings)}></BookFilters>
 
