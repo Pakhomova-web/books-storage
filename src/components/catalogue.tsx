@@ -97,7 +97,9 @@ export default function Catalogue() {
                     BOOK_TYPES.CARDS,
                     BOOK_TYPES.STICKERS,
                     BOOK_TYPES.RECIPES,
-                    BOOK_TYPES.COLORING_BOOK
+                    BOOK_TYPES.COLORING_BOOK,
+                    BOOK_TYPES.PUZZLES,
+                    BOOK_TYPES.DESK_GAMES
                 ]
             },
             children: [
@@ -121,7 +123,9 @@ export default function Catalogue() {
                             BOOK_TYPES.BOOK_IMAGE,
                             BOOK_TYPES.ENCYCLOPEDIA,
                             BOOK_TYPES.FOLD_OUT_BOOK,
-                            BOOK_TYPES.RECIPES
+                            BOOK_TYPES.RECIPES,
+                            BOOK_TYPES.PUZZLES,
+                            BOOK_TYPES.DESK_GAMES
                         ],
                         ages: [1, 2, 3, 4]
                     }
@@ -138,7 +142,9 @@ export default function Catalogue() {
                             BOOK_TYPES.BOOK_IMAGE,
                             BOOK_TYPES.ENCYCLOPEDIA,
                             BOOK_TYPES.FOLD_OUT_BOOK,
-                            BOOK_TYPES.RECIPES
+                            BOOK_TYPES.RECIPES,
+                            BOOK_TYPES.PUZZLES,
+                            BOOK_TYPES.DESK_GAMES
                         ],
                         ages: [5, 6]
                     }
@@ -165,6 +171,22 @@ export default function Catalogue() {
                     params: {
                         quickSearch: [
                             'читаємо по складах'
+                        ]
+                    }
+                },
+                {
+                    title: 'Пазли',
+                    params: {
+                        bookTypes: [
+                            BOOK_TYPES.PUZZLES
+                        ]
+                    }
+                },
+                {
+                    title: 'Настільні ігри',
+                    params: {
+                        bookTypes: [
+                            BOOK_TYPES.DESK_GAMES
                         ]
                     }
                 }
@@ -237,7 +259,8 @@ export default function Catalogue() {
                     BOOK_TYPES.VIMMELBUH,
                     BOOK_TYPES.BOOK_IMAGE,
                     BOOK_TYPES.FOLD_OUT_BOOK,
-                    BOOK_TYPES.POEMS
+                    BOOK_TYPES.POEMS,
+                    BOOK_TYPES.PUZZLES
                 ],
                 ages: [1, 2, 3, 4, 5]
             },
@@ -293,15 +316,26 @@ export default function Catalogue() {
                         ],
                         ages: [1, 2, 3, 4]
                     }
+                },
+                {
+                    title: 'Пазли',
+                    params: {
+                        bookTypes: [
+                            BOOK_TYPES.PUZZLES
+                        ],
+                        ages: [1, 2, 3, 4]
+                    }
                 }
             ]
         },
         {
-            title: 'Дитяча творчість',
+            title: 'Дитяча творчість та ігри',
             params: {
                 bookTypes: [
                     BOOK_TYPES.COLORING_BOOK,
-                    BOOK_TYPES.STICKERS
+                    BOOK_TYPES.STICKERS,
+                    BOOK_TYPES.PUZZLES,
+                    BOOK_TYPES.DESK_GAMES
                 ]
             },
             children: [
@@ -318,6 +352,22 @@ export default function Catalogue() {
                     params: {
                         bookTypes: [
                             BOOK_TYPES.STICKERS
+                        ]
+                    }
+                },
+                {
+                    title: 'Пазли',
+                    params: {
+                        bookTypes: [
+                            BOOK_TYPES.PUZZLES
+                        ]
+                    }
+                },
+                {
+                    title: 'Настільні ігри',
+                    params: {
+                        bookTypes: [
+                            BOOK_TYPES.DESK_GAMES
                         ]
                     }
                 }
