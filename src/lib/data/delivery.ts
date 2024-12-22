@@ -1,4 +1,4 @@
-import { DeliveryEntity, IPageable, UkrPoshtaWarehouses } from '@/lib/data/types';
+import { DeliveryEntity, IPageable, UkrPoshtaWarehouse } from '@/lib/data/types';
 import Delivery from '@/lib/data/models/delivery';
 import { GraphQLError } from 'graphql/error';
 import { getByName, getValidFilters, getDataByFiltersAndPageSettings } from '@/lib/data/base';
@@ -17,14 +17,14 @@ export async function getDeliveryOptions() {
     return Delivery.find().sort({ name: 'asc' });
 }
 
-export async function getUkrPoshtaWarehouses() {
+export async function getUkrPoshtaWarehouses(): Promise<UkrPoshtaWarehouse[]> {
     return GoogleSheetsMapper.fetchGoogleSheetsData({
         sheetId: '1bEQ8a8PNVTrUIHylIceu8Ho7s1XImvzLWPVTCIPQL0s',
         apiKey: process.env.GOOGLE_API_KEY
     }).then(res => {
         let temp = res.find(({ id }) => id === 'postindex');
 
-        return temp ? temp.data : [];
+        return temp ? temp.data as UkrPoshtaWarehouse[] : [];
     });
 }
 

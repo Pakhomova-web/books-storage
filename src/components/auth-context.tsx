@@ -1,4 +1,4 @@
-import { DeliveryEntity, UkrPoshtaWarehouses, UserEntity } from '@/lib/data/types';
+import { DeliveryEntity, UkrPoshtaWarehouse, UserEntity } from '@/lib/data/types';
 import { createContext, useContext, useState } from 'react';
 import { removeTokenFromLocalStorage, saveTokenToLocalStorage } from '@/utils/utils';
 import { useRouter } from 'next/router';
@@ -15,7 +15,7 @@ import { usePathname } from 'next/navigation';
 
 type authContextType = {
     user: UserEntity;
-    ukrPoshtaWarehouses: UkrPoshtaWarehouses[],
+    ukrPoshtaWarehouses: UkrPoshtaWarehouse[],
     deliveries: DeliveryEntity[],
     openLoginModal: boolean,
     setOpenLoginModal: (open: boolean) => void,
@@ -28,7 +28,7 @@ type authContextType = {
     setGroupDiscountInBasket: (bookId: string) => void;
     setRecentlyViewedBooks: (bookId: string) => void;
     setDeliveries: (deliveries: DeliveryEntity[]) => void;
-    setUkrPoshtaWarehouses: (warehouses: UkrPoshtaWarehouses[]) => void;
+    setUkrPoshtaWarehouses: (warehouses: UkrPoshtaWarehouse[]) => void;
 };
 
 const authContextDefaultValues: authContextType = {
@@ -55,7 +55,7 @@ const authContextDefaultValues: authContextType = {
     setOpenLoginModal: (_open: boolean) => {
     },
     setDeliveries: (_opts: DeliveryEntity[]) => {},
-    setUkrPoshtaWarehouses: (_opts: UkrPoshtaWarehouses[]) => {}
+    setUkrPoshtaWarehouses: (_opts: UkrPoshtaWarehouse[]) => {}
 };
 
 const AuthContext = createContext<authContextType>(authContextDefaultValues);
@@ -69,7 +69,7 @@ export function AuthProvider({ children }) {
     const pathname = usePathname();
     const [user, setUser] = useState<UserEntity>(null);
     const [deliveries, setDeliveries] = useState<DeliveryEntity[]>(null);
-    const [ukrPoshtaWarehouses, setUkrPoshtaWarehouses] = useState<UkrPoshtaWarehouses[]>([]);
+    const [ukrPoshtaWarehouses, setUkrPoshtaWarehouses] = useState<UkrPoshtaWarehouse[]>([]);
     const [openLoginModal, setOpenLoginModal] = useState<boolean>(false);
     const value = {
         user,
@@ -177,7 +177,7 @@ export function AuthProvider({ children }) {
         setDeliveries: (deliveries: DeliveryEntity[]) => {
             setDeliveries(deliveries);
         },
-        setUkrPoshtaWarehouses: (opts: UkrPoshtaWarehouses[]) => {
+        setUkrPoshtaWarehouses: (opts: UkrPoshtaWarehouse[]) => {
             setUkrPoshtaWarehouses(opts);
         }
     };

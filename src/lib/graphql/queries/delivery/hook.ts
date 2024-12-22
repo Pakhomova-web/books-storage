@@ -1,4 +1,4 @@
-import { DeliveryEntity, IPageable, UkrPoshtaWarehouses } from '@/lib/data/types';
+import { DeliveryEntity, IPageable, UkrPoshtaWarehouse } from '@/lib/data/types';
 import {
     _useCreateItem,
     _useDeleteItemById,
@@ -35,5 +35,5 @@ export function getDeliveryOptions() {
 }
 
 export function getUkrPoshtaWarehouses() {
-    return _useOptions<UkrPoshtaWarehouses>(ukrPoshtaWarehousesQuery);
+    return _useOptions<UkrPoshtaWarehouse>(ukrPoshtaWarehousesQuery);
 }

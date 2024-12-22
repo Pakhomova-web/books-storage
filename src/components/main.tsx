@@ -10,7 +10,7 @@ import CustomToolbar from '@/components/custom-toolbar';
 import { useUser } from '@/lib/graphql/queries/auth/hook';
 import { useAuth } from '@/components/auth-context';
 import Loading from '@/components/loading';
-import { UkrPoshtaWarehouses, UserEntity } from '@/lib/data/types';
+import { UkrPoshtaWarehouse, UserEntity } from '@/lib/data/types';
 import { isAdmin } from '@/utils/utils';
 import TopSoldBooks from '@/components/books/top-sold-books';
 import { getDeliveryOptions, getUkrPoshtaWarehouses } from '@/lib/graphql/queries/delivery/hook';
@@ -49,7 +49,7 @@ export default function Main({ children }) {
         }
         if (!ukrPoshtaWarehouses?.length) {
             getUkrPoshtaWarehouses()
-                .then(res => setUkrPoshtaWarehouses(res.map(d => new UkrPoshtaWarehouses(d))))
+                .then(res => setUkrPoshtaWarehouses(res.map(d => new UkrPoshtaWarehouse(d))))
                 .catch(() => {});
         }
 

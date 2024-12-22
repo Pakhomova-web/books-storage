@@ -14,7 +14,7 @@ import {
     NovaPoshtaSettlementEntity,
     NovaPoshtaStreetEntity,
     NovaPoshtaWarehouseEntity,
-    UkrPoshtaWarehouses
+    UkrPoshtaWarehouse
 } from '@/lib/data/types';
 import UkrPoshtaWarehouseAutocompleteField from '@/components/form-fields/ukrposhta-warehouse-autocomplete-field';
 
@@ -159,7 +159,7 @@ export default function AddressForm({ formContext, disabled = false }) {
         }
     }
 
-    function onUkrPoshtaWarehouseSelect(val: UkrPoshtaWarehouses) {
+    function onUkrPoshtaWarehouseSelect(val: UkrPoshtaWarehouse) {
         if (val) {
             formContext.setValue('city', val?.city || '');
             formContext.setValue('region', val?.region || '');

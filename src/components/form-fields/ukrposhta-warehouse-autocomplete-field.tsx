@@ -1,13 +1,13 @@
 import { Autocomplete, Box, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
 
-import { UkrPoshtaWarehouses } from '@/lib/data/types';
+import { UkrPoshtaWarehouse } from '@/lib/data/types';
 import { useAuth } from '@/components/auth-context';
 
 export default function UkrPoshtaWarehouseAutocompleteField({ disabled = false, onSelect, onInputChange = null }) {
-    const [options, setOptions] = useState<UkrPoshtaWarehouses[]>([]);
+    const [options, setOptions] = useState<UkrPoshtaWarehouse[]>([]);
     const [inputValue, setInputValue] = useState<string>('');
-    const [selected, setSelected] = useState<UkrPoshtaWarehouses>(null);
+    const [selected, setSelected] = useState<UkrPoshtaWarehouse>(null);
     const { ukrPoshtaWarehouses } = useAuth();
 
     useEffect(() => {
@@ -41,11 +41,11 @@ export default function UkrPoshtaWarehouseAutocompleteField({ disabled = false, 
                       value={selected}
                       onInputChange={(_, value) => setInputValue(value)}
                       options={options}
-                      onChange={(_, value: UkrPoshtaWarehouses) => {
+                      onChange={(_, value: UkrPoshtaWarehouse) => {
                           setSelected(value);
                           onSelect(value);
                       }}
-                      getOptionLabel={(opt: UkrPoshtaWarehouses) => opt.label}
+                      getOptionLabel={(opt: UkrPoshtaWarehouse) => opt.label}
                       renderInput={(params) => (
                           <TextField {...params}
                                      label="Пошук міста по назві/індексу"
@@ -53,7 +53,7 @@ export default function UkrPoshtaWarehouseAutocompleteField({ disabled = false, 
                                      fullWidth
                                      helperText="Введіть мін. 3 символи"/>
                       )}
-                      renderOption={(p, option: UkrPoshtaWarehouses) =>
+                      renderOption={(p, option: UkrPoshtaWarehouse) =>
                           <Box component="li" {...p} key={`${option.warehouse}-${option.city}`}>{option.label}</Box>
                       }/>
     );

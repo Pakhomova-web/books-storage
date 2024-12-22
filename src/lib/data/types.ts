@@ -333,7 +333,7 @@ export class DeliveryEntity {
     }
 }
 
-export class UkrPoshtaWarehouses {
+export class UkrPoshtaWarehouse {
     region: string;
     city: string;
     district: string;
