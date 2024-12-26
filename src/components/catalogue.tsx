@@ -386,14 +386,10 @@ export default function Catalogue() {
 
     function onSectionClick(params: {
         [key: string]: (string | number)[]
-    }, title?: string, url?: string, index?: number, event?) {
+    }, title?: string, url?: string, event?) {
         if (event){
             event.stopPropagation();
             event.preventDefault();
-        }
-        if (!parentIndex && index >= 0) {
-            setParentIndex(index);
-            return;
         }
         setParentIndex(null);
         setOpenModal(false);
@@ -452,7 +448,7 @@ export default function Catalogue() {
                                 sx={index === items.length - 1 ? rightDivider : {}}
                                 onMouseEnter={() => setParentIndex(index)}
                                 onMouseLeave={() => setParentIndex(null)}
-                                onClick={() => onSectionClick(item.params, item.title, item.url, index)}>
+                                onClick={() => onSectionClick(item.params, item.title, item.url)}>
                         {item.title}
 
                         {!!item.children?.length &&

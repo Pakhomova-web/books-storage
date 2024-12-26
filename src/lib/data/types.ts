@@ -222,13 +222,13 @@ export class BookFilter {
             this.bookSeries = data.bookSeries && typeof data.bookSeries === 'string' ? data.bookSeries.split(',') : (data.bookSeries || []);
             this.coverType = data.coverType || '';
             this.pageType = data.pageType || '';
-            this.priceMax = +data.priceMax || null;
+            this.priceMax = +data.priceMax || undefined;
             this.priceMin = +data.priceMin || 0;
             this.isbn = data.isbn || '';
             this.authors = data.authors && typeof data.authors === 'string' ? data.authors.split(',') : (data.authors || []);
             this.languages = data.languages && typeof data.languages === 'string' ? data.languages.split(',') : (data.languages || []);
-            this.isInStock = data.isInStock ? data.isInStock.toString() === 'true' : null;
-            this.withDiscount = data.withDiscount ? data.withDiscount.toString() === 'true' : null;
+            this.isInStock = data.isInStock ? data.isInStock.toString() === 'true' : undefined;
+            this.withDiscount = data.withDiscount ? data.withDiscount.toString() === 'true' : undefined;
             this.publishingHouse = data.publishingHouse || '';
             this.tags = !!data.tags ? (typeof data.tags === 'string' ? data.tags.split(',') : data.tags) : [];
             this.archived = data.archived !== undefined ? data.archived : false;

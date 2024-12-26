@@ -1,4 +1,4 @@
-import { Box, Button } from '@mui/material';
+import { Box, Button, IconButton } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import React, { ReactNode } from 'react';
 import { borderRadius, styleVariables } from '@/constants/styles-variables';
@@ -6,6 +6,7 @@ import Loading from '@/components/loading';
 import { FormContainer } from 'react-hook-form-mui';
 import { ApolloError } from '@apollo/client';
 import ErrorNotification from '@/components/error-notification';
+import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon';
 
 const modalContainerStyle = {
     display: 'flex',
@@ -17,15 +18,20 @@ const mainContainerStyle = (big = false) => ({
     position: 'relative',
     width: big ? '90vw' : '400px',
     maxWidth: '90vw',
-    bgcolor: 'background.paper',
+    backgroundColor: 'white',
     borderRadius,
     boxShadow: styleVariables.boxShadow,
-    p: 2
+    px: 2,
+    pb: 2,
+    pt: 1
 });
 
 const titleStyles = {
     ...styleVariables.titleFontSize,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    alignItems: 'center',
+    width: '100%',
+    display: 'flex'
 };
 
 const innerContainer = (withActions = true) => ({
@@ -50,15 +56,14 @@ const buttonsContainerStyles = {
 }
 
 interface ICustomModalProps {
+    title: string,
+    open: boolean,
+    onClose: () => void,
     children?: ReactNode,
-    title?: string,
     loading?: boolean,
     error?: ApolloError,
-    open: boolean,
     disableBackdropClick?: boolean,
     isSubmitDisabled?: boolean,
-    onClose?: () => void,
-    hideSubmit?: boolean,
     formContext?: any,
     onSubmit?: () => void,
     submitText?: string,
@@ -69,13 +74,11 @@ interface ICustomModalProps {
 export default function CustomModal(props: ICustomModalProps) {
     function closeModalHandler(_event: {}, reason: 'backdropClick' | 'escapeKeyDown') {
         if (props.disableBackdropClick && reason && reason === 'backdropClick') return;
-        if (props.onClose) {
-            props.onClose();
-        }
+        props.onClose();
     }
 
     function isWithActions(): boolean {
-        return !!props.onClose || (!props.hideSubmit && !!props.onSubmit) || !!props.actions?.length;
+        return !!props.onSubmit || !!props.actions?.length;
     }
 
     return (
@@ -84,7 +87,13 @@ export default function CustomModal(props: ICustomModalProps) {
                 {props.loading && <Loading show={props.loading}></Loading>}
 
                 <Box sx={innerContainer(isWithActions())}>
-                    {!!props.title && <Box sx={titleStyles} pb={2}>{props.title}</Box>}
+                    <Box display="flex" gap={1} mb={1} justifyContent="space-beetwen" flexWrap="nowrap">
+                        <Box sx={titleStyles}>{props.title}</Box>
+
+                        <Box>
+                            <IconButton onClick={() => props.onClose()}><CloseIcon/></IconButton>
+                        </Box>
+                    </Box>
 
                     {!!props.error && <ErrorNotification error={props.error}/>}
 
@@ -102,21 +111,18 @@ export default function CustomModal(props: ICustomModalProps) {
                     </Box>
 
                     {isWithActions() && <Box sx={buttonsContainerStyles} gap={2}>
-                        {props.onClose &&
-                          <Button variant="outlined" onClick={props.onClose}
-                                  autoFocus={true}>Закрити</Button>}
-                        {!props.hideSubmit && props.onSubmit ?
-                            <Button onClick={props.onSubmit} variant="contained"
-                                    disabled={props.isSubmitDisabled || props.loading}>
-                                {props.submitText || 'Зберегти'}
-                            </Button>
-                            : null}
                         {props.actions?.length && props.actions.map((action, index) => (
                             <Button key={index}
                                     onClick={action.onClick}
-                                    variant="contained"
+                                    variant="outlined"
                                     disabled={props.isSubmitDisabled}>{action.title}</Button>
                         ))}
+
+                        {!!props.onSubmit &&
+                          <Button onClick={props.onSubmit} variant="contained"
+                                  disabled={props.isSubmitDisabled || props.loading}>
+                              {props.submitText || 'Зберегти'}
+                          </Button>}
                     </Box>}
                 </Box>
             </Box>

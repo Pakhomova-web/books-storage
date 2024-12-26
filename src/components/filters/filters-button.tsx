@@ -8,8 +8,7 @@ import Badge from '@mui/material/Badge';
 export function FiltersButton({ onApply, onClear, children, formContext, totalCount }) {
     const [openFiltersModal, setOpenFiltersModal] = useState<boolean>(false);
     const [actions] = useState([
-        { title: 'Очистити', onClick: () => onClearClick() },
-        { title: 'Знайти', onClick: () => onApplyClick() }
+        { title: 'Очистити', onClick: () => onClearClick() }
     ]);
 
     function onClearClick() {
@@ -38,10 +37,11 @@ export function FiltersButton({ onApply, onClear, children, formContext, totalCo
 
             {openFiltersModal &&
               <CustomModal open={true}
+                           title="Фільтри"
                            formContext={formContext}
-                           hideSubmit={!!formContext}
                            onSubmit={onApplyClick}
                            onClose={() => setOpenFiltersModal(false)}
+                           submitText="Знайти"
                            actions={actions}>
                   {children}
               </CustomModal>}
