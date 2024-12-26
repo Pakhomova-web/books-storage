@@ -16,7 +16,7 @@ interface IImagesModalProps {
 
 export default function ImagesModal(props: IImagesModalProps) {
     return (
-        <CustomModal open={props.open} onClose={props.onClose} big={true}>
+        <CustomModal open={props.open} onClose={props.onClose} big={true} title="Зображення">
             <Grid container spacing={1} display="flex" justifyContent="center">
                 {props.imageIds.map((imageId, index) => (
                     <Grid key={index} item xs={12} md={6}>

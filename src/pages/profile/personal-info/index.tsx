@@ -395,7 +395,9 @@ export default function PersonalInfo() {
                 </Grid>
             </FormContainer>
 
-            <CustomModal open={sentActivationLinkModal} onClose={() => setSentActivationLinkModal(false)}>
+            <CustomModal open={sentActivationLinkModal}
+                         onClose={() => setSentActivationLinkModal(false)}
+                         title="Підтвердження ел. пошти">
                 <Box textAlign="center" display="flex" flexDirection="column" alignItems="center" gap={1}>
                     <Box sx={{ width: '50px', height: '50px' }}>
                         <CustomImage imageLink="/sent_email.png"/>

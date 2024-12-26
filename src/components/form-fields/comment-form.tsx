@@ -102,8 +102,7 @@ export default function CommentForm({ bookId }: ICommentFormProps) {
             </Grid>
 
             {openModal &&
-              <CustomModal open={true} onClose={() => setOpenModal(false)}>
-                <Box textAlign="center" sx={styleVariables.titleFontSize} mb={1}>Дякуємо за ваш відгук!</Box>
+              <CustomModal open={true} onClose={() => setOpenModal(false)} title="Дякуємо за ваш відгук!">
                 <Box textAlign="center">Він з{'\''}явиться для перегляду після перевірки адміністратором.</Box>
               </CustomModal>}
         </FormContainer>

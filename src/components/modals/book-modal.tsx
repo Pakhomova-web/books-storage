@@ -641,7 +641,8 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
               </CustomModal>}
 
             {showModalForSeries &&
-              <CustomModal open={true} title="Відредагувати одну книгу чи всю серію?">
+              <CustomModal open={true} title="Відредагувати одну книгу чи всю серію?"
+                           onClose={() => setShowModalForSeries(false)}>
                 <Box textAlign="center" mb={1}>В усій серії буде відредаговано:</Box>
                 <Box textAlign="center" mb={2}>формат, вік.</Box>
 
@@ -652,10 +653,6 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
 
                   <Button variant="contained" onClick={() => onSubmit()}>
                     Одну книгу
-                  </Button>
-
-                  <Button variant="outlined" onClick={() => setShowModalForSeries(false)}>
-                    Закрити
                   </Button>
                 </Box>
               </CustomModal>}

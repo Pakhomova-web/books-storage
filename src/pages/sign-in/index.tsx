@@ -137,12 +137,12 @@ export default function SignIn() {
                 {error && <ErrorNotification error={error}></ErrorNotification>}
             </Box>
 
-            <CustomModal open={openEmailConfirmationModal} onClose={() => onCloseEmailModal()}>
+            <CustomModal open={openEmailConfirmationModal} onClose={() => onCloseEmailModal()}
+                         title="Дякуємо за реєстрацію!">
                 <Box textAlign="center" display="flex" flexDirection="column" alignItems="center" gap={1}>
                     <Box sx={{ width: '50px', height: '50px' }}>
                         <CustomImage imageLink="/sent_email.png"/>
                     </Box>
-                    <Box>Дякуємо за реєстрацію!</Box>
                     На вказану Вами ел. пошту був надісланий лист для підтвердження.
                     Будь ласка, активуйте свій профіль для закінчення реєстрації.
                 </Box>

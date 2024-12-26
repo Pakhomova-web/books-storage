@@ -1,11 +1,9 @@
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { FormContainer, useForm } from 'react-hook-form-mui';
 import CustomTextField from '@/components/form-fields/custom-text-field';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
-
-import { authStyles } from '@/styles/auth';
 import CustomPasswordElement from '@/components/form-fields/custom-password-element';
 import { loginUser, useSendResetPasswordLink } from '@/lib/graphql/queries/auth/hook';
 import { useAuth } from '@/components/auth-context';
@@ -91,9 +89,8 @@ export default function LoginModal({ open }) {
     }
 
     return (
-        <CustomModal open={open} loading={loading || sendingResetPasswordLink}>
-            <Box sx={authStyles.title} mb={2}>Вхід</Box>
-
+        <CustomModal open={open} loading={loading || sendingResetPasswordLink} title="Вхід"
+                     onClose={() => setOpenLoginModal(false)}>
             <FormContainer formContext={formContext} handleSubmit={formContext.handleSubmit(onSubmit)}>
                 <Box display="flex" flexDirection="column" gap={1} mb={2}>
                     <CustomTextField fullWidth name="email" required label="Ел. пошта" type="email"/>
@@ -112,6 +109,7 @@ export default function LoginModal({ open }) {
                             Забули пароль?
                         </CustomLink> :
                         <CustomModal open={true}
+                                     title="Відновлення паролю"
                                      onClose={() => setSuccessMsgAfterSendingResetPasswordLink(false)}>
                             <Box display="flex" justifyContent="center" width="100%">
                                 <Box width="80px" height="80px">
@@ -124,6 +122,7 @@ export default function LoginModal({ open }) {
                         </CustomModal>}
                     {showForgotPasswordModal &&
                       <CustomModal open={true}
+                                   title="Відновлення паролю"
                                    onSubmit={onSendResetPasswordLink}
                                    submitText="Так"
                                    onClose={() => setShowForgotPasswordModal(false)}>
@@ -139,22 +138,14 @@ export default function LoginModal({ open }) {
                 {!!error && <ErrorNotification error={error}/>}
                 {!!errorSendingResetPasswordLink && <ErrorNotification error={errorSendingResetPasswordLink}/>}
 
-                <Grid container spacing={2} mb={1}>
-                    <Grid item xs={6}>
-                        <Button variant="outlined" fullWidth onClick={() => setOpenLoginModal(false)}>
-                            Відмінити
-                        </Button>
-                    </Grid>
-
-                    <Grid item xs={6}>
-                        <Button variant="contained"
-                                fullWidth
-                                type="submit"
-                                disabled={isFormInvalid()}>
-                            Вхід
-                        </Button>
-                    </Grid>
-                </Grid>
+                <Box width="100%" mb={1}>
+                    <Button variant="contained"
+                            fullWidth
+                            type="submit"
+                            disabled={isFormInvalid()}>
+                        Вхід
+                    </Button>
+                </Box>
             </FormContainer>
 
             <Box display="flex" flexDirection="column" gap={1} alignItems="center" mb={1}>
@@ -164,7 +155,7 @@ export default function LoginModal({ open }) {
                 </CustomLink>
             </Box>
 
-            <CustomModal open={showNotActivatedMsg} onClose={() => closeModal()}>
+            <CustomModal open={showNotActivatedMsg} onClose={() => closeModal()} title="Підтвердження ел. адреси">
                 <Box textAlign="center" display="flex" flexDirection="column" alignItems="center" gap={1}>
                     <Box sx={{ width: '50px', height: '50px' }}>
                         <CustomImage imageLink="/sent_email.png"/>
