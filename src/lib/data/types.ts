@@ -102,6 +102,7 @@ export class BookEntity {
     discount?: number;
     languageBookIds?: string[];
     languageBooks?: BookEntity[];
+    nameToSearch?: string;
 
     constructor(data?) {
         if (data) {
@@ -136,6 +137,7 @@ export class BookEntity {
             this.discount = data.discount;
             this.languageBookIds = data.languageBookIds ? data.languageBookIds : [];
             this.languageBooks = data.languageBooks ? data.languageBooks : [];
+            this.nameToSearch = data.nameToSearch;
         }
     }
 

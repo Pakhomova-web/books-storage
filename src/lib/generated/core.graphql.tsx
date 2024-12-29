@@ -69,6 +69,7 @@ export type Book = {
   languageBooks?: Maybe<Array<Maybe<Book>>>;
   languages: Array<Language>;
   name: Scalars['String']['output'];
+  nameToSearch: Scalars['String']['output'];
   numberInStock?: Maybe<Scalars['Int']['output']>;
   numberOfPages: Scalars['Int']['output'];
   pageType: PageType;
@@ -1447,6 +1448,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
   languageBooks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Book']>>>, ParentType, ContextType>;
   languages?: Resolver<Array<ResolversTypes['Language']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  nameToSearch?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   numberInStock?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   numberOfPages?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   pageType?: Resolver<ResolversTypes['PageType'], ParentType, ContextType>;

@@ -50,6 +50,7 @@ const typeDefs =  /* GraphQL */ `
     type Book {
         id: ID
         name: String!
+        nameToSearch: String!
         description: String
         numberOfPages: Int!
         price: Float!

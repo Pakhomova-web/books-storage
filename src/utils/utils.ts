@@ -239,3 +239,7 @@ export function trimValues<T>(obj: T): T {
 
     return obj;
 }
+
+export function removePunctuation(value: string): string {
+    return value.replace(/[.,\/#!?$%^&*;:{}=\-_`'"~()]/g, '');
+}

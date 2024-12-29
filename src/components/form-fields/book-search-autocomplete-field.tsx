@@ -70,7 +70,7 @@ export default function BookSearchAutocompleteField({ disabled = false, onSelect
                               <Highlighter highlightClassName="word-highlight"
                                            searchWords={[inputValue]}
                                            autoEscape={true}
-                                           textToHighlight={option.label + `(${option.description})`}/>
+                                           textToHighlight={option.label + ` (${option.description})`}/>
                           </Box>
                       }/>
     );

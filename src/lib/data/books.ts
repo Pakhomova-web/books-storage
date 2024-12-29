@@ -4,6 +4,7 @@ import { GraphQLError } from 'graphql/error';
 import { getCaseInsensitiveSubstringOption, getValidFilters } from '@/lib/data/base';
 import BookSeries from '@/lib/data/models/book-series';
 import Balance from '@/lib/data/models/balance';
+import { removePunctuation } from '@/utils/utils';
 
 export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): Promise<{
     items: BookEntity[],
@@ -60,17 +61,17 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
     await query.exec().then((items: BookEntity[]) => {
         if (quickSearch) {
             items = items.filter(
-                ({ authors, name, bookSeries, bookTypes, tags, illustrators, languages, description }) =>
-                    quickSearch.test(name.replace(/[^\w\s]|_/g, "")) ||
-                    (authors?.length && authors.some(author => quickSearch.test(author.name.replace(/[^\w\s]|_/g, "")))) ||
-                    (illustrators?.length && illustrators.some(illustrator => quickSearch.test(illustrator.name.replace(/[^\w\s]|_/g, "")))) ||
-                    (bookTypes?.length && bookTypes.some(bookType => quickSearch.test(bookType.name.replace(/[^\w\s]|_/g, "")))) ||
-                    (languages?.length && languages.some(language => quickSearch.test(language.name.replace(/[^\w\s]|_/g, "")))) ||
-                    quickSearch.test(bookSeries.name.replace(/[^\w\s]|_/g, "")) ||
-                    quickSearch.test(bookSeries.description.replace(/[^\w\s]|_/g, "")) ||
-                    quickSearch.test(description.replace(/[^\w\s]|_/g, "")) ||
-                    quickSearch.test(bookSeries.publishingHouse.name.replace(/[^\w\s]|_/g, "")) ||
-                    tags?.some(tag => quickSearch.test(tag.replace(/[^\w\s]|_/g, "")))
+                ({ authors, nameToSearch, bookSeries, bookTypes, tags, illustrators, languages, description }) =>
+                    quickSearch.test(nameToSearch) ||
+                    (authors?.length && authors.some(author => quickSearch.test(removePunctuation(author.name)))) ||
+                    (illustrators?.length && illustrators.some(illustrator => quickSearch.test(removePunctuation(illustrator.name)))) ||
+                    (bookTypes?.length && bookTypes.some(bookType => quickSearch.test(removePunctuation(bookType.name)))) ||
+                    (languages?.length && languages.some(language => quickSearch.test(removePunctuation(language.name)))) ||
+                    quickSearch.test(removePunctuation(bookSeries.name)) ||
+                    quickSearch.test(removePunctuation(bookSeries.description)) ||
+                    quickSearch.test(removePunctuation(description)) ||
+                    quickSearch.test(removePunctuation(bookSeries.publishingHouse.name)) ||
+                    tags?.some(tag => quickSearch.test(removePunctuation(tag)))
             );
         }
         if (pageSettings?.orderBy === 'priceWithDiscount') {
@@ -317,7 +318,7 @@ export async function getBookComments(id: string, page: number, rowsPerPage: num
 
 export async function getBooksNameByQuickSearch(quickSearch: string): Promise<IOption<string>[]> {
     const books = await Book.find({
-        name: getCaseInsensitiveSubstringOption(quickSearch),
+        nameToSearch: getCaseInsensitiveSubstringOption(quickSearch),
         archive: { $in: [null, false] }
     })
         .populate({
@@ -331,7 +332,7 @@ export async function getBooksNameByQuickSearch(quickSearch: string): Promise<IO
     return books.map(b => ({
         id: b.id,
         label: b.name,
-        description: `${b.bookSeries.publishingHouse.name}, ${b.bookSeries.name}`
+        description: `${b.bookSeries.publishingHouse.name}${b.bookSeries.default ? '' : `, ${b.bookSeries.name}`}`
     }));
 }
 
@@ -485,6 +486,7 @@ function _getBookData(input: Partial<BookEntity>) {
         pageType: input.pageTypeId,
         languageBooks: input.languageBookIds,
         bookTypes: input.bookTypeIds,
-        imageIds: input.imageIds || []
+        imageIds: input.imageIds || [],
+        nameToSearch: removePunctuation(input.name)
     };
 }

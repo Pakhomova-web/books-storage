@@ -73,7 +73,8 @@ const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
     languageBooks: [{
         type: Schema.Types.ObjectId,
         ref: 'book'
-    }]
+    }],
+    nameToSearch: String
 });
 
 bookSchema.index({ name: 1, bookSeries: 1, bookTypes: 1, pageType: 1, coverType: 1, language: 1 }, { unique: true });
