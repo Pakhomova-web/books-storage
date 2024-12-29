@@ -61,16 +61,16 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
         if (quickSearch) {
             items = items.filter(
                 ({ authors, name, bookSeries, bookTypes, tags, illustrators, languages, description }) =>
-                    quickSearch.test(name) ||
-                    (authors?.length && authors.some(author => quickSearch.test(author.name))) ||
-                    (illustrators?.length && illustrators.some(illustrator => quickSearch.test(illustrator.name))) ||
-                    (bookTypes?.length && bookTypes.some(bookType => quickSearch.test(bookType.name))) ||
-                    (languages?.length && languages.some(language => quickSearch.test(language.name))) ||
-                    quickSearch.test(bookSeries.name) ||
-                    quickSearch.test(bookSeries.description) ||
-                    quickSearch.test(description) ||
-                    quickSearch.test(bookSeries.publishingHouse.name) ||
-                    tags?.some(tag => quickSearch.test(tag))
+                    quickSearch.test(name.replace(/[^\w\s]|_/g, "")) ||
+                    (authors?.length && authors.some(author => quickSearch.test(author.name.replace(/[^\w\s]|_/g, "")))) ||
+                    (illustrators?.length && illustrators.some(illustrator => quickSearch.test(illustrator.name.replace(/[^\w\s]|_/g, "")))) ||
+                    (bookTypes?.length && bookTypes.some(bookType => quickSearch.test(bookType.name.replace(/[^\w\s]|_/g, "")))) ||
+                    (languages?.length && languages.some(language => quickSearch.test(language.name.replace(/[^\w\s]|_/g, "")))) ||
+                    quickSearch.test(bookSeries.name.replace(/[^\w\s]|_/g, "")) ||
+                    quickSearch.test(bookSeries.description.replace(/[^\w\s]|_/g, "")) ||
+                    quickSearch.test(description.replace(/[^\w\s]|_/g, "")) ||
+                    quickSearch.test(bookSeries.publishingHouse.name.replace(/[^\w\s]|_/g, "")) ||
+                    tags?.some(tag => quickSearch.test(tag.replace(/[^\w\s]|_/g, "")))
             );
         }
         if (pageSettings?.orderBy === 'priceWithDiscount') {

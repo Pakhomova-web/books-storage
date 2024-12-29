@@ -61,3 +61,7 @@ html, body {
 .MuiFormControlLabel-root {
     width: 100%;
 }
+
+.word-highlight {
+    background-color: var(--light-background);
+}

@@ -494,40 +494,40 @@ export default function BookDetails() {
                         </Grid>}
                   </Grid>}
 
-
               <DiscountBooks/>
 
-              <Grid container spacing={2} mt={0}>
-                  {book.authors.filter(a => !!a.description).map((author, index) => (
-                      <>
-                          {!index && <Grid item xs={12}>
-                            <Box sx={styleVariables.sectionTitle}>Про автора</Box>
-                          </Grid>}
+                {book.authors.filter(a => !!a.description).map((author, index) => (
+                    <Grid key={index} container spacing={2} mb={2}>
+                        {!index && <Grid item xs={12}>
+                          <Box sx={styleVariables.sectionTitle}>Про автора</Box>
+                        </Grid>}
 
-                          <Grid item xs={12}>
-                              <Box px={1} dangerouslySetInnerHTML={{ __html: author.description }}></Box>
-                          </Grid>
-                      </>
-                  ))}
+                        <Grid item xs={12}>
+                            <Box px={1} dangerouslySetInnerHTML={{ __html: author.description }}></Box>
+                        </Grid>
+                    </Grid>
+                ))}
 
-                  {book.authors.length === 1 && !!booksByAuthor?.length && <Grid item xs={12}>
-                    <Box sx={styleVariables.sectionTitle} mb={2}>
-                      Інші книги цього автора
+                {book.authors.length === 1 && !!booksByAuthor?.length &&
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <Box sx={styleVariables.sectionTitle} mb={2}>
+                        Інші книги цього автора
 
-                        {booksByAuthor?.length === (mobileMatches ? 2 : 5) &&
-                          <Button variant="outlined"
-                                  onClick={() => router.push(`/books?authors=${book.authors[0].id}`)}>
-                            Дивитися усі<ArrowForwardIcon/></Button>}
-                    </Box>
+                          {booksByAuthor?.length === (mobileMatches ? 2 : 5) &&
+                            <Button variant="outlined"
+                                    onClick={() => router.push(`/books?authors=${book.authors[0].id}`)}>
+                              Дивитися усі<ArrowForwardIcon/></Button>}
+                      </Box>
 
-                    <Grid container spacing={2} position="relative" px={1} display="flex"
-                          justifyContent="center">
-                      <Loading show={loadingBooksByAuthor} isSmall={true}></Loading>
+                      <Grid container spacing={2} position="relative" px={1} display="flex"
+                            justifyContent="center">
+                        <Loading show={loadingBooksByAuthor} isSmall={true}></Loading>
 
-                      <BooksList items={booksByAuthor} pageUrl={router.query.pageUrl as string}></BooksList>
+                        <BooksList items={booksByAuthor} pageUrl={router.query.pageUrl as string}></BooksList>
+                      </Grid>
                     </Grid>
                   </Grid>}
-              </Grid>
             </>}
 
             {!!imageIds?.length &&

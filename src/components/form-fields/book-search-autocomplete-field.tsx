@@ -1,9 +1,10 @@
 import { Autocomplete, Box, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
+import Highlighter from 'react-highlight-words';
+import CancelablePromise, { cancelable } from 'cancelable-promise';
 
 import { IOption } from '@/lib/data/types';
 import { getBookNamesByQuickSearch } from '@/lib/graphql/queries/book/hook';
-import CancelablePromise, { cancelable } from 'cancelable-promise';
 
 export default function BookSearchAutocompleteField({ disabled = false, onSelect, onInputChange = null }) {
     const [loading, setLoading] = useState<boolean>(false);
@@ -65,7 +66,12 @@ export default function BookSearchAutocompleteField({ disabled = false, onSelect
                                      helperText="Введіть мін. 3 літери"/>
                       )}
                       renderOption={(p, option: IOption<string>) =>
-                          <Box component="li" {...p} key={option.id}>{option.label} ({option.description})</Box>
+                          <Box component="li" {...p} key={option.id}>
+                              <Highlighter highlightClassName="word-highlight"
+                                           searchWords={[inputValue]}
+                                           autoEscape={true}
+                                           textToHighlight={option.label + `(${option.description})`}/>
+                          </Box>
                       }/>
     );
 }

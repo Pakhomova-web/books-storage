@@ -16,7 +16,6 @@ export default function RecentlyViewedBooks() {
     const extraLargeMatches = useMediaQuery(theme.breakpoints.up('xl'));
     const [itemsToView, setItemsToView] = useState<BookEntity[]>([]);
 
-
     useEffect(() => {
         let limit = 6;
 
