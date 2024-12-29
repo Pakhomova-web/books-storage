@@ -26,6 +26,7 @@ export default function QuickSearchModal({ open, onClose }) {
             <Box display="flex" flexWrap="nowrap" gap={1}>
                 <Box width="100%">
                     <BookSearchAutocompleteField onSelect={(opt: IOption<string>) => onHintClick(opt)}
+                                                 onEnterClick={onQuickSearchClick}
                                                  onInputChange={setInputValue}/>
                 </Box>
 

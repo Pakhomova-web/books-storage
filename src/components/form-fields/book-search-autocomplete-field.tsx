@@ -6,7 +6,7 @@ import CancelablePromise, { cancelable } from 'cancelable-promise';
 import { IOption } from '@/lib/data/types';
 import { getBookNamesByQuickSearch } from '@/lib/graphql/queries/book/hook';
 
-export default function BookSearchAutocompleteField({ disabled = false, onSelect, onInputChange = null }) {
+export default function BookSearchAutocompleteField({ disabled = false, onSelect, onEnterClick = null, onInputChange = null }) {
     const [loading, setLoading] = useState<boolean>(false);
     const [options, setOptions] = useState<IOption<string>[]>([]);
     const [inputValue, setInputValue] = useState<string>('');
@@ -28,6 +28,14 @@ export default function BookSearchAutocompleteField({ disabled = false, onSelect
             setOptions([]);
         }
     }, [inputValue]);
+
+    function handleEnterClick(e) {
+        if (e.key === 'Enter' && !!onEnterClick && !!inputValue?.length) {
+            e.preventDefault();
+            e.stopPropagation();
+            onEnterClick();
+        }
+    }
 
     function getOptions(value: string) {
         if (promise) {
@@ -63,6 +71,7 @@ export default function BookSearchAutocompleteField({ disabled = false, onSelect
                                      label="Пошук книги"
                                      variant="outlined"
                                      fullWidth
+                                     onKeyDown={handleEnterClick}
                                      helperText="Введіть мін. 3 літери"/>
                       )}
                       renderOption={(p, option: IOption<string>) =>
