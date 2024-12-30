@@ -1,7 +1,4 @@
 ﻿import { MetadataRoute } from 'next';
-import { BookEntity } from '@/lib/data/types';
-
-export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // const data = await apolloClient.query({
@@ -9,8 +6,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     //     fetchPolicy: 'no-cache'
     // });
 
-    const data = { books: { items: [] } };
-
+    // const data = { books: { items: [] } };
+// ,
+// ...data.books.items.map((book: BookEntity) => ({
+//         url: `${process.env.FRONTEND_URL}/books/${book.id}`,
+//         lastModified: new Date(),
+//         priority: 0.9,
+//         images: book.imageIds ? [`https://drive.google.com/thumbnail?id=${book.imageIds[0]}&sz=w1000`] : []
+//     }))
     return [
         {
             url: 'https://books-storage.vercel.app',
@@ -65,12 +68,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 0.5
-        },
-        ...data.books.items.map((book: BookEntity) => ({
-            url: `${process.env.FRONTEND_URL}/books/${book.id}`,
-            lastModified: new Date(),
-            priority: 0.9,
-            images: book.imageIds ? [`https://drive.google.com/thumbnail?id=${book.imageIds[0]}&sz=w1000`] : []
-        }))
+        }
     ];
 }
