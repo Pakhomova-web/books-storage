@@ -9,7 +9,7 @@ const generateSitemap = (data, origin) => {
         xml += `<url>
                     <loc>${origin + page.url}</loc>
                     <lastmod>${page.lastModified}</lastmod>
-                    ${page.image && `<image:image><image:loc>${page.image}</image:loc></image:image>`}
+                    ${!!page.image ? `<image:image><image:loc>${page.image}</image:loc></image:image>` : ''}
                 </url>`
     });
 
