@@ -1,9 +1,14 @@
-﻿const generateSitemap = (data, origin) => {
+﻿import { booksQuery } from '@/lib/graphql/queries/book/queries';
+import { apolloClient } from '@/lib/apollo';
+import { BookEntity } from '@/lib/data/types';
+
+const generateSitemap = (data, origin) => {
     let xml = '';
 
     data.map(page => {
         xml += `<url><loc>${origin + page.url}</loc><lastmod>${page.lastModified}</lastmod></url>`
     });
+
 
     return `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -12,6 +17,11 @@
 }
 
 export async function getServerSideProps({ res }) {
+    const booksData = await apolloClient.query({
+        query: booksQuery,
+        fetchPolicy: 'no-cache'
+    });
+
     const data = [
         {
             url: '/',
@@ -47,10 +57,14 @@ export async function getServerSideProps({ res }) {
         },
         {
             url: '/profile/orders',
+            lastModified: new Date()
+        },
+        ...booksData['books'].items.map((book: BookEntity) => ({
+            url: `${process.env.FRONTEND_URL}/books/${book.id}`,
             lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.5
-        }
+            priority: 0.9,
+            images: book.imageIds ? [`https://drive.google.com/thumbnail?id=${book.imageIds[0]}&sz=w1000`] : []
+        }))
     ];
 
     res.setHeader('Content-Type', 'text/xml');
@@ -64,17 +78,3 @@ export async function getServerSideProps({ res }) {
 
 const SitemapIndex = () => null;
 export default SitemapIndex;
-
-// const data = await apolloClient.query({
-//     query: booksQuery,
-//     fetchPolicy: 'no-cache'
-// });
-
-// const data = { books: { items: [] } };
-// ,
-// ...data.books.items.map((book: BookEntity) => ({
-//         url: `${process.env.FRONTEND_URL}/books/${book.id}`,
-//         lastModified: new Date(),
-//         priority: 0.9,
-//         images: book.imageIds ? [`https://drive.google.com/thumbnail?id=${book.imageIds[0]}&sz=w1000`] : []
-//     }))
