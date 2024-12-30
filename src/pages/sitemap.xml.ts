@@ -1,12 +1,76 @@
-﻿import { MetadataRoute } from 'next';
+﻿const generateSitemap = (data, origin) => {
+    let xml = '';
 
-export default async function sitemapXml(): Promise<MetadataRoute.Sitemap> {
-    // const data = await apolloClient.query({
-    //     query: booksQuery,
-    //     fetchPolicy: 'no-cache'
-    // });
+    data.map(page => {
+        xml += `<url><loc>${origin + page.url}</loc><lastmod>${page.lastModified}</lastmod></url>`
+    });
 
-    // const data = { books: { items: [] } };
+    return `<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      ${xml}
+    </urlset>`;
+}
+
+export async function getServerSideProps({ res }) {
+    const data = [
+        {
+            url: '/',
+            lastModified: new Date()
+        },
+        {
+            url: '/books',
+            lastModified: new Date()
+        },
+        {
+            url: '/about-us',
+            lastModified: new Date()
+        },
+        {
+            url: '/publishing-houses',
+            lastModified: new Date()
+        },
+        {
+            url: '/sign-in',
+            lastModified: new Date()
+        },
+        {
+            url: '/basket',
+            lastModified: new Date()
+        },
+        {
+            url: '/profile/personal-info',
+            lastModified: new Date()
+        },
+        {
+            url: '/profile/likes',
+            lastModified: new Date()
+        },
+        {
+            url: '/profile/orders',
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.5
+        }
+    ];
+
+    res.setHeader('Content-Type', 'text/xml');
+    res.write(generateSitemap(data, process.env.FRONTEND_URL));
+    res.end();
+
+    return {
+        props: {}
+    };
+}
+
+const SitemapIndex = () => null;
+export default SitemapIndex;
+
+// const data = await apolloClient.query({
+//     query: booksQuery,
+//     fetchPolicy: 'no-cache'
+// });
+
+// const data = { books: { items: [] } };
 // ,
 // ...data.books.items.map((book: BookEntity) => ({
 //         url: `${process.env.FRONTEND_URL}/books/${book.id}`,
@@ -14,60 +78,3 @@ export default async function sitemapXml(): Promise<MetadataRoute.Sitemap> {
 //         priority: 0.9,
 //         images: book.imageIds ? [`https://drive.google.com/thumbnail?id=${book.imageIds[0]}&sz=w1000`] : []
 //     }))
-    return [
-        {
-            url: 'https://books-storage.vercel.app',
-            lastModified: new Date(),
-            changeFrequency: 'yearly',
-            priority: 1
-        },
-        {
-            url: 'https://books-storage.vercel.app/books',
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.8
-        },
-        {
-            url: 'https://books-storage.vercel.app/about-us',
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.5
-        },
-        {
-            url: 'https://books-storage.vercel.app/publishing-houses',
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.5
-        },
-        {
-            url: 'https://books-storage.vercel.app/sign-in',
-            lastModified: new Date(),
-            changeFrequency: 'monthly',
-            priority: 0.5
-        },
-        {
-            url: 'https://books-storage.vercel.app/basket',
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.5
-        },
-        {
-            url: 'https://books-storage.vercel.app/profile/personal-info',
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.5
-        },
-        {
-            url: 'https://books-storage.vercel.app/profile/likes',
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.5
-        },
-        {
-            url: 'https://books-storage.vercel.app/profile/orders',
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.5
-        }
-    ];
-}
