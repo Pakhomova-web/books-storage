@@ -6,7 +6,11 @@ const generateSitemap = (data, origin) => {
     let xml = '';
 
     data.map(page => {
-        xml += `<url><loc>${origin + page.url}</loc><lastmod>${page.lastModified}</lastmod></url>`
+        xml += `<url>
+                    <loc>${origin + page.url}</loc>
+                    <lastmod>${page.lastModified}</lastmod>
+                    ${page.image && `<image:image><image:loc>${page.image}</image:loc></image:image>`}
+                </url>`
     });
 
 
@@ -17,10 +21,14 @@ const generateSitemap = (data, origin) => {
 }
 
 export async function getServerSideProps({ res }) {
-    const booksData = await apolloClient.query({
+    let books = [];
+
+    await apolloClient.query({
         query: booksQuery,
         fetchPolicy: 'no-cache'
-    }).catch(() => []);
+    }).then(data => {
+        books = data['books']?.items || [];
+    }).catch(err => console.log(err));
 
     const data = [
         {
@@ -59,11 +67,10 @@ export async function getServerSideProps({ res }) {
             url: '/profile/orders',
             lastModified: new Date()
         },
-        ...booksData['books'].items.map((book: BookEntity) => ({
+        ...books.map((book: BookEntity) => ({
             url: `/books/${book.id}`,
             lastModified: new Date(),
-            priority: 0.9,
-            images: book.imageIds ? [`https://drive.google.com/thumbnail?id=${book.imageIds[0]}&sz=w1000`] : []
+            image: book.imageIds ? `https://drive.google.com/thumbnail?id=${book.imageIds[0]}&sz=w1000` : null
         }))
     ];
 
