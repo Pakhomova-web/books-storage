@@ -60,7 +60,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             url: `${process.env.FRONTEND_URL}/books/${book.id}`,
             changeFrequency: 'monthly',
             lastModified: new Date(),
-            priority: 0.5
+            priority: 0.5,
+            images: book.imageIds ? [`https://drive.google.com/thumbnail?id=${book.imageIds[0]}&sz=w1000`] : []
         }))
     ];
 }
