@@ -1,7 +1,6 @@
 ﻿import { MetadataRoute } from 'next';
 import { BookEntity } from '@/lib/data/types';
 import { getAllBooks } from '@/lib/graphql/queries/book/hook';
-export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const books = await getAllBooks();
