@@ -17,7 +17,7 @@ export default function QuickSearchModal({ open, onClose }) {
     }
 
     function onHintClick(hint: IOption<string>) {
-        router.push(`/books/details?id=${hint.id}`);
+        router.push(`/books/${hint.id}`);
         onClose();
     }
 

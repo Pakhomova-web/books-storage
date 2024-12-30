@@ -61,7 +61,7 @@ export default function BasketBookItem({
     }, [discountValue, formContext])
 
     function onBookClick(book: BookEntity) {
-        router.push(`/books/details?${getParamsQueryString({ id: book.id, pageUrl: pageUrl || '/basket' })}`);
+        router.push(`/books/${book.id}?${getParamsQueryString({ pageUrl: pageUrl || '/basket' })}`);
     }
 
     function onRemoveBook(book: BookEntity) {

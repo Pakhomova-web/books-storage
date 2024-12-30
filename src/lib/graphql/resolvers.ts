@@ -297,7 +297,7 @@ const resolvers: Resolvers = {
             _checkUser(user);
             return deletePageType(id).catch(error => parseError(error));
         },
-        // details type
+        // [id] type
         updateBookType: async (_root, { input }: { input: BookTypeEntity }, { user }) => {
             _checkUser(user);
             return updateBookType(input).catch(error => parseError(error));
@@ -323,7 +323,7 @@ const resolvers: Resolvers = {
             _checkUser(user);
             return deleteCoverType(id).catch(error => parseError(error));
         },
-        // details series
+        // [id] series
         updateBookSeries: async (_root, { input }: { input: BookSeriesEntity }, { user }) => {
             _checkUser(user);
             return updateBookSeries(input).catch(error => parseError(error));
@@ -349,7 +349,7 @@ const resolvers: Resolvers = {
             _checkUser(user);
             return deleteAuthor(id).catch(error => parseError(error));
         },
-        // details
+        // [id]
         createBook: async (_root, { input }, { user }) => {
             _checkUser(user);
             return createBook(input).catch(error => parseError(error));

@@ -164,7 +164,7 @@ export default function GroupDiscounts() {
                 <Box key={index} borderBottom={1} borderColor={primaryLightColor}>
                     <GroupDiscountBox onDeleteGroupClick={() => onRemove(item.id)}
                                       onEditBook={() => onEditClick(item)}
-                                      onBookClick={(bookId: string) => router.push(`/books/details?id=${bookId}&pageUrl=/settings/group-discounts`)}
+                                      onBookClick={(bookId: string) => router.push(`/books/${bookId}&pageUrl=/settings/group-discounts`)}
                                       discount={item.discount}
                                       books={item.books}/>
                 </Box>

@@ -44,7 +44,7 @@ export default function TopSoldBooks({ mobile = false }) {
     const router = useRouter();
 
     function onBookClick(book: BookEntity) {
-        router.push(`/books/details?id=${book.id}`);
+        router.push(`/books/${book.id}`);
     }
 
     function onTitleClick() {

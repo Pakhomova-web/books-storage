@@ -286,7 +286,7 @@ function orderTemplate(order: OrderEntity) {
                 <td><img src="cid:${book.id}" style="width: 60px; height: 60px; object-fit: contain"/></td>
                 <td>
                     <div>
-                        <a href="${process.env.FRONTEND_URL}/books/details?id=${book.id}">
+                        <a href="${process.env.FRONTEND_URL}/books/${book.id}">
                             ${book.name}
                         </a>
                     </div>

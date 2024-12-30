@@ -59,7 +59,7 @@ export default function BooksList({ items, filters = {}, pageUrl = '/' }) {
             .filter(query => !!query);
         const query = !!filterQueries.length ? filterQueries.join('&') : router.query.filters;
 
-        router.push(`/books/details?${getParamsQueryString({ id: book.id, filters: query, pageUrl })}`);
+        router.push(`/books/${book.id}?${getParamsQueryString({ filters: query, pageUrl })}`);
     }
 
     return (

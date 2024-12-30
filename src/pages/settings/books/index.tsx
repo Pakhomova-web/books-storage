@@ -68,7 +68,7 @@ export default function Books() {
             {
                 label: () => 'Деталі',
                 type: TableActionEnum.navigation,
-                onClick: (item: BookEntity) => router.push(`/books/details?id=${item.id}`)
+                onClick: (item: BookEntity) => router.push(`/books/${item.id}`)
             },
             {
                 label: (item: BookEntity) => item.archived ? 'Разархівувати' : 'Заархівувати',
