@@ -1,6 +1,8 @@
 ﻿import { MetadataRoute } from 'next';
 import { BookEntity } from '@/lib/data/types';
 
+export const dynamic = 'force-dynamic';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // const data = await apolloClient.query({
     //     query: booksQuery,
