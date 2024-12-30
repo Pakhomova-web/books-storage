@@ -32,6 +32,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 priority: 0.5
             },
             {
+                url: 'https://books-storage.vercel.app/sign-in',
+                lastModified: new Date(),
+                changeFrequency: 'monthly',
+                priority: 0.5
+            },
+            {
                 url: 'https://books-storage.vercel.app/basket',
                 lastModified: new Date(),
                 changeFrequency: 'weekly',

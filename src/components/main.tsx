@@ -72,7 +72,7 @@ export default function Main({ children }) {
     }, []);
 
     function isSettings() {
-        return pathname.includes('/settings');
+        return pathname?.includes('/settings');
     }
 
     return (

@@ -60,6 +60,9 @@ export default function CustomToolbar() {
     ]);
 
     useEffect(() => {
+        if (!pathname) {
+            return;
+        }
         if (pathname.includes('settings')) {
             setSelectedMenuItem(MainMenuItem.settings);
         } else {
