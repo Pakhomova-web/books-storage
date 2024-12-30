@@ -20,12 +20,12 @@ const generateSitemap = (data, origin) => {
 export async function getServerSideProps({ res }) {
     let books = [];
 
-    await apolloClient.query({
-        query: booksQuery,
-        fetchPolicy: 'no-cache'
-    }).then(data => {
-        books = data['books']?.items || [];
-    }).catch(err => console.log(err));
+    // await apolloClient.query({
+    //     query: booksQuery,
+    //     fetchPolicy: 'no-cache'
+    // }).then(data => {
+    //     books = data['books']?.items || [];
+    // }).catch(err => console.log(err));
 
     const data = [
         {
