@@ -1,6 +1,6 @@
 ﻿import { MetadataRoute } from 'next';
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default async function sitemapXml(): Promise<MetadataRoute.Sitemap> {
     // const data = await apolloClient.query({
     //     query: booksQuery,
     //     fetchPolicy: 'no-cache'
