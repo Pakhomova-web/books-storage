@@ -1,9 +1,13 @@
 ﻿import { MetadataRoute } from 'next';
 import { BookEntity } from '@/lib/data/types';
-import { getAllBooks } from '@/lib/graphql/queries/book/hook';
+import { apolloClient } from '@/lib/apollo';
+import { booksQuery } from '@/lib/graphql/queries/book/queries';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const books = await getAllBooks();
+    const data = await apolloClient.query({
+        query: booksQuery,
+        fetchPolicy: 'no-cache'
+    });
 
     return [
         ...[
@@ -62,7 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                 priority: 0.5
             }
         ],
-        ...books.map((book: BookEntity) => ({
+        ...data['books'].items.map((book: BookEntity) => ({
             url: `${process.env.FRONTEND_URL}/books/${book.id}`,
             changeFrequency: 'monthly',
             lastModified: new Date(),
