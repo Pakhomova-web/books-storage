@@ -20,7 +20,7 @@ export async function getServerSideProps({ res }) {
     const booksData = await apolloClient.query({
         query: booksQuery,
         fetchPolicy: 'no-cache'
-    });
+    }).catch(() => []);
 
     const data = [
         {
