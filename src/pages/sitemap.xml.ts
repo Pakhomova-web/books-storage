@@ -60,7 +60,7 @@ export async function getServerSideProps({ res }) {
             lastModified: new Date()
         },
         ...booksData['books'].items.map((book: BookEntity) => ({
-            url: `${process.env.FRONTEND_URL}/books/${book.id}`,
+            url: `/books/${book.id}`,
             lastModified: new Date(),
             priority: 0.9,
             images: book.imageIds ? [`https://drive.google.com/thumbnail?id=${book.imageIds[0]}&sz=w1000`] : []
