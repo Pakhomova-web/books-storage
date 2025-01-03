@@ -1,6 +1,5 @@
-﻿import { booksQuery } from '@/lib/graphql/queries/book/queries';
-import { apolloClient } from '@/lib/apollo';
-import { BookEntity } from '@/lib/data/types';
+﻿import { BookEntity } from '@/lib/data/types';
+import { getBooks } from '@/lib/data/books';
 
 const generateSitemap = (data, origin) => {
     let xml = '';
@@ -10,23 +9,15 @@ const generateSitemap = (data, origin) => {
                     <loc>${origin + page.url}</loc>
                     <lastmod>${page.lastModified}</lastmod>
                     ${!!page.image ? `<image:image><image:loc>${page.image}</image:loc></image:image>` : ''}
-                </url>`
+                </url>`;
     });
 
 
-    return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${xml}</urlset>`;
+    return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">${xml}</urlset>`;
 }
 
 export async function getServerSideProps({ res }) {
-    let books = [];
-
-    // await apolloClient.query({
-    //     query: booksQuery,
-    //     fetchPolicy: 'no-cache'
-    // }).then(data => {
-    //     books = data['books']?.items || [];
-    // }).catch(err => console.log(err));
-
+    const { items } = await getBooks();
     const data = [
         {
             url: '/',
@@ -48,10 +39,10 @@ export async function getServerSideProps({ res }) {
             url: '/sign-in',
             lastModified: new Date()
         },
-        ...books.map((book: BookEntity) => ({
+        ...items.map((book: BookEntity) => ({
             url: `/books/${book.id}`,
             lastModified: new Date(),
-            image: book.imageIds ? `https://drive.google.com/thumbnail?id=${book.imageIds[0]}&sz=w1000` : null
+            image: book.imageIds ? `https://drive.google.com/thumbnail?id=${book.imageIds[0]}&amp;sz=w1000` : null
         }))
     ];
 
