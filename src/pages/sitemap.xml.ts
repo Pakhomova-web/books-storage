@@ -1,5 +1,5 @@
 ﻿import { BookEntity } from '@/lib/data/types';
-import { getBooks } from '@/lib/data/books';
+import { getAllBooks } from '@/lib/data/books';
 
 const generateSitemap = (data, origin) => {
     let xml = '';
@@ -16,7 +16,7 @@ const generateSitemap = (data, origin) => {
 }
 
 export async function getServerSideProps({ res }) {
-    const { items } = await getBooks().catch(() => ({ items: [] }));
+    const items: { id: string, imageIds?: string[] }[] = await getAllBooks().catch((err) => [{ id: err }]);
     const data = [
         { url: '/' },
         { url: '/books' },

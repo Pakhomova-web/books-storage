@@ -97,6 +97,10 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
     return res;
 }
 
+export async function getAllBooks(): Promise<{ id: string, imageIds?: string[] }[]> {
+    return Book.find();
+}
+
 export async function getBookById(id: string) {
     const item = await Book.findById(id)
         .populate('languages')
