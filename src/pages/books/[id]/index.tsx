@@ -177,7 +177,7 @@ export default function BookDetails() {
     }
 
     function onBackClick() {
-        router.push(`${router.query.pageUrl ? router.query.pageUrl : '/books'}${router.query.filters ? `?${router.query.filters}` : ''}`);
+        router.push(`${router.query.pageUrl ? router.query.pageUrl : '/'}${router.query.filters ? `?${router.query.filters}` : ''}`);
     }
 
     function onTagClick(tag: string) {

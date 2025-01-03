@@ -31,7 +31,7 @@ const StyledGrid = styled(Grid)(() => ({
     }
 }));
 
-export default function BooksList({ items, filters = {}, pageUrl = '/' }) {
+export default function BooksList({ items, filters = {}, pageUrl = null }) {
     const { user, setLikedBook, setBookInBasket } = useAuth();
     const router = useRouter();
 
@@ -58,8 +58,9 @@ export default function BooksList({ items, filters = {}, pageUrl = '/' }) {
             .map(key => !(filters[key] === null || filters[key] === undefined || filters[key].length === 0) ? `${key}=${filters[key]}` : '')
             .filter(query => !!query);
         const query = !!filterQueries.length ? filterQueries.join('&') : router.query.filters;
+        const params = getParamsQueryString({ filters: query, pageUrl });
 
-        router.push(`/books/${book.id}?${getParamsQueryString({ filters: query, pageUrl })}`);
+        router.push(`/books/${book.id}${params ? `?${params}` : ''}`);
     }
 
     return (
