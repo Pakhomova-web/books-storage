@@ -4,11 +4,10 @@ import { getBooks } from '@/lib/data/books';
 const generateSitemap = (data, origin) => {
     let xml = '';
 
-    data.map(page => {
+    data.map(({ url, image }) => {
         xml += `<url>
-                    <loc>${origin + page.url}</loc>
-                    <lastmod>${page.lastModified}</lastmod>
-                    ${!!page.image ? `<image:image><image:loc>${page.image}</image:loc></image:image>` : ''}
+                    <loc>${origin + url}</loc>
+                    ${!!image ? `<image:image><image:loc>${image}</image:loc></image:image>` : ''}
                 </url>`;
     });
 
@@ -19,29 +18,13 @@ const generateSitemap = (data, origin) => {
 export async function getServerSideProps({ res }) {
     const { items } = await getBooks();
     const data = [
-        {
-            url: '/',
-            lastModified: new Date()
-        },
-        {
-            url: '/books',
-            lastModified: new Date()
-        },
-        {
-            url: '/about-us',
-            lastModified: new Date()
-        },
-        {
-            url: '/publishing-houses',
-            lastModified: new Date()
-        },
-        {
-            url: '/sign-in',
-            lastModified: new Date()
-        },
+        { url: '/' },
+        { url: '/books' },
+        { url: '/about-us' },
+        { url: '/publishing-houses' },
+        { url: '/sign-in' },
         ...items.map((book: BookEntity) => ({
             url: `/books/${book.id}`,
-            lastModified: new Date(),
             image: book.imageIds ? `https://drive.google.com/thumbnail?id=${book.imageIds[0]}&amp;sz=w1000` : null
         }))
     ];
