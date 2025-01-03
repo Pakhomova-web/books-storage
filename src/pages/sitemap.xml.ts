@@ -16,7 +16,7 @@ const generateSitemap = (data, origin) => {
 }
 
 export async function getServerSideProps({ res }) {
-    const { items } = await getBooks();
+    const { items } = await getBooks().catch(() => ({ items: [] }));
     const data = [
         { url: '/' },
         { url: '/books' },
