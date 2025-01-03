@@ -48,22 +48,6 @@ export async function getServerSideProps({ res }) {
             url: '/sign-in',
             lastModified: new Date()
         },
-        {
-            url: '/basket',
-            lastModified: new Date()
-        },
-        {
-            url: '/profile/personal-info',
-            lastModified: new Date()
-        },
-        {
-            url: '/profile/likes',
-            lastModified: new Date()
-        },
-        {
-            url: '/profile/orders',
-            lastModified: new Date()
-        },
         ...books.map((book: BookEntity) => ({
             url: `/books/${book.id}`,
             lastModified: new Date(),

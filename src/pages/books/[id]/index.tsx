@@ -247,7 +247,22 @@ export default function BookDetails() {
     return (
         <>
             <Head>
-                <title>{book ? `${book.name} - ${book.bookSeries.publishingHouse.name}` : MAIN_NAME}</title>
+                <title>{book ? book.name : 'Книги'} - купити в {MAIN_NAME}</title>
+                <meta name="description"
+                      content={`Магазин дитячої літератури ${MAIN_NAME} - це великий вибір книг для дитячого розвитку, читання на ніч, самостійного читання та підготовки до школи. Віммельбухи. Книги з пазлами. Для вивчення англійської. Для підготовки руки до письма. Прописи. Енциклопедії. Наліпки. Розмальовки. Доставка книг поштою та кур'єром.`}/>
+                <meta name="keywords"
+                      content="видавництво, ph_smart_kids, phsmartkids, якісні, книжки, всебічного, розвитку, дітей, дорослих, книг, смак, ігри, акції, вибір, казки, пазли, книги, книгу, кращі"/>
+                {!!book && <>
+                  <meta name="description"
+                        content={`Інтернет-книгарня ${MAIN_NAME}. ${book.name}. Купити онлайн. Вигідні ціни. Швидка доставка`}/>
+                  <meta property="product:price:amount" content={renderPrice(book.price, book.discount, false)}/>
+                  <meta property="product:price:currency" content="UAH"/>
+                  <meta name="og:title" content={`${book ? book.name : 'Книги'} - купити в ${MAIN_NAME}`}/>
+                  <meta name="og:description"
+                        content={`Інтернет-книгарня ${MAIN_NAME}. ${book.name}. Купити онлайн. Вигідні ціни. Швидка доставка`}/>
+                    {!book.imageIds?.length && <meta property="og:image"
+                                                     content={`https://drive.google.com/thumbnail?id=/${book.imageIds[0]}`}/>}
+                </>}
             </Head>
 
             <Loading show={loading || refetching}></Loading>
@@ -260,7 +275,7 @@ export default function BookDetails() {
                 </Grid>
 
                 {book &&
-                  <StyledTitleGrid item sm={6} p={1} display="flex" gap={1}>
+                    <StyledTitleGrid item sm={6} p={1} display="flex" gap={1}>
                       {book.name}
                       {isAdmin(user) && <IconButton onClick={() => setShowEditModal(true)}><EditIcon/></IconButton>}
                   </StyledTitleGrid>}

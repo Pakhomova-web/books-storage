@@ -2,7 +2,6 @@ import { Box, Grid, useTheme } from '@mui/material';
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
 
 import Loading from '@/components/loading';
 import { borderRadius, styleVariables } from '@/constants/styles-variables';
@@ -14,6 +13,7 @@ import DeliveriesBox from '@/components/deliveries-box';
 import { MAIN_NAME } from '@/constants/main-name';
 import DiscountBooks from '@/components/books/discount-books';
 import Catalogue from '@/components/catalogue';
+import Head from 'next/head';
 
 const bookTypeBoxStyles = {
     borderRadius,
@@ -64,7 +64,14 @@ export default function Home() {
     return (
         <>
             <Head>
-                <title>Головна {MAIN_NAME}</title>
+                <title>{MAIN_NAME} - книги для дитячого розвитку</title>
+                <meta name="description"
+                      content={`Магазин дитячої літератури ${MAIN_NAME} - це великий вибір книг для дитячого розвитку, читання на ніч, самостійного читання та підготовки до школи. Віммельбухи. Книги з пазлами. Для вивчення англійської. Для підготовки руки до письма. Прописи. Енциклопедії. Наліпки. Розмальовки. Доставка книг поштою та кур'єром.`}/>
+                <meta name="keywords"
+                      content="видавництво, ph_smart_kids, phsmartkids, якісні, книжки, всебічного, розвитку, дітей, дорослих, книг, смак, ігри, акції, вибір, казки, пазли, книги, книгу, кращі"/>
+                <meta name="og:title" content={`${MAIN_NAME} - книги для дитячого розвитку`}/>
+                <meta name="og:description"
+                      content={`Магазин дитячої літератури ${MAIN_NAME} - це великий вибір книг для дитячого розвитку, читання на ніч, самостійного читання та підготовки до школи. Віммельбухи. Книги з пазлами. Для вивчення англійської. Для підготовки руки до письма. Прописи. Енциклопедії. Наліпки. Розмальовки. Доставка книг поштою та кур'єром.`}/>
             </Head>
 
             <SocialMediaBox/>
@@ -74,7 +81,7 @@ export default function Home() {
             <DiscountBooks/>
 
             <Grid container position="relative" mb={1} justifyContent="center">
-                <Loading show={loadingBookTypes} isSmall={true}></Loading>
+            <Loading show={loadingBookTypes} isSmall={true}></Loading>
 
                 <Grid item xs={12} sx={styleVariables.sectionTitle} mb={1}>Категорії</Grid>
 
