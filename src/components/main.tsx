@@ -16,7 +16,7 @@ import TopSoldBooks from '@/components/books/top-sold-books';
 import { getDeliveryOptions, getUkrPoshtaWarehouses } from '@/lib/graphql/queries/delivery/hook';
 
 const authUrls = ['/sign-in', '/reset-password'];
-const commonUrls = ['/books', '/books/[id]', '/publishing-houses', '/sitemap.xml'];
+const commonUrls = ['/books', '/books/[id]', '/publishing-houses', '/sitemap.xml', '/about-us'];
 
 const StyledDiscountBox = styled(Box)(({ theme }) => ({
     position: 'fixed',
