@@ -80,7 +80,7 @@ export default function Main({ children }) {
         <Box sx={fullHeight} position="relative">
             <Head>
                 <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
-                <meta http-equiv="content-language" content="ua"/>
+                <meta http-equiv="content-language" content="uk"/>
             </Head>
             <Loading show={loading}></Loading>
 
