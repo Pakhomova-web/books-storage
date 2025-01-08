@@ -15,8 +15,8 @@ import { isAdmin } from '@/utils/utils';
 import TopSoldBooks from '@/components/books/top-sold-books';
 import { getDeliveryOptions, getUkrPoshtaWarehouses } from '@/lib/graphql/queries/delivery/hook';
 
-const authUrls = ['/sign-in', '/reset-password'];
-const commonUrls = ['/books', '/books/[id]', '/publishing-houses', '/sitemap.xml', '/about-us'];
+const authUrls = ['/sign-in', '/reset-password', '/activation'];
+const commonUrls = ['/books', '/publishing-houses', '/sitemap.xml', '/about-us'];
 
 const StyledDiscountBox = styled(Box)(({ theme }) => ({
     position: 'fixed',
@@ -65,7 +65,7 @@ export default function Main({ children }) {
             .catch(() => {
                 setLoading(false);
                 logout();
-                if (![...authUrls, ...commonUrls].some(url => pathname === url)) {
+                if (![...authUrls, ...commonUrls].some(url => pathname.includes(url))) {
                     router.push('/');
                 }
             });
