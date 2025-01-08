@@ -76,7 +76,7 @@ export default function LoginModal({ open }) {
 
     function goToSignInPage() {
         setOpenLoginModal(false);
-        router.push('sign-in');
+        router.push('/sign-in');
     }
 
     function isFormInvalid(): boolean {
