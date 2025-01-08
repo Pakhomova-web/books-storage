@@ -18,7 +18,7 @@ const generateSitemap = (data, origin) => {
 export async function getServerSideProps({ res }) {
     const items: { id: string, imageIds?: string[] }[] = await getAllBooks().catch((err) => [{ id: err }]);
     const data = [
-        { url: '/' },
+        { url: '' },
         { url: '/books' },
         { url: '/about-us' },
         { url: '/publishing-houses' },
