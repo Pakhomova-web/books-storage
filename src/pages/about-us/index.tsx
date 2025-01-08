@@ -4,7 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 
 import SocialMediaBox from '@/components/social-media-box';
-import { MAIN_NAME } from '@/constants/main-name';
+import { MAIN_DESC, MAIN_NAME } from '@/constants/main-name';
 import DeliveriesBox from '@/components/deliveries-box';
 import { styleVariables } from '@/constants/styles-variables';
 
@@ -16,10 +16,10 @@ export default function AboutUsPage() {
             <Head>
                 <title>Про {MAIN_NAME}</title>
                 <meta name="description"
-                      content={`Магазин дитячої літератури ${MAIN_NAME} - це великий вибір книг для дитячого розвитку, читання на ніч, самостійного читання та підготовки до школи. Віммельбухи. Книги з пазлами. Для вивчення англійської. Для підготовки руки до письма. Прописи. Енциклопедії. Наліпки. Розмальовки. Доставка книг поштою та кур'єром.`}/>
+                      content={MAIN_DESC}/>
                 <meta name="og:title" content={`Про ${MAIN_NAME}`}/>
                 <meta name="og:description"
-                      content={`Магазин дитячої літератури ${MAIN_NAME} - це великий вибір книг для дитячого розвитку, читання на ніч, самостійного читання та підготовки до школи. Віммельбухи. Книги з пазлами. Для вивчення англійської. Для підготовки руки до письма. Прописи. Енциклопедії. Наліпки. Розмальовки. Доставка книг поштою та кур'єром.`}/>
+                      content={MAIN_DESC}/>
             </Head>
 
             <Box display="flex" width="100%" my={3} justifyContent="center" sx={styleVariables.titleFontSize}>

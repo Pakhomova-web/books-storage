@@ -29,7 +29,7 @@ import { useAuth } from '@/components/auth-context';
 import BooksList from '@/components/books/books-list';
 import DeliveriesBox from '@/components/deliveries-box';
 import Head from 'next/head';
-import { MAIN_NAME } from '@/constants/main-name';
+import { MAIN_DESC, MAIN_NAME } from '@/constants/main-name';
 import DiscountBooks from '@/components/books/discount-books';
 import RecentlyViewedBooks from '@/components/books/recently-viewed-books';
 import IconWithText from '@/components/icon-with-text';
@@ -57,9 +57,11 @@ const imageBoxStyles = (clickable = false) => ({
 });
 
 const StyledTitleGrid = styled(Grid)(({ theme }) => ({
-    ...styleVariables.bigTitleFontSize(theme),
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    'h1': {
+        ...styleVariables.bigTitleFontSize(theme)
+    }
 }));
 
 export default function BookDetails() {
@@ -248,8 +250,7 @@ export default function BookDetails() {
         <>
             <Head>
                 <title>{book ? book.name : 'Книги'} - купити в {MAIN_NAME}</title>
-                <meta name="description"
-                      content={`Магазин дитячої літератури ${MAIN_NAME} - це великий вибір книг для дитячого розвитку, читання на ніч, самостійного читання та підготовки до школи. Віммельбухи. Книги з пазлами. Для вивчення англійської. Для підготовки руки до письма. Прописи. Енциклопедії. Наліпки. Розмальовки. Доставка книг поштою та кур'єром.`}/>
+                <meta name="description" content={MAIN_DESC}/>
                 {!!book && <>
                   <meta name="description"
                         content={`Інтернет-книгарня ${MAIN_NAME}. ${book.name}. Купити онлайн. Вигідні ціни. Швидка доставка`}/>
@@ -273,8 +274,8 @@ export default function BookDetails() {
                 </Grid>
 
                 {book &&
-                    <StyledTitleGrid item sm={6} p={1} display="flex" gap={1}>
-                      {book.name}
+                  <StyledTitleGrid item sm={6} p={1} display="flex" gap={1}>
+                    <h1>{book.name}</h1>
                       {isAdmin(user) && <IconButton onClick={() => setShowEditModal(true)}><EditIcon/></IconButton>}
                   </StyledTitleGrid>}
             </Grid>

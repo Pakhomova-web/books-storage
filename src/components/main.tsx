@@ -66,7 +66,7 @@ export default function Main({ children }) {
             .catch(() => {
                 setLoading(false);
                 logout();
-                if (![...authUrls, ...commonUrls].some(url => pathname.includes(url))) {
+                if (![...authUrls, ...commonUrls].some(url => pathname?.includes(url))) {
                     router.push('/');
                 }
             });

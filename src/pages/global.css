@@ -69,3 +69,7 @@ html, body {
 img {
     object-fit: contain;
 }
+
+.centerText {
+    text-align: center;
+}

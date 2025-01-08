@@ -10,7 +10,7 @@ import CustomImage from '@/components/custom-image';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import SocialMediaBox from '@/components/social-media-box';
 import DeliveriesBox from '@/components/deliveries-box';
-import { MAIN_NAME } from '@/constants/main-name';
+import { MAIN_DESC, MAIN_NAME } from '@/constants/main-name';
 import DiscountBooks from '@/components/books/discount-books';
 import Catalogue from '@/components/catalogue';
 import Head from 'next/head';
@@ -65,11 +65,9 @@ export default function Home() {
         <>
             <Head>
                 <title>{MAIN_NAME} - книги для дитячого розвитку</title>
-                <meta name="description"
-                      content={`Магазин дитячої літератури ${MAIN_NAME} - це великий вибір книг для дитячого розвитку, читання на ніч, самостійного читання та підготовки до школи. Віммельбухи. Книги з пазлами. Для вивчення англійської. Для підготовки руки до письма. Прописи. Енциклопедії. Наліпки. Розмальовки. Доставка книг поштою та кур'єром.`}/>
+                <meta name="description" content={MAIN_DESC}/>
                 <meta name="og:title" content={`${MAIN_NAME} - книги для дитячого розвитку`}/>
-                <meta name="og:description"
-                      content={`Магазин дитячої літератури ${MAIN_NAME} - це великий вибір книг для дитячого розвитку, читання на ніч, самостійного читання та підготовки до школи. Віммельбухи. Книги з пазлами. Для вивчення англійської. Для підготовки руки до письма. Прописи. Енциклопедії. Наліпки. Розмальовки. Доставка книг поштою та кур'єром.`}/>
+                <meta name="og:description" content={MAIN_DESC}/>
             </Head>
 
             <SocialMediaBox/>
@@ -79,7 +77,7 @@ export default function Home() {
             <DiscountBooks/>
 
             <Grid container position="relative" mb={1} justifyContent="center">
-            <Loading show={loadingBookTypes} isSmall={true}></Loading>
+                <Loading show={loadingBookTypes} isSmall={true}></Loading>
 
                 <Grid item xs={12} sx={styleVariables.sectionTitle} mb={1}>Категорії</Grid>
 
@@ -108,6 +106,8 @@ export default function Home() {
                       ))}
                   </Grid>}
             </Grid>
+
+            <h1 className="centerText">{MAIN_NAME} - книги для дитячого розвитку</h1>
 
             <DeliveriesBox/>
         </>

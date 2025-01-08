@@ -26,7 +26,7 @@ import { BookFilters } from '@/components/filters/book-filters';
 import { getBookSeriesById } from '@/lib/graphql/queries/book-series/hook';
 import BooksList from '@/components/books/books-list';
 import Head from 'next/head';
-import { MAIN_NAME } from '@/constants/main-name';
+import { MAIN_DESC, MAIN_NAME } from '@/constants/main-name';
 import IconWithText from '@/components/icon-with-text';
 import SocialMediaBox from '@/components/social-media-box';
 import DeliveriesBox from '@/components/deliveries-box';
@@ -195,11 +195,9 @@ export default function Books() {
         <>
             <Head>
                 <title>{MAIN_NAME} - Пошук</title>
-                <meta name="description"
-                      content={`Магазин дитячої літератури ${MAIN_NAME} - це великий вибір книг для дитячого розвитку, читання на ніч, самостійного читання та підготовки до школи. Віммельбухи. Книги з пазлами. Для вивчення англійської. Для підготовки руки до письма. Прописи. Енциклопедії. Наліпки. Розмальовки. Доставка книг поштою та кур'єром.`}/>
+                <meta name="description" content={MAIN_DESC}/>
                 <meta name="og:title" content={`${MAIN_NAME} - книги для дитячого розвитку`}/>
-                <meta name="og:description"
-                      content={`Магазин дитячої літератури ${MAIN_NAME} - це великий вибір книг для дитячого розвитку, читання на ніч, самостійного читання та підготовки до школи. Віммельбухи. Книги з пазлами. Для вивчення англійської. Для підготовки руки до письма. Прописи. Енциклопедії. Наліпки. Розмальовки. Доставка книг поштою та кур'єром.`}/>
+                <meta name="og:description" content={MAIN_DESC}/>
             </Head>
 
             <Box position="relative">
