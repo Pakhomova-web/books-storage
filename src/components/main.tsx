@@ -14,6 +14,7 @@ import { UkrPoshtaWarehouse, UserEntity } from '@/lib/data/types';
 import { isAdmin } from '@/utils/utils';
 import TopSoldBooks from '@/components/books/top-sold-books';
 import { getDeliveryOptions, getUkrPoshtaWarehouses } from '@/lib/graphql/queries/delivery/hook';
+import Head from 'next/head';
 
 const authUrls = ['/sign-in', '/reset-password', '/activation'];
 const commonUrls = ['/books', '/publishing-houses', '/sitemap.xml', '/about-us'];
@@ -77,6 +78,10 @@ export default function Main({ children }) {
 
     return (
         <Box sx={fullHeight} position="relative">
+            <Head>
+                <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+                <meta http-equiv="content-language" content="ua"/>
+            </Head>
             <Loading show={loading}></Loading>
 
             {!mobileMatches && <TopSoldBooks/>}
@@ -97,7 +102,7 @@ export default function Main({ children }) {
             {!isSettings() &&
               <StyledDiscountBox onClick={() => router.push('/books?withDiscount=true')}>
                 <Tooltip title="Знижки від 30%">
-                  <img alt="Image" height="100%" style={{ objectFit: 'contain' }} src="/discount_icon.png"/>
+                  <img alt="Image" height="100%" src="/discount_icon.png"/>
                 </Tooltip>
               </StyledDiscountBox>}
         </Box>

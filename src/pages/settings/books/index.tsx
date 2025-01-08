@@ -44,13 +44,7 @@ export default function Books() {
 
                 <Box display="flex" alignItems="center" gap={1} mb={1} sx={styleVariables.hintFontSize}>
                     {item.numberInStock ?
-                        <>
-                            <HdrStrongIcon fontSize="small" style={{ color: "green" }}/>
-                            В наявності ({item.numberInStock})
-                        </> :
-                        <><HdrWeakIcon fontSize="small" style={{ color: styleVariables.warnColor }}/>
-                            Немає в наявності</>
-                    }
+                        'В наявності (' + item.numberInStock + ')' : 'Немає в наявності'}
                 </Box>
             </>
         ),

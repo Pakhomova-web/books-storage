@@ -65,3 +65,7 @@ html, body {
 .word-highlight {
     background-color: var(--light-background);
 }
+
+img {
+    object-fit: contain;
+}

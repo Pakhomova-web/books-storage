@@ -33,6 +33,6 @@ export default function CustomImage({
 
     return (
         getImage() &&
-        <img alt="Image" width="100%" height="100%" style={{ objectFit: 'contain' }} src={getImage()}/>
+        <img alt="Image" width="100%" height="100%" src={getImage()}/>
     );
 }
