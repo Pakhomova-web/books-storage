@@ -17,7 +17,7 @@ import { getDeliveryOptions, getUkrPoshtaWarehouses } from '@/lib/graphql/querie
 import Head from 'next/head';
 
 const authUrls = ['/sign-in', '/reset-password', '/activation'];
-const commonUrls = ['/books', '/publishing-houses', '/sitemap.xml', '/about-us'];
+const commonUrls = ['/books', '/publishing-houses', '/sitemap-index.xml', '/about-us'];
 
 const StyledDiscountBox = styled(Box)(({ theme }) => ({
     position: 'fixed',
