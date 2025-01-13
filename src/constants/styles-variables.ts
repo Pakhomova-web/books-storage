@@ -7,6 +7,8 @@ export const primaryColor = '#448AFF';
 export const primaryLightColor = 'rgba(68, 138, 255, 0.2)';
 export const redLightColor = 'rgba(171, 51, 44, 0.2)';
 export const greenLightColor = 'rgba(0, 128, 0)';
+export const yellowColor = 'rgb(209,213,47)';
+export const yellowLightColor = 'rgb(255,250,166)';
 export const borderRadius = '4px';
 export const titleFontSize = '20px';
 export const hintFontSize = '14px';
@@ -104,14 +106,6 @@ export const styleVariables = {
     }
 };
 
-export const StyledHintBox = styled(Box)(({ theme }) => ({
-    cursor: 'pointer',
-    opacity: 0.9,
-    ':hover': {
-        color: theme.palette.primary.main
-    }
-}));
-
 export const customFieldClearBtnStyles = {
     position: 'absolute',
     top: 0,
@@ -129,5 +123,6 @@ export const priceStyles = (theme, small = false) => ({
     borderRadius,
     padding: boxPadding,
     border: `1px solid ${primaryLightColor}`,
+    backgroundColor: 'white',
     ...(small ? styleVariables.hintFontSize : { fontSize: styleVariables.bigTitleFontSize(theme) })
 });

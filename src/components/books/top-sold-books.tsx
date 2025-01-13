@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import React from 'react';
 import { styled } from '@mui/material/styles';
 
-import { priceStyles, styleVariables } from '@/constants/styles-variables';
+import { borderRadius, priceStyles, styleVariables, yellowColor, yellowLightColor } from '@/constants/styles-variables';
 import { useTopOfSoldBooks } from '@/lib/graphql/queries/book/hook';
 import CustomImage from '@/components/custom-image';
 import { renderPrice } from '@/utils/utils';
@@ -29,6 +29,10 @@ const StyledTitle = styled(Box)(() => ({
     flexDirection: 'row',
     flexWrap: 'nowrap',
     alignItems: 'center',
+    border: `2px solid ${yellowColor}`,
+    background: yellowLightColor,
+    borderRadius,
+    ...styleVariables.titleFontSize
 }));
 
 const StyledTopSoldBook = styled(Box)(() => ({
@@ -55,8 +59,7 @@ export default function TopSoldBooks({ mobile = false }) {
         mobile ?
             <Box my={1} display="flex" flexDirection="row" flexWrap="nowrap" alignItems="center"
                  justifyContent="space-between" gap={1}>
-                <StyledTitle gap={1} onClick={() => onTitleClick()}>
-                    <Box height="25px"><CustomImage imageLink="/top_star.png"/></Box>
+                <StyledTitle gap={1} p={1} onClick={() => onTitleClick()}>
                     Топ продажів
                 </StyledTitle>
 
@@ -70,11 +73,8 @@ export default function TopSoldBooks({ mobile = false }) {
             </Box> :
             <StyledTopSoldBook gap={1} py={1}>
                 {!loading && !!items?.length && <Box>
-                  <StyledTitle sx={styleVariables.hintFontSize} justifyContent="center" gap={1}
-                               onClick={() => onTitleClick()}>
-                    <Box height="25px"><CustomImage imageLink="/top_star.png"/></Box>
+                  <StyledTitle justifyContent="center" gap={1} p={1} mx={1} onClick={() => onTitleClick()}>
                     Топ продажів
-                    <Box height="25px"><CustomImage imageLink="/top_star.png"/></Box>
                   </StyledTitle>
 
 
