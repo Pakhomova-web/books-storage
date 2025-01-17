@@ -17,7 +17,7 @@ import { getDeliveryOptions, getUkrPoshtaWarehouses } from '@/lib/graphql/querie
 import Head from 'next/head';
 
 const authUrls = ['/sign-in', '/reset-password', '/activation'];
-const commonUrls = ['/books', '/publishing-houses', '/sitemap-index.xml', '/about-us'];
+const commonUrls = ['/books', '/publishing-houses', '/sitemap.xml', '/about-us'];
 
 const StyledDiscountBox = styled(Box)(({ theme }) => ({
     position: 'fixed',
@@ -51,7 +51,8 @@ export default function Main({ children }) {
         if (!ukrPoshtaWarehouses?.length) {
             getUkrPoshtaWarehouses()
                 .then(res => setUkrPoshtaWarehouses(res.map(d => new UkrPoshtaWarehouse(d))))
-                .catch(() => {});
+                .catch(() => {
+                });
         }
 
         setLoading(true);
@@ -59,18 +60,29 @@ export default function Main({ children }) {
             .then((user: UserEntity) => {
                 setUser(user);
                 setLoading(false);
-                if (!isAdmin(user) && isSettings() || authUrls.some(url => url === pathname)) {
-                    router.push('/');
-                }
             })
             .catch(() => {
                 setLoading(false);
                 logout();
-                if (![...authUrls, ...commonUrls].some(url => pathname?.includes(url))) {
-                    router.push('/');
+                if (pathname) {
+                    if (![...authUrls, ...commonUrls].some(url => pathname.includes(url))) {
+                        router.push('/');
+                    }
                 }
             });
     }, []);
+
+    useEffect(() => {
+        if (pathname) {
+            if (!user) {
+                if (![...authUrls, ...commonUrls].some(url => pathname.includes(url))) {
+                    router.push('/');
+                }
+            } else if (!isAdmin(user) && isSettings() || authUrls.some(url => url === pathname)) {
+                router.push('/');
+            }
+        }
+    }, [pathname, user]);
 
     function isSettings() {
         return pathname?.includes('/settings');
