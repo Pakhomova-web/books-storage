@@ -13,7 +13,13 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
-import { getBookComments, getBookPartById, getBooksByAuthors, getBooksFromSeries, useBook } from '@/lib/graphql/queries/book/hook';
+import {
+    getBookComments,
+    getBookPartById,
+    getBooksByAuthors,
+    getBooksFromSeries,
+    useBook
+} from '@/lib/graphql/queries/book/hook';
 import ErrorNotification from '@/components/error-notification';
 import { TableKey } from '@/components/table/table-key';
 import { BookEntity, CommentEntity } from '@/lib/data/types';
@@ -65,9 +71,8 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
 }));
 
 export async function generateMetadata({ params }): Promise<Metadata> {
-    const id = (await params).id;
-
-    if (id) {
+    try {
+        const id = (await params).id;
         const book = await getBookPartById(id);
 
         return {
@@ -77,11 +82,12 @@ export async function generateMetadata({ params }): Promise<Metadata> {
                 images: book.imageId ? [`https://drive.google.com/thumbnail?id=${book.imageId}&sz=w1000`] : []
             }
         };
+    } catch (err) {
+        return {
+            title: `Книги - купити в ${MAIN_NAME}`,
+            description: `Відеоогляди в нашому інстаграм. Відправка кожного дня.`,
+        };
     }
-    return {
-        title: `Книги - купити в ${MAIN_NAME}`,
-        description: `Відеоогляди в нашому інстаграм. Відправка кожного дня.`,
-    };
 }
 
 export default function BookDetails() {

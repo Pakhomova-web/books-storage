@@ -92,6 +92,7 @@ export default function Main({ children }) {
         <Box sx={fullHeight} position="relative">
             <Head>
                 <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16"/>
+                <link rel="apple-touch-icon" href="/favicon.ico" type="image/x-icon" sizes="32x32"/>
                 <meta http-equiv="content-language" content="uk"/>
             </Head>
             <Loading show={loading}></Loading>
