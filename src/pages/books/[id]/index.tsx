@@ -13,13 +13,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
-import {
-    getBookComments,
-    getBookPartById,
-    getBooksByAuthors,
-    getBooksFromSeries,
-    useBook
-} from '@/lib/graphql/queries/book/hook';
+import { getBookComments, getBooksByAuthors, getBooksFromSeries, useBook } from '@/lib/graphql/queries/book/hook';
 import ErrorNotification from '@/components/error-notification';
 import { TableKey } from '@/components/table/table-key';
 import { BookEntity, CommentEntity } from '@/lib/data/types';
@@ -41,8 +35,8 @@ import BookModal from '@/components/modals/book-modal';
 import Catalogue from '@/components/catalogue';
 import GroupDiscountBooks from '@/components/books/group-discount-section';
 import ClickableOption from '@/components/clickable-option';
-import { MAIN_NAME } from '@/constants/main-name';
-import { Metadata } from 'next';
+import { MAIN_DESC, MAIN_NAME } from '@/constants/main-name';
+import Head from 'next/head';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
     height: '40px',
@@ -69,26 +63,6 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
         ...styleVariables.bigTitleFontSize(theme)
     }
 }));
-
-export async function generateMetadata({ params }): Promise<Metadata> {
-    try {
-        const id = (await params).id;
-        const book = await getBookPartById(id);
-
-        return {
-            title: `${book.name} - купити в ${MAIN_NAME}`,
-            description: `Ціна: ${renderPrice(book.price, book.discount)}. Відеоогляди в нашому інстаграм. Відправка кожного дня.`,
-            openGraph: {
-                images: book.imageId ? [`https://drive.google.com/thumbnail?id=${book.imageId}&sz=w1000`] : []
-            }
-        };
-    } catch (err) {
-        return {
-            title: `Книги - купити в ${MAIN_NAME}`,
-            description: `Відеоогляди в нашому інстаграм. Відправка кожного дня.`,
-        };
-    }
-}
 
 export default function BookDetails() {
     const router = useRouter();
@@ -272,8 +246,24 @@ export default function BookDetails() {
         router.push(`/books/${id}`);
     }
 
+    if (loading) {
+        return <Loading show={true}></Loading>;
+    }
+
     return (
         <>
+            <Head>
+                <title>{book.name + '- купити в ' + MAIN_NAME}</title>,
+                <meta name="description"
+                      content={`Ціна: ${renderPrice(book.price, book.discount)}. Відеоогляди в нашому інстаграм. Відправка кожного дня.`}/>
+                <meta name="og:title" content={`${book.name} - купити в ${MAIN_NAME}`}/>
+                <meta name="og:description"
+                      content={`Ціна: ${renderPrice(book.price, book.discount)}. Відеоогляди в нашому інстаграм. Відправка кожного дня.`}/>
+                {!!book.imageIds?.length && <>
+                  <meta name="image" content={`https://drive.google.com/thumbnail?id=${book.imageIds[0]}&sz=w1000`}/>
+                  <meta name="og:image" content={`https://drive.google.com/thumbnail?id=${book.imageIds[0]}&sz=w1000`}/>
+                </>}
+            </Head>
             <Loading show={loading || refetching}></Loading>
 
             <Catalogue/>
