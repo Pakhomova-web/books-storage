@@ -91,7 +91,7 @@ export default function Main({ children }) {
     return (
         <Box sx={fullHeight} position="relative">
             <Head>
-                <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+                <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16"/>
                 <meta http-equiv="content-language" content="uk"/>
             </Head>
             <Loading show={loading}></Loading>

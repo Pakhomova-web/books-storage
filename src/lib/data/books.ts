@@ -340,6 +340,16 @@ export async function getBooksNameByQuickSearch(quickSearch: string): Promise<IO
     }));
 }
 
+export async function getBookImageById(id: string): Promise<string> {
+    const book = await Book.findById(id);
+
+    if (!!book?.imageIds?.length) {
+        return book.imageIds[0];
+    } else {
+        return null;
+    }
+}
+
 export async function getBooksFromSeries(bookId: string, rowsPerPage: number) {
     if (!bookId) {
         throw new GraphQLError(`Не вказан ідентифікатор книги.`, {
