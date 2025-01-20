@@ -250,7 +250,8 @@ export default function BookDetails() {
         <>
             <Head>
                 <title>{book ? book.name : 'Книги'}&nbsp;- купити в&nbsp;{MAIN_NAME}</title>
-                <meta name="description" content={MAIN_DESC}/>
+                <meta name="description" content="Test description"/>
+                <meta property="image" content={`/api/opengraph-image?id=${router.query.id}`}/>
                 <meta property="og:description" content="Test description"/>
                 <meta property="og:image" content={`/api/opengraph-image?id=${router.query.id}`}/>
             </Head>
