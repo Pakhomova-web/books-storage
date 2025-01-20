@@ -28,8 +28,6 @@ import SocialMediaBox from '@/components/social-media-box';
 import { useAuth } from '@/components/auth-context';
 import BooksList from '@/components/books/books-list';
 import DeliveriesBox from '@/components/deliveries-box';
-import Head from 'next/head';
-import { MAIN_DESC, MAIN_NAME } from '@/constants/main-name';
 import DiscountBooks from '@/components/books/discount-books';
 import RecentlyViewedBooks from '@/components/books/recently-viewed-books';
 import IconWithText from '@/components/icon-with-text';
@@ -37,6 +35,8 @@ import BookModal from '@/components/modals/book-modal';
 import Catalogue from '@/components/catalogue';
 import GroupDiscountBooks from '@/components/books/group-discount-section';
 import ClickableOption from '@/components/clickable-option';
+import { getBookPartById } from '@/lib/data/books';
+import { MAIN_NAME } from '@/constants/main-name';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
     height: '40px',
@@ -63,6 +63,20 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
         ...styleVariables.bigTitleFontSize(theme)
     }
 }));
+
+export async function generateMetadata({ params }) {
+    const id = (await params).id
+    // const book = await getBookPartById(id);
+
+    const book = { name: 'test name', price: 34, discount: null, imageId: null };
+    return {
+        title: `${book ? book.name : 'Книги'} - купити в ${MAIN_NAME}`,
+        description: `Ціна: ${renderPrice(book.price, book.discount)}. Відеоогляди в нашому інстаграм. Відправка кожного дня.`,
+        openGraph: {
+            image: `https://drive.google.com/thumbnail?id=${book.imageId}&sz=w1000`
+        }
+    }
+}
 
 export default function BookDetails() {
     const router = useRouter();
@@ -248,12 +262,6 @@ export default function BookDetails() {
 
     return (
         <>
-            <Head>
-                <title>{book ? book.name : 'Книги'}&nbsp;- купити в&nbsp;{MAIN_NAME}</title>
-                <meta property="og:description" content="Test description"/>
-                <meta property="og:image" content={`/api/opengraph-image?id=${router.query.id}`}/>
-            </Head>
-
             <Loading show={loading || refetching}></Loading>
 
             <Catalogue/>

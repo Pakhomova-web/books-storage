@@ -1,5 +1,5 @@
-import { ImageResponse } from 'next/og'
-import { getBookImageById } from '@/lib/data/books';
+import { ImageResponse } from '@vercel/og'
+import { getBookPartById } from '@/lib/data/books';
 import { NextApiRequest, NextApiResponse } from 'next';
 import CustomImage from '@/components/custom-image';
 
@@ -11,7 +11,7 @@ export const size = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { id } = req.query;
-    const imageId = await getBookImageById(id as string);
+    const { imageId } = await getBookPartById(id as string);
 
     try {
         return new ImageResponse(<CustomImage imageId={imageId}/>, size);

@@ -340,14 +340,20 @@ export async function getBooksNameByQuickSearch(quickSearch: string): Promise<IO
     }));
 }
 
-export async function getBookImageById(id: string): Promise<string> {
+export async function getBookPartById(id: string): Promise<{
+    name: string,
+    imageId?: string,
+    price: number,
+    discount?: number
+}> {
     const book = await Book.findById(id);
 
-    if (!!book?.imageIds?.length) {
-        return book.imageIds[0];
-    } else {
-        return null;
-    }
+    return {
+        name: book.name,
+        imageId: book.imageIds ? book.imageIds[0] : null,
+        price: book.price,
+        discount: book.discount
+    };
 }
 
 export async function getBooksFromSeries(bookId: string, rowsPerPage: number) {
