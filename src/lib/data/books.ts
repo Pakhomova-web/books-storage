@@ -340,12 +340,7 @@ export async function getBooksNameByQuickSearch(quickSearch: string): Promise<IO
     }));
 }
 
-export async function getBookPartById(id: string): Promise<{
-    name: string,
-    imageId?: string,
-    price: number,
-    discount?: number
-}> {
+export async function getBookPartById(id: string) {
     const book = await Book.findById(id);
 
     return {

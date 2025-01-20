@@ -155,6 +155,17 @@ export const bookByIdQuery = gql`
     ${bookFragment}
 `;
 
+export const bookPartByIdQuery = gql`
+    query BookById($id: ID!) {
+        bookPartById(id: $id) {
+            name
+            imageId
+            price
+            discount
+        }
+    }
+`;
+
 export const createBookQuery = gql`
     mutation CreateBook($input: BookCreateInput!) {
         item: createBook(input: $input) {

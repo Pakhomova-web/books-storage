@@ -13,7 +13,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
-import { getBookComments, getBooksByAuthors, getBooksFromSeries, useBook } from '@/lib/graphql/queries/book/hook';
+import { getBookComments, getBookPartById, getBooksByAuthors, getBooksFromSeries, useBook } from '@/lib/graphql/queries/book/hook';
 import ErrorNotification from '@/components/error-notification';
 import { TableKey } from '@/components/table/table-key';
 import { BookEntity, CommentEntity } from '@/lib/data/types';
@@ -35,7 +35,6 @@ import BookModal from '@/components/modals/book-modal';
 import Catalogue from '@/components/catalogue';
 import GroupDiscountBooks from '@/components/books/group-discount-section';
 import ClickableOption from '@/components/clickable-option';
-import { getBookPartById } from '@/lib/data/books';
 import { MAIN_NAME } from '@/constants/main-name';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
@@ -65,17 +64,20 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
 }));
 
 export async function generateMetadata({ params }) {
-    const id = (await params).id
-    // const book = await getBookPartById(id);
+    const id = (await params).id;
 
-    const book = { name: 'test name', price: 34, discount: null, imageId: null };
-    return {
-        title: `${book ? book.name : 'Книги'} - купити в ${MAIN_NAME}`,
-        description: `Ціна: ${renderPrice(book.price, book.discount)}. Відеоогляди в нашому інстаграм. Відправка кожного дня.`,
-        openGraph: {
-            image: `https://drive.google.com/thumbnail?id=${book.imageId}&sz=w1000`
-        }
+    if (id) {
+        const book = await getBookPartById(id);
+
+        return {
+            title: `${book.name} - купити в ${MAIN_NAME}`,
+            description: `Ціна: ${renderPrice(book.price, book.discount)}. Відеоогляди в нашому інстаграм. Відправка кожного дня.`,
+            openGraph: {
+                image: book.imageId ? `https://drive.google.com/thumbnail?id=${book.imageId}&sz=w1000` : null
+            }
+        };
     }
+    return {};
 }
 
 export default function BookDetails() {

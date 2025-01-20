@@ -28,6 +28,13 @@ const typeDefs =  /* GraphQL */ `
         imageId: String
     }
 
+    type BookPart {
+        name: String!
+        imageId: String
+        price: Float!
+        discount: Float
+    }
+
     type CoverType {
         id: ID
         name: String!
@@ -224,6 +231,7 @@ const typeDefs =  /* GraphQL */ `
         sendEmailWithOrder(orderId: ID!): String!
         bookSeriesOptions(filters: BookSeriesSearchInput): [IOption!]
         bookById(id: ID!): Book
+        bookPartById(id: ID!): BookPart
         bookTypeById(id: ID!): BookType
         authorById(id: ID!): Author
         publishingHouseById(id: ID!): PublishingHouse
