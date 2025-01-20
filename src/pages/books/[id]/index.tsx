@@ -276,10 +276,7 @@ export default function BookDetails({ bookPart }) {
                       content={`${bookPart ? `Ціна: ${renderPrice(bookPart.price, bookPart.discount)}. ` : ''}Відеоогляди в нашому інстаграм. Відправка кожного дня.`}/>
                 {!!bookPart?.imageId && <>
                   <meta name="image" content={`https://drive.google.com/thumbnail?id=${bookPart.imageId}&sz=w500`}/>
-                  <meta name="og:image"
-                        content={`https://drive.google.com/thumbnail?id=${bookPart.imageId}&sz=w500`}/>
-                  <meta property="og:image:width" content="500"/>
-                  <meta property="og:image:height" content="500"/>
+                  <meta name="og:image" content={`https://drive.google.com/thumbnail?id=${bookPart.imageId}&sz=w500`}/>
                 </>}
             </Head>
             <Loading show={loading || refetching}></Loading>

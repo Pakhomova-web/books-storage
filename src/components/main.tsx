@@ -93,6 +93,8 @@ export default function Main({ children }) {
             <Head>
                 <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="16x16"/>
                 <link rel="apple-touch-icon" href="/favicon.ico" type="image/x-icon" sizes="32x32"/>
+                <meta name="image" content="%PUBLIC_URL%/favicon.ico"/>
+                <meta name="og:image" content="%PUBLIC_URL%/favicon.ico"/>
                 <meta http-equiv="content-language" content="uk"/>
             </Head>
             <Loading show={loading}></Loading>
