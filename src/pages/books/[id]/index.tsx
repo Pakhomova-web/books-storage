@@ -249,7 +249,7 @@ export default function BookDetails() {
     return (
         <>
             <Head>
-                <title>{book ? book.name : 'Книги'} - купити в {MAIN_NAME}</title>
+                <title>{book ? book.name : 'Книги'}&nbsp;- купити в&nbsp;{MAIN_NAME}</title>
                 <meta name="description" content={MAIN_DESC}/>
                 {!!book && <>
                   <meta name="description"
@@ -261,12 +261,8 @@ export default function BookDetails() {
                         content={`Інтернет-книгарня ${MAIN_NAME}. ${book.name}. Купити онлайн. Вигідні ціни. Швидка доставка`}/>
                     {!book.imageIds?.length && <meta property="og:image"
                                                      content={`https://drive.google.com/thumbnail?id=/${book.imageIds[0]}`}/>}
-
-                  <meta property="og:image:type" content="image/png"/>
-                  <meta property="og:image:width" content="1200"/>
-                  <meta property="og:image:height" content="630"/>
-                  <meta property="og:image" content={`https://books-storage.vercel.app/opengraph-image?${router.query.id}`}/>
                 </>}
+                <meta property="og:image" content={`/api/opengraph-image?id=${router.query.id}`}/>
             </Head>
 
             <Loading show={loading || refetching}></Loading>

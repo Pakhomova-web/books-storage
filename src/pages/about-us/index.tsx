@@ -15,11 +15,9 @@ export default function AboutUsPage() {
         <Box textAlign="center">
             <Head>
                 <title>Про {MAIN_NAME}</title>
-                <meta name="description"
-                      content={MAIN_DESC}/>
+                <meta name="description" content={MAIN_DESC}/>
                 <meta name="og:title" content={`Про ${MAIN_NAME}`}/>
-                <meta name="og:description"
-                      content={MAIN_DESC}/>
+                <meta name="og:description" content={MAIN_DESC}/>
             </Head>
 
             <Box display="flex" width="100%" my={3} justifyContent="center" sx={styleVariables.titleFontSize}>
