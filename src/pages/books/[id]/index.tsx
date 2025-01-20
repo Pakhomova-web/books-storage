@@ -251,17 +251,7 @@ export default function BookDetails() {
             <Head>
                 <title>{book ? book.name : 'Книги'}&nbsp;- купити в&nbsp;{MAIN_NAME}</title>
                 <meta name="description" content={MAIN_DESC}/>
-                {!!book && <>
-                  <meta name="description"
-                        content={`Інтернет-книгарня ${MAIN_NAME}. ${book.name}. Купити онлайн. Вигідні ціни. Швидка доставка`}/>
-                  <meta property="product:price:amount" content={renderPrice(book.price, book.discount, false)}/>
-                  <meta property="product:price:currency" content="UAH"/>
-                  <meta name="og:title" content={`${book ? book.name : 'Книги'} - купити в ${MAIN_NAME}`}/>
-                  <meta name="og:description"
-                        content={`Інтернет-книгарня ${MAIN_NAME}. ${book.name}. Купити онлайн. Вигідні ціни. Швидка доставка`}/>
-                    {!book.imageIds?.length && <meta property="og:image"
-                                                     content={`https://drive.google.com/thumbnail?id=/${book.imageIds[0]}`}/>}
-                </>}
+                <meta property="og:description" content="Test description"/>
                 <meta property="og:image" content={`/api/opengraph-image?id=${router.query.id}`}/>
             </Head>
 
