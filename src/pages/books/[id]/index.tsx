@@ -77,7 +77,10 @@ export async function generateMetadata({ params }) {
             }
         };
     }
-    return {};
+    return {
+        title: `Книги - купити в ${MAIN_NAME}`,
+        description: `Відеоогляди в нашому інстаграм. Відправка кожного дня.`,
+    };
 }
 
 export default function BookDetails() {
