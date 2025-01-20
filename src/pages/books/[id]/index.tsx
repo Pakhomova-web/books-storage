@@ -36,6 +36,7 @@ import Catalogue from '@/components/catalogue';
 import GroupDiscountBooks from '@/components/books/group-discount-section';
 import ClickableOption from '@/components/clickable-option';
 import { MAIN_NAME } from '@/constants/main-name';
+import { Metadata } from 'next';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
     height: '40px',
@@ -63,7 +64,7 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
     }
 }));
 
-export async function generateMetadata({ params }) {
+export async function generateMetadata({ params }): Promise<Metadata> {
     const id = (await params).id;
 
     if (id) {
@@ -73,7 +74,7 @@ export async function generateMetadata({ params }) {
             title: `${book.name} - купити в ${MAIN_NAME}`,
             description: `Ціна: ${renderPrice(book.price, book.discount)}. Відеоогляди в нашому інстаграм. Відправка кожного дня.`,
             openGraph: {
-                image: book.imageId ? `https://drive.google.com/thumbnail?id=${book.imageId}&sz=w1000` : null
+                images: book.imageId ? [`https://drive.google.com/thumbnail?id=${book.imageId}&sz=w1000`] : []
             }
         };
     }
