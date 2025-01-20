@@ -13,7 +13,12 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
-import { getBookComments, getBooksByAuthors, getBooksFromSeries, useBook } from '@/lib/graphql/queries/book/hook';
+import {
+    getBookComments,
+    getBooksByAuthors,
+    getBooksFromSeries,
+    useBook
+} from '@/lib/graphql/queries/book/hook';
 import ErrorNotification from '@/components/error-notification';
 import { TableKey } from '@/components/table/table-key';
 import { BookEntity, CommentEntity } from '@/lib/data/types';
@@ -37,6 +42,7 @@ import GroupDiscountBooks from '@/components/books/group-discount-section';
 import ClickableOption from '@/components/clickable-option';
 import { MAIN_DESC, MAIN_NAME } from '@/constants/main-name';
 import Head from 'next/head';
+import { getBookPartById } from '@/lib/data/books';
 
 const StyledPublishingHouseImageBox = styled(Box)(() => ({
     height: '40px',
@@ -64,7 +70,21 @@ const StyledTitleGrid = styled(Grid)(({ theme }) => ({
     }
 }));
 
-export default function BookDetails() {
+
+export async function getServerSideProps(context) {
+    const { id } = context.params;
+
+    console.log(context);
+    const bookPart = await getBookPartById(id);
+
+    return {
+        props: {
+            bookPart
+        }
+    };
+}
+
+export default function BookDetails({ bookPart }) {
     const router = useRouter();
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
@@ -246,24 +266,23 @@ export default function BookDetails() {
         router.push(`/books/${id}`);
     }
 
-    if (loading) {
-        return <Loading show={true}></Loading>;
-    }
-
     return (
         <>
-            <Head>
-                <title>{book.name + '- купити в ' + MAIN_NAME}</title>,
+            {bookPart &&
+              <Head>
+                <title>{bookPart.name + '- купити в ' + MAIN_NAME}</title>,
                 <meta name="description"
-                      content={`Ціна: ${renderPrice(book.price, book.discount)}. Відеоогляди в нашому інстаграм. Відправка кожного дня.`}/>
-                <meta name="og:title" content={`${book.name} - купити в ${MAIN_NAME}`}/>
+                      content={`Ціна: ${renderPrice(bookPart.price, bookPart.discount)}. Відеоогляди в нашому інстаграм. Відправка кожного дня.`}/>
+                <meta name="og:title" content={`${bookPart.name} - купити в ${MAIN_NAME}`}/>
                 <meta name="og:description"
-                      content={`Ціна: ${renderPrice(book.price, book.discount)}. Відеоогляди в нашому інстаграм. Відправка кожного дня.`}/>
-                {!!book.imageIds?.length && <>
-                  <meta name="image" content={`https://drive.google.com/thumbnail?id=${book.imageIds[0]}&sz=w1000`}/>
-                  <meta name="og:image" content={`https://drive.google.com/thumbnail?id=${book.imageIds[0]}&sz=w1000`}/>
-                </>}
-            </Head>
+                      content={`Ціна: ${renderPrice(bookPart.price, bookPart.discount)}. Відеоогляди в нашому інстаграм. Відправка кожного дня.`}/>
+                  {!!bookPart.imageId && <>
+                    <meta name="image" content={`https://drive.google.com/thumbnail?id=${bookPart.imageId}&sz=w1000`}/>
+                    <meta name="og:image"
+                          content={`https://drive.google.com/thumbnail?id=${bookPart.imageId}&sz=w1000`}/>
+                  </>}
+              </Head>
+            }
             <Loading show={loading || refetching}></Loading>
 
             <Catalogue/>
