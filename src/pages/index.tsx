@@ -2,6 +2,7 @@ import { Box, Grid, useTheme } from '@mui/material';
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
 
 import Loading from '@/components/loading';
 import { borderRadius, styleVariables } from '@/constants/styles-variables';
@@ -13,7 +14,6 @@ import DeliveriesBox from '@/components/deliveries-box';
 import { MAIN_DESC, MAIN_NAME, MAIN_URL } from '@/constants/main-name';
 import DiscountBooks from '@/components/books/discount-books';
 import Catalogue from '@/components/catalogue';
-import Head from 'next/head';
 
 const bookTypeBoxStyles = {
     borderRadius,
@@ -68,8 +68,8 @@ export default function Home() {
                 <meta name="description" content={MAIN_DESC}/>
                 <meta name="og:title" content={`${MAIN_NAME} - книги для дитячого розвитку`}/>
                 <meta name="og:description" content={MAIN_DESC}/>
-                <meta name="image" content={`${MAIN_URL}favicon.png`}/>
-                <meta name="og:image" content={`${MAIN_URL}favicon.png`}/>
+                <meta name="image" content="https://drive.google.com/thumbnail?id=153WC87CLmkKDfcCAmwFdDix-2WvydIMF&sz=w500"/>
+                <meta name="og:image" content="https://drive.google.com/thumbnail?id=153WC87CLmkKDfcCAmwFdDix-2WvydIMF&sz=w500"/>
             </Head>
 
             <SocialMediaBox/>
