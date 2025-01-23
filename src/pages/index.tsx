@@ -68,8 +68,8 @@ export default function Home() {
                 <meta name="description" content={MAIN_DESC}/>
                 <meta name="og:title" content={`${MAIN_NAME} - книги для дитячого розвитку`}/>
                 <meta name="og:description" content={MAIN_DESC}/>
-                <meta name="image" content="https://drive.google.com/thumbnail?id=153WC87CLmkKDfcCAmwFdDix-2WvydIMF&sz=w500"/>
-                <meta name="og:image" content="https://drive.google.com/thumbnail?id=153WC87CLmkKDfcCAmwFdDix-2WvydIMF&sz=w500"/>
+                <meta name="image" content="https://drive.google.com/thumbnail?id=1S6gg2YYTNbwR-NFowA0P2a4XA4dK21Ds&sz=w500"/>
+                <meta name="og:image" content="https://drive.google.com/thumbnail?id=1S6gg2YYTNbwR-NFowA0P2a4XA4dK21Ds&sz=w500"/>
             </Head>
 
             <SocialMediaBox/>
