@@ -64,7 +64,7 @@ export default function Home() {
     return (
         <>
             <Head>
-                <title>{MAIN_NAME} - книги для дитячого розвитку</title>
+                <title>{`${MAIN_NAME} - книги для дитячого розвитку`}</title>
                 <meta name="description" content={MAIN_DESC}/>
                 <meta name="og:title" content={`${MAIN_NAME} - книги для дитячого розвитку`}/>
                 <meta name="og:description" content={MAIN_DESC}/>
