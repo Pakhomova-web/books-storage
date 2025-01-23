@@ -81,7 +81,7 @@ export default function SignIn() {
     return (
         <Box position="relative" display="flex" justifyContent="center">
             <Head>
-                <title>Реєстрація {MAIN_NAME}</title>
+                <title>{`Реєстрація ${MAIN_NAME}`}</title>
                 <meta name="description"
                       content={`Реєстрація. Магазин дитячої літератури ${MAIN_NAME} - це великий вибір книг для дитячого розвитку, читання на ніч, самостійного читання та підготовки до школи. Віммельбухи. Книги з пазлами. Для вивчення англійської. Для підготовки руки до письма. Прописи. Енциклопедії. Наліпки. Розмальовки. Доставка книг поштою та кур'єром."`}/>
                 <meta name="og:title" content={`Реєстрація ${MAIN_NAME}`}/>

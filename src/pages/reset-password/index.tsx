@@ -59,7 +59,7 @@ export default function ResetPassword() {
     return (
         <Box position="relative" display="flex" justifyContent="center">
             <Head>
-                <title>Відновлення паролю {MAIN_NAME}</title>
+                <title>{`Відновлення паролю ${MAIN_NAME}`}</title>
             </Head>
 
             <Loading show={loading || checkingToken}></Loading>

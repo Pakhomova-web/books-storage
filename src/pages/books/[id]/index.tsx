@@ -268,7 +268,7 @@ export default function BookDetails({ bookPart }) {
     return (
         <>
             <Head>
-                <title>{bookPart?.name + '- купити в ' + MAIN_NAME}</title>,
+                <title>{`${bookPart?.name} - купити в ${MAIN_NAME}`}</title>,
                 <meta name="description"
                       content={`${bookPart ? `Ціна: ${renderPrice(bookPart.price, bookPart.discount)}. ` : ''}Відеоогляди в нашому інстаграм. Відправка кожного дня.`}/>
                 <meta name="og:title" content={`${bookPart.name} - купити в ${MAIN_NAME}`}/>

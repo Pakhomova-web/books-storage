@@ -194,7 +194,7 @@ export default function Books() {
     return (
         <>
             <Head>
-                <title>{MAIN_NAME} - Пошук</title>
+                <title>{`${MAIN_NAME} - Пошук`}</title>
                 <meta name="description" content={MAIN_DESC}/>
                 <meta name="og:title" content={`${MAIN_NAME} - книги для дитячого розвитку`}/>
                 <meta name="og:description" content={MAIN_DESC}/>

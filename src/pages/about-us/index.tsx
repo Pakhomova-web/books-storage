@@ -14,7 +14,7 @@ export default function AboutUsPage() {
     return (
         <Box textAlign="center">
             <Head>
-                <title>Про {MAIN_NAME}</title>
+                <title>{`Про ${MAIN_NAME}`}</title>
                 <meta name="description" content={MAIN_DESC}/>
                 <meta name="og:title" content={`Про ${MAIN_NAME}`}/>
                 <meta name="og:description" content={MAIN_DESC}/>

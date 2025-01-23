@@ -28,7 +28,7 @@ export default function ActivationPage() {
     return (
         <Box position="relative" display="flex" justifyContent="center">
             <Head>
-                <title>Підтвердження ел. адреси {MAIN_NAME}</title>
+                <title>{`Підтвердження ел. адреси ${MAIN_NAME}`}</title>
             </Head>
 
             <Loading show={loading}></Loading>
