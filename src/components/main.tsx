@@ -17,7 +17,8 @@ import { getDeliveryOptions, getUkrPoshtaWarehouses } from '@/lib/graphql/querie
 import Head from 'next/head';
 
 const authUrls = ['/sign-in', '/reset-password', '/activation'];
-const commonUrls = ['/books', '/publishing-houses', '/sitemap.xml', '/about-us'];
+const adminUrls = ['/setting'];
+const userUrls = [...adminUrls, '/profile', '/basket'];
 
 const StyledDiscountBox = styled(Box)(({ theme }) => ({
     position: 'fixed',
@@ -64,10 +65,8 @@ export default function Main({ children }) {
             .catch(() => {
                 setLoading(false);
                 logout();
-                if (pathname) {
-                    if (![...authUrls, ...commonUrls].some(url => pathname.includes(url))) {
-                        router.push('/');
-                    }
+                if (pathname && userUrls.some(url => pathname.includes(url))) {
+                    router.push('/');
                 }
             });
     }, []);
@@ -75,10 +74,10 @@ export default function Main({ children }) {
     useEffect(() => {
         if (pathname) {
             if (!user) {
-                if (![...authUrls, ...commonUrls].some(url => pathname.includes(url))) {
+                if (userUrls.some(url => pathname.includes(url))) {
                     router.push('/');
                 }
-            } else if (!isAdmin(user) && isSettings() || authUrls.some(url => url === pathname)) {
+            } else if (!isAdmin(user) && adminUrls.some(url => url.includes(pathname)) || authUrls.some(url => url.includes(pathname))) {
                 router.push('/');
             }
         }
