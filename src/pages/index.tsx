@@ -10,7 +10,7 @@ import CustomImage from '@/components/custom-image';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import SocialMediaBox from '@/components/social-media-box';
 import DeliveriesBox from '@/components/deliveries-box';
-import { MAIN_DESC, MAIN_NAME } from '@/constants/main-name';
+import { MAIN_DESC, MAIN_NAME, MAIN_URL } from '@/constants/main-name';
 import DiscountBooks from '@/components/books/discount-books';
 import Catalogue from '@/components/catalogue';
 import Head from 'next/head';
@@ -68,6 +68,8 @@ export default function Home() {
                 <meta name="description" content={MAIN_DESC}/>
                 <meta name="og:title" content={`${MAIN_NAME} - книги для дитячого розвитку`}/>
                 <meta name="og:description" content={MAIN_DESC}/>
+                <meta name="image" content={`${MAIN_URL}favicon.png`}/>
+                <meta name="og:image" content={`${MAIN_URL}favicon.png`}/>
             </Head>
 
             <SocialMediaBox/>
