@@ -100,6 +100,7 @@ export class BookEntity {
     ages: number[];
     comments?: CommentEntity[];
     discount?: number;
+    discountEndDate?: string;
     languageBookIds?: string[];
     languageBooks?: BookEntity[];
     nameToSearch?: string;
@@ -135,6 +136,7 @@ export class BookEntity {
             this.archived = data.archived;
             this.ages = data.ages
             this.discount = data.discount;
+            this.discountEndDate = data.discountEndDate;
             this.languageBookIds = data.languageBookIds ? data.languageBookIds : [];
             this.languageBooks = data.languageBooks ? data.languageBooks : [];
             this.nameToSearch = data.nameToSearch;

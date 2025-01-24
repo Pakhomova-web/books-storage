@@ -53,6 +53,7 @@ const bookFragment = gql`
         }
         tags
         discount
+        discountEndDate
         archived
         languageBooks {
             id
@@ -90,6 +91,7 @@ export const bookListFragment = gql`
             }
         }
         discount
+        discountEndDate
     }`;
 
 export const booksQuery = gql`

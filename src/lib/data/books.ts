@@ -74,6 +74,15 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
                     tags?.some(tag => quickSearch.test(removePunctuation(tag)))
             );
         }
+
+        const today = new Date();
+
+        items.forEach(item => {
+            if (!!item.discountEndDate && dateDiffInDays(today, new Date(item.discountEndDate)) > 0) {
+                item.discount = 0;
+            }
+        });
+
         if (pageSettings?.orderBy === 'priceWithDiscount') {
             items.sort((a, b) => {
                 if (a.price * (100 - (a.discount || 0)) > b.price * (100 - (b.discount || 0))) {
@@ -347,7 +356,7 @@ export async function getBookPartById(id: string) {
         name: book.name,
         imageId: book.imageIds ? book.imageIds[0] : null,
         price: book.price,
-        discount: book.discount
+        discount: !book.discountEndDate || dateDiffInDays(new Date(), new Date(book.discountEndDate)) > 0 ? book.discount : 0
     };
 }
 
@@ -502,6 +511,15 @@ function _getBookData(input: Partial<BookEntity>) {
         languageBooks: input.languageBookIds,
         bookTypes: input.bookTypeIds,
         imageIds: input.imageIds || [],
-        nameToSearch: removePunctuation(input.name)
+        nameToSearch: removePunctuation(input.name),
+        discountEndDate: !!input.discount ? input.discountEndDate : null
     };
+}
+
+function dateDiffInDays(a: Date, b: Date): number {
+    // Discard the time and time-zone information.
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc1 - utc2) / 1000 * 60 * 60 * 24);
 }

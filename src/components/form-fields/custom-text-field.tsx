@@ -5,7 +5,7 @@ import { TextFieldElement, TextFieldElementProps } from 'react-hook-form-mui';
 import Loading from '@/components/loading';
 
 const StyledTextField = styled(TextFieldElement)<TextFieldProps>(() => ({
-    mb: 1
+    py: 1
 }));
 
 interface ITextFieldElementProps extends TextFieldElementProps {

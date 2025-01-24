@@ -78,6 +78,7 @@ const typeDefs =  /* GraphQL */ `
         ages: [Int]
         comments: [Comment]
         discount: Float
+        discountEndDate: String
         languageBooks: [Book]
     }
 
@@ -447,6 +448,7 @@ const typeDefs =  /* GraphQL */ `
         archived: Boolean
         ages: [Int]
         discount: Float
+        discountEndDate: String
         languageBookIds: [ID!]
     }
 
@@ -471,6 +473,7 @@ const typeDefs =  /* GraphQL */ `
         archived: Boolean
         ages: [Int]
         discount: Float
+        discountEndDate: String
         languageBookIds: [ID!]
     }
 

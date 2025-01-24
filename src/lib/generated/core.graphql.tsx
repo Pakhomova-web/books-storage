@@ -61,6 +61,7 @@ export type Book = {
   coverType: CoverType;
   description?: Maybe<Scalars['String']['output']>;
   discount?: Maybe<Scalars['Float']['output']>;
+  discountEndDate?: Maybe<Scalars['String']['output']>;
   format?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
   illustrators?: Maybe<Array<Maybe<Author>>>;
@@ -87,6 +88,7 @@ export type BookCreateInput = {
   coverTypeId: Scalars['ID']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   discount?: InputMaybe<Scalars['Float']['input']>;
+  discountEndDate?: InputMaybe<Scalars['String']['input']>;
   format?: InputMaybe<Scalars['String']['input']>;
   illustratorIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   imageIds?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
@@ -205,6 +207,7 @@ export type BookUpdateInput = {
   coverTypeId: Scalars['ID']['input'];
   description?: InputMaybe<Scalars['String']['input']>;
   discount?: InputMaybe<Scalars['Float']['input']>;
+  discountEndDate?: InputMaybe<Scalars['String']['input']>;
   format?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
   illustratorIds?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
@@ -1455,6 +1458,7 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
   coverType?: Resolver<ResolversTypes['CoverType'], ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   discount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  discountEndDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   format?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
   illustrators?: Resolver<Maybe<Array<Maybe<ResolversTypes['Author']>>>, ParentType, ContextType>;

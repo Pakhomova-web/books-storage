@@ -5,7 +5,7 @@ import { Box } from '@mui/material';
 import Loading from '@/components/loading';
 
 const StyledSelectField = styled(SelectElement)<SelectElementProps>(() => ({
-    mb: 1
+    py: 1
 }));
 
 interface ICustomSelectField extends SelectElementProps {

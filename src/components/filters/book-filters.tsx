@@ -202,7 +202,7 @@ export function BookFilters(props: IBookFiltersProps) {
                 </Grid>
 
                 <Grid item xs={12}>
-                    <Box position="relative" mb={1}>
+                    <Box position="relative" my={1}>
                         <Loading isSmall={true} show={loadingBookTypes}></Loading>
                         <MultiSelectElement fullWidth
                                             options={bookTypeOptions}

@@ -51,6 +51,7 @@ const bookSchema = new Schema<BookEntity, Model<BookEntity>>({
     archived: Boolean,
     ages: [Number],
     discount: Number,
+    discountEndDate: String,
     comments: [{
         email: {
             type: String,

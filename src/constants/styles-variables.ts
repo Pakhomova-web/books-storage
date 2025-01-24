@@ -108,7 +108,7 @@ export const styleVariables = {
 
 export const customFieldClearBtnStyles = {
     position: 'absolute',
-    top: 0,
+    top: '-15px',
     right: '4px',
     cursor: 'pointer',
     ...styleVariables.hintFontSize,

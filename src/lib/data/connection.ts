@@ -20,7 +20,8 @@ async function connectDB() {
         const opts = {
             bufferCommands: false,
             useNewUrlParser: true,
-            useUnifiedTopology: true
+            useUnifiedTopology: true,
+            useFindAndModify: false
         };
 
         cached.promise = connect(process.env.BOOK_STORAGE_DATABASE_URL, opts).then(mongoose => {

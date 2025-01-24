@@ -35,6 +35,7 @@ import BookSeriesModal from '@/components/modals/book-series-modal';
 import { ApolloError } from '@apollo/client';
 import CustomLink from '@/components/custom-link';
 import BookSearchAutocompleteField from '@/components/form-fields/book-search-autocomplete-field';
+import CustomDatePickerField from '@/components/form-fields/custom-date-picker-field';
 
 interface IBookModalProps {
     open: boolean,
@@ -69,6 +70,7 @@ interface IForm {
     tag: string,
     ages: number[],
     discount: number,
+    discountEndDate: Date,
     finalPrice: number,
     languageBookIds: string[]
 }
@@ -95,6 +97,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             tags: item?.tags,
             ages: item?.ages || [],
             discount: item?.discount,
+            discountEndDate: !!item?.discountEndDate ? new Date(item.discountEndDate) : null,
             finalPrice: item ? +(item.price * (100 - item.discount) / 100).toFixed(2) : 0
         }
     });
@@ -112,6 +115,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
         bookTypeIds,
         illustratorIds,
         discount,
+        discountEndDate,
         price
     } = formContext.watch();
     const [bookSeries, setBookSeries] = useState<IOption<string>>(item?.bookSeries ? {
@@ -199,6 +203,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             ...values,
             price: Number(values.price),
             discount: Number(values.discount),
+            discountEndDate: values.discountEndDate.toISOString(),
             numberOfPages: Number(values.numberOfPages),
             numberInStock: values.numberInStock ? Number(values.numberInStock) : 0,
             purchasePrice: values.purchasePrice ? Number(values.purchasePrice) : 0,
@@ -364,7 +369,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={3} lg={2}>
-                    <Box position="relative" mb={1}>
+                    <Box position="relative" my={1}>
                         <Loading isSmall={true} show={loadingBookTypes}></Loading>
                         <MultiSelectElement fullWidth
                                             options={bookTypeOptions}
@@ -486,26 +491,6 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                      name="price"/>
                 </Grid>
 
-                <Grid item xs={12} sm={6} md={3} lg={2}>
-                    <CustomTextField fullWidth
-                                     disabled={!isAdmin}
-                                     type="number"
-                                     id="discount"
-                                     label="Знижка, %"
-                                     showClear={!!discount}
-                                     onClear={() => formContext.setValue('discount', null)}
-                                     name="discount"/>
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={3} lg={2}>
-                    <CustomTextField fullWidth
-                                     disabled={true}
-                                     type="number"
-                                     id="finalPrice"
-                                     label="Ціна зі знижкою, грн"
-                                     name="finalPrice"/>
-                </Grid>
-
                 <Grid item xs={12} md={6} lg={4}>
                     <CustomMultipleAutocompleteField options={authorOptions}
                                                      label="Автори"
@@ -528,6 +513,34 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                                                      loading={loadingAuthors || loadingAuthorOptions}
                                                      selected={illustratorIds}
                                                      onChange={(values: IOption<string>[]) => formContext.setValue('illustratorIds', values.map(v => v.id))}/>
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <CustomTextField fullWidth
+                                     disabled={!isAdmin}
+                                     type="number"
+                                     id="discount"
+                                     label="Знижка, %"
+                                     showClear={!!discount}
+                                     onClear={() => formContext.setValue('discount', null)}
+                                     name="discount"/>
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <CustomDatePickerField disabled={!isAdmin}
+                                           label="День закінчення знижки"
+                                           showClear={!!discountEndDate}
+                                           onClear={() => formContext.setValue('discountEndDate', null)}
+                                           name="discountEndDate"/>
+                </Grid>
+
+                <Grid item xs={12} sm={6} md={3} lg={2}>
+                    <CustomTextField fullWidth
+                                     disabled={true}
+                                     type="number"
+                                     id="finalPrice"
+                                     label="Ціна зі знижкою, грн"
+                                     name="finalPrice"/>
                 </Grid>
 
                 <Grid item xs={12}>
