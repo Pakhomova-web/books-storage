@@ -77,6 +77,7 @@ export async function getServerSideProps(context) {
     const bookPart = await getBookPartById(id);
 
     try {
+        console.log(bookPart);
         return {
             props: {
                 bookPart
