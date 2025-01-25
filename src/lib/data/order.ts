@@ -309,11 +309,11 @@ function orderTemplate(order: OrderEntity) {
             <p><b>ПІБ: </b>${order.lastName} ${order.firstName}</p>
             <p><b>Номер телефону: </b>${order.phoneNumber}</p>
             <p><b>Спосіб доставки: </b>${order.delivery.name}</p>
-            ${!isSelfPickup(order.delivery.id) && `<p>
+            ${!isSelfPickup(order.delivery.id) ? `<p>
                     <b>Адреса доставки: </b>
                     ${order.region} область${order.district ? `, ${order.district} район` : ''}, ${order.city}${order.house ? `, буд. ${order.house}${order.flat ? `, кв. ${order.flat}` : ''}` : ''}${order.warehouse ? `, № відділення/поштомат ${order.warehouse}` : ''}
-                </p>`}
-            ${!!order.comment && `<p><b>Коментар: </b>${order.comment}</p>`}
+                </p>` : ''}
+            ${!!order.comment ? `<p><b>Коментар: </b>${order.comment}</p>` : ''}
         </div>
         ${mailDivider(true)}
         

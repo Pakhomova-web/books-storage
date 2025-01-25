@@ -173,9 +173,9 @@ const typeDefs =  /* GraphQL */ `
         isConfirmed: Boolean
         delivery: Delivery
         books: [OrderBook!]!
-        region: String!
+        region: String
         district: String
-        city: String!
+        city: String
         street: String
         house: String
         flat: String

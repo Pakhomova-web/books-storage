@@ -706,7 +706,7 @@ export type NovaPoshtaWarehouseAddressInput = {
 export type Order = {
   adminComment?: Maybe<Scalars['String']['output']>;
   books: Array<OrderBook>;
-  city: Scalars['String']['output'];
+  city?: Maybe<Scalars['String']['output']>;
   comment?: Maybe<Scalars['String']['output']>;
   date?: Maybe<Scalars['String']['output']>;
   delivery?: Maybe<Delivery>;
@@ -725,7 +725,7 @@ export type Order = {
   lastName: Scalars['String']['output'];
   orderNumber: Scalars['Int']['output'];
   phoneNumber: Scalars['String']['output'];
-  region: Scalars['String']['output'];
+  region?: Maybe<Scalars['String']['output']>;
   street?: Maybe<Scalars['String']['output']>;
   trackingNumber?: Maybe<Scalars['String']['output']>;
   user: User;
@@ -1667,7 +1667,7 @@ export type NovaPoshtaWarehouseAddressResolvers<ContextType = any, ParentType ex
 export type OrderResolvers<ContextType = any, ParentType extends ResolversParentTypes['Order'] = ResolversParentTypes['Order']> = {
   adminComment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   books?: Resolver<Array<ResolversTypes['OrderBook']>, ParentType, ContextType>;
-  city?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  city?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   comment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   date?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   delivery?: Resolver<Maybe<ResolversTypes['Delivery']>, ParentType, ContextType>;
@@ -1686,7 +1686,7 @@ export type OrderResolvers<ContextType = any, ParentType extends ResolversParent
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   orderNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   phoneNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  region?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  region?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   street?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   trackingNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType>;

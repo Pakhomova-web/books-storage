@@ -37,15 +37,9 @@ const orderSchema = new Schema<OrderEntity, Model<OrderEntity>>({
     trackingNumber: String,
     comment: String,
     adminComment: String,
-    region: {
-        type: String,
-        required: true
-    },
+    region: String,
     district: String,
-    city: {
-        type: String,
-        required: true
-    },
+    city: String,
     street: String,
     house: String,
     flat: String,
