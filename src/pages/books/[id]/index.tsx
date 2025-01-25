@@ -266,7 +266,7 @@ export default function BookDetails({ bookPart }) {
     }
 
     function getBookPartDescription(): string {
-        return `${bookPart ? `Ціна: ${renderPrice(bookPart.price, bookPart.discount)}. ${bookPart.bookSeries.name} ` : ''}Відеоогляди в нашому інстаграм. Відправка кожного дня.`;
+        return `${bookPart ? `Ціна: ${renderPrice(bookPart.price, bookPart.discount)}. ${bookPart.bookSeries.default ? '' : `${bookPart.bookSeries.name} `}(${bookPart.bookSeries.publishingHouse.name}) ` : ''}Відеоогляди в нашому інстаграм. Відправка кожного дня.`;
     }
 
     function getBookImage(): string {
@@ -276,7 +276,7 @@ export default function BookDetails({ bookPart }) {
     return (
         <>
             <Head>
-                <title>{`${bookPart?.name} - купити в ${MAIN_NAME}`}</title>,
+                <title>{`${bookPart ? `${bookPart.name}${bookPart?.bookSeries.default ? '' : ` (${bookPart.bookSeries.name})`}` : ''} - купити в ${MAIN_NAME}`}</title>,
                 <meta name="description" content={getBookPartDescription()}/>
                 <meta name="og:title" content={`${bookPart.name} - купити в ${MAIN_NAME}`}/>
                 <meta name="og:description" content={getBookPartDescription()}/>

@@ -33,7 +33,7 @@ const typeDefs =  /* GraphQL */ `
         imageId: String
         price: Float!
         discount: Float
-        bookSeries: BookSeries
+        bookSeries: BookSeries!
     }
 
     type CoverType {

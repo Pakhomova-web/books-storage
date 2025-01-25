@@ -166,6 +166,7 @@ export const bookPartByIdQuery = gql`
             discount
             bookSeries {
                 name
+                default
                 publishingHouse {
                     name
                 }

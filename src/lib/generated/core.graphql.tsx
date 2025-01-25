@@ -110,6 +110,7 @@ export type BookLanguageItem = {
 };
 
 export type BookPart = {
+  bookSeries?: Maybe<BookSeries>;
   discount?: Maybe<Scalars['Float']['output']>;
   imageId?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
@@ -1264,7 +1265,7 @@ export type ResolversTypes = {
   Book: ResolverTypeWrapper<BookEntity>;
   BookCreateInput: BookCreateInput;
   BookLanguageItem: ResolverTypeWrapper<BookLanguageItem>;
-  BookPart: ResolverTypeWrapper<BookPart>;
+  BookPart: ResolverTypeWrapper<Omit<BookPart, 'bookSeries'> & { bookSeries?: Maybe<ResolversTypes['BookSeries']> }>;
   BookSearchInput: BookSearchInput;
   BookSeries: ResolverTypeWrapper<BookSeriesEntity>;
   BookSeriesCreateInput: BookSeriesCreateInput;
@@ -1349,7 +1350,7 @@ export type ResolversParentTypes = {
   Book: BookEntity;
   BookCreateInput: BookCreateInput;
   BookLanguageItem: BookLanguageItem;
-  BookPart: BookPart;
+  BookPart: Omit<BookPart, 'bookSeries'> & { bookSeries?: Maybe<ResolversParentTypes['BookSeries']> };
   BookSearchInput: BookSearchInput;
   BookSeries: BookSeriesEntity;
   BookSeriesCreateInput: BookSeriesCreateInput;
@@ -1484,6 +1485,7 @@ export type BookLanguageItemResolvers<ContextType = any, ParentType extends Reso
 };
 
 export type BookPartResolvers<ContextType = any, ParentType extends ResolversParentTypes['BookPart'] = ResolversParentTypes['BookPart']> = {
+  bookSeries?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType>;
   discount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   imageId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

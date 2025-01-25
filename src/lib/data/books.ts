@@ -362,7 +362,13 @@ export async function getBookPartById(id: string) {
         imageId: book.imageIds ? book.imageIds[0] : null,
         price: book.price,
         discount: !book.discountEndDate || dateDiffInDays(new Date(), new Date(book.discountEndDate)) > 0 ? book.discount : 0,
-        bookSeries: book.bookSeries
+        bookSeries: {
+            name: book.bookSeries.name,
+            default: !!book.bookSeries.default,
+            publishingHouse: {
+                name: book.bookSeries.publishingHouse.name
+            }
+        }
     };
 }
 
