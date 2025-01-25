@@ -21,7 +21,8 @@ async function connectDB() {
             bufferCommands: false,
             useNewUrlParser: true,
             useUnifiedTopology: true,
-            useFindAndModify: false
+            useFindAndModify: false,
+            useCreateIndex: true
         };
 
         cached.promise = connect(process.env.BOOK_STORAGE_DATABASE_URL, opts).then(mongoose => {
