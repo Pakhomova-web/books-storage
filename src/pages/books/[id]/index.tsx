@@ -76,11 +76,16 @@ export async function getServerSideProps(context) {
 
     const bookPart = await getBookPartById(id);
 
-    return {
-        props: {
-            bookPart
-        }
-    };
+    try {
+        return {
+            props: {
+                bookPart
+            }
+        };
+    } catch (err) {
+        console.log(err);
+        return { props: null };
+    }
 }
 
 export default function BookDetails({ bookPart }) {
