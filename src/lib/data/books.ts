@@ -352,9 +352,7 @@ export async function getBooksNameByQuickSearch(quickSearch: string): Promise<IO
 export async function getBookPartById(id: string) {
     const book = await Book.findById(id).populate({
         path: 'bookSeries',
-        populate: {
-            path: 'publishingHouse'
-        }
+        populate: 'publishingHouse'
     });
 
     return {
