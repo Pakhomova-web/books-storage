@@ -266,7 +266,7 @@ export default function BookDetails({ bookPart }) {
     }
 
     function getBookPartDescription(): string {
-        return `${bookPart ? `Ціна: ${renderPrice(bookPart.price, bookPart.discount)}.${bookPart.bookSeries.default ? '' : ` ${bookPart.bookSeries.name}.`} ${bookPart.bookSeries.publishingHouse?.name || ''}. ` : ''}Відеоогляди в нашому інстаграм. Відправка кожного дня.`;
+        return `${bookPart ? `Ціна: ${renderPrice(bookPart.price, bookPart.discount)}.${bookPart.bookSeries.default ? '' : ` ${bookPart.bookSeries.name}.`} ` : ''}Відеоогляди в нашому інстаграм. Відправка кожного дня.`;
     }
 
     function getBookImage(): string {
