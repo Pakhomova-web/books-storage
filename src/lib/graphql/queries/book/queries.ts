@@ -164,6 +164,12 @@ export const bookPartByIdQuery = gql`
             imageId
             price
             discount
+            bookSeries {
+                name
+                publishingHouse {
+                    name
+                }
+            }
         }
     }
 `;

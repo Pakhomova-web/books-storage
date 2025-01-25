@@ -40,7 +40,7 @@ import BookModal from '@/components/modals/book-modal';
 import Catalogue from '@/components/catalogue';
 import GroupDiscountBooks from '@/components/books/group-discount-section';
 import ClickableOption from '@/components/clickable-option';
-import { MAIN_DESC, MAIN_NAME } from '@/constants/main-name';
+import { MAIN_NAME } from '@/constants/main-name';
 import Head from 'next/head';
 import { getBookPartById } from '@/lib/data/books';
 
@@ -265,18 +265,24 @@ export default function BookDetails({ bookPart }) {
         router.push(`/books/${id}`);
     }
 
+    function getBookPartDescription(): string {
+        return `${bookPart ? `Ціна: ${renderPrice(bookPart.price, bookPart.discount)}. ${bookPart.bookSeries.name} ` : ''}Відеоогляди в нашому інстаграм. Відправка кожного дня.`;
+    }
+
+    function getBookImage(): string {
+        return `https://drive.google.com/thumbnail?id=${bookPart.imageId}&sz=w500`;
+    }
+
     return (
         <>
             <Head>
                 <title>{`${bookPart?.name} - купити в ${MAIN_NAME}`}</title>,
-                <meta name="description"
-                      content={`${bookPart ? `Ціна: ${renderPrice(bookPart.price, bookPart.discount)}. ` : ''}Відеоогляди в нашому інстаграм. Відправка кожного дня.`}/>
+                <meta name="description" content={getBookPartDescription()}/>
                 <meta name="og:title" content={`${bookPart.name} - купити в ${MAIN_NAME}`}/>
-                <meta name="og:description"
-                      content={`${bookPart ? `Ціна: ${renderPrice(bookPart.price, bookPart.discount)}. ` : ''}Відеоогляди в нашому інстаграм. Відправка кожного дня.`}/>
+                <meta name="og:description" content={getBookPartDescription()}/>
                 {!!bookPart?.imageId && <>
-                  <meta name="image" content={`https://drive.google.com/thumbnail?id=${bookPart.imageId}&sz=w500`}/>
-                  <meta name="og:image" content={`https://drive.google.com/thumbnail?id=${bookPart.imageId}&sz=w500`}/>
+                  <meta name="image" content={getBookImage()}/>
+                  <meta name="og:image" content={getBookImage()}/>
                 </>}
             </Head>
             <Loading show={loading || refetching}></Loading>

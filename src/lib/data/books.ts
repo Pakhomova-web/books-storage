@@ -350,13 +350,19 @@ export async function getBooksNameByQuickSearch(quickSearch: string): Promise<IO
 }
 
 export async function getBookPartById(id: string) {
-    const book = await Book.findById(id);
+    const book = await Book.findById(id).populate({
+        path: 'bookSeries',
+        populate: {
+            path: 'publishingHouse'
+        }
+    });
 
     return {
         name: book.name,
         imageId: book.imageIds ? book.imageIds[0] : null,
         price: book.price,
-        discount: !book.discountEndDate || dateDiffInDays(new Date(), new Date(book.discountEndDate)) > 0 ? book.discount : 0
+        discount: !book.discountEndDate || dateDiffInDays(new Date(), new Date(book.discountEndDate)) > 0 ? book.discount : 0,
+        bookSeries: book.bookSeries
     };
 }
 
