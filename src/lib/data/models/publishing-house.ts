@@ -11,4 +11,4 @@ const publishingHouseSchema = new Schema<PublishingHouseEntity, Model<Publishing
     imageId: String
 });
 
-export default models?.publishingHouse || model('publishingHouse', publishingHouseSchema);
+export default models.publishingHouse || model('publishingHouse', publishingHouseSchema);
