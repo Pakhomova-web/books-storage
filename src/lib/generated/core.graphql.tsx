@@ -109,14 +109,6 @@ export type BookLanguageItem = {
   languages: Array<Scalars['String']['output']>;
 };
 
-export type BookPart = {
-  bookSeries?: Maybe<BookSeries>;
-  discount?: Maybe<Scalars['Float']['output']>;
-  imageId?: Maybe<Scalars['String']['output']>;
-  name: Scalars['String']['output'];
-  price: Scalars['Float']['output'];
-};
-
 export type BookSearchInput = {
   ages?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   archived?: InputMaybe<Scalars['Boolean']['input']>;
@@ -878,7 +870,6 @@ export type Query = {
   balance?: Maybe<Scalars['Float']['output']>;
   bookById?: Maybe<Book>;
   bookComments?: Maybe<Array<Comment>>;
-  bookPartById?: Maybe<BookPart>;
   bookSeries?: Maybe<BookSeriesSubList>;
   bookSeriesByIdQuery?: Maybe<BookSeries>;
   bookSeriesOptions?: Maybe<Array<IOption>>;
@@ -940,11 +931,6 @@ export type QueryBookCommentsArgs = {
   id: Scalars['ID']['input'];
   page: Scalars['Int']['input'];
   rowsPerPage: Scalars['Int']['input'];
-};
-
-
-export type QueryBookPartByIdArgs = {
-  id: Scalars['ID']['input'];
 };
 
 
@@ -1265,7 +1251,6 @@ export type ResolversTypes = {
   Book: ResolverTypeWrapper<BookEntity>;
   BookCreateInput: BookCreateInput;
   BookLanguageItem: ResolverTypeWrapper<BookLanguageItem>;
-  BookPart: ResolverTypeWrapper<Omit<BookPart, 'bookSeries'> & { bookSeries?: Maybe<ResolversTypes['BookSeries']> }>;
   BookSearchInput: BookSearchInput;
   BookSeries: ResolverTypeWrapper<BookSeriesEntity>;
   BookSeriesCreateInput: BookSeriesCreateInput;
@@ -1350,7 +1335,6 @@ export type ResolversParentTypes = {
   Book: BookEntity;
   BookCreateInput: BookCreateInput;
   BookLanguageItem: BookLanguageItem;
-  BookPart: Omit<BookPart, 'bookSeries'> & { bookSeries?: Maybe<ResolversParentTypes['BookSeries']> };
   BookSearchInput: BookSearchInput;
   BookSeries: BookSeriesEntity;
   BookSeriesCreateInput: BookSeriesCreateInput;
@@ -1481,15 +1465,6 @@ export type BookResolvers<ContextType = any, ParentType extends ResolversParentT
 export type BookLanguageItemResolvers<ContextType = any, ParentType extends ResolversParentTypes['BookLanguageItem'] = ResolversParentTypes['BookLanguageItem']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   languages?: Resolver<Array<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-};
-
-export type BookPartResolvers<ContextType = any, ParentType extends ResolversParentTypes['BookPart'] = ResolversParentTypes['BookPart']> = {
-  bookSeries?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType>;
-  discount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
-  imageId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  price?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -1767,7 +1742,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   balance?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   bookById?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QueryBookByIdArgs, 'id'>>;
   bookComments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType, RequireFields<QueryBookCommentsArgs, 'id' | 'page' | 'rowsPerPage'>>;
-  bookPartById?: Resolver<Maybe<ResolversTypes['BookPart']>, ParentType, ContextType, RequireFields<QueryBookPartByIdArgs, 'id'>>;
   bookSeries?: Resolver<Maybe<ResolversTypes['BookSeriesSubList']>, ParentType, ContextType, Partial<QueryBookSeriesArgs>>;
   bookSeriesByIdQuery?: Resolver<Maybe<ResolversTypes['BookSeries']>, ParentType, ContextType, RequireFields<QueryBookSeriesByIdQueryArgs, 'id'>>;
   bookSeriesOptions?: Resolver<Maybe<Array<ResolversTypes['IOption']>>, ParentType, ContextType, Partial<QueryBookSeriesOptionsArgs>>;
@@ -1846,7 +1820,6 @@ export type Resolvers<ContextType = any> = {
   BasketItem?: BasketItemResolvers<ContextType>;
   Book?: BookResolvers<ContextType>;
   BookLanguageItem?: BookLanguageItemResolvers<ContextType>;
-  BookPart?: BookPartResolvers<ContextType>;
   BookSeries?: BookSeriesResolvers<ContextType>;
   BookSeriesSubList?: BookSeriesSubListResolvers<ContextType>;
   BookSubList?: BookSubListResolvers<ContextType>;

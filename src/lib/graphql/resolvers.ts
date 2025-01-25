@@ -226,9 +226,6 @@ const resolvers: Resolvers = {
         booksByIds: async (_root, { ids, pageSettings }) => {
             return getBooksByIds(ids, <IPageable>pageSettings).catch(error => parseError(error));
         },
-        bookPartById: async (_root, { id }) => {
-            return getBookPartById(id).catch(error => parseError(error));
-        },
         booksWithDiscount: async (_root, { rowsPerPage }) => {
             return getBooksWithDiscount(rowsPerPage).catch(error => parseError(error));
         },

@@ -165,10 +165,6 @@ export function getBookById(id: string) {
     return getItemById<BookEntity>(bookByIdQuery, id, 'bookById');
 }
 
-export function getBookPartById(id: string): Promise<{ name: string, imageId?: string, price: number, discount?: number }> {
-    return getItemById(bookPartByIdQuery, id, 'bookPartById');
-}
-
 export function useAddBookComment() {
     const [mutate, { loading, error }] = useMutation(addBookCommentQuery);
 
