@@ -76,17 +76,11 @@ export async function getServerSideProps(context) {
 
     const bookPart = await getBookPartById(id);
 
-    try {
-        console.log(bookPart);
-        return {
-            props: {
-                bookPart
-            }
-        };
-    } catch (err) {
-        console.log(err);
-        return { props: null };
-    }
+    return {
+        props: {
+            bookPart
+        }
+    };
 }
 
 export default function BookDetails({ bookPart }) {
@@ -272,7 +266,7 @@ export default function BookDetails({ bookPart }) {
     }
 
     function getBookPartDescription(): string {
-        return `${bookPart ? `Ціна: ${renderPrice(bookPart.price, bookPart.discount)}. ${bookPart.bookSeries.default ? '' : `${bookPart.bookSeries.name} `}(${bookPart.bookSeries.publishingHouse.name}) ` : ''}Відеоогляди в нашому інстаграм. Відправка кожного дня.`;
+        return `${bookPart ? `Ціна: ${renderPrice(bookPart.price, bookPart.discount)}.${bookPart.bookSeries.default ? '' : ` ${bookPart.bookSeries.name}.`} ${bookPart.bookSeries.publishingHouse.name}. ` : ''}Відеоогляди в нашому інстаграм. Відправка кожного дня.`;
     }
 
     function getBookImage(): string {
