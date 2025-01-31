@@ -1,6 +1,6 @@
 import { Box, Button, Grid, IconButton, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { styled } from '@mui/material/styles';
 import ProfileIcon from '@mui/icons-material/AccountCircle';
@@ -13,16 +13,11 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
-import {
-    getBookComments,
-    getBooksByAuthors,
-    getBooksFromSeries,
-    useBook
-} from '@/lib/graphql/queries/book/hook';
+import { getBookComments, getBooksByAuthors, getBooksFromSeries, useBook } from '@/lib/graphql/queries/book/hook';
 import ErrorNotification from '@/components/error-notification';
 import { TableKey } from '@/components/table/table-key';
 import { BookEntity, CommentEntity } from '@/lib/data/types';
-import { isAdmin, renderPrice } from '@/utils/utils';
+import { dateDiffInDays, isAdmin, renderPrice } from '@/utils/utils';
 import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
 import CustomLink from '@/components/custom-link';
@@ -273,6 +268,17 @@ export default function BookDetails({ bookPart }) {
         return `https://drive.google.com/thumbnail?id=${bookPart.imageId}&sz=w500`;
     }
 
+    function getEndOfDiscount(): ReactNode {
+        if (book.discountEndDate) {
+            const diff = dateDiffInDays(new Date(book.discountEndDate), new Date());
+
+            if (diff > 0) {
+                return <Box>До закінчення акції: <b>{diff} дн.</b></Box>;
+            }
+        }
+        return <></>;
+    }
+
     return (
         <>
             <Head>
@@ -346,7 +352,9 @@ export default function BookDetails({ bookPart }) {
                   <Box display="flex" gap={1} alignItems="center"
                        justifyContent={{ xs: 'center', md: 'flex-start' }} mb={1}>
                     <Box sx={priceStyles}><b>{renderPrice(book.price, book.discount)}</b></Box>
-                      {!!book.discount && <Box><s>{renderPrice(book.price)}</s></Box>}
+                      {!!book.discount && <>
+                        <Box><s>{renderPrice(book.price)}</s></Box>{getEndOfDiscount()}
+                      </>}
                   </Box>
 
                   <Grid container spacing={2} display="flex">

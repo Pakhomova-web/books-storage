@@ -4,7 +4,7 @@ import { GraphQLError } from 'graphql/error';
 import { getCaseInsensitiveSubstringOption, getValidFilters } from '@/lib/data/base';
 import BookSeries from '@/lib/data/models/book-series';
 import Balance from '@/lib/data/models/balance';
-import { removePunctuation } from '@/utils/utils';
+import { dateDiffInDays, removePunctuation } from '@/utils/utils';
 
 export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): Promise<{
     items: BookEntity[],
@@ -358,7 +358,7 @@ export async function getBookPartById(id: string) {
         name: book.name,
         imageId: book.imageIds ? book.imageIds[0] : null,
         price: book.price,
-        discount: !book.discountEndDate || dateDiffInDays(new Date(), new Date(book.discountEndDate)) > 0 ? book.discount : 0,
+        discount: !book.discountEndDate || dateDiffInDays(new Date(book.discountEndDate), new Date()) > 0 ? book.discount : 0,
         bookSeries: {
             name: book.bookSeries.name,
             default: !!book.bookSeries.default
@@ -520,12 +520,4 @@ function _getBookData(input: Partial<BookEntity>) {
         nameToSearch: removePunctuation(input.name),
         discountEndDate: !!input.discount ? input.discountEndDate : null
     };
-}
-
-function dateDiffInDays(a: Date, b: Date): number {
-    // Discard the time and time-zone information.
-    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-
-    return Math.floor((utc1 - utc2) / 1000 * 60 * 60 * 24);
 }

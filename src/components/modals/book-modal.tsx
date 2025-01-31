@@ -36,6 +36,7 @@ import { ApolloError } from '@apollo/client';
 import CustomLink from '@/components/custom-link';
 import BookSearchAutocompleteField from '@/components/form-fields/book-search-autocomplete-field';
 import CustomDatePickerField from '@/components/form-fields/custom-date-picker-field';
+import dayjs from 'dayjs';
 
 interface IBookModalProps {
     open: boolean,
@@ -70,7 +71,7 @@ interface IForm {
     tag: string,
     ages: number[],
     discount: number,
-    discountEndDate: Date,
+    discountEndDate: dayjs.Dayjs,
     finalPrice: number,
     languageBookIds: string[]
 }
@@ -97,7 +98,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             tags: item?.tags,
             ages: item?.ages || [],
             discount: item?.discount,
-            discountEndDate: !!item?.discountEndDate ? new Date(item.discountEndDate) : null,
+            discountEndDate: !!item?.discountEndDate ? dayjs(item.discountEndDate) : null,
             finalPrice: item ? +(item.price * (100 - item.discount) / 100).toFixed(2) : 0
         }
     });
