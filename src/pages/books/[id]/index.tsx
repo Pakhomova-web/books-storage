@@ -100,8 +100,8 @@ export default function BookDetails({ bookPart }) {
     const [showEditModal, setShowEditModal] = useState<boolean>(false);
     const [refetching, setRefetching] = useState<boolean>(false);
 
-    setLoading(false);
     useEffect(() => {
+        setLoading(false);
         if (book) {
             setRecentlyViewedBooks(book.id);
             refetchComments(true);

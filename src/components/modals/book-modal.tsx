@@ -204,7 +204,7 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
             ...values,
             price: Number(values.price),
             discount: Number(values.discount),
-            discountEndDate: values.discountEndDate.toISOString(),
+            discountEndDate: !!values.discountEndDate ? values.discountEndDate.toISOString() : null,
             numberOfPages: Number(values.numberOfPages),
             numberInStock: values.numberInStock ? Number(values.numberInStock) : 0,
             purchasePrice: values.purchasePrice ? Number(values.purchasePrice) : 0,
