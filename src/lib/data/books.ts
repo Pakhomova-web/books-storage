@@ -221,7 +221,7 @@ export async function updateBook(input: Partial<BookEntity>, updateAllBooksInSer
                 }
                 return book.save();
             }),
-        oldLanguageBooks.filter(book => !book.languageBooks || !input.languageBookIds.includes(book.id))
+        oldLanguageBooks.filter(book => !book.languageBooks || !input.languageBookIds?.includes(book.id))
             .map(book => {
                 book.languageBooks = book.languageBooks.filter((id: string) => id !== input.id);
 
