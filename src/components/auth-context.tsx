@@ -14,27 +14,30 @@ import {
 import { usePathname } from 'next/navigation';
 
 type authContextType = {
-    user: UserEntity;
+    user: UserEntity,
     ukrPoshtaWarehouses: UkrPoshtaWarehouse[],
     deliveries: DeliveryEntity[],
+    loading: boolean,
     openLoginModal: boolean,
     setOpenLoginModal: (open: boolean) => void,
-    login: (user: UserEntity, token: string, refreshToken: string) => void;
-    logout: () => void;
-    setUser: (user: UserEntity) => void;
-    checkAuth: (error: ApolloError) => void;
-    setLikedBook: (bookId: string) => void;
-    setBookInBasket: (bookId: string) => void;
-    setGroupDiscountInBasket: (bookId: string) => void;
-    setRecentlyViewedBooks: (bookId: string) => void;
-    setDeliveries: (deliveries: DeliveryEntity[]) => void;
-    setUkrPoshtaWarehouses: (warehouses: UkrPoshtaWarehouse[]) => void;
+    login: (user: UserEntity, token: string, refreshToken: string) => void,
+    logout: () => void,
+    setUser: (user: UserEntity) => void,
+    checkAuth: (error: ApolloError) => void,
+    setLikedBook: (bookId: string) => void,
+    setBookInBasket: (bookId: string) => void,
+    setGroupDiscountInBasket: (bookId: string) => void,
+    setRecentlyViewedBooks: (bookId: string) => void,
+    setDeliveries: (deliveries: DeliveryEntity[]) => void,
+    setUkrPoshtaWarehouses: (warehouses: UkrPoshtaWarehouse[]) => void,
+    setLoading: (loading: boolean) => void
 };
 
 const authContextDefaultValues: authContextType = {
     user: null,
     openLoginModal: false,
     ukrPoshtaWarehouses: [],
+    loading: false,
     deliveries: [],
     login: (_user: UserEntity, _token: string, _refreshToken: string) => {
     },
@@ -55,7 +58,8 @@ const authContextDefaultValues: authContextType = {
     setOpenLoginModal: (_open: boolean) => {
     },
     setDeliveries: (_opts: DeliveryEntity[]) => {},
-    setUkrPoshtaWarehouses: (_opts: UkrPoshtaWarehouse[]) => {}
+    setUkrPoshtaWarehouses: (_opts: UkrPoshtaWarehouse[]) => {},
+    setLoading: (_loading: boolean) => {}
 };
 
 const AuthContext = createContext<authContextType>(authContextDefaultValues);
@@ -69,6 +73,7 @@ export function AuthProvider({ children }) {
     const pathname = usePathname();
     const [user, setUser] = useState<UserEntity>(null);
     const [deliveries, setDeliveries] = useState<DeliveryEntity[]>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     const [ukrPoshtaWarehouses, setUkrPoshtaWarehouses] = useState<UkrPoshtaWarehouse[]>([]);
     const [openLoginModal, setOpenLoginModal] = useState<boolean>(false);
     const value = {
@@ -76,6 +81,7 @@ export function AuthProvider({ children }) {
         deliveries,
         ukrPoshtaWarehouses,
         openLoginModal,
+        loading,
         login: (user: UserEntity, token: string, refreshToken: string) => {
             saveTokenToLocalStorage(token, refreshToken);
             setUser(user ? new UserEntity(user) : null);
@@ -179,6 +185,9 @@ export function AuthProvider({ children }) {
         },
         setUkrPoshtaWarehouses: (opts: UkrPoshtaWarehouse[]) => {
             setUkrPoshtaWarehouses(opts);
+        },
+        setLoading: (loading: boolean) => {
+            setLoading(loading);
         }
     };
 

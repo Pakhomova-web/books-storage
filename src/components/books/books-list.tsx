@@ -32,7 +32,7 @@ const StyledGrid = styled(Grid)(() => ({
 }));
 
 export default function BooksList({ items, filters = {}, pageUrl = null }) {
-    const { user, setLikedBook, setBookInBasket } = useAuth();
+    const { user, setLikedBook, setBookInBasket, setLoading } = useAuth();
     const router = useRouter();
 
     function onLike(e, book: BookEntity) {
@@ -60,6 +60,7 @@ export default function BooksList({ items, filters = {}, pageUrl = null }) {
         const query = !!filterQueries.length ? filterQueries.join('&') : router.query.filters;
         const params = getParamsQueryString({ filters: query, pageUrl });
 
+        setLoading(true);
         router.push(`/books/${book.id}${params ? `?${params}` : ''}`);
     }
 

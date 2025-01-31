@@ -39,7 +39,16 @@ const StyledDiscountBox = styled(Box)(({ theme }) => ({
 export default function Main({ children }) {
     const [loading, setLoading] = useState<boolean>(false);
     const { fetchUser } = useUser();
-    const { user, logout, setUser, setDeliveries, deliveries, setUkrPoshtaWarehouses, ukrPoshtaWarehouses } = useAuth();
+    const {
+        user,
+        logout,
+        setUser,
+        setDeliveries,
+        deliveries,
+        setUkrPoshtaWarehouses,
+        ukrPoshtaWarehouses,
+        loading: globalLoading
+    } = useAuth();
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('lg'));
     const router = useRouter();
@@ -94,7 +103,7 @@ export default function Main({ children }) {
                 <link rel="apple-touch-icon" href="/favicon.ico" type="image/x-icon" sizes="32x32"/>
                 <meta http-equiv="content-language" content="uk"/>
             </Head>
-            <Loading show={loading}></Loading>
+            <Loading show={loading || globalLoading}></Loading>
 
             {!mobileMatches && <TopSoldBooks/>}
 

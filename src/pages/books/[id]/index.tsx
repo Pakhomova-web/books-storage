@@ -84,7 +84,7 @@ export default function BookDetails({ bookPart }) {
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
     const { loading, error, item: book, refetch } = useBook(router.query.id as string);
     const [commentsPage, setCommentsPage] = useState<number>(0);
-    const { user, setLikedBook, setBookInBasket, setRecentlyViewedBooks } = useAuth();
+    const { user, setLikedBook, setBookInBasket, setRecentlyViewedBooks, setLoading } = useAuth();
     const [commentsRowsPerPage] = useState<number>(3);
     const [keys, setKeys] = useState<TableKey<BookEntity>[]>([]);
     const [authorsKeys, setAuthorsKeys] = useState<TableKey<BookEntity>[]>([]);
@@ -100,6 +100,7 @@ export default function BookDetails({ bookPart }) {
     const [showEditModal, setShowEditModal] = useState<boolean>(false);
     const [refetching, setRefetching] = useState<boolean>(false);
 
+    setLoading(false);
     useEffect(() => {
         if (book) {
             setRecentlyViewedBooks(book.id);
