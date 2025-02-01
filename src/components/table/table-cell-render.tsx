@@ -20,7 +20,7 @@ export function renderTableCell<T>(key: TableKey<T>, item: T, index: number, row
     return (
         <TableCell key={index} sx={rowStyleClass ? rowStyleClass(item) : {}}>
             {key.type === 'text' && (key.renderValue ? key.renderValue(item) : '')}
-            {key.type === 'image' && <Box sx={{ width: '80px', height: '80px' }}>
+            {key.type === 'image' && <Box width="80px" height="80px">
               <CustomImage imageId={key.renderValue(item) as string}></CustomImage>
             </Box>}
         </TableCell>

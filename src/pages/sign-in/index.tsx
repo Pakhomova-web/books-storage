@@ -144,7 +144,7 @@ export default function SignIn() {
             <CustomModal open={openEmailConfirmationModal} onClose={() => onCloseEmailModal()}
                          title="Дякуємо за реєстрацію!">
                 <Box textAlign="center" display="flex" flexDirection="column" alignItems="center" gap={1}>
-                    <Box sx={{ width: '50px', height: '50px' }}>
+                    <Box width="50px" height="50px">
                         <CustomImage imageLink="/sent_email.png"/>
                     </Box>
                     На вказану Вами ел. пошту був надісланий лист для підтвердження.

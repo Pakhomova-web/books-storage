@@ -26,7 +26,7 @@ export default function ErrorNotification({ error }: IErrorNotificationProps) {
             <StyledBox p={1} gap={2}>
                 <Error sx={errorIcon}></Error>
 
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <Box display="flex" flexDirection="column">
                     {!!error?.graphQLErrors?.length &&
                       <Box>{String(error?.graphQLErrors[error.graphQLErrors.length - 1].extensions.message || error?.message)}</Box>
                     }

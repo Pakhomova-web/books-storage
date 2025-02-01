@@ -127,7 +127,7 @@ export default function LoginModal({ open }) {
                                    submitText="Так"
                                    onClose={() => setShowForgotPasswordModal(false)}>
                         <Box textAlign="center" display="flex" flexDirection="column" alignItems="center" gap={1}>
-                          <Box sx={{ width: '50px', height: '50px' }}>
+                          <Box width="50px" height="50px">
                             <CustomImage imageLink="/sent_email.png"/>
                           </Box>
                           Для відновлення паролю Вам буде надіслано повідомлення на ел. пошту {email}. Продовжити?
@@ -157,7 +157,7 @@ export default function LoginModal({ open }) {
 
             <CustomModal open={showNotActivatedMsg} onClose={() => closeModal()} title="Підтвердження ел. адреси">
                 <Box textAlign="center" display="flex" flexDirection="column" alignItems="center" gap={1}>
-                    <Box sx={{ width: '50px', height: '50px' }}>
+                    <Box width="50px" height="50px">
                         <CustomImage imageLink="/sent_email.png"/>
                     </Box>
                     На вказану Вами ел. пошту був надісланий лист для підтвердження.

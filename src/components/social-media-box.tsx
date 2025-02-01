@@ -30,11 +30,11 @@ export default function SocialMediaBox({ showAboutUsLink = true }) {
             <Grid item xs={12} sm={6} display="flex" justifyContent="center" flexDirection="column" alignItems="center">
                 <Box display="flex" alignItems="center" flexWrap="wrap" justifyContent="center">
                     При замовленні до&nbsp;<b>18:00</b>&nbsp;
-                    <Box sx={{ width: '15px' }} display="flex">
+                    <Box width="15px" display="flex">
                         <CustomImage imageLink="/nova_poshta_icon.png"/>
                     </Box>,&nbsp;
                     <b>15:00</b>&nbsp;
-                    <Box sx={{ width: '15px' }} display="flex">
+                    <Box width="15px" display="flex">
                         <CustomImage imageLink="/ukr_poshta_icon.png"/>
                     </Box>&nbsp;-&nbsp;
                     <b>відправка в той же день</b>.
@@ -51,7 +51,7 @@ export default function SocialMediaBox({ showAboutUsLink = true }) {
 
                 <Tooltip title="Tik Tok">
                     <IconButton onClick={onTikTokClick} sx={{ fontSize: '18px' }}>
-                        <Box sx={{ width: '18px', height: '18px' }}>
+                        <Box width="18px" height="18px">
                             <CustomImage imageLink="/tiktok_icon.png"></CustomImage>
                         </Box>
                     </IconButton>

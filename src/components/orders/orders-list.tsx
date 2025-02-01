@@ -59,7 +59,7 @@ export default function OrdersList({ orders, onClick }) {
                         {isAdmin(user) &&
                           <Box display="flex" gap={1} flexWrap="wrap">
                               {order.books.map((b, index) => (
-                                  <Box key={index} sx={{ height: '60px', width: '50px' }}>
+                                  <Box key={index} height="60px" width="50px">
                                       <CustomImage imageId={b.book.imageIds ? b.book.imageIds[0] : null}/>
                                   </Box>
                               ))}

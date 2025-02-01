@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { MuiTelInput } from 'mui-tel-input';
 import { ApolloError } from '@apollo/client';
+import { styled } from '@mui/material/styles';
 
 import { useAuth } from '@/components/auth-context';
 import CustomTextField from '@/components/form-fields/custom-text-field';
@@ -28,6 +29,11 @@ import WarehouseAutocompleteField from '@/components/form-fields/warehouses-auto
 import StreetAutocompleteField from '@/components/form-fields/street-autocomplete-field';
 import SettlementAutocompleteField from '@/components/form-fields/settlement-autocomplete-field';
 import UkrPoshtaWarehouseAutocompleteField from '@/components/form-fields/ukrposhta-warehouse-autocomplete-field';
+
+const StyledEmailImage = styled(Box)(() => ({
+    width: '50px',
+    height: '50px'
+}));
 
 export default function PersonalInfo() {
     const { user, setUser } = useAuth();
@@ -399,9 +405,9 @@ export default function PersonalInfo() {
                          onClose={() => setSentActivationLinkModal(false)}
                          title="Підтвердження ел. пошти">
                 <Box textAlign="center" display="flex" flexDirection="column" alignItems="center" gap={1}>
-                    <Box sx={{ width: '50px', height: '50px' }}>
+                    <StyledEmailImage>
                         <CustomImage imageLink="/sent_email.png"/>
-                    </Box>
+                    </StyledEmailImage>
                     На вказану Вами ел. пошту був надісланий лист для підтвердження.
                     Будь ласка, активуйте свій профіль для закінчення реєстрації.
                 </Box>

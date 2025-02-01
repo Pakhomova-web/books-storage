@@ -24,10 +24,10 @@ export default function OrderDeliveryTrackingBox({ deliveryId, trackingNumber, e
 
     function renderDeliveryName() {
         return delivery.imageId ?
-            <Box sx={{ width: '80px', height: '40px' }} display="flex" justifyContent="center"
-                 alignItems="center">
+            <Box width="80px" height="40px" display="flex" justifyContent="center" alignItems="center">
                 <CustomImage imageId={delivery.imageId}/>
-            </Box> : delivery.name;
+            </Box> :
+            delivery.name;
     }
 
     return (delivery && (

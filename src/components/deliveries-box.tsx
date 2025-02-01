@@ -28,7 +28,7 @@ export default function DeliveriesBox() {
                 <Grid key={index} item xs={12} sm={4} display="flex" alignItems="center"
                       justifyContent="center"
                       p={1} gap={1}>
-                    {delivery.imageId ? <Box sx={{ width: '100px', height: '50px' }}><CustomImage
+                    {delivery.imageId ? <Box width="100px" height="50px"><CustomImage
                         imageId={delivery.imageId}></CustomImage></Box> : delivery.name}
                 </Grid>
             )}

@@ -122,7 +122,7 @@ export default function Main({ children }) {
 
             {!isSettings() &&
               <StyledDiscountBox onClick={() => router.push('/books?withDiscount=true')}>
-                <Tooltip title="Знижки від 30%">
+                <Tooltip title="Знижки до 70%">
                   <img alt="Image" height="100%" src="/discount_icon.png"/>
                 </Tooltip>
               </StyledDiscountBox>}

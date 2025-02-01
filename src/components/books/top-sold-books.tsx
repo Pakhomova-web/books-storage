@@ -2,7 +2,7 @@ import { Box } from '@mui/material';
 import React from 'react';
 import { styled } from '@mui/material/styles';
 
-import { borderRadius, priceStyles, styleVariables, yellowColor, yellowLightColor } from '@/constants/styles-variables';
+import { priceStyles, styleVariables } from '@/constants/styles-variables';
 import { useTopOfSoldBooks } from '@/lib/graphql/queries/book/hook';
 import CustomImage from '@/components/custom-image';
 import { renderPrice } from '@/utils/utils';
@@ -17,25 +17,31 @@ const StyledBookBox = styled(Box)(() => ({
     flexDirection: 'column'
 }));
 
-const StyledMobileTopSoldBook = styled(Box)(() => ({
+const StyledMobileImage = styled(Box)(() => ({
     cursor: 'pointer',
     height: '65px',
     mxWidth: '65px'
 }));
 
+const StyledImage = styled(Box)(() => ({
+    cursor: 'pointer',
+    height: '80px',
+    mxWidth: '100%'
+}));
+
+const StyledIconContainer = styled(Box)(() => ({
+    height: '45px',
+    mxWidth: '45px'
+}));
+
 const StyledTitle = styled(Box)(() => ({
     cursor: 'pointer',
     display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'nowrap',
     alignItems: 'center',
-    border: `2px solid ${yellowColor}`,
-    background: yellowLightColor,
-    borderRadius,
-    ...styleVariables.titleFontSize
+    justifyContent: 'center'
 }));
 
-const StyledTopSoldBook = styled(Box)(() => ({
+const StyledContainer = styled(Box)(() => ({
     position: 'absolute',
     width: '10%',
     top: '64px',
@@ -59,30 +65,35 @@ export default function TopSoldBooks({ mobile = false }) {
         mobile ?
             <Box my={1} display="flex" flexDirection="row" flexWrap="nowrap" alignItems="center"
                  justifyContent="space-between" gap={1}>
-                <StyledTitle gap={1} p={1} onClick={() => onTitleClick()}>
+                <StyledTitle onClick={() => onTitleClick()} gap={1} p={1}>
+                    <StyledIconContainer>
+                        <CustomImage imageLink="/book_rate.png"/>
+                    </StyledIconContainer>
                     Топ продажів
                 </StyledTitle>
 
                 <Box display="flex" flexDirection="row" flexWrap="nowrap" gap={1}>
                     {items.map((book, index) => (
-                        <StyledMobileTopSoldBook key={index} onClick={() => onBookClick(book)}>
+                        <StyledMobileImage key={index} onClick={() => onBookClick(book)}>
                             <CustomImage imageId={book.imageIds ? book.imageIds[0] : null}/>
-                        </StyledMobileTopSoldBook>
+                        </StyledMobileImage>
                     ))}
                 </Box>
             </Box> :
-            <StyledTopSoldBook gap={1} py={1}>
+            <StyledContainer gap={1} py={1}>
                 {!loading && !!items?.length && <Box>
-                  <StyledTitle justifyContent="center" gap={1} p={1} mx={1} onClick={() => onTitleClick()}>
+                  <StyledTitle onClick={() => onTitleClick()} gap={1} p={1}>
+                    <StyledIconContainer>
+                      <CustomImage imageLink="/book_rate.png"/>
+                    </StyledIconContainer>
                     Топ продажів
                   </StyledTitle>
 
-
                     {items.map((book, index) =>
                         <StyledBookBox key={index} gap={1} p={1} onClick={() => onBookClick(book)}>
-                            <Box sx={{ height: '80px', width: '100%' }}>
+                            <StyledImage>
                                 <CustomImage imageId={book.imageIds ? book.imageIds[0] : null}/>
-                            </Box>
+                            </StyledImage>
 
                             <Box>{book.name}</Box>
 
@@ -93,6 +104,6 @@ export default function TopSoldBooks({ mobile = false }) {
                             </Box>
                         </StyledBookBox>)}
                 </Box>}
-            </StyledTopSoldBook>
+            </StyledContainer>
     );
 }

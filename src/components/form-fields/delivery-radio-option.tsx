@@ -8,7 +8,7 @@ export default function DeliveryRadioOption({ option, disabled = false }) {
                           disabled={disabled}
                           control={<Radio/>}
                           label={option.imageId ?
-                              <Box sx={{ width: '100px', height: '50px' }}>
+                              <Box width="100px" height="50px">
                                   <CustomImage
                                       imageId={option.imageId}></CustomImage>
                               </Box> : option.name}/>
