@@ -28,11 +28,17 @@ export default function SocialMediaBox({ showAboutUsLink = true }) {
         <StyledSocialsGrid container display="flex" alignItems="center" width="100%" p={1}
                            justifyContent="space-between">
             <Grid item xs={12} sm={6} display="flex" justifyContent="center" flexDirection="column" alignItems="center">
-                <Box mb={1} display="flex">
+                <Box mb={1} display="flex" alignItems="center" flexWrap="wrap" justifyContent="center">
                     При замовленні до&nbsp;<b>18:00</b>&nbsp;
-                    <Box sx={{ width: '15px' }}><CustomImage imageLink="/nova_poshta_icon.png"/></Box>,&nbsp;
-                    <b>15:00</b>&nbsp;<Box sx={{ width: '15px' }}><CustomImage imageLink="/ukr_poshta_icon.png"/></Box>
-                    &nbsp;-&nbsp;<b>відправка в той же день</b></Box>
+                    <Box sx={{ width: '15px' }} display="flex">
+                        <CustomImage imageLink="/nova_poshta_icon.png"/>
+                    </Box>,&nbsp;
+                    <b>15:00</b>&nbsp;
+                    <Box sx={{ width: '15px' }} display="flex">
+                        <CustomImage imageLink="/ukr_poshta_icon.png"/>
+                    </Box>&nbsp;-&nbsp;
+                    <b>відправка в той же день</b>.
+                </Box>
                 <Box>Графік роботи: 9:00 - 21:00. Без вихідних</Box>
             </Grid>
 
