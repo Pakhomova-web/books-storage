@@ -29,8 +29,8 @@ html, body {
 }
 
 .selectedToolbarMenuItem, .selectedToolbarMenuItem:hover {
-    color: white;
-    background-color: var(--background);
+    color: white !important;
+    background-color: var(--background) !important;
 }
 
 .MuiAutocomplete-tag {
