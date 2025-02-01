@@ -78,7 +78,7 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
         const today = new Date();
 
         items.forEach(item => {
-            if (!!item.discountEndDate && dateDiffInDays(today, new Date(item.discountEndDate)) > 0) {
+            if (!!item.discountEndDate && dateDiffInDays(new Date(item.discountEndDate), today) > 0) {
                 item.discount = 0;
             }
         });

@@ -1,5 +1,5 @@
 import { Box, Grid, IconButton, SortDirection } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 import HomeIcon from '@mui/icons-material/Home';
 import { styled } from '@mui/material/styles';
@@ -63,6 +63,7 @@ export default function Books() {
     const [loadingOption, setLoadingOption] = useState<boolean>();
     const { items, totalCount, gettingError, loading, refetch } = useBooks(pageSettings, filters);
     const [error, setError] = useState<ApolloError>();
+    const ref = useRef(null);
 
     useEffect(() => {
         if (toRefreshData) {
@@ -80,7 +81,6 @@ export default function Books() {
             setToRefreshData(true);
         }
     }, [filters]);
-
 
     useEffect(() => {
         if (toRefreshData) {
@@ -158,6 +158,7 @@ export default function Books() {
     }
 
     function onPageChange(val: number) {
+        ref.current.scrollIntoView();
         setPageSettings({
             ...pageSettings,
             page: val
@@ -200,7 +201,7 @@ export default function Books() {
                 <meta name="og:description" content={MAIN_DESC}/>
             </Head>
 
-            <Box position="relative">
+            <Box position="relative" ref={ref}>
                 <Loading show={loading}></Loading>
 
                 <BookFilters totalCount={totalCount}
@@ -228,7 +229,7 @@ export default function Books() {
                     </> :
                     (!loading &&
                       <IconWithText imageLink="/no_results.png"
-                                    text="На жаль пошук не дав результатів. Cпробуйте ще раз"/>)}
+                                    text="Нажаль пошук не дав результатів. Cпробуйте ще раз"/>)}
 
                 {error && <ErrorNotification error={error}></ErrorNotification>}
             </Box>
