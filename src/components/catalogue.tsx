@@ -79,7 +79,7 @@ interface ICatalogueItem {
     url?: string
 }
 
-export default function Catalogue() {
+export default function Catalogue({ opened = false }) {
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
     const [items] = useState<ICatalogueItem[]>([
@@ -387,7 +387,7 @@ export default function Catalogue() {
     function onSectionClick(params: {
         [key: string]: (string | number)[]
     }, title?: string, url?: string, event?) {
-        if (event){
+        if (event) {
             event.stopPropagation();
             event.preventDefault();
         }
@@ -404,44 +404,49 @@ export default function Catalogue() {
         router.push(`${url || '/books'}?${getParamsQueryString(filters)}`);
     }
 
+    function getCategoriesView() {
+        return items.map((item, index) => (
+            <Accordion key={index} expanded={expanded === `panel-${index}`}
+                       onChange={handleChange(`panel-${index}`)}>
+                <AccordionSummary expandIcon={<KeyboardArrowDownIcon color="primary"/>}>
+                    {item.title}
+                </AccordionSummary>
+                <AccordionDetails>
+                    {item.children.map((child, index) => (
+                        <Box key={index} py={2} pl={2}>
+                            <CustomLink
+                                onClick={() => onSectionClick(child.params, child.title, child.url)}>
+                                {child.title}
+                            </CustomLink>
+                        </Box>
+                    ))}
+                    <Box key={index} py={2} mt={1}>
+                        <CustomLink onClick={() => onSectionClick(item.params, item.title, item.url)}>
+                            <Box display="flex" alignItems="center" gap={1}>Дивитися усі
+                                <ArrowForwardIcon color="primary"/>
+                            </Box>
+                        </CustomLink>
+                    </Box>
+                </AccordionDetails>
+            </Accordion>
+        ));
+    }
+
     return (
         mobileMatches ?
-            <StyledContainer container mb={1}>
-                <StyledGrid item xs={12} px={2} py={1} sx={rightDivider} onClick={() => setOpenModal(true)}>
-                    <Box width="30px" mr={1} display="flex" alignItems="center">
-                        <CustomImage imageLink="/catalogue.png"/>
-                    </Box>Усі категорії
-                </StyledGrid>
+            (opened ?
+                <Box width="100%">{getCategoriesView()}</Box> :
+                <StyledContainer container mb={1}>
+                    <StyledGrid item xs={12} px={2} py={1} sx={rightDivider} onClick={() => setOpenModal(true)}>
+                        <Box width="30px" mr={1} display="flex" alignItems="center">
+                            <CustomImage imageLink="/catalogue.png"/>
+                        </Box>Усі категорії
+                    </StyledGrid>
 
-                <CustomModal open={openModal} onClose={() => setOpenModal(false)} title="Усі категорії">
-                    {items.map((item, index) => (
-                        <Accordion key={index} expanded={expanded === `panel-${index}`}
-                                   onChange={handleChange(`panel-${index}`)}>
-                            <AccordionSummary expandIcon={<KeyboardArrowDownIcon color="primary"/>}>
-                                {item.title}
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                {item.children.map((child, index) => (
-                                    <Box key={index} py={2} pl={2}>
-                                        <CustomLink
-                                            onClick={() => onSectionClick(child.params, child.title, child.url)}>
-                                            {child.title}
-                                        </CustomLink>
-                                    </Box>
-                                ))}
-                                <Box key={index} py={2} mt={1}>
-                                    <CustomLink
-                                        onClick={() => onSectionClick(item.params, item.title, item.url)}>
-                                        <Box display="flex" alignItems="center" gap={1}>Дивитися усі
-                                            <ArrowForwardIcon color="primary"/>
-                                        </Box>
-                                    </CustomLink>
-                                </Box>
-                            </AccordionDetails>
-                        </Accordion>
-                    ))}
-                </CustomModal>
-            </StyledContainer> :
+                    <CustomModal open={openModal} onClose={() => setOpenModal(false)} title="Усі категорії">
+                        {getCategoriesView()}
+                    </CustomModal>
+                </StyledContainer>) :
             <StyledContainer container mb={1}>
                 {items.map((item, index) => (
                     <StyledGrid item xs={3} key={index} px={2} py={{ md: 1, lg: 2 }}

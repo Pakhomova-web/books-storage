@@ -74,8 +74,6 @@ export default function Home() {
 
             <SocialMediaBox/>
 
-            <Catalogue/>
-
             <DiscountBooks/>
 
             <Grid container position="relative" mb={1} justifyContent="center">
@@ -83,8 +81,10 @@ export default function Home() {
 
                 <Grid item xs={12} sx={styleVariables.sectionTitle} mb={1}>Категорії</Grid>
 
+                <Catalogue opened={true}/>
+
                 {!!bookTypes?.length &&
-                  <Grid container spacing={1} justifyContent="center">
+                  <Grid container spacing={1} justifyContent="center" mt={1}>
                       {bookTypes?.map((type, index) => (
                           mobileMatches ?
                               <Grid xs={12} sm={6} key={index} item
