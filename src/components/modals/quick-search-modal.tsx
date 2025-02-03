@@ -62,6 +62,11 @@ export default function QuickSearchModal({ open, onClose }) {
         onClose();
     }
 
+    function changeInputValue(val: string) {
+        inputValues[indexOfFieldToSearch] = val;
+        setInputValues([...inputValues])
+    }
+
     return (
         <CustomModal open={open} title="Швидкий пошук" onClose={onClose}>
             <Box display="flex" flexWrap="nowrap" mb={2}>
@@ -79,14 +84,14 @@ export default function QuickSearchModal({ open, onClose }) {
                         <BookSearchAutocompleteField onSelect={(opt: IOption<string>) => onHintClick(opt)}
                                                      onEnterClick={onQuickSearchClick}
                                                      autoFocus={true}
-                                                     onInputChange={val => inputValues[indexOfFieldToSearch] = val}/> :
+                                                     onInputChange={changeInputValue}/> :
                         (indexOfFieldToSearch === 1 ?
                             <SeriesSearchAutocompleteField onSelect={(opt: IOption<string>) => onHintClick(opt)}
                                                            onEnterClick={onQuickSearchClick}
-                                                           onInputChange={val => inputValues[indexOfFieldToSearch] = val}/> :
+                                                           onInputChange={changeInputValue}/> :
                             <AuthorsSearchAutocompleteField onSelect={(opt: IOption<string>) => onHintClick(opt)}
                                                             onEnterClick={onQuickSearchClick}
-                                                            onInputChange={val => inputValues[indexOfFieldToSearch] = val}/>)
+                                                            onInputChange={changeInputValue}/>)
                     }
                 </Box>
 
