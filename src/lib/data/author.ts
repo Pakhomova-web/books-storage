@@ -1,7 +1,7 @@
-import { AuthorEntity, IPageable } from '@/lib/data/types';
+import { AuthorEntity, BookSeriesFilter, IOption, IPageable } from '@/lib/data/types';
 import Author from '@/lib/data/models/author';
 import { GraphQLError } from 'graphql/error';
-import { checkUsageInBook, getByName, getValidFilters, getDataByFiltersAndPageSettings } from '@/lib/data/base';
+import { checkUsageInBook, getByName, getDataByFiltersAndPageSettings, getValidFilters } from '@/lib/data/base';
 
 export async function getAuthors(pageSettings?: IPageable, filters?: AuthorEntity) {
     const { andFilters } = getValidFilters(filters);
@@ -10,6 +10,21 @@ export async function getAuthors(pageSettings?: IPageable, filters?: AuthorEntit
         andFilters,
         pageSettings
     );
+}
+
+export async function getAuthorsOptions(filters?: BookSeriesFilter): Promise<IOption<string>[]> {
+    const { andFilters } = getValidFilters(filters);
+    const query = Author.find();
+
+    if (!!andFilters.length) {
+        query.and(andFilters);
+    }
+    const items = await query.sort({ name: 'asc' });
+
+    return items.map(item => ({
+        id: item.id,
+        label: item.name
+    }));
 }
 
 export async function createAuthor(input: AuthorEntity)  {

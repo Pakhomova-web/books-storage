@@ -1,8 +1,9 @@
-import { AuthorEntity, IAuthorFilter, IOption, IPageable, NameFilter } from '@/lib/data/types';
+import { AuthorEntity, IAuthorFilter, IOption, IPageable } from '@/lib/data/types';
 import {
     _useCreateItem,
     _useDeleteItemById,
     _useItems,
+    _useOptions,
     _usePageableItems,
     _useUpdateItem,
     getItemById
@@ -17,11 +18,15 @@ import {
 } from '@/lib/graphql/queries/author/queries';
 
 export function useAuthors(pageSettings?: IPageable, filters?: IAuthorFilter) {
-    return _usePageableItems(authorsQuery, 'authors', pageSettings, filters);
+    return _usePageableItems<AuthorEntity>(authorsQuery, 'authors', pageSettings, filters);
 }
 
 export function useAuthorOptions() {
-    return _usePageableItems<IOption<string>>(authorOptionsQuery, 'authors');
+    return _useItems<IOption<string>, IAuthorFilter>(authorOptionsQuery);
+}
+
+export async function getAuthorOptions(filters?: IAuthorFilter): Promise<IOption<string>[]> {
+    return _useOptions<IOption<string>>(authorOptionsQuery, filters);
 }
 
 export function useCreateAuthor() {

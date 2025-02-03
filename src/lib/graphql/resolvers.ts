@@ -53,7 +53,14 @@ import {
     updateBook,
     updateBookNumberInStock
 } from '@/lib/data/books';
-import { createAuthor, deleteAuthor, getAuthorById, getAuthors, updateAuthor } from '@/lib/data/author';
+import {
+    createAuthor,
+    deleteAuthor,
+    getAuthorById,
+    getAuthors,
+    getAuthorsOptions,
+    updateAuthor
+} from '@/lib/data/author';
 import { GraphQLError } from 'graphql/error';
 import {
     activateUser,
@@ -159,6 +166,9 @@ const resolvers: Resolvers = {
         },
         authors: async (_root, { pageSettings, filters }) => {
             return getAuthors(<IPageable>pageSettings, <AuthorEntity>filters).catch(error => parseError(error));
+        },
+        authorsOptions: async (_root, { filters }) => {
+            return getAuthorsOptions(filters).catch(error => parseError(error));
         },
         bookSeries: async (_root, { pageSettings, filters }) => {
             return getBookSeries(<IPageable>pageSettings, filters).catch(error => parseError(error));

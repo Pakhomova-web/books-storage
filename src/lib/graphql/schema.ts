@@ -216,6 +216,7 @@ const typeDefs =  /* GraphQL */ `
         coverTypes(pageSettings: PageableInput, filters: SearchByNameInput): CoverTypeSubList
         bookSeries(pageSettings: PageableInput, filters: BookSeriesSearchInput): BookSeriesSubList
         authors(pageSettings: PageableInput, filters: SearchByNameInput): AuthorSubList
+        authorsOptions(filters: SearchByNameInput): [IOption!]
         books(pageSettings: PageableInput, filters: BookSearchInput): BookSubList
         deliveries(pageSettings: PageableInput, filters: SearchByNameInput): DeliverySubList
         deliveryOptions: [Delivery!]

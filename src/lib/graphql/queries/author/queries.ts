@@ -30,12 +30,10 @@ export const authorByIdQuery = gql`
 `;
 
 export const authorOptionsQuery = gql`
-    query Authors($pageSettings: PageableInput, $filters: SearchByNameInput) {
-        authors(pageSettings: $pageSettings, filters: $filters) {
-            items {
-                id
-                label: name
-            }
+    query Authors($filters: SearchByNameInput) {
+        items: authorsOptions(filters: $filters) {
+            id
+            label
         }
     }
 `;

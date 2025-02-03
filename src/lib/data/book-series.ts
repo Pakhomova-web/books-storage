@@ -39,7 +39,6 @@ export async function getBookSeriesOptions(filters?: BookSeriesFilter): Promise<
     }));
 }
 
-
 export async function getBookSeriesById(id: string) {
     if (!id) {
         throw new GraphQLError(`Не вказан ідентифікатор.`, {

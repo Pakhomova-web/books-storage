@@ -5,13 +5,14 @@ import CancelablePromise, { cancelable } from 'cancelable-promise';
 
 import { IOption } from '@/lib/data/types';
 import { getBookNamesByQuickSearch } from '@/lib/graphql/queries/book/hook';
+import { getBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
+import { getAuthorOptions } from '@/lib/graphql/queries/author/hook';
 
-export default function BookSearchAutocompleteField({
+export default function AuthorsSearchAutocompleteField({
                                                         disabled = false,
                                                         onSelect,
                                                         onEnterClick = null,
-                                                        onInputChange = null,
-                                                        autoFocus = false
+                                                        onInputChange = null
                                                     }) {
     const [loading, setLoading] = useState<boolean>(false);
     const [options, setOptions] = useState<IOption<string>[]>([]);
@@ -51,7 +52,7 @@ export default function BookSearchAutocompleteField({
             promise.cancel();
         }
         setLoading(true);
-        setPromise(cancelable(getBookNamesByQuickSearch(value)
+        setPromise(cancelable(getAuthorOptions({ name: value })
             .then((opts: IOption<string>[]) => {
                 setOptions(opts);
                 setLoading(false);
@@ -78,10 +79,9 @@ export default function BookSearchAutocompleteField({
                       getOptionLabel={(opt: IOption<string>) => opt.label}
                       renderInput={(params) => (
                           <TextField {...params}
-                                     label="Пошук книги"
+                                     label="Пошук автора"
                                      variant="outlined"
                                      fullWidth
-                                     autoFocus={autoFocus}
                                      onKeyDown={handleEnterClick}
                                      helperText="Введіть мін. 3 літери"/>
                       )}
@@ -90,7 +90,7 @@ export default function BookSearchAutocompleteField({
                               <Highlighter highlightClassName="word-highlight"
                                            searchWords={[inputValue]}
                                            autoEscape={true}
-                                           textToHighlight={option.label + ` (${option.description})`}/>
+                                           textToHighlight={option.label + (option.description ? ` (${option.description})` : '')}/>
                           </Box>
                       }/>
     );

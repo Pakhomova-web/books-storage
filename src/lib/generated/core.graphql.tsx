@@ -867,6 +867,7 @@ export type Query = {
   activateUser: Scalars['String']['output'];
   authorById?: Maybe<Author>;
   authors?: Maybe<AuthorSubList>;
+  authorsOptions?: Maybe<Array<IOption>>;
   balance?: Maybe<Scalars['Float']['output']>;
   bookById?: Maybe<Book>;
   bookComments?: Maybe<Array<Comment>>;
@@ -919,6 +920,11 @@ export type QueryAuthorByIdArgs = {
 export type QueryAuthorsArgs = {
   filters?: InputMaybe<SearchByNameInput>;
   pageSettings?: InputMaybe<PageableInput>;
+};
+
+
+export type QueryAuthorsOptionsArgs = {
+  filters?: InputMaybe<SearchByNameInput>;
 };
 
 
@@ -1739,6 +1745,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   activateUser?: Resolver<ResolversTypes['String'], ParentType, ContextType, RequireFields<QueryActivateUserArgs, 'token'>>;
   authorById?: Resolver<Maybe<ResolversTypes['Author']>, ParentType, ContextType, RequireFields<QueryAuthorByIdArgs, 'id'>>;
   authors?: Resolver<Maybe<ResolversTypes['AuthorSubList']>, ParentType, ContextType, Partial<QueryAuthorsArgs>>;
+  authorsOptions?: Resolver<Maybe<Array<ResolversTypes['IOption']>>, ParentType, ContextType, Partial<QueryAuthorsOptionsArgs>>;
   balance?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   bookById?: Resolver<Maybe<ResolversTypes['Book']>, ParentType, ContextType, RequireFields<QueryBookByIdArgs, 'id'>>;
   bookComments?: Resolver<Maybe<Array<ResolversTypes['Comment']>>, ParentType, ContextType, RequireFields<QueryBookCommentsArgs, 'id' | 'page' | 'rowsPerPage'>>;
