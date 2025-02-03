@@ -20,18 +20,23 @@ const StyledBookBox = styled(Box)(() => ({
 const StyledMobileImage = styled(Box)(() => ({
     cursor: 'pointer',
     height: '65px',
-    mxWidth: '65px'
+    maxWidth: '65px'
 }));
 
 const StyledImage = styled(Box)(() => ({
     cursor: 'pointer',
     height: '80px',
-    mxWidth: '100%'
+    maxWidth: '100%'
 }));
 
-const StyledIconContainer = styled(Box)(() => ({
-    height: '45px',
-    mxWidth: '45px'
+const StyledIconContainer = styled(Box)(({ theme }) => ({
+    maxHeight: '45px',
+    [theme.breakpoints.up('sm')]: {
+        maxWidth: '45px',
+    },
+    [theme.breakpoints.down('sm')]: {
+        maxWidth: '35px'
+    }
 }));
 
 const StyledTitle = styled(Box)(() => ({
@@ -65,7 +70,7 @@ export default function TopSoldBooks({ mobile = false }) {
         mobile ?
             <Box my={1} display="flex" flexDirection="row" flexWrap="nowrap" alignItems="center"
                  justifyContent="space-between" gap={1}>
-                <StyledTitle onClick={() => onTitleClick()} gap={1} p={1}>
+                <StyledTitle onClick={() => onTitleClick()} gap={1} p={1} flexWrap="wrap">
                     <StyledIconContainer>
                         <CustomImage imageLink="/book_rate.png"/>
                     </StyledIconContainer>
