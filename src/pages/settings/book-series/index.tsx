@@ -69,7 +69,7 @@ export default function BookSeries() {
     }, [gettingError, deletingError]);
 
     function deleteHandler(item: BookSeriesEntity) {
-        deleteItem(item.id).then(() => refreshData())
+        deleteItem(item.id).then(() => refreshData(true))
             .catch(err => checkAuth(err));
     }
 
