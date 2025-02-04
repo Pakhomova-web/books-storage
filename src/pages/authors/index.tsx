@@ -9,7 +9,7 @@ import RecentlyViewedBooks from '@/components/books/recently-viewed-books';
 import DeliveriesBox from '@/components/deliveries-box';
 import Loading from '@/components/loading';
 import ErrorNotification from '@/components/error-notification';
-import { borderRadius, primaryLightColor } from '@/constants/styles-variables';
+import { borderRadius, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import IconWithText from '@/components/icon-with-text';
 import React from 'react';
 import HomeIcon from '@mui/icons-material/Home';
@@ -24,7 +24,10 @@ const StyledClickableBox = styled(Box)(() => ({
     border: `1px solid ${primaryLightColor}`,
     ':hover': {
         backgroundColor: primaryLightColor
-    }
+    },
+    height: '100px',
+    justifyContent: 'center',
+    alignItems: 'center'
 }));
 
 export default function Authors() {
@@ -53,7 +56,7 @@ export default function Authors() {
                         <Grid item xs={12} sm={6} lg={4} xl={3} key={index}
                               onClick={() => router.push(`/books?authors=${author.id}`)}>
                             <StyledClickableBox p={1} gap={1}>
-                                <Box><b>{author.name}</b></Box>
+                                <Box sx={styleVariables.titleFontSize}><b>{author.name}</b></Box>
                             </StyledClickableBox>
                         </Grid>
                     ))}
