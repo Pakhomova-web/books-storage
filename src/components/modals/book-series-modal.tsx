@@ -7,10 +7,11 @@ import CustomTextField from '@/components/form-fields/custom-text-field';
 import CustomSelectField from '@/components/form-fields/custom-select-field';
 import ErrorNotification from '@/components/error-notification';
 import { useAuth } from '@/components/auth-context';
-import { Box, Grid } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import React from 'react';
 import { ApolloError } from '@apollo/client';
-import { trimValues } from '@/utils/utils';
+import { parseImageFromLink, trimValues } from '@/utils/utils';
+import CustomImage from '@/components/custom-image';
 
 interface IBookSeriesModalProps {
     open: boolean,
@@ -20,24 +21,52 @@ interface IBookSeriesModalProps {
     onClose: (item?: BookSeriesEntity) => void
 }
 
+interface IForm {
+    id: string;
+    name: string;
+    publishingHouseId: string;
+    default?: boolean;
+    description?: string;
+    imageId?: string;
+    imageLink?: string;
+}
+
+const imageBoxStyles = { height: '150px', maxHeight: '50vw' };
+
 export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookSeriesModalProps) {
-    const formContext = useForm<BookSeriesEntity>({
+    const formContext = useForm<IForm>({
         defaultValues: {
             id: item?.id,
             name: item?.name,
             publishingHouseId: item?.publishingHouse.id,
             default: item?.default,
-            description: item?.description
+            description: item?.description,
+            imageId: item?.imageId
         }
     });
-    const { description } = formContext.watch();
+    const { description, imageLink } = formContext.watch();
     const { update, updating, updatingError } = useUpdateBookSeries();
     const { create, creating, creatingError } = useCreateBookSeries();
     const { items: publishingHouseOptions, loading: loadingPublishingHouses } = usePublishingHouseOptions();
     const { checkAuth } = useAuth();
 
+    function parseImage(e?) {
+        if (!e || e.key === 'Enter') {
+            e?.preventDefault()
+            e?.stopPropagation();
+
+            if (!!imageLink) {
+                formContext.setValue('imageId', parseImageFromLink(imageLink));
+                formContext.setValue('imageLink', null);
+            }
+        }
+    }
+
     function onSubmit() {
-        const data = trimValues(formContext.getValues()) as BookSeriesEntity;
+        parseImage();
+        const data = new BookSeriesEntity(trimValues(formContext.getValues()));
+
+        delete data.publishingHouse;
         const promise = !!item?.id ? update(data) : create(data);
 
         promise
@@ -56,7 +85,7 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
             isSubmitDisabled={!formContext.formState.isValid}
             onSubmit={isAdmin && !item?.default ? onSubmit : null}>
             <FormContainer formContext={formContext}>
-                <Grid container display="flex" gap={1}>
+                <Grid container display="flex" spacing={2}>
                     <Grid item xs={12} sm={6} md={3}>
                         <CustomTextField fullWidth
                                          required
@@ -91,6 +120,37 @@ export default function BookSeriesModal({ open, item, onClose, isAdmin }: IBookS
                       <Box mb={1}><b>Попередній огляд опису:</b></Box>
                       <Box dangerouslySetInnerHTML={{ __html: description }}></Box>
                     </Grid>}
+
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomTextField fullWidth
+                                         disabled={!isAdmin}
+                                         id="imageLink"
+                                         onKeyDown={parseImage}
+                                         label="Посилання на фото"
+                                         name="imageLink"/>
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        {!!imageLink && <Box>
+                          <Button fullWidth variant="outlined" onClick={() => parseImage()}>
+                            Додати фото
+                          </Button>
+                        </Box>}
+                    </Grid>
+
+                    <Grid item xs={12} sm={6} md={3} lg={2}>
+                        <CustomTextField fullWidth
+                                         disabled={!isAdmin}
+                                         id="imageId"
+                                         label="ID фото"
+                                         name="imageId"/>
+                    </Grid>
+
+                    <Grid item xs={12} display="flex" justifyContent="start">
+                        <Box sx={imageBoxStyles} my={1}>
+                            <CustomImage isBookType={true} imageId={formContext.getValues('imageId')}></CustomImage>
+                        </Box>
+                    </Grid>
                 </Grid>
             </FormContainer>
 

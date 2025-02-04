@@ -14,6 +14,7 @@ import { useBookSeries } from '@/lib/graphql/queries/book-series/hook';
 import ErrorNotification from '@/components/error-notification';
 import { borderRadius, primaryLightColor } from '@/constants/styles-variables';
 import IconWithText from '@/components/icon-with-text';
+import CustomImage from '@/components/custom-image';
 
 const StyledClickableBox = styled(Box)(() => ({
     cursor: 'pointer',
@@ -24,7 +25,13 @@ const StyledClickableBox = styled(Box)(() => ({
     border: `1px solid ${primaryLightColor}`,
     ':hover': {
         backgroundColor: primaryLightColor
-    }
+    },
+    height: '100%'
+}));
+
+const StyledImageBox = styled(Box)(() => ({
+    width: '100%',
+    maxHeight: '200px'
 }));
 
 export default function BookSeries() {
@@ -55,6 +62,7 @@ export default function BookSeries() {
                             <StyledClickableBox p={1} gap={1}>
                                 <Box><b>{bookSeries.name}</b></Box>
                                 <Box>Видавництво: {bookSeries.publishingHouse.name}</Box>
+                                {bookSeries.imageId && <StyledImageBox><CustomImage imageLink={bookSeries.imageId}/></StyledImageBox>}
                             </StyledClickableBox>
                         </Grid>
                     ))}

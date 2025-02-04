@@ -86,7 +86,7 @@ export default function Main({ children }) {
                 if (userUrls.some(url => pathname.includes(url))) {
                     router.push('/');
                 }
-            } else if (!isAdmin(user) && adminUrls.some(url => url.includes(pathname)) || authUrls.some(url => url.includes(pathname))) {
+            } else if ((!isAdmin(user) && adminUrls.some(url => url.includes(pathname))) || authUrls.some(url => url.includes(pathname))) {
                 router.push('/');
             }
         }

@@ -56,6 +56,7 @@ export class BookSeriesEntity {
     publishingHouse: PublishingHouseEntity;
     default?: boolean;
     description?: string;
+    imageId?: string;
 
     constructor(data?) {
         if (data) {
@@ -65,6 +66,7 @@ export class BookSeriesEntity {
             this.publishingHouse = new PublishingHouseEntity(data.publishingHouse);
             this.default = !!data.default;
             this.description = data.description;
+            this.imageId = data.imageId;
         }
     }
 }

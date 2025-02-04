@@ -135,6 +135,7 @@ export type BookSeries = {
   default?: Maybe<Scalars['Boolean']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   id?: Maybe<Scalars['ID']['output']>;
+  imageId?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   publishingHouse: PublishingHouse;
 };
@@ -142,6 +143,7 @@ export type BookSeries = {
 export type BookSeriesCreateInput = {
   default?: InputMaybe<Scalars['Boolean']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
+  imageId?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   publishingHouseId: Scalars['ID']['input'];
 };
@@ -160,6 +162,7 @@ export type BookSeriesUpdateInput = {
   default?: InputMaybe<Scalars['Boolean']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['ID']['input'];
+  imageId?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   publishingHouseId: Scalars['ID']['input'];
 };
@@ -1478,6 +1481,7 @@ export type BookSeriesResolvers<ContextType = any, ParentType extends ResolversP
   default?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  imageId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   publishingHouse?: Resolver<ResolversTypes['PublishingHouse'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;

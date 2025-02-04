@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ApolloError } from '@apollo/client';
 
 import { useBookSeries, useDeleteBookSeries } from '@/lib/graphql/queries/book-series/hook';
-import { BookSeriesEntity, BookSeriesFilter, IPageable } from '@/lib/data/types';
+import { BookSeriesEntity, BookSeriesFilter, CoverTypeEntity, DeliveryEntity, IPageable } from '@/lib/data/types';
 import CustomTable from '@/components/table/custom-table';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import Loading from '@/components/loading';
@@ -43,6 +43,7 @@ export default function BookSeries() {
             renderValue: (item: BookSeriesEntity) => item.name,
             type: 'text'
         },
+        { type: 'image', title: 'Фото', renderValue: (item: DeliveryEntity) => item.imageId },
         ...mobileKeys
     ]);
     const [selectedItem, setSelectedItem] = useState<BookSeriesEntity>();
@@ -105,7 +106,7 @@ export default function BookSeries() {
                 <BookSeriesFilters totalCount={totalCount}
                                    onApply={(filters: BookSeriesFilter) => {
                                        setPageSettings(prev => ({ ...prev, page: 0 }));
-                                       setFilters(filters)
+                                       setFilters(filters);
                                    }}
                                    pageSettings={pageSettings}
                                    onSort={(settings: IPageable) => setPageSettings(settings)}></BookSeriesFilters>

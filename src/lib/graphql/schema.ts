@@ -39,6 +39,7 @@ const typeDefs =  /* GraphQL */ `
         publishingHouse: PublishingHouse!
         default: Boolean
         description: String
+        imageId: String
     }
 
     type Author {
@@ -527,6 +528,7 @@ const typeDefs =  /* GraphQL */ `
         publishingHouseId: ID!
         default: Boolean
         description: String
+        imageId: String
     }
 
     input BookSeriesUpdateInput {
@@ -535,6 +537,7 @@ const typeDefs =  /* GraphQL */ `
         publishingHouseId: ID!
         default: Boolean
         description: String
+        imageId: String
     }
 
     input BookSeriesSearchInput {

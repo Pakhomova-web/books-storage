@@ -12,7 +12,8 @@ const bookSeriesSchema = new Schema<BookSeriesEntity, Model<BookSeriesEntity>>({
         required: true
     },
     default: Boolean,
-    description: String
+    description: String,
+    imageId: String
 });
 
 bookSeriesSchema.index({ name: 1, publishingHouse: 1 }, { unique: true });
