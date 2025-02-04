@@ -62,7 +62,7 @@ export default function BookSeries() {
                             <StyledClickableBox p={1} gap={1}>
                                 <Box><b>{bookSeries.name}</b></Box>
                                 <Box>Видавництво: {bookSeries.publishingHouse.name}</Box>
-                                {bookSeries.imageId && <StyledImageBox><CustomImage imageLink={bookSeries.imageId}/></StyledImageBox>}
+                                {bookSeries.imageId && <StyledImageBox><CustomImage imageId={bookSeries.imageId}/></StyledImageBox>}
                             </StyledClickableBox>
                         </Grid>
                     ))}
