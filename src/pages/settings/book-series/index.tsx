@@ -129,7 +129,7 @@ export default function BookSeries() {
                     <BookSeriesModal open={true}
                                      item={selectedItem}
                                      isAdmin={isAdmin(user)}
-                                     onClose={item => refreshData(!item)}></BookSeriesModal>}
+                                     onClose={item => refreshData(!!item)}></BookSeriesModal>}
               </>
             }
         </SettingsMenu>
