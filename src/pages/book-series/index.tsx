@@ -12,9 +12,10 @@ import DeliveriesBox from '@/components/deliveries-box';
 import Loading from '@/components/loading';
 import { useBookSeries } from '@/lib/graphql/queries/book-series/hook';
 import ErrorNotification from '@/components/error-notification';
-import { borderRadius, primaryLightColor } from '@/constants/styles-variables';
+import { borderRadius, primaryLightColor, styleVariables, titleFontSize } from '@/constants/styles-variables';
 import IconWithText from '@/components/icon-with-text';
 import CustomImage from '@/components/custom-image';
+import Head from 'next/head';
 
 const StyledClickableBox = styled(Box)(() => ({
     cursor: 'pointer',
@@ -26,12 +27,13 @@ const StyledClickableBox = styled(Box)(() => ({
     ':hover': {
         backgroundColor: primaryLightColor
     },
-    height: '100%'
+    height: '100%',
+    justifyContent: 'center'
 }));
 
 const StyledImageBox = styled(Box)(() => ({
     width: '100%',
-    maxHeight: '200px'
+    height: '150px'
 }));
 
 export default function BookSeries() {
@@ -40,6 +42,10 @@ export default function BookSeries() {
 
     return (
         <>
+            <Head>
+                <title>Пошук - Серії</title>
+            </Head>
+
             <Loading show={loading}/>
 
             <Catalogue/>
@@ -60,9 +66,10 @@ export default function BookSeries() {
                         <Grid item xs={12} sm={6} lg={4} xl={3} key={index}
                               onClick={() => router.push(`/books?bookSeries=${bookSeries.id}`)}>
                             <StyledClickableBox p={1} gap={1}>
-                                <Box><b>{bookSeries.name}</b></Box>
-                                <Box>Видавництво: {bookSeries.publishingHouse.name}</Box>
-                                {bookSeries.imageId && <StyledImageBox><CustomImage imageId={bookSeries.imageId}/></StyledImageBox>}
+                                {!!bookSeries.imageId &&
+                                  <StyledImageBox><CustomImage imageId={bookSeries.imageId}/></StyledImageBox>}
+                                <Box textAlign="center">Видавництво: {bookSeries.publishingHouse.name}</Box>
+                                <Box textAlign="center" sx={styleVariables.titleFontSize}><b>{bookSeries.name}</b></Box>
                             </StyledClickableBox>
                         </Grid>
                     ))}
