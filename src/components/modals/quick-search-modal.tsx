@@ -10,6 +10,7 @@ import BookSearchAutocompleteField from '@/components/form-fields/book-search-au
 import { borderRadius, primaryLightColor } from '@/constants/styles-variables';
 import SeriesSearchAutocompleteField from '@/components/form-fields/series-search-autocomplete-field';
 import AuthorsSearchAutocompleteField from '@/components/form-fields/authors-search-autocomplete-field';
+import { useAuth } from '@/components/auth-context';
 
 const StyledClickableBox = styled(Box)(({ theme }) => ({
     cursor: 'pointer',
@@ -33,6 +34,7 @@ export default function QuickSearchModal({ open, onClose }) {
         'Автор'
     ]);
     const [inputValues, setInputValues] = useState<string[]>([]);
+    const { setLoading } = useAuth();
 
     function onQuickSearchClick() {
         switch (indexOfFieldToSearch) {
@@ -51,6 +53,7 @@ export default function QuickSearchModal({ open, onClose }) {
     function onHintClick(hint: IOption<string>) {
         switch (indexOfFieldToSearch) {
             case 0:
+                setLoading(true);
                 router.push(`/books/${hint.id}`);
                 break;
             case 1:

@@ -14,6 +14,7 @@ import IconWithText from '@/components/icon-with-text';
 import React from 'react';
 import HomeIcon from '@mui/icons-material/Home';
 import { useAuthors } from '@/lib/graphql/queries/author/hook';
+import Head from 'next/head';
 
 const StyledClickableBox = styled(Box)(() => ({
     cursor: 'pointer',
@@ -36,6 +37,10 @@ export default function Authors() {
 
     return (
         <>
+            <Head>
+                <title>Пошук - Автора</title>
+            </Head>
+
             <Loading show={loading}/>
 
             <Catalogue/>
