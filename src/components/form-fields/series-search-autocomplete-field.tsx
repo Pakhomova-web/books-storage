@@ -4,15 +4,14 @@ import Highlighter from 'react-highlight-words';
 import CancelablePromise, { cancelable } from 'cancelable-promise';
 
 import { IOption } from '@/lib/data/types';
-import { getBookNamesByQuickSearch } from '@/lib/graphql/queries/book/hook';
 import { getBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 
 export default function SeriesSearchAutocompleteField({
-                                                        disabled = false,
-                                                        onSelect,
-                                                        onEnterClick = null,
-                                                        onInputChange = null
-                                                    }) {
+                                                          disabled = false,
+                                                          onSelect,
+                                                          onEnterClick = null,
+                                                          onInputChange = null
+                                                      }) {
     const [loading, setLoading] = useState<boolean>(false);
     const [options, setOptions] = useState<IOption<string>[]>([]);
     const [inputValue, setInputValue] = useState<string>('');
@@ -50,8 +49,12 @@ export default function SeriesSearchAutocompleteField({
         if (promise) {
             promise.cancel();
         }
+        if (value.length < 3) {
+            setOptions([]);
+            return;
+        }
         setLoading(true);
-        setPromise(cancelable(getBookSeriesOptions({ name: value })
+        setPromise(cancelable(getBookSeriesOptions({ name: value }))
             .then((opts: IOption<string>[]) => {
                 setOptions(opts);
                 setLoading(false);
@@ -59,7 +62,7 @@ export default function SeriesSearchAutocompleteField({
             .catch(() => {
                 setOptions([]);
                 setLoading(false);
-            })));
+            }));
     }
 
     return (

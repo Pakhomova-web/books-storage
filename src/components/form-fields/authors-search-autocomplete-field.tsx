@@ -4,16 +4,14 @@ import Highlighter from 'react-highlight-words';
 import CancelablePromise, { cancelable } from 'cancelable-promise';
 
 import { IOption } from '@/lib/data/types';
-import { getBookNamesByQuickSearch } from '@/lib/graphql/queries/book/hook';
-import { getBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 import { getAuthorOptions } from '@/lib/graphql/queries/author/hook';
 
 export default function AuthorsSearchAutocompleteField({
-                                                        disabled = false,
-                                                        onSelect,
-                                                        onEnterClick = null,
-                                                        onInputChange = null
-                                                    }) {
+                                                           disabled = false,
+                                                           onSelect,
+                                                           onEnterClick = null,
+                                                           onInputChange = null
+                                                       }) {
     const [loading, setLoading] = useState<boolean>(false);
     const [options, setOptions] = useState<IOption<string>[]>([]);
     const [inputValue, setInputValue] = useState<string>('');
@@ -51,8 +49,12 @@ export default function AuthorsSearchAutocompleteField({
         if (promise) {
             promise.cancel();
         }
+        if (value.length < 3) {
+            setOptions([]);
+            return;
+        }
         setLoading(true);
-        setPromise(cancelable(getAuthorOptions({ name: value })
+        setPromise(cancelable(getAuthorOptions({ name: value }))
             .then((opts: IOption<string>[]) => {
                 setOptions(opts);
                 setLoading(false);
@@ -60,7 +62,7 @@ export default function AuthorsSearchAutocompleteField({
             .catch(() => {
                 setOptions([]);
                 setLoading(false);
-            })));
+            }));
     }
 
     return (

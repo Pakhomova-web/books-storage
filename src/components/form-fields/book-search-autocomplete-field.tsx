@@ -50,8 +50,12 @@ export default function BookSearchAutocompleteField({
         if (promise) {
             promise.cancel();
         }
+        if (value.length < 3) {
+            setOptions([]);
+            return;
+        }
         setLoading(true);
-        setPromise(cancelable(getBookNamesByQuickSearch(value)
+        setPromise(cancelable(getBookNamesByQuickSearch(value))
             .then((opts: IOption<string>[]) => {
                 setOptions(opts);
                 setLoading(false);
@@ -59,7 +63,7 @@ export default function BookSearchAutocompleteField({
             .catch(() => {
                 setOptions([]);
                 setLoading(false);
-            })));
+            }));
     }
 
     return (
