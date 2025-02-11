@@ -40,7 +40,7 @@ import {
     approveComment,
     createBook,
     getBookById,
-    getBookComments, getBookPartById,
+    getBookComments,
     getBooks,
     getBooksByAuthor,
     getBooksByIds,
@@ -51,7 +51,7 @@ import {
     getTopOfSoldBooks,
     removeComment,
     updateBook,
-    updateBookNumberInStock
+    updateBooksNumberInStock
 } from '@/lib/data/books';
 import {
     createAuthor,
@@ -100,7 +100,7 @@ import {
     updateGroupDiscount
 } from '@/lib/data/group-discounts';
 import { getSettlements, getStreets, getWarehouses } from '@/lib/data/nova-poshta';
-import { updateBalance, getBalance } from '@/lib/data/balance';
+import { getBalance, updateBalance } from '@/lib/data/balance';
 
 function parseError<T>(error): T {
     switch (error.extensions?.code) {
@@ -368,9 +368,9 @@ const resolvers: Resolvers = {
             _checkUser(user);
             return updateBook(input, updateAllBooksInSeries).catch(error => parseError(error));
         },
-        updateBookNumberInStock: async (_root, { input }, { user }) => {
+        updateBooksNumberInStock: async (_root, { input }, { user }) => {
             _checkUser(user);
-            return updateBookNumberInStock(input).catch(error => parseError(error));
+            return updateBooksNumberInStock(input).catch(error => parseError(error));
         },
         approveComment: async (_root, { input }: { input: { bookId: string, commentId: string } }, { user }) => {
             _checkUser(user);

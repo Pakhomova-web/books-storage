@@ -191,9 +191,9 @@ export const updateBookQuery = gql`
     }
 `;
 
-export const updateBookNumberInStockQuery = gql`
-    mutation UpdateBookNumberInStock($input: BookUpdateNumberInStockUpdateInput!) {
-        item: updateBookNumberInStock(input: $input) {
+export const updateBooksNumberInStockQuery = gql`
+    mutation UpdateBooksNumberInStock($input: BooksUpdateNumberInStockUpdateInput!) {
+        items: updateBooksNumberInStock(input: $input) {
             id
         }
     }

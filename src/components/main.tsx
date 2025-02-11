@@ -53,6 +53,7 @@ export default function Main({ children }) {
     const mobileMatches = useMediaQuery(theme.breakpoints.down('lg'));
     const router = useRouter();
     const pathname = usePathname();
+    const [checkUser, setCheckUser] = useState<boolean>(false);
 
     useEffect(() => {
         if (!deliveries?.length) {
@@ -68,12 +69,14 @@ export default function Main({ children }) {
         setLoading(true);
         fetchUser()
             .then((user: UserEntity) => {
+                setCheckUser(true);
                 setUser(user);
                 setLoading(false);
             })
             .catch(() => {
                 setLoading(false);
                 logout();
+                setCheckUser(true);
                 if (pathname && userUrls.some(url => pathname.includes(url))) {
                     router.push('/');
                 }
@@ -81,7 +84,7 @@ export default function Main({ children }) {
     }, []);
 
     useEffect(() => {
-        if (pathname) {
+        if (pathname && checkUser) {
             if (!user) {
                 if (userUrls.some(url => pathname.includes(url))) {
                     router.push('/');

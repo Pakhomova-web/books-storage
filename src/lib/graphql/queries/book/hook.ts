@@ -13,7 +13,7 @@ import {
     addGroupDiscountInBasketQuery,
     approveComment,
     bookByIdQuery,
-    bookCommentsQuery, bookPartByIdQuery,
+    bookCommentsQuery,
     booksByAuthorQuery,
     booksByIdsQuery,
     booksFromSeries,
@@ -30,8 +30,8 @@ import {
     topOfSoldBooksQuery,
     unlikeBookQuery,
     updateBookCountInBasketQuery,
-    updateBookNumberInStockQuery,
-    updateBookQuery
+    updateBookQuery,
+    updateBooksNumberInStockQuery
 } from '@/lib/graphql/queries/book/queries';
 import { useMutation, useQuery } from '@apollo/client';
 import { apolloClient } from '@/lib/apollo';
@@ -150,7 +150,7 @@ export function useUpdateBook() {
 }
 
 export function useUpdateBookNumberInStock() {
-    return _useUpdateItem<BookEntity>(updateBookNumberInStockQuery);
+    return _useUpdateItem<BookEntity[]>(updateBooksNumberInStockQuery);
 }
 
 export function useApproveComment() {

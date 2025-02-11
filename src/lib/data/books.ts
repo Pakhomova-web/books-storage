@@ -232,24 +232,27 @@ export async function updateBook(input: Partial<BookEntity>, updateAllBooksInSer
     return { id: input.id } as BookEntity;
 }
 
-export async function updateBookNumberInStock(input: { id: string, receivedNumber: number, purchasePrice: number }) {
-    if (!input.id) {
-        throw new GraphQLError(`Не вказан ідентифікатор.`, {
+export async function updateBooksNumberInStock(input: { books: { id: string, receivedNumber: number }[], purchasePrice: number }) {
+    if (!input.books?.length) {
+        throw new GraphQLError(`Немає даних.`, {
             extensions: { code: 'NOT_FOUND' }
         });
     }
-    const book = await Book.findById(input.id);
+    const books = await Book.find({ _id: input.books.map(b => b.id) });
     const balance = await Balance.findOne();
 
-    book.numberInStock = (book.numberInStock || 0) + input.receivedNumber;
-    balance.value = balance.value - input.purchasePrice * input.receivedNumber;
+    balance.value = balance.value - input.purchasePrice;
 
     await Promise.all([
-        book.save(),
+        books.map(book => {
+            book.numberInStock = (book.numberInStock || 0) + input.books.find(b => b.id === book.id).receivedNumber;
+
+            return book.save();
+        }),
         balance.save()
     ]);
 
-    return book as BookEntity;
+    return books as BookEntity[];
 }
 
 export async function approveComment(input: { bookId: string, commentId: string }) {

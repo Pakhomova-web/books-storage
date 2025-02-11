@@ -281,7 +281,7 @@ const typeDefs =  /* GraphQL */ `
         deleteBookSeries(id: ID!): BookSeries
 
         updateBook(input: BookUpdateInput!, updateAllBooksInSeries: Boolean): Book
-        updateBookNumberInStock(input: BookUpdateNumberInStockUpdateInput!): Book!
+        updateBooksNumberInStock(input: BooksUpdateNumberInStockUpdateInput!): [Book!]
         approveComment(input: UpdateCommentInput!): Book!
         removeComment(input: UpdateCommentInput!): Book!
         addBookComment(id: ID!, input: CommentInput!): Book!
@@ -403,10 +403,14 @@ const typeDefs =  /* GraphQL */ `
 
     #    book
 
-    input BookUpdateNumberInStockUpdateInput {
+    input BooksUpdateNumberInStockUpdateInput {
+        books: [BookNumberInStockItem!]!
+        purchasePrice: Float!
+    }
+    
+    input BookNumberInStockItem {
         id: ID!
         receivedNumber: Int!
-        purchasePrice: Float!
     }
 
     input UpdateCommentInput {
