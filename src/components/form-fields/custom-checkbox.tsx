@@ -16,7 +16,7 @@ export default function CustomCheckbox({ loading, label, name, disabled = false,
         <Box position="relative">
             <Loading show={!!loading} isSmall={true}/>
             {disabled ?
-                <Box display="flex" alignItems="center">
+                <Box display="flex" alignItems="center" sx={{ marginLeft: '-11px' }}>
                     <Checkbox checked={checked} disabled={true}/>{label}
                 </Box> :
                 <CheckboxElement label={label} name={name}/>}
