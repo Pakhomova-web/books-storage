@@ -8,6 +8,7 @@ import CustomImage from '@/components/custom-image';
 import { renderPrice } from '@/utils/utils';
 import { BookEntity } from '@/lib/data/types';
 import { useRouter } from 'next/router';
+import { useAuth } from '@/components/auth-context';
 
 const StyledBookBox = styled(Box)(() => ({
     cursor: 'pointer',
@@ -55,10 +56,12 @@ const StyledContainer = styled(Box)(() => ({
 }));
 
 export default function TopSoldBooks({ mobile = false }) {
+    const { setLoading } = useAuth();
     const { loading, items } = useTopOfSoldBooks(3);
     const router = useRouter();
 
     function onBookClick(book: BookEntity) {
+        setLoading(true);
         router.push(`/books/${book.id}`);
     }
 

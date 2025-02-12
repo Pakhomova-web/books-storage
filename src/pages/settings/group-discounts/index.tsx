@@ -34,7 +34,7 @@ export default function GroupDiscounts() {
     const [selectedItem, setSelectedItem] = useState<GroupDiscountEntity>();
     const { deleteItem, deleting, deletingError } = useRemoveGroupDiscount();
     const [refetching, setRefetching] = useState<boolean>(false);
-    const { user } = useAuth();
+    const { user, setLoading } = useAuth();
     const router = useRouter();
     const formContext = useForm<IForm>();
     const { bookSearch, fullBooks } = formContext.watch();
@@ -119,6 +119,11 @@ export default function GroupDiscounts() {
         formContext.setValue('fullBooks', fullBooks ? fullBooks.filter(({ id }) => id !== book.id) : []);
     }
 
+    function onBookClick(bookId: string) {
+        setLoading(true);
+        router.push(`/books/${bookId}&pageUrl=/settings/group-discounts`);
+    }
+
     return (
         <SettingsMenu activeUrl="group-discounts" onAddClick={onAddClick}>
             <Head>
@@ -164,7 +169,7 @@ export default function GroupDiscounts() {
                 <Box key={index} borderBottom={1} borderColor={primaryLightColor}>
                     <GroupDiscountBox onDeleteGroupClick={() => onRemove(item.id)}
                                       onEditBook={() => onEditClick(item)}
-                                      onBookClick={(bookId: string) => router.push(`/books/${bookId}&pageUrl=/settings/group-discounts`)}
+                                      onBookClick={(bookId: string) => onBookClick(bookId)}
                                       discount={item.discount}
                                       books={item.books}/>
                 </Box>

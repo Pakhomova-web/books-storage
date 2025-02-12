@@ -44,7 +44,7 @@ export default function BasketBookItem({
                                            onDiscountChange
                                        }: IProps) {
     const router = useRouter();
-    const { setBookInBasket } = useAuth();
+    const { setBookInBasket, setLoading } = useAuth();
     const formContext = useForm<{ discountValue: number }>({
         defaultValues: {
             discountValue: discount
@@ -61,6 +61,7 @@ export default function BasketBookItem({
     }, [discountValue, formContext])
 
     function onBookClick(book: BookEntity) {
+        setLoading(true);
         router.push(`/books/${book.id}?${getParamsQueryString({ pageUrl: pageUrl || '/basket' })}`);
     }
 

@@ -27,7 +27,7 @@ const subTitleStyles = {
 };
 
 export default function Books() {
-    const { user } = useAuth();
+    const { user, setLoading } = useAuth();
     const { update, updating, updatingError } = useUpdateBook();
     const router = useRouter();
     const tableActions: TableKey<BookEntity> = {
@@ -62,7 +62,10 @@ export default function Books() {
             {
                 label: () => 'Деталі',
                 type: TableActionEnum.navigation,
-                onClick: (item: BookEntity) => router.push(`/books/${item.id}`)
+                onClick: (item: BookEntity) => {
+                    setLoading(true);
+                    router.push(`/books/${item.id}`);
+                }
             },
             {
                 label: (item: BookEntity) => item.archived ? 'Разархівувати' : 'Заархівувати',
