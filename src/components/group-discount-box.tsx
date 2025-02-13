@@ -135,7 +135,7 @@ export default function GroupDiscountBox({
           </Box>
 
             {!mobileMatches &&
-              <Box display="flex">
+              <Box display="flex" maxHeight="300px" width="65px" overflow="hidden">
                 <StyledDivider><CircleBox>=</CircleBox></StyledDivider>
               </Box>}
 

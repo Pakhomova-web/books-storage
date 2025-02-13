@@ -190,8 +190,10 @@ export default function BookDetails({ bookPart }) {
     }
 
     function onGroupDiscountBookClick(bookId: string) {
-        setLoading(true);
-        router.push(`/books/${bookId}${router.query.pageUrl ? `&pageUrl=${router.query.pageUrl}` : ''}${router.query.filters ? router.query.filters : ''}`);
+        if (book.id !== bookId) {
+            setLoading(true);
+            router.push(`/books/${bookId}?${router.query.pageUrl ? `pageUrl=${router.query.pageUrl}` : ''}${router.query.filters ? router.query.filters : ''}`);
+        }
     }
 
     function onBackClick() {

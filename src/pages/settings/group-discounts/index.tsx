@@ -121,7 +121,7 @@ export default function GroupDiscounts() {
 
     function onBookClick(bookId: string) {
         setLoading(true);
-        router.push(`/books/${bookId}&pageUrl=/settings/group-discounts`);
+        router.push(`/books/${bookId}?pageUrl=/settings/group-discounts`);
     }
 
     return (
