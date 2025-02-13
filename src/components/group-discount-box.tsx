@@ -15,6 +15,7 @@ import { useAuth } from '@/components/auth-context';
 
 const StyledContainer = styled(Box)(() => ({
     width: '250px',
+    minWidth: '200px',
     maxHeight: '300px',
     display: 'flex',
     flexDirection: 'row',
@@ -86,10 +87,9 @@ export default function GroupDiscountBox({
           </>}
 
         <Box display="flex" gap={1} py={2} width="100%" overflow="hidden" key={key} justifyContent="center"
-             flexDirection={{ xs: 'column', sm: 'row' }} alignItems="center">
+             flexDirection={{ xs: 'column', sm: 'row' }}>
 
-          <Box sx={{ overflowX: 'scroll', overflowY: 'hidden' }} display="flex" gap={1} width="100%"
-               justifyContent="flex-end">
+          <Box sx={{ overflowX: 'scroll', overflowY: 'hidden' }} display="flex" gap={1} maxWidth="100%">
               {books.map((book, index) =>
                   (<>
                       {index !== 0 && <StyledDivider><CircleBox>+</CircleBox></StyledDivider>}
@@ -132,9 +132,12 @@ export default function GroupDiscountBox({
                           </Box>
                       </StyledContainer>
                   </>))}
-
-              {!mobileMatches && <StyledDivider><CircleBox>=</CircleBox></StyledDivider>}
           </Box>
+
+            {!mobileMatches &&
+              <Box display="flex">
+                <StyledDivider><CircleBox>=</CircleBox></StyledDivider>
+              </Box>}
 
           <StyledContainer gap={1}>
             <Box display="flex" flexDirection="column" alignItems="center" gap={2} justifyContent="center"
