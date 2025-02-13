@@ -361,7 +361,7 @@ export async function getBookPartById(id: string) {
         name: book.name,
         imageId: book.imageIds ? book.imageIds[0] : null,
         price: book.price,
-        discount: !book.discountEndDate || dateDiffInDays(new Date(book.discountEndDate), new Date()) > 0 ? book.discount : 0,
+        discount: !book.discountEndDate || dateDiffInDays(new Date(book.discountEndDate), new Date()) > 0 ? (book.discount || 0) : 0,
         bookSeries: {
             name: book.bookSeries.name,
             default: !!book.bookSeries.default
