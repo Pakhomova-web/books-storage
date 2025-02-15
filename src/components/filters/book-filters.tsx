@@ -70,7 +70,7 @@ export function BookFilters(props: IBookFiltersProps) {
         ages,
         authors
     } = formContext.watch();
-    const { items: bookTypeOptions, loading: loadingBookTypes } = useBookTypeOptions();
+    const { items: bookTypeOptions, loading: loadingBookTypes, refetch } = useBookTypeOptions();
     const { items: pageTypeOptions } = usePageTypeOptions();
     const { items: authorOptions, loading: loadingAuthors } = useAuthorOptions();
     const { items: languageOptions } = useLanguageOptions();
@@ -87,6 +87,13 @@ export function BookFilters(props: IBookFiltersProps) {
 
     useEffect(() => {
         if (props.defaultValues) {
+            if (!!props.defaultValues.bookSeries?.length) {
+                const ids = bookSeriesOptions.filter(bS => !props.defaultValues.bookSeries.includes(bS.id));
+
+                if (!!ids.length) {
+                    refetch();
+                }
+            }
             Object.keys(props.defaultValues).forEach((key) => {
                 formContext.setValue(key as keyof BookFilter, props.defaultValues[key]);
             });

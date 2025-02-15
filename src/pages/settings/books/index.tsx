@@ -14,8 +14,6 @@ import { useAuth } from '@/components/auth-context';
 import { getAllBooks, useBooks, useUpdateBook } from '@/lib/graphql/queries/book/hook';
 import { TableActionEnum, TableKey } from '@/components/table/table-key';
 import CustomImage from '@/components/custom-image';
-import HdrStrongIcon from '@mui/icons-material/HdrStrong';
-import HdrWeakIcon from '@mui/icons-material/HdrWeak';
 import { ApolloError } from '@apollo/client';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
