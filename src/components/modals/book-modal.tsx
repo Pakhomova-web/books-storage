@@ -1,5 +1,5 @@
 import { AuthorEntity, BookEntity, BookSeriesEntity, BookSeriesFilter, IOption } from '@/lib/data/types';
-import { MultiSelectElement, useForm } from 'react-hook-form-mui';
+import { useForm } from 'react-hook-form-mui';
 import { useCreateBook, useUpdateBook } from '@/lib/graphql/queries/book/hook';
 import React, { useEffect, useState } from 'react';
 import { Box, Button, Grid } from '@mui/material';
@@ -19,13 +19,7 @@ import { getBookSeriesOptions } from '@/lib/graphql/queries/book-series/hook';
 import CustomImage from '@/components/custom-image';
 import Tag from '@/components/tag';
 import { parseImageFromLink, trimValues } from '@/utils/utils';
-import {
-    borderRadius,
-    customFieldClearBtnStyles,
-    primaryLightColor,
-    styleVariables
-} from '@/constants/styles-variables';
-import Loading from '@/components/loading';
+import { borderRadius, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import Ages from '@/components/ages';
 import CustomMultipleAutocompleteField from '@/components/form-fields/custom-multiple-autocomplete-field';
@@ -370,19 +364,13 @@ export default function BookModal({ open, item, onClose, isAdmin }: IBookModalPr
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={3} lg={2}>
-                    <Box position="relative" my={1}>
-                        <Loading isSmall={true} show={loadingBookTypes}></Loading>
-                        <MultiSelectElement fullWidth
-                                            options={bookTypeOptions}
-                                            id="bookTypes"
-                                            label="Типи"
-                                            name="bookTypeIds" showCheckbox variant="outlined"/>
-                        {isAdmin && !!bookTypeIds?.length &&
-                          <Box sx={customFieldClearBtnStyles}
-                               onClick={() => formContext.setValue('bookTypeIds', null)}>
-                            Очистити
-                          </Box>}
-                    </Box>
+                    <CustomMultipleAutocompleteField options={bookTypeOptions}
+                                                     label="Категорії"
+                                                     required
+                                                     disabled={!isAdmin}
+                                                     loading={loadingBookTypes}
+                                                     selected={bookTypeIds}
+                                                     onChange={(values: IOption<string>[]) => formContext.setValue('bookTypeIds', values?.map(v => v.id))}/>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={3} lg={2}>

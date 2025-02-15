@@ -64,7 +64,7 @@ export default function CustomMultipleAutocompleteField(props: IAutocompleteProp
                           renderOption={renderOption}
                           noOptionsText={renderNoOptionsBox()}
                           renderTags={(values, getTagProps) =>
-                              values.length < 3 ?
+                              values.length < 2 ?
                                   values.map((option: IOption<string>, index) =>
                                       <Tooltip title={option.label} key={index}>
                                           <Chip {...getTagProps({ index })} label={option.label} key={index}/>
@@ -73,14 +73,11 @@ export default function CustomMultipleAutocompleteField(props: IAutocompleteProp
                                       <Tooltip title={values[0].label} key={0}>
                                           <Chip {...getTagProps({ index: 0 })} label={values[0].label} key={0}/>
                                       </Tooltip>
-                                      <Tooltip title={values[1].label} key={1}>
-                                          <Chip {...getTagProps({ index: 1 })} label={values[1].label} key={1}/>
-                                      </Tooltip>
-                                      <Tooltip key={2} title={
-                                          <Box display="flex" flexDirection="column" key={2}>
+                                      <Tooltip key={1} title={
+                                          <Box display="flex" flexDirection="column" key={1}>
                                               {values.map((opt, i) => i > 1 && <Box key={i}>{opt.label}</Box>)}
                                           </Box>}>
-                                          <Chip label={`+${values.length - 2}`} sx={{ cursor: 'default' }} key={2}/>
+                                          <Chip label={`+${values.length - 1}`} sx={{ cursor: 'default' }} key={2}/>
                                       </Tooltip>
                                   </>
                           }/>
