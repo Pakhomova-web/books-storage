@@ -106,8 +106,8 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
     return res;
 }
 
-export async function getAllBooks(): Promise<{ id: string, imageIds?: string[] }[]> {
-    return Book.find();
+export async function getAllBooks({ page, rowsPerPage }): Promise<{ id: string }[]> {
+    return Book.find({ archived: { $in: [false, null] } }).skip(page * rowsPerPage).limit(rowsPerPage);
 }
 
 export async function getBookById(id: string) {

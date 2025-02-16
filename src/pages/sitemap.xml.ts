@@ -9,8 +9,6 @@ const generateSitemap = (data, origin) => {
         xml += `<url>
                     <loc>${origin + url}</loc>
                     <lastmod>${new Date().toISOString()}</lastmod>
-                    <changefreq>weekly</changefreq>
-                    <priority>0.7</priority>
                 </url>`;
     });
 
@@ -18,13 +16,14 @@ const generateSitemap = (data, origin) => {
 }
 
 export async function getServerSideProps({ res }) {
-    const items: { id: string, imageIds?: string[] }[] = await getAllBooks().catch((err) => [{ id: err }]);
     const data = [
         { url: '' },
         { url: '/about-us' },
-        ...items.map((book: BookEntity) => ({ url: `/books/${book.id}` })),
-        ...getCatalogueItems(CATALOGUE)
+        { url: '/sitemaps/sitemap_products_1.xml'},
+        { url: '/sitemaps/sitemap_products_2.xml'},
+        { url: '/sitemaps/sitemap_products_3.xml'}
     ];
+    getCatalogueItems(CATALOGUE).forEach(item => data.push(item));
 
     res.setHeader('Content-Type', 'text/xml');
     res.write(generateSitemap(data, process.env.FRONTEND_URL));
