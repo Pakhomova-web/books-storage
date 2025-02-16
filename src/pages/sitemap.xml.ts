@@ -8,6 +8,9 @@ const generateSitemap = (data, origin) => {
     data.map(({ url }) => {
         xml += `<url>
                     <loc>${origin + url}</loc>
+                    <lastmod>${new Date().toISOString()}</lastmod>
+                    <changefreq>weekly</changefreq>
+                    <priority>0.7</priority>
                 </url>`;
     });
 
