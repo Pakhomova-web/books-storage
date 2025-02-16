@@ -90,8 +90,7 @@ export default function Catalogue({ opened = false }) {
             event.stopPropagation();
             event.preventDefault();
         }
-        setParentIndex(null);
-        setOpenModal(false);
+        closePanel();
 
         router.push(items[items.length - 1].url || `/books/catalogue/${items.map(i => i.id).join('-')}`);
     }
@@ -106,8 +105,7 @@ export default function Catalogue({ opened = false }) {
                 <AccordionDetails>
                     {item.children.map((child, index) => (
                         <Box key={index} py={2} pl={2}>
-                            <CustomLink
-                                onClick={() => onSectionClick([item, child])}>
+                            <CustomLink onClick={() => onSectionClick([item, child])}>
                                 {child.title}
                             </CustomLink>
                         </Box>
@@ -124,6 +122,11 @@ export default function Catalogue({ opened = false }) {
         ));
     }
 
+    function closePanel() {
+        setParentIndex(null);
+        setOpenModal(false);
+    }
+
     return (
         mobileMatches ?
             (opened ?
@@ -137,6 +140,11 @@ export default function Catalogue({ opened = false }) {
 
                     <CustomModal open={openModal} onClose={() => setOpenModal(false)} title="Усі категорії">
                         {getCategoriesView()}
+                        <Box m={2} textAlign="center">
+                            <CustomLink href="/publishing-houses" onClick={() => setOpenModal(false)}>
+                                Подивитись усі видавництва
+                            </CustomLink>
+                        </Box>
                     </CustomModal>
                 </StyledContainer>) :
             <StyledContainer container mb={1}>
@@ -161,7 +169,7 @@ export default function Catalogue({ opened = false }) {
                               )}
 
                             <Box mb={1}></Box>
-                            <CustomLink onClick={event => onSectionClick([{ url: '/publishing-houses' }], event)}
+                            <CustomLink href="/publishing-houses" onClick={() => closePanel()}
                                         key={index}>Подивитись усі видавництва</CustomLink>
                           </StyledChildrenContainer>}
                     </StyledGrid>

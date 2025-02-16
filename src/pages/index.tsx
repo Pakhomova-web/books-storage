@@ -11,13 +11,12 @@ import CustomImage from '@/components/custom-image';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import SocialMediaBox from '@/components/social-media-box';
 import DeliveriesBox from '@/components/deliveries-box';
-import { MAIN_DESC, MAIN_NAME, MAIN_URL } from '@/constants/main-name';
+import { MAIN_DESC, MAIN_NAME } from '@/constants/main-name';
 import DiscountBooks from '@/components/books/discount-books';
 import Catalogue from '@/components/catalogue';
 
 const bookTypeBoxStyles = {
     borderRadius,
-    cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
     backgroundColor: styleVariables.gray
@@ -68,8 +67,10 @@ export default function Home() {
                 <meta name="description" content={MAIN_DESC}/>
                 <meta name="og:title" content={`${MAIN_NAME} - книги для дитячого розвитку`}/>
                 <meta name="og:description" content={MAIN_DESC}/>
-                <meta name="image" content="https://drive.google.com/thumbnail?id=1S6gg2YYTNbwR-NFowA0P2a4XA4dK21Ds&sz=w500"/>
-                <meta name="og:image" content="https://drive.google.com/thumbnail?id=1S6gg2YYTNbwR-NFowA0P2a4XA4dK21Ds&sz=w500"/>
+                <meta name="image"
+                      content="https://drive.google.com/thumbnail?id=1S6gg2YYTNbwR-NFowA0P2a4XA4dK21Ds&sz=w500"/>
+                <meta name="og:image"
+                      content="https://drive.google.com/thumbnail?id=1S6gg2YYTNbwR-NFowA0P2a4XA4dK21Ds&sz=w500"/>
             </Head>
 
             <SocialMediaBox/>
@@ -87,25 +88,27 @@ export default function Home() {
                   <Grid container spacing={1} justifyContent="center" mt={1}>
                       {bookTypes?.map((type, index) => (
                           mobileMatches ?
-                              <Grid xs={12} sm={6} key={index} item
-                                    onClick={() => router.push(`/books?bookTypes=${type.id}`)}>
-                                  <Box sx={bookTypeBoxStyles} gap={1} p={1}>
-                                      <Box sx={mobileImageBoxStyles}>
-                                          <CustomImage imageId={type.imageId} isBookType={true}></CustomImage>
+                              <Grid xs={12} sm={6} key={index} item>
+                                  <a href={`/books?bookTypes=${type.id}`}>
+                                      <Box sx={bookTypeBoxStyles} gap={1} p={1}>
+                                          <Box sx={mobileImageBoxStyles}>
+                                              <CustomImage imageId={type.imageId} isBookType={true}></CustomImage>
+                                          </Box>
+                                          {type.name}
                                       </Box>
-                                      {type.name}
-                                  </Box>
+                                  </a>
                               </Grid> :
-                              <Grid key={index} item md={4} lg={3} xl={2}
-                                    onClick={() => router.push(`/books?bookTypes=${type.id}`)}>
+                              <Grid key={index} item md={4} lg={3} xl={2}>
                                   <StyledBookTypeBox>
-                                      <Box sx={imageBoxStyles}>
-                                          <CustomImage imageId={type.imageId} isBookType={true}></CustomImage>
-                                      </Box>
-                                      <Box sx={bookTypeNameStyles} p={2}>{type.name}</Box>
+                                      <a href={`/books?bookTypes=${type.id}`}>
+                                          <Box sx={imageBoxStyles}>
+                                              <CustomImage imageId={type.imageId} isBookType={true}></CustomImage>
+                                          </Box>
+                                          <Box sx={bookTypeNameStyles} p={2}>{type.name}</Box>
+                                      </a>
                                   </StyledBookTypeBox>
                               </Grid>
-                      ))}
+                          ))}
                   </Grid>}
             </Grid>
 

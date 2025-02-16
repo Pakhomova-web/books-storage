@@ -1,6 +1,5 @@
 import { styled } from "@mui/material/styles";
 import { Box, Link, Tooltip } from "@mui/material";
-import { primaryLightColor } from '@/constants/styles-variables';
 
 const StyledLink = styled(Link)(({ theme }) => ({
     color: 'black',
@@ -11,10 +10,10 @@ const StyledLink = styled(Link)(({ theme }) => ({
     }
 }));
 
-export default function CustomLink({ children, tooltip = '', disabled = false, onClick }) {
+export default function CustomLink({ children, href = null, tooltip = '', disabled = false, onClick = null }) {
     return (
         !disabled ?
-            <StyledLink onClick={onClick}>{children}</StyledLink> :
+            <StyledLink href={href} onClick={onClick}>{children}</StyledLink> :
             <Tooltip title={tooltip}>
                 <Box>{children}</Box>
             </Tooltip>

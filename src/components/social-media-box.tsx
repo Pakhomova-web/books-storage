@@ -59,7 +59,7 @@ export default function SocialMediaBox({ showAboutUsLink = true }) {
 
                 {showAboutUsLink &&
                   <Box ml={1}>
-                    <CustomLink onClick={() => router.push('/about-us')}>Про нас</CustomLink>
+                    <CustomLink href="/about-us">Про нас</CustomLink>
                   </Box>}
             </Grid>
         </StyledSocialsGrid>
