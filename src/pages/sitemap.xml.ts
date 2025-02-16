@@ -1,15 +1,15 @@
 ﻿import { BookEntity } from '@/lib/data/types';
 import { getAllBooks } from '@/lib/data/books';
+import { CATALOGUE, ICatalogueItem } from '@/constants/options';
 
 const generateSitemap = (data, origin) => {
     let xml = '';
 
-    data.map(({ url, image }) => {
+    data.map(({ url }) => {
         xml += `<url>
                     <loc>${origin + url}</loc>
                 </url>`;
     });
-// ${!!image ? `<image:image><image:loc>${image}</image:loc></image:image>` : ''}
 
     return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">${xml}</urlset>`;
 }
@@ -19,10 +19,8 @@ export async function getServerSideProps({ res }) {
     const data = [
         { url: '' },
         { url: '/about-us' },
-        ...items.map((book: BookEntity) => ({
-            url: `/books/${book.id}`,
-            image: book.imageIds ? `https://drive.google.com/thumbnail?id=${book.imageIds[0]}&amp;sz=w1000` : null
-        }))
+        ...items.map((book: BookEntity) => ({ url: `/books/${book.id}` })),
+        ...getCatalogueItems(CATALOGUE)
     ];
 
     res.setHeader('Content-Type', 'text/xml');
@@ -32,6 +30,21 @@ export async function getServerSideProps({ res }) {
     return {
         props: {}
     };
+}
+
+function getCatalogueItems(items: ICatalogueItem[], id?: string): { url: string }[] {
+    let urls = [];
+
+    if (!!items?.length) {
+        items.forEach(item => {
+            urls.push({ url: `/books/catalogue/${id ? `${id}-` : ''}${item.id}` });
+            if (!!item.children?.length) {
+                urls.push(...getCatalogueItems(item.children, `${id ? `${id}-` : ''}${item.id}`));
+            }
+        });
+    }
+
+    return urls;
 }
 
 const SitemapIndex = () => null;

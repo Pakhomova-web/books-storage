@@ -5,8 +5,7 @@ import { useRouter } from 'next/router';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import { borderRadius, primaryLightColor } from '@/constants/styles-variables';
-import { getParamsQueryString } from '@/utils/utils';
-import { BOOK_TYPES, LANGUAGES } from '@/constants/options';
+import { CATALOGUE, ICatalogueItem } from '@/constants/options';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CustomLink from '@/components/custom-link';
 import CustomModal from '@/components/modals/custom-modal';
@@ -72,308 +71,10 @@ const rightDivider = {
     }
 };
 
-interface ICatalogueItem {
-    title: string,
-    params: { [key: string]: (string | number)[] },
-    children?: ICatalogueItem[],
-    url?: string
-}
-
 export default function Catalogue({ opened = false }) {
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
-    const [items] = useState<ICatalogueItem[]>([
-        {
-            title: 'Ранній розвиток, підготовка до школи',
-            params: {
-                ages: [1, 2, 3, 4, 5, 6],
-                bookTypes: [
-                    BOOK_TYPES.ALPHABET,
-                    BOOK_TYPES.ABC_BOOK,
-                    BOOK_TYPES.VIMMELBUH,
-                    BOOK_TYPES.POEMS,
-                    BOOK_TYPES.TASKS,
-                    BOOK_TYPES.FAIRYTAILS,
-                    BOOK_TYPES.CARDS,
-                    BOOK_TYPES.STICKERS,
-                    BOOK_TYPES.RECIPES,
-                    BOOK_TYPES.COLORING_BOOK,
-                    BOOK_TYPES.PUZZLES,
-                    BOOK_TYPES.DESK_GAMES
-                ]
-            },
-            children: [
-                {
-                    title: 'Англійська дітям',
-                    params: {
-                        languages: [
-                            LANGUAGES.ENGLISH
-                        ]
-                    }
-                },
-                {
-                    title: 'Ранній розвиток 0-4',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.ALPHABET,
-                            BOOK_TYPES.ABC_BOOK,
-                            BOOK_TYPES.STICKERS,
-                            BOOK_TYPES.TASKS,
-                            BOOK_TYPES.COLORING_BOOK,
-                            BOOK_TYPES.BOOK_IMAGE,
-                            BOOK_TYPES.ENCYCLOPEDIA,
-                            BOOK_TYPES.FOLD_OUT_BOOK,
-                            BOOK_TYPES.RECIPES,
-                            BOOK_TYPES.PUZZLES,
-                            BOOK_TYPES.DESK_GAMES
-                        ],
-                        ages: [1, 2, 3, 4]
-                    }
-                },
-                {
-                    title: 'Ранній розвиток 4-6',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.ALPHABET,
-                            BOOK_TYPES.ABC_BOOK,
-                            BOOK_TYPES.STICKERS,
-                            BOOK_TYPES.TASKS,
-                            BOOK_TYPES.COLORING_BOOK,
-                            BOOK_TYPES.BOOK_IMAGE,
-                            BOOK_TYPES.ENCYCLOPEDIA,
-                            BOOK_TYPES.FOLD_OUT_BOOK,
-                            BOOK_TYPES.RECIPES,
-                            BOOK_TYPES.PUZZLES,
-                            BOOK_TYPES.DESK_GAMES
-                        ],
-                        ages: [5, 6]
-                    }
-                },
-                {
-                    title: 'Віммельбухи',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.VIMMELBUH
-                        ]
-                    }
-                },
-                {
-                    title: 'Завдання, тести',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.TASKS,
-                            BOOK_TYPES.RECIPES
-                        ]
-                    }
-                },
-                {
-                    title: 'Читаємо по складах',
-                    params: {
-                        quickSearch: [
-                            'читаємо по складах'
-                        ]
-                    }
-                },
-                {
-                    title: 'Пазли',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.PUZZLES
-                        ]
-                    }
-                },
-                {
-                    title: 'Настільні ігри',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.DESK_GAMES
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            title: 'Повчальні книжки',
-            params: {
-                bookTypes: [
-                    BOOK_TYPES.RECIPES,
-                    BOOK_TYPES.ABC_BOOK,
-                    BOOK_TYPES.ENCYCLOPEDIA,
-                    BOOK_TYPES.HISTORIES,
-                    BOOK_TYPES.FAIRYTAILS,
-                    BOOK_TYPES.TASKS,
-                    BOOK_TYPES.STICKERS
-                ]
-            },
-            children: [
-                {
-                    title: 'Прописи',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.RECIPES
-                        ]
-                    }
-                },
-                {
-                    title: 'Енциклопедії',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.ENCYCLOPEDIA
-                        ]
-                    }
-                },
-                {
-                    title: 'Перше читання',
-                    params: {
-                        quickSearch: [
-                            'для самостійного читання'
-                        ]
-                    }
-                },
-                {
-                    title: 'Читаємо по складах',
-                    params: {
-                        quickSearch: [
-                            'читаємо по складах'
-                        ]
-                    }
-                },
-                {
-                    title: 'Кросворди, ребуси, головоломки',
-                    params: {
-                        tags: [
-                            'кросворди, ребуси, головоломки'
-                        ]
-                    }
-                }
-            ]
-        },
-        {
-            title: 'Книги для найменших',
-            params: {
-                bookTypes: [
-                    BOOK_TYPES.FAIRYTAILS,
-                    BOOK_TYPES.TASKS,
-                    BOOK_TYPES.STICKERS,
-                    BOOK_TYPES.ABC_BOOK,
-                    BOOK_TYPES.VIMMELBUH,
-                    BOOK_TYPES.BOOK_IMAGE,
-                    BOOK_TYPES.FOLD_OUT_BOOK,
-                    BOOK_TYPES.POEMS,
-                    BOOK_TYPES.PUZZLES
-                ],
-                ages: [1, 2, 3, 4, 5]
-            },
-            children: [
-                {
-                    title: 'Книжки з віконцями',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.WITH_WINDOWS
-                        ]
-                    }
-                },
-                {
-                    title: 'Книжки-розкладайки',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.FOLD_OUT_BOOK
-                        ]
-                    }
-                },
-                {
-                    title: 'Віршики',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.POEMS
-                        ]
-                    }
-                },
-                {
-                    title: 'Книжки з наліпками',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.STICKERS
-                        ],
-                        ages: [1, 2, 3, 4]
-                    }
-                },
-                {
-                    title: 'Віммельбухи',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.VIMMELBUH
-                        ]
-                    }
-                },
-                {
-                    title: 'Читаємо дітям',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.FAIRYTAILS,
-                            BOOK_TYPES.BOOK_IMAGE,
-                            BOOK_TYPES.HISTORIES
-                        ],
-                        ages: [1, 2, 3, 4]
-                    }
-                },
-                {
-                    title: 'Пазли',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.PUZZLES
-                        ],
-                        ages: [1, 2, 3, 4]
-                    }
-                }
-            ]
-        },
-        {
-            title: 'Дитяча творчість та ігри',
-            params: {
-                bookTypes: [
-                    BOOK_TYPES.COLORING_BOOK,
-                    BOOK_TYPES.STICKERS,
-                    BOOK_TYPES.PUZZLES,
-                    BOOK_TYPES.DESK_GAMES
-                ]
-            },
-            children: [
-                {
-                    title: 'Розмальовки',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.COLORING_BOOK
-                        ]
-                    }
-                },
-                {
-                    title: 'Наліпки',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.STICKERS
-                        ]
-                    }
-                },
-                {
-                    title: 'Пазли',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.PUZZLES
-                        ]
-                    }
-                },
-                {
-                    title: 'Настільні ігри',
-                    params: {
-                        bookTypes: [
-                            BOOK_TYPES.DESK_GAMES
-                        ]
-                    }
-                }
-            ]
-        }
-    ]);
+    const [items] = useState<ICatalogueItem[]>(CATALOGUE);
     const [parentIndex, setParentIndex] = useState<number | null>(null);
     const [openModal, setOpenModal] = useState<boolean>(false);
     const router = useRouter();
@@ -384,24 +85,15 @@ export default function Catalogue({ opened = false }) {
             setExpanded(isExpanded ? panel : false);
         };
 
-    function onSectionClick(params: {
-        [key: string]: (string | number)[]
-    }, title?: string, url?: string, event?) {
+    function onSectionClick(items: ICatalogueItem[], event?) {
         if (event) {
             event.stopPropagation();
             event.preventDefault();
         }
         setParentIndex(null);
         setOpenModal(false);
-        let filters = {};
 
-        Object.keys(params).forEach(key => {
-            filters[key] = params[key].join();
-        });
-        if (title) {
-            filters['sectionTitle'] = title;
-        }
-        router.push(`${url || '/books'}?${getParamsQueryString(filters)}`);
+        router.push(items[items.length - 1].url || `/books/catalogue/${items.map(i => i.id).join('-')}`);
     }
 
     function getCategoriesView() {
@@ -415,13 +107,13 @@ export default function Catalogue({ opened = false }) {
                     {item.children.map((child, index) => (
                         <Box key={index} py={2} pl={2}>
                             <CustomLink
-                                onClick={() => onSectionClick(child.params, child.title, child.url)}>
+                                onClick={() => onSectionClick([item, child])}>
                                 {child.title}
                             </CustomLink>
                         </Box>
                     ))}
                     <Box key={index} py={2} mt={1}>
-                        <CustomLink onClick={() => onSectionClick(item.params, item.title, item.url)}>
+                        <CustomLink onClick={() => onSectionClick([item])}>
                             <Box display="flex" alignItems="center" gap={1}>Дивитися усі
                                 <ArrowForwardIcon color="primary"/>
                             </Box>
@@ -453,23 +145,23 @@ export default function Catalogue({ opened = false }) {
                                 sx={index === items.length - 1 ? rightDivider : {}}
                                 onMouseEnter={() => setParentIndex(index)}
                                 onMouseLeave={() => setParentIndex(null)}
-                                onClick={() => onSectionClick(item.params, item.title, item.url)}>
+                                onClick={() => onSectionClick([item])}>
                         {item.title}
 
                         {!!item.children?.length &&
                           <StyledChildrenContainer px={2} py={3} gap={2}
                                                    sx={{ visibility: parentIndex === index ? 'visible' : 'hidden' }}>
-                              {item.children.map((item, index) => (
+                              {item.children.map((child, index) => (
                                   <CustomLink key={index}
-                                              onClick={event => onSectionClick(item.params, item.title, item.url, event)}>
+                                              onClick={event => onSectionClick([item, child], event)}>
                                       <Box pl={2}>
-                                          {item.title}
+                                          {child.title}
                                       </Box>
                                   </CustomLink>)
                               )}
 
                             <Box mb={1}></Box>
-                            <CustomLink onClick={event => onSectionClick({}, null, '/publishing-houses', event)}
+                            <CustomLink onClick={event => onSectionClick([{ url: '/publishing-houses' }], event)}
                                         key={index}>Подивитись усі видавництва</CustomLink>
                           </StyledChildrenContainer>}
                     </StyledGrid>
