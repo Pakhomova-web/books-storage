@@ -1,5 +1,4 @@
-﻿import { BookEntity } from '@/lib/data/types';
-import { getAllBooks } from '@/lib/data/books';
+﻿import { getAllBooks } from '@/lib/data/books';
 import { CATALOGUE, ICatalogueItem } from '@/constants/options';
 
 const generateSitemap = (data, origin) => {
@@ -16,12 +15,12 @@ const generateSitemap = (data, origin) => {
 }
 
 export async function getServerSideProps({ res }) {
+    const items: { id: string }[] = await getAllBooks()
+        .catch((err) => [{ id: err }]);
     const data = [
         { url: '' },
         { url: '/about-us' },
-        { url: '/sitemaps/sitemap_products_1.xml'},
-        { url: '/sitemaps/sitemap_products_2.xml'},
-        { url: '/sitemaps/sitemap_products_3.xml'}
+        ...items.map(b => ({ url: `/books/${b.id}` }))
     ];
     getCatalogueItems(CATALOGUE).forEach(item => data.push(item));
 

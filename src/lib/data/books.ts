@@ -106,8 +106,8 @@ export async function getBooks(pageSettings?: IPageable, filters?: BookFilter): 
     return res;
 }
 
-export async function getAllBooks({ page, rowsPerPage }): Promise<{ id: string }[]> {
-    return Book.find({ archived: { $in: [false, null] } }).skip(page * rowsPerPage).limit(rowsPerPage);
+export async function getAllBooks(): Promise<{ id: string }[]> {
+    return Book.find({ archived: { $in: [false, null] } });
 }
 
 export async function getBookById(id: string) {
@@ -232,7 +232,10 @@ export async function updateBook(input: Partial<BookEntity>, updateAllBooksInSer
     return { id: input.id } as BookEntity;
 }
 
-export async function updateBooksNumberInStock(input: { books: { id: string, receivedNumber: number }[], purchasePrice: number }) {
+export async function updateBooksNumberInStock(input: {
+    books: { id: string, receivedNumber: number }[],
+    purchasePrice: number
+}) {
     if (!input.books?.length) {
         throw new GraphQLError(`Немає даних.`, {
             extensions: { code: 'NOT_FOUND' }
