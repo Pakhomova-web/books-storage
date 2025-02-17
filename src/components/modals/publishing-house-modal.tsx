@@ -91,6 +91,7 @@ export default function PublishingHouseModal({ open, item, onClose, isAdmin }: I
                 <CustomTextField fullWidth
                                  disabled={!isAdmin}
                                  id="imageLink"
+                                 onKeyDown={parseImage}
                                  label="Посилання на фото"
                                  name="imageLink"/>
                 {!!imageLink &&
