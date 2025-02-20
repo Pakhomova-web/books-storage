@@ -8,7 +8,8 @@ export interface TableKey<K> {
     actions?: ITableAction[],
     renderMobileLabel?: (item: K) => ReactNode,
     mobileStyleClasses?: any,
-    onValueClick?: () => void
+    onValueClick?: () => void,
+    getLink?: () => string
 }
 
 export interface ITableAction {

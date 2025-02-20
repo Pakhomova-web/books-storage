@@ -15,7 +15,7 @@ const theme = createTheme({
         }
     },
     typography: {
-        fontFamily: 'Tomes New Roman'
+        fontFamily: 'Philosopher, serif'
     }
 });
 

@@ -74,7 +74,8 @@ export default function BooksList({ items, filters = {}, pageUrl = null }) {
                          justifyContent="space-between"
                          position="relative"
                          height="100%">
-                        {!!book.discount && <Box sx={styleVariables.fixedDiscountBox()}>Знижка: {book.discount}%</Box>}
+                        {!!book.discount &&
+                          <Box sx={styleVariables.fixedDiscountBox()}>Знижка: {book.discount}%</Box>}
 
                         <Box sx={bookBoxStyles} mb={1} mt={book.discount ? 1 : 0}>
                             <CustomImage isBookDetails={true}

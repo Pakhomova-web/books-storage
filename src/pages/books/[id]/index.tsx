@@ -1,7 +1,6 @@
-import { Box, Button, Grid, IconButton, useTheme } from '@mui/material';
+import { Box, Button, Grid, IconButton, Tab, Tabs, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { ReactNode, useEffect, useState } from 'react';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { styled } from '@mui/material/styles';
 import ProfileIcon from '@mui/icons-material/AccountCircle';
 import { ApolloError } from '@apollo/client';
@@ -10,6 +9,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import EditIcon from '@mui/icons-material/Edit';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 
 import { priceStyles, primaryLightColor, styleVariables } from '@/constants/styles-variables';
 import Loading from '@/components/loading';
@@ -99,6 +99,7 @@ export default function BookDetails({ bookPart }) {
     const [imageIds, setImageIds] = useState<string[] | null>();
     const [showEditModal, setShowEditModal] = useState<boolean>(false);
     const [refetching, setRefetching] = useState<boolean>(false);
+    const [detailsTabIndex, setDetailsTabIndex] = useState<number>(0);
 
     useEffect(() => {
         setLoading(false);
@@ -133,34 +134,26 @@ export default function BookDetails({ bookPart }) {
                 title: i === 0 ? 'Автор' : '',
                 type: 'text',
                 renderValue: () => author.name,
-                onValueClick: () => {
-                    router.push(`/books?authors=${author.id}`);
-                }
+                getLink: () => `/books?authors=${author.id}`
             } as TableKey<BookEntity>)));
             setMainDetailsKeys([
                 {
                     title: 'Серія',
                     type: 'text',
                     renderValue: (book: BookEntity) => book.bookSeries.default ? '' : book.bookSeries.name,
-                    onValueClick: () => {
-                        router.push(`/books?bookSeries=${book.bookSeries.id}`);
-                    }
+                    getLink: () => `/books?bookSeries=${book.bookSeries.id}`
                 },
                 ...(book.illustrators || []).map((illustrator, i) => ({
                     title: i === 0 ? 'Іллюстратор' : '',
                     type: 'text',
                     renderValue: () => illustrator.name,
-                    onValueClick: () => {
-                        router.push(`/books?authors=${illustrator.id}`);
-                    }
+                    getLink: () => `/books?authors=${illustrator.id}`
                 } as TableKey<BookEntity>)),
                 ...(book.bookTypes || []).map((bookType, i) => ({
                     title: i === 0 ? 'Тип' : '',
                     type: 'text',
                     renderValue: () => bookType.name,
-                    onValueClick: () => {
-                        router.push(`/books?bookTypes=${bookType.id}`);
-                    }
+                    getLink: () => `/books?bookTypes=${bookType.id}`
                 } as TableKey<BookEntity>)),
                 { title: 'Кількість сторінок', type: 'text', renderValue: (book: BookEntity) => book.numberOfPages }
             ]);
@@ -220,15 +213,15 @@ export default function BookDetails({ bookPart }) {
         return user?.basketItems?.some(item => item.bookId === book.id);
     }
 
-    function renderDetailsRow(index: number, key: TableKey<BookEntity>, fullWidth = false) {
+    function renderDetailsRow(index: number, key: TableKey<BookEntity>) {
         return (
             !!key.renderValue(book) &&
-            <Grid item key={index} xs={12} md={fullWidth ? 12 : 6} display="flex" alignItems="center">
+            <Grid item key={index} xs={12} display="flex" alignItems="center">
               <Grid container borderBottom={1} borderColor={primaryLightColor}>
                 <Grid item pr={1} xs={6} my={1} px={1}>{key.title}</Grid>
                 <Grid item xs={6} my={1} px={1}>
-                    {key.onValueClick ?
-                        <CustomLink onClick={key.onValueClick}>{key.renderValue(book)}</CustomLink> :
+                    {key.getLink ?
+                        <CustomLink href={key.getLink()}>{key.renderValue(book)}</CustomLink> :
                         key.renderValue(book)}
                 </Grid>
               </Grid>
@@ -302,7 +295,7 @@ export default function BookDetails({ bookPart }) {
 
             <Grid container display="flex" alignItems="center" mb={!book ? 1 : 0}>
                 <Grid item sm={6}>
-                    <Button variant="outlined" onClick={onBackClick}><ArrowBackIcon/>Назад</Button>
+                    <Button variant="outlined" onClick={onBackClick}><KeyboardBackspaceIcon/>Назад</Button>
                 </Grid>
 
                 {book &&
@@ -418,11 +411,24 @@ export default function BookDetails({ bookPart }) {
                         <Ages selected={book.ages} showOnlySelected={true} onOptionClick={onAgeClick}></Ages>
                       </Box>}
 
+                  <Tabs value={detailsTabIndex} onChange={(_, newVal) => setDetailsTabIndex(newVal)}>
+                    <Tab label="Характеристики"/>
+                    <Tab label="Додаткові деталі"/>
+                  </Tabs>
 
-                  <Box sx={styleVariables.sectionTitle} mb={1}>Характеристики</Box>
+                  <Box role="tabpanel" hidden={detailsTabIndex !== 0}>
+                      {detailsTabIndex === 0 && [...mainDetailsKeys, ...(authorsKeys.length > 5 ? [] : authorsKeys)]
+                          .map((key, index) => renderDetailsRow(index, key))}
+                  </Box>
+                  <Box role="tabpanel" hidden={detailsTabIndex !== 1}>
+                      {detailsTabIndex === 1 && <>
+                          {keys.map((key, index) => renderDetailsRow(index, key))}
 
-                    {[...mainDetailsKeys, ...(authorsKeys.length > 5 ? [] : authorsKeys)]
-                        .map((key, index) => renderDetailsRow(index, key, true))}
+                          {isAdmin(user) && <Button fullWidth onClick={() => onCopyDetails()}>
+                            Скопіювати додаткові деталі
+                          </Button>}
+                      </>}
+                  </Box>
                 </Grid>
               </Grid>
 
@@ -431,20 +437,9 @@ export default function BookDetails({ bookPart }) {
                       {authorsKeys.map((key, index) => renderDetailsRow(index, key))}
                   </Grid>}
 
-              <Box sx={styleVariables.sectionTitle} mb={1}>Додаткові деталі</Box>
-
-              <Grid container mb={1} columnSpacing={1}>
-                  {keys.map((key, index) => renderDetailsRow(index, key))}
-              </Grid>
-
-                {isAdmin(user) && <Button fullWidth onClick={() => onCopyDetails()}>
-                  Скопіювати додаткові деталі
-                </Button>}
-
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    {(!!book.description || !!book.bookSeries.description) &&
-                      <Box sx={styleVariables.sectionTitle} mb={2}>Опис</Box>}
+                    {(!!book.description || !!book.bookSeries.description) && <h2>Опис</h2>}
 
                     {!!book.bookSeries.description && <>
                       <Box px={1} mb={!!book.description ? 1 : 0}
@@ -472,8 +467,8 @@ export default function BookDetails({ bookPart }) {
               <Grid container spacing={2} position="relative">
                 <Loading show={!loading && loadingComments} isSmall={true}></Loading>
 
-                <Grid item xs={12}>
-                  <Box sx={styleVariables.sectionTitle} mb={loadingComments ? 1 : 0}>Відгуки покупців</Box>
+                <Grid item xs={12} display="flex" justifyContent="space-between" alignItems="center">
+                  <h2>Відгуки покупців</h2>
                 </Grid>
 
                 <Grid item xs={12} md={7} lg={8} display="flex" justifyContent="center"
@@ -523,12 +518,11 @@ export default function BookDetails({ bookPart }) {
                     <Loading show={loadingBooksFromSeries} isSmall={true}></Loading>
 
                     <Grid item xs={12}>
-                      <Box sx={styleVariables.sectionTitle}>
-                        Інші книги із цієї серії
+                      <Box display="flex" justifyContent="space-between" alignItems="center">
+                        <h2>Інші книги із цієї серії</h2>
 
                           {booksFromSeries?.length === (mobileMatches ? 2 : 5) &&
-                            <Button variant="outlined"
-                                    onClick={() => router.push(`/books?bookSeries=${book.bookSeries.id}`)}>
+                            <Button onClick={() => router.push(`/books?bookSeries=${book.bookSeries.id}`)}>
                               Дивитися усі<ArrowForwardIcon/>
                             </Button>}
                       </Box>
@@ -546,9 +540,7 @@ export default function BookDetails({ bookPart }) {
 
                 {book.authors.filter(a => !!a.description).map((author, index) => (
                     <Grid key={index} container spacing={2} mb={2}>
-                        {!index && <Grid item xs={12}>
-                          <Box sx={styleVariables.sectionTitle}>Про автора</Box>
-                        </Grid>}
+                        {!index && <Grid item xs={12}><h2>Про автора</h2></Grid>}
 
                         <Grid item xs={12}>
                             <Box px={1} dangerouslySetInnerHTML={{ __html: author.description }}></Box>
@@ -558,16 +550,16 @@ export default function BookDetails({ bookPart }) {
 
                 {book.authors.length === 1 && !!booksByAuthor?.length &&
                   <Grid container spacing={2}>
+                    <Grid item xs={12} display="flex" justifyContent="space-between" alignItems="center">
+                      <h2>Інші книги цього автора</h2>
+
+                        {booksByAuthor?.length === (mobileMatches ? 2 : 5) &&
+                          <Button variant="outlined"
+                                  onClick={() => router.push(`/books?authors=${book.authors[0].id}`)}>
+                            Дивитися усі<ArrowForwardIcon/></Button>}
+                    </Grid>
+
                     <Grid item xs={12}>
-                      <Box sx={styleVariables.sectionTitle} mb={2}>
-                        Інші книги цього автора
-
-                          {booksByAuthor?.length === (mobileMatches ? 2 : 5) &&
-                            <Button variant="outlined"
-                                    onClick={() => router.push(`/books?authors=${book.authors[0].id}`)}>
-                              Дивитися усі<ArrowForwardIcon/></Button>}
-                      </Box>
-
                       <Grid container spacing={2} position="relative" px={1} display="flex"
                             justifyContent="center">
                         <Loading show={loadingBooksByAuthor} isSmall={true}></Loading>

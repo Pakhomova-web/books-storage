@@ -34,7 +34,7 @@ export default function RecentlyViewedBooks() {
     return (
         !!user?.recentlyViewedBooks?.length &&
         <Grid container position="relative" display="flex" justifyContent="center" alignItems="center">
-          <Grid item xs={12} sx={styleVariables.sectionTitle}>Нещодавно переглядали</Grid>
+          <Grid item xs={12}><h1>Нещодавно переглядали</h1></Grid>
 
           <Grid container display="flex" justifyContent="center">
             <BooksList items={itemsToView}></BooksList>

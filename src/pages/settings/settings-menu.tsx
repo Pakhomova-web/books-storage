@@ -9,80 +9,79 @@ import { primaryLightColor, styleVariables } from '@/constants/styles-variables'
 import CustomImage from '@/components/custom-image';
 import { CloseIcon } from 'next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Badge from '@mui/material/Badge';
 
 const menuItems = [
     {
         title: 'Замовлення',
         url: 'orders',
-        activeImg: '/settings_orders_color.png',
-        img: '/settings_orders.png'
+        activeImg: '/settings-menu-icons/settings_orders_color.png',
+        img: '/settings-menu-icons/settings_orders.png'
     },
     {
         title: 'Книги',
         url: 'books',
-        activeImg: '/settings_books_color.png',
-        img: '/settings_books.png'
+        activeImg: '/settings-menu-icons/settings_books_color.png',
+        img: '/settings-menu-icons/settings_books.png'
     },
     {
         title: 'Групові знижки',
         url: 'group-discounts',
-        activeImg: '/settings_group_discounts_color.png',
-        img: '/settings_group_discounts.png'
+        activeImg: '/settings-menu-icons/settings_group_discounts_color.png',
+        img: '/settings-menu-icons/settings_group_discounts.png'
     },
     {
         title: 'Коментарі',
         url: 'comments',
-        activeImg: '/settings_comments_color.png',
-        img: '/settings_comments.png'
+        activeImg: '/settings-menu-icons/settings_comments_color.png',
+        img: '/settings-menu-icons/settings_comments.png'
     },
     {
         title: 'Видавництва',
         url: 'publishing-houses',
-        activeImg: '/settings_publishing_houses_color.png',
-        img: '/settings_publishing_houses.png'
+        activeImg: '/settings-menu-icons/settings_publishing_houses_color.png',
+        img: '/settings-menu-icons/settings_publishing_houses.png'
     },
     {
         title: 'Серії',
         url: 'book-series',
-        activeImg: '/settings_book_series_color.png',
-        img: '/settings_book_series.png'
+        activeImg: '/settings-menu-icons/settings_book_series_color.png',
+        img: '/settings-menu-icons/settings_book_series.png'
     },
     {
         title: 'Види обкладинок',
         url: 'cover-types',
-        activeImg: '/settings_book_covers_color.png',
-        img: '/settings_book_covers.png'
+        activeImg: '/settings-menu-icons/settings_book_covers_color.png',
+        img: '/settings-menu-icons/settings_book_covers.png'
     },
     {
         title: 'Види книг',
         url: 'book-types',
-        activeImg: '/settings_book_types_color.png',
-        img: '/settings_book_types.png'
+        activeImg: '/settings-menu-icons/settings_book_types_color.png',
+        img: '/settings-menu-icons/settings_book_types.png'
     },
     {
         title: 'Види сторінок',
         url: 'page-types',
-        activeImg: '/settings_page_types_color.png',
-        img: '/settings_page_types.png'
+        activeImg: '/settings-menu-icons/settings_page_types_color.png',
+        img: '/settings-menu-icons/settings_page_types.png'
     },
     {
         title: 'Мови',
         url: 'languages',
-        activeImg: '/settings_languages_color.png',
-        img: '/settings_languages.png'
+        activeImg: '/settings-menu-icons/settings_languages_color.png',
+        img: '/settings-menu-icons/settings_languages.png'
     },
     {
         title: 'Автори',
         url: 'authors',
-        activeImg: '/settings_authors_color.png',
-        img: '/settings_authors.png'
+        activeImg: '/settings-menu-icons/settings_authors_color.png',
+        img: '/settings-menu-icons/settings_authors.png'
     },
     {
         title: 'Способи доставки',
         url: 'deliveries',
-        activeImg: '/settings_deliveries_color.png',
-        img: '/settings_deliveries.png'
+        activeImg: '/settings-menu-icons/settings_deliveries_color.png',
+        img: '/settings-menu-icons/settings_deliveries.png'
     }
 ];
 

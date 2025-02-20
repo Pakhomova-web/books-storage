@@ -2,7 +2,8 @@ import { Accordion, AccordionDetails, AccordionSummary, Box, Grid, useTheme } fr
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { useRouter } from 'next/router';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 
 import { borderRadius, primaryLightColor } from '@/constants/styles-variables';
 import { CATALOGUE, ICatalogueItem } from '@/constants/options';
@@ -10,7 +11,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import CustomLink from '@/components/custom-link';
 import CustomModal from '@/components/modals/custom-modal';
 import CustomImage from '@/components/custom-image';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const StyledChildrenContainer = styled(Box)(() => ({
     background: 'white',
@@ -99,7 +99,7 @@ export default function Catalogue({ opened = false }) {
         return items.map((item, index) => (
             <Accordion key={index} expanded={expanded === `panel-${index}`}
                        onChange={handleChange(`panel-${index}`)}>
-                <AccordionSummary expandIcon={<KeyboardArrowDownIcon color="primary"/>}>
+                <AccordionSummary expandIcon={<KeyboardBackspaceIcon color="primary"/>}>
                     {item.title}
                 </AccordionSummary>
                 <AccordionDetails>
@@ -112,8 +112,8 @@ export default function Catalogue({ opened = false }) {
                     ))}
                     <Box key={index} py={2} mt={1}>
                         <CustomLink onClick={() => onSectionClick([item])}>
-                            <Box display="flex" alignItems="center" gap={1}>Дивитися усі
-                                <ArrowForwardIcon color="primary"/>
+                            <Box display="flex" alignItems="center" gap={1}>
+                                Дивитися усі<ArrowRightAltIcon color="primary"/>
                             </Box>
                         </CustomLink>
                     </Box>

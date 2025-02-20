@@ -21,9 +21,7 @@ export default function DeliveriesBox() {
     }, []);
 
     return (
-        !loading && <Grid container position="relative">
-          <Grid item xs={12} sx={styleVariables.sectionTitle}>Способи доставки</Grid>
-
+        !loading && <Grid container position="relative" alignItems="center">
             {!!deliveries?.length && deliveries.map((delivery, index) =>
                 <Grid key={index} item xs={12} sm={4} display="flex" alignItems="center"
                       justifyContent="center"

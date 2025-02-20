@@ -9,20 +9,20 @@ const menuItems = [
     {
         title: 'Персональні дані',
         url: 'personal-info',
-        activeImg: '/personal_info_edit_color.png',
-        img: '/personal_info_edit.png'
+        activeImg: '/profile-icons/personal_info_edit_color.png',
+        img: '/profile-icons/personal_info_edit.png'
     },
     {
         title: 'Вподобання',
         url: 'likes',
-        activeImg: '/liked_books_active.png',
-        img: '/liked_books.png'
+        activeImg: '/profile-icons/liked_books_active.png',
+        img: '/profile-icons/liked_books.png'
     },
     {
         title: 'Замовлення',
         url: 'orders',
-        activeImg: '/settings_orders_color.png',
-        img: '/settings_orders.png'
+        activeImg: '/profile-icons/settings_orders_color.png',
+        img: '/profile-icons/settings_orders.png'
     }
 ];
 

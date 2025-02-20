@@ -10,6 +10,7 @@ export async function getGroupDiscounts(pageSettings?: IPageable, filters?: IGro
         delete filters.isInStock;
     }
     const { andFilters } = getValidFilters(filters);
+
     const data = await getDataByFiltersAndPageSettings(
         GroupDiscount.find()
             .populate({

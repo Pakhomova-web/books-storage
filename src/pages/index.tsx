@@ -1,7 +1,6 @@
 import { Box, Grid, useTheme } from '@mui/material';
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import { useRouter } from 'next/router';
 import Head from 'next/head';
 
 import Loading from '@/components/loading';
@@ -43,6 +42,7 @@ const bookTypeNameStyles = {
     ...styleVariables.titleFontSize,
     position: 'absolute',
     bottom: 0,
+    left: 0,
     background: 'rgba(255, 255, 255, 0.8)',
     width: '100%',
     textAlign: 'center'
@@ -56,7 +56,6 @@ const mobileImageBoxStyles = {
 
 export default function Home() {
     const { loading: loadingBookTypes, items: bookTypes } = useBookTypes({ orderBy: 'name', order: 'asc' });
-    const router = useRouter();
     const theme = useTheme();
     const mobileMatches = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -80,8 +79,7 @@ export default function Home() {
             <Grid container position="relative" mb={1} justifyContent="center">
                 <Loading show={loadingBookTypes} isSmall={true}></Loading>
 
-                <Grid item xs={12} sx={styleVariables.sectionTitle} mb={1}>Категорії</Grid>
-
+                <h1>Каталог</h1>
                 <Catalogue opened={true}/>
 
                 {!!bookTypes?.length &&
@@ -112,7 +110,7 @@ export default function Home() {
                   </Grid>}
             </Grid>
 
-            <h1 className="centerText">{MAIN_NAME} - книги для дитячого розвитку</h1>
+            <Box display="flex" justifyContent="center"><h1>{MAIN_NAME} - книги для дитячого розвитку</h1></Box>
 
             <DeliveriesBox/>
         </>

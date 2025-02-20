@@ -9,6 +9,7 @@ import { renderPrice } from '@/utils/utils';
 import { BookEntity } from '@/lib/data/types';
 import { useRouter } from 'next/router';
 import { useAuth } from '@/components/auth-context';
+import CustomLink from '@/components/custom-link';
 
 const StyledBookBox = styled(Box)(() => ({
     cursor: 'pointer',
@@ -28,23 +29,6 @@ const StyledImage = styled(Box)(() => ({
     cursor: 'pointer',
     height: '80px',
     maxWidth: '100%'
-}));
-
-const StyledIconContainer = styled(Box)(({ theme }) => ({
-    maxHeight: '45px',
-    [theme.breakpoints.up('sm')]: {
-        maxWidth: '45px',
-    },
-    [theme.breakpoints.down('sm')]: {
-        maxWidth: '35px'
-    }
-}));
-
-const StyledTitle = styled(Box)(() => ({
-    cursor: 'pointer',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
 }));
 
 const StyledContainer = styled(Box)(() => ({
@@ -73,12 +57,7 @@ export default function TopSoldBooks({ mobile = false }) {
         mobile ?
             <Box my={1} display="flex" flexDirection="row" flexWrap="nowrap" alignItems="center"
                  justifyContent="space-between" gap={1}>
-                <StyledTitle onClick={() => onTitleClick()} gap={1} p={1} flexWrap="wrap">
-                    <StyledIconContainer>
-                        <CustomImage imageLink="/book_rate.png"/>
-                    </StyledIconContainer>
-                    Топ продажів
-                </StyledTitle>
+                <CustomLink href="/books?orderBy=numberSold&order=desc"><h2>Топ продажів</h2></CustomLink>
 
                 <Box display="flex" flexDirection="row" flexWrap="nowrap" gap={1}>
                     {items.map((book, index) => (
@@ -89,13 +68,8 @@ export default function TopSoldBooks({ mobile = false }) {
                 </Box>
             </Box> :
             <StyledContainer gap={1} py={1}>
-                {!loading && !!items?.length && <Box>
-                  <StyledTitle onClick={() => onTitleClick()} gap={1} p={1}>
-                    <StyledIconContainer>
-                      <CustomImage imageLink="/book_rate.png"/>
-                    </StyledIconContainer>
-                    Топ продажів
-                  </StyledTitle>
+                {!loading && !!items?.length && <Box display="flex" alignItems="center" flexDirection="column">
+                  <h2><CustomLink href="/books?orderBy=numberSold&order=desc">Топ продажів</CustomLink></h2>
 
                     {items.map((book, index) =>
                         <StyledBookBox key={index} gap={1} p={1} onClick={() => onBookClick(book)}>

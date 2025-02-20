@@ -1,10 +1,8 @@
 import { Button, Grid, useTheme } from '@mui/material';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useRouter } from 'next/router';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import React, { useEffect } from 'react';
-
-import { styleVariables } from '@/constants/styles-variables';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import BooksList from './books-list';
 import { useBooksWithDiscount } from '@/lib/graphql/queries/book/hook';
 
@@ -33,11 +31,12 @@ export default function DiscountBooks() {
     return (
         <Grid container position="relative" display="flex" justifyContent="center" alignItems="center">
             {!loading && <>
-              <Grid item xs={12} sx={styleVariables.sectionTitle}>
-                Акційні товари
+              <Grid item xs={12} display="flex" justifyContent="space-between" alignItems="center">
+                <h1>Акційні товари</h1>
 
-                <Button variant="outlined" onClick={() => router.push(`/books?withDiscount=true`)}>
-                  Дивитися усі<ArrowForwardIcon/></Button>
+                <Button onClick={() => router.push(`/books?withDiscount=true`)}>
+                  Дивитися усі<ArrowRightAltIcon/>
+                </Button>
               </Grid>
 
               <Grid container display="flex" justifyContent="center">

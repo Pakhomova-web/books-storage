@@ -50,9 +50,10 @@ export const styleVariables = {
     },
     deleteIconBtn: { cursor: 'pointer', color: warnColor },
     bigTitleFontSize: (theme) => ({
-        fontSize: '28px',
+        fontWeight: '700',
+        fontSize: '2rem',
         [theme.breakpoints.down('md')]: {
-            fontSize: '20px'
+            fontSize: '1.5rem'
         }
     }),
     hintFontSize: {

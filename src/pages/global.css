@@ -1,13 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Philosopher:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
 :root {
     --background: #448AFF;
     --light-background: rgba(68, 138, 255, 0.2);
     --text-primary: white;
-    --text-secondary: black;
+    --text-secondary: #323336;
     --secondary: red;
 }
 
 div {
     box-sizing: border-box;
+}
+
+h1, h2 {
+    display: flex;
+    align-items: center;
 }
 
 .MuiBadge-badge {
@@ -21,6 +28,7 @@ html, body {
     padding: 0;
     margin: 0;
     overflow: hidden;
+    color: var(--text-secondary);
 }
 
 .clickable:hover {
@@ -76,6 +84,14 @@ img {
 
 a {
     text-decoration: none;
-    color: black;
+    color: var(--text-secondary) !important;
     cursor: pointer;
+}
+
+a:hover {
+    color: var(--background) !important;
+}
+
+a.selected {
+    color: var(--background) !important;
 }

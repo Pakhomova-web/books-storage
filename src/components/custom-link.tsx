@@ -2,7 +2,7 @@ import { styled } from "@mui/material/styles";
 import { Box, Link, Tooltip } from "@mui/material";
 
 const StyledLink = styled(Link)(({ theme }) => ({
-    color: 'black',
+    color: theme.palette.primary.contrastText,
     cursor: 'pointer',
     textDecoration: 'none',
     ':hover': {
@@ -10,10 +10,10 @@ const StyledLink = styled(Link)(({ theme }) => ({
     }
 }));
 
-export default function CustomLink({ children, href = null, tooltip = '', disabled = false, onClick = null }) {
+export default function CustomLink({ children, href = null, tooltip = '', selected = false, disabled = false, onClick = null }) {
     return (
         !disabled ?
-            <StyledLink href={href} onClick={onClick}>{children}</StyledLink> :
+            <StyledLink href={href} onClick={onClick} className={selected ? 'selected' : ''}>{children}</StyledLink> :
             <Tooltip title={tooltip}>
                 <Box>{children}</Box>
             </Tooltip>

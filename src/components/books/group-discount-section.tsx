@@ -17,8 +17,8 @@ export default function GroupDiscountBooks({ bookId, onBookClick = null }) {
     return (
         <Grid container position="relative" display="flex" justifyContent="center" alignItems="center">
             {!loading && !!items.length && <>
-              <Grid item xs={12} sx={styleVariables.sectionTitle}>
-                Заощаджуйте, замовляючи разом
+              <Grid item xs={12} display="flex" justifyContent="space-between" alignItems="center">
+                <h1>Заощаджуйте, замовляючи разом</h1>
               </Grid>
 
               <Grid container display="flex" justifyContent="center">
