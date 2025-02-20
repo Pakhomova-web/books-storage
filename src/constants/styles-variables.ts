@@ -1,6 +1,3 @@
-import { styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
-
 const gray = 'rgb(244, 244, 244)';
 export const warnColor = '#d00';
 export const primaryColor = '#448AFF';
